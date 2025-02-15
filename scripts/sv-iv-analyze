@@ -73,6 +73,11 @@ class Results:
     self.data = OrderedDict()
     self.wide = wide
 
+    print(f"Data length: {len(self.data)}")
+    if len(self.data) == 0:
+        print("Warning: No data available for analysis.")
+        return
+
   def add_result( self, problem, sample, record ):
     sample = int(sample)
     if problem not in self.data:
