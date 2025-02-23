@@ -7,6 +7,25 @@ import subprocess
 import multiprocessing
 from pathlib import Path
 import warnings
+from verilog_model import VerilogModel 
+from dotenv import load_dotenv
+from tqdm import tqdm
+
+from datetime import datetime
+import json
+
+load_dotenv()
+
+# Add this function to create execution directory
+def create_execution_directory(num_samples):
+    # Create timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # Create execution folder name
+    exec_folder = Path("executions") / f"samples_{num_samples}_{timestamp}"
+    exec_folder.mkdir(parents=True, exist_ok=True)
+    
+    return exec_folder
 
 # Suppress deprecation warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -33,25 +52,118 @@ def check_openai_key():
         print("Please set it using: export OPENAI_API_KEY='your-api-key'")
         sys.exit(1)
 
-def run_problem(problem_path, config):
+# def run_problem(problem_path, config):
+#     """Run evaluation for a single problem"""
+#     problem_name = Path(problem_path).stem.replace("_prompt", "")
+#     print(f"Processing {problem_name}...")
+    
+#     # Create output directory
+#     out_dir = Path("build") / problem_name
+#     out_dir.mkdir(parents=True, exist_ok=True)
+    
+#     # Ensure scripts directory exists and is in the correct location
+#     scripts_dir = Path("scripts")
+#     if not scripts_dir.exists():
+#         scripts_dir = Path("../scripts")
+#     if not scripts_dir.exists():
+#         print(f"Error: Cannot find scripts directory")
+#         return False
+    
+#     try:
+#         # Run sv-generate (syntax generation)
+#         gen_cmd = [
+#             str(scripts_dir / "sv-generate"),
+#             f"--model={config['model']}", 
+#             f"--examples={config['examples']}", 
+#             f"--temperature={config['temperature']}", 
+#             f"--top-p={config['top_p']}", 
+#             f"--task={config['task']}", 
+#             f"--output={out_dir}/{problem_name}.sv",
+#             problem_path
+#         ]
+#         subprocess.run(gen_cmd, check=True, capture_output=True, text=True)
+
+#         str(out_dir / f"{problem_name}.sv")
+        
+#         # Run iverilog test with problem-specific testbench and reference
+#         test_cmd = [
+#             "iverilog",
+#             "-g2012",
+#             "-Wall",
+#             "-o", str(out_dir / problem_name),
+#             str(out_dir / f"{problem_name}.sv"),  # Generated solution
+#             f"dataset_{config['task']}/{problem_name}_ref.sv",  # Reference implementation
+#             f"dataset_{config['task']}/{problem_name}_test.sv"  # Problem-specific testbench
+#         ]
+#         subprocess.run(test_cmd, check=True, capture_output=True, text=True)
+        
+#         # Run simulation for functional verification
+#         vvp_cmd = ["vvp", str(out_dir / problem_name)]
+#         result = subprocess.run(vvp_cmd, check=True, capture_output=True, text=True)
+        
+#         # Check for successful functional verification
+#         if "Mismatches: 0 in" in result.stdout:
+#             print(f"Successfully processed {problem_name} (passed both syntax and functional checks)")
+#             return True
+#         else:
+#             print(f"Functional verification failed for {problem_name}")
+#             if result.stdout:
+#                 print(f"Simulation output: {result.stdout}")
+#             return False
+        
+#     except subprocess.CalledProcessError as e:
+#         print(f"Error processing {problem_name}:")
+#         print(f"Command failed: {' '.join(e.cmd)}")
+#         if e.output:
+#             print(f"Output: {e.output}")
+#         if e.stderr:
+#             print(f"Error: {e.stderr}")
+#         return False
+#     except Exception as e:
+#         print(f"Unexpected error processing {problem_name}: {str(e)}")
+#         return False
+    
+def run_problem(problem_path, config, exec_folder, refinement):
     """Run evaluation for a single problem"""
     problem_name = Path(problem_path).stem.replace("_prompt", "")
     print(f"Processing {problem_name}...")
     
-    # Create output directory
-    out_dir = Path("build") / problem_name
-    out_dir.mkdir(parents=True, exist_ok=True)
-    
-    # Ensure scripts directory exists and is in the correct location
-    scripts_dir = Path("scripts")
-    if not scripts_dir.exists():
-        scripts_dir = Path("../scripts")
-    if not scripts_dir.exists():
-        print(f"Error: Cannot find scripts directory")
-        return False
-    
+    print(f"Problem path: {problem_path}")
+
+    problem_dir = exec_folder / f"problem_{problem_name}"
+    problem_dir.mkdir(parents=True, exist_ok=True)
+
     try:
-        # Run sv-generate (syntax generation)
+        with open(problem_path, 'r') as file:
+            content = file.read()
+            print(f"Content of {problem_name}:")
+            print(content[:500])  # Print the first 500 characters for brevity
+            
+        # Save the question (moved after content is read)
+        with open(problem_dir / "question.txt", 'w') as f:
+            f.write(content)
+
+        try:
+            with open(problem_path, 'r') as file:
+                content = file.read()
+                print(f"Content of {problem_name}:")
+                print(content[:500])  # Print the first 500 characters for brevity
+        except Exception as e:
+            print(f"Error reading {problem_path}: {e}")
+            return False
+
+        # Create output directory
+        out_dir = Path("build") / problem_name
+        out_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Ensure scripts directory exists and is in the correct location
+        scripts_dir = Path("scripts")
+        if not scripts_dir.exists():
+            scripts_dir = Path("../scripts")
+        if not scripts_dir.exists():
+            print(f"Error: Cannot find scripts directory")
+            return False
+        
         gen_cmd = [
             str(scripts_dir / "sv-generate"),
             f"--model={config['model']}", 
@@ -63,45 +175,92 @@ def run_problem(problem_path, config):
             problem_path
         ]
         subprocess.run(gen_cmd, check=True, capture_output=True, text=True)
-        
-        # Run iverilog test with problem-specific testbench and reference
-        test_cmd = [
-            "iverilog",
-            "-g2012",
-            "-Wall",
-            "-o", str(out_dir / problem_name),
-            str(out_dir / f"{problem_name}.sv"),  # Generated solution
-            f"dataset_{config['task']}/{problem_name}_ref.sv",  # Reference implementation
-            f"dataset_{config['task']}/{problem_name}_test.sv"  # Problem-specific testbench
-        ]
-        subprocess.run(test_cmd, check=True, capture_output=True, text=True)
-        
-        # Run simulation for functional verification
-        vvp_cmd = ["vvp", str(out_dir / problem_name)]
-        result = subprocess.run(vvp_cmd, check=True, capture_output=True, text=True)
-        
-        # Check for successful functional verification
-        if "Mismatches: 0 in" in result.stdout:
-            print(f"Successfully processed {problem_name} (passed both syntax and functional checks)")
-            return True
+
+        if refinement:
+            with open(str(out_dir / f"{problem_name}.sv"), 'r') as f:
+                base_response = f.read().strip()
+
+            # Initialize VerilogModel
+            model = VerilogModel(
+                gen_tb_model=config['model'],
+                generation_temp=config['temperature']
+            )
+                    
+            # Generate and verify code using VerilogModel
+            base_query = content.strip()  # Replace with actual query
+            
+            result = model.run_pipeline(base_query, base_response)
+
+            with open(problem_dir / "initial_solution.sv", 'w') as f:
+                f.write(base_response)
+            
+            # After running the pipeline, save the result
+            with open(problem_dir / "refinement_result.json", 'w') as f:
+                json.dump(result, f, indent=4)
+                
+            # Save the final status
+            status = "success" if "Mismatches: 0 in" in result['test_results'] else "failure"
+            with open(problem_dir / "status.txt", 'w') as f:
+                f.write(status)
+                if result['test_results']:
+                    f.write(f"\n\nTest Results:\n{result['test_results']}")
+            
+            # Check for successful functional verification
+            if "Mismatches: 0 in" in result['test_results'].lower():
+                print(f"Successfully processed {problem_name} (passed both syntax and functional checks)")
+                return True
+            else:
+                print(f"Functional verification failed for {problem_name}")
+                if result['test_results']:
+                    print(f"Simulation output: {result['test_results']}")
+                return False
+            
         else:
-            print(f"Functional verification failed for {problem_name}")
-            if result.stdout:
-                print(f"Simulation output: {result.stdout}")
-            return False
-        
-    except subprocess.CalledProcessError as e:
+            # Read the generated solution
+            with open(str(out_dir / f"{problem_name}.sv"), 'r') as f:
+                base_response = f.read().strip()
+
+            # Save the initial solution
+            with open(problem_dir / "initial_solution.sv", 'w') as f:
+                f.write(base_response)
+
+            # Run verification
+            vvp_cmd = ["vvp", str(out_dir / problem_name)]
+            result = subprocess.run(vvp_cmd, check=True, capture_output=True, text=True)
+
+            # Save the results
+            with open(problem_dir / "verification_result.json", 'w') as f:
+                json.dump({"test_results": result.stdout}, f, indent=4)
+
+            # Save the final status
+            status = "success" if "Mismatches: 0 in" in result.stdout else "failure"
+            with open(problem_dir / "status.txt", 'w') as f:
+                f.write(status)
+                if result.stdout:
+                    f.write(f"\n\nTest Results:\n{result.stdout}")
+
+            # Check for successful functional verification
+            if "Mismatches: 0 in" in result.stdout:
+                print(f"Successfully processed {problem_name} (passed both syntax and functional checks)")
+                return True
+            else:
+                print(f"Functional verification failed for {problem_name}")
+                if result.stdout:
+                    print(f"Simulation output: {result.stdout}")
+                return False
+                
+            
+    except Exception as e:
         print(f"Error processing {problem_name}:")
         print(f"Command failed: {' '.join(e.cmd)}")
         if e.output:
             print(f"Output: {e.output}")
         if e.stderr:
             print(f"Error: {e.stderr}")
+
+        with open(problem_dir / "error.txt", 'w') as f:
+            f.write(str(e))
         return False
-    except Exception as e:
-        print(f"Unexpected error processing {problem_name}: {str(e)}")
-        return False
-    
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Run VerilogEval with custom settings')
@@ -109,8 +268,8 @@ def parse_args():
     parser.add_argument('--task', default='spec-to-rtl', 
                        choices=['spec-to-rtl', 'code-complete-iccad2023'],
                        help='Task type (default: spec-to-rtl)')
-    parser.add_argument('--model', default='gpt-4', 
-                       help='Model to use (default: gpt-4)')
+    parser.add_argument('--model', default='gpt-4o-mini', 
+                       help='Model to use (default: gpt-4o-mini)')
     parser.add_argument('--examples', type=int, default=2, 
                        choices=range(5),
                        help='Number of examples (0-4, default: 2)')
@@ -118,6 +277,8 @@ def parse_args():
                        help='Temperature (default: 0.2)')
     parser.add_argument('--top-p', type=float, default=0.9,  # Changed from 0.95
                        help='Top-p value (default: 0.9)')
+    parser.add_argument('--refinement', type=bool, default=False,
+                       help='Iterative Refinement of initial solution (default: False)')
     return parser.parse_args()
 
 
@@ -155,13 +316,16 @@ def main():
         print(f"Processing {len(problem_files)} samples...")
     else:
         print(f"Processing all {len(problem_files)} samples...")
+
+    num_samples = args.num_samples if args.num_samples else len(problem_files)
+    exec_folder = create_execution_directory(num_samples)
     
     # Process problems in parallel
     with multiprocessing.Pool() as pool:
-        results = pool.starmap(
-            run_problem,
-            [(f, config) for f in problem_files]
-        )
+        results = list(tqdm(pool.starmap(
+           run_problem,
+           [(f, config, exec_folder, args.refinement) for f in problem_files]
+       ), total=len(problem_files), desc="Processing problems"))
     
     # Print summary
     success = sum(1 for r in results if r)
