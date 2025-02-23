@@ -211,7 +211,7 @@ class VerilogModel:
             response = generate_together(messages=messages, model=model, temperature=self.generation_temp)
         return response
 
-    def gen_tb_prompt(self, base_quey: str, base_response: str, model: str = "gpt-4o-mini") -> str:
+    def gen_tb_prompt(self, base_query: str, base_response: str, model: str = "gpt-4o-mini") -> str:
         """
         INPUT:
             base_query: str - Base query to generate testbench
@@ -220,37 +220,73 @@ class VerilogModel:
         OUTPUT:
             str - Prompt for generating testbench code
         """
-        prompt_prefix = f"For the input specification: {base_quey}, the generated design code is: {base_response}"
-        prompt_rules = """
-                Here are some additional rules and coding conventions used to generate the design code. 
+        prompt = f"""Generate a SystemVerilog testbench for the following design, adhering to these requirements:
 
-                - Declare all ports and signals as logic; do not to use wire or reg.
+            0. The specification with which the design code was generated: 
+            {base_query}
 
-                - For combinational logic with an always block do not explicitly specify
-                the sensitivity list; instead use always @(*).
+            1. The design code to verify is:
+            {base_response}
+            
+            """ + """
+            
+            2. Design Coding Rules:
+            - All ports and signals must be declared as 'logic' (no wire/reg)
+            - Use always @(*) for combinational logic (implicit sensitivity list)
+            - Numeric constants must have size > 0 (e.g., 1'b0 not 0'b0)
+            - Always blocks must read at least one signal
+            - For synchronous reset designs:
+            * Reset signal is sampled with the clock
+            * Exclude posedge reset from sequential block sensitivity lists
 
-                - All sized numeric constants must have a size greater than zero
-                (e.g, 0'b0 is not a valid expression).
+            3. Testbench Requirements:
+            - Implement comprehensive corner case testing
+            - Include at least two test points
+            - Track errors using this structure:
+            typedef struct packed {
+                int errors;        // Total error count
+                int errortime;     // Time of first error
+                int errors_zero;   // Errors for zero output
+                int errortime_zero; // Time of first zero error
+                int clocks;        // Total clock cycles
+            } stats;
 
-                - An always block must read at least one signal otherwise it will never
-                be executed; use an assign statement instead of an always block in
-                situations where there is no need to read any signals.
+            4. Required Error Reporting:
+            
+            - Include this final block:
+            final begin
+                if (stats1.errors_zero)
+                    $display("Hint: Output '%s' has %0d mismatches. The first mismatch occurred at time %0d.",
+                            "zero", stats1.errors_zero, stats1.errortime_zero);
+                else
+                    $display("Hint: Output '%s' has no mismatches.", "zero");
 
-                - if the module uses a synchronous reset signal, this means the reset
-                signal is sampled with respect to the clock. When implementing a
-                synchronous reset signal, do not include posedge reset in the
-                sensitivity list of any sequential always block.
+                $display("Hint: Total mismatched samples is %1d out of %1d samples\n",
+                        stats1.errors, stats1.clocks);
+                $display("Simulation finished at %0d ps", $time);
+                $display("Mismatches: %1d in %1d samples", stats1.errors, stats1.clocks);
+            end
+ 
 
-                - Your testbench should explicitly check for mismatches between the expected
-                and actual outputs of the design code. And print the number of mismatches
-                found in the simulation and what are the values of the inputs that caused
-                the mismatches.
-                """
-        prompt_suffix = """Generate a testbench for the design code, to cover all possible corner cases and\n
-                           exhaustively test the design code. The testbench should be able to verify the correctness of the design code.\n
-                           Enclose your code with [BEGIN] and [DONE]. Only output the testbench code snippet and do NOT output anything else."""
-        
-        prompt = f"{prompt_prefix}\n{prompt_rules}\n{prompt_suffix}"
+            5. Testbench Structure:
+            - Include clock generation with a configurable period
+            - Implement reset sequence if the desing is sequential
+            - Generate test vectors covering corner cases
+            - Add output validation checks
+            - Add simulation timeout
+            - Use modular structure with separate blocks for:
+                * Clock/reset generation
+                * DUT instantiation
+                * Stimulus generation
+                * Response checking
+                * Error tracking
+                * Assertions
+                * Results Reporting
+
+            Please generate a complete SystemVerilog testbench following these requirements. The generated testbench, 
+            should be enclosed within the tags [BEGIN] and [DONE]. Don't include any explanation, only the code.
+            """
+
         return prompt
 
     def gen_tb_code(self, prompt: str, model: str = "gpt-4o-mini") -> str:
