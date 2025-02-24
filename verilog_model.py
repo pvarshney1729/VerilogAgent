@@ -3,20 +3,31 @@ from typing import Dict
 from utils import generate_openai, generate_anthropic, generate_together
 from typing import Dict, List 
 import subprocess
+import re
+
+from prompts import prompts
+
+from Verilog_generator import VerilogGenerator
 
 class ResultRecord:
     def __init__(self):
         self.num_mismatch = 0
         self.passfail = '?'
 
+    def to_dict(self):
+        return {
+            "num_mismatch": self.num_mismatch,
+            "passfail": self.passfail
+        }
+
 class Verifier:
-    def __init__(self):
-        ground_truth_path = "verilog-eval/dataset_spec-to-rtl"
+    def __init__(self, problem_name: str):
+        ground_truth_path = "dataset_spec-to-rtl"
         self.ground_truth_path = os.path.join(os.getcwd(), ground_truth_path)
 
-    def functional_verify(self, design: str, testbench: str)->ResultRecord:
+    def functional_verify(self, solution: str, ground_truth: str)->ResultRecord:
         """
-        design: str
+        solution: str
             The solution string that needs to be verified, like: 
             "module RefModule (
                 output zero
@@ -24,28 +35,28 @@ class Verifier:
                 assign zero = 1'b0;
             endmodule"
 
-        testbench: str
-            The name of the ground truth testbench str, like: "Ref
+        ground_truth: str
+            The name of the ground truth file, like Problem001_zero, 
+            We inherently assume there are two files:
+                1. Problem001_zero_ref.sv
+                2. Problem001_zero_test.sv
         """
 
+        # The ground truth test_bench path
+        ground_truth_test_bench_path = os.path.join(self.ground_truth_path, ground_truth + "_test.sv")
 
-        # Write the design to a temporary file
-        design_path = os.path.join(os.getcwd(), "temp_top.sv")
+        # The ground truth reference path
+        ground_truth_ref_path = os.path.join(self.ground_truth_path, ground_truth + "_ref.sv")
 
-        if os.path.exists(design_path):
-            os.remove(design_path)
+        # Write the solution to a temporary file
+        solution_path = os.path.join(os.getcwd(), "temp_top.sv")
 
-        with open(design_path, "w") as f:
-            f.write(design)
+        if os.path.exists(solution_path):
+            os.remove(solution_path)
 
-        # Write the ground truth testbench to a temporary file
-        test_bench_path = os.path.join(os.getcwd(), f"temp_test.sv")
-        if os.path.exists(test_bench_path):
-            os.remove(test_bench_path)
-
-        with open(test_bench_path, "w") as f:
-            f.write(testbench)
-
+        with open(solution_path, "w") as f:
+            f.write(solution)
+ 
         compile_log_path = os.path.join(os.getcwd(), "compile_log.txt") 
         if os.path.exists(compile_log_path):
             os.remove(compile_log_path)
@@ -53,7 +64,7 @@ class Verifier:
         # Compile the simulation and append the output to a compile log file
         with open(compile_log_path, "w") as log_file:
             result = subprocess.run(
-                ["iverilog", "-g2012", "-o", "temp_top", design_path, test_bench_path],
+                ["iverilog", "-g2012", "-o", "temp_top", ground_truth_test_bench_path, solution_path, ground_truth_ref_path],
                 stdout=log_file,
                 stderr=subprocess.STDOUT,  # Redirect stderr to stdout
                 text=True
@@ -70,11 +81,6 @@ class Verifier:
                 )
             os.remove("temp_top")
 
-        with open(compile_log_path, "r") as f:  
-            compile_log = f.read()
-            return compile_log
-
-        """
         with open("compile_log.txt", "r") as f:
 
             error_C     = False
@@ -166,8 +172,10 @@ class Verifier:
                     if result_record.passfail == '?':
                         result_record.passfail = 'R'
 
-        return result_record, compile_log_path
-        """
+        return result_record
+     
+
+
 
 class VerilogModel:
     def __init__(
@@ -176,6 +184,8 @@ class VerilogModel:
         iter_ref_model: str = "gpt-4o-mini",
         generation_temp: float = 0.7,
         iter_ref_temp: float = 0.7, 
+        problem_name: str = None,
+        examples: int = 0
     ):
         """
         INPUT:
@@ -188,6 +198,13 @@ class VerilogModel:
         self.iter_ref_temp=iter_ref_temp
         self.gen_tb_model=gen_tb_model
         self.iter_ref_model=iter_ref_model
+
+        self.generator = VerilogGenerator(
+            model=gen_tb_model,
+            temperature=generation_temp,
+            examples=examples
+        )
+        self.problem_name = problem_name
 
     def generate(self, prompt: str, model: str = "gpt-4o-mini") -> List[Dict]:
         """
@@ -303,21 +320,9 @@ class VerilogModel:
         ]
         response = generate_openai(messages=messages, model=model, temperature=self.generation_temp)
         return response
-    
-    def test_verilog(self, design_code: str, testbench_code: str) -> str:
-        """
-        INPUT:
-            design_code: str - Design code to be tested
-            testbench_code: str - Testbench code to test the design code
-        OUTPUT:
-            str - Test results
-        """
 
-        verifier = Verifier()
-        result = verifier.functional_verify(design_code, testbench_code)
-        return result
 
-    def run_pipeline(self, base_query: str, base_response: str) -> Dict:
+    def run_pipeline(self, base_query: str, refinement: bool = False) -> Dict:
         """
         INPUT:
             base_query: str - Base query to generate testbench
@@ -325,37 +330,38 @@ class VerilogModel:
         OUTPUT:
             Dict - Contains the generated testbench code and the test results
         """
-        # Generate testbench prompt
-        tb_prompt = self.gen_tb_prompt(base_query, base_response, model=self.gen_tb_model)
-        # Generate testbench code
-        tb_code = self.gen_tb_code(tb_prompt, model=self.gen_tb_model)
+        try:
+            if not refinement:
+                # Original approach using sv-generate style
+                generated_code = self.generator.generate(
+                    base_query,
+                    include_rules=True,
+                    include_examples=False
+                )
+                verifier = Verifier(problem_name=self.problem_name)
+                test_results = verifier.functional_verify(generated_code, self.problem_name)
+                
+                return {
+                    "code": generated_code,
+                    "test_results": test_results.to_dict()
+                }
+            else:
+                # Refinement approach
+                base_response = self.generator.generate(
+                    base_query,
+                    include_rules=True,
+                    include_examples=False
+                )[0]  # Get just the code, ignore stats
 
-        # Extract tb code from the response
-        tb_code = tb_code.split("[BEGIN]")[1].split("[DONE]")[0].strip()
-
-        # Test the design code with the generated testbench
-        test_results = self.test_verilog(base_response, tb_code)
-
-        return {"testbench_code": tb_code, "test_results": test_results}
-
-
-    def run_pipeline(self, base_query: str, base_response: str) -> Dict:
-        """
-        INPUT:
-            base_query: str - Base query to generate testbench
-            base_response: str - Base response to the query
-        OUTPUT:
-            Dict - Contains the generated testbench code and the test results
-        """
-        # Generate testbench prompt
-        tb_prompt = self.gen_tb_prompt(base_query, base_response, model=self.gen_tb_model)
-        # Generate testbench code
-        tb_code = self.gen_tb_code(tb_prompt, model=self.gen_tb_model)
-
-        # Extract tb code from the response
-        tb_code = tb_code.split("[BEGIN]")[1].split("[DONE]")[0].strip()
-
-        # Test the design code with the generated testbench
-        test_results = self.test_verilog(base_response, tb_code)
-
-        return {"testbench_code": tb_code, "test_results": test_results}
+                # Generate testbench and verify
+                verifier = Verifier(problem_name=self.problem_name)
+                test_results = verifier.functional_verify(base_response, self.problem_name)
+                
+                return {
+                    "code": base_response,
+                    "test_results": test_results.to_dict()
+                }
+                
+        except Exception as e:
+            print(f"Error in run_pipeline: {str(e)}")
+            raise

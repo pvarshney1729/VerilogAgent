@@ -13,6 +13,11 @@ from tqdm import tqdm
 
 from datetime import datetime
 import json
+import warnings
+import urllib3
+warnings.filterwarnings('ignore', category=urllib3.exceptions.NotOpenSSLWarning)
+from multiprocessing.pool import ThreadPool  # Add this import
+
 
 load_dotenv()
 
@@ -53,131 +58,108 @@ def check_openai_key():
         print("Please set it using: export OPENAI_API_KEY='your-api-key'")
         sys.exit(1)
     
+
 def run_problem(problem_path, config, exec_folder, refinement):
     """Run evaluation for a single problem"""
     problem_name = Path(problem_path).stem.replace("_prompt", "")
     print(f"Processing {problem_name}...")
     
-    print(f"Problem path: {problem_path}")
-
     problem_dir = exec_folder / f"problem_{problem_name}"
     problem_dir.mkdir(parents=True, exist_ok=True)
 
     try:
+        # Read the base query
         with open(problem_path, 'r') as file:
-            content = file.read()
-            print(f"Content of {problem_name}:")
-            print(content[:500])  # Print the first 500 characters for brevity
+            base_query = file.read()
             
-        # Save the question (moved after content is read)
+        # Save the question
         with open(problem_dir / "question.txt", 'w') as f:
-            f.write(content)
+            f.write(base_query)
 
-        try:
-            with open(problem_path, 'r') as file:
-                content = file.read()
-                print(f"Content of {problem_name}:")
-                print(content[:500])  # Print the first 500 characters for brevity
-        except Exception as e:
-            print(f"Error reading {problem_path}: {e}")
-            return False
-
-        # Create output directory
-        out_dir = Path("build") / problem_name
-        out_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Ensure scripts directory exists and is in the correct location
-        scripts_dir = Path("scripts")
-        if not scripts_dir.exists():
-            scripts_dir = Path("../scripts")
-        if not scripts_dir.exists():
-            print(f"Error: Cannot find scripts directory")
-            return False
-        
-        gen_cmd = [
-            str(scripts_dir / "sv-generate"),
-            f"--model={config['model']}", 
-            f"--examples={config['examples']}", 
-            f"--temperature={config['temperature']}", 
-            f"--top-p={config['top_p']}", 
-            f"--task={config['task']}", 
-            f"--output={out_dir}/{problem_name}.sv",
-            problem_path
-        ]
-        subprocess.run(gen_cmd, check=True, capture_output=True, text=True)
-
-        if refinement:
-            with open(str(out_dir / f"{problem_name}.sv"), 'r') as f:
-                base_response = f.read().strip()
-
-            # Initialize VerilogModel
-            model = VerilogModel(
-                gen_tb_model=config['model'],
-                generation_temp=config['temperature']
-            )
-                    
-            # Generate and verify code using VerilogModel
-            base_query = content.strip()  # Replace with actual query
-            
-            result = model.run_pipeline(base_query, base_response)
-
-            with open(problem_dir / "initial_solution.sv", 'w') as f:
-                f.write(base_response)
-            
-            # After running the pipeline, save the result
-            with open(problem_dir / "refinement_result.json", 'w') as f:
-                json.dump(result, f, indent=4)
+        # Initialize VerilogModel
+        model = VerilogModel(
+            gen_tb_model=config['model'],
+            generation_temp=config['temperature'],
+            problem_name=problem_name,
+            examples=config['examples']
+        )
                 
-            # Save the final status
-            status = "success" if "Mismatches: 0 in" in result['test_results'] else "failure"
+        # Generate and verify code using VerilogModel
+        result = model.run_pipeline(base_query, refinement=refinement)
+
+        # Save the generated code
+        with open(problem_dir / "initial_solution.sv", 'w') as f:
+            f.write(result['code'])
+
+        # Save the full result as JSON
+        with open(problem_dir / "result.json", 'w') as f:
+            json.dump(result, f, indent=4)
+
+        if 'test_results' in result and result['test_results']:
+            with open(problem_dir / "test_results.txt", 'w') as f:
+                f.write(str(result["test_results"]))
+            
+            # Check the number of mismatches directly
+            num_mismatch = result['test_results'].get('num_mismatch', 1)  # Default to 1 if not found
+            status = "success" if num_mismatch == 0 else "failure"
             with open(problem_dir / "status.txt", 'w') as f:
                 f.write(status)
-                if result['test_results']:
-                    f.write(f"\n\nTest Results:\n{result['test_results']}")
+                f.write(f"\n\nTest Results:\n{result['test_results']}")
             
-            # Check for successful functional verification
-            if "Mismatches: 0 in" in result['test_results'].lower():
-                print(f"Successfully processed {problem_name} (passed both syntax and functional checks)")
-                return True
-            else:
-                print(f"Functional verification failed for {problem_name}")
-                if result['test_results']:
-                    print(f"Simulation output: {result['test_results']}")
-                return False
-            
-        else:
-            # Read the generated solution
-            with open(str(out_dir / f"{problem_name}.sv"), 'r') as f:
-                base_response = f.read().strip()
+            return num_mismatch == 0
 
-            # Save the initial solution
-            with open(problem_dir / "initial_solution.sv", 'w') as f:
-                f.write(base_response)
+    except Exception as e:
+        print(f"Error processing {problem_name}: {str(e)}")
+        with open(problem_dir / "error.txt", 'w') as f:
+            f.write(f"Error: {str(e)}\n")
+            if hasattr(e, 'traceback'):
+                f.write(f"Traceback: {e.traceback}")
+        return False
+        # else:
 
-            # Run verification
-            vvp_cmd = ["vvp", str(out_dir / problem_name)]
-            result = subprocess.run(vvp_cmd, check=True, capture_output=True, text=True)
+        #     gen_cmd = [
+        #         str(scripts_dir / "sv-generate"),
+        #         f"--model={config['model']}", 
+        #         f"--examples={config['examples']}", 
+        #         f"--temperature={config['temperature']}", 
+        #         f"--top-p={config['top_p']}", 
+        #         f"--task={config['task']}", 
+        #         f"--output={out_dir}/{problem_name}.sv",
+        #         problem_path
+        #     ]
+        #     subprocess.run(gen_cmd, check=True, capture_output=True, text=True)
+        #     # Read the generated solution
+        #     with open(str(out_dir / f"{problem_name}.sv"), 'r') as f:
+        #         base_response = f.read().strip()
 
-            # Save the results
-            with open(problem_dir / "verification_result.json", 'w') as f:
-                json.dump({"test_results": result.stdout}, f, indent=4)
+        #     # Save the initial solution
+        #     with open(problem_dir / "initial_solution.sv", 'w') as f:
+        #         f.write(base_response)
 
-            # Save the final status
-            status = "success" if "Mismatches: 0 in" in result.stdout else "failure"
-            with open(problem_dir / "status.txt", 'w') as f:
-                f.write(status)
-                if result.stdout:
-                    f.write(f"\n\nTest Results:\n{result.stdout}")
+        #     # Run verification
+        #     vvp_cmd = ["vvp", str(out_dir / problem_name)]
+        #     result = subprocess.run(vvp_cmd, check=True, capture_output=True, text=True)
 
-            # Check for successful functional verification
-            if "Mismatches: 0 in" in result.stdout:
-                print(f"Successfully processed {problem_name} (passed both syntax and functional checks)")
-                return True
-            else:
-                print(f"Functional verification failed for {problem_name}")
-                if result.stdout:
-                    print(f"Simulation output: {result.stdout}")
-                return False
+        #     # Save the results
+        #     with open(problem_dir / "verification_result.json", 'w') as f:
+        #         json.dump({"test_results": result.stdout}, f, indent=4)
+
+        #     # Save the final status
+        #     status = "success" if "Mismatches: 0 in" in result.stdout else "failure"
+        #     with open(problem_dir / "status.txt", 'w') as f:
+        #         f.write(status)
+        #         if result.stdout:
+        #             f.write(f"\n\nTest Results:\n{result.stdout}")
+
+        #     # Check for successful functional verification
+        #     if "Mismatches: 0 in" in result.stdout:
+        #         print(f"Successfully processed {problem_name} (passed both syntax and functional checks)")
+        #         return True
+        #     else:
+        #         print(f"Functional verification failed for {problem_name}")
+        #         if result.stdout:
+        #             print(f"Simulation output: {result.stdout}")
+        #         return False
                 
             
     except Exception as e:
@@ -252,14 +234,20 @@ def main():
     
     problem_results = {}  # Dictionary to store results for each problem
     # Process problems in parallel
-    with multiprocessing.Pool() as pool:
-        results = list(tqdm(pool.starmap(
-           run_problem,
-           [(f, config, exec_folder, args.refinement) for f in problem_files]
-       ), total=len(problem_files), desc="Processing problems"))
+    with ThreadPool(10) as pool:
+        # Use tqdm to wrap the pool.starmap call for progress tracking
+        results = list(tqdm(
+            pool.starmap(
+                run_problem,
+                [(f, config, exec_folder, args.refinement) for f in problem_files]
+            ),
+            total=len(problem_files),  # Total number of tasks
+            desc="Processing problems",  # Description for the progress bar
+            unit="problem"  # Unit name for each iteration
+        ))
         problem_results = {Path(f).stem.replace("_prompt", ""): success 
-                         for f, success in zip(problem_files, results)}
-    
+                        for f, success in zip(problem_files, results)}
+
     
     # Print and store summary
     success = sum(1 for r in results if r)
