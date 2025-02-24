@@ -17,12 +17,13 @@ import json
 load_dotenv()
 
 # Add this function to create execution directory
-def create_execution_directory(num_samples):
+def create_execution_directory(num_samples, model_name, refinement):
     # Create timestamp
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
-    # Create execution folder name
-    exec_folder = Path("executions") / f"samples_{num_samples}_{timestamp}"
+    # Create execution folder name with model and refinement info
+    refinement_str = "_refined" if refinement else ""
+    exec_folder = Path("executions") / f"samples_{num_samples}_{model_name}{refinement_str}_{timestamp}"
     exec_folder.mkdir(parents=True, exist_ok=True)
     
     return exec_folder
@@ -51,77 +52,6 @@ def check_openai_key():
         print("Error: OPENAI_API_KEY environment variable is not set!")
         print("Please set it using: export OPENAI_API_KEY='your-api-key'")
         sys.exit(1)
-
-# def run_problem(problem_path, config):
-#     """Run evaluation for a single problem"""
-#     problem_name = Path(problem_path).stem.replace("_prompt", "")
-#     print(f"Processing {problem_name}...")
-    
-#     # Create output directory
-#     out_dir = Path("build") / problem_name
-#     out_dir.mkdir(parents=True, exist_ok=True)
-    
-#     # Ensure scripts directory exists and is in the correct location
-#     scripts_dir = Path("scripts")
-#     if not scripts_dir.exists():
-#         scripts_dir = Path("../scripts")
-#     if not scripts_dir.exists():
-#         print(f"Error: Cannot find scripts directory")
-#         return False
-    
-#     try:
-#         # Run sv-generate (syntax generation)
-#         gen_cmd = [
-#             str(scripts_dir / "sv-generate"),
-#             f"--model={config['model']}", 
-#             f"--examples={config['examples']}", 
-#             f"--temperature={config['temperature']}", 
-#             f"--top-p={config['top_p']}", 
-#             f"--task={config['task']}", 
-#             f"--output={out_dir}/{problem_name}.sv",
-#             problem_path
-#         ]
-#         subprocess.run(gen_cmd, check=True, capture_output=True, text=True)
-
-#         str(out_dir / f"{problem_name}.sv")
-        
-#         # Run iverilog test with problem-specific testbench and reference
-#         test_cmd = [
-#             "iverilog",
-#             "-g2012",
-#             "-Wall",
-#             "-o", str(out_dir / problem_name),
-#             str(out_dir / f"{problem_name}.sv"),  # Generated solution
-#             f"dataset_{config['task']}/{problem_name}_ref.sv",  # Reference implementation
-#             f"dataset_{config['task']}/{problem_name}_test.sv"  # Problem-specific testbench
-#         ]
-#         subprocess.run(test_cmd, check=True, capture_output=True, text=True)
-        
-#         # Run simulation for functional verification
-#         vvp_cmd = ["vvp", str(out_dir / problem_name)]
-#         result = subprocess.run(vvp_cmd, check=True, capture_output=True, text=True)
-        
-#         # Check for successful functional verification
-#         if "Mismatches: 0 in" in result.stdout:
-#             print(f"Successfully processed {problem_name} (passed both syntax and functional checks)")
-#             return True
-#         else:
-#             print(f"Functional verification failed for {problem_name}")
-#             if result.stdout:
-#                 print(f"Simulation output: {result.stdout}")
-#             return False
-        
-#     except subprocess.CalledProcessError as e:
-#         print(f"Error processing {problem_name}:")
-#         print(f"Command failed: {' '.join(e.cmd)}")
-#         if e.output:
-#             print(f"Output: {e.output}")
-#         if e.stderr:
-#             print(f"Error: {e.stderr}")
-#         return False
-#     except Exception as e:
-#         print(f"Unexpected error processing {problem_name}: {str(e)}")
-#         return False
     
 def run_problem(problem_path, config, exec_folder, refinement):
     """Run evaluation for a single problem"""
@@ -318,18 +248,37 @@ def main():
         print(f"Processing all {len(problem_files)} samples...")
 
     num_samples = args.num_samples if args.num_samples else len(problem_files)
-    exec_folder = create_execution_directory(num_samples)
+    exec_folder = create_execution_directory(num_samples, args.model, args.refinement)
     
+    problem_results = {}  # Dictionary to store results for each problem
     # Process problems in parallel
     with multiprocessing.Pool() as pool:
         results = list(tqdm(pool.starmap(
            run_problem,
            [(f, config, exec_folder, args.refinement) for f in problem_files]
        ), total=len(problem_files), desc="Processing problems"))
+        problem_results = {Path(f).stem.replace("_prompt", ""): success 
+                         for f, success in zip(problem_files, results)}
     
-    # Print summary
+    
+    # Print and store summary
     success = sum(1 for r in results if r)
     print(f"\nCompleted {success}/{len(results)} problems successfully")
+    
+    # Get failed problems
+    failed_problems = [name for name, success in problem_results.items() if not success]
+    
+    if failed_problems:
+        print("\nFailed problems:")
+        for problem in failed_problems:
+            print(f"- {problem}")
+            
+        # Save failed problems to file
+        with open(exec_folder / "failed_problems.txt", "w") as f:
+            f.write(f"Failed problems ({len(failed_problems)}/{len(results)}):\n")
+            for problem in failed_problems:
+                f.write(f"- {problem}\n")
+
 
 if __name__ == "__main__":
     main()
