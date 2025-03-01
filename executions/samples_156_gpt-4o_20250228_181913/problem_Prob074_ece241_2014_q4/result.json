@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    logic dff1, dff2, dff3;\n    logic xor_out, and_out, or_out;\n\n    // Combinational logic\n    always @(*) begin\n        xor_out = x ^ dff1;\n        and_out = x & ~dff2;\n        or_out  = x | ~dff3;\n    end\n\n    // Sequential logic with synchronous reset\n    always_ff @(posedge clk) begin\n        dff1 <= xor_out;\n        dff2 <= and_out;\n        dff3 <= or_out;\n    end\n\n    // Output logic\n    assign z = ~(dff1 | dff2 | dff3);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 45,
+        "passfail": "R"
+    }
+}

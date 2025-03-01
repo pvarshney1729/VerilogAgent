@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input wire        clk,  // Clock signal, 1-bit, active on rising edge\n    input wire        a,    // Input signal, 1-bit\n    output reg [2:0]  q     // Output, 3-bit, unsigned\n);\n\n    // Initialize q to 0\n    initial begin\n        q = 3'b000;\n    end\n\n    // Sequential logic for the counter\n    always @(posedge clk) begin\n        if (a == 1'b0) begin\n            if (q == 3'b111) begin\n                q <= 3'b000;  // Wrap around to 0 when q reaches 7\n            end else begin\n                q <= q + 1'b1;  // Increment q\n            end\n        end\n        // If a is 1, q holds its value, no need for an else statement\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

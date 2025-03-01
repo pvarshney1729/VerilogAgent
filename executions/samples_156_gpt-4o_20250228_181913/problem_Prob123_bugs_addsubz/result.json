@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\n// Enhanced Specification for Adder-Subtractor with Zero Flag\n\n// Interface Definition\nmodule TopModule (\n    input logic do_sub,               // Control signal for operation mode: 0 for addition, 1 for subtraction\n    input logic [7:0] a,              // 8-bit operand a, unsigned\n    input logic [7:0] b,              // 8-bit operand b, unsigned\n    output logic [7:0] out,           // 8-bit result of operation\n    output logic result_is_zero       // Flag indicating if the result is zero\n);\n\n// Bit-Ordering: LSB is bit[0], MSB is bit[7]\n\n// Behavior Description\n// This module performs either addition or subtraction on 8-bit unsigned inputs\n// depending on the control signal `do_sub`. It outputs the result and sets\n// a zero flag if the result is zero.\n\n// Combinational Logic Block\nalways @(*) begin\n    // Compute result based on the operation mode\n    if (do_sub == 1'b0) begin\n        out = a + b;                // Perform addition\n    end else begin\n        out = a - b;                // Perform subtraction\n    end\n\n    // Zero flag logic\n    if (out == 8'b00000000) begin\n        result_is_zero = 1'b1;      // Set zero flag if result is zero\n    end else begin\n        result_is_zero = 1'b0;      // Clear zero flag otherwise\n    end\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

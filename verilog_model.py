@@ -8,6 +8,28 @@ import re
 from prompts import prompts
 
 from Verilog_generator import VerilogGenerator
+from typing import List, Dict, Optional
+import time
+
+def extract_between_tags(text: str, tag: str) -> str:
+    """Extract content between XML-style tags"""
+    start_tag = f"<{tag}>"
+    end_tag = f"</{tag}>"
+    try:
+        start_idx = text.find(start_tag)
+        end_idx = text.find(end_tag)
+        
+        # Check if both tags exist before proceeding
+        if start_idx == -1 or end_idx == -1:
+            return text  # Return original text if tags not found
+            
+        start = start_idx + len(start_tag)
+        return text[start:end_idx].strip()
+    except Exception as e:
+        print(f"Error extracting content between {tag} tags: {str(e)}")
+        return text
+    
+    
 
 class ResultRecord:
     def __init__(self):
@@ -322,7 +344,7 @@ class VerilogModel:
         return response
 
 
-    def run_pipeline(self, base_query: str, refinement: bool = False) -> Dict:
+    def run_pipeline(self, base_query: str, refinement: bool = False, enhance_spec: bool = True) -> Dict:
         """
         INPUT:
             base_query: str - Base query to generate testbench
@@ -331,6 +353,15 @@ class VerilogModel:
             Dict - Contains the generated testbench code and the test results
         """
         try:
+            if enhance_spec:
+                # Enhance the specification using the prompts
+                enhanced_query = self.generator.generate_with_system_prompt(
+                    prompt=prompts['enhance_spec_rules'].format(user_spec=base_query),
+                    system_prompt=prompts['enhance_spec_system'],
+                    model='gpt-4o',
+                )
+                base_query = extract_between_tags(enhanced_query, "ENHANCED_SPEC")
+
             if not refinement:
                 # Original approach using sv-generate style
                 generated_code = self.generator.generate(

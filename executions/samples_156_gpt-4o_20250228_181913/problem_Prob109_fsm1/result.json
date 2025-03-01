@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic areset,\n    input logic in,\n    output logic out\n);\n\n    typedef enum logic [0:0] {\n        A = 1'b0,\n        B = 1'b1\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            A: begin\n                if (in == 1'b0)\n                    next_state = B;\n                else\n                    next_state = A;\n            end\n            B: begin\n                if (in == 1'b0)\n                    next_state = A;\n                else\n                    next_state = B;\n            end\n            default: next_state = B; // Default to state B\n        endcase\n    end\n\n    // State register with asynchronous reset\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset)\n            current_state <= B;\n        else\n            current_state <= next_state;\n    end\n\n    // Output logic\n    always @(*) begin\n        case (current_state)\n            A: out = 1'b0;\n            B: out = 1'b1;\n            default: out = 1'b1; // Default to output of state B\n        endcase\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

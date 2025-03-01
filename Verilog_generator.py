@@ -2,7 +2,7 @@
 from prompts import prompts
 from utils import generate_openai, generate_anthropic, generate_together
 import time
-from typing import Dict, Tuple, Optional
+from typing import List, Dict, Tuple, Optional
 
 
 class GenerationStats:
@@ -314,4 +314,32 @@ class VerilogGenerator:
                 
         return code_lines
 
+
+    def generate_with_system_prompt(self, prompt: str, system_prompt: Optional[str] = None, model: str = "gpt-4o-mini", temperature: float = 0.7) -> List[Dict]:
+        """
+        INPUT:
+            prompt: str - Input prompt for generation
+            system_prompt: Optional[str] - System prompt for context, defaults to a predefined prompt
+            model: str - The model to use for generation
+            temperature: float - Temperature setting for generation
+        OUTPUT:
+            response: List[Dict] - Generated response
+        """
         
+        # Use a default system prompt if none is provided
+        if system_prompt is None:
+            system_prompt = "You are an expert in formal hardware design specification."
+
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": prompt}
+        ]
+        
+        if "gpt" in model:
+            response = generate_openai(messages=messages, model=model, temperature=temperature)
+        elif "claude" in model:
+            response = generate_anthropic(messages=messages, model=model, temperature=temperature)
+        else:
+            response = generate_together(messages=messages, model=model, temperature=temperature)
+        
+        return response

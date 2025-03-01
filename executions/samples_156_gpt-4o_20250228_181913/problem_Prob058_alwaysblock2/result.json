@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input wire clk,\n    input wire a,\n    input wire b,\n    output wire out_assign,\n    output reg out_always_comb,\n    output reg out_always_ff\n);\n\n// Continuous assignment for XOR\nassign out_assign = a ^ b;\n\n// Combinational always block for XOR\nalways @(*) begin\n    out_always_comb = a ^ b;\nend\n\n// Sequential always block for XOR, with positive edge clock triggering\nalways @(posedge clk) begin\n    out_always_ff <= a ^ b; // Consider adding a reset condition here\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

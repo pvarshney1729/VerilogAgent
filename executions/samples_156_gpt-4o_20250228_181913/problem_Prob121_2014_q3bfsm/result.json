@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,          // Clock signal (1-bit)\n    input logic reset,        // Synchronous active high reset (1-bit)\n    input logic x,            // FSM input signal (1-bit)\n    output logic z            // FSM output signal (1-bit)\n);\n\n    logic [2:0] y;            // State register\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            y <= 3'b000;      // Initial state on reset\n            z <= 1'b0;        // Output on reset\n        end else begin\n            case (y)\n                3'b000: begin\n                    y <= (x == 1'b0) ? 3'b000 : 3'b001;\n                    z <= 1'b0;\n                end\n                3'b001: begin\n                    y <= (x == 1'b0) ? 3'b001 : 3'b100;\n                    z <= 1'b0;\n                end\n                3'b010: begin\n                    y <= (x == 1'b0) ? 3'b010 : 3'b001;\n                    z <= 1'b0;\n                end\n                3'b011: begin\n                    y <= (x == 1'b0) ? 3'b001 : 3'b010;\n                    z <= 1'b1;\n                end\n                3'b100: begin\n                    y <= (x == 1'b0) ? 3'b011 : 3'b100;\n                    z <= 1'b1;\n                end\n                default: begin\n                    y <= 3'b000; // Default state in case of unexpected behavior\n                    z <= 1'b0;\n                end\n            endcase\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 312,
+        "passfail": "R"
+    }
+}

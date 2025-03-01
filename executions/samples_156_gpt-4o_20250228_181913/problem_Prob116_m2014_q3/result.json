@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule(\n    input [3:0] x,\n    output reg f\n);\n\nalways @(*) begin\n    case (x)\n        4'b0001: f = 1'b0;\n        4'b0110: f = 1'b1;\n        4'b0111: f = 1'b0;\n        4'b1000: f = 1'b1;\n        4'b1001: f = 1'b1;\n        default: f = 1'b0; // Assign default value for don't-care conditions\n    endcase\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}
