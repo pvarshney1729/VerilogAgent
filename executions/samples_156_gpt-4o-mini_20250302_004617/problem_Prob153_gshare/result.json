@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic rst,\n    input logic [6:0] global_history,\n    input logic branch_out,\n    output logic prediction\n);\n    // Parameters\n    localparam TABLE_SIZE = 128;\n    localparam COUNTER_BITS = 2;\n\n    // Saturating counter table\n    logic [COUNTER_BITS-1:0] counter_table [0:TABLE_SIZE-1];\n    \n    // Global history register\n    logic [6:0] gh_reg;\n\n    // Prediction logic\n    always @(*) begin\n        prediction = counter_table[global_history[6:0]][1]; // Take the MSB for prediction\n    end\n\n    // Training logic\n    always @(posedge clk) begin\n        if (rst) begin\n            // Reset all counters to zero\n            for (int i = 0; i < TABLE_SIZE; i++) begin\n                counter_table[i] <= 2'b00;\n            end\n            gh_reg <= 7'b0000000;\n        end else begin\n            // Update the global history register\n            gh_reg <= {gh_reg[5:0], branch_out};\n\n            // Update the saturating counter\n            if (branch_out) begin\n                if (counter_table[gh_reg[6:0]] < 2'b11) begin\n                    counter_table[gh_reg[6:0]] <= counter_table[gh_reg[6:0]] + 1'b1;\n                end\n            end else begin\n                if (counter_table[gh_reg[6:0]] > 2'b00) begin\n                    counter_table[gh_reg[6:0]] <= counter_table[gh_reg[6:0]] - 1'b1;\n                end\n            end\n        end\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

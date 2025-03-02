@@ -1,0 +1,8 @@
+{
+    "code": "module combinational_logic (\n    input logic clk,\n    input logic reset,\n    input logic a,\n    input logic b,\n    output logic y\n);\n\n    logic xnor_result;\n    logic xor_result;\n\n    // Combinational logic for XNOR followed by XOR\n    always @(*) begin\n        xnor_result = ~(a ^ b); // XNOR operation\n        xor_result = xnor_result ^ a; // XOR operation with one of the inputs\n    end\n\n    // Sequential logic with synchronous reset\n    always @(posedge clk) begin\n        if (reset) begin\n            y <= 1'b0; // Initialize output to zero on reset\n        end else begin\n            y <= xor_result; // Assign the result to output\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

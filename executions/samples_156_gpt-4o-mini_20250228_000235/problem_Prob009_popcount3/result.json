@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic [2:0] in,\n    output logic [1:0] out\n);\n\n    logic [1:0] count;\n\n    always @(*) begin\n        count = 2'b00; // Initialize count\n        if (in[0] == 1'b1) count = count + 2'b01;\n        if (in[1] == 1'b1) count = count + 2'b01;\n        if (in[2] == 1'b1) count = count + 2'b01;\n    end\n\n    assign out = count;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

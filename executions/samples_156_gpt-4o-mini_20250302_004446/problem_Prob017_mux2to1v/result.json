@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  logic [99:0] a,   \n    input  logic [99:0] b,   \n    input  logic        sel, \n    output logic [99:0] out  \n);\n\nalways @(*) begin\n    case (sel)\n        1'b0: out = a;\n        1'b1: out = b;\n        default: out = 100'b0; // Default case for safety\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

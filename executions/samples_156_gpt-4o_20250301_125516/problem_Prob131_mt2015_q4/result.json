@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule ModuleA (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    assign z = (x ^ y) & x;\nendmodule\n\nmodule ModuleB (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    assign z = ((x == 1'b0) && (y == 1'b0)) ? 1'b1 : ((x == 1'b1) && (y == 1'b1)) ? 1'b1 : 1'b0;\nendmodule\n\nmodule TopLevel (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    logic z_A1, z_A2, z_B1, z_B2;\n    logic or_out, and_out;\n\n    // Instantiate Module A\n    ModuleA A1 (.x(x), .y(y), .z(z_A1));\n    ModuleA A2 (.x(x), .y(y), .z(z_A2));\n\n    // Instantiate Module B\n    ModuleB B1 (.x(x), .y(y), .z(z_B1));\n    ModuleB B2 (.x(x), .y(y), .z(z_B2));\n\n    // OR gate\n    assign or_out = z_A1 | z_B1;\n\n    // AND gate\n    assign and_out = z_A2 & z_B2;\n\n    // XOR gate\n    assign z = or_out ^ and_out;\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

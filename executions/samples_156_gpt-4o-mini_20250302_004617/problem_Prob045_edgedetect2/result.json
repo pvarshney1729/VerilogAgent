@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic rst_n,\n    input logic [7:0] data_in,\n    output logic [7:0] edge_detected\n);\n\n    logic [7:0] data_reg;\n    logic [7:0] data_prev;\n\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            data_reg <= 8'b00000000;\n            data_prev <= 8'b00000000;\n        end else begin\n            data_prev <= data_reg;\n            data_reg <= data_in;\n        end\n    end\n\n    always @(*) begin\n        edge_detected = data_reg ^ data_prev;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic predict_valid,\n    input logic train_mispredicted,\n    output logic [31:0] predict_history\n);\n\n    // 32-bit shift register for predict_history\n    logic [31:0] shift_reg;\n\n    // Sequential logic for shift register with synchronous reset\n    always_ff @(posedge clk) begin\n        if (areset) begin\n            shift_reg <= 32'b0;\n        end else begin\n            if (predict_valid) begin\n                shift_reg <= {shift_reg[30:0], train_mispredicted};\n            end\n        end\n    end\n\n    // Assign the shift register to the output\n    assign predict_history = shift_reg;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

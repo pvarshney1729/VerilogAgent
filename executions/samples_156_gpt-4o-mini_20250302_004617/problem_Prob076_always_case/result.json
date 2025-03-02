@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic [5:0] data_in,  // 6-bit input data\n    input logic [2:0] sel,      // 3-bit select signal\n    input logic clk,            // Clock signal\n    input logic rst_n,          // Active low synchronous reset\n    output logic data_out       // Output data\n);\n\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            data_out <= 1'b0;    // Initialize output to zero on reset\n        end else begin\n            case (sel)\n                3'b000: data_out <= data_in[0]; // Select input 0\n                3'b001: data_out <= data_in[1]; // Select input 1\n                3'b010: data_out <= data_in[2]; // Select input 2\n                3'b011: data_out <= data_in[3]; // Select input 3\n                3'b100: data_out <= data_in[4]; // Select input 4\n                3'b101: data_out <= data_in[5]; // Select input 5\n                default: data_out <= 1'b0;       // Default case\n            endcase\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  logic clk,    // Clock signal, triggers on positive edge\n    input  logic reset,  // Reset signal, active high\n    input  logic w,      // Input signal determining state transitions\n    output logic z       // Output signal, high in states E and F\n);\n\nlogic [2:0] current_state, next_state;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        current_state <= 3'b000; // State A\n    end else begin\n        current_state <= next_state;\n    end\nend\n\nalways @(*) begin\n    case (current_state)\n        3'b000: next_state = (w == 1'b0) ? 3'b001 : 3'b000; // A\n        3'b001: next_state = (w == 1'b0) ? 3'b010 : 3'b011; // B\n        3'b010: next_state = (w == 1'b0) ? 3'b100 : 3'b011; // C\n        3'b011: next_state = (w == 1'b0) ? 3'b101 : 3'b000; // D\n        3'b100: next_state = (w == 1'b0) ? 3'b100 : 3'b011; // E\n        3'b101: next_state = (w == 1'b0) ? 3'b010 : 3'b011; // F\n        default: next_state = 3'b000; // Default to A\n    endcase\nend\n\nassign z = (current_state == 3'b100) || (current_state == 3'b101);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

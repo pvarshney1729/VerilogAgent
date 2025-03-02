@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,            // Clock signal, active edge not specified\n    input logic rst_n,          // Asynchronous active-low reset signal\n    input logic x,              // Single-bit input\n    input logic [2:0] y,        // 3-bit input, MSB y[2]\n    output logic Y0,            // Single-bit output, corresponds to Y[0]\n    output logic z              // Single-bit output\n);\n\n    logic [2:0] state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (state)\n            3'b000: next_state = (x == 1'b0) ? 3'b000 : 3'b001;\n            3'b001: next_state = (x == 1'b0) ? 3'b001 : 3'b100;\n            3'b010: next_state = (x == 1'b0) ? 3'b010 : 3'b001;\n            3'b011: next_state = (x == 1'b0) ? 3'b001 : 3'b010;\n            3'b100: next_state = (x == 1'b0) ? 3'b011 : 3'b100;\n            default: next_state = 3'b000; // Safe state\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        case (state)\n            3'b011, 3'b100: z = 1'b1;\n            default: z = 1'b0;\n        endcase\n    end\n\n    // State register with asynchronous reset\n    always_ff @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            state <= 3'b000;\n        else\n            state <= next_state;\n    end\n\n    // Output Y0 logic\n    assign Y0 = next_state[0];\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 80,
+        "passfail": "R"
+    }
+}

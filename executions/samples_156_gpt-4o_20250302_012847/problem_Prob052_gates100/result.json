@@ -1,0 +1,8 @@
+{
+    "code": "module enhanced_counter (\n    input logic clk,\n    input logic reset,\n    input logic [3:0] in,\n    output logic [3:0] out,\n    output logic overflow\n);\n\n    logic [3:0] count;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            count <= 4'b0000;\n            overflow <= 1'b0;\n        end else begin\n            {overflow, count} <= count + in;\n        end\n    end\n\n    assign out = count;\n\nendmodule\n\nmodule tb_enhanced_counter;\n    logic clk;\n    logic reset;\n    logic [3:0] in;\n    logic [3:0] out;\n    logic overflow;\n\n    enhanced_counter uut (\n        .clk(clk),\n        .reset(reset),\n        .in(in),\n        .out(out),\n        .overflow(overflow)\n    );\n\n    initial begin\n        // Initialize signals\n        clk = 0;\n        reset = 0;\n        in = 4'b0000;\n\n        // Apply reset\n        reset = 1;\n        #10 reset = 0;\n\n        // Test case 1: No overflow\n        in = 4'b0010;\n        #10;\n        assert(out == 4'b0010 && overflow == 1'b0);\n\n        // Test case 2: Overflow occurs\n        in = 4'b1111;\n        #10;\n        assert(out == 4'b0001 && overflow == 1'b1);\n\n        // Test case 3: Reset after overflow\n        reset = 1;\n        #10 reset = 0;\n        assert(out == 4'b0000 && overflow == 1'b0);\n\n        // Test case 4: Increment without overflow\n        in = 4'b0100;\n        #10;\n        assert(out == 4'b0100 && overflow == 1'b0);\n\n        $finish;\n    end\n\n    always #5 clk = ~clk; // Clock generation\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

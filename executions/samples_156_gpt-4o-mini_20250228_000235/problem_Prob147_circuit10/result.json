@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic a,\n    input  logic b,\n    output logic q,\n    output logic state\n);\n\n    logic ff_state;\n\n    // Combinational logic to determine the next state of the flip-flop\n    always @(*) begin\n        if (a && !b) begin\n            q = 1'b1;\n        end else if (!a && b) begin\n            q = 1'b0;\n        end else begin\n            q = ff_state; // Hold state\n        end\n    end\n\n    // Sequential logic to update the flip-flop state\n    always @(posedge clk) begin\n        ff_state <= q;\n    end\n\n    assign state = ff_state;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 89,
+        "passfail": "R"
+    }
+}

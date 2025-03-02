@@ -345,7 +345,7 @@ class VerilogModel:
         return response
 
 
-    def run_pipeline(self, base_query: str, refinement: bool = False, enhance_spec: bool = True, iterative_refinement: bool = True, max_iterations: int = 3) -> Dict:
+    def run_pipeline(self, base_query: str, refinement: bool = False, enhance_spec: bool = True, iterative_refinement: bool = False, max_iterations: int = 3) -> Dict:
         """
         INPUT:
             base_query: str - Base query to generate testbench

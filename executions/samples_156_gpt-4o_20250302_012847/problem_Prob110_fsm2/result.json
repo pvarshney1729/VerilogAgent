@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic async_reset_n,\n    output logic state\n);\n\n    typedef enum logic [0:0] {\n        STATE_0 = 1'b0,\n        STATE_1 = 1'b1\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // Asynchronous reset logic\n    always_ff @(posedge clk or negedge async_reset_n) begin\n        if (!async_reset_n)\n            current_state <= STATE_0;\n        else\n            current_state <= next_state;\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            STATE_0: next_state = STATE_1;\n            STATE_1: next_state = STATE_0;\n            default: next_state = STATE_0;\n        endcase\n    end\n\n    // Output logic\n    assign state = current_state;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

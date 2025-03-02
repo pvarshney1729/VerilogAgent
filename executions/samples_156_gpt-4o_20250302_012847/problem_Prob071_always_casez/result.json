@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic [7:0] data_in,\n    output logic [2:0] first_one_position,\n    output logic found\n);\n\n    always @(*) begin\n        found = 1'b0;\n        first_one_position = 3'b000;\n        for (int i = 0; i < 8; i++) begin\n            if (data_in[i] == 1'b1 && found == 1'b0) begin\n                found = 1'b1;\n                first_one_position = i[2:0];\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

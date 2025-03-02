@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,           // Clock signal, positive edge triggered\n    input logic areset,        // Asynchronous reset, active high\n    input logic load,          // Load control signal, active high\n    input logic ena,           // Enable control signal, active high\n    input logic [3:0] data,    // 4-bit data input\n    output logic [3:0] q        // 4-bit shift register output\n);\n\nalways_ff @(posedge clk or posedge areset) begin\n    if (areset) begin\n        q <= 4'b0000;          // Asynchronous reset\n    end else if (load) begin\n        q <= data;            // Load data into q\n    end else if (ena) begin\n        q <= {1'b0, q[3:1]};  // Right shift operation\n    end\n    // If neither load nor ena is high, q remains unchanged\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

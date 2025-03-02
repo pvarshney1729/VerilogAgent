@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic data_in,\n    output logic discard,\n    output logic flag,\n    output logic error\n);\n\n    typedef enum logic [1:0] {\n        S_IDLE = 2'b00,\n        S_DISCARD = 2'b01,\n        S_FLAG = 2'b10,\n        S_ERROR = 2'b11\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            S_IDLE: begin\n                if (data_in == 1'b1) \n                    next_state = S_DISCARD;\n                else \n                    next_state = S_IDLE;\n            end\n            S_DISCARD: begin\n                if (data_in == 1'b0) \n                    next_state = S_FLAG;\n                else \n                    next_state = S_ERROR;\n            end\n            S_FLAG: begin\n                if (data_in == 1'b1) \n                    next_state = S_ERROR;\n                else \n                    next_state = S_IDLE;\n            end\n            S_ERROR: begin\n                next_state = S_IDLE; // Reset to IDLE after error\n            end\n            default: next_state = S_IDLE;\n        endcase\n    end\n\n    // State register with synchronous reset\n    always @(posedge clk) begin\n        if (reset) \n            current_state <= S_IDLE;\n        else \n            current_state <= next_state;\n    end\n\n    // Output logic\n    assign discard = (current_state == S_DISCARD);\n    assign flag = (current_state == S_FLAG);\n    assign error = (current_state == S_ERROR);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

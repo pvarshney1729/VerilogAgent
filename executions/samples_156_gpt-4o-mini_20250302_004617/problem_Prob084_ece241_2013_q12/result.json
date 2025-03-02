@@ -1,0 +1,8 @@
+{
+    "code": "module shift_register (\n    input logic clk,\n    input logic rst,\n    input logic [7:0] data_in,\n    input logic shift,\n    input logic [2:0] addr,\n    output logic [7:0] Z\n);\n    logic [7:0] shift_reg;\n\n    always @(*) begin\n        case (addr)\n            3'b000: Z = shift_reg[0];\n            3'b001: Z = shift_reg[1];\n            3'b010: Z = shift_reg[2];\n            3'b011: Z = shift_reg[3];\n            3'b100: Z = shift_reg[4];\n            3'b101: Z = shift_reg[5];\n            3'b110: Z = shift_reg[6];\n            3'b111: Z = shift_reg[7];\n            default: Z = 1'b0;\n        endcase\n    end\n\n    always @(*) begin\n        if (rst) begin\n            shift_reg = 8'b00000000;\n        end else if (shift) begin\n            shift_reg = {shift_reg[6:0], data_in[0]};\n        end else begin\n            shift_reg = shift_reg;\n        end\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module combinational_kmap (\n    input logic c,\n    input logic d,\n    output logic [3:0] mux_in\n);\n\n    always @(*) begin\n        case ({c, d})\n            2'b00: mux_in = 4'b0001; // K-map output for c=0, d=0\n            2'b01: mux_in = 4'b0010; // K-map output for c=0, d=1\n            2'b10: mux_in = 4'b0100; // K-map output for c=1, d=0\n            2'b11: mux_in = 4'b1000; // K-map output for c=1, d=1\n            default: mux_in = 4'b0000; // Default case\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

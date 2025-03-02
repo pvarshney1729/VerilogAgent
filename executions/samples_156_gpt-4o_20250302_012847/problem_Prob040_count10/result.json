@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,        // Positive-edge-triggered clock signal\n    input logic reset,      // Active-high, synchronous reset signal\n    output logic [3:0] q    // 4-bit output, q[3] is MSB, q[0] is LSB\n);\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q <= 4'b0000;   // Reset counter to 0\n        end else begin\n            if (q == 4'b1001) begin\n                q <= 4'b0000; // Wrap around to 0 after reaching 9\n            end else begin\n                q <= q + 1'b1; // Increment counter\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

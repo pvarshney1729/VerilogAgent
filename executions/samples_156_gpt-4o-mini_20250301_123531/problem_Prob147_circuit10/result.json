@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n\n    // Synchronous reset and state initialization\n    always @(posedge clk) begin\n        if (state == 1'b0) begin\n            state <= 1'b0; // Reset state\n        end else begin\n            state <= ~state; // Toggle state for demonstration\n        end\n    end\n\n    // Combinational logic for output q\n    always @(*) begin\n        q = (a & b) | (state); // Example combinational logic\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 229,
+        "passfail": "R"
+    }
+}

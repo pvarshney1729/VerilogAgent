@@ -1,0 +1,8 @@
+{
+    "code": "module fixed_module (\n    input logic clk,\n    input logic reset,\n    input logic [15:0] in1,\n    input logic [15:0] in2,\n    output logic [31:0] out\n);\n\n    logic [31:0] concatenated_input;\n\n    // Concatenate inputs to form a 32-bit vector\n    always @(*) begin\n        concatenated_input = {in1, in2};\n    end\n\n    // Sequential logic with synchronous reset\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            out <= 32'd0;\n        end else begin\n            out <= concatenated_input;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

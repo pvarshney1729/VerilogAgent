@@ -1,0 +1,8 @@
+{
+    "code": "```verilog\nmodule ringer_motor_control (\n    input logic clk,\n    input logic reset,\n    input logic ring,\n    input logic vibrate_mode,\n    output logic ringer,\n    output logic motor\n);\n\n    // Sequential logic for synchronous reset\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            ringer <= 1'b0;\n            motor <= 1'b0;\n        end else begin\n            // Combinational logic to ensure mutual exclusivity\n            if (ring && !vibrate_mode) begin\n                ringer <= 1'b1;\n                motor <= 1'b0;\n            end else if (ring && vibrate_mode) begin\n                ringer <= 1'b0;\n                motor <= 1'b1;\n            end else begin\n                ringer <= 1'b0;\n                motor <= 1'b0;\n            end\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 3
+}

@@ -1,0 +1,8 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic rst_n,\n    input logic [3:0] data_in,\n    output logic [3:0] data_out\n);\n\n    logic [3:0] state;\n\n    // Synchronous reset and state initialization\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            state <= 4'b0000; // Initialize state to zero\n        end else begin\n            // State transition logic (example)\n            state <= state + 1'b1; // Example state transition\n        end\n    end\n\n    // Combinational logic for output\n    always @(*) begin\n        data_out = state; // Example output logic\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 3
+}

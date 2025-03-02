@@ -1,0 +1,8 @@
+{
+    "code": "module state_machine (\n    input logic clk,\n    input logic rst_n,\n    input logic start,\n    output logic done\n);\n\n    typedef enum logic [1:0] {\n        S_IDLE = 2'b00,\n        S_PROCESS = 2'b01,\n        S_DONE = 2'b10\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // Synchronous reset and state transition\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            current_state <= S_IDLE;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            S_IDLE: begin\n                if (start) begin\n                    next_state = S_PROCESS;\n                end else begin\n                    next_state = S_IDLE;\n                end\n            end\n            S_PROCESS: begin\n                next_state = S_DONE;\n            end\n            S_DONE: begin\n                next_state = S_IDLE;\n            end\n            default: begin\n                next_state = S_IDLE;\n            end\n        endcase\n    end\n\n    // Output logic\n    assign done = (current_state == S_DONE);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

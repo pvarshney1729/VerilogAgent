@@ -1,0 +1,8 @@
+{
+    "code": "```verilog\nmodule fsm_with_one_hot_checker (\n    input logic clk,\n    input logic reset,\n    input logic [2:0] state_in,\n    output logic [2:0] state_out\n);\n\n    // State encoding\n    localparam logic [2:0] S0 = 3'b001,\n                           S1 = 3'b010,\n                           S2 = 3'b100;\n\n    logic [2:0] current_state, next_state;\n\n    // One-hot checker\n    function logic is_one_hot(input logic [2:0] state);\n        return (state == S0) || (state == S1) || (state == S2);\n    endfunction\n\n    // State transition logic with one-hot checking\n    always @(*) begin\n        if (!is_one_hot(current_state)) begin\n            next_state = S0; // Reset to a valid state if invalid\n        end else begin\n            case (current_state)\n                S0: next_state = S1;\n                S1: next_state = S2;\n                S2: next_state = S0;\n                default: next_state = S0; // Default to a valid state\n            endcase\n        end\n    end\n\n    // Sequential logic with synchronous reset\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            current_state <= S0;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Output logic\n    assign state_out = current_state;\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 3
+}

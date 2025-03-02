@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset_n,\n    input logic load,\n    input logic ena,\n    input logic [7:0] data_in,\n    output logic [7:0] data_out\n);\n\n    logic [7:0] reg_data;\n\n    always @(*) begin\n        if (!reset_n) begin\n            reg_data = 8'b0;\n        end else if (load) begin\n            reg_data = data_in;\n        end else if (ena) begin\n            reg_data = reg_data >> 1; // Arithmetic shift right\n        end\n    end\n\n    assign data_out = reg_data;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 2
+}

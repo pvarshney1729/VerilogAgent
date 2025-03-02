@@ -1,0 +1,8 @@
+{
+    "code": "module rule110 (\n    input logic clk,\n    input logic rst_n,\n    input logic [511:0] current_state,\n    output logic [511:0] next_state\n);\n\n    logic [511:0] state;\n\n    // Synchronous reset\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            state <= 512'b0; // Initialize all flip-flops to zero\n        end else begin\n            state <= next_state; // Update state on clock edge\n        end\n    end\n\n    // Combinational logic to determine next state\n    always @(*) begin\n        next_state[0] = state[0] | (state[1] & ~state[0]); // Left boundary condition\n        for (int i = 1; i < 511; i++) begin\n            next_state[i] = (state[i-1] & ~state[i]) | (state[i] & ~state[i-1]) | (state[i+1] & state[i]);\n        end\n        next_state[511] = state[510] | (state[511] & ~state[510]); // Right boundary condition\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

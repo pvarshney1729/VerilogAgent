@@ -1,0 +1,8 @@
+{
+    "code": "module clock_module (\n    input logic clk,\n    input logic reset,\n    output logic [7:0] hh,\n    output logic [7:0] mm,\n    output logic [7:0] ss,\n    output logic am_pm // 0 for AM, 1 for PM\n);\n\n    // Internal registers for hours, minutes, and seconds\n    logic [7:0] hours;\n    logic [7:0] minutes;\n    logic [7:0] seconds;\n    logic am_pm_flag;\n\n    // Synchronous reset and clock logic\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            // Initialize to 12:00:00 AM\n            hours <= 8'd12;\n            minutes <= 8'd0;\n            seconds <= 8'd0;\n            am_pm_flag <= 1'b0; // AM\n        end else begin\n            // Increment seconds\n            if (seconds == 8'd59) begin\n                seconds <= 8'd0;\n                // Increment minutes\n                if (minutes == 8'd59) begin\n                    minutes <= 8'd0;\n                    // Increment hours\n                    if (hours == 8'd11) begin\n                        hours <= 8'd12;\n                        am_pm_flag <= ~am_pm_flag; // Toggle AM/PM\n                    end else if (hours == 8'd12) begin\n                        hours <= 8'd1;\n                    end else begin\n                        hours <= hours + 1;\n                    end\n                end else begin\n                    minutes <= minutes + 1;\n                end\n            end else begin\n                seconds <= seconds + 1;\n            end\n        end\n    end\n\n    // Assign outputs\n    assign hh = hours;\n    assign mm = minutes;\n    assign ss = seconds;\n    assign am_pm = am_pm_flag;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

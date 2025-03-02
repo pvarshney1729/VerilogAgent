@@ -1,0 +1,8 @@
+{
+    "code": "module shift_count_register (\n    input logic clk,\n    input logic reset_n,\n    input logic shift_en,\n    input logic count_en,\n    output logic [3:0] data_out\n);\n    logic [3:0] reg_data;\n\n    always @(*) begin\n        if (!reset_n) begin\n            reg_data = 4'b0000;\n        end else if (shift_en && !count_en) begin\n            reg_data = {reg_data[2:0], 1'b1}; // Shift right and insert 1\n        end else if (!shift_en && count_en) begin\n            reg_data = reg_data + 1'b1; // Increment\n        end else begin\n            reg_data = reg_data; // Hold value\n        end\n    end\n\n    assign data_out = reg_data;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

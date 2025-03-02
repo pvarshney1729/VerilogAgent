@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic [3:0] c,\n    output logic [3:0] q\n);\n\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 4'b0000;\n        end else begin\n            case (c)\n                4'b0000: q <= 4'b0001;\n                4'b0001: q <= 4'b0010;\n                4'b0010: q <= 4'b0011;\n                4'b0011: q <= 4'b0100;\n                4'b0100: q <= 4'b0101;\n                4'b0101: q <= 4'b0110;\n                4'b0110: q <= 4'b0111;\n                4'b0111: q <= 4'b1000;\n                4'b1000: q <= 4'b1001;\n                4'b1001: q <= 4'b1010;\n                4'b1010: q <= 4'b1011;\n                4'b1011: q <= 4'b1100;\n                4'b1100: q <= 4'b1101;\n                4'b1101: q <= 4'b1110;\n                4'b1110: q <= 4'b1111;\n                4'b1111: q <= 4'b0000;\n                default: q <= 4'b0000;\n            endcase\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

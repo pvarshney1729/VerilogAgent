@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic [1023:0] data_in,\n    input logic [7:0] sel,\n    output logic data_out\n);\n\n    always @(*) begin\n        if (sel < 8'd256) begin\n            data_out = data_in[sel];\n        end else begin\n            data_out = 1'b0; // Default value for sel > 255\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

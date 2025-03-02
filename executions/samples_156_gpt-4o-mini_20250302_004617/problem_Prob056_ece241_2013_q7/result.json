@@ -1,0 +1,8 @@
+{
+    "code": "module jk_flip_flop (\n    input logic clk,\n    input logic reset,\n    input logic J,\n    input logic K,\n    output logic Q,\n    output logic Qn\n);\n\n    // Initialize Q and Qn\n    initial begin\n        Q = 1'b0;\n        Qn = 1'b1;\n    end\n\n    always @(*) begin\n        if (reset) begin\n            Q = 1'b0;\n            Qn = 1'b1;\n        end else begin\n            case ({J, K})\n                2'b00: begin\n                    // No change\n                    Q = Q;\n                    Qn = ~Q;\n                end\n                2'b01: begin\n                    // Reset\n                    Q = 1'b0;\n                    Qn = 1'b1;\n                end\n                2'b10: begin\n                    // Set\n                    Q = 1'b1;\n                    Qn = 1'b0;\n                end\n                2'b11: begin\n                    // Toggle\n                    Q = ~Q;\n                    Qn = ~Qn;\n                end\n            endcase\n        end\n    end\n\n    // Sequential logic to update Q on clock edge\n    always @(posedge clk) begin\n        // Update Q and Qn based on the combinational logic\n        Q <= Q;\n        Qn <= ~Q;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

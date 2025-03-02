@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,          // Clock signal, positive edge-triggered\n    input logic async_reset,  // Asynchronous active-high reset\n    input logic a,            // Single-bit input\n    input logic b,            // Single-bit input\n    output logic out_assign,  // Single-bit output for assign statement-based XOR\n    output logic out_always_comb, // Single-bit output for combinational always block-based XOR\n    output logic out_always_ff    // Single-bit output for clocked always block-based XOR\n);\n\n    // Assign statement-based XOR\n    assign out_assign = a ^ b;\n\n    // Combinational always block-based XOR\n    always_comb begin\n        out_always_comb = a ^ b;\n    end\n\n    // Clocked always block-based XOR with asynchronous reset\n    always_ff @(posedge clk or posedge async_reset) begin\n        if (async_reset) begin\n            out_always_ff <= 1'b0;\n        end else begin\n            out_always_ff <= a ^ b;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

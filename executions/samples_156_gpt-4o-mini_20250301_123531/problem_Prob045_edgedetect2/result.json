@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    input logic [7:0] in,\n    output logic [7:0] anyedge\n);\n\n    logic [7:0] prev_in;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            anyedge <= 8'b0;\n            prev_in <= 8'b0;\n        end else begin\n            anyedge <= in ^ prev_in;\n            prev_in <= in;\n        end\n    end\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

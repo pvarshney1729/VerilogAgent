@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic c, // Input 'c', 1-bit, used for K-map row selection\n    input logic d, // Input 'd', 1-bit, used for K-map row selection\n    output logic [3:0] mux_in // 4-bit output connecting to a 4-to-1 multiplexer\n);\n\n    assign mux_in[0] = (c ~& d) | (c & ~d) | (c & d); // K-map entry for ab = 00\n    assign mux_in[1] = 1'b0;                          // K-map entry for ab = 01\n    assign mux_in[2] = c & d;                         // K-map entry for ab = 11\n    assign mux_in[3] = (c ~& d) | (c & d);           // K-map entry for ab = 10\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 60,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  logic [7:0] a,  // Input A, 8 bits, unsigned\n    input  logic [7:0] b,  // Input B, 8 bits, unsigned\n    input  logic [7:0] c,  // Input C, 8 bits, unsigned\n    input  logic [7:0] d,  // Input D, 8 bits, unsigned\n    output logic [7:0] min // Output minimum value, 8 bits, unsigned\n);\n\n    assign min = (a <= b) ? (a <= c ? (a <= d ? a : d) : (c <= d ? c : d)) :\n                            (b <= c ? (b <= d ? b : d) : (c <= d ? c : d));\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

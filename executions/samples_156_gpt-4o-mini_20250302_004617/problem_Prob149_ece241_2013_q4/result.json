@@ -1,0 +1,8 @@
+{
+    "code": "```verilog\nmodule flow_rate_control (\n    input logic clk,\n    input logic reset,\n    input logic [7:0] sensor_input,\n    output logic [7:0] flow_rate_output\n);\n\n    logic [7:0] flow_rate;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            flow_rate <= 8'b00000000;\n        end else begin\n            // Example logic for flow rate control based on sensor input\n            flow_rate <= sensor_input; // Replace with actual control logic\n        end\n    end\n\n    assign flow_rate_output = flow_rate;\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 3
+}

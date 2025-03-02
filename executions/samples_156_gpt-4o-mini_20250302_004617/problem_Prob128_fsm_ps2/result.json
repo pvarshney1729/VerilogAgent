@@ -1,0 +1,8 @@
+{
+    "code": "module fsm_ps2_mouse (\n    input logic clk,\n    input logic reset,\n    input logic data_in,\n    output logic boundary_detected\n);\n\n    typedef enum logic [1:0] {\n        IDLE = 2'b00,\n        START = 2'b01,\n        DATA = 2'b10,\n        STOP = 2'b11\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // Synchronous reset and state transition\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= IDLE;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            IDLE: begin\n                if (data_in == 1'b1) begin\n                    next_state = START;\n                end else begin\n                    next_state = IDLE;\n                end\n            end\n            START: begin\n                next_state = DATA;\n            end\n            DATA: begin\n                if (data_in == 1'b0) begin\n                    next_state = STOP;\n                end else begin\n                    next_state = DATA;\n                end\n            end\n            STOP: begin\n                next_state = IDLE;\n            end\n            default: next_state = IDLE;\n        endcase\n    end\n\n    // Boundary detection logic\n    assign boundary_detected = (current_state == STOP);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

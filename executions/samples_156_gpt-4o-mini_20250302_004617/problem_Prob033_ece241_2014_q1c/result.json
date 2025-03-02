@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic [7:0] A,\n    input logic [7:0] B,\n    output logic [7:0] Sum,\n    output logic Overflow\n);\n\n    logic [8:0] full_sum;\n\n    // Calculate the full sum including carry\n    assign full_sum = {1'b0, A} + {1'b0, B};\n\n    // Assign the sum output\n    assign Sum = full_sum[7:0];\n\n    // Detect overflow: overflow occurs if the sign of A and B are the same\n    // and the sign of the result is different\n    assign Overflow = (A[7] == B[7]) && (A[7] != Sum[7]);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

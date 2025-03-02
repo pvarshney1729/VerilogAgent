@@ -1,0 +1,8 @@
+{
+    "code": "module combinational_logic (\n    input logic [3:0] a,\n    input logic [3:0] b,\n    input logic [1:0] sel,\n    output logic [3:0] y\n);\n\n    always @(*) begin\n        case (sel)\n            2'b00: y = a & b;  // AND operation\n            2'b01: y = a | b;  // OR operation\n            2'b10: y = a ^ b;  // XOR operation\n            2'b11: y = ~a;     // NOT operation on 'a'\n            default: y = 4'b0000; // Default case\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

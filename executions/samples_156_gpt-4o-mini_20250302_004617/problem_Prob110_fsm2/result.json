@@ -1,0 +1,8 @@
+{
+    "code": "module state_machine (\n    input logic clk,\n    input logic reset,\n    input logic j,\n    input logic k,\n    output logic state\n);\n\n    typedef enum logic {OFF, ON} state_t;\n    state_t current_state, next_state;\n\n    always @(*) begin\n        case (current_state)\n            OFF: begin\n                if (j && !k)\n                    next_state = ON;\n                else\n                    next_state = OFF;\n            end\n            ON: begin\n                if (!j && k)\n                    next_state = OFF;\n                else\n                    next_state = ON;\n            end\n            default: next_state = OFF;\n        endcase\n    end\n\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= OFF;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    assign state = (current_state == ON);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

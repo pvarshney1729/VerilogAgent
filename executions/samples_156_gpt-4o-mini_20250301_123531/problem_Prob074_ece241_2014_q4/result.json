@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    output logic Z\n);\n\n    logic Q1, Q2, Q3;\n    logic D1, D2, D3;\n\n    // D flip-flops with asynchronous reset\n    always @(posedge clk or negedge clk) begin\n        if (!clk) begin\n            Q1 <= 1'b0;\n            Q2 <= 1'b0;\n            Q3 <= 1'b0;\n        end else begin\n            Q1 <= D1;\n            Q2 <= D2;\n            Q3 <= D3;\n        end\n    end\n\n    // Combinational logic\n    always @(*) begin\n        D1 = x ^ Q1;\n        D2 = x & ~Q2;\n        D3 = x | ~Q3;\n    end\n\n    // Output logic\n    assign Z = ~(Q1 | Q2 | Q3);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    }
+}

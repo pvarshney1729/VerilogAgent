@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset_n,\n    input logic [5:0] y,\n    input logic w,\n    output logic Y1,\n    output logic Y3\n);\n\n    logic [5:0] state, next_state;\n\n    // Synchronous reset and state transition logic\n    always @(posedge clk) begin\n        if (!reset_n) begin\n            state <= 6'b000001; // Reset to state A\n        end else begin\n            state <= next_state; // Transition to next state\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (state)\n            6'b000001: next_state = (w) ? 6'b000010 : 6'b000001; // State A\n            6'b000010: next_state = (w) ? 6'b000100 : 6'b001000; // State B\n            6'b000100: next_state = (w) ? 6'b010000 : 6'b001000; // State C\n            6'b001000: next_state = (w) ? 6'b100000 : 6'b000001; // State D\n            6'b010000: next_state = (w) ? 6'b010000 : 6'b001000; // State E\n            6'b100000: next_state = (w) ? 6'b000100 : 6'b001000; // State F\n            default:   next_state = 6'b000001; // Default to state A for illegal states\n        endcase\n    end\n\n    // Output logic\n    assign Y1 = (next_state == 6'b000010); // State B\n    assign Y3 = (next_state == 6'b001000); // State D\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 274,
+        "passfail": "R"
+    }
+}

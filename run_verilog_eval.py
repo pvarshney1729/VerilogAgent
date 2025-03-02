@@ -191,6 +191,8 @@ def parse_args():
                        help='Top-p value (default: 0.9)')
     parser.add_argument('--refinement', type=bool, default=False,
                        help='Iterative Refinement of initial solution (default: False)')
+    parser.add_argument('--iterative_refinement', type=bool, default=False,
+                       help='Iterative Refinement (temp implementation) (default: False)')
     return parser.parse_args()
 
 

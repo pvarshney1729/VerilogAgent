@@ -1,0 +1,8 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic do_sub,               // Control signal for operation mode: 0 for addition, 1 for subtraction\n    input logic [7:0] a,              // 8-bit input operand 'a'\n    input logic [7:0] b,              // 8-bit input operand 'b'\n    output logic [7:0] out,           // 8-bit output result\n    output logic result_is_zero       // Flag indicating if the result is zero\n);\n\n// Internal signal for signed arithmetic\nlogic signed [8:0] signed_result;\n\n// Combinational Logic\nalways @(*) begin\n    // Perform signed addition or subtraction based on 'do_sub' and capture potential overflow in an extended bit\n    signed_result = do_sub ? $signed({1'b0, a}) - $signed({1'b0, b}) : $signed({1'b0, a}) + $signed({1'b0, b});\n\n    // Assign the 8-bit result, ignoring overflow\n    out = signed_result[7:0];\n\n    // Set the zero flag explicitly when the result is zero\n    result_is_zero = (out == 8'b0);\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic load,\n    input logic [255:0] data_in,\n    output logic [255:0] q\n);\n\n    logic [255:0] state, next_state;\n\n    // Synchronous reset and loading\n    always @(posedge clk) begin\n        if (reset) begin\n            state <= 256'b0;\n        end else if (load) begin\n            state <= data_in;\n        end else begin\n            state <= next_state;\n        end\n    end\n\n    // Game logic for state transitions\n    always @(*) begin\n        next_state = state; // Default to current state\n        for (int i = 0; i < 256; i++) begin\n            int count = 0;\n            // Count neighbors with toroidal wrap-around\n            for (int j = -1; j <= 1; j++) begin\n                for (int k = -1; k <= 1; k++) begin\n                    if (j == 0 && k == 0) continue; // Skip self\n                    int neighbor_index = (i + j * 16 + k) % 256; // 16 columns for toroidal wrap\n                    if (neighbor_index < 0) neighbor_index += 256; // Handle negative index\n                    count += state[neighbor_index];\n                end\n            end\n            \n            // Apply Game of Life rules\n            if (state[i] == 1'b1) begin\n                if (count < 2 || count > 3) begin\n                    next_state[i] = 1'b0; // Cell dies\n                end\n            end else begin\n                if (count == 3) begin\n                    next_state[i] = 1'b1; // Cell becomes alive\n                end\n            end\n        end\n    end\n\n    assign q = state; // Output current state\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 3
+}

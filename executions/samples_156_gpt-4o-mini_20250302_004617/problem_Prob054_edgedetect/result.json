@@ -1,0 +1,8 @@
+{
+    "code": "module edge_detector (\n    input logic clk,\n    input logic rst,\n    input logic [7:0] in,\n    output logic [7:0] pos_edge\n);\n\n    logic [7:0] prev_state;\n\n    always @(*) begin\n        pos_edge = in & ~prev_state; // Detect positive edge\n    end\n\n    always @(posedge clk) begin\n        if (rst) begin\n            prev_state <= 8'b00000000; // Synchronous reset\n        end else begin\n            prev_state <= in; // Store current state\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

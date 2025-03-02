@@ -1,0 +1,7 @@
+{
+    "code": "module SafetyControl (\n    input logic cpu_overheated,    // 1-bit input, active-high, indicating CPU temperature is above safe limits\n    input logic arrived,           // 1-bit input, active-high, indicating vehicle has reached its destination\n    input logic gas_tank_empty,    // 1-bit input, active-high, indicating the gas tank is empty\n    output logic shut_off_computer, // 1-bit output, active-high, controls the computer shutdown state\n    output logic keep_driving       // 1-bit output, active-high, controls whether to keep driving\n);\n\n    // Initial states\n    initial begin\n        shut_off_computer = 0;\n        keep_driving = 0;\n    end\n\n    // Combinational logic for determining the shutdown state of the computer\n    always @(*) begin\n        // If the CPU is overheated, the computer should be shut down\n        if (cpu_overheated) begin\n            shut_off_computer = 1;\n        end else begin\n            shut_off_computer = 0; // Explicit deassertion when the condition is not met\n        end\n    end\n\n    // Combinational logic for determining the driving state\n    always @(*) begin\n        // If the vehicle has not arrived, keep driving unless the gas tank is empty\n        if (~arrived) begin\n            keep_driving = ~gas_tank_empty;\n        end else begin\n            keep_driving = 0; // Stop driving upon arrival\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    }
+}

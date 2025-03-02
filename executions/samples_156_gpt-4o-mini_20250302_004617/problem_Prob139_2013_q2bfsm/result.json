@@ -1,0 +1,8 @@
+{
+    "code": "module fsm_sequence_detector (\n    input logic clk,\n    input logic rst_n,\n    input logic x,\n    output logic f,\n    output logic g\n);\n\n    typedef enum logic [1:0] {\n        A = 2'b00,\n        B = 2'b01,\n        C = 2'b10,\n        D = 2'b11\n    } state_t;\n\n    state_t state, next_state;\n\n    // Synchronous reset and state transition\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            state <= A;\n        end else begin\n            state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (state)\n            A: begin\n                if (x) next_state = B;\n                else next_state = A;\n            end\n            B: begin\n                if (!x) next_state = C;\n                else next_state = B;\n            end\n            C: begin\n                if (x) next_state = D;\n                else next_state = A;\n            end\n            D: begin\n                if (x) next_state = B; // Loop back to B for the next '1'\n                else next_state = A;    // Reset to A on '0'\n            end\n            default: next_state = A;\n        endcase\n    end\n\n    // Output logic\n    assign f = (state == D); // Output f is high when in state D\n    assign g = (state == C); // Output g is high when in state C\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

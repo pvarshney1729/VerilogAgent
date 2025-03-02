@@ -1,0 +1,8 @@
+{
+    "code": "module state_machine (\n    input logic clk,\n    input logic reset,\n    output logic [2:0] state\n);\n\n    typedef enum logic [2:0] {\n        S0 = 3'b000,\n        S1 = 3'b001,\n        S2 = 3'b010,\n        S3 = 3'b011,\n        S4 = 3'b100,\n        S5 = 3'b101,\n        S6 = 3'b110,\n        S7 = 3'b111\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            S0: next_state = S1;\n            S1: next_state = S2;\n            S2: next_state = S3;\n            S3: next_state = S4;\n            S4: next_state = S5;\n            S5: next_state = S6;\n            S6: next_state = S7;\n            S7: next_state = S0;\n            default: next_state = S0;\n        endcase\n    end\n\n    // State register with synchronous reset\n    always_ff @(posedge clk) begin\n        if (reset)\n            current_state <= S0;\n        else\n            current_state <= next_state;\n    end\n\n    // Output logic\n    assign state = current_state;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

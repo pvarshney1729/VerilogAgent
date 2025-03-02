@@ -1,0 +1,8 @@
+{
+    "code": "module refined_module (\n    input logic clk,\n    input logic ar,  // Asynchronous reset\n    output logic q\n);\n\n    always_ff @(posedge clk or posedge ar) begin\n        if (ar) begin\n            q <= 1'b0;  // Asynchronous reset\n        end else begin\n            // Add synchronous logic here if needed\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

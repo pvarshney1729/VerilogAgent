@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,            // Clock signal for sequential logic\n    input logic rst_n,          // Active-low synchronous reset signal\n    input logic in,             // 1-bit input signal\n    input logic [3:0] state,    // 4-bit one-hot encoded current state\n    output logic [3:0] next_state, // 4-bit one-hot encoded next state\n    output logic out            // 1-bit output signal\n);\n\nalways_ff @(posedge clk) begin\n    if (!rst_n) begin\n        next_state <= 4'b0001; // Default to state A on reset\n    end else begin\n        case(state)\n            4'b0001: begin // State A\n                next_state <= in ? 4'b0010 : 4'b0001;\n                out <= 0;\n            end\n            4'b0010: begin // State B\n                next_state <= in ? 4'b0010 : 4'b0100;\n                out <= 0;\n            end\n            4'b0100: begin // State C\n                next_state <= in ? 4'b1000 : 4'b0001;\n                out <= 0;\n            end\n            4'b1000: begin // State D\n                next_state <= in ? 4'b0010 : 4'b0100;\n                out <= 1;\n            end\n            default: begin // Default case for invalid state\n                next_state <= 4'b0001; // Reset to state A\n                out <= 0;\n            end\n        endcase\n    end\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

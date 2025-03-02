@@ -1,0 +1,8 @@
+{
+    "code": "module xor_with_reset (\n    input logic clk,\n    input logic reset,\n    input logic in,\n    output logic out\n);\n\n    logic out_next;\n\n    always @(*) begin\n        out_next = in ^ out; // XOR functionality\n    end\n\n    always @(posedge clk) begin\n        if (reset) begin\n            out <= 1'b0; // Synchronous reset\n        end else begin\n            out <= out_next; // Update output with XOR result\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

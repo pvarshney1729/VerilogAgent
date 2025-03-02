@@ -1,0 +1,8 @@
+{
+    "code": "module my_module (\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n\n    logic internal_q;\n    logic internal_state;\n\n    always @(*) begin\n        internal_q = a & b; // Example combinational logic\n        internal_state = a | b; // Example combinational logic\n    end\n\n    always @(posedge clk) begin\n        q <= internal_q;\n        state <= internal_state;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

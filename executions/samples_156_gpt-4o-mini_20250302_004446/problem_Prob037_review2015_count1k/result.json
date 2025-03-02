@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    logic clk,\n    logic reset,\n    logic [9:0] q\n);\n\nalways @(posedge clk) begin\n    if (reset) begin\n        q <= 10'b0; // Reset counter to 0\n    end else if (q == 10'd999) begin\n        q <= 10'b0; // Roll over to 0 after reaching 999\n    end else begin\n        q <= q + 10'b1; // Increment counter\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 1
+}

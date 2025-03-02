@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n  input wire clk,\n  input wire reset,\n  input wire a,\n  output reg q\n);\n\n  always @(posedge clk) begin\n    if (reset) begin\n      q <= 1'b0;\n    end else if (a == 1'b1) begin\n      q <= ~q;\n    end\n  end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 120,
+        "passfail": "R"
+    }
+}

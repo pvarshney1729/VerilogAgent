@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic signed [7:0] a,\n    input logic signed [7:0] b,\n    output logic signed [7:0] sum,\n    output logic overflow\n);\n\n    always @(*) begin\n        logic signed [8:0] extended_sum;\n        extended_sum = a + b;\n        sum = extended_sum[7:0];\n        overflow = (a[7] == b[7]) && (sum[7] != a[7]);\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "R"
+    },
+    "iterations_used": 3
+}

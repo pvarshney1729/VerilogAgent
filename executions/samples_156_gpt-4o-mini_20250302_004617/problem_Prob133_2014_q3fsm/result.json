@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic w,\n    output logic z\n);\n\n    typedef enum logic [1:0] {\n        S0 = 2'b00,\n        S1 = 2'b01,\n        S2 = 2'b10\n    } state_t;\n\n    state_t current_state, next_state;\n    logic [2:0] count_w;\n\n    // Synchronous reset and state transition\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= S0;\n            count_w <= 3'b000;\n        end else begin\n            current_state <= next_state;\n            if (current_state == S1) begin\n                count_w <= {count_w[1:0], w}; // Shift in the current w value\n            end\n        end\n    end\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            S0: next_state = S1; // Move to counting state\n            S1: next_state = S2; // Move to output state after counting\n            S2: next_state = S0; // Reset to initial state\n            default: next_state = S0;\n        endcase\n    end\n\n    // Output logic for z based on count_w\n    always @(*) begin\n        z = (count_w[0] + count_w[1] + count_w[2] == 3'b010); // Check if exactly two are high\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}
