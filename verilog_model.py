@@ -10,6 +10,7 @@ from prompts import prompts
 from Verilog_generator import VerilogGenerator
 from typing import List, Dict, Optional
 import time
+import json
 
 def extract_between_tags(text: str, tag: str) -> str:
     """Extract content between XML-style tags"""
@@ -344,7 +345,7 @@ class VerilogModel:
         return response
 
 
-    def run_pipeline(self, base_query: str, refinement: bool = False, enhance_spec: bool = True) -> Dict:
+    def run_pipeline(self, base_query: str, refinement: bool = False, enhance_spec: bool = True, iterative_refinement: bool = True, max_iterations: int = 3) -> Dict:
         """
         INPUT:
             base_query: str - Base query to generate testbench
@@ -362,7 +363,111 @@ class VerilogModel:
                 )
                 base_query = extract_between_tags(enhanced_query, "ENHANCED_SPEC")
 
-            if not refinement:
+            if iterative_refinement:
+                current_query = base_query
+                current_response = ""
+                
+                for iteration in range(max_iterations):
+                    try:
+                        try:
+                            generated_code = self.generator.generate(
+                                current_query,
+                                include_rules=True,
+                                include_examples=False
+                            )
+                            
+                            if isinstance(generated_code, list):
+                                current_response = generated_code[0]  
+                            else:
+                                current_response = generated_code
+                        except Exception as gen_error:
+                            print(f"Generation error: {str(gen_error)}")
+                            fallback_response = self.generator.generate_with_system_prompt(
+                                prompt=current_query,
+                                system_prompt="You are a code generation assistant. Generate code to solve the problem.",
+                                model='gpt-4o-mini',
+                            )
+                            if isinstance(fallback_response, list):
+                                for message in fallback_response:
+                                    if message.get('role') == 'assistant':
+                                        current_response = message.get('content', '')
+                                        break
+                                else:
+                                    current_response = fallback_response[-1].get('content', '')
+                            else:
+                                current_response = str(fallback_response)
+                        
+                        verifier = Verifier(problem_name=self.problem_name)
+                        test_results = verifier.functional_verify(current_response, self.problem_name)
+                        
+                        if iteration == max_iterations - 1:
+                            break
+                        
+                        verif = f"""
+                        Original Query: {base_query}
+                        Current Response: {current_response}
+                        Test Results: {test_results.to_dict()}
+                        Please evaluate this response and identify:
+                        1. What issues exist in the code that cause test failures?
+                        2. What modifications are needed to fix these issues?
+                        3. Should we make another iteration to improve the response?
+                        Return your analysis in this format:
+                        {{
+                            "issues": "description of issues in the code",
+                            "needed_fixes": ["list", "of", "needed", "fixes"],
+                            "needs_iteration": true/false,
+                            "follow_up_query": "refined query for next iteration with the code improvements"
+                        }}
+                        """
+                        
+                        # Use existing generate method for verification
+                        verif_result = self.generator.generate_with_system_prompt(
+                            prompt=verif,
+                            system_prompt="You are a code reviewer. Analyze the code and test results carefully.",
+                            model='gpt-4o-mini',
+                        )
+                        
+                        try:
+                            # Extract text content from the response structure
+                            if isinstance(verif_result, list):
+                                # Extract content from assistant's message
+                                for message in verif_result:
+                                    if message.get('role') == 'assistant':
+                                        verification_content = message.get('content', '')
+                                        break
+                                else:
+                                    verification_content = verif_result[-1].get('content', '')
+                            else:
+                                verification_content = str(verif_result)
+                                
+                            result = json.loads(extract_json(verification_content))
+                        except Exception as json_error:
+                            print(f"JSON parsing error: {str(json_error)}")
+                            break
+                        
+                        if not result.get('needs_iteration', False):
+                            break
+                        
+                        follow_up_result = result.get('follow_up_query')
+                        if follow_up_result:
+                            current_query = follow_up_result
+                        else:
+                            break
+                            
+                    except Exception as e:
+                        print(f"Error in iteration {iteration + 1}: {str(e)}")
+                        break
+                
+                verifier = Verifier(problem_name=self.problem_name)
+                test_results = verifier.functional_verify(current_response, self.problem_name)
+                
+                return {
+                    "code": current_response,
+                    "test_results": test_results.to_dict(),
+                    "iterations_used": iteration + 1
+                }
+            
+            elif not refinement:
                 # Original approach using sv-generate style
                 generated_code = self.generator.generate(
                     base_query,
@@ -396,3 +501,11 @@ class VerilogModel:
         except Exception as e:
             print(f"Error in run_pipeline: {str(e)}")
             raise
+
+def extract_json(text):
+    """Helper function to extract JSON from text that might contain other content"""
+    import re
+    json_match = re.search(r'({[\s\S]*})', text)
+    if json_match:
+        return json_match.group(1)
+    return "{}"
