@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic a,  // LSB of input vector\n    input logic b,\n    input logic c,\n    input logic d,  // MSB of input vector\n    output logic out_sop,\n    output logic out_pos\n);\n\n    // Sum-of-Products (SOP) form\n    assign out_sop = (~d & ~c & b & ~a) | (~d & c & b & a) | (d & c & b & a);\n\n    // Product-of-Sums (POS) form\n    assign out_pos = (d | ~c | a) & (d | ~b | ~a) & (~d | c | ~b | a);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 78,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

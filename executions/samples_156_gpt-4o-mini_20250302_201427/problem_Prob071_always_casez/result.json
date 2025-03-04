@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic [7:0] in_vector,\n    output logic [2:0] pos\n);\n\nalways @(*) begin\n    case (in_vector)\n        8'b00000000: pos = 3'b000;\n        8'b00000001: pos = 3'b000;\n        8'b00000010: pos = 3'b001;\n        8'b00000100: pos = 3'b010;\n        8'b00001000: pos = 3'b011;\n        8'b00010000: pos = 3'b100;\n        8'b00100000: pos = 3'b101;\n        8'b01000000: pos = 3'b110;\n        8'b10000000: pos = 3'b111;\n        default: pos = 3'b000; // This handles cases with multiple bits set\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 1
+}

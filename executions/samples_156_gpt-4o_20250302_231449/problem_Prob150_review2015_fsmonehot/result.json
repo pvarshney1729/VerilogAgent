@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic d,                   // 1-bit input representing data\n    input logic done_counting,       // 1-bit input indicating counting completion\n    input logic ack,                 // 1-bit input for acknowledgment\n    input logic [9:0] state,         // 10-bit one-hot encoded state input\n    output logic B3_next,            // 1-bit output asserting next state is B3\n    output logic S_next,             // 1-bit output asserting next state is S\n    output logic S1_next,            // 1-bit output asserting next state is S1\n    output logic Count_next,         // 1-bit output asserting next state is Count\n    output logic Wait_next,          // 1-bit output asserting next state is Wait\n    output logic done,               // 1-bit output for done status\n    output logic counting,           // 1-bit output for counting status\n    output logic shift_ena           // 1-bit output for shift enable\n);\n\n    // Combinational logic for next state\n    always @(*) begin\n        S_next = (state[0] & ~d) | (state[1] & ~d) | (state[7] & ack);\n        S1_next = state[0] & d;\n        B3_next = state[6];\n        Count_next = (state[7] & ~done_counting) | state[8];\n        Wait_next = (state[8] & done_counting) | state[9];\n    end\n\n    // Output logic\n    assign shift_ena = state[4] | state[5] | state[6] | state[7];\n    assign counting = state[8];\n    assign done = state[9];\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 70,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

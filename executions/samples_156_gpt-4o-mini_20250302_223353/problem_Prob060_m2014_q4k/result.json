@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,         // Clock input, positive edge-triggered\n    input logic resetn,      // Active-low, synchronous reset\n    input logic in,          // 1-bit data input\n    output logic out         // 1-bit data output\n);\n\n    // Internal signals\n    logic [3:0] shift_reg;    // 4-bit shift register to store internal state\n\n    // Shift Register Implementation\n    always @(posedge clk) begin\n        if (!resetn) begin\n            shift_reg <= 4'b0000; // Reset state\n        end else begin\n            // Shift the register and input the new bit\n            shift_reg <= {shift_reg[2:0], in};\n        end\n    end\n    \n    // Output Assignment\n    assign out = shift_reg[3];\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,    // 1-bit clock input, positive edge-triggered\n    input logic a,      // 1-bit data input\n    output logic q      // 1-bit output, state of the circuit\n);\n\n// The module is a sequential circuit that toggles the output `q` based on the input `a`,\n// but only when the clock signal `clk` has a rising edge. The following describes the behavior:\n\n// **Initial State**: \n// At simulation start or power-up, the state of `q` is initialized to 0.\n\n// **Behavior**: \n// - On the rising edge of `clk`:\n//   - If `a` is 0, keep `q` unchanged.\n//   - If `a` is 1, toggle the state of `q` (i.e., if `q` was 1, it becomes 0 and vice versa).\n\n// **Reset Behavior**: \n// No reset signal is specified; thus, the circuit does not include any reset logic.\n\n// **Assumptions**: \n// - The input `a` is stable around the clock edge (setup and hold times are met).\n// - The initial value of `q` is explicitly set to 0 for simulation and synthesis purposes.\n\ninitial begin\n    q = 1'b0; // Initialize q to 0 to avoid undefined states\nend\n\nalways @(posedge clk) begin\n    if (a == 1'b1) begin\n        q <= ~q; // Toggle the output\n    end\n    // If a == 0, q remains unchanged\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 56,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

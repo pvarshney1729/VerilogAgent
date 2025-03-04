@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic [5:0] y,  // 6-bit input vector representing the one-hot encoded state\n    input logic w,        // 1-bit input used for state transitions\n    input logic clk,      // Clock input for synchronous logic\n    output logic Y1,      // 1-bit output\n    output logic Y3       // 1-bit output\n);\n\n    // State encoding\n    typedef enum logic [5:0] {\n        A = 6'b000001,\n        B = 6'b000010,\n        C = 6'b000100,\n        D = 6'b001000,\n        E = 6'b010000,\n        F = 6'b100000\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // Synchronous state transition with reset\n    always @(posedge clk) begin\n        if (y == 6'b000000) begin\n            current_state <= A; // Reset to State A\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next-state logic\n    always @(*) begin\n        case (current_state)\n            A: next_state = (w == 1'b0) ? B : A;\n            B: next_state = (w == 1'b0) ? C : D;\n            C: next_state = (w == 1'b0) ? E : D;\n            D: next_state = (w == 1'b0) ? F : A;\n            E: next_state = (w == 1'b0) ? E : D;\n            F: next_state = (w == 1'b0) ? C : D;\n            default: next_state = A; // Handle invalid states\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        Y1 = (current_state == E || current_state == F) ? 1'b1 : 1'b0;\n        Y3 = (current_state == D) ? 1'b1 : 1'b0;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "e"
+    },
+    "iterations_used": 3
+}

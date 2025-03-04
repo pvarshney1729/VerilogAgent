@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic j,\n    input logic k,\n    input logic reset,\n    output logic Q\n);\n\n    logic Qold;\n\n    always_ff @(posedge clk or negedge reset) begin\n        if (!reset) begin\n            Q <= 1'b0;\n        end else begin\n            case ({j, k})\n                2'b00: Q <= Q;        // Hold state\n                2'b01: Q <= 1'b0;     // Reset state\n                2'b10: Q <= 1'b1;     // Set state\n                2'b11: Q <= ~Q;       // Toggle state\n            endcase\n        end\n    end\n\n    always_ff @(posedge clk) begin\n        Qold <= Q; // Store the previous state\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

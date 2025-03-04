@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic sel_b1,\n    input logic sel_b2,\n    output logic out_assign,\n    output logic out_always\n);\n\n    // Combinational logic using assign for out_assign\n    assign out_assign = (sel_b1 && sel_b2) ? b : a;\n\n    // Combinational logic using always block for out_always\n    always @(*) begin\n        if (sel_b1 && sel_b2)\n            out_always = b;\n        else\n            out_always = a;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out_sop,\n    output logic out_pos\n);\n\n    // Sum-of-Products (SOP) form\n    // Logic-1 for values: 2 (0010), 7 (0111), 15 (1111)\n    // Don't care for values: 3 (0011), 8 (1000), 11 (1011), 12 (1100)\n    assign out_sop = (~d & ~c & b & ~a) |  // 2 (0010)\n                     (~d & c & b & a)   |  // 7 (0111)\n                     (d & c & b & a);      // 15 (1111)\n\n    // Product-of-Sums (POS) form\n    // Logic-0 for values: 0 (0000), 1 (0001), 4 (0100), 5 (0101), 6 (0110), 9 (1001), 10 (1010), 13 (1101), 14 (1110)\n    // Don't care for values: 3 (0011), 8 (1000), 11 (1011), 12 (1100)\n    assign out_pos = (d | c | ~b | a) &   // 0 (0000), 1 (0001)\n                     (d | ~c | b | a) &   // 4 (0100), 5 (0101)\n                     (d | ~c | ~b | a) &  // 6 (0110)\n                     (~d | c | b | ~a) &  // 9 (1001)\n                     (~d | c | ~b | a) &  // 10 (1010)\n                     (~d | ~c | b | ~a);  // 13 (1101), 14 (1110)\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 76,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

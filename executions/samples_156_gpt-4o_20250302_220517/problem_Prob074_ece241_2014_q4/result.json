@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset_n,  // Active-low asynchronous reset\n    input logic x,\n    output logic z\n);\n\n    // Internal signals for D flip-flop outputs\n    logic q1, q2, q3;\n\n    // Combinational logic for D inputs of flip-flops\n    logic d1, d2, d3;\n\n    // XOR gate for D1\n    assign d1 = x ^ q1;\n\n    // AND gate for D2\n    assign d2 = x & ~q2;\n\n    // OR gate for D3\n    assign d3 = x | ~q3;\n\n    // Sequential logic for D flip-flops with asynchronous reset\n    always_ff @(posedge clk or negedge reset_n) begin\n        if (!reset_n) begin\n            q1 <= 1'b0;\n            q2 <= 1'b0;\n            q3 <= 1'b0;\n        end else begin\n            q1 <= d1;\n            q2 <= d2;\n            q3 <= d3;\n        end\n    end\n\n    // NOR gate for output z\n    assign z = ~(q1 | q2 | q3);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 45,
+        "passfail": "r"
+    },
+    "iterations_used": 1
+}

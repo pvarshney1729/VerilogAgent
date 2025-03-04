@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input wire c,\n    input wire d,\n    output wire [3:0] mux_in\n);\n\n    // Assign mux_in[0] based on the Karnaugh map\n    assign mux_in[0] = (~c & ~d) | (c & ~d) | (c & d);\n\n    // Assign mux_in[1] based on the Karnaugh map\n    assign mux_in[1] = ~c & ~d;\n\n    // Assign mux_in[2] based on the Karnaugh map\n    assign mux_in[2] = c & d;\n\n    // Assign mux_in[3] based on the Karnaugh map\n    assign mux_in[3] = (~c & ~d) | (c & ~d) | (c & d);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 60,
+        "passfail": "R"
+    },
+    "iterations_used": 2
+}

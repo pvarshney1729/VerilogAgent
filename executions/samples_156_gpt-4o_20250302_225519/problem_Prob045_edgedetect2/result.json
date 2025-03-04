@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset_n, // Active-low asynchronous reset\n    input logic [7:0] in,\n    output logic [7:0] anyedge\n);\n\n    logic [7:0] prev_in; // Register to hold the previous state of the input\n\n    always_ff @(posedge clk or negedge reset_n) begin\n        if (!reset_n) begin\n            anyedge <= 8'b0; // Reset anyedge to 0\n            prev_in <= 8'b0; // Reset prev_in to 0\n        end else begin\n            anyedge <= in ^ prev_in; // XOR to detect any edge\n            prev_in <= in; // Update prev_in with the current in\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "R"
+    },
+    "iterations_used": 2
+}

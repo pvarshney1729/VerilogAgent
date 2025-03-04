@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,        // Clock signal for sequential logic\n    input logic a,          // Single-bit input\n    input logic b,          // Single-bit input\n    output logic out_assign,            // XOR output using assign statement\n    output logic out_always_comb,       // XOR output using combinational always block\n    output logic out_always_ff          // XOR output using sequential always block with flip-flop\n);\n\n    // Combinational Logic using assign statement\n    assign out_assign = a ^ b;\n\n    // Combinational Logic using always block\n    always @(*) begin\n        out_always_comb = a ^ b;\n    end\n\n    // Sequential Logic using always block with flip-flop\n    always_ff @(posedge clk) begin\n        out_always_ff <= a ^ b;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,   // Clock signal for sequential behavior\n    input logic reset, // Asynchronous active-high reset\n    input logic x,     // 1-bit input\n    input logic y,     // 1-bit input\n    output logic z     // 1-bit output\n);\n\nalways_ff @(posedge clk) begin\n    if (reset) begin\n        z <= 1'b1;\n    end else begin\n        z <= (x & y) | (~x & ~y & z);\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 110,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

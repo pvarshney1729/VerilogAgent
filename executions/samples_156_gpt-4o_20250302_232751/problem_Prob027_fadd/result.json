@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input logic a,    // 1-bit input, represents one operand bit\n    input logic b,    // 1-bit input, represents another operand bit\n    input logic cin,  // 1-bit input, represents the carry-in bit\n    output logic cout, // 1-bit output, represents the carry-out bit\n    output logic sum   // 1-bit output, represents the sum bit\n);\n\n    // Combinational logic for full adder\n    always_comb begin\n        sum = a ^ b ^ cin; // XOR operation for sum\n        cout = (a & b) | (b & cin) | (a & cin); // AND-OR operation for carry-out\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

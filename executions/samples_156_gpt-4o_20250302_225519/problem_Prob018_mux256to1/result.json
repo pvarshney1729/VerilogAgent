@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic [255:0] input_vector,  // 256-bit wide input vector\n    input logic [7:0] sel,             // 8-bit wide selection input\n    output logic out                   // 1-bit output\n);\n\n    // Combinational Logic Description\n    // The module implements a combinational 1-bit wide, 256-to-1 multiplexer.\n    // The input_vector[0] is the least significant bit of the input vector.\n    // sel=0 selects input_vector[0], sel=1 selects input_vector[1], ..., sel=255 selects input_vector[255].\n\n    // Handle boundary condition: If sel > 255, default to selecting input_vector[0] (wrap around).\n    assign out = (sel < 8'd256) ? input_vector[sel] : input_vector[0];\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 2
+}

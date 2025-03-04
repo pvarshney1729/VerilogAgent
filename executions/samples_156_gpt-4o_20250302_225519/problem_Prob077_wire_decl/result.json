@@ -1,0 +1,8 @@
+{
+    "code": "// Module: TopModule\n// Description: A combinational logic circuit with AND, OR, and NOT gates.\n//              This module takes four 1-bit inputs and produces two 1-bit outputs.\n\nmodule TopModule(\n    input logic a,  // 1-bit input\n    input logic b,  // 1-bit input\n    input logic c,  // 1-bit input\n    input logic d,  // 1-bit input\n    output logic out,   // 1-bit output: result of OR operation\n    output logic out_n  // 1-bit output: inverted result of OR operation\n);\n\n// Intermediate signals for connecting gates\nlogic and1_out; // Output of AND gate connecting inputs a and b\nlogic and2_out; // Output of AND gate connecting inputs c and d\n\n// Combinational Logic\nassign and1_out = a & b; // First AND gate\nassign and2_out = c & d; // Second AND gate\nassign out = and1_out | and2_out; // OR gate combining outputs of AND gates\nassign out_n = ~out; // NOT gate inverting the OR gate output\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

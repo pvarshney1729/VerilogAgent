@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  logic clk,    // Clock signal; active on rising edge\n    input  logic reset,  // Synchronous active-high reset\n    input  logic j,      // Input signal j; unsigned, single-bit\n    input  logic k,      // Input signal k; unsigned, single-bit\n    output logic out     // Output signal out; unsigned, single-bit\n);\n\n    // State encoding\n    localparam logic OFF = 1'b0;\n    localparam logic ON  = 1'b1;\n\n    // State register\n    logic state;\n\n    // State transition and output logic\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            state <= OFF; // Initialize to OFF state\n        end else begin\n            case (state)\n                OFF: if (j) state <= ON; // Transition to ON if j is 1\n                ON:  if (k) state <= OFF; // Transition to OFF if k is 1\n            endcase\n        end\n    end\n\n    // Output logic\n    always_comb begin\n        out = state; // Output reflects the current state\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

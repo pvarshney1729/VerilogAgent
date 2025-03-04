@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic ar,\n    input logic d,\n    output logic q\n);\n\n    // Asynchronous reset with priority over clock\n    always_ff @(posedge clk or posedge ar) begin\n        if (ar) begin\n            q <= 1'b0;  // Reset state\n        end else begin\n            q <= d;  // Latch data on rising edge of clk\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

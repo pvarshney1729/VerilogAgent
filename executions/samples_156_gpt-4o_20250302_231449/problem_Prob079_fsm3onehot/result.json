@@ -1,0 +1,8 @@
+{
+    "code": "```verilog\nmodule TopModule(\n    input logic clk,\n    input logic rst_n,\n    input logic in,\n    input logic [3:0] state,\n    output logic [3:0] next_state,\n    output logic out\n);\n\n    // State encoding\n    localparam logic [3:0] A = 4'b0001;\n    localparam logic [3:0] B = 4'b0010;\n    localparam logic [3:0] C = 4'b0100;\n    localparam logic [3:0] D = 4'b1000;\n\n    // Next state logic\n    always @(*) begin\n        case (state)\n            A: next_state = in ? B : A;\n            B: next_state = in ? B : C;\n            C: next_state = in ? D : A;\n            D: next_state = in ? B : C;\n            default: next_state = A; // Handle invalid state\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        out = (state == D) ? 1'b1 : 1'b0;\n    end\n\n    // State transition logic\n    always_ff @(posedge clk or negedge rst_n) begin\n        if (!rst_n) begin\n            next_state <= A; // Asynchronous reset to state A\n        end else begin\n            next_state <= next_state; // Transition to next state\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    logic clk,\n    logic reset,\n    logic a,\n    logic [2:0] q\n);\n\nalways @(posedge clk) begin\n    if (reset) begin\n        q <= 3'b000;\n    end else if (a) begin\n        if (q == 3'b111) begin\n            q <= 3'b000;\n        end else begin\n            q <= q + 1;\n        end\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 3
+}

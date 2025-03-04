@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,       // Clock signal, triggers on positive edge\n    input logic reset,     // Asynchronous reset signal\n    input logic x,         // Single-bit unsigned input\n    output logic z         // Single-bit unsigned output\n);\n\n    // Internal signals for D flip-flop outputs\n    logic xor_ff_out, and_ff_out, or_ff_out;\n\n    // XOR, AND, OR gate outputs\n    logic xor_out, and_out, or_out;\n\n    // XOR gate logic\n    assign xor_out = x ^ xor_ff_out;\n\n    // AND gate logic\n    assign and_out = x & ~and_ff_out;\n\n    // OR gate logic\n    assign or_out = x | ~or_ff_out;\n\n    // D flip-flops with asynchronous reset\n    always_ff @(posedge clk or posedge reset) begin\n        if (reset) begin\n            xor_ff_out <= 1'b0;\n            and_ff_out <= 1'b0;\n            or_ff_out <= 1'b0;\n        end else begin\n            xor_ff_out <= xor_out;\n            and_ff_out <= and_out;\n            or_ff_out <= or_out;\n        end\n    end\n\n    // NOR gate combining the outputs of the flip-flops\n    assign z = ~(xor_ff_out | and_ff_out | or_ff_out);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 45,
+        "passfail": "r"
+    },
+    "iterations_used": 1
+}

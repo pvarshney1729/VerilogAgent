@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic [7:0] in,\n    output logic done\n);\n\n    typedef enum logic [1:0] {\n        IDLE = 2'b00,\n        BYTE_1_RECEIVED = 2'b01,\n        BYTE_2_RECEIVED = 2'b10,\n        BYTE_3_RECEIVED = 2'b11\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            IDLE: begin\n                if (in[3] == 1'b1)\n                    next_state = BYTE_1_RECEIVED;\n                else\n                    next_state = IDLE;\n            end\n            BYTE_1_RECEIVED: begin\n                next_state = BYTE_2_RECEIVED;\n            end\n            BYTE_2_RECEIVED: begin\n                next_state = BYTE_3_RECEIVED;\n            end\n            BYTE_3_RECEIVED: begin\n                next_state = IDLE;\n            end\n            default: begin\n                next_state = IDLE;\n            end\n        endcase\n    end\n\n    // State register and output logic\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            current_state <= IDLE;\n            done <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            done <= (current_state == BYTE_3_RECEIVED);\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 149,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

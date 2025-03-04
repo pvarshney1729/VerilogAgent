@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic load,\n    input logic [255:0] data,\n    output logic [255:0] q\n);\n\n    logic [255:0] next_q;\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            q <= next_q;\n        end\n    end\n\n    always_comb begin\n        next_q = q; // Default to current state\n        for (int i = 0; i < 16; i++) begin\n            for (int j = 0; j < 16; j++) begin\n                int alive_neighbors = 0;\n\n                // Count alive neighbors with wrap-around\n                for (int di = -1; di <= 1; di++) begin\n                    for (int dj = -1; dj <= 1; dj++) begin\n                        if (di == 0 && dj == 0) continue; // Skip self\n                        int ni = (i + di + 16) % 16; // Wrap around row\n                        int nj = (j + dj + 16) % 16; // Wrap around column\n                        alive_neighbors += q[ni * 16 + nj];\n                    end\n                end\n\n                // Apply transition rules\n                int idx = i * 16 + j;\n                if (alive_neighbors == 3) begin\n                    next_q[idx] = 1'b1; // Become alive\n                end else if (alive_neighbors == 2) begin\n                    next_q[idx] = q[idx]; // Remain unchanged\n                end else begin\n                    next_q[idx] = 1'b0; // Become dead\n                end\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 3
+}

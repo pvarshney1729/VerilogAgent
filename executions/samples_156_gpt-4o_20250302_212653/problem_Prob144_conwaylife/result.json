@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic load,\n    input logic [255:0] data,\n    output logic [255:0] q\n);\n\n    logic [255:0] grid;\n    logic [3:0] neighbor_count [15:0][15:0];\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            grid <= data;\n        end else begin\n            for (int i = 0; i < 16; i++) begin\n                for (int j = 0; j < 16; j++) begin\n                    int sum = 0;\n                    for (int di = -1; di <= 1; di++) begin\n                        for (int dj = -1; dj <= 1; dj++) begin\n                            if (di != 0 || dj != 0) begin\n                                int ni = (i + di + 16) % 16;\n                                int nj = (j + dj + 16) % 16;\n                                sum += grid[ni * 16 + nj];\n                            end\n                        end\n                    end\n                    neighbor_count[i][j] = sum;\n                end\n            end\n\n            for (int i = 0; i < 16; i++) begin\n                for (int j = 0; j < 16; j++) begin\n                    case (neighbor_count[i][j])\n                        4'b0010: grid[i * 16 + j] <= grid[i * 16 + j]; // 2 neighbors, remain unchanged\n                        4'b0011: grid[i * 16 + j] <= 1'b1; // 3 neighbors, become alive\n                        default: grid[i * 16 + j] <= 1'b0; // 0-1 or 4+ neighbors, become dead\n                    endcase\n                end\n            end\n        end\n    end\n\n    assign q = grid;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 1
+}

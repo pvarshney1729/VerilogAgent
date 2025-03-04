@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,        // Clock input\n    input logic areset,     // Asynchronous reset input, active high\n    input logic in,         // Data input\n    output logic out        // Output, reflects the Moore machine output\n);\n\n    // State encoding\n    typedef enum logic {\n        STATE_A = 1'b0,\n        STATE_B = 1'b1\n    } state_t;\n\n    state_t state; // Current state\n\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            state <= STATE_B;\n        end else begin\n            case (state)\n                STATE_A: begin\n                    if (in == 0) state <= STATE_B;\n                end\n                STATE_B: begin\n                    if (in == 0) state <= STATE_A;\n                end\n            endcase\n        end\n    end\n\n    always_comb begin\n        case (state)\n            STATE_A: out = 1'b0;\n            STATE_B: out = 1'b1;\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

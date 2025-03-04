@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic load,\n    input logic [255:0] data,\n    output logic [255:0] q\n);\n\n    logic [255:0] next_q;\n\n    always @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            q <= next_q;\n        end\n    end\n\n    always @(*) begin\n        next_q = 256'b0; // Initialize next_q to all dead cells\n        for (int i = 0; i < 16; i++) begin\n            for (int j = 0; j < 16; j++) begin\n                int live_neighbors = 0;\n                for (int di = -1; di <= 1; di++) begin\n                    for (int dj = -1; dj <= 1; dj++) begin\n                        if (di == 0 && dj == 0) continue; // Skip the cell itself\n                        int ni = (i + di + 16) % 16; // Toroidal wrap\n                        int nj = (j + dj + 16) % 16; // Toroidal wrap\n                        live_neighbors += q[ni * 16 + nj];\n                    end\n                end\n                int index = i * 16 + j;\n                if (live_neighbors == 3) begin\n                    next_q[index] = 1'b1; // Cell becomes alive\n                end else if (live_neighbors == 2) begin\n                    next_q[index] = q[index]; // Cell remains unchanged\n                end else begin\n                    next_q[index] = 1'b0; // Cell becomes dead\n                end\n            end\n        end\n    end\n\n    initial begin\n        q = 256'b0; // Initialize q to all dead cells\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 3
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic in,\n    output logic out\n);\n\n    // State encoding\n    logic [1:0] state, next_state;\n    parameter A = 2'b00, B = 2'b01, C = 2'b10, D = 2'b11;\n\n    // State transition logic\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            state <= A;\n        end else begin\n            state <= next_state;\n        end\n    end\n\n    // Next state and output logic\n    always_comb begin\n        case (state)\n            A: begin\n                next_state = (in == 1'b0) ? A : B;\n                out = 1'b0;\n            end\n            B: begin\n                next_state = (in == 1'b0) ? C : B;\n                out = 1'b0;\n            end\n            C: begin\n                next_state = (in == 1'b0) ? A : D;\n                out = 1'b0;\n            end\n            D: begin\n                next_state = (in == 1'b0) ? C : B;\n                out = 1'b1;\n            end\n            default: begin\n                next_state = A;\n                out = 1'b0;\n            end\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input  logic clk,           // Clock signal, triggers on positive edge\n    input  logic reset,         // Synchronous, active-high reset\n    input  logic data,          // Input data stream, one bit per clock cycle\n    output logic start_shifting // Output signal, remains high after sequence detection\n);\n\n    // Example FSM state encoding\n    typedef enum logic [2:0] {\n        IDLE = 3'b000,\n        S1 = 3'b001,\n        S11 = 3'b010,\n        S110 = 3'b011,\n        DETECTED = 3'b100\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // Sequential logic for state transition\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= IDLE;\n            start_shifting <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            if (current_state == DETECTED)\n                start_shifting <= 1'b1;\n        end\n    end\n\n    // Combinational logic for next state\n    always @(*) begin\n        case (current_state)\n            IDLE: next_state = (data) ? S1 : IDLE;\n            S1: next_state = (data) ? S11 : IDLE;\n            S11: next_state = (data) ? S11 : S110;\n            S110: next_state = (data) ? DETECTED : IDLE;\n            DETECTED: next_state = DETECTED;\n            default: next_state = IDLE;\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "e"
+    },
+    "iterations_used": 1
+}

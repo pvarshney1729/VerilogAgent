@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule(\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n\n    always_ff @(posedge clk) begin\n        if (a == 1'b1 && b == 1'b1) begin\n            state <= 1'b0;\n            q <= 1'b0;\n        end else if (a == 1'b0 && b == 1'b0) begin\n            state <= ~state;\n            q <= ~q;\n        end else begin\n            state <= state;\n            q <= q;\n        end\n    end\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

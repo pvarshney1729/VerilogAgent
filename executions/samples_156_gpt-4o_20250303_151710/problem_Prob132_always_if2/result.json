@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input wire cpu_overheated,      // 1-bit input signal indicating CPU overheating status\n    input wire arrived,             // 1-bit input signal indicating arrival status\n    input wire gas_tank_empty,      // 1-bit input signal indicating gas tank status\n    output reg shut_off_computer,   // 1-bit output control signal for computer shutdown\n    output reg keep_driving         // 1-bit output control signal for driving status\n);\n\nalways @(*) begin\n    // If CPU is overheated, shut off the computer\n    shut_off_computer = cpu_overheated ? 1'b1 : 1'b0;\nend\n\nalways @(*) begin\n    // Keep driving logic based on arrival and gas tank status\n    if (~arrived)\n        keep_driving = ~gas_tank_empty;\n    else\n        keep_driving = 1'b0;\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

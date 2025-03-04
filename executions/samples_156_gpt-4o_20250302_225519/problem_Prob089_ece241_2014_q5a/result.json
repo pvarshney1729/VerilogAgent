@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic x,\n    output logic z\n);\n\n    typedef enum logic [1:0] {\n        IDLE = 2'b00,\n        INVERT = 2'b01,\n        PASS = 2'b10\n    } state_t;\n\n    state_t current_state, next_state;\n    logic complement_bit;\n\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            current_state <= IDLE;\n            z <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            z <= complement_bit;\n        end\n    end\n\n    always_comb begin\n        case (current_state)\n            IDLE: begin\n                if (x == 1'b1) begin\n                    next_state = INVERT;\n                    complement_bit = 1'b1;\n                end else begin\n                    next_state = PASS;\n                    complement_bit = 1'b0;\n                end\n            end\n            INVERT: begin\n                next_state = INVERT;\n                complement_bit = ~x;\n            end\n            PASS: begin\n                next_state = PASS;\n                complement_bit = x;\n            end\n            default: begin\n                next_state = IDLE;\n                complement_bit = 1'b0;\n            end\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 206,
+        "passfail": "R"
+    },
+    "iterations_used": 2
+}

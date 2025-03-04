@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n  input signed [7:0] a,\n  input signed [7:0] b,\n  output reg signed [7:0] s,\n  output reg overflow\n);\n  always @(*) begin\n    s = a + b;\n    // Overflow is set if the sign of a and b is the same and differs from s\n    overflow = ((a[7] == b[7]) && (s[7] != a[7]));\n  end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "R"
+    },
+    "iterations_used": 2
+}

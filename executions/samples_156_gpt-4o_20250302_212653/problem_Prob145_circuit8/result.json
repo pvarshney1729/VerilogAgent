@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input logic clock,\n    input logic a,\n    output logic p,\n    output logic q\n);\n    logic p_next, q_next;\n\n    initial begin\n        p = 1'b0;\n        q = 1'b0;\n    end\n\n    always @(posedge clock) begin\n        p <= p_next;\n        q <= q_next;\n    end\n\n    always @(*) begin\n        if (a) begin\n            p_next = 1'b1;\n        end else begin\n            p_next = 1'b0;\n        end\n\n        if (p && !a) begin\n            q_next = 1'b1;\n        end else begin\n            q_next = 1'b0;\n        end\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 180,
+        "passfail": "R"
+    },
+    "iterations_used": 2
+}

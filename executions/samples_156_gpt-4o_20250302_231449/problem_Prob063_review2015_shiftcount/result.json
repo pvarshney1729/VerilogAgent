@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n  input wire clk,\n  input wire reset,\n  input wire shift_ena,\n  input wire count_ena,\n  input wire data,\n  output reg [3:0] q\n);\n\nalways @(posedge clk or posedge reset) begin\n  if (reset) begin\n    q <= 4'b0000;\n  end else if (shift_ena && !count_ena) begin\n    q <= {q[2:0], data};\n  end else if (count_ena && !shift_ena) begin\n    q <= q - 1;\n  end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

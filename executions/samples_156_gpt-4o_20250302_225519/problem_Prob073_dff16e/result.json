@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic resetn,\n    input logic [1:0] byteena,\n    input logic [15:0] d,\n    output logic [15:0] q\n);\n\n    always_ff @(posedge clk) begin\n        if (!resetn) begin\n            q <= 16'b0;\n        end else begin\n            if (byteena[1]) begin\n                q[15:8] <= d[15:8];\n            end\n            if (byteena[0]) begin\n                q[7:0] <= d[7:0];\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

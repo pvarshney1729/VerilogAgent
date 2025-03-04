@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic [7:0] d,\n    output logic [7:0] q\n);\n\n    always_ff @(negedge clk) begin\n        if (reset) begin\n            q <= 8'b00110100; // Set q to 0x34 on reset\n        end else begin\n            q <= d; // Update q with d on negative edge of clk\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic [5:0] y,\n    input logic w,\n    input logic clk,\n    input logic rst,\n    output logic Y1,\n    output logic Y3\n);\n\n    typedef enum logic [5:0] {\n        A = 6'b000001,\n        B = 6'b000010,\n        C = 6'b000100,\n        D = 6'b001000,\n        E = 6'b010000,\n        F = 6'b100000\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always_ff @(posedge clk) begin\n        if (rst) begin\n            current_state <= A;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always_comb begin\n        case (current_state)\n            A: next_state = (w) ? B : A;\n            B: next_state = (w) ? C : D;\n            C: next_state = (w) ? E : D;\n            D: next_state = (w) ? F : A;\n            E: next_state = (w) ? E : D;\n            F: next_state = (w) ? C : D;\n            default: next_state = A;\n        endcase\n    end\n\n    // Output logic\n    always_comb begin\n        Y1 = (current_state == B) ? 1'b1 : 1'b0;\n        Y3 = (current_state == D) ? 1'b1 : 1'b0;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "e"
+    },
+    "iterations_used": 3
+}

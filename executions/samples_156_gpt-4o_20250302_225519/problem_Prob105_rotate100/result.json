@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,                     // Clock signal, active edge not specified\n    input logic reset,                   // Synchronous active high reset signal\n    input logic load,                    // Synchronous active high load signal\n    input logic [1:0] ena,               // 2-bit control signal for rotation direction\n    input logic [99:0] data,             // 100-bit input data\n    output logic [99:0] q                // 100-bit output data\n);\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q <= 100'b0;                 // Initialize q to all zeros on reset\n        end else if (load) begin\n            q <= data;                   // Load data into q\n        end else begin\n            case (ena)\n                2'b01: q <= {q[0], q[99:1]};  // Rotate right\n                2'b10: q <= {q[98:0], q[99]}; // Rotate left\n                default: ;                    // Maintain current value\n            endcase\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 3
+}

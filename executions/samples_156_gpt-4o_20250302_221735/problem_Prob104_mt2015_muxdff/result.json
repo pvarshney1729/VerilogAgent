@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,       // Clock input for sequential logic\n    input logic L,         // Load control signal (active high)\n    input logic q_in,      // Input to the flip-flop\n    input logic r_in,      // Input to the multiplexer\n    output logic Q         // Output of the flip-flop\n);\n\n    always @(posedge clk) begin\n        if (L) begin\n            Q <= r_in;\n        end else begin\n            Q <= q_in;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 1,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

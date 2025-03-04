@@ -1,0 +1,8 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,  // Clock signal, triggers on the positive edge\n    input logic in,   // Single-bit input signal\n    output logic out  // Single-bit output, driven by the D flip-flop\n);\n\n    logic xor_out; // Intermediate signal for XOR output\n\n    // Combinational logic for XOR gate\n    assign xor_out = in ^ out;\n\n    // D Flip-Flop with initial state defined\n    always @(posedge clk) begin\n        out <= xor_out;\n    end\n\n    initial begin\n        out = 1'b0; // Initial state of the flip-flop output\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 3
+}

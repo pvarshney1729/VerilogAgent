@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  wire clk,       // Positive-edge triggered clock\n    input  wire areset,    // Asynchronous, active-high reset\n    input  wire x,         // Input signal\n    output reg  z          // Output signal\n);\n\nreg [1:0] state, next_state;\n\n// State encoding\nlocalparam STATE_A = 2'b01;\nlocalparam STATE_B = 2'b10;\n\n// State transition logic\nalways @(posedge clk or posedge areset) begin\n    if (areset) begin\n        state <= STATE_A; // Reset to state A\n        z <= 0;\n    end else begin\n        state <= next_state;\n    end\nend\n\n// Next state and output logic\nalways @(*) begin\n    case (state)\n        STATE_A: begin\n            if (x == 0) begin\n                next_state = STATE_A; // Stay in state A\n                z = 0;\n            end else begin\n                next_state = STATE_B; // Move to state B\n                z = 1;\n            end\n        end\n        STATE_B: begin\n            if (x == 0) begin\n                next_state = STATE_B; // Stay in state B\n                z = 1;\n            end else begin\n                next_state = STATE_B; // Stay in state B\n                z = 0;\n            end\n        end\n        default: begin\n            next_state = STATE_A; // Default to state A\n            z = 0;\n        end\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

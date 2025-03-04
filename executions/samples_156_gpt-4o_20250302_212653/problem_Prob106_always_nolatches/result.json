@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input [15:0] scancode,  // 16-bit input representing the scancode from the PS/2 keyboard\n    output reg left,        // 1-bit output, asserted when left arrow key is detected\n    output reg down,        // 1-bit output, asserted when down arrow key is detected\n    output reg right,       // 1-bit output, asserted when right arrow key is detected\n    output reg up           // 1-bit output, asserted when up arrow key is detected\n);\n\nalways @(*) begin\n    // Default de-assert all outputs\n    left = 1'b0;\n    down = 1'b0;\n    right = 1'b0;\n    up = 1'b0;\n    \n    case (scancode)\n        16'he06b: left = 1'b1;\n        16'he072: down = 1'b1;\n        16'he074: right = 1'b1;\n        16'he075: up = 1'b1;\n        default: ; // Implicitly handles all other cases by de-asserting outputs\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input logic [254:0] in,\n    output logic [7:0] out\n);\n\n    // Combinational logic to calculate the population count\n    always_comb begin\n        integer i;\n        integer count;\n        count = 0;\n        for (i = 0; i < 255; i = i + 1) begin\n            count = count + in[i];\n        end\n        out = count[7:0]; // Assign the lower 8 bits of count to out\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

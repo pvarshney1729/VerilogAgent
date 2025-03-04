@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic in,              // 1-bit input signal, unsigned\n    input logic [3:0] state,     // 4-bit input signal representing current state, one-hot encoded\n    output logic [3:0] next_state, // 4-bit output signal representing next state, one-hot encoded\n    output logic out             // 1-bit output signal, unsigned\n);\n\n    always @(*) begin\n        // Default values for next_state and out\n        next_state = 4'b0001; // Default to state A\n        out = 1'b0;           // Default output\n\n        case (state)\n            4'b0001: begin // State A\n                next_state = (in == 1'b0) ? 4'b0001 : 4'b0010; // Stay in A or move to B\n                out = 1'b0;\n            end\n            4'b0010: begin // State B\n                next_state = (in == 1'b0) ? 4'b0100 : 4'b0010; // Move to C or stay in B\n                out = 1'b0;\n            end\n            4'b0100: begin // State C\n                next_state = (in == 1'b0) ? 4'b0001 : 4'b1000; // Move to A or D\n                out = 1'b0;\n            end\n            4'b1000: begin // State D\n                next_state = (in == 1'b0) ? 4'b0100 : 4'b0010; // Move to C or B\n                out = 1'b1;\n            end\n            default: begin // Invalid state\n                next_state = 4'b0001; // Default to state A\n                out = 1'b0;\n            end\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clock,\n    input logic a,\n    output logic p,\n    output logic q\n);\n\n    // Internal register to hold the state of q\n    logic q_reg;\n\n    // Initial conditions\n    initial begin\n        p = 1'b0;\n        q_reg = 1'b0;\n    end\n\n    // Sequential logic for p and q\n    always_ff @(posedge clock) begin\n        p <= a;          // p follows the state of a on the rising edge of clock\n        q_reg <= ~q_reg; // q toggles on every rising edge of clock\n    end\n\n    // Assign the internal register to the output q\n    assign q = q_reg;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 171,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

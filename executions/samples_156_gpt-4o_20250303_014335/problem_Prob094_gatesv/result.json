@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  wire [3:0] in,            // 4-bit input vector\n    output wire [2:0] out_both,      // 3-bit output vector for both condition\n    output wire [2:0] out_any,       // 3-bit output vector for any condition\n    output wire [3:0] out_different  // 4-bit output vector for different condition\n);\n\n    // out_both[i] = in[i] & in[i+1]\n    assign out_both[0] = in[0] & in[1];\n    assign out_both[1] = in[1] & in[2];\n    assign out_both[2] = in[2] & in[3];\n\n    // out_any[i] = in[i] | in[i-1]\n    assign out_any[0] = in[1] | in[0];\n    assign out_any[1] = in[2] | in[1];\n    assign out_any[2] = in[3] | in[2];\n\n    // out_different[i] = in[i] ^ in[(i+1) % 4]\n    assign out_different[0] = in[0] ^ in[1];\n    assign out_different[1] = in[1] ^ in[2];\n    assign out_different[2] = in[2] ^ in[3];\n    assign out_different[3] = in[3] ^ in[0];\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 207,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

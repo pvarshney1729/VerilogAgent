@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    logic Dx, Da, Do;\n    logic Qx, Qa, Qo;\n\n    // XOR, AND, OR gate logic\n    assign Qx = x ^ Dx;\n    assign Qa = x & ~Da;\n    assign Qo = x | ~Do;\n\n    // D flip-flops with asynchronous reset\n    always_ff @(posedge clk) begin\n        Dx <= Qx;\n        Da <= Qa;\n        Do <= Qo;\n    end\n\n    // NOR gate for output\n    assign z = ~(Dx | Da | Do);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 45,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,         // Clock signal, positive edge-triggered\n    input logic areset,      // Asynchronous reset, active high\n    input logic in,          // Input signal\n    output logic out         // Output signal, driven by state\n);\n\n    typedef logic state_t; // Define state type\n    state_t state, next_state; // Current and next state\n\n    // Asynchronous reset to State B\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            state <= 1'b1; // Reset to State B\n        end else begin\n            state <= next_state; // Update state\n        end\n    end\n\n    // Next state logic\n    always_comb begin\n        case (state)\n            1'b0: begin // State A\n                if (in == 1'b0) begin\n                    next_state = 1'b1; // Transition to State B\n                end else begin\n                    next_state = 1'b0; // Remain in State A\n                end\n            end\n            1'b1: begin // State B\n                if (in == 1'b0) begin\n                    next_state = 1'b0; // Transition to State A\n                end else begin\n                    next_state = 1'b1; // Remain in State B\n                end\n            end\n            default: next_state = 1'b1; // Default to State B\n        endcase\n    end\n\n    // Output logic\n    always_comb begin\n        out = (state == 1'b1); // Output 1 when in State B, else 0\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input logic [3:0] x,\n    output logic f\n);\n\n    always @(*) begin\n        f = (x[3] & x[2]) |\n            (~x[3] & ~x[2] & ~x[1] & ~x[0]) |\n            (~x[3] & ~x[2] & x[0]) |\n            (~x[3] & x[2] & x[1]);\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 32,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

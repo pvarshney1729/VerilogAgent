@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,                // Clock signal, positive edge-triggered\n    input logic load,               // Load control signal, active high\n    input logic [9:0] data,         // 10-bit input data, unsigned (bit[9] is MSB, bit[0] is LSB)\n    output logic tc                 // Terminal count output signal, active high\n);\n\n    logic [9:0] counter;            // Internal 10-bit counter\n\n    // Initialize counter to zero\n    initial begin\n        counter = 10'b0;\n        tc = 1'b0;\n    end\n\n    // Sequential logic for counter and terminal count\n    always_ff @(posedge clk) begin\n        if (load) begin\n            counter <= data;\n            tc <= (data == 10'b0); // Assert tc if loaded data is zero\n        end else if (counter != 10'b0) begin\n            counter <= counter - 1;\n            if (counter == 10'b1) begin\n                tc <= 1'b1; // Assert tc when counter reaches zero\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,         // Clock signal, positive edge-triggered\n    input logic rst,         // Active-high synchronous reset\n    input logic [7:0] d,     // Data input bus, 8 bits wide\n    output logic [7:0] q     // Data output bus, 8 bits wide\n);\n\n    // Sequential logic for D-type flip-flops with synchronous reset\n    always_ff @(posedge clk) begin\n        if (rst) begin\n            q <= 8'b00000000; // Reset q to all zeros\n        end else begin\n            q <= d;           // Transfer input d to output q\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

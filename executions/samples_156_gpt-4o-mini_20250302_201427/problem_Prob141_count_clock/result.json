@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,       // Clock signal (positive edge-triggered)\n    input logic reset,     // Active high synchronous reset\n    input logic ena,       // Enable signal for counting\n    output logic pm,       // AM/PM indicator (1 for PM, 0 for AM)\n    output logic [7:0] hh,  // Hours in BCD (01-12)\n    output logic [7:0] mm,  // Minutes in BCD (00-59)\n    output logic [7:0] ss   // Seconds in BCD (00-59)\n);\n\n    always @(posedge clk) begin\n        if (reset) begin\n            hh <= 8'b0001_0010; // Set to 12 in BCD\n            mm <= 8'b0000_0000; // Set to 00 in BCD\n            ss <= 8'b0000_0000; // Set to 00 in BCD\n            pm <= 1'b0;         // Set to AM\n        end else if (ena) begin\n            ss <= ss + 1;\n            if (ss == 8'b0110_0000) begin // If ss rolls over to 60\n                ss <= 8'b0000_0000; // Reset ss to 0\n                mm <= mm + 1;\n                if (mm == 8'b0110_0000) begin // If mm rolls over to 60\n                    mm <= 8'b0000_0000; // Reset mm to 0\n                    hh <= hh + 1;\n                    if (hh == 8'b0001_0011) begin // If hh rolls over to 13\n                        hh <= 8'b0001_0001; // Reset hh to 1\n                        pm <= ~pm; // Toggle PM/AM\n                    end\n                end\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "T"
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n\nalways @(*) begin\n    q = a ^ b;\nend\n\nalways @(posedge clk) begin\n    state <= q;\nend\n\ninitial begin\n    q = 1'bx;\n    state = 1'bx;\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 18,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

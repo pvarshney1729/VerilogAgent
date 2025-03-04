@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic cpu_overheated,        // 1-bit input signal indicating CPU overheating\n    input logic arrived,               // 1-bit input signal indicating arrival at the destination\n    input logic gas_tank_empty,        // 1-bit input signal indicating if the gas tank is empty\n    output logic shut_off_computer,    // 1-bit output to signal computer shutdown\n    output logic keep_driving          // 1-bit output to signal to continue driving\n);\n\n    always @(*) begin\n        if (cpu_overheated)\n            shut_off_computer = 1'b1;\n        else\n            shut_off_computer = 1'b0;\n    end\n\n    always @(*) begin\n        if (~arrived && ~gas_tank_empty)\n            keep_driving = 1'b1;\n        else\n            keep_driving = 1'b0;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

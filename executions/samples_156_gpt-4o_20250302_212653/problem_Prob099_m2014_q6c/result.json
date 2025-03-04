@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic [5:0] y,  // Input state vector, one-hot encoded\n    input logic w,        // 1-bit input for state transitions\n    input logic clk,      // Clock signal for sequential logic\n    input logic reset,    // Asynchronous reset signal\n    output logic Y1,      // 1-bit output\n    output logic Y3,      // 1-bit output\n    output logic Y2,      // 1-bit output, derived from next-state logic for y[1]\n    output logic Y4       // 1-bit output, derived from next-state logic for y[3]\n);\n\n    // State transition logic\n    always_ff @(posedge clk or posedge reset) begin\n        if (reset) begin\n            Y1 <= 1'b0;\n            Y3 <= 1'b0;\n            Y2 <= 1'b0;\n            Y4 <= 1'b0;\n        end else begin\n            // Next-state logic for Y2 (state B)\n            Y2 <= (y[0] & ~w) | (y[3] & w);\n\n            // Next-state logic for Y4 (state D)\n            Y4 <= (y[1] & w) | (y[2] & w) | (y[3] & ~w) | (y[5] & w);\n\n            // Output logic\n            Y1 <= y[0];\n            Y3 <= y[2];\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 1
+}

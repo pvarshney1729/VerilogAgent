@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic [5:0] y,\n    input logic w,\n    input logic clk,\n    input logic rst,\n    output logic Y1,\n    output logic Y3\n);\n\n    // State transition logic\n    always_ff @(posedge clk or posedge rst) begin\n        if (rst) begin\n            // Reset to state A\n            y <= 6'b000001;\n        end else begin\n            case (y)\n                6'b000001: y <= (w) ? 6'b000010 : 6'b000001; // A to B or stay in A\n                6'b000010: y <= (w) ? 6'b000100 : 6'b001000; // B to C or D\n                6'b000100: y <= (w) ? 6'b010000 : 6'b001000; // C to E or D\n                6'b001000: y <= (w) ? 6'b100000 : 6'b000001; // D to F or A\n                6'b010000: y <= (w) ? 6'b010000 : 6'b001000; // E to E or D\n                6'b100000: y <= (w) ? 6'b000100 : 6'b001000; // F to C or D\n                default: y <= 6'b000001; // Handle illegal states by resetting to A\n            endcase\n        end\n    end\n\n    // Output logic\n    assign Y1 = (y == 6'b000001) & w; // Y1 is high when transitioning from A to B\n    assign Y3 = ((y == 6'b000010) & ~w) | ((y == 6'b000100) & ~w) | ((y == 6'b010000) & ~w) | ((y == 6'b100000) & ~w); // Y3 is high when transitioning to D\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "w"
+    }
+}

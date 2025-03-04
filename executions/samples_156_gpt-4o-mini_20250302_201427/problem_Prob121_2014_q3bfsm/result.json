@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic x,\n    output logic z\n);\n    logic [2:0] y;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            y <= 3'b000;\n        end else begin\n            case (y)\n                3'b000: y <= (x ? 3'b001 : 3'b000);\n                3'b001: y <= (x ? 3'b100 : 3'b001);\n                3'b010: y <= (x ? 3'b001 : 3'b010);\n                3'b011: y <= (x ? 3'b010 : 3'b001);\n                3'b100: y <= (x ? 3'b100 : 3'b011);\n                default: y <= 3'b000;\n            endcase\n        end\n    end\n\n    always @(*) begin\n        case (y)\n            3'b011: z = 1'b1;\n            3'b100: z = 1'b1;\n            default: z = 1'b0;\n        endcase\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

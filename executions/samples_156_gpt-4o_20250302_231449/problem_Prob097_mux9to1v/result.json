@@ -1,0 +1,8 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input  logic [15:0] a,   // 16-bit input vector\n    input  logic [15:0] b,   // 16-bit input vector\n    input  logic [15:0] c,   // 16-bit input vector\n    input  logic [15:0] d,   // 16-bit input vector\n    input  logic [15:0] e,   // 16-bit input vector\n    input  logic [15:0] f,   // 16-bit input vector\n    input  logic [15:0] g,   // 16-bit input vector\n    input  logic [15:0] h,   // 16-bit input vector\n    input  logic [15:0] i,   // 16-bit input vector\n    input  logic [3:0]  sel, // 4-bit selection input\n    output logic [15:0] out  // 16-bit output vector\n);\n\n    // Multiplexer Implementation\n    // This module is a purely combinational logic block.\n    // The output `out` will change immediately with changes in inputs or `sel`.\n\n    always_comb begin\n        case (sel)\n            4'b0000: out = a; // sel = 0\n            4'b0001: out = b; // sel = 1\n            4'b0010: out = c; // sel = 2\n            4'b0011: out = d; // sel = 3\n            4'b0100: out = e; // sel = 4\n            4'b0101: out = f; // sel = 5\n            4'b0110: out = g; // sel = 6\n            4'b0111: out = h; // sel = 7\n            4'b1000: out = i; // sel = 8\n            default: out = 16'hFFFF; // sel = 9 to 15; output all bits set to '1'\n        endcase\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module ModuleA (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    always @(*) begin\n        z = (x ^ y) & x;\n    end\nendmodule\n\nmodule ModuleB (\n    input logic clk,\n    input logic reset,\n    input logic x,\n    input logic y,\n    output logic z\n);\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            z <= 1'b1;\n        end else begin\n            // Implement stateful behavior here\n            // Assuming some stateful logic based on x and y\n            z <= (x & y) | z;\n        end\n    end\nendmodule\n\nmodule TopLevel (\n    input logic clk,\n    input logic reset,\n    input logic x,\n    input logic y,\n    output logic z\n);\n    logic a1_out, a2_out, b1_out, b2_out;\n    \n    ModuleA u1_ModuleA (\n        .x(x),\n        .y(y),\n        .z(a1_out)\n    );\n\n    ModuleA u2_ModuleA (\n        .x(x),\n        .y(y),\n        .z(a2_out)\n    );\n\n    ModuleB u1_ModuleB (\n        .clk(clk),\n        .reset(reset),\n        .x(x),\n        .y(y),\n        .z(b1_out)\n    );\n\n    ModuleB u2_ModuleB (\n        .clk(clk),\n        .reset(reset),\n        .x(x),\n        .y(y),\n        .z(b2_out)\n    );\n\n    always @(*) begin\n        z = (a1_out | b1_out) ^ (a2_out & b2_out);\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 1
+}

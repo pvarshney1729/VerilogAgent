@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,           // Clock signal, positive edge-triggered\n    input logic areset,        // Asynchronous active-high reset\n    input logic j,             // Input for state transition\n    input logic k,             // Input for state transition\n    output logic out           // Output, reflects state\n);\n\nalways @(posedge clk or posedge areset) begin\n    if (areset) begin\n        out <= 1'b0; // Reset to OFF state\n    end else begin\n        case (out)\n            1'b0: out <= j ? 1'b1 : 1'b0; // OFF state transitions\n            1'b1: out <= k ? 1'b0 : 1'b1; // ON state transitions\n        endcase\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

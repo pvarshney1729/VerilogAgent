@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,     // Clock signal, triggers on positive edge\n    input logic w,       // Data input from the previous stage of the shift register\n    input logic R,       // Data to load into the shift register\n    input logic E,       // Enable signal for shifting\n    input logic L,       // Load signal, indicates when to load the value R\n    output logic Q       // Output of this stage of the shift register\n);\n\n    // Initial state for simulation purposes\n    initial begin\n        Q = 1'b0;\n    end\n\n    // Sequential logic for shift and load operations\n    always @(posedge clk) begin\n        if (L) begin\n            Q <= R; // Load operation takes precedence\n        end else if (E) begin\n            Q <= w; // Shift operation\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

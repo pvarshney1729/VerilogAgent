@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input  logic clk,       // Clock signal, rising edge triggered\n    input  logic reset,     // Active-high synchronous reset\n    input  logic in,        // Input signal for state transitions\n    output logic out        // Output signal, driven by the current state\n);\n\n    // State encoding\n    typedef enum logic {\n        STATE_A = 1'b0,\n        STATE_B = 1'b1\n    } state_t;\n\n    state_t state;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            state <= STATE_B; // Initialize to State B on reset\n            out <= 1'b1;\n        end else begin\n            case (state)\n                STATE_B: begin\n                    if (in == 1'b0) begin\n                        state <= STATE_A; // Transition to State A\n                        out <= 1'b0;\n                    end\n                end\n                STATE_A: begin\n                    if (in == 1'b0) begin\n                        state <= STATE_B; // Transition to State B\n                        out <= 1'b1;\n                    end\n                end\n            endcase\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

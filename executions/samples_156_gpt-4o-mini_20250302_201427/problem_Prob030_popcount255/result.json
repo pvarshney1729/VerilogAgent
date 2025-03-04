@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  logic [254:0] in,\n    output logic [7:0]  out\n);\n    assign out = population_count(in);\n\n    function logic [7:0] population_count(input logic [254:0] vec);\n        integer i;\n        begin\n            population_count = 8'b0;\n            for (i = 0; i <= 254; i = i + 1) begin\n                population_count = population_count + vec[i];\n            end\n        end\n    endfunction\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

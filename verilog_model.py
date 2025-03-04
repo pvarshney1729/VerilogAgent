@@ -11,6 +11,7 @@ from Verilog_generator import VerilogGenerator
 from typing import List, Dict, Optional
 import time
 import json
+import random
 
 def extract_between_tags(text: str, tag: str) -> str:
     """Extract content between XML-style tags"""
@@ -196,8 +197,248 @@ class Verifier:
                         result_record.passfail = 'R'
 
         return result_record
-     
 
+class StandaloneVerifier:
+    """A simple verifier that catches basic syntax errors without complex testbenches"""
+    
+    def __init__(self, problem_name=None):
+        """Initialize the verifier"""
+        self.temp_dir = os.getcwd()
+        self.problem_name = problem_name
+        self._compile_errors = []
+        self._runtime_errors = []
+        self._warnings = []
+    
+    def extract_module_info(self, verilog_code):
+        """Extract just the module name and basic port info"""
+        # Clean up comments
+        code_without_comments = re.sub(r'//.*?\n|/\*.*?\*/', '', verilog_code, flags=re.DOTALL)
+        
+        # Extract module declaration
+        module_match = re.search(r'module\s+(\w+)\s*\((.*?)\);', code_without_comments, re.DOTALL)
+        if not module_match:
+            return None, []
+        
+        module_name = module_match.group(1)
+        port_text = module_match.group(2)
+        
+        # Basic port extraction
+        ports = []
+        port_lines = port_text.split('\n')
+        
+        port_regex = r'(input|output|inout)\s+(?:reg|wire|logic)?\s*(?:\[\d+:\d+\])?\s*(\w+)'
+        
+        for line in port_lines:
+            port_match = re.search(port_regex, line)
+            if port_match:
+                direction = port_match.group(1)
+                name = port_match.group(2)
+                ports.append({"name": name, "direction": direction})
+        
+        return module_name, ports
+    
+    def create_test_bench(self, module_name, ports):
+        """Create a minimal test bench just to check for syntax errors"""
+        # Identify clock and reset signals
+        has_clock = any(p["name"].lower() in ["clk", "clock"] for p in ports)
+        has_reset = any(p["name"].lower() in ["reset", "rst"] for p in ports)
+        
+        # Generate simple port declarations
+        input_declarations = []
+        output_declarations = []
+        port_connections = []
+        
+        for port in ports:
+            if port["direction"] == "input":
+                input_declarations.append(f"reg {port['name']} = 0;")
+            else:
+                output_declarations.append(f"wire {port['name']};")
+            
+            port_connections.append(f".{port['name']}({port['name']})")
+        
+        # Begin test bench with minimal content
+        test_bench = f"`timescale 1ns/1ps\n\nmodule test_bench;\n\n"
+        
+        # Add signal declarations
+        for decl in input_declarations:
+            test_bench += f"    {decl}\n"
+        
+        for decl in output_declarations:
+            test_bench += f"    {decl}\n"
+        
+        # Basic clock generation if needed
+        if has_clock:
+            clock_name = next(p["name"] for p in ports if p["name"].lower() in ["clk", "clock"])
+            test_bench += f"\n    // Clock generation\n"
+            test_bench += f"    always #5 {clock_name} = ~{clock_name};\n"
+        
+        # Simple test sequence
+        test_bench += "\n    initial begin\n"
+        
+        # Reset sequence if needed
+        if has_reset:
+            reset_name = next(p["name"] for p in ports if p["name"].lower() in ["reset", "rst"])
+            test_bench += f"        {reset_name} = 1;\n"
+            test_bench += "        #20;\n"
+            test_bench += f"        {reset_name} = 0;\n"
+        
+        # Simple stimulus - just toggle each input once
+        for port in ports:
+            if port["direction"] == "input" and port["name"].lower() not in ["clk", "clock", "reset", "rst"]:
+                test_bench += f"        {port['name']} = 1;\n"
+                test_bench += "        #10;\n"
+                test_bench += f"        {port['name']} = 0;\n"
+        
+        # Finish simulation
+        test_bench += "        #50;\n"
+        test_bench += "        $display(\"Simulation completed successfully\");\n"
+        test_bench += "        $finish;\n"
+        test_bench += "    end\n\n"
+        
+        # Module instantiation
+        test_bench += f"    {module_name} dut (\n"
+        test_bench += ",\n".join(f"        {port}" for port in port_connections)
+        test_bench += "\n    );\n\n"
+        
+        # Basic waveform dumping
+        test_bench += "    initial begin\n"
+        test_bench += "        $dumpfile(\"waveform.vcd\");\n"
+        test_bench += "        $dumpvars(0, test_bench);\n"
+        test_bench += "    end\n"
+        
+        test_bench += "endmodule\n"
+        return test_bench
+    
+    def get_compile_errors(self):
+        """Get list of compilation errors from last verification"""
+        return self._compile_errors
+    
+    def get_runtime_errors(self):
+        """Get list of runtime errors from last verification"""
+        return self._runtime_errors
+    
+    def get_warnings(self):
+        """Get list of warnings from last verification"""
+        return self._warnings
+    
+    def functional_verify(self, solution, module_name=None):
+        """Verify if the solution compiles and runs with minimal testing"""
+        # Reset error storage
+        self._compile_errors = []
+        self._runtime_errors = []
+        self._warnings = []
+        
+        # Create a new ResultRecord instance
+        result_record = ResultRecord()
+        
+        # Extract module name and ports
+        extracted_name, ports = self.extract_module_info(solution)
+        if not extracted_name:
+            result_record.passfail = 'M'  # Module extraction failed
+            self._compile_errors.append("Could not extract module name from code")
+            return result_record
+        
+        # Setup temporary files
+        solution_path = os.path.join(self.temp_dir, "temp_top.sv")
+        testbench_path = os.path.join(self.temp_dir, "temp_testbench.sv")
+        compile_log_path = os.path.join(self.temp_dir, "compile_log.txt")
+        
+        # Clean up previous files
+        for path in [solution_path, compile_log_path]:
+            if os.path.exists(path):
+                os.remove(path)
+        
+        # Write solution to file
+        with open(solution_path, "w") as f:
+            f.write(solution)
+        
+        # Generate and write test bench
+        test_bench = self.create_test_bench(extracted_name, ports)
+        with open(testbench_path, "w") as f:
+            f.write(test_bench)
+        
+        # Compile with Icarus Verilog
+        with open(compile_log_path, "w") as log_file:
+            try:
+                subprocess.run(
+                    ["iverilog", "-g2012", "-o", "temp_top", testbench_path, solution_path],
+                    stdout=log_file,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    timeout=10
+                )
+            except Exception as e:
+                result_record.passfail = 'C'
+                self._compile_errors.append(f"Compilation failed: {str(e)}")
+                return result_record
+        
+        # Run simulation if compilation succeeded
+        if os.path.exists("temp_top"):
+            with open(compile_log_path, "a") as log_file:
+                try:
+                    subprocess.run(
+                        ["vvp", "temp_top"],
+                        stdout=log_file,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                        timeout=10
+                    )
+                except Exception as e:
+                    result_record.passfail = 'R'
+                    self._runtime_errors.append(f"Simulation failed: {str(e)}")
+            
+            if os.path.exists("temp_top"):
+                os.remove("temp_top")
+        
+        # Process the log file for errors
+        with open(compile_log_path, "r") as f:
+            log_content = f.read()
+            
+            # Check for various error patterns
+            if "syntax error" in log_content:
+                result_record.passfail = 'S'
+            elif "error: This assignment requires an explicit cast" in log_content:
+                result_record.passfail = 'e'
+            elif "error: Sized numeric constant must have a size greater than zero" in log_content:
+                result_record.passfail = '0'
+            elif "warning: always_comb process has no sensitivities" in log_content or "found no sensitivities" in log_content:
+                result_record.passfail = 'n'
+            elif "is declared here as wire" in log_content:
+                result_record.passfail = 'w'
+            elif "Unknown module type" in log_content:
+                result_record.passfail = 'm'
+            elif "Unable to bind wire/reg/memory `clk'" in log_content:
+                result_record.passfail = 'c'
+            elif "Unable to bind wire/reg" in log_content:
+                result_record.passfail = 'p'
+            elif "TIMEOUT" in log_content:
+                result_record.passfail = 'T'
+            elif "error:" in log_content:
+                result_record.passfail = 'C'
+                
+                # Extract error messages
+                error_lines = [line for line in log_content.split('\n') if "error:" in line]
+                self._compile_errors.extend(error_lines)
+            elif "Simulation completed successfully" in log_content:
+                result_record.passfail = '.'
+            else:
+                # Default to runtime issue if no specific error found
+                result_record.passfail = 'R'
+        
+        # Check for reset edge sensitivity issues
+        if result_record.passfail == '?':
+            with open(solution_path, "r") as file:
+                file_content = file.read()
+                if any(pattern in file_content for pattern in ["posedge reset", "negedge reset", "posedge rst", "negedge rst"]):
+                    result_record.passfail = 'r'
+                else:
+                    result_record.passfail = 'R'
+        
+        # Clean up test bench file
+        if os.path.exists(testbench_path):
+            os.remove(testbench_path)
+        
+        return result_record
 
 
 class VerilogModel:
@@ -345,7 +586,7 @@ class VerilogModel:
         return response
 
 
-    def run_pipeline(self, base_query: str, refinement: bool = False, enhance_spec: bool = True, iterative_refinement: bool = False, max_iterations: int = 3) -> Dict:
+    def run_pipeline(self, base_query: str, refinement: bool = False, enhance_spec: bool = True, iterative_refinement: bool = False, max_iterations: int = 2) -> Dict:
         """
         INPUT:
             base_query: str - Base query to generate testbench
@@ -363,110 +604,112 @@ class VerilogModel:
                 )
                 base_query = extract_between_tags(enhanced_query, "ENHANCED_SPEC")
 
+            # Store the original specification for reference
+            original_spec = base_query
+            
             if iterative_refinement:
                 current_query = base_query
                 current_response = ""
+                standalone_verifier = StandaloneVerifier(problem_name=self.problem_name)
+                original_response = None
                 
                 for iteration in range(max_iterations):
+                    print(f"Iteration {iteration + 1}/{max_iterations}")
+                    
+                    # Generate Verilog code - using stronger model for first iteration
                     try:
-                        try:
-                            generated_code = self.generator.generate(
-                                current_query,
-                                include_rules=True,
-                                include_examples=False
-                            )
-                            
-                            if isinstance(generated_code, list):
-                                current_response = generated_code[0]  
-                            else:
-                                current_response = generated_code
-                        except Exception as gen_error:
-                            print(f"Generation error: {str(gen_error)}")
-                            fallback_response = self.generator.generate_with_system_prompt(
-                                prompt=current_query,
-                                system_prompt="You are a code generation assistant. Generate code to solve the problem.",
-                                model='gpt-4o-mini',
-                            )
-                            if isinstance(fallback_response, list):
-                                for message in fallback_response:
-                                    if message.get('role') == 'assistant':
-                                        current_response = message.get('content', '')
-                                        break
-                                else:
-                                    current_response = fallback_response[-1].get('content', '')
-                            else:
-                                current_response = str(fallback_response)
-                        
-                        verifier = Verifier(problem_name=self.problem_name)
-                        test_results = verifier.functional_verify(current_response, self.problem_name)
-                        
-                        if iteration == max_iterations - 1:
-                            break
-                        
-                        verif = f"""
-                        Original Query: {base_query}
-                        Current Response: {current_response}
-                        Test Results: {test_results.to_dict()}
-                        Please evaluate this response and identify:
-                        1. What issues exist in the code that cause test failures?
-                        2. What modifications are needed to fix these issues?
-                        3. Should we make another iteration to improve the response?
-                        Return your analysis in this format:
-                        {{
-                            "issues": "description of issues in the code",
-                            "needed_fixes": ["list", "of", "needed", "fixes"],
-                            "needs_iteration": true/false,
-                            "follow_up_query": "refined query for next iteration with the code improvements"
-                        }}
-                        """
-                        
-                        # Use existing generate method for verification
-                        verif_result = self.generator.generate_with_system_prompt(
-                            prompt=verif,
-                            system_prompt="You are a code reviewer. Analyze the code and test results carefully.",
-                            model='gpt-4o-mini',
+                        current_response = self.generator.generate(
+                            current_query,
+                            include_rules=True,
+                            include_examples=False
                         )
                         
-                        try:
-                            # Extract text content from the response structure
-                            if isinstance(verif_result, list):
-                                # Extract content from assistant's message
-                                for message in verif_result:
-                                    if message.get('role') == 'assistant':
-                                        verification_content = message.get('content', '')
-                                        break
-                                else:
-                                    verification_content = verif_result[-1].get('content', '')
-                            else:
-                                verification_content = str(verif_result)
-                                
-                            result = json.loads(extract_json(verification_content))
-                        except Exception as json_error:
-                            print(f"JSON parsing error: {str(json_error)}")
-                            break
-                        
-                        if not result.get('needs_iteration', False):
-                            break
-                        
-                        follow_up_result = result.get('follow_up_query')
-                        if follow_up_result:
-                            current_query = follow_up_result
-                        else:
-                            break
+                        # Save the original response from the first iteration
+                        if iteration == 0:
+                            original_response = current_response
                             
+                        print("Code generation successful")
                     except Exception as e:
-                        print(f"Error in iteration {iteration + 1}: {str(e)}")
+                        print(f"Generation error: {str(e)}")
+                        # Skip this iteration if generation fails
+                        continue
+                    
+                    # Verify the code
+                    result = standalone_verifier.functional_verify(current_response)
+                    print(f"Verification result: {result.passfail}")
+                    
+                    # If the code passes verification, we're done
+                    if result.passfail == '.':
+                        print("Code passed verification, stopping iterations")
                         break
+                    
+                    # If we've reached max iterations, we're done
+                    if iteration == max_iterations - 1:
+                        print("Reached maximum iterations")
+                        break
+                    
+                    # Map error codes to descriptions for better prompting
+                    error_descriptions = {
+                        'S': "syntax error in the code",
+                        'e': "assignment that requires an explicit cast",
+                        '0': "sized numeric constant with size zero (use 1'b0 not 0)",
+                        'n': "always block with no sensitivities",
+                        'w': "wire declaration issue",
+                        'm': "unknown module type",
+                        'p': "port binding error",
+                        'c': "unable to bind clock signal",
+                        'T': "simulation timeout (possible infinite loop)",
+                        'r': "reset signal used incorrectly with posedge/negedge",
+                        'R': "general runtime issue",
+                        'C': "compilation error",
+                        'M': "module extraction failed"
+                    }
+                    
+                    error_desc = error_descriptions.get(result.passfail, "unknown error")
+                    
+                    # Generate prompt for fixing the code - enhanced with detail
+                    fix_prompt = f"""
+                    I have a Verilog module with a {error_desc} issue that needs fixing.
+                    
+                    ORIGINAL SPECIFICATION:
+                    {original_spec}
+                    
+                    CURRENT IMPLEMENTATION WITH ERROR:
+                    [BEGIN]
+                    {current_response}
+                    [DONE]
+                    
+                    DETAILED ERROR INFORMATION:
+                    - Error type: {result.passfail} - {error_desc}
+                    
+                    REQUIRED FIXES:
+                    1. Fix the {error_desc} issue
+                    2. Ensure the code still meets ALL requirements in the original specification
+                    3. Maintain correct functionality as specified
+                    4. Ensure port declarations match what's needed by the specification
+                    5. Use proper Verilog syntax and follow best practices
+                    
+                    IMPORTANT: Your solution must be functionally equivalent to what was requested in the specification.
+                    Do not just fix the syntax error - make sure the code works correctly.
+                    
+                    Mark your complete solution with [BEGIN] and [DONE] tags.
+                    """
+                    
+                    current_query = fix_prompt
                 
+                print("Performing verification with ground truth")
                 verifier = Verifier(problem_name=self.problem_name)
-                test_results = verifier.functional_verify(current_response, self.problem_name)
+                gt_result = verifier.functional_verify(current_response, self.problem_name)
                 
+                # Use ground truth result if available
+                final_result = gt_result
+
                 return {
                     "code": current_response,
-                    "test_results": test_results.to_dict(),
+                    "test_results": final_result.to_dict(),
                     "iterations_used": iteration + 1
                 }
-            
+        
             elif not refinement:
                 # Original approach using sv-generate style
                 generated_code = self.generator.generate(

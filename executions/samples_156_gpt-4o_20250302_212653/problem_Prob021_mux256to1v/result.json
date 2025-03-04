@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic [1023:0] in,\n    input logic [7:0] sel,\n    output logic [3:0] out\n);\n\n    always_comb begin\n        if (sel <= 8'd255) begin\n            out = in[(sel * 4) +: 4];\n        end else begin\n            out = 4'b0000;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

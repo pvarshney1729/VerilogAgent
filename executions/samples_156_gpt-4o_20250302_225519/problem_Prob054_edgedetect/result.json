@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset_n,\n    input logic [7:0] in,\n    output logic [7:0] pedge\n);\n\n    logic [7:0] in_prev;\n\n    always_ff @(posedge clk) begin\n        if (!reset_n) begin\n            in_prev <= 8'b0;\n            pedge <= 8'b0;\n        end else begin\n            pedge <= ~in_prev & in;\n            in_prev <= in;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

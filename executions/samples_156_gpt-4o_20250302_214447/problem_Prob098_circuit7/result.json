@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    output logic q\n);\n\n    // Initialize q to 0\n    initial begin\n        q = 1'b0;\n    end\n\n    // Sequential logic block\n    always_ff @(posedge clk) begin\n        if (a == 1'b1) begin\n            q <= ~q; // Toggle q if a is 1\n        end\n        // If a is 0, q retains its value (no action needed)\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 56,
+        "passfail": "R"
+    }
+}

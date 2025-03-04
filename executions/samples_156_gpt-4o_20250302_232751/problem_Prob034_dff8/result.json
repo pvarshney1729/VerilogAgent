@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,               // Clock input, triggers on positive edge\n    input logic rst_n,             // Active low synchronous reset\n    input logic [7:0] d,           // 8-bit data input, bit[0] is the LSB\n    output logic [7:0] q           // 8-bit data output, bit[0] is the LSB\n);\n\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            q <= 8'b00000000;      // Reset output to zero\n        end else begin\n            q <= d;               // On the rising edge of the clock, latch the input 'd' to output 'q'\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 1,
+        "passfail": "R"
+    },
+    "iterations_used": 2
+}

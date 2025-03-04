@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,      // Clock signal, positive edge triggered\n    input  logic reset,    // Synchronous active-high reset\n    input  logic x,        // Input signal\n    output logic z         // Output signal\n);\n\n    logic [2:0] y; // Current state, 3-bit wide register\n\n    // State transition and output logic\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            y <= 3'b000;\n        end else begin\n            case (y)\n                3'b000: y <= (x == 1'b0) ? 3'b000 : 3'b001;\n                3'b001: y <= (x == 1'b0) ? 3'b001 : 3'b100;\n                3'b010: y <= (x == 1'b0) ? 3'b010 : 3'b001;\n                3'b011: y <= (x == 1'b0) ? 3'b001 : 3'b010;\n                3'b100: y <= (x == 1'b0) ? 3'b011 : 3'b100;\n                default: y <= 3'b000; // Default case to handle undefined states\n            endcase\n        end\n    end\n\n    // Output logic based on current state\n    always_comb begin\n        case (y)\n            3'b011, 3'b100: z = 1'b1;\n            default: z = 1'b0;\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

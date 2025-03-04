@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,                  // 1-bit clock signal\n    input logic reset,                // 1-bit synchronous active-high reset\n    input logic [31:0] in,            // 32-bit input vector\n    output logic [31:0] out           // 32-bit output vector\n);\n\n    logic [31:0] previous_in;         // Register to hold the previous state of the input\n\n    // Sequential logic to implement the described behavior\n    always @(posedge clk) begin\n        if (reset) begin\n            out <= 32'b0; // Reset all output bits to 0 on reset\n            previous_in <= 32'b0; // Reset previous_in on reset\n        end else begin\n            for (int i = 0; i < 32; i = i + 1) begin\n                if (previous_in[i] && !in[i]) begin\n                    out[i] <= 1'b1; // Capture transition from 1 to 0\n                end\n            end\n            previous_in <= in; // Update previous_in with current in\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 99,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

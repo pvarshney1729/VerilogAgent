@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic [7:0] in,\n    output logic [23:0] out_bytes,\n    output logic done\n);\n\n    typedef enum logic [1:0] {\n        IDLE = 2'b00,\n        FIRST_BYTE = 2'b01,\n        SECOND_BYTE = 2'b10,\n        THIRD_BYTE = 2'b11\n    } state_t;\n\n    state_t current_state, next_state;\n    logic [23:0] byte_buffer;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            current_state <= IDLE;\n            done <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            if (current_state == THIRD_BYTE) begin\n                done <= 1'b1;\n            end else begin\n                done <= 1'b0;\n            end\n        end\n    end\n\n    always_ff @(posedge clk) begin\n        if (!reset) begin\n            case (current_state)\n                FIRST_BYTE: byte_buffer[23:16] <= in;\n                SECOND_BYTE: byte_buffer[15:8] <= in;\n                THIRD_BYTE: byte_buffer[7:0] <= in;\n                default: byte_buffer <= byte_buffer;\n            endcase\n        end\n    end\n\n    always_comb begin\n        next_state = current_state;\n        case (current_state)\n            IDLE: if (in[3]) next_state = FIRST_BYTE;\n            FIRST_BYTE: next_state = SECOND_BYTE;\n            SECOND_BYTE: next_state = THIRD_BYTE;\n            THIRD_BYTE: next_state = IDLE;\n            default: next_state = IDLE;\n        endcase\n    end\n\n    assign out_bytes = byte_buffer;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 676,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

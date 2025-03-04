@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic do_sub,          // Single-bit control signal for operation mode\n    input logic [7:0] a,         // 8-bit input operand\n    input logic [7:0] b,         // 8-bit input operand\n    output logic [7:0] out,      // 8-bit output result\n    output logic result_is_zero  // Single-bit zero flag\n);\n\n    // Combinational logic block\n    always_comb begin\n        // Arithmetic operation based on do_sub signal\n        case (do_sub)\n            1'b0: out = a + b;    // Addition operation\n            1'b1: out = a - b;    // Subtraction operation\n            default: out = 8'b0;  // Default case for safety\n        endcase\n\n        // Determine if the result is zero\n        result_is_zero = (out == 8'b0);\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,         // Clock signal, negative edge triggered\n    input logic reset,       // Synchronous active-high reset signal\n    input logic [7:0] d,     // 8-bit data input\n    output logic [7:0] q     // 8-bit data output\n);\n\n    always_ff @(negedge clk) begin\n        if (reset) begin\n            q <= 8'h34;      // Set q to 8'h34 on reset\n        end else begin\n            q <= d;          // Capture input d on negative edge of clk\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

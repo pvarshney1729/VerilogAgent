@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input wire clk,         // Clock input\n    input wire aresetn,     // Asynchronous active-low reset\n    input wire x,           // Input signal for sequence detection\n    output reg z            // Output signal, asserted for sequence \"101\"\n);\n\n    // State encoding\n    typedef enum logic [1:0] {\n        IDLE = 2'b00,\n        S1   = 2'b01,\n        S10  = 2'b10\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(posedge clk or negedge aresetn) begin\n        if (!aresetn)\n            current_state <= IDLE;\n        else\n            current_state <= next_state;\n    end\n\n    // Next state logic and output logic\n    always @(*) begin\n        // Default assignments\n        next_state = current_state;\n        z = 1'b0;\n\n        case (current_state)\n            IDLE: begin\n                if (x)\n                    next_state = S1;\n            end\n            S1: begin\n                if (!x)\n                    next_state = S10;\n            end\n            S10: begin\n                if (x) begin\n                    next_state = S1;\n                    z = 1'b1;\n                end else begin\n                    next_state = IDLE;\n                end\n            end\n            default: begin\n                next_state = IDLE;\n            end\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

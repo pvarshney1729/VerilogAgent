@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  logic [7:0] a,  // 8-bit unsigned input\n    input  logic [7:0] b,  // 8-bit unsigned input\n    input  logic [7:0] c,  // 8-bit unsigned input\n    input  logic [7:0] d,  // 8-bit unsigned input\n    output logic [7:0] min // 8-bit unsigned output representing the minimum value\n);\n\n    logic [7:0] min_temp1;\n    logic [7:0] min_temp2;\n\n    always_comb begin\n        if (a < b)\n            min_temp1 = a;\n        else\n            min_temp1 = b;\n\n        if (c < d)\n            min_temp2 = c;\n        else\n            min_temp2 = d;\n\n        if (min_temp1 < min_temp2)\n            min = min_temp1;\n        else\n            min = min_temp2;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

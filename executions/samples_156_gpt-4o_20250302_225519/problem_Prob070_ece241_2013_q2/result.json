@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input [3:0] in_bits,\n    output logic out_sop,\n    output logic out_pos\n);\n\n    // Minimum Sum-of-Products (SOP) form for out_sop\n    // out_sop = (in_bits == 4'b0010) || (in_bits == 4'b0111) || (in_bits == 4'b1111)\n    assign out_sop = (in_bits == 4'b0010) || (in_bits == 4'b0111) || (in_bits == 4'b1111);\n\n    // Minimum Product-of-Sums (POS) form for out_pos\n    // out_pos = !( (a + b + !c + !d) * (a + !b + !c + d) * (!a + !b + c + d) )\n    // where a = in_bits[3], b = in_bits[2], c = in_bits[1], d = in_bits[0]\n    assign out_pos = !((in_bits[3] || in_bits[2] || !in_bits[1] || !in_bits[0]) &&\n                       (in_bits[3] || !in_bits[2] || !in_bits[1] || in_bits[0]) &&\n                       (!in_bits[3] || !in_bits[2] || in_bits[1] || in_bits[0]));\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 1
+}

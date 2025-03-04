@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clock,\n    input logic a,\n    output logic p,\n    output logic q\n);\n\n    // Internal state to track the previous value of `p`\n    logic prev_p;\n\n    // Initialize outputs and internal state\n    initial begin\n        p = 1'b0;\n        q = 1'b0;\n        prev_p = 1'b0;\n    end\n\n    // Sequential logic for `p` and `q`\n    always_ff @(posedge clock) begin\n        // Update `p` based on the previous value of `a`\n        p <= a;\n\n        // Update `q` based on the previous and current value of `p`\n        if (prev_p && p) begin\n            q <= 1'b1;\n        end else begin\n            q <= 1'b0;\n        end\n\n        // Store the current value of `p` for the next cycle\n        prev_p <= p;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 173,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  logic clk,           // Clock input, positive edge-triggered\n    input  logic shift_ena,     // Shift enable, active high\n    input  logic count_ena,     // Count enable, active high\n    input  logic data,          // Data input, unsigned\n    output logic [3:0] q        // 4-bit output register, unsigned\n);\n\n    // Initialize q to zero at the start\n    initial begin\n        q = 4'b0000;\n    end\n\n    always_ff @(posedge clk) begin\n        if (shift_ena && !count_ena) begin\n            // Shift operation\n            q <= {q[2:0], data};\n        end else if (count_ena && !shift_ena) begin\n            // Down counter operation\n            q <= q - 1;\n        end\n        // Undefined behavior if both shift_ena and count_ena are high\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

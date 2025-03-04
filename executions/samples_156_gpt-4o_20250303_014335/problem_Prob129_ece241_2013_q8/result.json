@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  wire clk,        // Clock signal, positive edge triggered\n    input  wire aresetn,    // Active-low asynchronous reset\n    input  wire x,          // 1-bit input signal\n    output reg  z           // 1-bit output signal\n);\n\n    // State encoding\n    typedef enum logic [1:0] {\n        S0 = 2'b00,\n        S1 = 2'b01,\n        S2 = 2'b10\n    } state_t;\n\n    state_t state, next_state;\n\n    // State transition logic\n    always @(posedge clk or negedge aresetn) begin\n        if (!aresetn) begin\n            state <= S0;\n            z <= 1'b0;\n        end else begin\n            state <= next_state;\n            if (state == S2 && x) begin\n                z <= 1'b1;\n            end else begin\n                z <= 1'b0;\n            end\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (state)\n            S0: begin\n                if (x) next_state = S1;\n                else next_state = S0;\n            end\n            S1: begin\n                if (!x) next_state = S2;\n                else next_state = S1;\n            end\n            S2: begin\n                if (x) next_state = S1;\n                else next_state = S0;\n            end\n            default: next_state = S0;\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 92,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

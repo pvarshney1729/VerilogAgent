@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic load,\n    input logic [511:0] data,\n    output logic [511:0] q\n);\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            q[0] <= q[1] ^ 1'b0; // Left neighbor of q[0] is zero\n            q[511] <= 1'b0 ^ q[510]; // Right neighbor of q[511] is zero\n            for (int i = 1; i < 511; i = i + 1) begin\n                q[i] <= q[i-1] ^ q[i+1];\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

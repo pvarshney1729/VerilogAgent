@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic [5:0] y,\n    input logic w,\n    output logic Y1,\n    output logic Y3,\n    output logic Y2,\n    output logic Y4\n);\n\n    // Derive logic for Y2 and Y4 based on state transitions\n    always @(*) begin\n        // Default output values\n        Y1 = 1'b0;\n        Y3 = 1'b0;\n        Y2 = 1'b0;\n        Y4 = 1'b0;\n\n        // Determine next-state conditions\n        case (y)\n            6'b000001: begin // State A\n                Y2 = (w == 1'b0); // Transition to State B\n            end\n            6'b000010: begin // State B\n                Y2 = (w == 1'b0); // Transition to State C\n                Y4 = (w == 1'b1); // Transition to State D\n            end\n            6'b000100: begin // State C\n                Y4 = 1'b1; // Transition to State D\n            end\n            6'b001000: begin // State D\n                Y4 = (w == 1'b0); // Transition to State F\n            end\n            6'b010000: begin // State E\n                Y4 = (w == 1'b1); // Transition to State D\n            end\n            6'b100000: begin // State F\n                Y4 = 1'b1; // Transition to State D\n            end\n            default: begin\n                // Handle undefined states\n                Y1 = 1'b0;\n                Y3 = 1'b0;\n                Y2 = 1'b0;\n                Y4 = 1'b0;\n            end\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 1
+}

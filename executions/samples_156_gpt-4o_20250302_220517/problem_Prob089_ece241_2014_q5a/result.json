@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,        // Clock signal, positive edge triggered\n    input logic areset,     // Asynchronous reset, active high\n    input logic x,          // Serial input bit stream\n    output logic z          // Serial output bit stream\n);\n\n    typedef enum logic [1:0] {\n        IDLE = 2'b00,\n        FLIP = 2'b01,\n        ADD_ONE = 2'b10\n    } state_t;\n\n    state_t current_state, next_state;\n    logic carry;\n\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            current_state <= IDLE;\n            carry <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            if (current_state == ADD_ONE) begin\n                carry <= carry & x;\n            end\n        end\n    end\n\n    always_comb begin\n        next_state = current_state;\n        z = 1'b0;\n        case (current_state)\n            IDLE: begin\n                if (!areset) begin\n                    next_state = FLIP;\n                end\n            end\n            FLIP: begin\n                z = ~x;\n                next_state = ADD_ONE;\n            end\n            ADD_ONE: begin\n                z = x ^ carry;\n                carry = x & carry;\n                next_state = ADD_ONE;\n            end\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 212,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

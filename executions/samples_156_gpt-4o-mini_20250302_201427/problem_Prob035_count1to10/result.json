@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,             // Clock input, 1-bit, unsigned\n    input logic reset,           // Active high synchronous reset, 1-bit, unsigned\n    output logic [3:0] q         // 4-bit output, unsigned with q[3] as the MSB\n);\n    // Initial state\n    initial begin\n        q = 4'b0001;            // Initialize q to 1 at the start\n    end\n\n    // Sequential logic, triggered on the positive edge of the clock\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 4'b0001;       // Reset the counter to 1\n        end else begin\n            if (q == 4'b1010) begin\n                q <= 4'b0001;   // Wrap around from 10 to 1\n            end else begin\n                q <= q + 1'b1;  // Increment the counter\n            end\n        end\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

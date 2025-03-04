@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  logic          clk,           // Positive edge-triggered clock signal\n    input  logic          areset,        // Asynchronous reset, active-high, resets state to zero\n    input  logic          predict_valid, // Indicates a valid branch prediction\n    input  logic          predict_taken, // Indicates the predicted outcome of the branch\n    input  logic          train_mispredicted, // Indicates a branch misprediction event\n    input  logic          train_taken,   // Indicates the actual outcome of the mispredicted branch\n    input  logic [31:0]   train_history, // The branch history prior to the mispredicted branch\n    output logic [31:0]   predict_history // The current branch history\n);\n\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            predict_history <= 32'b0;\n        end else if (train_mispredicted) begin\n            predict_history <= {train_history[30:0], train_taken};\n        end else if (predict_valid) begin\n            predict_history <= {predict_history[30:0], predict_taken};\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

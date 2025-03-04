@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input wire d,       // Data input, 1-bit width\n    input wire ena,     // Enable input, 1-bit width, active high\n    output reg q        // Output, 1-bit width\n);\n\nalways @(*) begin\n    if (ena) begin\n        q = d; // Pass the data to output when ena is high\n    end\n    // No else block, q retains its value when ena is low\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

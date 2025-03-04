@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    output logic [4:0] q\n);\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q <= 5'b00001;\n        end else begin\n            q[4] <= q[0];\n            q[3] <= q[4];\n            q[2] <= q[3];\n            q[1] <= q[2];\n            q[0] <= q[1] ^ q[0];\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 4280,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

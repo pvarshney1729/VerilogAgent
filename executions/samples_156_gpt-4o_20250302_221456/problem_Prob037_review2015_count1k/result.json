@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,       // Clock signal\n    input logic reset,     // Active-high synchronous reset\n    output logic [9:0] q   // 10-bit counter output\n);\n\n    // Internal register for the counter\n    logic [9:0] count;\n\n    // Counter logic\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            count <= 10'b0; // Reset counter to 0\n        end else begin\n            if (count == 10'd999) begin\n                count <= 10'b0; // Wrap around to 0 after 999\n            end else begin\n                count <= count + 10'b1; // Increment counter\n            end\n        end\n    end\n\n    // Assign the internal counter to the output\n    assign q = count;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 3
+}

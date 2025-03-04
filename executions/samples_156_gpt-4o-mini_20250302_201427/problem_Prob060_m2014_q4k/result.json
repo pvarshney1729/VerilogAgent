@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic resetn,\n    input logic in,\n    output logic out\n);\n    logic [3:0] shift_reg;\n\n    always @(posedge clk) begin\n        if (!resetn) begin\n            shift_reg <= 4'b0000;\n        end else begin\n            shift_reg[3] <= shift_reg[2];\n            shift_reg[2] <= shift_reg[1];\n            shift_reg[1] <= shift_reg[0];\n            shift_reg[0] <= in;\n        end\n    end\n\n    assign out = shift_reg[3];\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

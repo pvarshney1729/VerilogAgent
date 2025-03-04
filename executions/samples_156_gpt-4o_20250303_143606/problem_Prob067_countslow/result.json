@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic reset,\n    input logic slowena,\n    output logic [3:0] q\n);\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q <= 4'b0000; // Reset counter to 0\n        end else if (slowena) begin\n            if (q == 4'b1001) begin\n                q <= 4'b0000; // Wrap-around from 9 to 0\n            end else begin\n                q <= q + 1'b1; // Increment counter\n            end\n        end\n        // If slowena is low, retain current value of q\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

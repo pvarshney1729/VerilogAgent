@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input wire clk,\n    input wire reset,\n    input wire load,\n    input wire ena,\n    input wire [1:0] amount,\n    input wire [63:0] data,\n    output reg [63:0] q\n);\n\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 64'b0;\n        end else if (load) begin\n            q <= data;\n        end else if (ena) begin\n            case (amount)\n                2'b00: q <= q << 1;\n                2'b01: q <= q << 8;\n                2'b10: q <= {q[63], q[63:1]};\n                2'b11: q <= {{8{q[63]}}, q[63:8]};\n                default: q <= q; // Unspecified behavior, retain current value\n            endcase\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

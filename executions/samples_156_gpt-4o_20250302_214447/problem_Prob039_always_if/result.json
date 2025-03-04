@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n  input wire a,\n  input wire b,\n  input wire sel_b1,\n  input wire sel_b2,\n  output wire out_assign,\n  output reg out_always\n);\n\n  // Continuous assignment for combinational logic\n  assign out_assign = (sel_b1 && sel_b2) ? b : a;\n\n  // Procedural block for combinational logic\n  always @(*) begin\n    if (sel_b1 && sel_b2) begin\n      out_always = b;\n    end else begin\n      out_always = a;\n    end\n  end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

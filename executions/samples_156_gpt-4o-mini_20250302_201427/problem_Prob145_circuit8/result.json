@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clock,\n    input logic a,\n    output logic p,\n    output logic q\n);\n\n    initial begin\n        p = 1'b0;\n        q = 1'b0;\n    end\n\n    always @(posedge clock) begin\n        if (a == 1'b1 && p == 1'b0) begin\n            p = 1'b1;\n        end else if (a == 1'b0 && p == 1'b1) begin\n            p = 1'b0;\n        end\n    end\n\n    always @(negedge clock) begin\n        q = p;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 138,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

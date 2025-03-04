@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule DFlipFlop (\n    input logic clk,    // Clock signal, positive-edge triggered\n    input logic d,      // Data input\n    input logic r,      // Active high synchronous reset\n    output logic q      // Data output\n);\n\n    always_ff @(posedge clk) begin\n        if (r) begin\n            q <= 1'b0;\n        end else begin\n            q <= d;\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

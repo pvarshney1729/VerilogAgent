@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset_n,\n    input logic d,\n    output logic q\n);\n\n    logic rising_d, falling_d;\n    logic clk_div;\n\n    // Clock divider to emulate dual-edge behavior\n    always_ff @(posedge clk or negedge reset_n) begin\n        if (!reset_n)\n            clk_div <= 1'b0;\n        else\n            clk_div <= ~clk_div;\n    end\n\n    // Capture data on rising edge\n    always_ff @(posedge clk or negedge reset_n) begin\n        if (!reset_n)\n            rising_d <= 1'b0;\n        else\n            rising_d <= d;\n    end\n\n    // Capture data on falling edge\n    always_ff @(negedge clk or negedge reset_n) begin\n        if (!reset_n)\n            falling_d <= 1'b0;\n        else\n            falling_d <= d;\n    end\n\n    // Multiplexer to select between rising and falling edge data\n    always_ff @(posedge clk or negedge reset_n) begin\n        if (!reset_n)\n            q <= 1'b0;\n        else\n            q <= clk_div ? rising_d : falling_d;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 162,
+        "passfail": "r"
+    }
+}

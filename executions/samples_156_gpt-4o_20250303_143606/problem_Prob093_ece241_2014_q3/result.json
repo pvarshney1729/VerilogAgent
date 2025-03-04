@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic c,       // 1-bit input signal\n    input logic d,       // 1-bit input signal\n    input logic a,       // 1-bit selector for the 4-to-1 multiplexer\n    input logic b,       // 1-bit selector for the 4-to-1 multiplexer\n    output logic [3:0] mux_in // 4-bit output signal connected to the 4-to-1 multiplexer\n);\n\n    // Combinational logic for mux_in[0]\n    assign mux_in[0] = c & (d | ~d); // Simplified to c\n\n    // Combinational logic for mux_in[1]\n    assign mux_in[1] = 1'b0; // Always 0\n\n    // Combinational logic for mux_in[2]\n    assign mux_in[2] = c & d;\n\n    // Combinational logic for mux_in[3]\n    assign mux_in[3] = (c & d) | (~c & d) | (c & ~d);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 60,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,          // Clock signal, triggers on positive edge\n    input logic reset,        // Active high, synchronous reset\n    output logic [3:0] q      // 4-bit unsigned output, q[3] is MSB, q[0] is LSB\n);\n\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 4'b0000; // Reset counter to 0\n        end else begin\n            q <= q + 1;   // Increment counter\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,   // Clock signal, assumed to trigger on positive edge\n    input logic j,     // J input for JK flip-flop\n    input logic k,     // K input for JK flip-flop\n    output logic Q     // Output Q of the JK flip-flop\n);\n\n    always @(posedge clk) begin\n        case ({j, k})\n            2'b00: Q <= Q;    // Retain state\n            2'b01: Q <= 1'b0; // Reset\n            2'b10: Q <= 1'b1; // Set\n            2'b11: Q <= ~Q;   // Toggle\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

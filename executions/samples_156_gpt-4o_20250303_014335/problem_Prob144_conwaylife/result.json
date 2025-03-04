@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic load,\n    input logic [255:0] data,\n    output logic [255:0] q\n);\n\n    logic [255:0] next_state;\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            q <= next_state;\n        end\n    end\n\n    always_comb begin\n        for (int row = 0; row < 16; row++) begin\n            for (int col = 0; col < 16; col++) begin\n                int count;\n                count = 0;\n\n                // Calculate neighbors with toroidal wrap-around\n                for (int i = -1; i <= 1; i++) begin\n                    for (int j = -1; j <= 1; j++) begin\n                        if (!(i == 0 && j == 0)) begin\n                            int neighbor_row = (row + i + 16) % 16;\n                            int neighbor_col = (col + j + 16) % 16;\n                            if (q[neighbor_row * 16 + neighbor_col]) begin\n                                count++;\n                            end\n                        end\n                    end\n                end\n\n                // Apply game rules\n                if (count == 3 || (count == 2 && q[row * 16 + col])) begin\n                    next_state[row * 16 + col] = 1;\n                end else begin\n                    next_state[row * 16 + col] = 0;\n                end\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 780,
+        "passfail": "R"
+    },
+    "iterations_used": 2
+}

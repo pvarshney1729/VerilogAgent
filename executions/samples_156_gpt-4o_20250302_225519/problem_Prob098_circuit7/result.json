@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic a,\n    input logic reset,\n    output logic q\n);\n\nalways_ff @(posedge clk or posedge reset) begin\n    if (reset) begin\n        q <= 1'b0; // Asynchronous reset to initial state\n    end else if (a) begin\n        q <= ~q; // Toggle state on positive edge of clk if a is 1\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 120,
+        "passfail": "r"
+    },
+    "iterations_used": 2
+}

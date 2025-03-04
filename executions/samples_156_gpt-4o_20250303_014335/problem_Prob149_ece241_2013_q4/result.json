@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    input logic [2:0] s,\n    output logic fr2,\n    output logic fr1,\n    output logic fr0,\n    output logic dfr\n);\n\n    logic [2:0] prev_s;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            fr0 <= 1'b1;\n            fr1 <= 1'b1;\n            fr2 <= 1'b1;\n            dfr <= 1'b1;\n            prev_s <= 3'b000;\n        end else begin\n            prev_s <= s;\n            case (s)\n                3'b100: begin\n                    fr0 <= 1'b0;\n                    fr1 <= 1'b0;\n                    fr2 <= 1'b0;\n                    dfr <= 1'b0;\n                end\n                3'b010: begin\n                    fr0 <= 1'b1;\n                    fr1 <= 1'b0;\n                    fr2 <= 1'b0;\n                    dfr <= (prev_s < s) ? 1'b1 : 1'b0;\n                end\n                3'b001: begin\n                    fr0 <= 1'b1;\n                    fr1 <= 1'b1;\n                    fr2 <= 1'b0;\n                    dfr <= (prev_s < s) ? 1'b1 : 1'b0;\n                end\n                default: begin\n                    fr0 <= 1'b1;\n                    fr1 <= 1'b1;\n                    fr2 <= 1'b1;\n                    dfr <= 1'b0;\n                end\n            endcase\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 1903,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

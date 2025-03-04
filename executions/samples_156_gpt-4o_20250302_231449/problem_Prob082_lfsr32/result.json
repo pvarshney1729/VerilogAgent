@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [31:0] q\n);\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q <= 32'h1;\n        end else begin\n            logic new_bit;\n            new_bit = q[0] ^ q[1] ^ q[2] ^ q[22] ^ q[31];\n            q <= {new_bit, q[31:1]};\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "T"
+    },
+    "iterations_used": 1
+}

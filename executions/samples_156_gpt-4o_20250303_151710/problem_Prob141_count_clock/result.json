@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic ena,\n    output logic pm,\n    output logic [7:0] hh,\n    output logic [7:0] mm,\n    output logic [7:0] ss\n);\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            hh <= 8'd12;\n            mm <= 8'd0;\n            ss <= 8'd0;\n            pm <= 1'b0;\n        end else if (ena) begin\n            if (ss == 8'd59) begin\n                ss <= 8'd0;\n                if (mm == 8'd59) begin\n                    mm <= 8'd0;\n                    if (hh == 8'd12) begin\n                        hh <= 8'd1;\n                        pm <= ~pm;\n                    end else if (hh == 8'd11) begin\n                        hh <= 8'd12;\n                    end else begin\n                        hh <= hh + 8'd1;\n                    end\n                end else begin\n                    mm <= mm + 8'd1;\n                end\n            end else begin\n                ss <= ss + 8'd1;\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "T"
+    }
+}

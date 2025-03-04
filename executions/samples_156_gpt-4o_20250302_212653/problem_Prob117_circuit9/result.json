@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,        // Clock input, active on rising edge\n    input logic a,          // 1-bit input signal\n    output logic [2:0] q    // 3-bit output signal, unsigned\n);\n\n    always_ff @(posedge clk) begin\n        if (a == 1'b1) begin\n            q <= 3'b100;  // Maintain value 4\n        end else begin\n            q <= q + 1;   // Increment q\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 192,
+        "passfail": "R"
+    },
+    "iterations_used": 2
+}

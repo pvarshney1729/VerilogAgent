@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  wire [3:0] in,     // 4-bit input vector representing a 4-bit binary number\n    output reg  out_sop,      // Output in minimum sum-of-products form\n    output reg  out_pos       // Output in minimum product-of-sums form\n);\n\nalways @(*) begin\n    // Default outputs to 0\n    out_sop = 1'b0;\n    out_pos = 1'b0;\n    \n    // Check for valid input conditions\n    case (in)\n        4'b0010, 4'b0111, 4'b1111: begin\n            out_sop = 1'b1;\n            out_pos = 1'b1;\n        end\n        default: begin\n            out_sop = 1'b0;\n            out_pos = 1'b0;\n        end\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 1
+}

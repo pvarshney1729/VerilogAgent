@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic do_sub,                // Single-bit input for operation selection: 0 for add, 1 for subtract\n    input logic [7:0] a,               // 8-bit input operand a\n    input logic [7:0] b,               // 8-bit input operand b\n    output logic [7:0] out,             // 8-bit output for the result of the operation\n    output logic result_is_zero         // Single-bit output flag indicating if the result is zero\n);\n\n    // Combinational Logic Block for Addition/Subtraction\n    always @(*) begin\n        // Perform addition or subtraction based on do_sub\n        if (do_sub == 1'b0)\n            out = a + b;              // Perform addition\n        else\n            out = a - b;              // Perform subtraction\n        \n        // Zero Detection Logic\n        result_is_zero = (out == 8'b00000000); // Set flag if result is zero\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}
