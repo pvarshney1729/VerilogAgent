@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic resetn,\n    input logic [2:0] r,\n    output logic [2:0] g\n);\n\n// State encoding\nlocalparam logic [1:0] STATE_A = 2'd0;\nlocalparam logic [1:0] STATE_B = 2'd1;\nlocalparam logic [1:0] STATE_C = 2'd2;\nlocalparam logic [1:0] STATE_D = 2'd3;\n\nlogic [1:0] current_state, next_state;\n\n// State transition logic\nalways @(posedge clk) begin\n    if (!resetn)\n        current_state <= STATE_A;\n    else\n        current_state <= next_state;\nend\n\n// Next state logic\nalways @(*) begin\n    case (current_state)\n        STATE_A: begin\n            if (r[0]) next_state = STATE_B;\n            else if (r[1]) next_state = STATE_C;\n            else if (r[2]) next_state = STATE_D;\n            else next_state = STATE_A;\n        end\n        STATE_B: begin\n            if (r[0]) next_state = STATE_B;\n            else next_state = STATE_A;\n        end\n        STATE_C: begin\n            if (r[1]) next_state = STATE_C;\n            else next_state = STATE_A;\n        end\n        STATE_D: begin\n            if (r[2]) next_state = STATE_D;\n            else next_state = STATE_A;\n        end\n        default: next_state = STATE_A;\n    endcase\nend\n\n// Output logic\nalways @(*) begin\n    g = 3'b000; // default\n    case (current_state)\n        STATE_B: g[0] = 1'b1;\n        STATE_C: g[1] = 1'b1;\n        STATE_D: g[2] = 1'b1;\n    endcase\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

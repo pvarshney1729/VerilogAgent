@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic in1,  // Single-bit input, represents the first operand for XNOR.\n    input logic in2,  // Single-bit input, represents the second operand for XNOR.\n    input logic in3,  // Single-bit input, represents the second operand for XOR.\n    output logic out  // Single-bit output, result of the XOR operation.\n);\n\n    logic xnor_out;\n\n    always @(*) begin\n        xnor_out = ~(in1 ^ in2);  // XNOR operation\n        out = xnor_out ^ in3;     // XOR operation\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input wire clk,            // Clock signal, positive edge-triggered\n    input wire load,           // Synchronous active-high load signal\n    input wire [1:0] ena,      // Synchronous 2-bit enable signal\n    input wire [99:0] data,    // 100-bit input data, data[99] is MSB\n    output reg [99:0] q        // 100-bit output, q[99] is MSB\n);\n\n    always @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            case (ena)\n                2'b01: q <= {q[0], q[99:1]};  // Rotate right\n                2'b10: q <= {q[98:0], q[99]}; // Rotate left\n                default: q <= q;              // No operation\n            endcase\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

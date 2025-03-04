@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,         // Clock input, triggers on the positive edge\n    input logic data_in,     // Data input to the D flip-flop\n    output logic data_out,   // Data output from the D flip-flop\n    input logic rst_n        // Active-low asynchronous reset\n);\n\n// Sequential logic with asynchronous reset.\nalways_ff @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        data_out <= 1'b0; // Reset state\n    end else begin\n        data_out <= data_in; // Capture input on rising edge of clk\n    end\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

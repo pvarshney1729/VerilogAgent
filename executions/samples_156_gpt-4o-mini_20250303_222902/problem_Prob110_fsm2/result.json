@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,      // Clock signal, positive-edge triggered\n    input logic areset,   // Active-high asynchronous reset\n    input logic j,        // Input signal for state transition\n    input logic k,        // Input signal for state transition\n    output logic out      // Output signal representing the state\n);\n\n    typedef enum logic {OFF, ON} state_t;\n    state_t current_state, next_state;\n\n    // Asynchronous reset\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            current_state <= OFF;\n            out <= 0;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // State transition logic\n    always_comb begin\n        case (current_state)\n            OFF: begin\n                if (j) begin\n                    next_state = ON;\n                end else begin\n                    next_state = OFF;\n                end\n                out = 0;\n            end\n            ON: begin\n                if (k) begin\n                    next_state = OFF;\n                end else begin\n                    next_state = ON;\n                end\n                out = 1;\n            end\n            default: begin\n                next_state = OFF;\n                out = 0;\n            end\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

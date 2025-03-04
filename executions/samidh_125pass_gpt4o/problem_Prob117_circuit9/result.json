@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,        // Clock signal, 1-bit\n    input logic a,          // Input signal, 1-bit\n    output logic [2:0] q    // Output signal, 3-bits (MSB: q[2], LSB: q[0])\n);\n\n    // Internal register to hold the state of q\n    logic [2:0] q_reg;\n\n    // Initialize q to 3'b000\n    initial begin\n        q_reg = 3'b000;\n    end\n\n    // Sequential logic to update q on the rising edge of clk\n    always_ff @(posedge clk) begin\n        if (a == 1'b0) begin\n            if (q_reg == 3'b111) begin\n                q_reg <= 3'b000; // Wrap around to 3'b000 after reaching 3'b111\n            end else begin\n                q_reg <= q_reg + 1'b1; // Increment q by 1\n            end\n        end\n        // If a is 1, hold the current value of q_reg\n    end\n\n    // Assign the internal register to the output\n    assign q = q_reg;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "R"
+    }
+}

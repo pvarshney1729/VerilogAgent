@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic a,  // 1-bit input, MSB\n    input logic b,  // 1-bit input\n    input logic c,  // 1-bit input\n    input logic d,  // 1-bit input, LSB\n    output logic out_sop, // 1-bit output in minimum sum-of-products form\n    output logic out_pos  // 1-bit output in minimum product-of-sums form\n);\n\n    // Minimum Sum-of-Products (SOP) expression\n    assign out_sop = (~a & ~b & c & ~d) | (~a & b & c & d) | (a & b & c & d);\n\n    // Minimum Product-of-Sums (POS) expression\n    assign out_pos = (a | b | ~c | d) & (a | ~b | ~c | ~d) & (~a | ~b | c | ~d);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 85,
+        "passfail": "R"
+    }
+}

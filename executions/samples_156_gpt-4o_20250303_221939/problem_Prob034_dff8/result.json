@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,              // Clock signal, positive edge-triggered\n    input logic rst_n,            // Active-low asynchronous reset\n    input logic [7:0] d,          // 8-bit input data bus, unsigned\n    output logic [7:0] q          // 8-bit output data bus, unsigned\n);\n\n    always_ff @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            q <= 8'b00000000;    // Reset state: all zeros\n        else\n            q <= d;              // Capture input data on clock edge\n    end\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

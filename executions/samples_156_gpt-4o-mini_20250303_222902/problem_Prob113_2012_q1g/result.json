@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic [3:0] x,\n    output logic f\n);\n    assign f = (~x[3] & ~x[2] & ~x[1] & x[0]) | \n               (~x[3] & x[2] & ~x[1] & ~x[0]) | \n               (x[3] & x[2] & ~x[1]) | \n               (x[3] & ~x[2] & ~x[0]);\nendmodule",
+    "test_results": {
+        "num_mismatch": 55,
+        "passfail": "R"
+    }
+}

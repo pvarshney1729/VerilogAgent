@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule(\n    input logic mode,       // 1-bit input; 1 for heating mode, 0 for cooling mode\n    input logic too_cold,   // 1-bit input; 1 indicates temperature is below desired threshold\n    input logic too_hot,    // 1-bit input; 1 indicates temperature is above desired threshold\n    input logic fan_on,     // 1-bit input; user request to turn on the fan\n    output logic heater,    // 1-bit output; 1 to turn on the heater\n    output logic aircon,    // 1-bit output; 1 to turn on the air conditioner\n    output logic fan        // 1-bit output; 1 to turn on the fan\n);\n\n    always @(*) begin\n        // Default outputs\n        heater = 1'b0;\n        aircon = 1'b0;\n        fan = 1'b0;\n\n        // Mode Control\n        if (mode) begin\n            // Heating mode\n            if (too_cold) begin\n                heater = 1'b1;\n            end\n        end else begin\n            // Cooling mode\n            if (too_hot) begin\n                aircon = 1'b1;\n            end\n        end\n\n        // Fan Control\n        if (heater || aircon || fan_on) begin\n            fan = 1'b1;\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input wire clk,            // Clock input\n    input wire reset,          // Asynchronous active-high reset\n    input wire shift_ena,      // Shift enable signal\n    input wire count_ena,      // Count enable signal\n    input wire data,           // Input data for shifting\n    output reg [3:0] q         // 4-bit shift register output\n);\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        q <= 4'b0000;\n    end else begin\n        if (shift_ena && !count_ena) begin\n            q <= {q[2:0], data};  // Shift left\n        end else if (count_ena && !shift_ena) begin\n            if (q != 4'b0000) begin\n                q <= q - 1;  // Decrement\n            end\n        end\n        // If both shift_ena and count_ena are high, no operation is performed\n    end\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

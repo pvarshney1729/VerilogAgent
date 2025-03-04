@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,  // 1-bit clock input\n    input logic d,    // 1-bit data input\n    output logic q    // 1-bit data output\n);\n\n    logic d_posedge;  // Intermediate register for rising edge\n\n    always @(posedge clk) begin\n        d_posedge <= d;  // Capture input on rising edge\n    end\n\n    always @(negedge clk) begin\n        q <= d_posedge;  // Transfer captured value on falling edge\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 113,
+        "passfail": "R"
+    },
+    "iterations_used": 2
+}

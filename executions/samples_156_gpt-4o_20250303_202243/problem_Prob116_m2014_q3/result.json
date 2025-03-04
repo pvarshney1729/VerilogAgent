@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic [3:0] x,\n    output logic f\n);\n\n    always @(*) begin\n        case (x)\n            4'b0001: f = 1'b0;\n            4'b0100: f = 1'b0;\n            4'b0101: f = 1'b1;\n            4'b0111: f = 1'b0;\n            4'b1100: f = 1'b1;\n            4'b1101: f = 1'b1;\n            4'b1000: f = 1'b1;\n            4'b1001: f = 1'b1;\n            4'b1010: f = 1'b0;\n            default: f = 1'b0; // Assign 0 for don't-care conditions for optimization\n        endcase\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

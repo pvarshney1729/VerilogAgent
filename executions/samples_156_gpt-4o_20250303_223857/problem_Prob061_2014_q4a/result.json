@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,  // Clock signal for triggering sequential logic\n    input logic w,    // Input from the previous stage of the shift register\n    input logic R,    // Value to load into the register when loading is enabled\n    input logic E,    // Enable signal for shifting operation\n    input logic L,    // Load signal to load the value R\n    output logic Q    // Output to the next stage of the shift register\n);\n\n    always @(posedge clk) begin\n        if (L) begin\n            Q <= R;  // Load operation has precedence\n        end else if (E) begin\n            Q <= w;  // Shift operation\n        end\n        // If neither L nor E are asserted, Q retains its value\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

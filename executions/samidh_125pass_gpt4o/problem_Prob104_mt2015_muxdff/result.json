@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,          // Clock signal, positive edge-triggered\n    input logic L,            // Load signal; when high, loads input to output\n    input logic q_in,         // Input from the previous flip-flop or external source\n    input logic r_in,         // Input that can be loaded directly into the flip-flop\n    output logic Q            // Output of the flip-flop; 1-bit wide\n);\n\n    // Synchronous logic with synchronous reset\n    always_ff @(posedge clk) begin\n        if (L) begin\n            Q <= r_in;        // Load r_in into Q when L is high\n        end else begin\n            Q <= q_in;        // Load q_in into Q when L is low\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

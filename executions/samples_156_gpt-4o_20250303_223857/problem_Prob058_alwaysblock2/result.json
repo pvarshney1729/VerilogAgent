@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic out_assign,\n    output logic out_always_comb,\n    output logic out_always_ff\n);\n\n    // Combinational logic using assign statement\n    assign out_assign = a ^ b;\n\n    // Combinational logic using always_comb block\n    always_comb begin\n        out_always_comb = a ^ b;\n    end\n\n    // Sequential logic with a flip-flop\n    always_ff @(posedge clk) begin\n        out_always_ff <= a ^ b;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

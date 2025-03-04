@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,               // Clock signal\n    input logic load,              // Synchronous active-high load signal\n    input logic [511:0] data,      // 512-bit input data\n    output logic [511:0] q          // 512-bit output representing the cellular automaton state\n);\n\n    logic [511:0] next_q;\n\n    always @(*) begin\n        next_q[0] = (q[1] & q[0]) | (q[1] & ~q[-1]) | (~q[0] & q[-1]);\n        for (int i = 1; i < 511; i++) begin\n            next_q[i] = (q[i+1] & q[i]) | (q[i+1] & ~q[i-1]) | (~q[i] & q[i-1]);\n        end\n        next_q[511] = (0 & q[511]) | (0 & ~q[510]) | (~q[511] & q[510]);\n    end\n\n    always @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            q <= next_q;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 6220,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule SafeDrivingControl (\n    input logic cpu_overheated,       // Input signal indicating CPU temperature status\n    input logic arrived,              // Input signal indicating arrival status\n    input logic gas_tank_empty,       // Input signal indicating gas tank status\n    output logic shut_off_computer,    // Output signal to shut off the computer\n    output logic keep_driving          // Output signal to continue driving\n);\n\n    // Combinational logic block for shut_off_computer\n    always @(*) begin\n        shut_off_computer = cpu_overheated; // Shut off computer if CPU is overheated\n    end\n\n    // Combinational logic block for keep_driving\n    always @(*) begin\n        keep_driving = ~arrived & ~gas_tank_empty; // Continue driving if not arrived and gas tank is not empty\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

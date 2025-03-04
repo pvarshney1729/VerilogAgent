@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic enable,\n    input logic S,\n    input logic [2:0] A,\n    input logic rst,\n    output logic Z\n);\n\n    logic [7:0] Q;\n\n    // Asynchronous reset\n    always @(*) begin\n        if (rst) begin\n            Q = 8'b00000000;\n        end\n    end\n\n    // Shift register logic\n    always @(posedge clk) begin\n        if (enable) begin\n            Q[0] <= S;\n            Q[7:1] <= Q[6:0];\n        end\n    end\n\n    // Multiplexer for output Z\n    always @(*) begin\n        case (A)\n            3'b000: Z = Q[0];\n            3'b001: Z = Q[1];\n            3'b010: Z = Q[2];\n            3'b011: Z = Q[3];\n            3'b100: Z = Q[4];\n            3'b101: Z = Q[5];\n            3'b110: Z = Q[6];\n            3'b111: Z = Q[7];\n            default: Z = 1'b0; // Default case, though not needed for 3-bit input\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    }
+}

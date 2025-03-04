@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,         // Clock signal, active on the rising edge\n    input logic reset,       // Active-high synchronous reset\n    output logic [4:0] q     // 5-bit output representing the LFSR state\n);\n\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 5'b00001;  // Initialize to 1 on reset\n        end else begin\n            q[4] <= q[0] ^ q[4] ^ q[2]; // New bit calculation\n            q[3] <= q[4];               // Shift right\n            q[2] <= q[3];               // Shift right\n            q[1] <= q[2];               // Shift right\n            q[0] <= q[1];               // Shift right\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 4288,
+        "passfail": "R"
+    }
+}

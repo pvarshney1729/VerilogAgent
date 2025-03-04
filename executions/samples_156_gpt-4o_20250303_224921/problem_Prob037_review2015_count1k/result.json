@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,        // 1 bit, positive edge-triggered clock signal\n    input logic reset,      // 1 bit, active high synchronous reset signal\n    output logic [9:0] q    // 10 bits, unsigned, with q[9] as MSB and q[0] as LSB\n);\n\n    // Internal register for the counter\n    logic [9:0] counter;\n\n    // Sequential logic for counter operation\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            counter <= 10'd0;  // Reset counter to 0\n        end else begin\n            if (counter == 10'd999) begin\n                counter <= 10'd0;  // Wrap around to 0 after reaching 999\n            end else begin\n                counter <= counter + 10'd1;  // Increment counter\n            end\n        end\n    end\n\n    // Assign the internal counter to the output\n    assign q = counter;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

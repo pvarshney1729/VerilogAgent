@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clock,\n    input logic a,\n    output logic p = 0,\n    output logic q = 0\n);\n\nalways @(posedge clock) begin\n    if (a) begin\n        p <= 1;\n        if (p == 0) begin\n            q <= ~q;\n        end\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 125,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    // Flip-flop outputs\n    logic FF_XOR, FF_AND, FF_OR;\n\n    // Asynchronous reset logic\n    initial begin\n        FF_XOR = 1'b0;\n        FF_AND = 1'b0;\n        FF_OR = 1'b0;\n    end\n\n    // Sequential logic for D flip-flops\n    always_ff @(posedge clk) begin\n        FF_XOR <= x ^ FF_XOR;\n        FF_AND <= x & ~FF_AND;\n        FF_OR <= x | ~FF_OR;\n    end\n\n    // Combinational logic for NOR gate\n    always_comb begin\n        z = ~(FF_XOR | FF_AND | FF_OR);\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

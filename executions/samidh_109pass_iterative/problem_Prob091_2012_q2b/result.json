@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic [5:0] y,      // 6-bit one-hot encoded current state input\n    input logic w,            // 1-bit input signal\n    input logic clk,          // Clock signal\n    input logic reset,        // Synchronous reset signal\n    output logic Y1,          // 1-bit output derived from next state logic\n    output logic Y3           // 1-bit output derived from next state logic\n);\n\n    // State encoding\n    typedef enum logic [5:0] {\n        A = 6'b000001,\n        B = 6'b000010,\n        C = 6'b000100,\n        D = 6'b001000,\n        E = 6'b010000,\n        F = 6'b100000\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            A: next_state = (w) ? B : A;\n            B: next_state = (w) ? C : D;\n            C: next_state = (w) ? E : D;\n            D: next_state = (w) ? F : A;\n            E: next_state = (w) ? E : D;\n            F: next_state = (w) ? C : D;\n            default: next_state = A; // Handle invalid states\n        endcase\n    end\n\n    // State register with synchronous reset\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            current_state <= A;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Output logic\n    assign Y1 = (next_state == B) ? 1'b1 : 1'b0;\n    assign Y3 = (next_state == D) ? 1'b1 : 1'b0;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "e"
+    },
+    "iterations_used": 2
+}

@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input  logic clk,     // Clock signal, positive edge-triggered\n    input  logic reset,   // Reset signal, active-high, synchronous\n    input  logic w,       // State transition input\n    output logic z        // Output signal\n);\n\n    typedef enum logic [2:0] {\n        A = 3'b000,\n        B = 3'b001,\n        C = 3'b010,\n        D = 3'b011,\n        E = 3'b100,\n        F = 3'b101\n    } state_t;\n\n    state_t state;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            state <= A; // Initial state A\n        end else begin\n            case (state)\n                A: state <= (w == 0) ? B : A;\n                B: state <= (w == 0) ? C : D;\n                C: state <= (w == 0) ? E : D;\n                D: state <= (w == 0) ? F : A;\n                E: state <= (w == 0) ? E : D;\n                F: state <= (w == 0) ? C : D;\n                default: state <= A; // Default recovery to state A\n            endcase\n        end\n    end\n\n    always @(*) begin\n        case (state)\n            E, F: z = 1; // States E and F\n            default: z = 0;\n        endcase\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

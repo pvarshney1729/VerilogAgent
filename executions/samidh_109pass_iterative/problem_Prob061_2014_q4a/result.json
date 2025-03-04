@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic w,\n    input logic R,\n    input logic E,\n    input logic L,\n    output logic Q\n);\n\n    // Initialize Q to 0\n    initial begin\n        Q = 1'b0;\n    end\n\n    // Sequential logic for shift register stage\n    always_ff @(posedge clk) begin\n        if (L) begin\n            Q <= R; // Load R into Q\n        end else if (E) begin\n            Q <= w; // Shift w into Q\n        end\n        // If neither L nor E are asserted, Q retains its value\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    output logic q\n);\n\n    initial begin\n        q = 1'b0;\n    end\n\n    always_ff @(posedge clk) begin\n        if (a == 1'b1) begin\n            q <= ~q;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 56,
+        "passfail": "R"
+    }
+}

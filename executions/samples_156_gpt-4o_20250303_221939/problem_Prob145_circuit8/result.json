@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clock,  // Clock signal, assumed to be single-bit\n    input logic a,      // Single-bit input signal\n    output logic p,     // Single-bit output signal\n    output logic q      // Single-bit output signal\n);\n\n    always_ff @(posedge clock) begin\n        if (a)\n            p <= 1'b1;\n        else\n            p <= 1'b0;\n        q <= p;\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

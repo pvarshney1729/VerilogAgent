@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic rst,\n    input logic d,\n    output logic q\n);\n\nlogic toggle;  // Toggle signal to switch between edges\nlogic d_pos;   // Register for posedge data capture\nlogic d_neg;   // Register for negedge data capture\n\nalways_ff @(posedge clk or posedge rst) begin\n    if (rst) begin\n        toggle <= 1'b0;\n        d_pos <= 1'b0;\n    end else begin\n        toggle <= ~toggle;  // Toggle on every posedge\n        d_pos <= d;  // Capture data on posedge\n    end\nend\n\nalways_ff @(negedge clk or posedge rst) begin\n    if (rst) begin\n        d_neg <= 1'b0;\n    end else begin\n        d_neg <= d;  // Capture data on negedge\n    end\nend\n\nalways_comb begin\n    if (toggle) begin\n        q = d_neg;  // Output data captured on negedge\n    end else begin\n        q = d_pos;  // Output data captured on posedge\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 52,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,  // Clock signal, positive edge-triggered for sequential logic\n    input logic reset, // Asynchronous reset signal\n    input logic x,    // 1-bit input signal\n    output logic z    // 1-bit output signal\n);\n\nlogic FF_XOR, FF_AND, FF_OR;\n\nalways_ff @(posedge clk) begin\n    if (reset) begin\n        FF_XOR <= 1'b0;\n        FF_AND <= 1'b0;\n        FF_OR <= 1'b0;\n    end else begin\n        FF_XOR <= x ^ FF_XOR;\n        FF_AND <= x & ~FF_AND;\n        FF_OR <= x | ~FF_OR;\n    end\nend\n\nassign z = ~(FF_XOR | FF_AND | FF_OR);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 45,
+        "passfail": "R"
+    },
+    "iterations_used": 2
+}

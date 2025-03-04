@@ -1,0 +1,7 @@
+{
+    "code": "module SignExtend8to32 (\n    input  logic signed [7:0] in,   // 8-bit signed input\n    output logic signed [31:0] out  // 32-bit signed output\n);\n\n    // Description:\n    // The module performs sign extension on an 8-bit signed input number\n    // to produce a 32-bit signed output. The most significant bit (MSB) of the \n    // input is replicated 24 times to preserve the signed value in the extended \n    // form. This is useful for operations that require larger bit-widths while \n    // maintaining the sign of the original number.\n\n    // Implementation:\n    // The output is formed by concatenating 24 copies of the sign bit (in[7]) \n    // followed by the original 8-bit input.\n    assign out = {{24{in[7]}}, in};\n\n    // Notes:\n    // - This implementation assumes the input is a signed 8-bit number and the \n    //   output is a signed 32-bit number.\n    // - The module is purely combinational and does not require any clock or reset.\n    // - Bit indexing: bit[0] refers to the least significant bit (LSB), and bit[7] \n    //   refers to the most significant bit (MSB) of the input `in`.\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    }
+}

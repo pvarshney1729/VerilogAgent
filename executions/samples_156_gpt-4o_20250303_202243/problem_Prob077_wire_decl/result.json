@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic a,  // 1-bit input, unsigned\n    input logic b,  // 1-bit input, unsigned\n    input logic c,  // 1-bit input, unsigned\n    input logic d,  // 1-bit input, unsigned\n    output logic out,  // 1-bit output, unsigned\n    output logic out_n  // 1-bit output, inverted signal of `out`, unsigned\n);\n\n    logic and1_out;  // Intermediate wire for first AND gate\n    logic and2_out;  // Intermediate wire for second AND gate\n\n    // Combinational logic\n    assign and1_out = a & b;  // First AND gate\n    assign and2_out = c & d;  // Second AND gate\n    assign out = and1_out | and2_out;  // OR gate\n    assign out_n = ~out;  // NOT gate for inverted output\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

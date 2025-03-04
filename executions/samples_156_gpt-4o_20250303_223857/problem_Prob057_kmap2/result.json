@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic a,  // Input bit 0\n    input logic b,  // Input bit 1\n    input logic c,  // Input bit 2\n    input logic d,  // Input bit 3\n    output logic out // Output bit\n);\n\n    assign out = (~a & ~b & ~c & ~d) | (~a & ~b & c & ~d) | (~a & b & c & ~d) | (~a & b & c & d) |\n                 (a & ~b & ~c & ~d) | (a & ~b & c & ~d) | (a & b & ~c & ~d) | (a & b & c & d);\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

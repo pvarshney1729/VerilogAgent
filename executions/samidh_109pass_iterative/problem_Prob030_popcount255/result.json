@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input [254:0] in,\n    output [7:0] out\n);\n\n    // Internal logic to count the number of '1's in the input vector\n    integer i;\n    reg [7:0] count;\n\n    always @(*) begin\n        count = 8'b0; // Initialize count to zero\n        for (i = 0; i < 255; i = i + 1) begin\n            count = count + in[i];\n        end\n    end\n\n    assign out = count;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

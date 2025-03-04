@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input wire clk,                      // Clock signal, triggers on the positive edge\n    input wire reset,                    // Active high synchronous reset\n    input wire [31:0] in,                // 32-bit input vector, unsigned\n    output reg [31:0] out                // 32-bit output vector, unsigned\n);\n\n    reg [31:0] prev_in;                  // Register to store the previous state of input\n\n    always @(posedge clk) begin\n        if (reset) begin\n            out <= 32'b0;                // Reset output to zero\n            prev_in <= 32'b0;            // Reset previous input to zero\n        end else begin\n            out <= out | (prev_in & ~in); // Detect 1 to 0 transition and set out[i] to 1\n            prev_in <= in;               // Update previous input\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 91,
+        "passfail": "R"
+    }
+}

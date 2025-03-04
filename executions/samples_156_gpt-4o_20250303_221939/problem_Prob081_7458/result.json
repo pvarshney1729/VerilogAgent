@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input wire p1a,\n    input wire p1b,\n    input wire p1c,\n    input wire p1d,\n    input wire p1e,\n    input wire p1f,\n    input wire p2a,\n    input wire p2b,\n    input wire p2c,\n    input wire p2d,\n    output wire p1y,\n    output wire p2y\n);\n\n    // Intermediate wires for AND gate outputs\n    wire and1_out, and2_out, and3_out, and4_out;\n\n    // Implementing the logic for p1y\n    assign and1_out = p1a & p1b & p1c;\n    assign and2_out = p1d & p1e & p1f;\n    assign p1y = and1_out | and2_out;\n\n    // Implementing the logic for p2y\n    assign and3_out = p2a & p2b;\n    assign and4_out = p2c & p2d;\n    assign p2y = and3_out | and4_out;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

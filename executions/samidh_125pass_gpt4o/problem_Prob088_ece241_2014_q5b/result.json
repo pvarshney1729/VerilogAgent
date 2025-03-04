@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input wire clk,            // Clock input, positive edge triggered.\n    input wire areset,         // Asynchronous active-high reset.\n    input wire x,              // Input signal.\n    output reg z               // Output signal.\n);\n\n    reg [1:0] state;           // One-hot encoded state register\n\n    always @(posedge clk or posedge areset) begin\n        if (areset) begin\n            state <= 2'b01;    // Reset to state A\n            z <= 0;\n        end else begin\n            case (state)\n                2'b01: begin // State A\n                    if (x) begin\n                        state <= 2'b10; // Transition to State B\n                        z <= 1;\n                    end else begin\n                        z <= 0; // Remain in State A\n                    end\n                end\n                2'b10: begin // State B\n                    if (x) begin\n                        z <= 0; // Remain in State B\n                    end else begin\n                        z <= 1; // Remain in State B\n                    end\n                end\n            endcase\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 209,
+        "passfail": "R"
+    }
+}

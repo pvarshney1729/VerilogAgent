@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,          // Clock signal, positive edge-triggered\n    input logic reset,        // Synchronous active high reset\n    input logic x,            // Input signal x\n    output logic z            // Output signal z\n);\n\n    logic [2:0] y;           // State register\n\n    // Synchronous reset and state transition\n    always @(posedge clk) begin\n        if (reset) begin\n            y <= 3'b000;      // Reset state\n            z <= 1'b0;        // Reset output\n        end else begin\n            case (y)\n                3'b000: begin\n                    y <= (x) ? 3'b001 : 3'b000;\n                    z <= 1'b0;\n                end\n                3'b001: begin\n                    y <= (x) ? 3'b100 : 3'b001;\n                    z <= 1'b0;\n                end\n                3'b010: begin\n                    y <= (x) ? 3'b001 : 3'b010;\n                    z <= 1'b0;\n                end\n                3'b011: begin\n                    y <= (x) ? 3'b010 : 3'b001;\n                    z <= 1'b1;\n                end\n                3'b100: begin\n                    y <= (x) ? 3'b100 : 3'b011;\n                    z <= 1'b1;\n                end\n                default: begin\n                    y <= 3'b000;  // Undefined states transition to 000\n                    z <= 1'b0;\n                end\n            endcase\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

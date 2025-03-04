@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic [7:0] input_a,\n    input  logic [7:0] input_b,\n    input  logic [7:0] input_c,\n    input  logic [7:0] input_d,\n    output logic [7:0] output_min\n);\n\n    always @(*) begin\n        if (input_a <= input_b && input_a <= input_c && input_a <= input_d) begin\n            output_min = input_a;\n        end else if (input_b <= input_a && input_b <= input_c && input_b <= input_d) begin\n            output_min = input_b;\n        end else if (input_c <= input_a && input_c <= input_b && input_c <= input_d) begin\n            output_min = input_c;\n        end else begin\n            output_min = input_d;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    }
+}

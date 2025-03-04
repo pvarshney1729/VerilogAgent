@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic [2:0] in_vector,\n    output logic [1:0] out_count\n);\n\nalways @(*) begin\n    case (in_vector)\n        3'b000: out_count = 2'b00;\n        3'b001, 3'b010, 3'b100: out_count = 2'b01;\n        3'b011, 3'b101, 3'b110: out_count = 2'b10;\n        3'b111: out_count = 2'b11;\n        default: out_count = 2'b00; // Default case for completeness\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    }
+}

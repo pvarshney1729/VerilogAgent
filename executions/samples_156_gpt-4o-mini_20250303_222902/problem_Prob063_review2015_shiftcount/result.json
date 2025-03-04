@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic shift_ena,\n    input logic count_ena,\n    input logic data,\n    output logic [3:0] q\n);\n\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 4'b0000;\n        end else begin\n            if (shift_ena && !count_ena) begin\n                q <= {data, q[3:1]}; // Shift in data to MSB\n            end else if (!shift_ena && count_ena) begin\n                q <= (q == 4'b0000) ? 4'b1111 : (q - 1); // Decrement with wrap around\n            end\n            // If both shift_ena and count_ena are high, do nothing (no operation)\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "p"
+    }
+}

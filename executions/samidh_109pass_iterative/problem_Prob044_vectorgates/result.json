@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  wire [2:0] a,              // 3-bit input vector a\n    input  wire [2:0] b,              // 3-bit input vector b\n    output wire [2:0] out_or_bitwise, // 3-bit output for bitwise OR operation\n    output wire       out_or_logical, // 1-bit output for logical OR operation\n    output wire [5:0] out_not         // 6-bit output for NOT operations\n);\n\n    // Bitwise OR operation\n    assign out_or_bitwise = a | b;\n\n    // Logical OR operation\n    assign out_or_logical = |a | |b;\n\n    // Inverse operation\n    assign out_not[2:0] = ~a;\n    assign out_not[5:3] = ~b;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}
