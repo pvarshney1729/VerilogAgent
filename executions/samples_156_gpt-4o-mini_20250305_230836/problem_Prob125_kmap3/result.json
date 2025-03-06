@@ -1,0 +1,17 @@
+{
+    "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out\n);\n\nalways @(*) begin\n    case ({c, d, a, b})\n        4'b00_00: out = 1'b0;  // ab = 00\n        4'b00_01: out = 1'b0;  // ab = 01\n        4'b00_10: out = 1'b1;  // ab = 10\n        4'b00_11: out = 1'b1;  // ab = 11\n        4'b01_00: out = 1'b1;  // ab = 00\n        4'b01_01: out = 1'b0;  // ab = 01\n        4'b01_10: out = 1'b1;  // ab = 10\n        4'b01_11: out = 1'b1;  // ab = 11\n        4'b10_00: out = 1'b1;  // ab = 00\n        4'b10_01: out = 1'b0;  // ab = 01\n        4'b10_10: out = 1'b1;  // ab = 10\n        4'b10_11: out = 1'b1;  // ab = 11\n        4'b11_00: out = 1'b1;  // ab = 00\n        4'b11_01: out = 1'b0;  // ab = 01\n        4'b11_10: out = 1'b1;  // ab = 10\n        4'b11_11: out = 1'b1;  // ab = 11\n        default: out = 1'b0;    // Default case\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 15,
+        "passfail": "R"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out\n);\n\nalways @(*) begin\n    case ({c, d, a, b})\n        4'b00_00: out = 1'b0;  // ab = 00\n        4'b00_01: out = 1'b0;  // ab = 01\n        4'b00_10: out = 1'b1;  // ab = 10\n        4'b00_11: out = 1'b1;  // ab = 11\n        4'b01_00: out = 1'b1;  // ab = 00\n        4'b01_01: out = 1'b0;  // ab = 01\n        4'b01_10: out = 1'b1;  // ab = 10\n        4'b01_11: out = 1'b1;  // ab = 11\n        4'b10_00: out = 1'b1;  // ab = 00\n        4'b10_01: out = 1'b0;  // ab = 01\n        4'b10_10: out = 1'b1;  // ab = 10\n        4'b10_11: out = 1'b1;  // ab = 11\n        4'b11_00: out = 1'b1;  // ab = 00\n        4'b11_01: out = 1'b0;  // ab = 01\n        4'b11_10: out = 1'b1;  // ab = 10\n        4'b11_11: out = 1'b1;  // ab = 11\n        default: out = 1'b0;    // Default case\n    endcase\nend\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": [],
+    "testbench_results": {}
+}

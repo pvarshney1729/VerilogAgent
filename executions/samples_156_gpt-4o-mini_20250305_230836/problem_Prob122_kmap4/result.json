@@ -1,0 +1,17 @@
+{
+    "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out\n);\n\nalways @(*) begin\n    case ({c, d, a, b})\n        4'b0000: out = 1'b0; // cd = 00, ab = 00\n        4'b0001: out = 1'b1; // cd = 00, ab = 01\n        4'b0011: out = 1'b0; // cd = 00, ab = 11\n        4'b0010: out = 1'b1; // cd = 00, ab = 10\n        4'b0100: out = 1'b1; // cd = 01, ab = 00\n        4'b0101: out = 1'b0; // cd = 01, ab = 01\n        4'b0111: out = 1'b1; // cd = 01, ab = 11\n        4'b0110: out = 1'b0; // cd = 01, ab = 10\n        4'b1000: out = 1'b0; // cd = 11, ab = 00\n        4'b1001: out = 1'b1; // cd = 11, ab = 01\n        4'b1011: out = 1'b0; // cd = 11, ab = 11\n        4'b1010: out = 1'b1; // cd = 11, ab = 10\n        4'b1100: out = 1'b1; // cd = 10, ab = 00\n        4'b1101: out = 1'b0; // cd = 10, ab = 01\n        4'b1111: out = 1'b1; // cd = 10, ab = 11\n        4'b1110: out = 1'b0; // cd = 10, ab = 10\n        default: out = 1'b0; // Default case\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 121,
+        "passfail": "R"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out\n);\n\nalways @(*) begin\n    case ({c, d, a, b})\n        4'b0000: out = 1'b0; // cd = 00, ab = 00\n        4'b0001: out = 1'b1; // cd = 00, ab = 01\n        4'b0011: out = 1'b0; // cd = 00, ab = 11\n        4'b0010: out = 1'b1; // cd = 00, ab = 10\n        4'b0100: out = 1'b1; // cd = 01, ab = 00\n        4'b0101: out = 1'b0; // cd = 01, ab = 01\n        4'b0111: out = 1'b1; // cd = 01, ab = 11\n        4'b0110: out = 1'b0; // cd = 01, ab = 10\n        4'b1000: out = 1'b0; // cd = 11, ab = 00\n        4'b1001: out = 1'b1; // cd = 11, ab = 01\n        4'b1011: out = 1'b0; // cd = 11, ab = 11\n        4'b1010: out = 1'b1; // cd = 11, ab = 10\n        4'b1100: out = 1'b1; // cd = 10, ab = 00\n        4'b1101: out = 1'b0; // cd = 10, ab = 01\n        4'b1111: out = 1'b1; // cd = 10, ab = 11\n        4'b1110: out = 1'b0; // cd = 10, ab = 10\n        default: out = 1'b0; // Default case\n    endcase\nend\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": [],
+    "testbench_results": {}
+}

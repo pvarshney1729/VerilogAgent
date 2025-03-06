@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input logic d,\n    input logic done_counting,\n    input logic ack,\n    input logic [9:0] state, // One-hot encoded current state\n    output logic B3_next,\n    output logic S_next,\n    output logic S1_next,\n    output logic Count_next,\n    output logic Wait_next,\n    output logic done,\n    output logic counting,\n    output logic shift_ena\n);\n\n    // Next-State Logic\n    always @(*) begin\n        S_next = (state == 10'b0000000001);\n        S1_next = (state == 10'b0000000010);\n        B3_next = (state == 10'b0010000000);\n        Count_next = (state == 10'b0100000000);\n        Wait_next = (state == 10'b1000000000);\n    end\n\n    // Output Logic\n    always @(*) begin\n        shift_ena = (state == 10'b0000010000) || (state == 10'b0000100000) || \n                    (state == 10'b0001000000) || (state == 10'b0010000000);\n        counting = (state == 10'b0100000000);\n        done = (state == 10'b1000000000);\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 145,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input [3:0] x,\n    input [3:0] y,\n    output [4:0] sum\n);\n\n    logic [3:0] carry;\n    logic [3:0] result;\n\n    // Full adder for bit 0\n    assign result[0] = x[0] ^ y[0];\n    assign carry[0] = x[0] & y[0];\n\n    // Full adder for bit 1\n    assign result[1] = x[1] ^ y[1] ^ carry[0];\n    assign carry[1] = (x[1] & y[1]) | (x[1] & carry[0]) | (y[1] & carry[0]);\n\n    // Full adder for bit 2\n    assign result[2] = x[2] ^ y[2] ^ carry[1];\n    assign carry[2] = (x[2] & y[2]) | (x[2] & carry[1]) | (y[2] & carry[1]);\n\n    // Full adder for bit 3\n    assign result[3] = x[3] ^ y[3] ^ carry[2];\n    assign carry[3] = (x[3] & y[3]) | (x[3] & carry[2]) | (y[3] & carry[2]);\n\n    // Assign the result and overflow\n    assign sum[3:0] = result;\n    assign sum[4] = carry[3];\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

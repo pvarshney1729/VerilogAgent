@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic a,\n    output logic q\n);\n\n    initial begin\n        q = 1'b0; // Initial state of the output\n    end\n\n    always @(posedge clk) begin\n        if (a) begin\n            q <= ~q; // Toggle q if a is high\n        end\n        // No state change if a is low\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 56,
+        "passfail": "R"
+    },
+    "iterations_used": 1
+}

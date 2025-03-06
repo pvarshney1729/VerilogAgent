@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input wire clk,   // Clock signal, rising edge-triggered\n    input wire d,     // Data input\n    input wire r,     // Synchronous reset, active high\n    output reg q      // Output\n);\n\n    // Initial state\n    initial begin\n        q = 1'b0;\n    end\n\n    // D flip-flop with synchronous reset\n    always @(posedge clk) begin\n        if (r) begin\n            q <= 1'b0;  // Reset output\n        end else begin\n            q <= d;     // Capture input\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

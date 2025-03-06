@@ -1,0 +1,38 @@
+{
+    "code": "[BEGIN]\n```verilog\nmodule TopModule (\n    input logic [2:0] vec,  // 3-bit input vector, bit[0] is LSB, bit[2] is MSB\n    output logic [2:0] outv, // 3-bit output vector, directly mirrors 'vec'\n    output logic o2,         // 1-bit output, corresponds to vec[2]\n    output logic o1,         // 1-bit output, corresponds to vec[1]\n    output logic o0          // 1-bit output, corresponds to vec[0]\n);\n\nalways @(*) begin\n    outv = vec;\n    o2 = vec[2];\n    o1 = vec[1];\n    o0 = vec[0];\nend\n\nendmodule\n```\n[DONE]",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input logic [2:0] vec,  // 3-bit input vector, bit[0] is LSB, bit[2] is MSB\n    output logic [2:0] outv, // 3-bit output vector, directly mirrors 'vec'\n    output logic o2,         // 1-bit output, corresponds to vec[2]\n    output logic o1,         // 1-bit output, corresponds to vec[1]\n    output logic o0          // 1-bit output, corresponds to vec[0]\n);\n\nassign outv = vec;\nassign o2 = vec[2];\nassign o1 = vec[1];\nassign o0 = vec[0];\n\nendmodule",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "```verilog\nmodule TopModule (\n    input logic [2:0] vec,  // 3-bit input vector, bit[0] is LSB, bit[2] is MSB\n    output logic [2:0] outv, // 3-bit output vector, directly mirrors 'vec'\n    output logic o2,         // 1-bit output, corresponds to vec[2]\n    output logic o1,         // 1-bit output, corresponds to vec[1]\n    output logic o0          // 1-bit output, corresponds to vec[0]\n);\n\nalways @(*) begin\n    outv = vec;\n    o2 = vec[2];\n    o1 = vec[1];\n    o0 = vec[0];\nend\n\nendmodule\n```",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+                "syntax_error: syntax error"
+            ]
+        },
+        {
+            "iteration": 2,
+            "code": "[BEGIN]\n```verilog\nmodule TopModule (\n    input logic [2:0] vec,  // 3-bit input vector, bit[0] is LSB, bit[2] is MSB\n    output logic [2:0] outv, // 3-bit output vector, directly mirrors 'vec'\n    output logic o2,         // 1-bit output, corresponds to vec[2]\n    output logic o1,         // 1-bit output, corresponds to vec[1]\n    output logic o0          // 1-bit output, corresponds to vec[0]\n);\n\nalways @(*) begin\n    outv = vec;\n    o2 = vec[2];\n    o1 = vec[1];\n    o0 = vec[0];\nend\n\nendmodule\n```\n[DONE]",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+                "syntax_error: syntax error"
+            ]
+        }
+    ],
+    "refinement_count": 2,
+    "remaining_issues": [
+        "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+        "syntax_error: syntax error"
+    ],
+    "testbench_results": {}
+}

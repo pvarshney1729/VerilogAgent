@@ -1,5 +1,5 @@
 $date
-	Mon Mar  3 01:53:15 2025
+	Mon Mar  3 23:29:48 2025
 $end
 $version
 	Icarus Verilog
@@ -8,35 +8,28 @@ $timescale
 	1ps
 $end
 $scope module test_bench $end
-$var wire 1 ! q $end
-$var reg 1 " clk $end
-$var reg 1 # data $end
-$var reg 1 $ load $end
+$var wire 1 ! done $end
+$var wire 1 " counting $end
+$var wire 1 # count $end
+$var reg 1 $ ack $end
+$var reg 1 % clk $end
+$var reg 1 & data $end
+$var reg 1 ' reset $end
 $scope module dut $end
-$var wire 1 " clk $end
-$var wire 256 % data [255:0] $end
-$var wire 1 $ load $end
-$var reg 256 & next_state [255:0] $end
-$var reg 256 ' q [255:0] $end
-$scope begin $ivl_for_loop0 $end
-$var integer 32 ( row [31:0] $end
-$scope begin $ivl_for_loop1 $end
-$var integer 32 ) col [31:0] $end
-$scope begin $unm_blk_8 $end
-$var integer 32 * count [31:0] $end
-$scope begin $ivl_for_loop2 $end
-$var integer 32 + i [31:0] $end
-$scope begin $ivl_for_loop3 $end
-$var integer 32 , j [31:0] $end
-$scope begin $unm_blk_11 $end
-$var integer 32 - neighbor_col [31:0] $end
-$var integer 32 . neighbor_row [31:0] $end
-$upscope $end
-$upscope $end
-$upscope $end
-$upscope $end
-$upscope $end
-$upscope $end
+$var wire 1 $ ack $end
+$var wire 1 % clk $end
+$var wire 1 & data $end
+$var wire 1 ' reset $end
+$var reg 4 ( count [3:0] $end
+$var reg 1 " counting $end
+$var reg 2 ) current_state [1:0] $end
+$var reg 14 * cycle_counter [13:0] $end
+$var reg 4 + delay [3:0] $end
+$var reg 4 , delay_shift_reg [3:0] $end
+$var reg 1 ! done $end
+$var reg 2 - next_state [1:0] $end
+$var reg 1 . pattern_detected $end
+$var reg 4 / pattern_shift_reg [3:0] $end
 $upscope $end
 $upscope $end
 $enddefinitions $end
@@ -45,57 +38,68 @@ $dumpall
 $end
 #0
 $dumpvars
-b0 .
-b0 -
-b10 ,
-b10 +
-b0 *
-b10000 )
-b10000 (
-bx '
-b0 &
-b0 %
-1$
-0#
-0"
+bx /
+x.
+bx -
+bx ,
+bx +
+bx *
+bx )
+bx (
+1'
+0&
+0%
+0$
+x#
+x"
 x!
 $end
 #5000
-b10 ,
-b10 +
-b10000 )
-b10000 (
+0.
+b0 -
+b0 ,
+b0 /
+b0 *
 0!
-b0 '
-1"
+0"
+b0 )
+1%
 #10000
-0"
-b1 %
-1#
-0$
+0%
 #15000
-1"
+1%
 #20000
-0"
-b0 %
-0#
+0%
+1&
+0'
 #25000
-1"
+1%
 #30000
-0"
+0%
+1$
+0&
 #35000
-1"
+1%
 #40000
-0"
+0%
+0$
 #45000
-1"
+1%
 #50000
-0"
+0%
 #55000
-1"
+1%
 #60000
-0"
+0%
 #65000
-1"
+1%
 #70000
-0"
+0%
+#75000
+1%
+#80000
+0%
+#85000
+1%
+#90000
+0%

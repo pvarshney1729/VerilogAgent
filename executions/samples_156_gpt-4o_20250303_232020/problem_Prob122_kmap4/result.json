@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic a,  // Unsigned 1-bit\n    input logic b,  // Unsigned 1-bit\n    input logic c,  // Unsigned 1-bit\n    input logic d,  // Unsigned 1-bit\n    output logic out // Unsigned 1-bit\n);\n\n    assign out = (~a & ~b & c & ~d) | \n                 (~a & b & ~c & ~d) | \n                 (a & ~b & ~c & d) | \n                 (a & b & c & ~d);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 90,
+        "passfail": "R"
+    },
+    "iterations_used": 2
+}

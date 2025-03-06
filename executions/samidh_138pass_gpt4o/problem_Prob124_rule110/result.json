@@ -1,0 +1,38 @@
+{
+    "code": "```\n[BEGIN]\nmodule TopModule (\n    input logic clk,                 // Clock signal, positive edge-triggered\n    input logic load,                // Synchronous active high load signal\n    input logic [511:0] data,        // 512-bit input data vector, unsigned\n    output logic [511:0] q           // 512-bit output state vector, unsigned\n);\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;                // Load data into q\n        end else begin\n            q[0] <= (q[0] & q[1]) | (~q[0] & q[1]) | (q[0] & ~q[1]); // Update q[0]\n            q[511] <= (q[510] & q[511]) | (~q[510] & q[511]) | (q[510] & ~q[511]); // Update q[511]\n            for (int i = 1; i < 511; i = i + 1) begin\n                q[i] <= (q[i-1] & q[i]) | (~q[i-1] & q[i]) | (q[i-1] & q[i+1]); // Update q[i]\n            end\n        end\n    end\n\nendmodule\n[DONE]\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input logic clk,                 // Clock signal, positive edge-triggered\n    input logic load,                // Synchronous active high load signal\n    input logic [511:0] data,        // 512-bit input data vector, unsigned\n    output logic [511:0] q           // 512-bit output state vector, unsigned\n);\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            q[0] <= (q[0] & q[1]) | (~q[0] & q[1]) | (q[0] & ~q[1]);\n            q[511] <= (q[510] & q[511]) | (~q[510] & q[511]) | (q[510] & ~q[511]);\n            for (int i = 1; i < 511; i = i + 1) begin\n                q[i] <= (q[i-1] & q[i]) | (~q[i-1] & q[i]) | (q[i-1] & q[i+1]);\n            end\n        end\n    end\n\nendmodule",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "```verilog\nmodule TopModule (\n    input logic clk,                 // Clock signal, positive edge-triggered\n    input logic load,                // Synchronous active high load signal\n    input logic [511:0] data,        // 512-bit input data vector, unsigned\n    output logic [511:0] q           // 512-bit output state vector, unsigned\n);\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            q[0] <= (q[0] & q[1]) | (~q[0] & q[1]) | (q[0] & ~q[1]);\n            q[511] <= (q[510] & q[511]) | (~q[510] & q[511]) | (q[510] & ~q[511]);\n            for (int i = 1; i < 511; i = i + 1) begin\n                q[i] <= (q[i-1] & q[i]) | (~q[i-1] & q[i]) | (q[i-1] & q[i+1]);\n            end\n        end\n    end\n\nendmodule\n```",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+                "syntax_error: syntax error"
+            ]
+        },
+        {
+            "iteration": 2,
+            "code": "```\n[BEGIN]\nmodule TopModule (\n    input logic clk,                 // Clock signal, positive edge-triggered\n    input logic load,                // Synchronous active high load signal\n    input logic [511:0] data,        // 512-bit input data vector, unsigned\n    output logic [511:0] q           // 512-bit output state vector, unsigned\n);\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;                // Load data into q\n        end else begin\n            q[0] <= (q[0] & q[1]) | (~q[0] & q[1]) | (q[0] & ~q[1]); // Update q[0]\n            q[511] <= (q[510] & q[511]) | (~q[510] & q[511]) | (q[510] & ~q[511]); // Update q[511]\n            for (int i = 1; i < 511; i = i + 1) begin\n                q[i] <= (q[i-1] & q[i]) | (~q[i-1] & q[i]) | (q[i-1] & q[i+1]); // Update q[i]\n            end\n        end\n    end\n\nendmodule\n[DONE]\n```",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+                "syntax_error: syntax error"
+            ]
+        }
+    ],
+    "refinement_count": 2,
+    "remaining_issues": [
+        "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+        "syntax_error: syntax error"
+    ],
+    "testbench_results": {}
+}

@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input  logic [99:0] in,    // 100-bit input vector\n    output logic [99:0] out    // 100-bit output vector\n);\n\n    // Bit Reversal Logic\n    genvar i;\n    generate\n        for (i = 0; i < 100; i = i + 1) begin : bit_reversal\n            assign out[i] = in[99-i];\n        end\n    endgenerate\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

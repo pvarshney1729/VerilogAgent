@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,           // Clock input, positive-edge triggered\n    input logic reset,         // Active high synchronous reset\n    output logic [3:0] q       // 4-bit output, q[3] is MSB, q[0] is LSB\n);\n\n// Module Description:\n// This module implements a decade counter that counts from 1 to 10. \n// The counter increments on the positive edge of the clock. \n// When the counter reaches 10, it wraps around to 1. \n// The counter is reset to 1 on an active high reset signal, synchronous with the clock.\n\nalways_ff @(posedge clk) begin\n    if (reset) begin\n        q <= 4'b0001;  // Synchronous reset to 1\n    end else begin\n        if (q == 4'b1010) begin\n            q <= 4'b0001;  // Wrap around to 1 when counter reaches 10\n        end else begin\n            q <= q + 1'b1; // Increment counter\n        end\n    end\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,    // Clock input, assumes positive edge-triggered\n    input logic reset,  // Active-high synchronous reset\n    input logic in,     // Single-bit input signal\n    output logic out    // Single-bit output signal\n);\n\n    typedef enum logic [1:0] {\n        STATE_B = 2'b00, // State B with output set to 1\n        STATE_A = 2'b01  // State A with output set to 0\n    } state_t;\n\n    state_t current_state, next_state;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= STATE_B;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    always @(*) begin\n        case (current_state)\n            STATE_B: begin\n                out = 1'b1;\n                if (in == 1'b0) begin\n                    next_state = STATE_A;\n                end else begin\n                    next_state = STATE_B;\n                end\n            end\n            STATE_A: begin\n                out = 1'b0;\n                if (in == 1'b0) begin\n                    next_state = STATE_B;\n                end else begin\n                    next_state = STATE_A;\n                end\n            end\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

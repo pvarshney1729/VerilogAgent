@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule(\n    input  logic clk,\n    input  logic reset,\n    output logic shift_ena\n);\n\n    typedef enum logic [1:0] {\n        IDLE = 2'b00,\n        ENABLE_SHIFT = 2'b01,\n        WAIT = 2'b10\n    } state_t;\n\n    state_t current_state, next_state;\n    logic [1:0] shift_counter;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            current_state <= ENABLE_SHIFT;\n            shift_counter <= 2'b00;\n        end else begin\n            current_state <= next_state;\n            if (current_state == ENABLE_SHIFT) begin\n                shift_counter <= shift_counter + 1;\n            end else begin\n                shift_counter <= 2'b00;\n            end\n        end\n    end\n\n    always_comb begin\n        next_state = current_state;\n        shift_ena = 1'b0;\n        case (current_state)\n            IDLE: begin\n                // Transition logic for IDLE state\n                // Assuming a specific bit pattern detection logic is required here\n                // For now, we transition to ENABLE_SHIFT on reset only\n                if (reset) begin\n                    next_state = ENABLE_SHIFT;\n                end\n            end\n            ENABLE_SHIFT: begin\n                shift_ena = 1'b1;\n                if (shift_counter == 2'b11) begin\n                    next_state = WAIT;\n                end\n            end\n            WAIT: begin\n                if (reset) begin\n                    next_state = ENABLE_SHIFT;\n                end\n            end\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

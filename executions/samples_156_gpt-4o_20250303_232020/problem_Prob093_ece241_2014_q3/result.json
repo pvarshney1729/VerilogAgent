@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input wire c,              // 1-bit input\n    input wire d,              // 1-bit input\n    output logic [3:0] mux_in  // 4-bit output\n);\n\n    always @(*) begin\n        case ({c, d})\n            2'b00: mux_in = 4'b0001;\n            2'b01: mux_in = 4'b1000;\n            2'b11: mux_in = 4'b1011;\n            2'b10: mux_in = 4'b1001;\n            default: mux_in = 4'b0000;  // Default to zero for safety, although all cases are covered.\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 60,
+        "passfail": "R"
+    },
+    "iterations_used": 2
+}

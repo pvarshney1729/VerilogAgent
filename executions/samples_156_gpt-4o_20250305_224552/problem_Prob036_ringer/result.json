@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input wire ring,\n    input wire vibrate_mode,\n    output reg ringer,\n    output reg motor\n);\n\nalways @(*) begin\n    if (ring) begin\n        if (vibrate_mode) begin\n            motor = 1'b1;\n            ringer = 1'b0;\n        end else begin\n            motor = 1'b0;\n            ringer = 1'b1;\n        end\n    end else begin\n        motor = 1'b0;\n        ringer = 1'b0;\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

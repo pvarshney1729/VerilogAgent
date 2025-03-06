@@ -1,0 +1,35 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic i_ring,\n    input logic i_vibrate_mode,\n    output logic o_ringer,\n    output logic o_motor\n);\n    always @(*) begin\n        o_motor = 1'b0;\n        o_ringer = 1'b0;\n\n        if (i_ring) begin\n            if (i_vibrate_mode) begin\n                o_motor = 1'b1;\n            end else begin\n                o_ringer = 1'b1;\n            end\n        end\n    end\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "```verilog\nmodule TopModule (\n    input logic i_ring,\n    input logic i_vibrate_mode,\n    output logic o_ringer,\n    output logic o_motor\n);\n    assign o_motor = i_ring & i_vibrate_mode;\n    assign o_ringer = i_ring & ~i_vibrate_mode;\nendmodule\n```",
+            "issues": [
+                "syntax_error: syntax error"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "```verilog\nmodule TopModule (\n    input logic i_ring,\n    input logic i_vibrate_mode,\n    output logic o_ringer,\n    output logic o_motor\n);\n    always @(*) begin\n        o_motor = 1'b0;\n        o_ringer = 1'b0;\n\n        if (i_ring) begin\n            if (i_vibrate_mode) begin\n                o_motor = 1'b1;\n            end else begin\n                o_ringer = 1'b1;\n            end\n        end\n    end\nendmodule\n```",
+            "issues": [
+                "syntax_error: syntax error"
+            ]
+        },
+        {
+            "iteration": 2,
+            "code": "```verilog\nmodule TopModule (\n    input logic i_ring,\n    input logic i_vibrate_mode,\n    output logic o_ringer,\n    output logic o_motor\n);\n    always @(*) begin\n        o_motor = 1'b0;\n        o_ringer = 1'b0;\n\n        if (i_ring) begin\n            if (i_vibrate_mode) begin\n                o_motor = 1'b1;\n            end else begin\n                o_ringer = 1'b1;\n            end\n        end\n    end\nendmodule\n```",
+            "issues": [
+                "syntax_error: syntax error"
+            ]
+        }
+    ],
+    "refinement_count": 2,
+    "remaining_issues": [
+        "syntax_error: syntax error"
+    ],
+    "testbench_results": {}
+}

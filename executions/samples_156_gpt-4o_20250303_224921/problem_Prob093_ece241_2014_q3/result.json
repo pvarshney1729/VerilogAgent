@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input wire c,         // Single bit input\n    input wire d,         // Single bit input\n    input wire a,         // Single bit select line for 4-to-1 mux (MSB)\n    input wire b,         // Single bit select line for 4-to-1 mux (LSB)\n    output wire [3:0] mux_in // 4-bit output connected to 4-to-1 multiplexer inputs\n);\n\n    // Implementing the logic for mux_in based on the Karnaugh map\n    assign mux_in[0] = (~c & ~d) | (c & ~d) | (c & d);\n    assign mux_in[1] = 1'b0;\n    assign mux_in[2] = c & d;\n    assign mux_in[3] = (~c & d) | (c & d);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

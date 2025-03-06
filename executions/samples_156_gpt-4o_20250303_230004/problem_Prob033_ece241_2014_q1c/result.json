@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input signed [7:0] a,\n    input signed [7:0] b,\n    output [7:0] s,\n    output overflow\n);\n\n    assign s = a + b;\n\n    assign overflow = ((a[7] == 0 && b[7] == 0 && s[7] == 1) ||\n                       (a[7] == 1 && b[7] == 1 && s[7] == 0));\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

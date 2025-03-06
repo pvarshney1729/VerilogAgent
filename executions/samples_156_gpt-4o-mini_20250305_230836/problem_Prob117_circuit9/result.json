@@ -1,0 +1,38 @@
+{
+    "code": "```verilog\nmodule TopModule(\n    input logic clk,\n    input logic a,\n    output logic [2:0] q\n);\n\nlogic reset; // Reset signal to be integrated\n\ninitial begin\n    q = 3'b000;\nend\n\nalways @(posedge clk) begin\n    if (a == 1'b1) begin\n        q <= 3'b100;\n    end else begin\n        case (q)\n            3'b100: q <= 3'b101;\n            3'b101: q <= 3'b110;\n            3'b110: q <= 3'b000;\n            3'b000: q <= 3'b001;\n            default: q <= 3'b000;\n        endcase\n    end\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule(\n    input logic clk,\n    input logic a,\n    output logic [2:0] q\n);\n\ninitial begin\n    q = 3'b000;\nend\n\nalways @(posedge clk) begin\n    if (a == 1'b1) begin\n        q <= 3'b100;\n    end else begin\n        case (q)\n            3'b100: q <= 3'b101;\n            3'b101: q <= 3'b110;\n            3'b110: q <= 3'b000;\n            3'b000: q <= 3'b001;\n            default: q <= 3'b000;\n        endcase\n    end\nend\n\nendmodule",
+            "issues": [
+                "Use always @(*) for combinational logic"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "```verilog\nmodule TopModule(\n    input logic clk,\n    input logic a,\n    output logic [2:0] q\n);\n\nlogic reset; // Reset signal to be integrated\n\ninitial begin\n    q = 3'b000;\nend\n\nalways @(posedge clk) begin\n    if (a == 1'b1) begin\n        q <= 3'b100;\n    end else begin\n        case (q)\n            3'b100: q <= 3'b101;\n            3'b101: q <= 3'b110;\n            3'b110: q <= 3'b000;\n            3'b000: q <= 3'b001;\n            default: q <= 3'b000;\n        endcase\n    end\nend\n\nendmodule\n```",
+            "issues": [
+                "Use always @(*) for combinational logic",
+                "syntax_error: syntax error"
+            ]
+        },
+        {
+            "iteration": 2,
+            "code": "```verilog\nmodule TopModule(\n    input logic clk,\n    input logic a,\n    output logic [2:0] q\n);\n\nlogic reset; // Reset signal to be integrated\n\ninitial begin\n    q = 3'b000;\nend\n\nalways @(posedge clk) begin\n    if (a == 1'b1) begin\n        q <= 3'b100;\n    end else begin\n        case (q)\n            3'b100: q <= 3'b101;\n            3'b101: q <= 3'b110;\n            3'b110: q <= 3'b000;\n            3'b000: q <= 3'b001;\n            default: q <= 3'b000;\n        endcase\n    end\nend\n\nendmodule\n```",
+            "issues": [
+                "Use always @(*) for combinational logic",
+                "syntax_error: syntax error"
+            ]
+        }
+    ],
+    "refinement_count": 2,
+    "remaining_issues": [
+        "Use always @(*) for combinational logic",
+        "syntax_error: syntax error"
+    ],
+    "testbench_results": {}
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input wire in,                   // Input signal, 1 bit\n    input wire [3:0] state,          // Current state, 4 bits, one-hot encoded\n    output reg [3:0] next_state,     // Next state, 4 bits, one-hot encoded\n    output reg out                   // Output signal, 1 bit\n);\n\n    always @(*) begin\n        // Default assignments\n        next_state = 4'b0000;\n        out = 1'b0;\n\n        // State transition logic\n        case (state)\n            4'b0001: next_state = (in == 1'b0) ? 4'b0001 : 4'b0010; // State A\n            4'b0010: next_state = (in == 1'b0) ? 4'b0100 : 4'b0010; // State B\n            4'b0100: next_state = (in == 1'b0) ? 4'b0001 : 4'b1000; // State C\n            4'b1000: next_state = (in == 1'b0) ? 4'b0100 : 4'b0010; // State D\n            default: next_state = 4'b0000; // Undefined state handling\n        endcase\n\n        // Output logic\n        if (state == 4'b1000) begin\n            out = 1'b1; // State D\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

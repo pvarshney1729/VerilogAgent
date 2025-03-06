@@ -1,0 +1,17 @@
+{
+    "code": "module mux_logic (\n    input logic c,\n    input logic d,\n    input logic [1:0] ab,\n    output logic [3:0] mux_in\n);\n\n    // Intermediate signals for the 4-to-1 multiplexer inputs\n    logic mux0, mux1, mux2, mux3;\n\n    // Assigning values based on the Karnaugh map\n    assign mux0 = (~c & ~d) | (c & d);\n    assign mux1 = 1'b0;\n    assign mux2 = (c & d);\n    assign mux3 = (~c & d) | (c & d);\n\n    // Assigning the outputs based on the selector inputs\n    always @(*) begin\n        case (ab)\n            2'b00: mux_in = {3'b000, mux0};\n            2'b01: mux_in = {3'b000, mux1};\n            2'b10: mux_in = {3'b000, mux2};\n            2'b11: mux_in = {3'b000, mux3};\n            default: mux_in = 4'b0000; // Default case for safety\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module mux_logic (\n    input logic c,\n    input logic d,\n    input logic [1:0] ab,\n    output logic [3:0] mux_in\n);\n\n    // Intermediate signals for the 4-to-1 multiplexer inputs\n    logic mux0, mux1, mux2, mux3;\n\n    // Assigning values based on the Karnaugh map\n    assign mux0 = (~c & ~d) | (c & d);\n    assign mux1 = 1'b0;\n    assign mux2 = (c & d);\n    assign mux3 = (~c & d) | (c & d);\n\n    // Assigning the outputs based on the selector inputs\n    always @(*) begin\n        case (ab)\n            2'b00: mux_in = {3'b000, mux0};\n            2'b01: mux_in = {3'b000, mux1};\n            2'b10: mux_in = {3'b000, mux2};\n            2'b11: mux_in = {3'b000, mux3};\n            default: mux_in = 4'b0000; // Default case for safety\n        endcase\n    end\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": [],
+    "testbench_results": {}
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input  logic clk,          // Clock signal, single-bit, positive edge-triggered\n    input  logic reset,        // Synchronous reset signal, single-bit\n    input  logic a,            // Input signal 'a', single-bit, unsigned\n    input  logic b,            // Input signal 'b', single-bit, unsigned\n    output logic out_assign,   // Output for assign-based XOR, single-bit\n    output logic out_always_comb, // Output for combinational always block XOR, single-bit\n    output logic out_always_ff // Output for sequential always block XOR, single-bit\n);\n\n    // Implement XOR using assign statement\n    assign out_assign = a ^ b;\n\n    // Implement XOR using a combinational always block\n    always @(*) begin\n        out_always_comb = a ^ b;\n    end\n\n    // Implement XOR using a sequential always block with synchronous reset\n    always @(posedge clk) begin\n        if (reset) begin\n            out_always_ff <= 1'b0; // Reset state\n        end else begin\n            out_always_ff <= a ^ b;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 2
+}

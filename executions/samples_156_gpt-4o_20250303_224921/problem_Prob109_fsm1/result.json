@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule(\n    input logic clk,\n    input logic areset,\n    input logic in,\n    output logic out\n);\n\n    // State encoding\n    localparam state_A = 1'b0;\n    localparam state_B = 1'b1;\n\n    logic current_state, next_state;\n\n    // State transition logic\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            current_state <= state_B; // Asynchronous reset to state B\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always_comb begin\n        case (current_state)\n            state_A: next_state = (in == 1'b0) ? state_B : state_A;\n            state_B: next_state = (in == 1'b0) ? state_A : state_B;\n            default: next_state = state_B; // Default to state B\n        endcase\n    end\n\n    // Output logic\n    always_comb begin\n        case (current_state)\n            state_A: out = 1'b0;\n            state_B: out = 1'b1;\n            default: out = 1'b1; // Default output\n        endcase\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

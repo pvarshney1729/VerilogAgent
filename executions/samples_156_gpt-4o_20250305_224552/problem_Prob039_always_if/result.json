@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic a,          // 1-bit unsigned input signal a\n    input logic b,          // 1-bit unsigned input signal b\n    input logic sel_b1,     // 1-bit unsigned input signal sel_b1\n    input logic sel_b2,     // 1-bit unsigned input signal sel_b2\n    output logic out_assign, // 1-bit unsigned output signal for assign-based mux\n    output logic out_always  // 1-bit unsigned output signal for procedural if-based mux\n);\n\n// Continuous assignment (combinational)\nassign out_assign = (sel_b1 && sel_b2) ? b : a;\n\n// Procedural logic (combinational)\nalways @(*) begin\n    if (sel_b1 && sel_b2) begin\n        out_always = b;\n    end else begin\n        out_always = a;\n    end\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

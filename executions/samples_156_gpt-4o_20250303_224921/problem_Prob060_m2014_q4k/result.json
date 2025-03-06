@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,        // Clock input, triggers on positive edge\n    input logic resetn,     // Active-low synchronous reset input\n    input logic in,         // Single-bit data input\n    output logic out        // Single-bit data output\n);\n\n    logic [3:0] shift_reg;  // 4-bit shift register\n\n    always_ff @(posedge clk) begin\n        if (!resetn) begin\n            shift_reg <= 4'b0000;  // Synchronous reset to 0\n        end else begin\n            shift_reg <= {shift_reg[2:0], in};  // Shift right and load input\n        end\n    end\n\n    assign out = shift_reg[3];  // Output the MSB\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

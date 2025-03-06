@@ -1,0 +1,39 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input  logic [99:0] in,  // 100-bit wide input bus, bit 0 is LSB\n    output logic [99:0] out  // 100-bit wide output bus, bit 0 is LSB\n);\n\n    always @(*) begin\n        integer i;\n        for (i = 0; i < 100; i = i + 1) begin\n            out[i] = in[99 - i];  // Reverse bit order\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "```verilog\nmodule TopModule (\n    input  logic [99:0] in,  // 100-bit wide input bus, bit 0 is LSB\n    output logic [99:0] out  // 100-bit wide output bus, bit 0 is LSB\n);\n\n    always @(*) begin\n        integer i;\n        for (i = 0; i < 100; i = i + 1) begin\n            out[i] = in[99-i];\n        end\n    end\n\nendmodule\n```",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+                "syntax_error: syntax error"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "```verilog\nmodule TopModule (\n    input  logic [99:0] in,  // 100-bit wide input bus, bit 0 is LSB\n    output logic [99:0] out  // 100-bit wide output bus, bit 0 is LSB\n);\n\n    always @(*) begin\n        integer i;\n        for (i = 0; i < 100; i = i + 1) begin\n            out[i] = in[99 - i];  // Reverse bit order\n        end\n    end\n\nendmodule\n```",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+                "syntax_error: syntax error"
+            ]
+        },
+        {
+            "iteration": 2,
+            "code": "```verilog\nmodule TopModule (\n    input  logic [99:0] in,  // 100-bit wide input bus, bit 0 is LSB\n    output logic [99:0] out  // 100-bit wide output bus, bit 0 is LSB\n);\n\n    always @(*) begin\n        integer i;\n        for (i = 0; i < 100; i = i + 1) begin\n            out[i] = in[99 - i];  // Reverse bit order\n        end\n    end\n\nendmodule\n```",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+                "syntax_error: syntax error"
+            ]
+        }
+    ],
+    "refinement_count": 2,
+    "remaining_issues": [
+        "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+        "syntax_error: syntax error"
+    ],
+    "testbench_results": {}
+}
