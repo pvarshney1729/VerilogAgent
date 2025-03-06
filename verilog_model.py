@@ -13,6 +13,7 @@ import time
 import json
 import random
 import tempfile
+from openai import OpenAI
 
 def extract_between_tags(text: str, tag: str) -> str:
     """Extract content between XML-style tags"""
@@ -31,8 +32,31 @@ def extract_between_tags(text: str, tag: str) -> str:
     except Exception as e:
         print(f"Error extracting content between {tag} tags: {str(e)}")
         return text
+
+def extract_content(text):
+    """
+    Extract content between [BEGIN] and [DONE] tags from a string.
     
-    
+    Args:
+        text (str): The input text containing the tags
+        
+    Returns:
+        str: The extracted content between tags, or empty string if not found
+    """
+    try:
+        start_tag = "[BEGIN]"
+        end_tag = "[DONE]"
+        
+        start_index = text.find(start_tag) + len(start_tag)
+        end_index = text.find(end_tag)
+        
+        if start_index == -1 or end_index == -1 or start_index >= end_index:
+            return ""
+        
+        return text[start_index:end_index].strip()
+    except Exception as e:
+        print(f"Error extracting content: {e}")
+        return ""
 
 class ResultRecord:
     def __init__(self):
@@ -215,6 +239,13 @@ class SimpleVerifier:
     
     def compile_verilog(self, code: str) -> str:
         """Compile Verilog code using iverilog and capture output."""
+
+        if "[BEGIN]" in code and "[DONE]" in code:
+            code = extract_content(code)
+        elif "verilog" in code:
+            code = code.replace("verilog", "").replace("```", "")
+
+        print(code)
         
         # Create temporary files
         with tempfile.NamedTemporaryFile(suffix='.sv', delete=False, mode='w') as f:
@@ -267,7 +298,128 @@ class SimpleVerifier:
         
         return issues
     
-    def generate_testbench(self, code: str) -> str:
+    def generate_stimulus(self, base_query: str, base_response: str) -> Dict[str, Any]:
+        """Generate stimulus dict for the given Verilog code."""
+        
+        """
+        INPUT:
+            base_query: str - Base query to generate testbench
+            base_response: str - Base response to the query
+        OUTPUT:
+            Dict - Contains the testbench stimuli
+        """
+
+        
+        generation_prompt = f"""Your are a Verilog RTL tester that only writes code using correct Verilog syntax. 
+                                The specification with which the design code was generated: {base_query}
+                                The design code to verify is: {base_response}
+                                Your task is to generate test stimuli, for the previously generated design code, 
+                                that will be used to verify the correctness of the design. The test stimuli should be generated 
+                                as a json object with the following format specified below. You could either apply a single stimuli,
+                                if it is a combinational design, or a sequence of stimuli for a sequential design and fill the 
+                                output at each stage. Don't include the clock signal in the stimuli, provide the cycle latency 
+                                after which the output should be sampled, after the inputs have been applied, for example, latency is 
+                                0 for a combinational design, 1 for a single cycle latency sequential design and so on.
+                                Please make the stimuli as exhaustive as possible to cover all possible edge cases.
+                                """ + """
+                                Ex: 
+                                --------------------------------
+                                {
+                                    "stimuli": [
+                                        {
+                                            "input": {
+                                                "signal_name": "signal_value"
+                                            },
+                                            "output": {
+                                                "signal_name": "signal_value"
+                                            },
+                                            "cycle_latency": expected_cycle_latency
+                                        }
+                                    ]
+                                }
+                                --------------------------------
+                                """
+        
+        messages = [
+            {"role": "system", "content": "You are a Verilog RTL tester that can reason verilog specification and generate test stimuli."},
+            {"role": "user", "content": generation_prompt}
+        ]
+
+        stimuli_dict = {
+            "name": "stimuli",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "stimuli": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "input": {
+                                    "type": "object",
+                                    "properties": {
+                                        "signal_name": {
+                                            "type": "string",
+                                            "description": "The name of the input signal"
+                                        },
+                                        "signal_value": {
+                                            "type": "string",
+                                            "description": "The value of the input signal"
+                                        }
+                                    },
+                                    "required": ["signal_name", "signal_value"]
+                                },
+                                "output": {
+                                    "type": "object",
+                                    "properties": {
+                                        "signal_name": {
+                                            "type": "string",
+                                            "description": "The name of the output signal"
+                                        },
+                                        "signal_value": {
+                                            "type": "string",
+                                            "description": "The value of the output signal"
+                                        }
+                                    },
+                                    "required": ["signal_name", "signal_value"]
+                                },
+                                "cycle_latency": {
+                                    "type": "number",
+                                    "description": "The expected cycle latency for the output signal"
+                                }
+                            },
+                            "required": ["input", "output", "cycle_latency"]
+                        }
+                    }
+                },
+                "required": ["stimuli"]
+            }
+        }
+
+        client = OpenAI()
+
+        # Query OpenAI for routing decision
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=messages,
+            functions=[stimuli_dict],
+            function_call={"name": "stimuli"})
+
+        # Extract the response from the API
+        function_call = response.choices[0].message.function_call
+
+        # Extract the response from function call arguments
+        response_text = function_call.arguments
+
+        # Extract the stimuli from the response
+        stimuli = extract_between_tags(response_text, "stimuli")
+
+        # Convert the stimuli to a dictionary
+        stimuli_dict = json.loads(stimuli)
+
+        return stimuli_dict
+        
+    def generate_testbench(self, code: str, stimulus: List) -> str:
         """Generate a simple testbench for the given Verilog code."""
         # Extract module name and ports
         module_name, ports = self._extract_module_info(code)
@@ -339,7 +491,33 @@ class SimpleVerifier:
             tb += f"        #(CLK_PERIOD * 2);\n"
         else:
             tb += f"        #(CLK_PERIOD * 5);\n"
-        
+
+
+        for stim in stimulus:
+
+            # Apply the input stimulus
+            tb += f"\n        // Apply input stimulus\n"
+            for port in stim["input"]:
+                if port in inputs:
+                    tb += f"        {port} = {stim['input'][port]};\n"
+            
+            # Wait for the output to stabilize
+            tb += f"\n        // Wait for output to stabilize\n"
+            tb += f"        #(CLK_PERIOD * {stim['cycle_latency']});\n"
+
+            # Check the output
+            tb += f"\n        // Check output\n"
+            for port in stim["output"]:
+                if port in outputs:
+                    tb += f"        if ({port} !== {stim['output'][port]}) begin\n"
+                    tb += f"            $display(\"Time %0t: Inputs\", $time);\n"
+                    for port in inputs:
+                        tb += f"            $display(\"            %s = %h\", \"{port}\", {port});\n"                 
+                    tb += f"            $display(\"Time %0t: Output %s = %h\", $time, \"{port}\", {port});\n"
+                    tb += f"            stats1.errors = stats1.errors + 1;\n"
+                    tb += f"            if (stats1.errortime == 0) stats1.errortime = $time;\n"
+                    tb += f"        end\n"
+
         # Generate test vectors
         tb += f"\n        // Test vector 1\n"
         for port in inputs:
@@ -451,10 +629,10 @@ class SimpleVerifier:
         
         return module_name, ports
     
-    def run_testbench(self, code: str) -> Dict[str, Any]:
+    def run_testbench(self, code: str, initial_stimulus) -> Dict[str, Any]:
         """Generate and run a testbench for the given Verilog code."""
         # Create testbench
-        testbench = self.generate_testbench(code)
+        testbench = self.generate_testbench(code, initial_stimulus)
         if not testbench:
             return {
                 "success": False,
@@ -483,6 +661,7 @@ class SimpleVerifier:
             
             if compile_result.returncode != 0:
                 return {
+                    
                     "success": False,
                     "error": f"Compilation failed: {compile_result.stderr}"
                 }
@@ -498,6 +677,7 @@ class SimpleVerifier:
             
             # Process results
             output = sim_result.stdout
+
             passed = "TEST PASSED" in output
             
             return {
@@ -521,7 +701,7 @@ class SimpleVerifier:
             if os.path.exists("sim.out"):
                 os.remove("sim.out")
     
-    def verify(self, code: str) -> Dict[str, Any]:
+    def verify(self, code: str, initial_stimulus) -> Dict[str, Any]:
         """Verify the code and return issues found."""
         # First analyze code structure
         static_issues = self.analyze_code(code)
@@ -541,9 +721,12 @@ class SimpleVerifier:
         all_issues = static_issues + compile_issues
         
         # If there are no compilation issues, try running the testbench
+        print(f"Static issues: {static_issues}")
+        print(f"Compile issues: {compile_issues}")
         testbench_results = None
         if not compile_issues:
-            testbench_results = self.run_testbench(code)
+            testbench_results = self.run_testbench(code, initial_stimulus)
+            print(testbench_results)
         
         return {
             "has_issues": len(all_issues) > 0,
@@ -708,6 +891,7 @@ class VerilogModel:
         Returns:
             Dict containing the final code, test results, and iteration history
         """
+
         
         # Generate initial code using the existing generator
         initial_code = self.generator.generate(
@@ -728,10 +912,15 @@ class VerilogModel:
             "issues": []
         }]
         
+
+        # Get stimulus for the initial code
+        initial_stimulus = simple_verifier.generate_stimulus(base_query, best_code)
+        initial_stimulus = initial_stimulus.get("stimuli", [])
+
         # Iterative refinement loop
         while iterations < max_iterations:
             # Verify current code
-            verification_results = simple_verifier.verify(best_code)
+            verification_results = simple_verifier.verify(best_code, initial_stimulus)
             
             # If no issues found, we're done
             if not verification_results["has_issues"]:
@@ -811,7 +1000,7 @@ class VerilogModel:
             print(f"Completed iteration {iterations}")
         
         # Final verification
-        final_verification = simple_verifier.verify(best_code)
+        final_verification = simple_verifier.verify(best_code, initial_stimulus)
         
         # Update the final iteration with verification results
         if all_iterations:
