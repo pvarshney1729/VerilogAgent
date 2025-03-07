@@ -698,7 +698,7 @@ class VerilogModel:
         return response
 
 
-    def iterative_refinement(self, base_query: str, max_iterations: int = 2) -> Dict[str, Any]:
+    def iterative_refinement(self, base_query: str, max_iterations: int = 5) -> Dict[str, Any]:
         """Implement iterative refinement for Verilog code generation.
         
         Args:
@@ -840,7 +840,7 @@ class VerilogModel:
             "testbench_results": testbench_data
         }
 
-    def run_pipeline(self, base_query: str, refinement: bool = False, enhance_spec: bool = True, iterative_refinement: bool = True, max_iterations: int = 2) -> Dict:
+    def run_pipeline(self, base_query: str, refinement: bool = True, enhance_spec: bool = True, iterative_refinement: bool = True, max_iterations: int = 5, decompose: bool = False) -> Dict:
         """
         INPUT:
             base_query: str - Base query to generate testbench
@@ -849,6 +849,10 @@ class VerilogModel:
             Dict - Contains the generated testbench code and the test results
         """
         try:
+
+            # print("Original specification:", flush=True)
+            # print(base_query, flush=True)
+            # print("\n\n", flush=True)
             if enhance_spec:
                 # Enhance the specification using the prompts
                 enhanced_query = self.generator.generate_with_system_prompt(
@@ -856,7 +860,39 @@ class VerilogModel:
                     system_prompt=prompts['enhance_spec_system'],
                     model='gpt-4o',
                 )
-                base_query = extract_between_tags(enhanced_query, "ENHANCED_SPEC")
+
+                base_query += f"""Here is the enhanced specification which might be useful to you:
+                {extract_between_tags(enhanced_query, "ENHANCED_SPEC")}
+                """
+                
+                # print("Enhanced query:", flush=True)
+                # print(enhanced_query, flush=True)
+                # print("\n\n", flush=True)
+                # print("Enhanced specification:", flush=True)
+                # print(base_query, flush=True)
+                # print("\n\n", flush=True)
+                
+            if decompose:
+                print("Decomposing the problem into subtasks...")
+                decomposition_result = self.decompose_and_implement(base_query)
+        
+
+                implementation_hints = "\n\n".join([
+                    f"SUBTASK {impl['id']}: {impl['content']}\nIMPLEMENTATION:\n{impl['implementation']}"
+                    for impl in decomposition_result
+                ])
+                
+                base_query += f"""
+                Further, I have broken down this specification into subtasks and tried implementing each one separately.
+                THESE MIGHT BE INCORRECT BUT IF YOU WANT, you can use these implementations as hints to create a complete, integrated Verilog module:
+                {implementation_hints}
+                """
+
+                # print("Specification after decomposition:", flush=True)
+                # print(base_query, flush=True)
+                # print("\n\n", flush=True)
+                # print("--------------------------------", flush=True)
+                # print("\n\n", flush=True)
 
             # Store the original specification for reference
             
@@ -908,3 +944,67 @@ def extract_json(text):
     if json_match:
         return json_match.group(1)
     return "{}"
+
+
+
+def decompose_and_implement(self, spec: str, model: str = "gpt-4o") -> Dict:
+    """
+    Decomposes the Verilog specification into subtasks, implements each subtask,
+    and then uses these implementations as hints to generate the final code.
+    
+    INPUT:
+        spec: str - The enhanced specification to decompose and implement
+        model: str - The model to use for decomposition and implementation
+    OUTPUT:
+        Dict - Contains the decomposed subtasks and their implementations
+    """
+    # Step 1: Generate a plan to decompose the specification into subtasks
+    
+    
+    # Generate the decomposition plan
+    decomposition_response = self.generator.generate_with_system_prompt(
+        prompt=prompts['decomposition_prompt'].format(spec=spec),
+        system_prompt=prompts['decomposition_system_prompt'],
+        model=model
+    )
+    
+    
+    json_match = re.search(r'```json\s*(.*?)\s*```', decomposition_response, re.DOTALL)
+    if not json_match:
+        print("Failed to extract JSON from decomposition response")
+        return {"error": "Failed to extract JSON from decomposition response"}
+    
+    try:
+        subtasks = json.loads(json_match.group(1))
+    except json.JSONDecodeError as e:
+        print(f"Failed to parse JSON: {e}")
+        return {"error": f"Failed to parse JSON: {e}"}
+    
+    # Step 2: Implement each subtask
+    implementations = []
+    
+    for subtask in subtasks.get("subtasks", []):
+        subtask_id = subtask.get("id")
+        subtask_content = subtask.get("content")
+        subtask_source = subtask.get("source")
+        
+        
+        # Generate the implementation
+        implementation_response = self.generator.generate_with_system_prompt(
+            prompt=prompts['implementation_prompt'].format(subtask_content=subtask_content, subtask_source=subtask_source, spec=spec),
+            system_prompt=prompts['implementation_system_prompt'],
+            model=model
+        )
+        
+        # Extract the code from the response
+        code_match = re.search(r'\[BEGIN\](.*?)\[DONE\]', implementation_response, re.DOTALL)
+        implementation_code = code_match.group(1).strip() if code_match else implementation_response
+        
+        implementations.append({
+            "id": subtask_id,
+            "content": subtask_content,
+            "source": subtask_source,
+            "implementation": implementation_code
+        })
+    
+    return implementations

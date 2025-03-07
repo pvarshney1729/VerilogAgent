@@ -193,6 +193,8 @@ def parse_args():
                        help='Iterative Refinement of initial solution (default: False)')
     parser.add_argument('--iterative_refinement', type=bool, default=False,
                        help='Iterative Refinement (temp implementation) (default: False)')
+    parser.add_argument('--decompose', type=bool, default=False,
+                       help='Decompose the problem into subtasks (default: False)')
     return parser.parse_args()
 
 
