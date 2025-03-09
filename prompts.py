@@ -69,53 +69,75 @@ Analysis of Ambiguities and Issues:
 </ENHANCED_SPEC>
 """,
 
-  'decomposition_system_prompt': """You are a Verilog RTL designer that can break down complicated implementation into subtasks implementation plans.""",
-  
-  'decomposition_prompt': """
-  [Target Problem]
-  ### Problem
-  {spec}
-  
-  [Instruction]
-  Let's think step by step.
-  Based on the Problem description, set up a sequential implementation plan. Each subtask should focus on implementing only one signal or logical component at a time.
-  Extract the corresponding source contexts in the [Target Problem] section of each subtask into the 'source' field.
-  The task id number indicates the sequential orders. Return the subtasks in json format as below.
-  
-  ```json
-  {{ "subtasks": [
-  {{
-  "id": "1",
-  "content": "task description 1",
-  "source": "source 1"
-  }},
-  {{
-  "id": "2",
-  "content": "task description 2",
-  "source": "source 2"
-  }},
-  {{
-  "id": "3",
-  "content": "task description 3",
-  "source": "source 3"
-  }},
-  ...
-  ]
-  }}
-  ```
-  
-  [Rules]
-  Make sure the task plans satisfy the following rules! Do not make plans that violate the following rules!!!
-  - Make a plan to define the module with its input and output first.
-  - Do not plan the implementation of logic or signal from the input ports.
-  - There is a test bench to test the functional correctness. Do not plan generating testbench to test the generated verilog code.
-  - Don't make a plan only with clock or control signals. The clock or control signals should be planned with register or wire signal.
-  - Don't make a plan on implementing the signal or next state logics which are not related to the module outputs.
-  - For module related to Finite State Machine (FSM), try to determine the number of states first and then make the plan to implement FSM.
-  - For module related to Finite State Machine or Moore State Machine, if the state or current_state is an input port signal of the module, You must Do Not implement the state flip-flops for state transition in TopModule.
-  """,
+'decomposition_system_prompt': """You are an expert Verilog RTL designer that can break down complicated implementations into sequential subtasks. You MUST return valid JSON in the exact format requested.""",
 
-  # Generate implementation for this subtask
+'decomposition_prompt': """
+[Target Problem]
+### Problem
+{spec}
+
+[Instruction]
+Let's think step by step.
+Based on the Problem description, set up a sequential implementation plan. Each subtask should focus on implementing only one signal or logical component at a time.
+Extract the corresponding source contexts in the [Target Problem] section of each subtask into the 'source' field.
+The task id number indicates the sequential orders.
+
+IMPORTANT: Return ONLY a valid JSON object with this EXACT structure:
+{{
+  "subtasks": [
+    {{
+      "id": "1",
+      "content": "task description 1",
+      "source": "source 1"
+    }},
+    {{
+      "id": "2",
+      "content": "task description 2",
+      "source": "source 2"
+    }},
+    {{
+      "id": "3",
+      "content": "task description 3",
+      "source": "source 3"
+    }}
+  ]
+}}
+
+EXAMPLE:
+For a problem about implementing a counter, your response might be:
+{{
+  "subtasks": [
+    {{
+      "id": "1",
+      "content": "Define the module with input clock, reset, and enable signals, and output count[3:0]",
+      "source": "Design a 4-bit counter with clock, reset, and enable inputs"
+    }},
+    {{
+      "id": "2",
+      "content": "Implement the synchronous reset logic for the counter",
+      "source": "The counter should reset to 0 when reset is high"
+    }},
+    {{
+      "id": "3",
+      "content": "Implement the counter increment logic when enable is high",
+      "source": "The counter should increment by 1 on each clock cycle when enable is high"
+    }}
+  ]
+}}
+
+[Rules]
+Make sure the task plans satisfy the following rules! Do not make plans that violate the following rules!!!
+- Make a plan to define the module with its input and output first.
+- Do not plan the implementation of logic or signal from the input ports.
+- There is a test bench to test the functional correctness. Do not plan generating testbench to test the generated verilog code.
+- Don't make a plan only with clock or control signals. The clock or control signals should be planned with register or wire signal.
+- Don't make a plan on implementing the signal or next state logics which are not related to the module outputs.
+- For module related to Finite State Machine (FSM), try to determine the number of states first and then make the plan to implement FSM.
+- For module related to Finite State Machine or Moore State Machine, if the state or current_state is an input port signal of the module, You must Do Not implement the state flip-flops for state transition in TopModule.
+
+DO NOT include any explanations, notes, or text outside the JSON structure. Return ONLY the JSON object.
+""",
+# Generate implementation for this subtask
   'implementation_system_prompt': """You are a Verilog RTL designer that only writes code using correct Verilog syntax.""",
   
   'implementation_prompt': """

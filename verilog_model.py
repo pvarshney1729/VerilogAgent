@@ -1000,7 +1000,7 @@ class VerilogModel:
             "testbench_results": testbench_data
         }
 
-    def run_pipeline(self, base_query: str, refinement: bool = True, enhance_spec: bool = True, iterative_refinement: bool = True, max_iterations: int = 5, decompose: bool = False) -> Dict:
+    def run_pipeline(self, base_query: str, refinement: bool = True, enhance_spec: bool = True, iterative_refinement: bool = True, max_iterations: int = 2, decompose: bool = True) -> Dict:
         """
         INPUT:
             base_query: str - Base query to generate testbench
@@ -1097,74 +1097,166 @@ class VerilogModel:
             print(f"Error in run_pipeline: {str(e)}")
             raise
 
-def extract_json(text):
-    """Helper function to extract JSON from text that might contain other content"""
-    import re
-    json_match = re.search(r'({[\s\S]*})', text)
-    if json_match:
-        return json_match.group(1)
-    return "{}"
+    def extract_json(text):
+        """Helper function to extract JSON from text that might contain other content"""
+        import re
+        json_match = re.search(r'({[\s\S]*})', text)
+        if json_match:
+            return json_match.group(1)
+        return "{}"
 
 
 
-def decompose_and_implement(self, spec: str, model: str = "gpt-4o") -> Dict:
-    """
-    Decomposes the Verilog specification into subtasks, implements each subtask,
-    and then uses these implementations as hints to generate the final code.
-    
-    INPUT:
-        spec: str - The enhanced specification to decompose and implement
-        model: str - The model to use for decomposition and implementation
-    OUTPUT:
-        Dict - Contains the decomposed subtasks and their implementations
-    """
-    # Step 1: Generate a plan to decompose the specification into subtasks
-    
-    
-    # Generate the decomposition plan
-    decomposition_response = self.generator.generate_with_system_prompt(
-        prompt=prompts['decomposition_prompt'].format(spec=spec),
-        system_prompt=prompts['decomposition_system_prompt'],
-        model=model
-    )
-    
-    
-    json_match = re.search(r'```json\s*(.*?)\s*```', decomposition_response, re.DOTALL)
-    if not json_match:
-        print("Failed to extract JSON from decomposition response")
-        return {"error": "Failed to extract JSON from decomposition response"}
-    
-    try:
-        subtasks = json.loads(json_match.group(1))
-    except json.JSONDecodeError as e:
-        print(f"Failed to parse JSON: {e}")
-        return {"error": f"Failed to parse JSON: {e}"}
-    
-    # Step 2: Implement each subtask
-    implementations = []
-    
-    for subtask in subtasks.get("subtasks", []):
-        subtask_id = subtask.get("id")
-        subtask_content = subtask.get("content")
-        subtask_source = subtask.get("source")
+    def decompose_and_implement(self, spec: str, model: str = "gpt-4o") -> Dict:
+        """
+        Decomposes the Verilog specification into subtasks, implements each subtask,
+        and then uses these implementations as hints to generate the final code.
         
-        
-        # Generate the implementation
-        implementation_response = self.generator.generate_with_system_prompt(
-            prompt=prompts['implementation_prompt'].format(subtask_content=subtask_content, subtask_source=subtask_source, spec=spec),
-            system_prompt=prompts['implementation_system_prompt'],
-            model=model
-        )
-        
-        # Extract the code from the response
-        code_match = re.search(r'\[BEGIN\](.*?)\[DONE\]', implementation_response, re.DOTALL)
-        implementation_code = code_match.group(1).strip() if code_match else implementation_response
-        
-        implementations.append({
-            "id": subtask_id,
-            "content": subtask_content,
-            "source": subtask_source,
-            "implementation": implementation_code
-        })
-    
-    return implementations
+        INPUT:
+            spec: str - The enhanced specification to decompose and implement
+            model: str - The model to use for decomposition and implementation
+        OUTPUT:
+            Dict - Contains the decomposed subtasks and their implementations
+        """
+        # Step 1: Generate a plan to decompose the specification into subtasks
+        try:
+            # # Generate the decomposition plan
+            # decomposition_response = self.generator.generate_with_system_prompt(
+            #     prompt=prompts['decomposition_prompt'].format(spec=spec),
+            #     system_prompt=prompts['decomposition_system_prompt'],
+            #     model=model
+            # )
+            
+            # # Clean the response to extract just the JSON
+            # cleaned_response = decomposition_response.strip()
+            
+            # # Try different patterns to extract JSON
+            # json_patterns = [
+            #     r'```json\s*(.*?)\s*```',  # JSON in code block
+            #     r'({[\s\S]*})',            # Any JSON-like structure
+            #     r'({[\s\S]*"subtasks"[\s\S]*})'  # JSON with subtasks key
+            # ]
+            
+            # json_str = None
+            # for pattern in json_patterns:
+            #     match = re.search(pattern, cleaned_response, re.DOTALL)
+            #     if match:
+            #         json_str = match.group(1).strip()
+            #         break
+            
+            # if not json_str:
+            #     print("Failed to extract JSON from decomposition response")
+            #     print("Raw response:", decomposition_response[:500])  # Print first 500 chars for debugging
+            #     return []
+            
+            # # Try to parse the JSON
+            # try:
+            #     subtasks_data = json.loads(json_str)
+            #     subtasks = subtasks_data.get("subtasks", [])
+            # except json.JSONDecodeError as e:
+            #     print(f"Failed to parse JSON: {e}")
+            #     print("Extracted JSON string:", json_str[:500])  # Print first 500 chars for debugging
+                
+            #     # Try to fix common JSON issues
+            #     fixed_json_str = json_str.replace("'", '"')  # Replace single quotes with double quotes
+            #     try:
+            #         subtasks_data = json.loads(fixed_json_str)
+            #         subtasks = subtasks_data.get("subtasks", [])
+            #     except:
+            #         print("Failed to parse JSON even after fixing")
+            #         return []
+            decomposition_schema = {
+                "name": "decompose_verilog_task",
+                "description": "Break down a Verilog implementation task into sequential subtasks",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "subtasks": {
+                            "type": "array",
+                            "description": "List of subtasks to implement the Verilog module",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "description": "Sequential ID number of the subtask"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "description": "Description of what needs to be implemented in this subtask"
+                                    },
+                                    "source": {
+                                        "type": "string",
+                                        "description": "Relevant part of the specification that this subtask addresses"
+                                    }
+                                },
+                                "required": ["id", "content", "source"]
+                            }
+                        }
+                    },
+                    "required": ["subtasks"]
+                }
+            }
+            
+            # Step 2: Generate the decomposition plan using function calling
+            client = OpenAI()
+            decomposition_response = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {"role": "system", "content": prompts['decomposition_system_prompt']},
+                    {"role": "user", "content": prompts['decomposition_prompt'].format(spec=spec)}
+                ],
+                tools=[{"type": "function", "function": decomposition_schema}],
+                tool_choice={"type": "function", "function": {"name": "decompose_verilog_task"}}
+            )
+            
+            # Extract the function call arguments
+            function_call = decomposition_response.choices[0].message.tool_calls[0]
+            subtasks_data = json.loads(function_call.function.arguments)
+            subtasks = subtasks_data.get("subtasks", [])
+
+            # print("Subtasks:", flush=True)
+            # print(json.dumps(subtasks, indent=4), flush=True)
+            # print("\n\n", flush=True)
+            
+            # Step 2: Implement each subtask
+            implementations = []
+            
+            for subtask in subtasks:
+                subtask_id = subtask.get("id")
+                subtask_content = subtask.get("content")
+                subtask_source = subtask.get("source")
+                
+                if not all([subtask_id, subtask_content, subtask_source]):
+                    print(f"Skipping incomplete subtask: {subtask}")
+                    continue
+                
+                # Generate the implementation
+                implementation_response = self.generator.generate_with_system_prompt(
+                    prompt=prompts['implementation_prompt'].format(
+                        subtask_content=subtask_content, 
+                        subtask_source=subtask_source, 
+                        spec=spec
+                    ),
+                    system_prompt=prompts['implementation_system_prompt'],
+                    model=model
+                )
+                
+                # Extract the code from the response
+                code_match = re.search(r'\[BEGIN\](.*?)\[DONE\]', implementation_response, re.DOTALL)
+                implementation_code = code_match.group(1).strip() if code_match else implementation_response
+                
+                implementations.append({
+                    "id": subtask_id,
+                    "content": subtask_content,
+                    "source": subtask_source,
+                    "implementation": implementation_code
+                })
+            
+            return implementations
+            
+        except Exception as e:
+            print(f"Error in decompose_and_implement: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return []
