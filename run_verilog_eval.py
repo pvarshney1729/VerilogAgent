@@ -22,15 +22,13 @@ from multiprocessing.pool import ThreadPool  # Add this import
 load_dotenv()
 
 # Add this function to create execution directory
-def create_execution_directory(num_samples, model_name,  enhance_spec, decompose,iterative_refinement):
+def create_execution_directory(num_samples, model_name, refinement):
     # Create timestamp
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     
     # Create execution folder name with model and refinement info
-    enhance_spec_str = "_enhanced" if enhance_spec else ""
-    decompose_str = "_decomposed" if decompose else ""
-    refinement_str = "_refined" if iterative_refinement else ""
-    exec_folder = Path("executions") / f"samples_{num_samples}_{model_name}_{enhance_spec_str}_{decompose_str}_{refinement_str}_{timestamp}"
+    refinement_str = "_refined" if refinement else ""
+    exec_folder = Path("executions") / f"samples_{num_samples}_{model_name}{refinement_str}_{timestamp}"
     exec_folder.mkdir(parents=True, exist_ok=True)
     
     return exec_folder
@@ -61,7 +59,7 @@ def check_openai_key():
         sys.exit(1)
     
 
-def run_problem(problem_path, config, exec_folder,  enhance_spec, decompose, iterative_refinement):
+def run_problem(problem_path, config, exec_folder, refinement):
     """Run evaluation for a single problem"""
     problem_name = Path(problem_path).stem.replace("_prompt", "")
     print(f"Processing {problem_name}...")
@@ -87,7 +85,7 @@ def run_problem(problem_path, config, exec_folder,  enhance_spec, decompose, ite
         )
                 
         # Generate and verify code using VerilogModel
-        result = model.run_pipeline(base_query, enhance_spec=enhance_spec, decompose=decompose, iterative_refinement=iterative_refinement )
+        result = model.run_pipeline(base_query, refinement=refinement)
 
         # Save the generated code
         with open(problem_dir / "initial_solution.sv", 'w') as f:
@@ -191,10 +189,10 @@ def parse_args():
                        help='Temperature (default: 0.2)')
     parser.add_argument('--top-p', type=float, default=0.9,  # Changed from 0.95
                        help='Top-p value (default: 0.9)')
-    parser.add_argument('--enhance_spec', type=bool, default=False,
-                       help='Enhance the Spec (default: False)')
+    parser.add_argument('--refinement', type=bool, default=False,
+                       help='Iterative Refinement of initial solution (default: False)')
     parser.add_argument('--iterative_refinement', type=bool, default=False,
-                       help='Iterative Refinement (default: False)')
+                       help='Iterative Refinement (temp implementation) (default: False)')
     parser.add_argument('--decompose', type=bool, default=False,
                        help='Decompose the problem into subtasks (default: False)')
     return parser.parse_args()
@@ -236,7 +234,7 @@ def main():
         print(f"Processing all {len(problem_files)} samples...")
 
     num_samples = args.num_samples if args.num_samples else len(problem_files)
-    exec_folder = create_execution_directory(num_samples, args.model, args.enhance_spec, args.decompose, args.iterative_refinement)
+    exec_folder = create_execution_directory(num_samples, args.model, args.refinement)
     
     problem_results = {}  # Dictionary to store results for each problem
     # Process problems in parallel
@@ -245,7 +243,7 @@ def main():
         results = list(tqdm(
             pool.starmap(
                 run_problem,
-                [(f, config, exec_folder,  args.enhance_spec, args.decompose, args.iterative_refinement) for f in problem_files]
+                [(f, config, exec_folder, args.refinement) for f in problem_files]
             ),
             total=len(problem_files),  # Total number of tasks
             desc="Processing problems",  # Description for the progress bar

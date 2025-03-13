@@ -403,7 +403,7 @@ class SimpleVerifier:
         client = OpenAI()
 
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-4o",
             messages=messages,
             functions=[stimuli_dict],
             function_call={"name": "stimuli"})
@@ -760,6 +760,99 @@ class VerilogModel:
             response = generate_together(messages=messages, model=model, temperature=self.generation_temp)
         return response
 
+    def gen_tb_prompt(self, base_query: str, base_response: str, model: str = "gpt-4o-mini") -> str:
+        """
+        INPUT:
+            base_query: str - Base query to generate testbench
+            base_response: str - Base response to the query
+            model: str - The model to use for generation
+        OUTPUT:
+            str - Prompt for generating testbench code
+        """
+        prompt = f"""Generate a SystemVerilog testbench for the following design, adhering to these requirements:
+
+            0. The specification with which the design code was generated: 
+            {base_query}
+
+            1. The design code to verify is:
+            {base_response}
+            
+            """ + """
+            
+            2. Design Coding Rules:
+            - All ports and signals must be declared as 'logic' (no wire/reg)
+            - Use always @(*) for combinational logic (implicit sensitivity list)
+            - Numeric constants must have size > 0 (e.g., 1'b0 not 0'b0)
+            - Always blocks must read at least one signal
+            - For synchronous reset designs:
+            * Reset signal is sampled with the clock
+            * Exclude posedge reset from sequential block sensitivity lists
+
+            3. Testbench Requirements:
+            - Implement comprehensive corner case testing
+            - Include at least two test points
+            - Track errors using this structure:
+            typedef struct packed {
+                int errors;        // Total error count
+                int errortime;     // Time of first error
+                int errors_zero;   // Errors for zero output
+                int errortime_zero; // Time of first zero error
+                int clocks;        // Total clock cycles
+            } stats;
+
+            4. Required Error Reporting:
+            
+            - Include this final block:
+            final begin
+                if (stats1.errors_zero)
+                    $display("Hint: Output '%s' has %0d mismatches. The first mismatch occurred at time %0d.",
+                            "zero", stats1.errors_zero, stats1.errortime_zero);
+                else
+                    $display("Hint: Output '%s' has no mismatches.", "zero");
+
+                $display("Hint: Total mismatched samples is %1d out of %1d samples\n",
+                        stats1.errors, stats1.clocks);
+                $display("Simulation finished at %0d ps", $time);
+                $display("Mismatches: %1d in %1d samples", stats1.errors, stats1.clocks);
+            end
+ 
+
+            5. Testbench Structure:
+            - Include clock generation with a configurable period
+            - Implement reset sequence if the desing is sequential
+            - Generate test vectors covering corner cases
+            - Add output validation checks
+            - Add simulation timeout
+            - Use modular structure with separate blocks for:
+                * Clock/reset generation
+                * DUT instantiation
+                * Stimulus generation
+                * Response checking
+                * Error tracking
+                * Assertions
+                * Results Reporting
+
+            Please generate a complete SystemVerilog testbench following these requirements. The generated testbench, 
+            should be enclosed within the tags [BEGIN] and [DONE]. Don't include any explanation, only the code.
+            """
+
+        return prompt
+
+    def gen_tb_code(self, prompt: str, model: str = "gpt-4o-mini") -> str:
+        """
+        INPUT:
+            prompt: str - Prompt for generating testbench code
+            model: str - The model to use for generation
+        OUTPUT:
+            str - Generated testbench code
+        """
+        messages = [
+            {"role": "system", "content": "You are a Verilog RTL tester that only writes code using correct Verilog syntax."},
+            {"role": "user", "content": prompt}
+        ]
+        response = generate_openai(messages=messages, model=model, temperature=self.generation_temp)
+        return response
+
 
     def iterative_refinement(self, base_query: str, max_iterations: int = 5) -> Dict[str, Any]:
         """Implement iterative refinement for Verilog code generation.
@@ -907,7 +1000,7 @@ class VerilogModel:
             "testbench_results": testbench_data
         }
 
-    def run_pipeline(self, base_query: str, enhance_spec: bool = True, decompose: bool = True, iterative_refinement: bool = True, max_iterations: int = 2) -> Dict:
+    def run_pipeline(self, base_query: str, refinement: bool = True, enhance_spec: bool = True, iterative_refinement: bool = True, max_iterations: int = 2, decompose: bool = True) -> Dict:
         """
         INPUT:
             base_query: str - Base query to generate testbench
@@ -927,7 +1020,7 @@ class VerilogModel:
                     system_prompt=prompts['enhance_spec_system'],
                     model='gpt-4o',
                 )
-                print("I am in enhance_spec")
+
                 base_query += f"""Here is the enhanced specification which might be useful to you:
                 {extract_between_tags(enhanced_query, "ENHANCED_SPEC")}
                 """
@@ -969,6 +1062,20 @@ class VerilogModel:
                 result = self.iterative_refinement(base_query, max_iterations)
                 return result
         
+            elif not refinement:
+                # Original approach using sv-generate style
+                generated_code = self.generator.generate(
+                    base_query,
+                    include_rules=True,
+                    include_examples=False
+                )
+                verifier = Verifier(problem_name=self.problem_name)
+                test_results = verifier.functional_verify(generated_code, self.problem_name)
+                
+                return {
+                    "code": generated_code,
+                    "test_results": test_results.to_dict()
+                }
             else:
                 # Refinement approach
                 base_response = self.generator.generate(
