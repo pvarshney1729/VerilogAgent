@@ -1,0 +1,43 @@
+{
+    "code": "[BEGIN]\nmodule TopModule (\n    input logic clk,      // Clock input\n    input logic resetn,  // Active-low synchronous reset\n    input logic in,      // Data input\n    output logic out     // Data output\n);\n\nlogic [3:0] shift_reg;    // 4-bit shift register\n\nalways @(posedge clk) begin\n    if (!resetn) begin\n        shift_reg <= 4'b0000;  \n        out <= 1'b0;           \n    end else begin\n        shift_reg <= {shift_reg[2:0], in};  \n        out <= shift_reg[3];                \n    end\nend\n\nendmodule\n[DONE]",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input logic clk,      // Clock input\n    input logic resetn,  // Active-low synchronous reset\n    input logic in,      // Data input\n    output logic out     // Data output\n);\n\nlogic [3:0] shift_reg;    // 4-bit shift register\n\nalways @(posedge clk) begin\n    if (!resetn) begin\n        shift_reg <= 4'b0000;  \n        out <= 1'b0;           \n    end else begin\n        shift_reg <= {shift_reg[2:0], in};  \n        out <= shift_reg[3];                \n    end\nend\n\nendmodule",
+            "issues": [
+                "Use 'logic' type instead of 'wire' or 'reg'",
+                "Use always @(*) for combinational logic",
+                "Testbench error: Compilation failed: /var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpyf3h0m76_tb.sv:6: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpyf3h0m76_tb.sv:1: error: Syntax error in variable list.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpyf3h0m76_tb.sv:8: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpyf3h0m76_tb.sv:1: error: Syntax error in variable list.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpyf3h0m76_tb.sv:15: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpyf3h0m76_tb.sv:13: error: Syntax error in instance port expression(s).\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpyf3h0m76_tb.sv:13: error: Invalid module instantiation\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpyf3h0m76_tb.sv:30: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpyf3h0m76_tb.sv:30: Syntax in assignment statement l-value.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpyf3h0m76_tb.sv:32: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpyf3h0m76_tb.sv:32: Syntax in assignment statement l-value.\n"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "[BEGIN]\nmodule TopModule (\n    input logic clk,      // Clock input\n    input logic resetn,  // Active-low synchronous reset\n    input logic in,      // Data input\n    output logic out     // Data output\n);\n\nlogic [3:0] shift_reg;    // 4-bit shift register\n\nalways @(posedge clk) begin\n    if (!resetn) begin\n        shift_reg <= 4'b0000;  \n        out <= 1'b0;           \n    end else begin\n        shift_reg <= {shift_reg[2:0], in};  \n        out <= shift_reg[3];                \n    end\nend\n\nendmodule\n[DONE]",
+            "issues": [
+                "Use 'logic' type instead of 'wire' or 'reg'",
+                "Use always @(*) for combinational logic",
+                "Testbench error: Compilation failed: /var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5l_e_a0l_tb.sv:6: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5l_e_a0l_tb.sv:1: error: Syntax error in variable list.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5l_e_a0l_tb.sv:8: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5l_e_a0l_tb.sv:1: error: Syntax error in variable list.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5l_e_a0l_tb.sv:15: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5l_e_a0l_tb.sv:13: error: Syntax error in instance port expression(s).\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5l_e_a0l_tb.sv:13: error: Invalid module instantiation\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5l_e_a0l_tb.sv:30: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5l_e_a0l_tb.sv:30: Syntax in assignment statement l-value.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5l_e_a0l_tb.sv:32: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5l_e_a0l_tb.sv:32: Syntax in assignment statement l-value.\n"
+            ]
+        },
+        {
+            "iteration": 2,
+            "code": "[BEGIN]\nmodule TopModule (\n    input logic clk,      // Clock input\n    input logic resetn,  // Active-low synchronous reset\n    input logic in,      // Data input\n    output logic out     // Data output\n);\n\nlogic [3:0] shift_reg;    // 4-bit shift register\n\nalways @(posedge clk) begin\n    if (!resetn) begin\n        shift_reg <= 4'b0000;  \n        out <= 1'b0;           \n    end else begin\n        shift_reg <= {shift_reg[2:0], in};  \n        out <= shift_reg[3];                \n    end\nend\n\nendmodule\n[DONE]",
+            "issues": [
+                "Use 'logic' type instead of 'wire' or 'reg'",
+                "Use always @(*) for combinational logic",
+                "Testbench error: Compilation failed: /var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:6: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:1: error: Syntax error in variable list.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:8: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:1: error: Syntax error in variable list.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:15: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:13: error: Syntax error in instance port expression(s).\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:13: error: Invalid module instantiation\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:30: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:30: Syntax in assignment statement l-value.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:32: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:32: Syntax in assignment statement l-value.\n"
+            ]
+        }
+    ],
+    "refinement_count": 2,
+    "remaining_issues": [
+        "Use 'logic' type instead of 'wire' or 'reg'",
+        "Use always @(*) for combinational logic",
+        "Testbench error: Compilation failed: /var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:6: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:1: error: Syntax error in variable list.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:8: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:1: error: Syntax error in variable list.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:15: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:13: error: Syntax error in instance port expression(s).\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:13: error: Invalid module instantiation\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:30: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:30: Syntax in assignment statement l-value.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:32: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb9e7gkdq_tb.sv:32: Syntax in assignment statement l-value.\n"
+    ],
+    "testbench_results": {}
+}

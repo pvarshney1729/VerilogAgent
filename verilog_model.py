@@ -15,6 +15,8 @@ import random
 import tempfile
 from openai import OpenAI
 
+DEBUG_PRINTS = True
+
 def extract_between_tags(text: str, tag: str) -> str:
     """Extract content between XML-style tags"""
     start_tag = f"<{tag}>"
@@ -401,6 +403,9 @@ class SimpleVerifier:
         }
 
         client = OpenAI()
+
+        if DEBUG_PRINTS: 
+            print("Generating stimuli, using model:", model)
 
         response = client.chat.completions.create(
             model=model,
@@ -849,6 +854,9 @@ class VerilogModel:
             Return the improved code within [BEGIN] and [DONE] tags without any explanations and ```verilog tags.
             """
             
+            if DEBUG_PRINTS: 
+                print("Iterative refinement using model:", self.iter_ref_model)
+
             # Generate refined code using the appropriate model
             refined_text = self.generator.generate_with_system_prompt(
                 prompt=refinement_prompt,
@@ -922,12 +930,14 @@ class VerilogModel:
             # print("\n\n", flush=True)
             if enhance_spec:
                 # Enhance the specification using the prompts
+                if DEBUG_PRINTS: 
+                    print("Enhancing the spec, using model:", model)
+
                 enhanced_query = self.generator.generate_with_system_prompt(
                     prompt=prompts['enhance_spec_rules'].format(user_spec=base_query),
                     system_prompt=prompts['enhance_spec_system'],
                     model=model,
                 )
-                print("I am in enhance_spec")
                 base_query += f"""Here is the enhanced specification which might be useful to you:
                 {extract_between_tags(enhanced_query, "ENHANCED_SPEC")}
                 """
@@ -976,7 +986,7 @@ class VerilogModel:
                     include_rules=True,
                     include_examples=False
                 )  # Get just the code, ignore stats
-
+                
                 # Generate testbench and verify
                 verifier = Verifier(problem_name=self.problem_name)
                 test_results = verifier.functional_verify(base_response, self.problem_name)
@@ -1092,6 +1102,9 @@ class VerilogModel:
             }
             
             # Step 2: Generate the decomposition plan using function calling
+            if DEBUG_PRINTS: 
+                print("Decomposition using model:", model)
+            
             client = OpenAI()
             decomposition_response = client.chat.completions.create(
                 model=model,

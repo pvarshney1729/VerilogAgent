@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [2:0] ena,\n    output logic [15:0] q\n);\n\n    logic [3:0] ones, tens, hundreds, thousands;\n\n    assign q = {thousands, hundreds, tens, ones};\n\n    always @(*) begin\n        ena[0] = (ones == 4'b1001) ? 1'b1 : 1'b0;\n        ena[1] = (tens == 4'b1001 && ena[0]) ? 1'b1 : 1'b0;\n        ena[2] = (hundreds == 4'b1001 && ena[1]) ? 1'b1 : 1'b0;\n    end\n\n    always @(posedge clk) begin\n        if (reset) begin\n            ones <= 4'b0000;\n            tens <= 4'b0000;\n            hundreds <= 4'b0000;\n            thousands <= 4'b0000;\n        end else begin\n            if (ones == 4'b1001) begin\n                ones <= 4'b0000;\n                if (tens == 4'b1001) begin\n                    tens <= 4'b0000;\n                    if (hundreds == 4'b1001) begin\n                        hundreds <= 4'b0000;\n                        if (thousands == 4'b1001) begin\n                            thousands <= 4'b0000;\n                        end else begin\n                            thousands <= thousands + 1'b1;\n                        end\n                    end else begin\n                        hundreds <= hundreds + 1'b1;\n                    end\n                end else begin\n                    tens <= tens + 1'b1;\n                end\n            end else begin\n                ones <= ones + 1'b1;\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    }
+}

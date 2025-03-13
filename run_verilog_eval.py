@@ -18,7 +18,6 @@ import urllib3
 warnings.filterwarnings('ignore', category=urllib3.exceptions.NotOpenSSLWarning)
 from multiprocessing.pool import ThreadPool  # Add this import
 
-
 load_dotenv()
 
 # Add this function to create execution directory
@@ -81,6 +80,7 @@ def run_problem(problem_path, config, exec_folder,  enhance_spec, decompose, ite
         # Initialize VerilogModel
         model = VerilogModel(
             gen_tb_model=config['model'],
+            iter_ref_model=config['model'],
             generation_temp=config['temperature'],
             problem_name=problem_name,
             examples=config['examples']

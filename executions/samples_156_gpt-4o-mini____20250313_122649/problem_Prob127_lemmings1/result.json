@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic areset,\n    input  logic bump_left,\n    input  logic bump_right,\n    output logic walk_left,\n    output logic walk_right\n);\n\n    typedef enum logic [1:0] {\n        LEFT = 2'b00,\n        RIGHT = 2'b01\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            LEFT: begin\n                if (bump_right) \n                    next_state = RIGHT;\n                else \n                    next_state = LEFT;\n            end\n            RIGHT: begin\n                if (bump_left) \n                    next_state = LEFT;\n                else \n                    next_state = RIGHT;\n            end\n            default: next_state = LEFT; // Default state\n        endcase\n    end\n\n    // State update logic with synchronous reset\n    always @(posedge clk) begin\n        if (areset) \n            current_state <= LEFT;\n        else \n            current_state <= next_state;\n    end\n\n    // Output logic\n    assign walk_left = (current_state == LEFT);\n    assign walk_right = (current_state == RIGHT);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 195,
+        "passfail": "R"
+    }
+}

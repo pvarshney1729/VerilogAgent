@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic c,\n    input logic d,\n    output logic [3:0] mux_in\n);\n\n    logic a, b;\n    logic mux1_out, mux2_out;\n\n    // Assign a and b based on c and d\n    assign a = c;\n    assign b = d;\n\n    // Implementing the K-map using multiplexers\n    // mux_in[0] = 0, mux_in[1] = 1, mux_in[2] = 1, mux_in[3] = 1\n    // Using 2-to-1 multiplexers to create the necessary inputs for the 4-to-1 mux\n    assign mux1_out = (a == 1'b0) ? 1'b0 : 1'b1; // For ab = 01 and ab = 11\n    assign mux2_out = (a == 1'b0) ? 1'b1 : 1'b0; // For ab = 10\n\n    assign mux_in[0] = 1'b0; // ab = 00\n    assign mux_in[1] = (b == 1'b0) ? 1'b1 : 1'b0; // ab = 01\n    assign mux_in[2] = (b == 1'b0) ? 1'b1 : 1'b1; // ab = 11\n    assign mux_in[3] = (b == 1'b0) ? 1'b1 : 1'b0; // ab = 10\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 60,
+        "passfail": "R"
+    }
+}

@@ -4,6 +4,7 @@ from utils import generate_openai, generate_anthropic, generate_together
 import time
 from typing import List, Dict, Tuple, Optional
 
+DEBUG_PRINTS = True
 
 class GenerationStats:
     def __init__(self):
@@ -136,6 +137,9 @@ class VerilogGenerator:
         backoff_factor = 2
         delay = 1  # initial delay in seconds
 
+
+        if DEBUG_PRINTS: 
+            print("Core sv generation logic, using model:", self.model)
         for attempt in range(max_retries):
             try:
                 if self.model in self.openai_models:

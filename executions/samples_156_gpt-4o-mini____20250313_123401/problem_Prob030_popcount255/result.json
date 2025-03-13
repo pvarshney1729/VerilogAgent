@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic [254:0] in,\n    output logic [7:0] out\n);\n\n    logic [7:0] count;\n\n    always @(*) begin\n        count = 8'b0;\n        for (int i = 0; i < 255; i++) begin\n            count = count + in[i];\n        end\n    end\n\n    assign out = count;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic in,\n    output logic out\n);\n\n    logic d_ff_out;\n\n    // Combinational logic for XOR\n    always @(*) begin\n        out = in ^ d_ff_out;\n    end\n\n    // D flip-flop\n    always @(posedge clk) begin\n        d_ff_out <= out;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 1,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic [7:0] a,\n    input logic [7:0] b,\n    output logic [7:0] s,\n    output logic overflow\n);\n    logic [8:0] sum; // 9 bits to capture overflow\n\n    always @(*) begin\n        sum = {1'b0, a} + {1'b0, b}; // Extend to 9 bits for addition\n        s = sum[7:0]; // Lower 8 bits are the result\n        overflow = (a[7] == b[7]) && (s[7] != a[7]); // Check for overflow\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "R"
+    }
+}
