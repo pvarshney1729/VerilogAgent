@@ -975,7 +975,7 @@ class VerilogModel:
                     base_query,
                     include_rules=True,
                     include_examples=False
-                )[0]  # Get just the code, ignore stats
+                )  # Get just the code, ignore stats
 
                 # Generate testbench and verify
                 verifier = Verifier(problem_name=self.problem_name)

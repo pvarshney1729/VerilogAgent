@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic c,\n    input logic d,\n    output logic [3:0] mux_in\n);\n\n    logic a, b;\n    logic mux0, mux1, mux2, mux3;\n\n    // Assign a and b based on c and d\n    assign a = c;\n    assign b = d;\n\n    // Implementing the K-map using multiplexers\n    // mux0 = ab = 00 -> 0\n    assign mux0 = 1'b0; // K-map value for ab = 00\n\n    // mux1 = ab = 01 -> 1\n    assign mux1 = 1'b1; // K-map value for ab = 01\n\n    // mux2 = ab = 11 -> 1\n    assign mux2 = 1'b1; // K-map value for ab = 11\n\n    // mux3 = ab = 10 -> 1\n    assign mux3 = 1'b1; // K-map value for ab = 10\n\n    // Connect mux outputs to mux_in\n    assign mux_in[0] = mux0; // ab = 00\n    assign mux_in[1] = mux1; // ab = 01\n    assign mux_in[2] = mux2; // ab = 11\n    assign mux_in[3] = mux3; // ab = 10\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 60,
+        "passfail": "."
+    }
+}

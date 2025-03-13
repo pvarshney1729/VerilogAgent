@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic x,\n    input logic y,\n    output logic z\n);\n\n    logic state;\n\n    always @(*) begin\n        case (state)\n            1'b0: z = (x & y) ? 1'b1 : 1'b1; // states when x=0, y=0\n            1'b1: z = (x & y) ? 1'b1 : 1'b0; // states when x=1, y=1\n            default: z = 1'b0;\n        endcase\n    end\n\n    always @(posedge clk) begin\n        if (reset) begin\n            state <= 1'b0; // synchronous reset\n        end else begin\n            // state transitions based on x and y\n            if (x && !y) state <= 1'b1;\n            else if (!x && y) state <= 1'b0;\n            else if (x && y) state <= 1'b1;\n            else state <= state; // hold state\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "p"
+    }
+}

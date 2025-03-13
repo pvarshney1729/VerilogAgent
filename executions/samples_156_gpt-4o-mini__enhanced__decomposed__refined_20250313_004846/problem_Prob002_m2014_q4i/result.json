@@ -1,0 +1,21 @@
+{
+    "code": "module TopModule (\n    output logic out  // 1-bit output, unsigned\n);\n\n    // Drive the output to a constant logic low\n    assign out = 1'b0;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    output logic out  // 1-bit output, unsigned\n);\n\n    // Drive the output to a constant logic low\n    assign out = 1'b0;\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": [],
+    "testbench_results": {
+        "passed": true,
+        "output": "Simulation finished at 20 ps\nTEST PASSED\n",
+        "testbench": "`timescale 1ns/1ps\n\nmodule TopModule_tb;\n\n    logic  out;\n\n    // Stats for tracking errors\n      int errors;\n    // Instantiate the Device Under Test (DUT)\n    TopModule dut (\n        .out(out)\n    );\n\n    // Test stimulus\n    initial begin\n        // Initialize inputs\n\n        // Wait for reset\n        #10;\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n        if (out !== 0) begin\n            $display(\"Time %0t: Inputs\", $time);\n            $display(\"Time %0t: Output %s = %h\", $time, \"out\", out);\n            errors++;\n        end\n    end\n\n    // Final reporting\n    final begin\n        $display(\"Simulation finished at %0d ps\", $time);\n        if (errors == 0)\n            $display(\"TEST PASSED\");\n        else\n            $display(\"TEST FAILED with %0d errors\", errors);\n    end\n\nendmodule\n"
+    }
+}
