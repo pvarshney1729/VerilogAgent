@@ -87,7 +87,7 @@ def run_problem(problem_path, config, exec_folder,  enhance_spec, decompose, ite
         )
                 
         # Generate and verify code using VerilogModel
-        result = model.run_pipeline(base_query, enhance_spec=enhance_spec, decompose=decompose, iterative_refinement=iterative_refinement )
+        result = model.run_pipeline(base_query, enhance_spec=enhance_spec, decompose=decompose, iterative_refinement=iterative_refinement, model=config['model'] )
 
         # Save the generated code
         with open(problem_dir / "initial_solution.sv", 'w') as f:

@@ -291,7 +291,7 @@ class SimpleVerifier:
         
         return issues
     
-    def generate_stimulus(self, base_query: str, base_response: str) -> Dict[str, Any]:
+    def generate_stimulus(self, base_query: str, base_response: str, model: str = "gpt-4o-mini") -> Dict[str, Any]:
         """Generate stimulus dict for the given Verilog code."""
         
         """
@@ -403,7 +403,7 @@ class SimpleVerifier:
         client = OpenAI()
 
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=model,
             messages=messages,
             functions=[stimuli_dict],
             function_call={"name": "stimuli"})
@@ -761,7 +761,7 @@ class VerilogModel:
         return response
 
 
-    def iterative_refinement(self, base_query: str, max_iterations: int = 5) -> Dict[str, Any]:
+    def iterative_refinement(self, base_query: str, max_iterations: int = 5, model: str = "gpt-4o-mini") -> Dict[str, Any]:
         """Implement iterative refinement for Verilog code generation.
         
         Args:
@@ -794,7 +794,7 @@ class VerilogModel:
         
 
         # Get stimulus for the initial code
-        initial_stimulus = simple_verifier.generate_stimulus(base_query, best_code)
+        initial_stimulus = simple_verifier.generate_stimulus(base_query, best_code, model=model)
         initial_stimulus = initial_stimulus.get("stimuli", [])
 
         # Iterative refinement loop
@@ -907,7 +907,7 @@ class VerilogModel:
             "testbench_results": testbench_data
         }
 
-    def run_pipeline(self, base_query: str, enhance_spec: bool = True, decompose: bool = True, iterative_refinement: bool = True, max_iterations: int = 2) -> Dict:
+    def run_pipeline(self, base_query: str, enhance_spec: bool = True, decompose: bool = True, iterative_refinement: bool = True, max_iterations: int = 2, model: str = "gpt-4o-mini") -> Dict:
         """
         INPUT:
             base_query: str - Base query to generate testbench
@@ -925,7 +925,7 @@ class VerilogModel:
                 enhanced_query = self.generator.generate_with_system_prompt(
                     prompt=prompts['enhance_spec_rules'].format(user_spec=base_query),
                     system_prompt=prompts['enhance_spec_system'],
-                    model='gpt-4o',
+                    model=model,
                 )
                 print("I am in enhance_spec")
                 base_query += f"""Here is the enhanced specification which might be useful to you:
@@ -941,7 +941,7 @@ class VerilogModel:
                 
             if decompose:
                 print("Decomposing the problem into subtasks...")
-                decomposition_result = self.decompose_and_implement(base_query)
+                decomposition_result = self.decompose_and_implement(base_query, model=model)
         
 
                 implementation_hints = "\n\n".join([
@@ -966,7 +966,7 @@ class VerilogModel:
             if iterative_refinement:
                 #ADD CODE HERE FOR ITERATIVE REFINEMENT
                 print(f"Using iterative refinement with max {max_iterations} iterations")
-                result = self.iterative_refinement(base_query, max_iterations)
+                result = self.iterative_refinement(base_query, max_iterations, model=model)
                 return result
         
             else:
@@ -1000,7 +1000,7 @@ class VerilogModel:
 
 
 
-    def decompose_and_implement(self, spec: str, model: str = "gpt-4o") -> Dict:
+    def decompose_and_implement(self, spec: str, model: str = "gpt-4o-mini") -> Dict:
         """
         Decomposes the Verilog specification into subtasks, implements each subtask,
         and then uses these implementations as hints to generate the final code.
