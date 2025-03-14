@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic mode,          // 1-bit input: 1 = heating mode, 0 = cooling mode\n    input logic too_cold,      // 1-bit input: 1 = temperature is too cold\n    input logic too_hot,       // 1-bit input: 1 = temperature is too hot\n    input logic fan_on,        // 1-bit input: 1 = user requests fan on\n    output logic heater,       // 1-bit output: heater control\n    output logic aircon,       // 1-bit output: air conditioner control\n    output logic fan           // 1-bit output: fan control\n);\n\n    always @(*) begin\n        // Initialize outputs\n        heater = 1'b0;\n        aircon = 1'b0;\n        fan = 1'b0;\n\n        if (mode) begin\n            // Heating mode\n            if (too_cold) begin\n                heater = 1'b1;\n            end\n        end else begin\n            // Cooling mode\n            if (too_hot) begin\n                aircon = 1'b1;\n            end\n        end\n\n        // Fan control\n        if (heater || aircon || fan_on) begin\n            fan = 1'b1;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

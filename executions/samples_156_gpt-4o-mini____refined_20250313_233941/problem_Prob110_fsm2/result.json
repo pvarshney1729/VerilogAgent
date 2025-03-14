@@ -1,0 +1,35 @@
+{
+    "code": "[BEGIN]\nmodule TopModule (\n    input logic clk,\n    input logic areset,\n    input logic j,\n    input logic k,\n    output logic out\n);\n\n    typedef enum logic {OFF, ON} state_t;\n    state_t current_state, next_state;\n\n    always_ff @(posedge clk) begin\n        if (areset) begin\n            current_state <= OFF;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    always_ff @(current_state, j, k) begin\n        out = 1'b0; // Default output value\n        next_state = current_state; // Default next state is current state\n\n        case (current_state)\n            OFF: begin\n                if (j) begin\n                    next_state = ON;\n                end\n            end\n            ON: begin\n                out = 1'b1; // Output is 1 in ON state\n                if (k) begin\n                    next_state = OFF;\n                end\n            end\n        endcase\n    end\n\nendmodule\n[DONE]",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic j,\n    input logic k,\n    output logic out\n);\n\n    typedef enum logic {OFF, ON} state_t;\n    state_t current_state, next_state;\n\n    always_ff @(posedge clk) begin\n        if (areset) begin\n            current_state <= OFF;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    always_comb begin\n        case (current_state)\n            OFF: begin\n                out = 1'b0;\n                if (j) begin\n                    next_state = ON;\n                end else begin\n                    next_state = OFF;\n                end\n            end\n            ON: begin\n                out = 1'b1;\n                if (k) begin\n                    next_state = OFF;\n                end else begin\n                    next_state = ON;\n                end\n            end\n            default: begin\n                out = 1'b0;\n                next_state = OFF;\n            end\n        endcase\n    end\n\nendmodule",
+            "issues": [
+                "Testbench error: Error running simulation: Command '['vvp', 'sim.out']' timed out after 5 seconds"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic areset,\n    input logic j,\n    input logic k,\n    output logic out\n);\n\n    typedef enum logic {OFF, ON} state_t;\n    state_t current_state, next_state;\n\n    always_ff @(posedge clk) begin\n        if (areset) begin\n            current_state <= OFF;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    always_comb begin\n        out = 1'b0; // Default output value\n        next_state = current_state; // Default next state is current state\n\n        case (current_state)\n            OFF: begin\n                if (j) begin\n                    next_state = ON;\n                    out = 1'b0; // Output remains 0 in OFF state\n                end\n            end\n            ON: begin\n                out = 1'b1; // Output is 1 in ON state\n                if (k) begin\n                    next_state = OFF;\n                end\n            end\n        endcase\n    end\n\nendmodule\n```",
+            "issues": [
+                "Testbench error: Error running simulation: Command '['vvp', 'sim.out']' timed out after 5 seconds"
+            ]
+        },
+        {
+            "iteration": 2,
+            "code": "[BEGIN]\nmodule TopModule (\n    input logic clk,\n    input logic areset,\n    input logic j,\n    input logic k,\n    output logic out\n);\n\n    typedef enum logic {OFF, ON} state_t;\n    state_t current_state, next_state;\n\n    always_ff @(posedge clk) begin\n        if (areset) begin\n            current_state <= OFF;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    always_ff @(current_state, j, k) begin\n        out = 1'b0; // Default output value\n        next_state = current_state; // Default next state is current state\n\n        case (current_state)\n            OFF: begin\n                if (j) begin\n                    next_state = ON;\n                end\n            end\n            ON: begin\n                out = 1'b1; // Output is 1 in ON state\n                if (k) begin\n                    next_state = OFF;\n                end\n            end\n        endcase\n    end\n\nendmodule\n[DONE]",
+            "issues": [
+                "Testbench error: Error running simulation: Command '['vvp', 'sim.out']' timed out after 5 seconds"
+            ]
+        }
+    ],
+    "refinement_count": 2,
+    "remaining_issues": [
+        "Testbench error: Error running simulation: Command '['vvp', 'sim.out']' timed out after 5 seconds"
+    ],
+    "testbench_results": {}
+}

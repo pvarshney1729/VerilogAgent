@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic in,\n    input logic [1:0] state,\n    output logic [1:0] next_state,\n    output logic out\n);\n\n    always @(*) begin\n        case (state)\n            2'b00: begin // State A\n                next_state = (in == 1'b0) ? 2'b00 : 2'b01; // A -> A or B\n                out = 1'b0;\n            end\n            2'b01: begin // State B\n                next_state = (in == 1'b0) ? 2'b10 : 2'b01; // B -> C or B\n                out = 1'b0;\n            end\n            2'b10: begin // State C\n                next_state = (in == 1'b0) ? 2'b00 : 2'b11; // C -> A or D\n                out = 1'b0;\n            end\n            2'b11: begin // State D\n                next_state = (in == 1'b0) ? 2'b10 : 2'b01; // D -> C or B\n                out = 1'b1;\n            end\n            default: begin\n                next_state = 2'b00; // Default to state A\n                out = 1'b0;\n            end\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

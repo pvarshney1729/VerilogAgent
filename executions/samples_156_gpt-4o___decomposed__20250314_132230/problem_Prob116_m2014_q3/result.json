@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input [3:0] x,\n    output logic f\n);\n\nalways @(*) begin\n    case (x)\n        4'b0101, 4'b0110, 4'b1000, 4'b1001, 4'b1100, 4'b1101, 4'b1110: f = 1'b1;\n        4'b0001, 4'b0010, 4'b0100: f = 1'b0;\n        default: f = 1'bx; // Don't-care conditions\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 22,
+        "passfail": "R"
+    }
+}

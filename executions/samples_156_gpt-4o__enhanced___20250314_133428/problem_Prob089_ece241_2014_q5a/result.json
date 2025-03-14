@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic areset,\n    input logic x,\n    output logic z\n);\n\n    typedef enum logic [1:0] {\n        STATE_IDLE = 2'b00,\n        STATE_FLIP = 2'b01,\n        STATE_ADD  = 2'b10\n    } state_t;\n\n    state_t current_state, next_state;\n    logic flip_bit;\n    logic add_carry;\n\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            current_state <= STATE_IDLE;\n            flip_bit <= 1'b0;\n            add_carry <= 1'b0;\n            z <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            if (current_state == STATE_FLIP) begin\n                flip_bit <= ~x;\n            end\n            if (current_state == STATE_ADD) begin\n                {add_carry, z} <= flip_bit + 1'b1;\n            end else begin\n                z <= flip_bit;\n            end\n        end\n    end\n\n    always_comb begin\n        case (current_state)\n            STATE_IDLE: begin\n                next_state = STATE_FLIP;\n            end\n            STATE_FLIP: begin\n                next_state = STATE_ADD;\n            end\n            STATE_ADD: begin\n                next_state = STATE_FLIP;\n            end\n            default: begin\n                next_state = STATE_IDLE;\n            end\n        endcase\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

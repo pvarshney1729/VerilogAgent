@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic a,         // 1-bit input signal a\n    input  logic b,         // 1-bit input signal b\n    input  logic c,         // 1-bit input signal c\n    input  logic d,         // 1-bit input signal d\n    input  logic e,         // 1-bit input signal e\n    output logic [24:0] out // 25-bit output vector\n);\n\n    always @(*) begin\n        // Compute pairwise comparisons\n        out[0]  = (e == e);\n        out[1]  = (e == d);\n        out[2]  = (e == c);\n        out[3]  = (e == b);\n        out[4]  = (e == a);\n        out[5]  = (d == d);\n        out[6]  = (d == c);\n        out[7]  = (d == b);\n        out[8]  = (d == a);\n        out[9]  = (c == c);\n        out[10] = (c == b);\n        out[11] = (c == a);\n        out[12] = (b == b);\n        out[13] = (b == a);\n        out[14] = (a == a);\n        out[15] = (a == b);\n        out[16] = (a == c);\n        out[17] = (a == d);\n        out[18] = (a == e);\n        out[19] = (b == c);\n        out[20] = (b == d);\n        out[21] = (b == e);\n        out[22] = (c == d);\n        out[23] = (c == e);\n        out[24] = (d == e);\n    end\n\n    initial begin\n        out = 25'b0; // Initialize output to zero\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 94,
+        "passfail": "R"
+    }
+}

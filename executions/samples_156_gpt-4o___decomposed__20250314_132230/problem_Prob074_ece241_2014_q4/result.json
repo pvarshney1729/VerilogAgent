@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    logic q_xor, q_and, q_or;\n\n    // Initialize all D flip-flops to zero\n    initial begin\n        q_xor = 1'b0;\n        q_and = 1'b0;\n        q_or  = 1'b0;\n    end\n\n    always @(posedge clk) begin\n        q_xor <= x ^ q_xor;     // XOR with the flip-flop's current output\n        q_and <= x & ~q_and;    // AND with the flip-flop's complemented output\n        q_or  <= x | ~q_or;     // OR with the flip-flop's complemented output\n    end\n\n    assign z = ~(q_xor | q_and | q_or); // Three-input NOR gate\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,           // Clock signal; positive edge triggered\n    input logic reset,         // Synchronous reset signal, active high\n    input logic d,             // Data input for the D flip-flop\n    output logic q             // Output representing the stored state\n);\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q <= 1'b0;         // Reset output to 0\n        end else begin\n            q <= d;            // Capture data input on rising edge of clk\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

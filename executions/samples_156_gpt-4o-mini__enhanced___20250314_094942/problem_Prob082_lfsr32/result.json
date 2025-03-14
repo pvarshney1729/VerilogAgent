@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,            // Clock signal (1 bit)\n    input logic reset,          // Synchronous active-high reset signal (1 bit)\n    output logic [31:0] q       // 32-bit output representing the current state of the LFSR\n);\n\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 32'h1;         // Reset to 32'h1\n        end else begin\n            // Calculate the new LSB based on the taps\n            logic new_lsb;\n            new_lsb = q[31] ^ q[21] ^ q[1] ^ q[0];\n            // Shift right and insert new LSB\n            q <= {q[30:0], new_lsb};\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

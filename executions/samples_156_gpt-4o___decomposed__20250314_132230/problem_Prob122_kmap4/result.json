@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic a,\n    input  logic b,\n    input  logic c,\n    input  logic d,\n    output logic out\n);\n\n    always @(*) begin\n        case ({c, d})\n            2'b00: out = b & ~a;\n            2'b01: out = (~a & b) | (a & ~b);\n            2'b11: out = (~a & b) | (a & ~b);\n            2'b10: out = b & ~a;\n            default: out = 1'b0;\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 121,
+        "passfail": "R"
+    }
+}

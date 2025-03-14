@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic d,    // D input for the latch\n    input logic ena,  // Enable signal\n    output logic q    // Output of the latch\n);\n\ninitial begin\n    q = 1'b0; // Initialize q to 0\nend\n\nalways @(*) begin\n    if (ena) begin\n        q = d;  // Update q to d when ena is high\n    end\n    // When ena is low, q retains its previous value\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

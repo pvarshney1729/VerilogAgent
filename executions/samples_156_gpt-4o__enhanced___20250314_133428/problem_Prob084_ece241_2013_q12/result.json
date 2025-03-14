@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic enable,\n    input logic S,\n    input logic A,\n    input logic B,\n    input logic C,\n    output logic Z\n);\n\n    // 8-bit shift register\n    logic [7:0] Q;\n\n    // Shift register logic\n    always_ff @(posedge clk) begin\n        if (enable) begin\n            Q <= {Q[6:0], S}; // Shift left and insert S into Q[7]\n        end\n    end\n\n    // Multiplexer logic\n    always_comb begin\n        case ({A, B, C})\n            3'b000: Z = Q[0];\n            3'b001: Z = Q[1];\n            3'b010: Z = Q[2];\n            3'b011: Z = Q[3];\n            3'b100: Z = Q[4];\n            3'b101: Z = Q[5];\n            3'b110: Z = Q[6];\n            3'b111: Z = Q[7];\n            default: Z = 1'b0; // Default case, though not needed for binary inputs\n        endcase\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

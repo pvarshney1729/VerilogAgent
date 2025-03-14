@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nsynthesis verilog_input_version verilog_2001\nmodule TopModule (\n    input logic do_sub,              // Control signal: 0 for addition, 1 for subtraction\n    input logic [7:0] a,            // 8-bit input operand a\n    input logic [7:0] b,            // 8-bit input operand b\n    output logic [7:0] out,          // 8-bit output result of addition or subtraction\n    output logic result_is_zero       // Flag indicating if the result is zero\n);\n\n    // Specify the behavior of the module\n    always @(*) begin\n        // Perform addition or subtraction based on the do_sub signal\n        if (do_sub == 1'b0) begin\n            out = a + b;             // Addition\n        end else begin\n            out = a - b;             // Subtraction\n        end\n        \n        // Set the result_is_zero flag based on the value of out\n        result_is_zero = (out == 8'b00000000); // Set to 1 when out is zero; otherwise, 0\n    end\n\n    // Initial state definitions\n    initial begin\n        out = 8'b00000000;           // Initialize output to zero\n        result_is_zero = 1'b0;       // Initialize zero flag to false\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,               // Clock input, triggered on the rising edge\n    input logic reset,             // Active-high synchronous reset\n    output logic [4:0] q           // 5-bit output representing the LFSR state\n);\n\n// Bit ordering convention: q[0] is the least significant bit (LSB), q[4] is the most significant bit (MSB)\n\n// Define the LFSR taps based on Galois configuration\nlocalparam TAP1 = 4; // Bit position 5 (index 4)\nlocalparam TAP2 = 2; // Bit position 3 (index 2)\n\n// Initial state of LFSR (upon reset)\ninitial begin\n    q = 5'b00001; // Initialize LFSR to non-zero state (1)\nend\n\n// Sequential logic for LFSR operation\nalways @(posedge clk) begin\n    if (reset) begin\n        q <= 5'b00001; // Reset LFSR output to 1\n    end else begin\n        // Shift right: new bit = XOR of the tap positions with the LSB\n        // Calculate the new bit based on tap positions\n        q[0] <= q[TAP1] ^ q[TAP2]; // XOR tap bits to generate new LSB\n        // Shift remaining bits right\n        q[4:1] <= q[3:0]; // Shift bits right\n    end\nend\n\n// Note: The LFSR cycles through 2^5 - 1 = 31 states before repeating, with all-zero state never reached.\nendmodule",
+    "test_results": {
+        "num_mismatch": 4276,
+        "passfail": "R"
+    }
+}

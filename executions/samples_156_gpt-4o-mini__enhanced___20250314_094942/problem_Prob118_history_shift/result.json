@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,                   // Clock input, 1 bit wide\n    input logic areset,               // Asynchronous active-high reset, 1 bit wide\n    input logic predict_valid,         // Signal indicating prediction validity, 1 bit wide\n    input logic predict_taken,         // Prediction outcome, 1 bit wide\n    input logic train_mispredicted,    // Signal indicating a misprediction, 1 bit wide\n    input logic train_taken,           // Actual outcome of the mispredicted branch, 1 bit wide\n    input logic [31:0] train_history,  // History to load in case of misprediction, 32 bits wide\n    output logic [31:0] predict_history  // Current branch history, 32 bits wide\n);\n\n    // Initial state of the predict_history register\n    initial begin\n        predict_history = 32'b0; // Initialize to all zeros\n    end\n\n    always @(posedge clk) begin\n        if (areset) begin\n            predict_history <= 32'b0; // Reset state\n        end else begin\n            if (train_mispredicted) begin\n                // Load with history before the misprediction\n                predict_history <= {train_history[30:0], train_taken};\n            end else if (predict_valid) begin\n                // Shift in the prediction outcome\n                predict_history <= {predict_history[30:0], predict_taken};\n            end\n            // If neither signal is asserted, retain current state.\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 3,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic [7:0] in,  // Input signal (8 bits), unsigned representation\n    output logic [31:0] out // Output signal (32 bits), signed representation\n);\n\n// Behavioral Description:\n// This module implements a combinational logic circuit that sign-extends \n// the 8-bit input 'in' to a 32-bit output 'out'. The most significant bit \n// (MSB) of the input (in[7]) is used as the sign bit for sign extension.\n// The output is constructed by concatenating 24 copies of in[7] with \n// the 8-bit input 'in'.\n\nassign out = { {24{in[7]}}, in }; // Sign-extend the 8-bit input to 32 bits\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,         // Clock signal (1-bit input)\n    input logic x,           // Input signal (1-bit input)\n    output logic z           // Output signal (1-bit output)\n);\n\n    // Internal Signals\n    logic ff_xor;             // Output of XOR gate D flip-flop\n    logic ff_and;             // Output of AND gate D flip-flop\n    logic ff_or;              // Output of OR gate D flip-flop\n\n    // Finite State Machine (FSM) Logic\n    always @(posedge clk) begin\n        ff_xor <= (x ^ ff_xor);  // XOR gate operation\n        ff_and <= (x & ~ff_and); // AND gate operation with complemented output\n        ff_or  <= (x | ~ff_or);   // OR gate operation with complemented output\n    end\n\n    // Output Logic\n    assign z = ~(ff_xor | ff_and | ff_or); // Three-input NOR gate to output z\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 45,
+        "passfail": "R"
+    }
+}

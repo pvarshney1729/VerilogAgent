@@ -1,0 +1,38 @@
+{
+    "code": "[BEGIN]\nmodule TopModule (\n    input  [255:0] in,  // 256-bit input vector\n    input  [7:0]   sel, // 8-bit selection signal\n    input          reset, // Optional reset signal\n    input          clk,    // Clock signal\n    output logic     out   // 1-bit output\n);\n\nalways @(posedge clk) begin\n    if (reset) begin\n        out <= 1'b0; // Reset output to 0 on reset signal\n    end else begin\n        if (sel > 8'd255) begin\n            out <= 1'b0; // Default behavior when 'sel' exceeds the valid range\n        end else begin\n            out <= in[sel]; // Select input based on 'sel'\n        end\n    end\nend\n\nendmodule\n[DONE]",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input  [255:0] in,  // 256-bit input vector\n    input  [7:0]   sel, // 8-bit selection signal\n    output logic     out // 1-bit output\n);\n\nalways @(*) begin\n    if (sel > 8'd255) begin\n        out = 1'b0; // Default behavior when 'sel' exceeds the valid range\n    end else begin\n        out = in[sel]; // Select input based on 'sel'\n    end\nend\n\nendmodule",
+            "issues": [
+                "Testbench error: Compilation failed: /var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpl90qgpwn_tb.sv:13: error: port ``vector'' is not a port of dut.\n1 error(s) during elaboration.\n"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "```verilog\nmodule TopModule (\n    input  [255:0] in,  // 256-bit input vector\n    input  [7:0]   sel, // 8-bit selection signal\n    input          reset, // Optional reset signal\n    output logic     out   // 1-bit output\n);\n\nalways @(posedge reset) begin\n    out <= 1'b0; // Reset output to 0 on reset signal\nend\n\nalways @(*) begin\n    if (sel > 8'd255) begin\n        out = 1'b0; // Default behavior when 'sel' exceeds the valid range\n    end else begin\n        out = in[sel]; // Select input based on 'sel'\n    end\nend\n\nendmodule\n```",
+            "issues": [
+                "Reset signal should be sampled with the clock",
+                "Testbench error: Compilation failed: /var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5_iox1j__tb.sv:14: error: port ``vector'' is not a port of dut.\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5_iox1j__tb.sv:38: error: Unable to bind wire/reg/memory `CLK_PERIOD' in `TopModule_tb'\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp5_iox1j__tb.sv:38: error: Unable to elaborate (or evaluate) delay expression.\n3 error(s) during elaboration.\n"
+            ]
+        },
+        {
+            "iteration": 2,
+            "code": "[BEGIN]\nmodule TopModule (\n    input  [255:0] in,  // 256-bit input vector\n    input  [7:0]   sel, // 8-bit selection signal\n    input          reset, // Optional reset signal\n    input          clk,    // Clock signal\n    output logic     out   // 1-bit output\n);\n\nalways @(posedge clk) begin\n    if (reset) begin\n        out <= 1'b0; // Reset output to 0 on reset signal\n    end else begin\n        if (sel > 8'd255) begin\n            out <= 1'b0; // Default behavior when 'sel' exceeds the valid range\n        end else begin\n            out <= in[sel]; // Select input based on 'sel'\n        end\n    end\nend\n\nendmodule\n[DONE]",
+            "issues": [
+                "Use always @(*) for combinational logic",
+                "Testbench error: Compilation failed: /var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb0dopyyl_tb.sv:15: error: port ``vector'' is not a port of dut.\n1 error(s) during elaboration.\n"
+            ]
+        }
+    ],
+    "refinement_count": 2,
+    "remaining_issues": [
+        "Use always @(*) for combinational logic",
+        "Testbench error: Compilation failed: /var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpb0dopyyl_tb.sv:15: error: port ``vector'' is not a port of dut.\n1 error(s) during elaboration.\n"
+    ],
+    "testbench_results": {}
+}

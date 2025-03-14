@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic ring,          // 1-bit input: Indicates an incoming call\n    input logic vibrate_mode,  // 1-bit input: Indicates if the phone is in vibrate mode\n    output logic ringer,       // 1-bit output: Controls the phone ringer\n    output logic motor         // 1-bit output: Controls the vibration motor\n);\n\n    always @(*) begin\n        if (ring) begin\n            ringer = !vibrate_mode;\n            motor = vibrate_mode;\n        end else begin\n            ringer = 1'b0;\n            motor = 1'b0;\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

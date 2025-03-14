@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  [5:0] y,  // 6-bit input representing the current state in one-hot encoding\n    input        w,  // 1-bit input\n    output logic Y1, // 1-bit output\n    output logic Y3  // 1-bit output\n);\n\n    // Logic for Y1: Corresponds to y[1] (State B)\n    assign Y1 = (y[0] & ~w); // Transition to B from A on w = 0\n\n    // Logic for Y3: Corresponds to y[3] (State D)\n    assign Y3 = (y[1] & w) | (y[2] & w) | (y[4] & w) | (y[5] & w); // Transitions to D from B, C, E, F on w = 1\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    }
+}

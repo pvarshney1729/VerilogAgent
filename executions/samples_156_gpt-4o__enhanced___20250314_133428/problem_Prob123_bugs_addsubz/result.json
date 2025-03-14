@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\n`timescale 1ns / 1ps\n\nmodule TopModule (\n    input wire do_sub,          // 1-bit control signal for addition/subtraction\n    input wire [7:0] a,         // 8-bit unsigned input operand\n    input wire [7:0] b,         // 8-bit unsigned input operand\n    output reg [7:0] out,       // 8-bit output for result of arithmetic operation\n    output reg result_is_zero   // 1-bit flag indicating if result is zero\n);\n\n    // Combinational logic to perform addition or subtraction\n    always @(*) begin\n        // Arithmetic operation based on control signal `do_sub`\n        if (do_sub) begin\n            out = a - b; // Perform subtraction when do_sub is 1\n        end else begin\n            out = a + b; // Perform addition when do_sub is 0\n        end\n\n        // Zero detection logic\n        if (out == 8'b00000000) begin\n            result_is_zero = 1'b1; // Set zero flag if result is zero\n        end else begin\n            result_is_zero = 1'b0; // Clear zero flag otherwise\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

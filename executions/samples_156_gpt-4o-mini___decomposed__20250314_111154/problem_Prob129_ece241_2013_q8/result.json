@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic aresetn,\n    input logic x,\n    output logic z\n);\n    // State encoding\n    typedef enum logic [1:0] {S0, S1, S2} state_t;\n    state_t state, next_state;\n\n    // Sequential logic for state transition\n    always @(posedge clk) begin\n        if (!aresetn)\n            state <= S0;\n        else\n            state <= next_state;\n    end\n\n    // Combinational logic for next state and output\n    always @(*) begin\n        case (state)\n            S0: begin\n                next_state = (x) ? S1 : S0; // Transition to S1 on '1'\n                z = 0;\n            end\n            S1: begin\n                next_state = (x) ? S2 : S0; // Transition to S2 on '0'\n                z = 0;\n            end\n            S2: begin\n                next_state = (x) ? S1 : S0; // Stay in S1 on '1' (overlapping)\n                z = 1;                      // Output '1' on detecting '101'\n            end\n            default: begin\n                next_state = S0;           // Default to S0\n                z = 0;\n            end\n        endcase\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "e"
+    }
+}

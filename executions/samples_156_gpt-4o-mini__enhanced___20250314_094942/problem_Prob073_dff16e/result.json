@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,                // Clock input (1 bit)\n    input logic resetn,            // Synchronous active-low reset (1 bit)\n    input logic [1:0] byteena,     // Byte enable signals (2 bits)\n    input logic [15:0] d,           // Data input (16 bits)\n    output logic [15:0] q            // Output data (16 bits)\n);\n\nalways @(posedge clk) begin\n    if (!resetn) begin\n        q <= 16'b0; // Reset state for all DFFs\n    end else begin\n        if (byteena[0]) \n            q[7:0] <= d[7:0]; // Write lower byte\n        if (byteena[1]) \n            q[15:8] <= d[15:8]; // Write upper byte\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

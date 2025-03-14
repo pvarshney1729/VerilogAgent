@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic [3:0] a,\n    input logic [3:0] b,\n    input logic [3:0] c,\n    input logic [3:0] d,\n    input logic [3:0] e,\n    input logic reset,\n    output logic [3:0] q\n);\n\n    always @(*) begin\n        if (!reset) begin\n            q = 4'b0000;\n        end else begin\n            case (c)\n                4'b0000: q = b; // c = 0\n                4'b0001: q = e; // c = 1\n                4'b0010: q = a; // c = 2\n                4'b0011: q = d; // c = 3\n                4'b0100, 4'b0101, 4'b0110, 4'b0111, 4'b1000, 4'b1001: q = 4'b1111; // f for c = 4 to 9\n                default: q = 4'b0000; // Default case for c >= 10\n            endcase\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 41,
+        "passfail": "R"
+    }
+}

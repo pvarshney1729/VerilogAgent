@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic j,\n    input logic k,\n    output logic Q\n);\n\nlogic Qold;\n\nalways @(posedge clk) begin\n    case ({j, k})\n        2'b00: Qold <= Qold;      // Qold\n        2'b01: Qold <= 1'b0;      // Reset\n        2'b10: Qold <= 1'b1;      // Set\n        2'b11: Qold <= ~Qold;     // Toggle\n    endcase\nend\n\nassign Q = Qold;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

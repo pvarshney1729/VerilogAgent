@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic [7:0] a,\n    input  logic [7:0] b,\n    input  logic [7:0] c,\n    input  logic [7:0] d,\n    output logic [7:0] min\n);\n\n    logic [7:0] min_ab;\n    logic [7:0] min_cd;\n\n    // Compare a and b\n    assign min_ab = (a < b) ? a : b;\n\n    // Compare c and d\n    assign min_cd = (c < d) ? c : d;\n\n    // Compare the results to find the overall minimum\n    assign min = (min_ab < min_cd) ? min_ab : min_cd;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

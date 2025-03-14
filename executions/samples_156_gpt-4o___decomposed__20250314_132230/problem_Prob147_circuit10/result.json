@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic a,\n    input  logic b,\n    output logic q,\n    output logic state\n);\n\n    logic state_reg;\n\n    always @(posedge clk) begin\n        if (a && b)\n            state_reg <= ~state_reg;\n        else if (a && ~b)\n            state_reg <= 1'b0;\n        else if (~a && b)\n            state_reg <= 1'b1;\n        else\n            state_reg <= state_reg;\n    end\n\n    always @(*) begin\n        q = state_reg;\n    end\n\n    assign state = state_reg;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 148,
+        "passfail": "R"
+    }
+}

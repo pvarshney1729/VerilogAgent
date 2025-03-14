@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic in,            // One-bit input signal\n    input logic [3:0] state,  // 4-bit input representing current state (one-hot encoding)\n    output logic [3:0] next_state, // 4-bit output representing next state (one-hot encoding)\n    output logic out          // One-bit output signal\n);\n\n// Implementing the combinational logic for next_state and output\nassign next_state = (state[0] & ~in) ? state : // State A\n                    (state[1] & ~in) ? 4'b0100 : // State B to C\n                    (state[1] & in)  ? state : // State B remains B\n                    (state[2] & ~in) ? 4'b0001 : // State C to A\n                    (state[2] & in)  ? 4'b1000 : // State C to D\n                    (state[3] & ~in) ? 4'b0100 : // State D to C\n                                     (state[1] & in) ? state : // State D to B\n                                     4'b0000; // Default case, invalid state\n\nassign out = (state[3] & in) ? 1'b1 : 1'b0; // Only output 1 when in state D and input is 1\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 67,
+        "passfail": "R"
+    }
+}

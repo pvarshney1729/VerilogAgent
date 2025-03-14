@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic c,               // Input signal c (1 bit)\n    input logic d,               // Input signal d (1 bit)\n    output logic [3:0] mux_in    // Output mux_in (4 bits, LSB mux_in[0] to MSB mux_in[3])\n);\n\nlogic a;                        // Selector input a for mux\nlogic b;                        // Selector input b for mux\n\n// The logic of this module is combinational\n// Initialize output mux_in to 0\ninitial begin\n    mux_in = 4'b0000;         \nend\n\n// Implementation based on Karnaugh Map\nalways @(*) begin\n    // Assign values to mux_in based on the K-map\n    // ab = 00 -> mux_in[0]\n    // ab = 01 -> mux_in[1]\n    // ab = 10 -> mux_in[2]\n    // ab = 11 -> mux_in[3]\n\n    case ({c, d})             // Using c and d as a 2-bit selector\n        2'b00: mux_in = 4'b0001; // K-map entry for ab=00\n        2'b01: mux_in = 4'b1000; // K-map entry for ab=01\n        2'b10: mux_in = 4'b1100; // K-map entry for ab=10\n        2'b11: mux_in = 4'b1110; // K-map entry for ab=11\n        default: mux_in = 4'b0000; // Default case for safety\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 60,
+        "passfail": "R"
+    }
+}

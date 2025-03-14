@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,             // Clock input\n    input logic areset,         // Asynchronous active high reset\n    input logic load,           // Synchronous active high load signal\n    input logic ena,            // Synchronous active high enable signal\n    input logic [3:0] data,     // Input data (4 bits)\n    output logic [3:0] q        // Output of the shift register (4 bits)\n);\n\n    always @(posedge clk or posedge areset) begin\n        if (areset) begin\n            q <= 4'b0000; // Reset q to zero\n        end else if (load) begin\n            q <= data; // Load data into q\n        end else if (ena) begin\n            q <= {1'b0, q[3:1]}; // Shift right\n        end\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

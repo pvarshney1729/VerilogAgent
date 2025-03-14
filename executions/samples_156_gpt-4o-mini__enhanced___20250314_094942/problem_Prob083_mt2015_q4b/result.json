@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic x,  // 1-bit input\n    input logic y,  // 1-bit input\n    output logic z  // 1-bit output\n);\n\n    initial begin\n        z = 1;  // Initialize z to 1 at time 0\n    end\n\n    always @(*) begin\n        case ({x, y})\n            2'b00: z = 1;\n            2'b01: z = 0;\n            2'b10: z = 0;\n            2'b11: z = 1;\n            default: z = 1; // Default behavior (should not occur)\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

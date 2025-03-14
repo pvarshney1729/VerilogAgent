@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,      // 1-bit clock input, positive edge triggered\n    input  logic a,        // 1-bit input signal a\n    input  logic b,        // 1-bit input signal b\n    output logic q,        // 1-bit output signal q\n    output logic state      // 1-bit output signal state (observable output of flip-flop)\n);\n\n    // Initialize state to 0\n    initial begin\n        state = 0; \n    end\n\n    // Sequential logic for state update\n    always @(posedge clk) begin\n        state <= (a & ~b) | (state & ~a); // Example logic for state update\n    end\n\n    // Combinational logic for output q\n    always @(*) begin\n        q = (a & b) | (~state); // Example combinational logic for q\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 227,
+        "passfail": "R"
+    }
+}

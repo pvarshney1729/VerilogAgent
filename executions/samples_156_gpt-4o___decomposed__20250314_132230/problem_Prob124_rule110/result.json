@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic load,\n    input logic [511:0] data,\n    output logic [511:0] q\n);\n\n    logic [511:0] next_q;\n\n    always @(*) begin\n        integer i;\n        for (i = 0; i < 512; i = i + 1) begin\n            if (i == 0) begin\n                // Left boundary: q[-1] is assumed to be 0\n                next_q[i] = (1'b0 & q[i] & q[i+1]) | (1'b0 & q[i] & ~q[i+1]) | (1'b0 & ~q[i] & q[i+1]) | (~1'b0 & q[i] & q[i+1]);\n            end else if (i == 511) begin\n                // Right boundary: q[512] is assumed to be 0\n                next_q[i] = (q[i-1] & q[i] & 1'b0) | (q[i-1] & ~q[i] & 1'b0) | (~q[i-1] & q[i] & 1'b0) | (~q[i-1] & q[i] & ~1'b0);\n            end else begin\n                // General case for cell i\n                next_q[i] = (q[i-1] & q[i] & q[i+1]) | (q[i-1] & q[i] & ~q[i+1]) | (q[i-1] & ~q[i] & q[i+1]) | (~q[i-1] & q[i] & q[i+1]);\n            end\n        end\n    end\n\n    always @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            q <= next_q;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 6220,
+        "passfail": "R"
+    }
+}

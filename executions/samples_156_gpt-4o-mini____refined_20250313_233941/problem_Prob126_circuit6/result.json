@@ -1,0 +1,21 @@
+{
+    "code": "module TopModule (\n    input logic [2:0] a,\n    output logic [15:0] q\n);\n\n    always @(*) begin\n        case (a)\n            3'b000: q = 16'h04D0; // 1232\n            3'b001: q = 16'hAEE0; // aee0\n            3'b010: q = 16'h27D4; // 27d4\n            3'b011: q = 16'h5A0E; // 5a0e\n            3'b100: q = 16'h2066; // 2066\n            3'b101: q = 16'h64CE; // 64ce\n            3'b110: q = 16'hC526; // c526\n            3'b111: q = 16'h2F19; // 2f19\n            default: q = 16'h0000; // Default case\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 10,
+        "passfail": "R"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input logic [2:0] a,\n    output logic [15:0] q\n);\n\n    always @(*) begin\n        case (a)\n            3'b000: q = 16'h04D0; // 1232\n            3'b001: q = 16'hAEE0; // aee0\n            3'b010: q = 16'h27D4; // 27d4\n            3'b011: q = 16'h5A0E; // 5a0e\n            3'b100: q = 16'h2066; // 2066\n            3'b101: q = 16'h64CE; // 64ce\n            3'b110: q = 16'hC526; // c526\n            3'b111: q = 16'h2F19; // 2f19\n            default: q = 16'h0000; // Default case\n        endcase\n    end\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": [],
+    "testbench_results": {
+        "passed": true,
+        "output": "Simulation finished at 170 ps\nTEST PASSED\n",
+        "testbench": "`timescale 1ns/1ps\n\nmodule TopModule_tb;\n\n    logic [2:0] a;\n    logic [15:0] q;\n\n    // Stats for tracking errors\n      int errors;\n    // Instantiate the Device Under Test (DUT)\n    TopModule dut (\n        .a(a),\n        .q(q)\n    );\n\n    // Test stimulus\n    initial begin\n        // Initialize inputs\n        a = 3'b0;\n\n        // Wait for reset\n        #10;\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n    end\n\n    // Final reporting\n    final begin\n        $display(\"Simulation finished at %0d ps\", $time);\n        if (errors == 0)\n            $display(\"TEST PASSED\");\n        else\n            $display(\"TEST FAILED with %0d errors\", errors);\n    end\n\nendmodule\n"
+    }
+}

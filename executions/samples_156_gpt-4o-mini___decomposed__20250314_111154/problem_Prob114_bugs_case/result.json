@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic [7:0] code,\n    output logic [3:0] out,\n    output logic valid\n);\n\nalways @(*) begin\n    case (code)\n        8'h45: begin out = 4'd0; valid = 1'b1; end // Key '0'\n        8'h16: begin out = 4'd1; valid = 1'b1; end // Key '1'\n        8'h1e: begin out = 4'd2; valid = 1'b1; end // Key '2'\n        8'h26: begin out = 4'd3; valid = 1'b1; end // Key '3'\n        8'h25: begin out = 4'd4; valid = 1'b1; end // Key '4'\n        8'h2e: begin out = 4'd5; valid = 1'b1; end // Key '5'\n        8'h36: begin out = 4'd6; valid = 1'b1; end // Key '6'\n        8'h3d: begin out = 4'd7; valid = 1'b1; end // Key '7'\n        8'h3e: begin out = 4'd8; valid = 1'b1; end // Key '8'\n        8'h46: begin out = 4'd9; valid = 1'b1; end // Key '9'\n        default: begin out = 4'd0; valid = 1'b0; end // Invalid key\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

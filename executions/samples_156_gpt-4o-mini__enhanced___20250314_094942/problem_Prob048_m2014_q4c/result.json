@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,            // Clock input (rising edge triggered)\n    input logic d,              // Data input (1-bit, unsigned)\n    input logic r,              // Active high synchronous reset input (1-bit, unsigned)\n    output logic q              // Output (1-bit, unsigned)\n);\n\nalways @(posedge clk) begin\n    if (r) begin\n        q <= 1'b0; // Synchronous reset\n    end else begin\n        q <= d; // Capture data on clock edge\n    end\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

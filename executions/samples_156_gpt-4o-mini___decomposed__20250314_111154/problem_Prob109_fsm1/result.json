@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic in,\n    output logic out\n);\n    typedef enum logic {0, 1} state_t; // State encoding for A and B\n    state_t state, next_state;\n\n    always @(posedge clk) begin\n        if (areset) \n            state <= 1; // Asynchronous reset to state B\n        else \n            state <= next_state;\n    end\n\n    always @(*) begin\n        case (state)\n            1: begin // State B\n                if (in) \n                    next_state = 1; // Stay in B\n                else \n                    next_state = 0; // Transition to A\n            end\n            0: begin // State A\n                if (in) \n                    next_state = 0; // Stay in A\n                else \n                    next_state = 1; // Transition to B\n            end\n            default: next_state = 1; // Default to B\n        endcase\n    end\n\n    assign out = ~state; // A outputs 0, B outputs 1\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

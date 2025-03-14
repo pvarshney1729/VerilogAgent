@@ -1,0 +1,35 @@
+{
+    "code": "[BEGIN]\nmodule TopModule (\n    input logic clk,\n    input logic load,\n    input logic [9:0] data,\n    output logic tc\n);\n\n    logic [9:0] counter;\n    logic counter_zero;\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            counter <= data;\n        end else if (!counter_zero) begin\n            counter <= counter - 10'b0000000001;\n        end\n    end\n\n    always @(*) begin\n        counter_zero = (counter == 10'b0000000000);\n        tc = counter_zero;\n    end\n\nendmodule\n[DONE]",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input logic clk,\n    input logic load,\n    input logic [9:0] data,\n    output logic tc\n);\n\n    logic [9:0] counter;\n    logic counter_zero;\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            counter <= data;\n        end else if (!counter_zero) begin\n            counter <= counter - 1;\n        end\n    end\n\n    always_comb begin\n        counter_zero = (counter == 10'b0);\n        tc = counter_zero;\n    end\n\nendmodule",
+            "issues": [
+                "Testbench error: Error running simulation: Command '['vvp', 'sim.out']' timed out after 5 seconds"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "[BEGIN]\nmodule TopModule (\n    input logic clk,\n    input logic load,\n    input logic [9:0] data,\n    output logic tc\n);\n\n    logic [9:0] counter;\n    logic counter_zero;\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            counter <= data;\n        end else if (!counter_zero) begin\n            counter <= counter - 10'b1;\n        end\n    end\n\n    always @(*) begin\n        counter_zero = (counter == 10'b0);\n        tc = counter_zero;\n    end\n\nendmodule\n[END]",
+            "issues": [
+                "syntax_error: syntax error"
+            ]
+        },
+        {
+            "iteration": 2,
+            "code": "[BEGIN]\nmodule TopModule (\n    input logic clk,\n    input logic load,\n    input logic [9:0] data,\n    output logic tc\n);\n\n    logic [9:0] counter;\n    logic counter_zero;\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            counter <= data;\n        end else if (!counter_zero) begin\n            counter <= counter - 10'b0000000001;\n        end\n    end\n\n    always @(*) begin\n        counter_zero = (counter == 10'b0000000000);\n        tc = counter_zero;\n    end\n\nendmodule\n[DONE]",
+            "issues": [
+                "Testbench error: Error running simulation: Command '['vvp', 'sim.out']' timed out after 5 seconds"
+            ]
+        }
+    ],
+    "refinement_count": 2,
+    "remaining_issues": [
+        "Testbench error: Error running simulation: Command '['vvp', 'sim.out']' timed out after 5 seconds"
+    ],
+    "testbench_results": {}
+}

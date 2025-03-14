@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out\n);\n\nassign out = (a == 1'b0 && b == 1'b0 && c == 1'b0) ? 1'b0 : // cd = 00, ab = 00\n             (a == 1'b0 && b == 1'b0 && c == 1'b1) ? 1'b1 : // cd = 01, ab = 00\n             (a == 1'b0 && b == 1'b1 && c == 1'b0) ? 1'b0 : // cd = 00, ab = 01\n             (a == 1'b0 && b == 1'b1 && c == 1'b1) ? 1'b1 : // cd = 01, ab = 01\n             (a == 1'b1 && b == 0 && c == 1'b0) ? 1'b1 : // cd = 00, ab = 10\n             (a == 1'b1 && b == 0 && c == 1'b1) ? 1'b1 : // cd = 01, ab = 10\n             (a == 1'b1 && b == 1 && c == 1'b0) ? 1'b1 : // cd = 00, ab = 11\n             (a == 1'b1 && b == 1 && c == 1'b1) ? 1'b1 : // cd = 01, ab = 11\n             1'b0; // Default case, can choose any value for don't-care\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 35,
+        "passfail": "R"
+    }
+}

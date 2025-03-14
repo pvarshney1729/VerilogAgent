@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic [2:0] y,\n    input logic w,\n    input logic clk,\n    input logic rst,\n    output logic Y1\n);\n\n    logic [2:0] state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (state)\n            3'b000: next_state = (w == 1'b0) ? 3'b001 : 3'b000; // A\n            3'b001: next_state = (w == 1'b0) ? 3'b010 : 3'b011; // B\n            3'b010: next_state = (w == 1'b0) ? 3'b100 : 3'b011; // C\n            3'b011: next_state = (w == 1'b0) ? 3'b101 : 3'b000; // D\n            3'b100: next_state = (w == 1'b0) ? 3'b100 : 3'b011; // E\n            3'b101: next_state = (w == 1'b0) ? 3'b010 : 3'b011; // F\n            default: next_state = 3'b000; // Undefined states reset to A\n        endcase\n    end\n\n    // State register with synchronous reset\n    always_ff @(posedge clk) begin\n        if (rst) begin\n            state <= 3'b000; // Reset to state A\n        end else begin\n            state <= next_state;\n        end\n    end\n\n    // Output logic\n    assign Y1 = state[1];\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 68,
+        "passfail": "R"
+    }
+}

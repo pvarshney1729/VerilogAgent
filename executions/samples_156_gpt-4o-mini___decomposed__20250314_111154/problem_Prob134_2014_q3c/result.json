@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    input logic [2:0] y,\n    output logic Y0,\n    output logic z\n);\n\nlogic [2:0] current_state;\nlogic [2:0] next_state;\n\nalways @(posedge clk) begin\n    current_state <= next_state; // State transition\nend\n\nalways @(*) begin\n    case (current_state)\n        3'b000: next_state = (x) ? 3'b001 : 3'b000;\n        3'b001: next_state = (x) ? 3'b100 : 3'b001;\n        3'b010: next_state = (x) ? 3'b001 : 3'b010;\n        3'b011: next_state = (x) ? 3'b010 : 3'b001;\n        3'b100: next_state = (x) ? 3'b100 : 3'b011;\n        default: next_state = 3'b000; // Default case\n    endcase\nend\n\nassign Y0 = next_state[0]; // Output Y0\nassign z = (current_state == 3'b011 && x) || (current_state == 3'b100 && x); // Output z logic\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 88,
+        "passfail": "R"
+    }
+}

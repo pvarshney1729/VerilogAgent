@@ -1,0 +1,7 @@
+{
+    "code": "module top_module (\n    input  logic x,\n    input  logic y,\n    output logic z\n);\n\n    logic a1_out, a2_out, b1_out, b2_out;\n    logic or_out, and_out;\n\n    // Module A: z = (x ^ y) & x\n    module A (\n        input  logic x,\n        input  logic y,\n        output logic z\n    );\n        assign z = (x ^ y) & x;\n    endmodule\n\n    // Module B: Based on the waveform, z = ~(x | y)\n    module B (\n        input  logic x,\n        input  logic y,\n        output logic z\n    );\n        assign z = ~(x | y);\n    endmodule\n\n    // Instantiate modules\n    A module_a1 (.x(x), .y(y), .z(a1_out));\n    A module_a2 (.x(x), .y(y), .z(a2_out));\n    B module_b1 (.x(x), .y(y), .z(b1_out));\n    B module_b2 (.x(x), .y(y), .z(b2_out));\n\n    // Logic connections\n    assign or_out = a1_out | b1_out;\n    assign and_out = a2_out & b2_out;\n    assign z = or_out ^ and_out;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    }
+}
