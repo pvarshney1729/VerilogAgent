@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic rst_n,\n    input logic [4:0] in1,\n    input logic [4:0] in2,\n    input logic [4:0] in3,\n    input logic [4:0] in4,\n    input logic [4:0] in5,\n    input logic [4:0] in6,\n    output logic [7:0] out1,\n    output logic [7:0] out2,\n    output logic [7:0] out3,\n    output logic [7:0] out4\n);\n\n    logic [29:0] concatenated_input;\n    \n    always @(*) begin\n        concatenated_input = {in1, in2, in3, in4, in5, in6, 2'b11};\n    end\n\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            out1 <= 8'b0;\n            out2 <= 8'b0;\n            out3 <= 8'b0;\n            out4 <= 8'b0;\n        end else begin\n            out1 <= concatenated_input[7:0];\n            out2 <= concatenated_input[15:8];\n            out3 <= concatenated_input[23:16];\n            out4 <= concatenated_input[29:24];\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 3
-}

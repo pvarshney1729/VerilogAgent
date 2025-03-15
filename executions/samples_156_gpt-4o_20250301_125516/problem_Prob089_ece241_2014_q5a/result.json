@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic x,\n    output logic z\n);\n\n    typedef enum logic [1:0] {\n        IDLE,\n        PROCESS,\n        COMPLEMENT\n    } state_t;\n\n    state_t current_state, next_state;\n    logic carry;\n    logic x_reg;\n\n    // State transition logic\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            current_state <= IDLE;\n            z <= 1'b0;\n            carry <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            if (current_state == PROCESS) begin\n                {carry, z} <= x_reg + carry;\n            end\n        end\n    end\n\n    // Next state logic\n    always_comb begin\n        next_state = current_state;\n        case (current_state)\n            IDLE: begin\n                if (!areset) next_state = PROCESS;\n            end\n            PROCESS: begin\n                next_state = COMPLEMENT;\n            end\n            COMPLEMENT: begin\n                if (areset) next_state = IDLE;\n            end\n        endcase\n    end\n\n    // Input register\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            x_reg <= 1'b0;\n        end else begin\n            x_reg <= x;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 190,
-        "passfail": "R"
-    }
-}

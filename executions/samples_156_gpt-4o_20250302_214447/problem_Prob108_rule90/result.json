@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic load,\n    input logic [511:0] data,\n    output logic [511:0] q\n);\n    integer i;\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            for (i = 0; i < 512; i = i + 1) begin\n                if (i == 0)\n                    q[i] <= 0 ^ q[i+1];\n                else if (i == 511)\n                    q[i] <= q[i-1] ^ 0;\n                else\n                    q[i] <= q[i-1] ^ q[i+1];\n            end\n        end\n    end\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

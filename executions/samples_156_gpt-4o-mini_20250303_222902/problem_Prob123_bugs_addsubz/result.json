@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic do_sub,                  // 1-bit control signal for addition/subtraction\n    input logic [7:0] a,                 // 8-bit input operand 'a'\n    input logic [7:0] b,                 // 8-bit input operand 'b'\n    output logic [7:0] out,               // 8-bit result of the operation\n    output logic result_is_zero           // 1-bit flag indicating if result is zero\n);\n\n    // Define behavior for combinational logic\n    always @(*) begin\n        // Perform operation based on do_sub control signal\n        if (do_sub == 1'b0) begin\n            out = a + b;               // Perform addition\n        end else begin\n            out = a - b;               // Perform subtraction\n        end\n\n        // Set result_is_zero flag based on the result\n        if (out == 8'b0) begin\n            result_is_zero = 1'b1;     // Set flag if result is zero\n        end else begin\n            result_is_zero = 1'b0;     // Reset flag otherwise\n        end\n    end\n\n    // Define initial states for simulation purposes\n    initial begin\n        out = 8'b0;                    // Initialize output to zero\n        result_is_zero = 1'b0;         // Initialize zero flag to low\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

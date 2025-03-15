@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic reset,\n    output logic shift_ena\n);\n\n    // State variable to count clock cycles\n    logic [1:0] cycle_count;\n\n    // Always block for synchronous reset and cycle counting\n    always @(posedge clk) begin\n        if (reset) begin\n            cycle_count <= 2'b00;   // Reset cycle counter\n            shift_ena <= 1'b1;      // Enable shift for the first cycle\n        end else begin\n            if (cycle_count < 2'b11) begin\n                cycle_count <= cycle_count + 1; // Increment counter\n                shift_ena <= 1'b1;               // Continue enabling shift\n            end else begin\n                shift_ena <= 1'b0;               // Disable shift after 4 cycles\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

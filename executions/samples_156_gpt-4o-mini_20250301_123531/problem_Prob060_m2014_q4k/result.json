@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic resetn,\n    input logic in,\n    output logic out\n);\n    logic [3:0] R;\n\n    always @(posedge clk) begin\n        if (!resetn) begin\n            R <= 4'b0000;\n        end else begin\n            R <= {R[2:0], in};\n        end\n    end\n\n    assign out = R[3];\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

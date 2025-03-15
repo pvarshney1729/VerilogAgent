@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic [5:0] y,      // One-hot encoded current state\n    input logic w,            // Control signal for state transitions\n    input logic clk,          // Clock signal for sequential logic\n    input logic rst_n,        // Active-low asynchronous reset\n    output logic Y1,          // Determines the next state transition for state B\n    output logic Y3           // Determines the next state transition for state D\n);\n\n    // State transition logic\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            y <= 6'b000001;  // Reset to state A\n        end else begin\n            case (y)\n                6'b000001: y <= (w) ? 6'b000010 : 6'b000001; // A\n                6'b000010: y <= (w) ? 6'b000100 : 6'b001000; // B\n                6'b000100: y <= (w) ? 6'b010000 : 6'b001000; // C\n                6'b001000: y <= (w) ? 6'b100000 : 6'b000001; // D\n                6'b010000: y <= (w) ? 6'b010000 : 6'b001000; // E\n                6'b100000: y <= (w) ? 6'b000100 : 6'b001000; // F\n                default:   y <= 6'b000001; // Illegal state, reset to A\n            endcase\n        end\n    end\n\n    // Output logic\n    assign Y1 = y[1]; // Transition to state B\n    assign Y3 = y[3]; // Transition to state D\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "w"
-    },
-    "iterations_used": 3
-}

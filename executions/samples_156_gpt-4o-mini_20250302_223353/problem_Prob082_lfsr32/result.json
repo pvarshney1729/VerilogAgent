@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,               // Clock input, triggering on positive edge\n    input logic reset,             // Active high synchronous reset\n    output logic [31:0] q          // 32-bit output register\n);\n\n// Initial State and Reset Behavior\n// On reset (active high), output q is reset to 32'h1. When reset is de-asserted, the LFSR resumes normal operation.\ninitial begin\n    q = 32'h1;\nend\n\n// LFSR Tap Positions\n// Taps are at bit positions: 32, 22, 2, and 1 (1-indexed as per convention).\n// The feedback mechanism uses XOR operations with these taps and the current LSB (q[0]).\n\nalways @(posedge clk) begin\n    if (reset) begin\n        q <= 32'h1; // Reset state\n    end else begin\n        // Feedback calculation: New MSB is the XOR of specified taps with q[0]\n        logic feedback = q[31] ^ q[21] ^ q[1] ^ q[0];\n        q <= {q[30:0], feedback}; // Shift right and insert feedback as the new MSB\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "T"
-    },
-    "iterations_used": 1
-}

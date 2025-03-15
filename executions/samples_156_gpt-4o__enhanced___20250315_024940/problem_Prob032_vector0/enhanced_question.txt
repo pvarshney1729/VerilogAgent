@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - vec: bit[2:0] (3 bits, unsigned)
+    - Description: A 3-bit vector input where bit[0] is the least significant bit (LSB) and bit[2] is the most significant bit (MSB).
+  
+- Output Ports:
+  - outv: bit[2:0] (3 bits, unsigned)
+    - Description: A 3-bit output that directly reflects the input vector 'vec'. 
+  - o0: bit (1 bit, unsigned)
+    - Description: Outputs the value of vec[0], corresponding to the LSB of the input vector.
+  - o1: bit (1 bit, unsigned)
+    - Description: Outputs the value of vec[1], corresponding to the second bit of the input vector.
+  - o2: bit (1 bit, unsigned)
+    - Description: Outputs the value of vec[2], corresponding to the MSB of the input vector.
+
+Logic Description:
+- The module implements a combinational logic circuit with no sequential elements. 
+- The outputs are determined directly from the input 'vec' as follows:
+  - o0 = vec[0]
+  - o1 = vec[1]
+  - o2 = vec[2]
+  - outv = vec
+
+Reset Behavior:
+- There are no reset signals defined in this module.
+
+Edge Cases:
+- The module should handle all possible values of 'vec' (000 to 111) without any undefined behavior.
+
+Signal Dependencies:
+- The outputs 'o0', 'o1', 'o2', and 'outv' are dependent solely on the 'vec' input with no additional conditions or operations.
+
+Implementation Notes:
+- Ensure that the output assignments are made in a manner that reflects the input vector with correct mapping to individual output signals.
+</ENHANCED_SPEC>

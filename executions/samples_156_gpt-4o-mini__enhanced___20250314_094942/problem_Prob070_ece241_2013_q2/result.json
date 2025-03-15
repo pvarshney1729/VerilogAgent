@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n  input  logic a,          // Most Significant Bit (MSB)\n  input  logic b,          // Second Bit\n  input  logic c,          // Third Bit\n  input  logic d,          // Least Significant Bit (LSB)\n  \n  output logic out_sop,    // Output for minimum Sum-Of-Products\n  output logic out_pos     // Output for minimum Product-Of-Sums\n);\n\nalways @(*) begin\n  // Default output states\n  out_sop = 0;\n  out_pos = 0;\n\n  // Convert inputs to a single 4-bit value\n  logic [3:0] input_value = {a, b, c, d}; // Concatenate a, b, c, d into a 4-bit value\n\n  // Determine out_sop\n  if (input_value == 4'b0010 || input_value == 4'b0111 || input_value == 4'b1111) begin\n    out_sop = 1;\n  end\n\n  // Determine out_pos\n  if (input_value == 4'b0000 || input_value == 4'b0001 || input_value == 4'b0100 || \n      input_value == 4'b0101 || input_value == 4'b0110 || input_value == 4'b1001 || \n      input_value == 4'b1010 || input_value == 4'b1101 || input_value == 4'b1110) begin\n    out_pos = 1;\n  end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

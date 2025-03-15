@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - sel: bit[2:0] (3 bits, unsigned) - Select signal to choose one of the data inputs. 
+  - data0: bit[3:0] (4 bits, unsigned) - First data input.
+  - data1: bit[3:0] (4 bits, unsigned) - Second data input.
+  - data2: bit[3:0] (4 bits, unsigned) - Third data input.
+  - data3: bit[3:0] (4 bits, unsigned) - Fourth data input.
+  - data4: bit[3:0] (4 bits, unsigned) - Fifth data input.
+  - data5: bit[3:0] (4 bits, unsigned) - Sixth data input.
+
+- Output Ports:
+  - out: bit[3:0] (4 bits, unsigned) - Output data corresponding to the selected input.
+
+Functional Description:
+The module implements a 6-to-1 multiplexer. The output 'out' is determined by the value of the 'sel' input as follows:
+- When sel is in the range of 3'b000 (0) to 3'b101 (5), 'out' shall be assigned the corresponding 'dataN' input where N is the value of 'sel'.
+- If sel is outside the range 0 to 5 (i.e., sel = 3'b110 (6) or sel = 3'b111 (7)), 'out' shall be assigned the value 4'b0000 (0).
+
+Signal Definitions:
+- 'sel' is indexed such that bit[0] refers to the least significant bit (LSB) and bit[2] refers to the most significant bit (MSB).
+- All input and output ports are unsigned, ensuring clarity in interpretation of binary values.
+
+Sequential Logic:
+- The module is purely combinational; there are no sequential elements or clock dependencies involved.
+
+Reset Conditions:
+- There are no reset conditions defined for this module, as it operates solely based on combinational logic without state retention.
+
+Edge Cases:
+- The module should handle cases when 'sel' has values outside the defined range, ensuring that the output defaults to 4'b0000.
+
+Behavioral Specification:
+- The module must maintain consistent behavior upon receiving the same 'sel' input repeatedly, providing the corresponding 'dataN' output without delay or alteration.
+
+Dependencies:
+- The output 'out' is directly dependent on the current value of 'sel' and the corresponding 'dataN' inputs. There are no race conditions anticipated given the combinational nature of the design.
+</ENHANCED_SPEC>

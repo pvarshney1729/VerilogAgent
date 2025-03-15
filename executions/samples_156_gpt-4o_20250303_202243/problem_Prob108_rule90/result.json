@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire clk,                // Clock signal\n    input wire load,               // Load signal, active high\n    input wire [511:0] data,       // Data input for initial state, 512 bits, unsigned\n    output reg [511:0] q           // Output state, 512 bits, unsigned\n);\n\n    always @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            integer i;\n            for (i = 0; i < 512; i = i + 1) begin\n                if (i == 0) begin\n                    q[i] <= 0 ^ q[i+1];  // q[-1] is considered as 0\n                end else if (i == 511) begin\n                    q[i] <= q[i-1] ^ 0;  // q[512] is considered as 0\n                end else begin\n                    q[i] <= q[i-1] ^ q[i+1];\n                end\n            end\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

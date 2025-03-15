@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,       // Clock signal\n    input logic reset,     // Synchronous active-high reset\n    output logic [2:0] ena, // Enable signals for upper three BCD digits\n    output logic [15:0] q   // 4-digit BCD counter\n);\n\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 16'b0000_0000_0000_0000;\n            ena <= 3'b000;\n        end else begin\n            if (q[3:0] == 4'b1001) begin\n                q[3:0] <= 4'b0000;\n                ena[0] <= 1'b1;\n                if (q[7:4] == 4'b1001) begin\n                    q[7:4] <= 4'b0000;\n                    ena[1] <= 1'b1;\n                    if (q[11:8] == 4'b1001) begin\n                        q[11:8] <= 4'b0000;\n                        ena[2] <= 1'b1;\n                        if (q[15:12] == 4'b1001) begin\n                            q[15:12] <= 4'b0000;\n                        end else begin\n                            q[15:12] <= q[15:12] + 1'b1;\n                        end\n                    end else begin\n                        q[11:8] <= q[11:8] + 1'b1;\n                    end\n                end else begin\n                    q[7:4] <= q[7:4] + 1'b1;\n                end\n            end else begin\n                q[3:0] <= q[3:0] + 1'b1;\n                ena[0] <= 1'b0;\n            end\n            ena[1] <= 1'b0;\n            ena[2] <= 1'b0;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 7942,
-        "passfail": "R"
-    }
-}

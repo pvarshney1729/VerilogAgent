@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input, active on the rising edge (positive edge-triggered)
+  - reset: 1-bit input, active high, synchronous reset
+  
+- Output Port:
+  - q: 5-bit output, where q[0] represents the least significant bit (LSB) and q[4] represents the most significant bit (MSB)
+
+Functional Specification:
+The module implements a 5-bit maximal-length Galois Linear Feedback Shift Register (LFSR). The LFSR shall be configured to shift right, where:
+- The output bit q[0] is the least significant bit (LSB).
+- Taps for the LFSR are located at bit positions 5 (q[4]) and 3 (q[2]).
+
+Behavior:
+1. On the positive edge of clk:
+   - If reset is high, the output q shall be reset to the value 5'b00001 (binary representation of decimal 1).
+   - If reset is low, the LFSR shall perform a right shift operation:
+     - The next state of the LFSR is determined by XORing the bit values at the tap positions (q[4] and q[2]) with the current LSB (q[0]) to generate the new input value for q[4].
+     - The contents of the register shift right by one position, such that:
+       - q[4] (new) = q[4] XOR q[2]
+       - q[3] (new) = q[4] (current)
+       - q[2] (new) = q[3] (current)
+       - q[1] (new) = q[2] (current)
+       - q[0] (new) = q[1] (current)
+
+Initial Conditions:
+- Upon power-up, the reset must bring the LFSR to a known state of 5'b00001.
+
+Edge Cases:
+- The LFSR should not reach the all-zero state during normal operation as it is designed for maximum-length operation. All other states must cycle through the 2**5 - 1 = 31 possible non-zero states before repeating.
+
+Signal Dependencies:
+- Ensure that the reset condition is prioritized over normal operation during the clock cycle to prevent unintended state transitions.
+
+Race Conditions:
+- There should be no race conditions in the design, as all state changes are synchronized to the rising edge of clk and are contingent upon the reset signal.
+
+</ENHANCED_SPEC>

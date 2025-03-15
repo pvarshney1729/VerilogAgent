@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input clk,\n    input L,\n    input q_in,\n    input r_in,\n    output Q\n);\n    logic Q_int;\n\n    always @(posedge clk) begin\n        if (L) begin\n            Q_int <= r_in;\n        end else begin\n            Q_int <= q_in ^ r_in;\n        end\n    end\n\n    assign Q = Q_int;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 53,
-        "passfail": "R"
-    }
-}

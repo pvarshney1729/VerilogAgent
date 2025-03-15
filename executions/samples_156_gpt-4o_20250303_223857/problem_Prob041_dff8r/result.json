@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,          // Clock input, active on the rising edge\n    input logic reset,        // Synchronous reset input, active high\n    input logic [7:0] d,      // 8-bit data input, unsigned, LSB is d[0]\n    output logic [7:0] q      // 8-bit data output, unsigned, LSB is q[0]\n);\n\n// Description:\n// This module implements 8 D flip-flops with an active high synchronous reset. \n// On the rising edge of the clock, if the reset is high, all outputs are set to zero;\n// otherwise, the output q follows the input d.\n\nalways_ff @(posedge clk) begin\n    if (reset) begin\n        q <= 8'b00000000;  // Reset state: all bits set to zero\n    end else begin\n        q <= d;            // Normal operation: output follows input\n    end\nend\n\n// Implementation Notes:\n// - The 'reset' signal is synchronous, meaning the reset condition is only checked \n//   and acted upon at the rising edge of 'clk'.\n// - Inputs and outputs are considered unsigned, with d[0] and q[0] representing \n//   the least significant bit (LSB).\n// - The module does not include any additional logic beyond the D flip-flops for data storage.\n// - There are no dependencies or interactions between individual bits of 'd' and 'q'; each bit\n//   in 'q' directly corresponds to the same bit position in 'd' under normal operation.\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description: This module implements a 2-to-1 multiplexer that selects between two 100-bit input signals based on a control signal.
+
+Interface:
+- Inputs:
+  - input [99:0] a: 100-bit wide input signal 'a', where bit[0] refers to the least significant bit (LSB) and bit[99] refers to the most significant bit (MSB).
+  - input [99:0] b: 100-bit wide input signal 'b', where bit[0] refers to the least significant bit (LSB) and bit[99] refers to the most significant bit (MSB).
+  - input sel: 1-bit control signal for selection. When sel = 0, output 'out' will reflect input 'a'. When sel = 1, output 'out' will reflect input 'b'.
+
+- Outputs:
+  - output [99:0] out: 100-bit wide output signal. The output will be determined by the value of the sel signal as described above.
+
+Functionality:
+- The module operates as a combinational logic circuit. The output 'out' is updated immediately based on the values of inputs 'a', 'b', and 'sel'.
+- The output selection is defined as follows:
+  - If sel = 0, then out = a
+  - If sel = 1, then out = b
+
+Behavioral Constraints:
+- The module should handle all valid values of inputs 'a' and 'b', ensuring that both inputs are valid 100-bit values.
+- The module does not require initialization values for the output since it is combinational logic; however, it must ensure that the output is stable and valid based on the current values of 'a', 'b', and 'sel'.
+
+Edge Cases:
+- The module should be tested for the boundary conditions where 'sel' transitions between 0 and 1, ensuring no glitches occur in the output during the selection process.
+</ENHANCED_SPEC>

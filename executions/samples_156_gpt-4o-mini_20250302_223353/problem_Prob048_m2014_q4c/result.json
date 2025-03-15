@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,  // Clock signal (1-bit), positive edge-sensitive\n    input logic d,    // Data input (1-bit)\n    input logic r,    // Reset input (1-bit), active high\n    output logic q    // Data output (1-bit)\n);\n\ninitial begin\n    q = 1'b0;  // Initialize output to 0\nend\n\nalways @(posedge clk) begin\n    if (r) begin\n        q <= 1'b0;  // Reset output to 0\n    end else begin\n        q <= d;     // Capture data input\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic cpu_overheated,     // 1-bit input indicating if the CPU is overheated\n    input logic arrived,            // 1-bit input indicating if the destination has been arrived\n    input logic gas_tank_empty,     // 1-bit input indicating if the gas tank is empty\n    output logic shut_off_computer,  // 1-bit output to shut off the computer\n    output logic keep_driving        // 1-bit output to keep driving\n);\n\nalways @(*) begin\n    // Default output values to prevent latch inference\n    shut_off_computer = 1'b0;\n    keep_driving = 1'b0;\n    \n    // Shut off the computer if the CPU is overheated\n    if (cpu_overheated) begin\n        shut_off_computer = 1'b1;\n    end\n\n    // Determine whether to keep driving based on arrival and gas status\n    if (!arrived) begin\n        keep_driving = ~gas_tank_empty;  // Keep driving if not arrived and gas tank is not empty\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

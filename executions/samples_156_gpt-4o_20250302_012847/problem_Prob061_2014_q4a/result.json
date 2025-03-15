@@ -1,8 +1,0 @@
-{
-    "code": "module ShiftLoad(\n    input logic clk,\n    input logic L,\n    input logic E,\n    input logic [3:0] data_in,\n    output logic [3:0] w\n);\n\n    always_ff @(posedge clk) begin\n        if (L) begin\n            w <= data_in;\n        end else if (E) begin\n            w <= {w[2:0], 1'b0}; // Shift left by 1 bit\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

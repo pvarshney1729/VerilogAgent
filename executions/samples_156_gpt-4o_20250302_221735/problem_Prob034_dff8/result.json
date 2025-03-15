@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic rst_n, // Asynchronous active-low reset\n    input logic [7:0] d,\n    output logic [7:0] q\n);\n\nalways_ff @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        q <= 8'b0; // Reset state\n    else\n        q <= d; // Capture input\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 1,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input  logic clk,  // Clock signal, positive edge-triggered\n    input  logic w,    // Input from the previous stage of the shift register\n    input  logic R,    // Value to load into the shift register\n    input  logic E,    // Enable signal for shifting\n    input  logic L,    // Load signal to load value R into Q\n    output logic Q     // Output to the next stage of the shift register\n);\n\n    always @(posedge clk) begin\n        if (L) begin\n            Q <= R;  // Load value R into Q\n        end else if (E) begin\n            Q <= w;  // Shift input w into Q\n        end\n        // If neither L nor E is asserted, Q retains its previous value\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

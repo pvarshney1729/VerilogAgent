@@ -1,0 +1,60 @@
+Generated Response:
+
+Following your requirements and guidelines, here is the Verilog code for the `TopModule` that reverses the bit ordering of an 8-bit input.
+
+```verilog
+[BEGIN]
+module TopModule (
+    input  logic [7:0] in,
+    output logic [7:0] out
+);
+
+    // Combinational logic to reverse the bits of the input
+    always @(*) begin
+        out[0] = in[7];
+        out[1] = in[6];
+        out[2] = in[5];
+        out[3] = in[4];
+        out[4] = in[3];
+        out[5] = in[2];
+        out[6] = in[1];
+        out[7] = in[0];
+    end
+
+endmodule
+[DONE]
+```
+
+### Reasoning:
+1. **Module Declaration**: The module is named `TopModule` with the specified input and output ports declared as `logic` types which adheres to your coding conventions.
+   
+2. **Input/Output Specification**: The input `in` is defined as an 8-bit vector, and the output `out` is also defined as an 8-bit vector.
+
+3. **Combinational Logic**: The `always @(*)` block is used to specify that the output `out` should be continuously driven based on the input `in`. This allows for the bit reversal to happen immediately when `in` changes.
+
+4. **Bit Reversal Implementation**: Each bit of the output is assigned the corresponding reversed bit from the input. For instance, `out[0]` takes the value of `in[7]`, `out[1]` takes the value of `in[6]`, and so on.
+
+5. **No Reset Logic**: Since the requirement did not specify a synchronous reset, it is not included in the design. The output will continuously reflect the state of the input.
+
+This implementation meets all specified guidelines and conventions while correctly performing the task of reversing the bit order of the input signal.
+
+Generated Code:
+
+module TopModule (
+    input  logic [7:0] in,
+    output logic [7:0] out
+);
+
+    // Combinational logic to reverse the bits of the input
+    always @(*) begin
+        out[0] = in[7];
+        out[1] = in[6];
+        out[2] = in[5];
+        out[3] = in[4];
+        out[4] = in[3];
+        out[5] = in[2];
+        out[6] = in[1];
+        out[7] = in[0];
+    end
+
+endmodule

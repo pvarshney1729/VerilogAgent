@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - areset: 1-bit input (asynchronous reset signal)
+  - in: 1-bit input (data signal)
+
+- Output Ports:
+  - out: 1-bit output (state machine output)
+
+State Machine Description:
+The module implements a Moore state machine with the following characteristics:
+- Number of States: 4
+- State Encoding:
+  - State A: 00
+  - State B: 01
+  - State C: 10
+  - State D: 11
+
+State Transition Table:
+- The state machine transitions are defined as follows, based on the value of the input signal 'in':
+  
+| Current State | Next State (in=0) | Next State (in=1) | Output |
+|---------------|--------------------|--------------------|--------|
+| A             | A                  | B                  | 0      |
+| B             | C                  | B                  | 0      |
+| C             | A                  | D                  | 0      |
+| D             | C                  | B                  | 1      |
+
+Reset Conditions:
+- The asynchronous reset signal 'areset' will reset the state machine to State A (00) when asserted (active high).
+- On the next positive edge of the clock, if 'areset' is high, the state will be set to State A regardless of the current state.
+
+Sequential Logic Behavior:
+- All state transitions and output logic shall occur on the positive edge of the clock signal (clk).
+- The output 'out' is determined solely by the current state of the state machine and is updated on the clock edge.
+
+Initial Conditions:
+- Upon reset, all state registers should initialize to State A (00).
+- The output 'out' should be set to 0 during the reset condition.
+
+Edge Cases:
+- Ensure proper handling of the 'areset' signal during clock cycles.
+- Define behavior when 'in' remains constant (0 or 1) for multiple clock cycles.
+
+Potential Race Conditions:
+- Ensure that the transition logic and output logic do not create any race conditions during state transitions, especially during the reset condition.
+
+Signal Dependencies:
+- The next state logic is dependent on the current state and the input signal 'in'.
+</ENHANCED_SPEC>

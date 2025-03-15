@@ -1,0 +1,76 @@
+Generated Response:
+
+Here is the Verilog code for the `TopModule` as specified in the question. The module uses a 4-to-1 multiplexer and the appropriate logic based on the provided Karnaugh map.
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic c,          // 1-bit input
+    input logic d,          // 1-bit input
+    output logic [3:0] mux_in // 4-bit output
+);
+
+    logic a; // Selector input a
+    logic b; // Selector input b
+    
+    // Assign values to a and b based on the inputs c and d
+    assign a = c; // Assume a is connected to c
+    assign b = d; // Assume b is connected to d
+
+    // Implementing the K-map logic for mux_in using a 4-to-1 multiplexer structure
+    always @(*) begin
+        case ({a, b}) // Selector for the 4-to-1 MUX
+            2'b00: mux_in = 4'b0001; // ab = 00 -> mux_in[0] = 1
+            2'b01: mux_in = 4'b0001; // ab = 01 -> mux_in[1] = 0
+            2'b10: mux_in = 4'b1001; // ab = 10 -> mux_in[3] = 1
+            2'b11: mux_in = 4'b1101; // ab = 11 -> mux_in[2] = 1
+            default: mux_in = 4'b0000; // Default case
+        endcase
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation of the Code:
+1. **Module Declaration**: The `TopModule` is declared with input ports `c` and `d`, and a 4-bit output `mux_in`.
+
+2. **Selector Inputs**: The logic signals `a` and `b` are assigned from inputs `c` and `d`, respectively. This setup presumes `a` corresponds to `c` and `b` corresponds to `d`.
+
+3. **Karnaugh Map Logic**: The `always @(*)` block defines the combinational logic based on the values of `a` and `b` using a case statement. Each case corresponds to the combination of `a` and `b`, and the output `mux_in` is assigned values based on the K-map:
+   - For `ab = 00`, `mux_in[0]` is set to `1` (others `0`).
+   - For `ab = 01`, `mux_in[1]` remains `0`.
+   - For `ab = 10`, `mux_in[3]` is set to `1` (all others `0`).
+   - For `ab = 11`, `mux_in[2]` is set to `1` (and others remain unchanged).
+
+4. **Default Case**: The default case ensures that `mux_in` is set to `0000` if none of the defined cases match.
+
+This implementation strictly follows the guidelines and coding conventions provided, without using any additional logic gates.
+
+Generated Code:
+
+module TopModule (
+    input logic c,          // 1-bit input
+    input logic d,          // 1-bit input
+    output logic [3:0] mux_in // 4-bit output
+);
+
+    logic a; // Selector input a
+    logic b; // Selector input b
+    
+    // Assign values to a and b based on the inputs c and d
+    assign a = c; // Assume a is connected to c
+    assign b = d; // Assume b is connected to d
+
+    // Implementing the K-map logic for mux_in using a 4-to-1 multiplexer structure
+    always @(*) begin
+        case ({a, b}) // Selector for the 4-to-1 MUX
+            2'b00: mux_in = 4'b0001; // ab = 00 -> mux_in[0] = 1
+            2'b01: mux_in = 4'b0001; // ab = 01 -> mux_in[1] = 0
+            2'b10: mux_in = 4'b1001; // ab = 10 -> mux_in[3] = 1
+            2'b11: mux_in = 4'b1101; // ab = 11 -> mux_in[2] = 1
+            default: mux_in = 4'b0000; // Default case
+        endcase
+    end
+
+endmodule

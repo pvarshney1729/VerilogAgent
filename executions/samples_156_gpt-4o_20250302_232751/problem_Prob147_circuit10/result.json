@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic rst_n,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n\n// Sequential logic for flip-flop\nalways_ff @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        state <= 1'b0; // Reset flip-flop state\n    end else begin\n        // Define state update logic based on inputs and/or current state\n        state <= a ^ b ^ state; // Example logic derived from waveform\n    end\nend\n\n// Combinational logic for output q\nalways_comb begin\n    q = a ^ b ^ state; // Example combinational logic\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 229,
-        "passfail": "R"
-    },
-    "iterations_used": 2
-}

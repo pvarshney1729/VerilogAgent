@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a: 1-bit input (unsigned)
+  - input wire b: 1-bit input (unsigned)
+  - input wire c: 1-bit input (unsigned)
+  - input wire d: 1-bit input (unsigned)
+  
+- Output Ports:
+  - output wire out: 1-bit output (unsigned)
+  - output wire out_n: 1-bit output (unsigned)
+
+Circuit Description:
+The module implements a combinational logic circuit comprising two layers of gates.
+
+Layer 1:
+- Two 2-input AND gates are utilized:
+  - AND Gate 1: Takes inputs from 'a' and 'b'. The output of this gate will be referred to as `and_output1`.
+  - AND Gate 2: Takes inputs from 'c' and 'd'. The output of this gate will be referred to as `and_output2`.
+
+Layer 2:
+- A single 2-input OR gate takes inputs from `and_output1` and `and_output2`. The output of this OR gate is assigned to the output port 'out'.
+
+Inversion:
+- The output port 'out_n' is the logical negation of the output port 'out', defined as follows:
+  - out_n = NOT(out)
+
+Signal Dependencies:
+- Ensure that the outputs are driven by the results of the AND gates, with no additional wires needed for the output of the NOT operation.
+- All signals must have exactly one driver, adhering to the combinational logic design principles.
+
+Edge Cases:
+- All input signals (a, b, c, d) are assumed to be either 0 or 1, and the behavior of 'out' and 'out_n' should be clearly defined for all combinations of these inputs.
+
+Reset Conditions:
+- There are no reset conditions specified for this module, as it is purely combinational logic without state elements.
+
+This specification should ensure that the implementation of the TopModule is clear, unambiguous, and correct.
+</ENHANCED_SPEC>

@@ -1,0 +1,95 @@
+Generated Response:
+
+Based on the provided specifications and guidelines, here is the implementation of the `TopModule` in Verilog:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input  logic mode,
+    input  logic too_cold,
+    input  logic too_hot,
+    input  logic fan_on,
+    output logic heater,
+    output logic aircon,
+    output logic fan
+);
+
+    always @(*) begin
+        // Default output values
+        heater = 1'b0;
+        aircon = 1'b0;
+        fan = 1'b0;
+
+        // Control logic for heater and air conditioner based on mode
+        if (mode) begin // Heating mode
+            if (too_cold) begin
+                heater = 1'b1; // Turn on heater
+            end
+            // Air conditioner is off in heating mode
+        end else begin // Cooling mode
+            if (too_hot) begin
+                aircon = 1'b1; // Turn on air conditioner
+            end
+            // Heater is off in cooling mode
+        end
+
+        // Fan control: on if fan_on is 1 or if heater or aircon is on
+        fan = fan_on || heater || aircon;
+    end
+
+endmodule
+[DONE]
+```
+
+### Reasoning Behind the Implementation:
+1. **Module Declaration**: The module is declared with the specified input and output ports, all as `logic` type.
+
+2. **Combinational Logic**: The `always @(*)` block is used to describe combinational logic, ensuring that the outputs are recalculated whenever any input changes.
+
+3. **Default States**: The output values for `heater`, `aircon`, and `fan` are initialized to `0` at the beginning of the block.
+
+4. **Heating and Cooling Logic**:
+   - If `mode` is `1` (heating mode), and `too_cold` is `1`, the heater is turned on.
+   - If `mode` is `0` (cooling mode), and `too_hot` is `1`, the air conditioner is turned on.
+   - The corresponding component that is not in use (heater in cooling mode and air conditioner in heating mode) remains off.
+
+5. **Fan Control**: The fan is controlled based on the user input `fan_on` or if either the heater or air conditioner is active.
+
+This implementation adheres strictly to the guidelines and conventions provided, ensuring correct behavior as specified in the requirements.
+
+Generated Code:
+
+module TopModule (
+    input  logic mode,
+    input  logic too_cold,
+    input  logic too_hot,
+    input  logic fan_on,
+    output logic heater,
+    output logic aircon,
+    output logic fan
+);
+
+    always @(*) begin
+        // Default output values
+        heater = 1'b0;
+        aircon = 1'b0;
+        fan = 1'b0;
+
+        // Control logic for heater and air conditioner based on mode
+        if (mode) begin // Heating mode
+            if (too_cold) begin
+                heater = 1'b1; // Turn on heater
+            end
+            // Air conditioner is off in heating mode
+        end else begin // Cooling mode
+            if (too_hot) begin
+                aircon = 1'b1; // Turn on air conditioner
+            end
+            // Heater is off in cooling mode
+        end
+
+        // Fan control: on if fan_on is 1 or if heater or aircon is on
+        fan = fan_on || heater || aircon;
+    end
+
+endmodule

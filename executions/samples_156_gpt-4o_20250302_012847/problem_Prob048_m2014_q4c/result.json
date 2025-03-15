@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input wire clk,   // Clock input\n    input wire d,     // Data input\n    input wire r,     // Synchronous reset input\n    output reg q      // Output\n);\n\n    // On the rising edge of the clock\n    always @(posedge clk) begin\n        if (r) begin\n            q <= 1'b0; // Reset output to 0\n        end else begin\n            q <= d;    // Follow the input d\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

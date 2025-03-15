@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,            // Clock signal, triggers on positive edge\n    input logic shift_ena,      // Enable for shift operation\n    input logic count_ena,      // Enable for count operation\n    input logic data,           // Input data for shifting (1 bit)\n    output logic [3:0] q        // 4-bit output, representing the shift register/counter\n);\n\n    always_ff @(posedge clk) begin\n        if (shift_ena && !count_ena) begin\n            // Shift operation\n            q <= {q[2:0], data};\n        end else if (!shift_ena && count_ena) begin\n            // Count operation\n            q <= q - 1;\n        end\n        // If both shift_ena and count_ena are high, behavior is undefined\n        // and no operation is performed.\n    end\n\n    // Initialize q to 4'b0000 at the start\n    initial begin\n        q = 4'b0000;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

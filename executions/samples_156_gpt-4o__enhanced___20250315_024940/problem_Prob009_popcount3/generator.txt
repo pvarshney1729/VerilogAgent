@@ -1,0 +1,64 @@
+Generated Response:
+
+Here is the Verilog code for the `TopModule` that implements a population count circuit based on the provided specifications and guidelines.
+
+```verilog
+[BEGIN]
+module TopModule (
+    input  logic [2:0] in,  // 3-bit input
+    output logic [1:0] out  // 2-bit output
+);
+
+    // Combinational logic to calculate the population count
+    always @(*) begin
+        case (in)
+            3'b000: out = 2'b00;  // 0 ones
+            3'b001: out = 2'b01;  // 1 one
+            3'b010: out = 2'b01;  // 1 one
+            3'b011: out = 2'b10;  // 2 ones
+            3'b100: out = 2'b01;  // 1 one
+            3'b101: out = 2'b10;  // 2 ones
+            3'b110: out = 2'b10;  // 2 ones
+            3'b111: out = 2'b11;  // 3 ones
+            default: out = 2'b00;  // Should not occur, but keeping it safe
+        endcase
+    end
+
+endmodule
+[DONE]
+```
+
+### Reasoning:
+1. **Module Declaration**: The module is named `TopModule` and has the specified input and output ports.
+2. **Input and Output Types**: Both input and output ports are declared as `logic` according to the coding conventions.
+3. **Population Count Logic**: 
+   - The `always @(*)` block is used to create combinational logic that responds to changes in the input `in`.
+   - A `case` statement is used to evaluate the 3-bit input and determine the number of '1's present, assigning the correct 2-bit output `out`.
+4. **Output Mapping**: Each possible combination of the input bits is explicitly handled to ensure the correct count is outputted.
+5. **Default Case**: A default case is included for safety, even though all input combinations are covered.
+
+This implementation adheres to the guidelines and conventions provided, ensuring correctness and clarity in the design.
+
+Generated Code:
+
+module TopModule (
+    input  logic [2:0] in,  // 3-bit input
+    output logic [1:0] out  // 2-bit output
+);
+
+    // Combinational logic to calculate the population count
+    always @(*) begin
+        case (in)
+            3'b000: out = 2'b00;  // 0 ones
+            3'b001: out = 2'b01;  // 1 one
+            3'b010: out = 2'b01;  // 1 one
+            3'b011: out = 2'b10;  // 2 ones
+            3'b100: out = 2'b01;  // 1 one
+            3'b101: out = 2'b10;  // 2 ones
+            3'b110: out = 2'b10;  // 2 ones
+            3'b111: out = 2'b11;  // 3 ones
+            default: out = 2'b00;  // Should not occur, but keeping it safe
+        endcase
+    end
+
+endmodule

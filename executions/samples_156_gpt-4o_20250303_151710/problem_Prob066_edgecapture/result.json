@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic [31:0] in,\n    output logic [31:0] out\n);\n\n    logic [31:0] in_prev;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            out <= 32'b0;\n            in_prev <= 32'b0;\n        end else begin\n            out <= out | (in_prev & ~in);\n            in_prev <= in;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 91,
-        "passfail": "R"
-    }
-}

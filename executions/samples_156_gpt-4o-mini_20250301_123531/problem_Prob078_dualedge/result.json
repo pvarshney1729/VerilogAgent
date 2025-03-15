@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic d,\n    output logic q\n);\n    logic q_rise;\n    logic q_fall;\n\n    always @(posedge clk) begin\n        q_rise <= d;\n    end\n\n    always @(negedge clk) begin\n        q_fall <= d;\n    end\n\n    always @(*) begin\n        q = q_rise | q_fall;\n    end\nendmodule",
-    "test_results": {
-        "num_mismatch": 47,
-        "passfail": "R"
-    }
-}

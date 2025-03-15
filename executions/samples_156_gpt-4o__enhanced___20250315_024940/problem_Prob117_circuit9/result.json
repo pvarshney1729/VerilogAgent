@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic a,\n    output logic [2:0] q\n);\n\n    // Initialize q to 3'b000\n    initial begin\n        q = 3'b000;\n    end\n\n    // Sequential logic to update q on the rising edge of clk\n    always @(posedge clk) begin\n        case (q)\n            3'b000: if (a) q <= 3'b100; // Transition to 4 if a is 1\n            3'b100: if (a) q <= 3'b100; // Remain at 4 if a is 1\n            3'b101: if (a) q <= 3'b110; // Transition to 6 if a is 1\n            3'b110: if (a) q <= 3'b000; // Transition to 0 if a is 1\n            3'b111: if (a) q <= 3'b000; // Transition to 0 if a is 1\n            default: begin\n                if (a) \n                    q <= q + 1; // Increment q on a=1\n                else \n                    q <= q; // Hold value on a=0\n            end\n        endcase\n    end\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

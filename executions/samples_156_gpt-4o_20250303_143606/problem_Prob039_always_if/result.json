@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input wire a,\n    input wire b,\n    input wire sel_b1,\n    input wire sel_b2,\n    output wire out_assign,\n    output reg out_always\n);\n\n    // Continuous assignment for out_assign\n    assign out_assign = (sel_b1 & sel_b2) ? b : a;\n\n    // Procedural assignment for out_always\n    always @(*) begin\n        if (sel_b1 & sel_b2)\n            out_always = b;\n        else\n            out_always = a;\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

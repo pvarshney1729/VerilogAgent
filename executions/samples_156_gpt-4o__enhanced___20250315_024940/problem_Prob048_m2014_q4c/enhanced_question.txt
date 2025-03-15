@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, active on rising edge)
+  - d: 1-bit input (data input)
+  - r: 1-bit input (active high synchronous reset signal)
+  
+- Output Ports:
+  - q: 1-bit output (data output, reflects the current state of the D flip-flop)
+
+Specifications:
+1. The module implements a D flip-flop characterized by the following behavior:
+   - On the rising edge of the clock (clk), if the reset signal (r) is low (0), the output (q) is updated to the value of the data input (d).
+   - If the reset signal (r) is high (1), the output (q) is reset to 0, regardless of the value of d.
+  
+2. Reset Behavior:
+   - The reset (r) is an active high synchronous reset. The output (q) will be set to 0 when reset (r) is high during the clock's rising edge.
+   - If reset (r) is low (0) during the clock's rising edge, the output (q) will follow the value of (d).
+
+3. Initial Conditions:
+   - The output (q) should be initialized to a known state of 0 upon power-up or when the module is first instantiated.
+
+4. Timing and Edge Cases:
+   - The module must ensure that the output (q) changes only on the rising edge of the clock signal (clk).
+   - The data input (d) must be stable at least setup time before the rising edge of clk to ensure reliable operation.
+   - The reset signal (r) must also be stable before the clock edge to avoid unexpected behavior.
+
+5. Signal Dependencies:
+   - The output (q) is directly dependent on the values of d and r at the time of the clock's rising edge.
+   - There are no race conditions expected due to the synchronous nature of the reset and the clocking mechanism.
+
+6. Bit Indexing:
+   - All input and output ports are defined as 1-bit wide, where bit[0] refers to the least significant bit (LSB).
+</ENHANCED_SPEC>

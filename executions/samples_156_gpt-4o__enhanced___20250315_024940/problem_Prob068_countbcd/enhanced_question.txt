@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: input, width = 1 bit, active on the rising edge (positive edge triggered)
+  - reset: input, width = 1 bit, active-high, asynchronous reset
+
+- Output Ports:
+  - ena: output, width = 3 bits
+    - ena[2]: enables the tens digit (q[7:4])
+    - ena[1]: enables the hundreds digit (q[11:8])
+    - ena[0]: enables the thousands digit (q[15:12])
+  - q: output, width = 16 bits
+    - q[3:0]: represents the ones digit (0-9)
+    - q[7:4]: represents the tens digit (0-9)
+    - q[11:8]: represents the hundreds digit (0-9)
+    - q[15:12]: represents the thousands digit (0-9)
+
+Functionality:
+- The module implements a 4-digit BCD (binary-coded decimal) counter.
+- Each BCD digit is represented by 4 bits, with the least significant bit (LSB) at the rightmost position (e.g., q[0] is LSB).
+- The counter increments on the rising edge of the clk signal.
+- The enable signals (ena[2:0]) should be asserted (high) only when the corresponding digit is incremented.
+
+Reset Behavior:
+- The reset signal is asynchronous and active-high.
+- When reset is asserted (high), all registers (q) should be set to 0 (q = 16'b0000_0000_0000_0000).
+
+Sequential Logic:
+- All flip-flops and registers are triggered on the positive edge of clk.
+- Upon the assertion of reset, all sequential elements must initialize to 0 regardless of the current state.
+
+Edge Cases:
+- The counter should properly handle overflow conditions:
+  - When any digit reaches 10 (1010 in binary), it should reset to 0 and increment the next significant digit.
+  - The counter must not exceed a value greater than 9999 (i.e., q should wrap around to 0 after reaching 9999).
+
+Dependencies and Timing:
+- Ensure that operations do not create race conditions by following a clear sequence of operations during the clock cycles.
+
+Input Boundaries:
+- The input clk and reset signals must adhere to the valid timing requirements for setup and hold times as per the synthesized hardware's specifications.
+
+Documentation:
+- Provide a truth table for the BCD counting operation, indicating the state transitions for each digit on increment and reset conditions.
+</ENHANCED_SPEC>

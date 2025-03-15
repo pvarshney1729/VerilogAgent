@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,   // Clock input, positive edge triggered\n    input logic a,     // 1-bit input\n    input logic b,     // 1-bit input\n    output logic q,    // 1-bit output\n    output logic state // 1-bit output representing the state of the flip-flop\n);\n\n    // Initial state\n    initial begin\n        q = 1'b0;\n        state = 1'b0;\n    end\n\n    // Sequential logic\n    always_ff @(posedge clk) begin\n        if (a == 1'b0 && b == 1'b1) begin\n            q <= 1'b1;\n        end else begin\n            q <= state ^ b;\n        end\n        state <= q;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 229,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

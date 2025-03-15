@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic do_sub,           // Control signal: 0 for addition, 1 for subtraction\n    input logic [7:0] a,          // 8-bit input operand `a`\n    input logic [7:0] b,          // 8-bit input operand `b`\n    output logic [7:0] out,       // 8-bit output result\n    output logic result_is_zero   // Zero flag: 1 if `out` is zero, else 0\n);\n\n    // Combinational logic: Operates based on the inputs without any clock dependency\n    always @(*) begin\n        // Perform addition or subtraction based on `do_sub`\n        case (do_sub)\n            1'b0: out = a + b;   // Addition\n            1'b1: out = a - b;   // Subtraction\n            default: out = 8'b0; // Default case, though not strictly necessary for a 1-bit control\n        endcase\n\n        // Zero flag logic: Assert flag if the output is zero\n        result_is_zero = (out == 8'b0);\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 2
-}

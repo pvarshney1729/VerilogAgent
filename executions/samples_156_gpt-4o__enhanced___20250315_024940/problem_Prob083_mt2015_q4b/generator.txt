@@ -1,0 +1,60 @@
+Generated Response:
+
+Based on the provided specifications and guidelines, here is the implementation of the `TopModule`. The design captures the behavior defined in the simulation waveform while adhering to the coding conventions and requirements.
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic x,
+    input logic y,
+    output logic z
+);
+
+    always @(*) begin
+        case ({x, y})
+            2'b00: z = 1'b1; // When x=0, y=0, output z=1
+            2'b01: z = 1'b0; // When x=0, y=1, output z=0
+            2'b10: z = 1'b0; // When x=1, y=0, output z=0
+            2'b11: z = 1'b1; // When x=1, y=1, output z=1
+            default: z = 1'b0; // Default case (shouldn't occur)
+        endcase
+    end
+
+endmodule
+[DONE]
+```
+
+### Reasoning:
+1. **Module Declaration**: The module `TopModule` is declared with two input ports (`x` and `y`) and one output port (`z`), all defined as `logic` type.
+
+2. **Combinational Logic**: The output `z` is computed based on the values of `x` and `y` using a combinational `always @(*)` block. This block will evaluate whenever there is a change in `x` or `y`.
+
+3. **Case Statement**: A case statement is used to define the output `z` based on the combination of input signals (`x` and `y`):
+   - For the combination `2'b00` (both inputs low), `z` is set to `1`.
+   - For the combination `2'b01` (low and high), `z` is set to `0`.
+   - For the combination `2'b10` (high and low), `z` is also set to `0`.
+   - For the combination `2'b11` (both high), `z` is set to `1`.
+
+4. **Default Case**: A default case is included to ensure that `z` is assigned a value even if an unexpected input occurs, which in this case, doesn't happen since `x` and `y` are both single-bit inputs.
+
+This implementation accurately reflects the desired behavior as specified by the simulation waveform.
+
+Generated Code:
+
+module TopModule (
+    input logic x,
+    input logic y,
+    output logic z
+);
+
+    always @(*) begin
+        case ({x, y})
+            2'b00: z = 1'b1; // When x=0, y=0, output z=1
+            2'b01: z = 1'b0; // When x=0, y=1, output z=0
+            2'b10: z = 1'b0; // When x=1, y=0, output z=0
+            2'b11: z = 1'b1; // When x=1, y=1, output z=1
+            default: z = 1'b0; // Default case (shouldn't occur)
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input [7:0] in: An 8-bit input signal, where bit[0] refers to the least significant bit (LSB) and bit[7] refers to the most significant bit (MSB).
+
+- Output Ports:
+  - output [7:0] out: An 8-bit output signal, where the ordering of bits is reversed from the input signal.
+
+Functionality:
+The module shall reverse the bit ordering of the 8-bit input port `in` such that:
+- If `in` = {in[7], in[6], in[5], in[4], in[3], in[2], in[1], in[0]}`, then `out` shall equal {in[0], in[1], in[2], in[3], in[4], in[5], in[6], in[7]}.
+
+Behavioral Description:
+- The operation of reversing the bit ordering is combinational logic and should be performed instantaneously upon the change of the input signal.
+- The output signal `out` should reflect the reversed bit ordering of `in` without any propagation delay assumption.
+
+Edge Cases:
+- The module shall handle all possible values of `in`, including all-zero and all-one inputs, and should verify that the output `out` is correctly reflecting the expected reversed order in these cases.
+
+Reset Behavior:
+- No reset functionality is specified in the original requirements. If a reset is required, please specify if it should be synchronous or asynchronous and the reset state for the output.
+
+Signal Dependencies:
+- The output `out` is directly dependent on the input `in`. There are no additional signal dependencies or precedence of operations.
+
+Performance Considerations:
+- Ensure that the implementation is optimized for combinational logic to prevent unnecessary delays in output.
+</ENHANCED_SPEC>

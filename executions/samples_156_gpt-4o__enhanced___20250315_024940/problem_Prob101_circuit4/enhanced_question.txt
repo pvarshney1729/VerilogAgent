@@ -1,0 +1,52 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a;     // 1-bit input, unsigned, bit[0] refers to the least significant bit (LSB)
+  - input wire b;     // 1-bit input, unsigned, bit[0] refers to the least significant bit (LSB)
+  - input wire c;     // 1-bit input, unsigned, bit[0] refers to the least significant bit (LSB)
+  - input wire d;     // 1-bit input, unsigned, bit[0] refers to the least significant bit (LSB)
+
+- Output Ports:
+  - output wire q;    // 1-bit output, unsigned, bit[0] refers to the least significant bit (LSB)
+
+Functional Description:
+- The module implements a combinational logic circuit that produces the output 'q' based on the inputs 'a', 'b', 'c', and 'd'.
+- The behavior of the circuit is determined by the following truth table derived from the provided simulation waveforms:
+
+| Time (ns) | a | b | c | d | q |
+|-----------|---|---|---|---|---|
+| 0         | 0 | 0 | 0 | 0 | 0 |
+| 5         | 0 | 0 | 0 | 0 | 0 |
+| 10        | 0 | 0 | 0 | 0 | 0 |
+| 15        | 0 | 0 | 0 | 0 | 0 |
+| 20        | 0 | 0 | 0 | 1 | 0 |
+| 25        | 0 | 0 | 1 | 0 | 1 |
+| 30        | 0 | 0 | 1 | 1 | 1 |
+| 35        | 0 | 1 | 0 | 0 | 1 |
+| 40        | 0 | 1 | 0 | 1 | 1 |
+| 45        | 0 | 1 | 1 | 0 | 1 |
+| 50        | 0 | 1 | 1 | 1 | 1 |
+| 55        | 1 | 0 | 0 | 0 | 0 |
+| 60        | 1 | 0 | 0 | 1 | 0 |
+| 65        | 1 | 0 | 1 | 0 | 1 |
+| 70        | 1 | 0 | 1 | 1 | 1 |
+| 75        | 1 | 1 | 0 | 0 | 1 |
+| 80        | 1 | 1 | 0 | 1 | 1 |
+| 85        | 1 | 1 | 1 | 0 | 1 |
+| 90        | 1 | 1 | 1 | 1 | 1 |
+
+- The output 'q' is a direct result of the combination of inputs 'a', 'b', 'c', and 'd' and is updated continuously based on the changes of these inputs.
+
+Implementation Notes:
+- Ensure that the behavior is clearly defined for all possible input combinations as shown in the truth table.
+- The combinational logic should not contain any sequential elements or state-dependent behavior.
+- There are no resets in this module as it is purely combinational.
+
+Edge Cases:
+- The module should be tested for all possible input combinations of 'a', 'b', 'c', and 'd', including extreme cases such as all inputs being low (0) and all inputs being high (1).
+
+Reset Conditions:
+- Not applicable as this is a combinational circuit without any state elements.
+</ENHANCED_SPEC>

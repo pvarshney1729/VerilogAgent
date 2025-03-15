@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description: This module is designed to reverse the byte order of a 32-bit input vector. The output will also be a 32-bit vector reflecting the reversed byte order of the input.
+
+Interface:
+- Input Port:
+  - Name: in
+  - Width: 32 bits
+  - Signedness: Unsigned
+  - Bit Indexing: bit[0] refers to the least significant bit (LSB) and bit[31] refers to the most significant bit (MSB).
+
+- Output Port:
+  - Name: out
+  - Width: 32 bits
+  - Signedness: Unsigned
+  - Bit Indexing: bit[0] refers to the least significant bit (LSB) and bit[31] refers to the most significant bit (MSB).
+
+Functionality:
+- The module shall reverse the byte order of the 32-bit input vector such that:
+  - out[7:0] = in[31:24]
+  - out[15:8] = in[23:16]
+  - out[23:16] = in[15:8]
+  - out[31:24] = in[7:0]
+
+Signal Dependencies:
+- The output signal 'out' is combinational and directly depends on the input signal 'in'.
+- There are no clock cycles or sequential logic elements in this module.
+
+Reset Conditions:
+- There are no synchronous or asynchronous reset conditions defined for this module.
+
+Edge Cases:
+- The behavior of the module is deterministic for all valid 32-bit input values.
+- The specification does not need to handle undefined or non-standard input values as all inputs are assumed to be valid 32-bit unsigned values.
+
+Implementation Notes:
+- Ensure that the implementation adheres strictly to the defined bit indexing and byte order reversal.
+</ENHANCED_SPEC>

@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,  // Clock signal\n    input logic j,    // J input for JK flip-flop\n    input logic k,    // K input for JK flip-flop\n    output logic Q    // Flip-flop output\n);\n\n    initial begin\n        Q = 1'b0;  // Initial state\n    end\n\n    always @(*) begin\n        case ({j, k})\n            2'b00: Q = Q;      // Maintain state\n            2'b01: Q = 1'b0;   // Reset the output\n            2'b10: Q = 1'b1;   // Set the output\n            2'b11: Q = ~Q;     // Toggle the output\n        endcase\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 220,
-        "passfail": "R"
-    }
-}

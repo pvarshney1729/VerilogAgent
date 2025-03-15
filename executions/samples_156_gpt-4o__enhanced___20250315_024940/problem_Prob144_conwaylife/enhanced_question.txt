@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - load: 1-bit input (active high synchronous load signal)
+  - data: 256 bits input (representing the initial state of the grid; bit[255] is the MSB and bit[0] is the LSB)
+  
+- Output Ports:
+  - q: 256 bits output (current state of the grid; bit[255] is the MSB and bit[0] is the LSB)
+
+Grid Representation:
+- The module simulates a two-dimensional 16x16 grid of cells, where each cell can be in one of two states: 1 (alive) or 0 (dead).
+- The grid is represented as a single vector `q` of 256 bits, structured as follows:
+  - q[15:0]: Row 0
+  - q[31:16]: Row 1
+  - ...
+  - q[255:240]: Row 15
+
+Game Rules:
+- Each cell's state changes based on the number of alive neighbors according to the following rules:
+  1. If a cell has 0 or 1 alive neighbors, it becomes 0 (dead).
+  2. If a cell has exactly 2 alive neighbors, it retains its current state.
+  3. If a cell has exactly 3 alive neighbors, it becomes 1 (alive).
+  4. If a cell has 4 or more alive neighbors, it becomes 0 (dead).
+  
+Neighbor Calculation:
+- The grid is treated as a toroidal structure, meaning edges wrap around. For example, the cell at (0,0) has neighbors at:
+  - (15,1), (15,0), (15,15), 
+  - (0,1), (0,15), 
+  - (1,1), (1,0), (1,15).
+
+Clock Cycle and Load Behavior:
+- The game state advances one timestep on the positive edge of the clock. 
+- When the `load` signal is high at the next clock edge, the initial state from `data` is loaded into `q`. This operation is synchronous.
+- The reset state of all registers is undefined; however, the grid will reflect the loaded state upon activation of the `load` signal.
+
+Sequential Logic:
+- All sequential logic is triggered on the positive edge of the `clk`, ensuring consistent state updates for the grid based on the defined rules.
+
+Edge Cases:
+- The behavior of cells with no alive neighbors and cells on the edges of the grid must be handled according to the defined toroidal neighbor relationships. 
+
+Initial Values:
+- All flip-flops, registers, and sequential elements should be initialized to a known state upon the first activation of the `load` signal.
+
+Signal Dependencies:
+- Ensure that the updates to the grid state in `q` depend solely on the current state of `q` and the external inputs during each clock cycle, avoiding any race conditions.
+
+Behavior at Input Boundaries:
+- The module is designed to handle valid `data` input at the full 256-bit width; behavior with invalid inputs is not specified and should be avoided.
+</ENHANCED_SPEC>

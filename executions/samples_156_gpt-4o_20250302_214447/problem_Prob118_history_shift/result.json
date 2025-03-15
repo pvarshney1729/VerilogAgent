@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,                 // Clock signal, positive edge-triggered\n    input logic areset,              // Asynchronous reset, active high\n    input logic predict_valid,       // Indicates a branch prediction is made\n    input logic predict_taken,       // Result of branch prediction, 1 bit\n    input logic train_mispredicted,  // Indicates a branch misprediction occurred\n    input logic train_taken,         // Actual outcome of the branch, 1 bit\n    input logic [31:0] train_history,// Historical branch data, unsigned 32 bits\n    output logic [31:0] predict_history // Branch history register, unsigned 32 bits\n);\n\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            predict_history <= 32'b0;\n        end else begin\n            if (train_mispredicted) begin\n                predict_history <= {train_history[30:0], train_taken};\n            end else if (predict_valid) begin\n                predict_history <= {predict_history[30:0], predict_taken};\n            end\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

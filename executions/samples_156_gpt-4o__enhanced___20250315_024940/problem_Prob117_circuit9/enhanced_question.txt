@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1 bit (clock signal, active on rising edge)
+  - a: 1 bit (data input)
+  
+- Output Ports:
+  - q: 3 bits (output data, bit[2] is the most significant bit (MSB), bit[0] is the least significant bit (LSB))
+
+Description:
+The TopModule implements a sequential circuit. The behavior of this circuit is defined in terms of the input signals and is determined by the clock cycles. The output q is updated based on the input signal a and the clock signal clk.
+
+Clocking:
+- The circuit is synchronous and operates on the rising edge of the clk signal.
+
+Reset Behavior:
+- The module does not specify a reset signal. Therefore, the initial state of the output q is undefined until the first clock cycle. It is recommended to define an initial state for q, for example, q = 3'b000 at time 0ns.
+
+State Transition and Output Behavior:
+- The output q is updated based on the following waveform behavior:
+  - At time 0ns, when clk = 0 and a = 1, output q is undefined (x).
+  - At time 5ns, when clk transitions to 1 (rising edge), if a = 1, output q changes to 3'b100 (value 4).
+  - If clk remains high (1) and a = 1, the output q remains at 3'b100.
+  - At time 45ns, when a transitions to 0, output q remains at 3'b100 until the next rising edge.
+  - At times when a transitions between 0 and 1 during the clock cycles, the corresponding updates to q will follow the observed behavior in the provided waveform table.
+  
+Edge Cases:
+- If a transitions to 0 at any point, the output q may increment based on the previous value of q, depending on the specific timing of a with respect to clk.
+- The output should not exceed the maximum value representable by 3 bits (3'b111 or decimal 7).
+
+Initial Values:
+- It is recommended to explicitly state that q will be initialized to 3'b000 at the start of the simulation.
+
+Signal Dependencies:
+- The output q is dependent on both the current state of a and the previous state of q during the clock cycles. 
+
+Race Conditions:
+- Ensure that there are no race conditions by clearly defining the precedence of operations between a and the clk edge.
+
+Output States:
+- The output q must be defined for all possible combinations of clk and a, especially during transitions to ensure predictable behavior.
+
+The implementation must faithfully represent the timing and values illustrated in the simulation waveform provided.
+</ENHANCED_SPEC>

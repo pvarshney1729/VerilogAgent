@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule(\n    input  logic [4:0] a, // 5-bit unsigned input\n    input  logic [4:0] b, // 5-bit unsigned input\n    input  logic [4:0] c, // 5-bit unsigned input\n    input  logic [4:0] d, // 5-bit unsigned input\n    input  logic [4:0] e, // 5-bit unsigned input\n    input  logic [4:0] f, // 5-bit unsigned input\n    output logic [7:0] w, // 8-bit unsigned output\n    output logic [7:0] x, // 8-bit unsigned output\n    output logic [7:0] y, // 8-bit unsigned output\n    output logic [7:0] z  // 8-bit unsigned output\n);\n\n    always @(*) begin\n        // Concatenate inputs and append two '1' bits\n        logic [31:0] concatenated_vector;\n        concatenated_vector = {a, b, c, d, e, f, 2'b11};\n\n        // Split the concatenated vector into outputs\n        w = concatenated_vector[31:24];\n        x = concatenated_vector[23:16];\n        y = concatenated_vector[15:8];\n        z = concatenated_vector[7:0];\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 1,
-        "passfail": "R"
-    }
-}

@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - input wire ring: 1-bit signal indicating an incoming call. (bit[0] refers to the least significant bit)
+  - input wire vibrate_mode: 1-bit signal indicating whether the phone is in vibrate mode. (bit[0] refers to the least significant bit)
+
+- Output Ports:
+  - output reg ringer: 1-bit signal controlling the ringer. (bit[0] refers to the least significant bit)
+  - output reg motor: 1-bit signal controlling the vibration motor. (bit[0] refers to the least significant bit)
+
+Functional Description:
+The module implements a control circuit for a cellphone's ringer and vibration motor based on the input signals provided. 
+
+Behavioral Logic:
+1. When the input signal 'ring' is asserted (ring = 1), the module shall determine the state of the 'vibrate_mode' input to control the outputs:
+   - If 'vibrate_mode' is asserted (vibrate_mode = 1), then:
+     - Set output 'motor' to 1 (motor = 1).
+     - Set output 'ringer' to 0 (ringer = 0).
+   - If 'vibrate_mode' is not asserted (vibrate_mode = 0), then:
+     - Set output 'ringer' to 1 (ringer = 1).
+     - Set output 'motor' to 0 (motor = 0).
+2. If the input 'ring' is not asserted (ring = 0), both outputs shall be deactivated:
+   - Set output 'ringer' to 0 (ringer = 0).
+   - Set output 'motor' to 0 (motor = 0).
+
+Sequential Logic:
+- The outputs 'ringer' and 'motor' are both registered outputs and should reflect changes at the positive edge of a clock signal (not defined in this specification but assumed for sequential logic).
+
+Reset Conditions:
+- This specification does not define a reset signal. If a reset is required, please specify whether it is synchronous or asynchronous, and the reset state for both outputs.
+
+Edge Cases:
+- The module must handle the case where both inputs are asserted in the same clock cycle (ring = 1 and vibrate_mode = 1). The output behavior in this case is defined in the behavioral logic above.
+
+Signal Dependencies:
+- Ensure that the outputs 'ringer' and 'motor' are mutually exclusive and cannot be high at the same time.
+
+Initial Values:
+- Both outputs 'ringer' and 'motor' should be initialized to 0 upon module instantiation.
+
+Potential Race Conditions:
+- Ensure that the logic for determining the states of 'ringer' and 'motor' is executed in a manner that avoids race conditions, particularly during input transitions.
+</ENHANCED_SPEC>

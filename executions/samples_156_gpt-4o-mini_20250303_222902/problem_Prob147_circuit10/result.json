@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,      // 1-bit clock signal\n    input logic a,        // 1-bit input signal\n    input logic b,        // 1-bit input signal\n    output logic q,       // 1-bit output signal\n    output logic state    // 1-bit state of the flip-flop\n);\n\n    initial begin\n        q = 1'b0;         // Initialize output q to 0\n        state = 1'b0;     // Initialize state to 0\n    end\n\n    always @(posedge clk) begin\n        state <= q;       // Update state with current output q\n        if (a == 1'b0) begin\n            q <= 1'b0;    // If a is 0, set q to 0\n        end else if (a == 1'b1 && b == 1'b1) begin\n            q <= ~q;      // If both a and b are 1, toggle q\n        end\n        // If a is 1 and b is 0, maintain previous state of q\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 24,
-        "passfail": "R"
-    }
-}

@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire clk;            // Clock signal (1 bit)
+  - input wire reset;          // Synchronous active high reset signal (1 bit)
+  - input wire in;             // Input signal (1 bit)
+  
+- Output Ports:
+  - output reg out;            // Output signal (1 bit)
+
+State Machine Description:
+- The module implements a Moore state machine with the following characteristics:
+  - The state machine has four states: A, B, C, and D.
+  - The states are represented by a 2-bit encoded value (00 for A, 01 for B, 10 for C, 11 for D).
+
+State Transition Table:
+- The transitions and outputs are defined as follows:
+
+  | Current State | Input in=0 | Input in=1 | Output |
+  |---------------|-------------|-------------|--------|
+  | A (00)        | A (00)     | B (01)      | 0      |
+  | B (01)        | C (10)     | B (01)      | 0      |
+  | C (10)        | A (00)     | D (11)      | 0      |
+  | D (11)        | C (10)     | B (01)      | 1      |
+
+State Definitions:
+- State A (00): Initial state; outputs 0.
+- State B (01): Intermediate state; outputs 0.
+- State C (10): Intermediate state; outputs 0.
+- State D (11): Final state; outputs 1.
+
+Reset Behavior:
+- The reset signal is synchronous and active high. When the reset signal is high, the state machine transitions to state A (00) on the next positive edge of the clk signal.
+
+Sequential Logic:
+- All state transitions occur on the positive edge of the clk signal. The state of the machine and output are updated synchronously in response to the clock.
+
+Initial Conditions:
+- Upon power-up or reset, the state machine will be in state A (00) and the output out will be set to 0.
+
+Edge Cases:
+- The behavior of the state machine is defined for all valid input combinations (in=0 or in=1) and in all states. There are no undefined states or outputs.
+- Ensure no race conditions exist by defining all state transitions and output logic clearly in the always block triggered by the clk signal.
+
+Signal Dependencies:
+- The next state is determined solely based on the current state and the input 'in', with all transitions being synchronous to the clk. The output 'out' is determined from the current state only, conforming to the Moore model.
+
+Precedence of Operations:
+- State transitions should be evaluated before the output is assigned within the same clock cycle to prevent any unintended behavior.
+
+</ENHANCED_SPEC>

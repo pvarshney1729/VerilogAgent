@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input signal representing the clock (active on the rising edge).
+  - L: 1-bit input signal used to load data (active high).
+  - q_in: 1-bit input signal representing the data to be loaded into the flip-flop.
+  - r_in: 1-bit input signal representing the data to be loaded when L is asserted.
+
+- Output Ports:
+  - Q: 1-bit output signal representing the current state of the flip-flop.
+
+Signal Descriptions:
+- The input signals 'clk', 'L', 'q_in', and 'r_in' are all 1-bit wide and are considered unsigned.
+- The output signal 'Q' is a 1-bit wide and is also considered unsigned.
+
+Clocking and Reset Behavior:
+- This module operates synchronously with respect to the 'clk' input signal.
+- There is no asynchronous reset specified; therefore, the behavior of 'Q' during the first clock cycle after power-up should be defined.
+- Initial state of 'Q' shall be defined as '0' (logic low) at power-up before the first rising edge of 'clk'.
+
+Functional Description:
+- On the rising edge of 'clk':
+  - If 'L' is high, the output 'Q' shall be assigned the value of 'r_in'.
+  - If 'L' is low, 'Q' shall retain its current state or update based on the defined logic for the flip-flop (to be implemented in the hierarchy).
+
+Edge Cases:
+- The behavior of the module during the transition of 'L' from low to high or high to low should be clearly defined to avoid race conditions. Specifically, if 'L' transitions during a clock cycle, the module should prioritize the loading of 'r_in' in that cycle if 'L' is high.
+
+Implementation Notes:
+- The flip-flop and 2:1 multiplexer functionalities should be encapsulated in this module.
+- The hierarchical structure will allow for instantiation of the 'TopModule' three times in the full_module, where each instance will manage one bit of the output.
+
+Bit Indexing:
+- The least significant bit (LSB) is indexed as bit[0], and the most significant bit (MSB) is indexed as bit[3] (if applicable).
+</ENHANCED_SPEC>

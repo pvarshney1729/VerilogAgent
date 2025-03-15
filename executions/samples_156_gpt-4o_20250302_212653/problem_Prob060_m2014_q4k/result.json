@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic resetn,\n    input logic in,\n    output logic out\n);\n\n    logic [3:0] shift_reg;\n\n    always_ff @(posedge clk) begin\n        if (!resetn) begin\n            shift_reg <= 4'b0000;\n        end else begin\n            shift_reg <= {shift_reg[2:0], in};\n        end\n    end\n\n    assign out = shift_reg[3];\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 3
-}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic a,\n    input  logic b,\n    output logic q,\n    output logic state\n);\n\n    // Internal signal to hold the state of the flip-flop\n    logic flip_flop_state;\n\n    // Combinational logic to determine the next state of the flip-flop\n    always @(*) begin\n        // Next state logic based on inputs a and b\n        if (a && !b) begin\n            flip_flop_state = 0; // Set state to 0 when a is 1 and b is 0\n        end else if (a && b) begin\n            flip_flop_state = 1; // Set state to 1 when both a and b are 1\n        end else begin\n            flip_flop_state = flip_flop_state; // Retain previous state\n        end\n    end\n\n    // Sequential logic to update the flip-flop on the positive edge of clk\n    always @(posedge clk) begin\n        q <= flip_flop_state; // Update q output\n        state <= flip_flop_state; // Update state output\n    end\n\n    // Initialize the flip-flop state to 0\n    initial begin\n        flip_flop_state = 0;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 18,
+        "passfail": "R"
+    }
+}

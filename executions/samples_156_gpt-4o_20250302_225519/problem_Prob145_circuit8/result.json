@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule(\n    input logic clock,  // Clock signal\n    input logic a,      // 1-bit input signal\n    output logic p,     // 1-bit output signal\n    output logic q      // 1-bit output signal\n);\n\n    logic prev_p; // To store the previous state of p\n\n    // Initial block to set initial states\n    initial begin\n        p = 1'b0;\n        q = 1'b0;\n        prev_p = 1'b0;\n    end\n\n    // Sequential logic for p and q\n    always_ff @(posedge clock) begin\n        prev_p <= p; // Store the previous state of p\n        p <= a;      // Update p based on input a\n\n        // Update q based on the transition of p\n        if (prev_p == 1'b0 && p == 1'b1) begin\n            q <= 1'b1;\n        end else begin\n            q <= q; // Retain the previous value of q\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 165,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

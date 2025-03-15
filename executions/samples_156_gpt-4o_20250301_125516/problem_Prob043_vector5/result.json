@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule(\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    input logic e,\n    output logic [24:0] out\n);\n\n    always_comb begin\n        out[24] = ~(a ^ a); // Always 1\n        out[23] = ~(a ^ b);\n        out[22] = ~(a ^ c);\n        out[21] = ~(a ^ d);\n        out[20] = ~(a ^ e);\n        out[19] = ~(b ^ b); // Always 1\n        out[18] = ~(b ^ c);\n        out[17] = ~(b ^ d);\n        out[16] = ~(b ^ e);\n        out[15] = ~(c ^ c); // Always 1\n        out[14] = ~(c ^ d);\n        out[13] = ~(c ^ e);\n        out[12] = ~(d ^ d); // Always 1\n        out[11] = ~(d ^ e);\n        out[10] = ~(e ^ e); // Always 1\n        // Remaining bits can be set to 0 or optimized out\n        out[9:0] = 10'b0;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 99,
-        "passfail": "R"
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input  logic clk,  // Clock signal, active on the rising edge\n    input  logic j,    // Input signal J\n    input  logic k,    // Input signal K\n    input  logic rst,  // Synchronous reset signal\n    output logic Q     // Output signal Q, one bit\n);\n\n    always @(posedge clk) begin\n        if (rst) begin\n            Q <= 1'b0;  // Reset Q to 0\n        end else begin\n            case ({j, k})\n                2'b00: Q <= Q;        // No change\n                2'b01: Q <= 1'b0;     // Reset\n                2'b10: Q <= 1'b1;     // Set\n                2'b11: Q <= ~Q;       // Toggle\n            endcase\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 3
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic [5:0] y,  // 6-bit input, one-hot encoded state\n    input logic w,        // 1-bit input\n    input logic clk,      // Clock signal\n    input logic reset,    // Synchronous reset\n    output logic Y1,      // 1-bit output\n    output logic Y3       // 1-bit output\n);\n\n    // State encoding\n    localparam logic [5:0] A = 6'b000001;\n    localparam logic [5:0] B = 6'b000010;\n    localparam logic [5:0] C = 6'b000100;\n    localparam logic [5:0] D = 6'b001000;\n    localparam logic [5:0] E = 6'b010000;\n    localparam logic [5:0] F = 6'b100000;\n\n    logic [5:0] state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (state)\n            A: next_state = (w == 1'b0) ? B : A;\n            B: next_state = (w == 1'b0) ? C : D;\n            C: next_state = (w == 1'b0) ? E : D;\n            D: next_state = (w == 1'b0) ? F : A;\n            E: next_state = (w == 1'b0) ? E : D;\n            F: next_state = (w == 1'b0) ? C : D;\n            default: next_state = A; // Default to A for safety\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        Y1 = (state == E || state == F) ? 1'b1 : 1'b0;\n        // Define Y3 based on specific requirements or state transitions\n        Y3 = 1'b0; // Placeholder, define as needed\n    end\n\n    // State register with synchronous reset\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            state <= A;\n        end else begin\n            state <= next_state;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 2
-}

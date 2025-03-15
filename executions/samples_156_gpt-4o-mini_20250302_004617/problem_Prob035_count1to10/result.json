@@ -1,8 +1,0 @@
-{
-    "code": "module counter (\n    input logic clk,\n    input logic reset,\n    output logic [3:0] count\n);\n    always @(*) begin\n        if (reset) begin\n            count = 4'b0001; // Set counter to 1 on reset\n        end else if (count == 4'b1010) begin\n            count = 4'b0001; // Wrap back to 1 after reaching 10\n        end else begin\n            count = count + 4'b0001; // Increment counter\n        end\n    end\n\n    initial begin\n        count = 4'b0000; // Initialize counter to 0 in simulation\n    end\n\n    always @(posedge clk) begin\n        // Synchronous reset is handled in the combinational block\n    end\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

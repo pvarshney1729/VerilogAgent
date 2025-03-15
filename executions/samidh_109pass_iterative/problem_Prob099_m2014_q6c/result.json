@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic [5:0] y,    // 6-bit one-hot encoded current state\n    input logic w,          // 1-bit input signal, unsigned\n    output logic Y1,        // 1-bit output signal, unsigned\n    output logic Y3,        // 1-bit output signal, unsigned\n    output logic Y2,        // 1-bit next-state signal corresponding to state B (y[1])\n    output logic Y4         // 1-bit next-state signal corresponding to state D (y[3])\n);\n\n    // Combinational logic for next-state signals\n    always @(*) begin\n        Y2 = (y[0] & ~w) | (y[5] & ~w);\n        Y4 = (y[1] & w) | (y[2] & w) | (y[4] & w) | (y[5] & w);\n    end\n\n    // Initialize outputs to 0\n    initial begin\n        Y1 = 1'b0;\n        Y3 = 1'b0;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 1
-}

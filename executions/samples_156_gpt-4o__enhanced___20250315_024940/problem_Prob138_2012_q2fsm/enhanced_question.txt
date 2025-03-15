@@ -1,0 +1,71 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - reset: 1-bit input (synchronous active-high reset)
+  - w: 1-bit input (signal for state transitions)
+  
+- Output Ports:
+  - z: 1-bit output (output signal based on the current state)
+
+State Machine Description:
+The module implements a finite state machine (FSM) with the following states and transitions:
+
+States (encoded as 3-bit binary values):
+- A: 3'b000
+- B: 3'b001
+- C: 3'b010
+- D: 3'b011
+- E: 3'b100
+- F: 3'b101
+
+State Transitions:
+1. From state A (3'b000):
+   - If w = 1, transition to state B (3'b001)
+   - If w = 0, remain in state A (3'b000)
+
+2. From state B (3'b001):
+   - If w = 1, transition to state C (3'b010)
+   - If w = 0, transition to state D (3'b011)
+
+3. From state C (3'b010):
+   - If w = 1, transition to state E (3'b100)
+   - If w = 0, transition to state D (3'b011)
+
+4. From state D (3'b011):
+   - If w = 1, transition to state F (3'b101)
+   - If w = 0, transition to state A (3'b000)
+
+5. From state E (3'b100):
+   - If w = 1, remain in state E (3'b100)
+   - If w = 0, transition to state D (3'b011)
+
+6. From state F (3'b101):
+   - If w = 1, transition to state C (3'b010)
+   - If w = 0, transition to state D (3'b011)
+
+Reset Condition:
+- The reset signal (reset) is synchronous and active-high. When reset is asserted, the FSM will transition to state A (3'b000).
+
+Sequential Logic:
+- The FSM state transitions will occur on the positive edge of the clock (clk).
+- Each state will be stored in a flip-flop that maintains the current state of the FSM.
+
+Output Signal Definition:
+- The output signal z (1-bit) will be determined based on the current state of the FSM as follows:
+  - z = 1 if the FSM is in state E (3'b100)
+  - z = 0 for all other states (A, B, C, D, F)
+
+Implementation Instructions:
+- Use separate always blocks for:
+  - State transition logic based on the input signal w and the current state.
+  - State flip-flop to update the current state on the clock's positive edge.
+- Use either continuous assignment statements or an always block to describe the output signal z based on the current state.
+
+Edge Cases and Boundaries:
+- Ensure to handle the transitions correctly based on the input signal w during all possible states.
+- The FSM should have well-defined behavior at the boundaries of state transitions.
+
+</ENHANCED_SPEC>

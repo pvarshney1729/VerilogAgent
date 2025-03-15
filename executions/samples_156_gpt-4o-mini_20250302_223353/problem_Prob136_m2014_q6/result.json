@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,        // Clock signal, positive edge-triggered\n    input logic reset,      // Reset signal, active high\n    input logic w,          // Input signal for state transitions\n    output logic z          // Output signal, logic level depends on state\n);\n\n    // State encoding\n    typedef enum logic [2:0] {\n        A = 3'b000,\n        B = 3'b001,\n        C = 3'b010,\n        D = 3'b011,\n        E = 3'b100,\n        F = 3'b101\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // Synchronous reset and state transition\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= A;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            A: next_state = (w == 1'b0) ? B : A;\n            B: next_state = (w == 1'b0) ? C : D;\n            C: next_state = (w == 1'b0) ? E : D;\n            D: next_state = (w == 1'b0) ? F : A;\n            E: next_state = (w == 1'b0) ? E : D;\n            F: next_state = (w == 1'b0) ? C : D;\n            default: next_state = A; // Handle invalid state\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        case (current_state)\n            A, B, C, D: z = 1'b0;\n            E, F: z = 1'b1;\n            default: z = 1'b0; // Default case\n        endcase\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "e"
-    },
-    "iterations_used": 3
-}

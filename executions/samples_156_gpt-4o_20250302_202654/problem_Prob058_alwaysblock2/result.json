@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic out_assign,\n    output logic out_always_comb,\n    output logic out_always_ff\n);\n\n    // Continuous assignment for out_assign\n    assign out_assign = a ^ b;\n\n    // Combinational always block for out_always_comb\n    always @(*) begin\n        out_always_comb = a ^ b;\n    end\n\n    // Sequential always block for out_always_ff\n    initial begin\n        out_always_ff = 1'b0; // Initial state\n    end\n\n    always @(posedge clk) begin\n        out_always_ff <= a ^ b;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 2
-}

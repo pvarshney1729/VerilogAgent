@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\n// Module: TopModule\n// Description: A 2-1 multiplexer with 100-bit wide data inputs and outputs.\n//              Selects between 'a' and 'b' based on the 'sel' signal.\n\nmodule TopModule (\n    input  logic [99:0] a,   // 100-bit wide input vector 'a', unsigned\n    input  logic [99:0] b,   // 100-bit wide input vector 'b', unsigned\n    input  logic sel,        // 1-bit select signal\n    output logic [99:0] out  // 100-bit wide output vector, unsigned\n);\n\n// Bit-ordering: \n// - 'a[0]' and 'b[0]' refer to the least significant bit (LSB)\n// - 'a[99]' and 'b[99]' refer to the most significant bit (MSB)\n\n// Behavior:\n// - The module implements a purely combinational 2-1 multiplexer.\n// - When 'sel' is 0, 'out' should be equal to 'a'.\n// - When 'sel' is 1, 'out' should be equal to 'b'.\n// - No other values for 'sel' are considered valid for this design.\n\n// Implementation:\nassign out = (sel == 1'b0) ? a : b;\n\n// Timing:\n// - This design is purely combinational, involving no clock or reset signals.\n// - There is no internal state; 'out' changes immediately when 'a', 'b', or 'sel' changes.\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

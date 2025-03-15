@@ -1,8 +1,0 @@
-{
-    "code": "module lfsr_32bit (\n    input logic clk,\n    input logic reset,\n    output logic [31:0] lfsr_out\n);\n\n    logic [31:0] lfsr_reg;\n\n    // Define the tap positions for a 32-bit LFSR\n    // Using taps at positions 32, 22, 2, 1 (0-based index: 31, 21, 1, 0)\n    logic feedback;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            lfsr_reg <= 32'h00000001; // Reset value\n        end else begin\n            feedback = lfsr_reg[31] ^ lfsr_reg[21] ^ lfsr_reg[1] ^ lfsr_reg[0];\n            lfsr_reg <= {lfsr_reg[30:0], feedback};\n        end\n    end\n\n    assign lfsr_out = lfsr_reg;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

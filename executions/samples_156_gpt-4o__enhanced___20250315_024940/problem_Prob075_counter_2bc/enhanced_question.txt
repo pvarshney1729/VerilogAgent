@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input, clock signal (positive edge-triggered)
+  - areset: 1-bit input, asynchronous reset signal (active high)
+  - train_valid: 1-bit input, indicates if the training condition is valid (active high)
+  - train_taken: 1-bit input, indicates if the training action was taken (active high)
+  
+- Output Ports:
+  - state: 2-bit output, representing the current value of the saturating counter. 
+    - bit[1]: Most Significant Bit (MSB)
+    - bit[0]: Least Significant Bit (LSB)
+
+Counter Functionality:
+- The module implements a 2-bit saturating counter with the following behavior:
+  - The counter value can range from 0 (00) to 3 (11).
+  - The counter increments by 1 when both train_valid = 1 and train_taken = 1, unless the counter is at its maximum value (3).
+  - The counter decrements by 1 when train_valid = 1 and train_taken = 0, unless the counter is at its minimum value (0).
+  - When train_valid = 0, the counter remains unchanged regardless of the value of train_taken.
+  
+Reset Behavior:
+- The areset signal is an active high asynchronous reset that, when asserted, sets the counter to the state representing weakly not-taken, specifically 2'b01.
+  
+Sequential Logic:
+- All sequential logic, including counter updates, is triggered on the positive edge of the clk signal.
+- The counter update occurs in accordance with the specified conditions in the clock cycle immediately following the positive edge of clk.
+
+Initial State:
+- Upon reset (assertion of areset), the counter is initialized to the value of 2'b01.
+
+Edge Cases:
+- Ensure that input validation is performed to prevent invalid states. The counter must never exceed the defined maximum (3) or fall below the defined minimum (0).
+  
+Signal Dependencies:
+- Clearly define that the counter's increment and decrement operations depend on both the train_valid and train_taken signals, with precedence given to these conditions during each positive clock edge.
+
+</ENHANCED_SPEC>

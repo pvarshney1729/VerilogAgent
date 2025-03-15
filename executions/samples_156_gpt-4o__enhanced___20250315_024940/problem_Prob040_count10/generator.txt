@@ -1,0 +1,63 @@
+Generated Response:
+
+Based on the specifications provided, here is the Verilog code implementation for the `TopModule` which implements a decade counter with a synchronous reset. The following code adheres strictly to the guidelines and conventions specified.
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    // Synchronous reset and counter logic
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 4'b0000; // Synchronous reset to 0
+        end else if (q == 4'b1001) begin
+            q <= 4'b0000; // Reset to 0 after reaching 9
+        end else begin
+            q <= q + 1; // Increment counter
+        end
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation of the Code Implementation:
+
+1. **Module Declaration**: The module `TopModule` is defined with the specified input and output ports.
+
+2. **Port Types**: All ports are declared as `logic` type, which is compliant with the coding conventions provided.
+
+3. **Always Block**: The `always @(posedge clk)` block is used to handle the synchronous reset and the counting operation. The sensitivity list only includes `clk`, as per the guidelines.
+
+4. **Synchronous Reset**: The reset condition is checked first. If `reset` is high, `q` is reset to `0000`. This ensures proper synchronous behavior.
+
+5. **Counting Logic**: The next condition checks if `q` has reached `1001` (which is decimal 9). If so, it resets `q` back to `0000`. Otherwise, it increments `q` by 1.
+
+6. **No Race Conditions**: The structure of the `always` block ensures that the reset and count logic are executed safely and correctly with respect to the clock.
+
+This implementation fulfills all the requirements of a decade counter with a synchronous reset, producing the correct behavior as specified in the prompt.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    // Synchronous reset and counter logic
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 4'b0000; // Synchronous reset to 0
+        end else if (q == 4'b1001) begin
+            q <= 4'b0000; // Reset to 0 after reaching 9
+        end else begin
+            q <= q + 1; // Increment counter
+        end
+    end
+
+endmodule

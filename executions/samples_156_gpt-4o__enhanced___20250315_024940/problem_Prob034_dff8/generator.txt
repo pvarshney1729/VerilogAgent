@@ -1,0 +1,59 @@
+Generated Response:
+
+Here is the implementation of the `TopModule` as per your specifications:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    // On the positive edge of the clock, update the output q with the input d
+    always @(posedge clk) begin
+        q <= d;
+    end
+
+    // Initialize q to zero
+    initial begin
+        q = 8'b00000000;
+    end
+
+endmodule
+[DONE]
+```
+
+### Reasoning Behind the Implementation:
+
+1. **Module Declaration**: The module is named `TopModule` as specified, with the necessary input and output ports declared.
+
+2. **Port Types**: All ports are declared as `logic`, adhering to the coding conventions provided.
+
+3. **Sequential Logic**: An `always` block is used to implement the D flip-flop behavior, triggered on the positive edge of the `clk`. This block assigns the value of `d` to `q`.
+
+4. **Initialization**: A separate `initial` block is included to set `q` to `8'b00000000`, ensuring that all flip-flops start with a known state when the module is first simulated.
+
+5. **Clarity and Readability**: The code is structured to be clear and easily readable while maintaining adherence to all specified guidelines and conventions. 
+
+This Verilog code satisfies all requirements and should function as intended in a simulation or synthesis environment.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    // On the positive edge of the clock, update the output q with the input d
+    always @(posedge clk) begin
+        q <= d;
+    end
+
+    // Initialize q to zero
+    initial begin
+        q = 8'b00000000;
+    end
+
+endmodule

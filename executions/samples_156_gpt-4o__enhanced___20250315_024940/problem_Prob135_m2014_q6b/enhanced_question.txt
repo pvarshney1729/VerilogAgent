@@ -1,0 +1,55 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - y (input, 3 bits, unsigned): Represents the current state of the FSM.
+    - Bit indexing: y[0] is the least significant bit (LSB), corresponding to the least significant state.
+  - w (input, 1 bit, unsigned): Represents an external input used for state transitions.
+
+- Output Ports:
+  - Y1 (output, 1 bit, unsigned): Represents the value of the second bit of the current state (y[1]).
+
+State Machine Description:
+The module implements a finite state machine (FSM) with the following states and transitions:
+- States are defined as:
+  - A (000) = 0
+  - B (001) = 1
+  - C (010) = 2
+  - D (011) = 3
+  - E (100) = 4
+  - F (101) = 5
+
+- State Transition Table:
+  - Current State (y) | Input (w) | Next State (y_next)
+  - A (000)          | 0         | B (001)
+  - A (000)          | 1         | A (000)
+  - B (001)          | 0         | C (010)
+  - B (001)          | 1         | D (011)
+  - C (010)          | 0         | E (100)
+  - C (010)          | 1         | D (011)
+  - D (011)          | 0         | F (101)
+  - D (011)          | 1         | A (000)
+  - E (100)          | 0         | E (100)
+  - E (100)          | 1         | D (011)
+  - F (101)          | 0         | C (010)
+  - F (101)          | 1         | D (011)
+
+Implementation Details:
+- The FSM shall be implemented using three flip-flops (D-type).
+- Only the next-state logic for y[1] needs to be implemented.
+- The output Y1 shall be directly assigned the value of y[1].
+
+Clocking and Reset:
+- The FSM operates on a rising edge clock signal.
+- The reset mechanism is asynchronous and active high, initializing the state to A (000) when activated.
+
+Initialization:
+- All flip-flops must have an explicit initial value of A (000) upon reset.
+
+Edge Cases:
+- The module should handle transitions based on the defined state table, ensuring that invalid states do not occur.
+
+Signal Dependencies:
+- Ensure that the state transitions are executed based on the current state and the value of input w, maintaining correct precedence and avoiding race conditions.
+</ENHANCED_SPEC>

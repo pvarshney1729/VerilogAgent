@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [3:0] q\n);\n\n    logic [3:0] count;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            count <= 4'd1;\n        end else begin\n            if (count == 4'd10) begin\n                count <= 4'd1;\n            end else begin\n                count <= count + 4'd1;\n            end\n        end\n    end\n\n    assign q = count;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

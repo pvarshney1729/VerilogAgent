@@ -1,0 +1,49 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input clk: 1-bit clock signal (rising edge triggered)
+  - input areset: 1-bit asynchronous active-high reset signal
+  - input bump_left: 1-bit signal indicating a bump on the left (active high)
+  - input bump_right: 1-bit signal indicating a bump on the right (active high)
+  - input ground: 1-bit signal indicating the ground state (1 = grounded, 0 = falling)
+
+- Output Ports:
+  - output walk_left: 1-bit output signal indicating the Lemming is walking left (1 = walking left)
+  - output walk_right: 1-bit output signal indicating the Lemming is walking right (1 = walking right)
+  - output aaah: 1-bit output signal indicating the Lemming is falling (1 = falling)
+
+State Description:
+The Lemming can be in one of two possible states:
+1. Walking Left (walk_left = 1, walk_right = 0)
+2. Walking Right (walk_left = 0, walk_right = 1)
+
+State Transition Rules:
+- On the positive edge of clk:
+  - If areset = 1, reset the state to Walking Left (walk_left = 1, walk_right = 0).
+  - If ground = 0 (falling):
+    - Set aaah = 1.
+    - Maintain the current walking direction (do not change state).
+  - If ground = 1 (grounded):
+    - Set aaah = 0.
+    - Continue walking in the same direction as before falling.
+  - If bump_left = 1 and bump_right = 0, switch to Walking Right (walk_left = 0, walk_right = 1).
+  - If bump_right = 1 and bump_left = 0, switch to Walking Left (walk_left = 1, walk_right = 0).
+  - If both bump_left and bump_right are high, switch direction (if previously walking left, switch to walking right, and vice versa).
+
+Behavior at Edge Cases:
+- If both bump signals are active simultaneously, the Lemming will change its direction regardless of which side was bumped first.
+- The output aaah should only be high when ground = 0, regardless of the bump signals.
+- The Lemming does not change direction upon receiving bump signals while falling (ground = 0).
+
+Initial Conditions:
+- Upon receiving areset = 1, the Lemming should initialize to Walking Left (walk_left = 1, walk_right = 0) and aaah = 0.
+
+Sequential Logic:
+- The state transition is edge-triggered on the positive edge of clk. All flip-flops and state registers must be defined to ensure no race conditions occur within the logic operations.
+
+Signal Dependencies:
+- The outputs walk_left, walk_right, and aaah must accurately reflect the internal state of the Lemming based on the defined rules and input conditions.
+
+</ENHANCED_SPEC>

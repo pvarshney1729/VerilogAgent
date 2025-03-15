@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: bit (1) - Clock signal (rising edge-triggered)
+  - reset: bit (1) - Active-high synchronous reset signal
+  - j: bit (1) - Input signal for state transition from OFF to ON
+  - k: bit (1) - Input signal for state transition from ON to OFF
+
+- Output Ports:
+  - out: bit (1) - Output signal indicating the current state of the machine
+
+State Description:
+- The module implements a Moore state machine with two defined states:
+  1. State OFF: 
+     - Output (out) = 0
+     - Transition conditions:
+       - Remain in OFF (out=0) if j=0
+       - Transition to ON (out=1) if j=1
+  2. State ON:
+     - Output (out) = 1
+     - Transition conditions:
+       - Remain in ON (out=1) if k=0
+       - Transition to OFF (out=0) if k=1
+
+Reset Behavior:
+- The reset signal is synchronous and active-high.
+- Upon the assertion of the reset signal (reset=1), the state machine transitions to the OFF state (out=0), regardless of the input signals.
+
+Clock Cycle Relationships:
+- The state transitions occur on the rising edge of the clk signal.
+
+Initial Conditions:
+- The state machine initializes to the OFF state, with out=0, when the reset signal is asserted.
+
+Edge Cases:
+- The module should handle simultaneous transitions, where both j and k are asserted at the same time. The precedence should be defined such that the state machine prioritizes transitions based on the current state:
+  - When in OFF state, j takes precedence to transition to ON.
+  - When in ON state, k takes precedence to transition to OFF.
+
+Signal Dependencies:
+- The outputs are dependent solely on the current state and the input signals j and k.
+- No race conditions are expected as transitions are defined explicitly based on the state and input conditions.
+
+End of Specification
+</ENHANCED_SPEC>

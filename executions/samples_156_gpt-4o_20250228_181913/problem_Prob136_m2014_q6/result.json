@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n  input logic clk,\n  input logic reset,\n  input logic w,\n  output logic z\n);\n\n  // State Encoding\n  typedef enum logic [2:0] {\n    STATE_A = 3'b000,\n    STATE_B = 3'b001,\n    STATE_C = 3'b010,\n    STATE_D = 3'b011,\n    STATE_E = 3'b100,\n    STATE_F = 3'b101\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // State Transition Logic\n  always_ff @(posedge clk or posedge reset) begin\n    if (reset) begin\n      current_state <= STATE_A;\n      z <= 1'b0;\n    end else begin\n      current_state <= next_state;\n    end\n  end\n\n  // Next State Logic and Output Logic\n  always_comb begin\n    case (current_state)\n      STATE_A: begin\n        next_state = (w == 1'b0) ? STATE_B : STATE_A;\n        z = 1'b0;\n      end\n      STATE_B: begin\n        next_state = (w == 1'b0) ? STATE_C : STATE_D;\n        z = 1'b0;\n      end\n      STATE_C: begin\n        next_state = (w == 1'b0) ? STATE_E : STATE_D;\n        z = 1'b0;\n      end\n      STATE_D: begin\n        next_state = (w == 1'b0) ? STATE_F : STATE_A;\n        z = 1'b0;\n      end\n      STATE_E: begin\n        next_state = (w == 1'b0) ? STATE_E : STATE_D;\n        z = 1'b1;\n      end\n      STATE_F: begin\n        next_state = (w == 1'b0) ? STATE_C : STATE_D;\n        z = 1'b1;\n      end\n      default: begin\n        next_state = STATE_A;\n        z = 1'b0;\n      end\n    endcase\n  end\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

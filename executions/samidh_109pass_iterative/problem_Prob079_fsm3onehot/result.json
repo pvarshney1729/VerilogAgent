@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic in,              // Single-bit input signal\n    input logic [3:0] state,     // 4-bit one-hot encoded current state\n    output logic [3:0] next_state, // 4-bit one-hot encoded next state\n    output logic out             // Single-bit output signal\n);\n\n    // State Transition Logic\n    assign next_state = (state == 4'b0001) ? (in ? 4'b0010 : 4'b0001) :\n                        (state == 4'b0010) ? (in ? 4'b0010 : 4'b0100) :\n                        (state == 4'b0100) ? (in ? 4'b1000 : 4'b0001) :\n                        (state == 4'b1000) ? (in ? 4'b0010 : 4'b0100) : 4'b0000;\n\n    // Output Logic\n    assign out = (state == 4'b1000) ? 1'b1 : 1'b0;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

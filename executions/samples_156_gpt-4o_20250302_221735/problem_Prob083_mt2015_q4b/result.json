@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic x,\n    input logic y,\n    input logic clk,\n    input logic rst_n,\n    output logic z\n);\n\n    always_ff @(posedge clk) begin\n        if (!rst_n) begin\n            z <= 1'b1;\n        end else begin\n            case ({x, y})\n                2'b00: z <= 1'b1;\n                2'b01: z <= 1'b0;\n                2'b10: z <= 1'b0;\n                2'b11: z <= 1'b1;\n                default: z <= 1'b1; // Default case for completeness\n            endcase\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 110,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

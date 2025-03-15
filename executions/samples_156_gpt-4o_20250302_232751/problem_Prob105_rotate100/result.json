@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule(\n    input wire           clk,        // Clock signal, active edge not specified\n    input wire           load,       // Active-high synchronous load signal\n    input wire [1:0]     ena,        // 2-bit control signal for rotation direction\n    input wire [99:0]    data,       // 100-bit input data\n    output reg [99:0]    q           // 100-bit output data\n);\n\n    // Initial state of q\n    initial begin\n        q = 100'b0;\n    end\n\n    always @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            case (ena)\n                2'b01: q <= {q[0], q[99:1]};  // Rotate right by one bit\n                2'b10: q <= {q[98:0], q[99]}; // Rotate left by one bit\n                default: q <= q;              // No rotation\n            endcase\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

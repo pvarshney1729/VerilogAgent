@@ -1,8 +1,0 @@
-{
-    "code": "module fsm (\n    input logic clk,\n    input logic reset,\n    input logic din,\n    output logic dout\n);\n\n    logic state, next_state;\n\n    // State encoding\n    localparam S0 = 1'b0, S1 = 1'b1;\n\n    // D flip-flop for state storage\n    always @(posedge clk) begin\n        if (reset) begin\n            state <= 1'b0; // Initialize state to S0 on reset\n        end else begin\n            state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (state)\n            S0: begin\n                if (din) begin\n                    next_state = S1; // Transition to S1 on din = 1\n                end else begin\n                    next_state = S0; // Stay in S0\n                end\n            end\n            S1: begin\n                if (din) begin\n                    next_state = S0; // Transition to S0 on din = 1\n                end else begin\n                    next_state = S1; // Stay in S1\n                end\n            end\n            default: next_state = S0; // Default state\n        endcase\n    end\n\n    // Output logic\n    assign dout = state ^ din; // XOR operation for output\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

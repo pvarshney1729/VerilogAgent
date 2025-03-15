@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input  [3:0] x,  // 4-bit input, unsigned\n    input  [3:0] y,  // 4-bit input, unsigned\n    output [4:0] sum // 5-bit output, includes overflow\n);\n\n    wire carry1, carry2, carry3;\n\n    // Full Adder for bit 0\n    assign {carry1, sum[0]} = x[0] + y[0];\n\n    // Full Adder for bit 1\n    assign {carry2, sum[1]} = x[1] + y[1] + carry1;\n\n    // Full Adder for bit 2\n    assign {carry3, sum[2]} = x[2] + y[2] + carry2;\n\n    // Full Adder for bit 3\n    assign {sum[4], sum[3]} = x[3] + y[3] + carry3;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a [1 bit, unsigned] // Controls the first variable of the function
+  - input wire b [1 bit, unsigned] // Controls the second variable of the function
+  - input wire c [1 bit, unsigned] // Controls the third variable of the function
+  - input wire d [1 bit, unsigned] // Controls the fourth variable of the function
+
+- Output Port:
+  - output wire out [1 bit, unsigned] // Result of the combinational logic based on inputs a, b, c, and d
+
+Karnaugh Map Representation:
+The module implements the following logic function based on the provided Karnaugh map:
+
+             ab
+  cd   00  01  11  10
+  00 |  0 |  1 |  0 |  1 |
+  01 |  1 |  0 |  1 |  0 |
+  11 |  0 |  1 |  0 |  1 |
+  10 |  1 |  0 |  1 |  0 |
+
+- Function Definition:
+  The output 'out' is defined as follows based on the values of inputs 'a', 'b', 'c', and 'd':
+  - out = (c' d' b) + (c d' a) + (c' d a) + (c d b')
+
+  Where:
+  - c' denotes the complement (NOT) of c
+  - d' denotes the complement (NOT) of d
+
+- Bit Indexing:
+  - The most significant bit (MSB) is 'a' and the least significant bit (LSB) is 'd'.
+  - Bit indexing follows the convention where bit[0] refers to the LSB (d), and bit[3] refers to the MSB (a).
+
+- Logic Type:
+  - The output 'out' is derived from combinational logic based on the inputs a, b, c, and d.
+  - There are no sequential elements, and therefore no clock cycles or reset states are relevant in this specification.
+
+- Edge Cases:
+  - When any input (a, b, c, d) is at its boundary (0 or 1), the output 'out' should reflect the logic defined in the Karnaugh map without any undefined states.
+
+- Signal Dependencies:
+  - The output 'out' is solely dependent on the current values of inputs a, b, c, and d. There are no additional dependencies.
+
+- Race Conditions:
+  - As this is a purely combinational circuit with no memory elements, race conditions are not a concern.
+
+Initial Conditions:
+- The module does not include any flip-flops or registers; thus, there are no initial values to specify.
+
+Please ensure that the implementation adheres strictly to this clarified specification to maintain functional correctness.
+</ENHANCED_SPEC>

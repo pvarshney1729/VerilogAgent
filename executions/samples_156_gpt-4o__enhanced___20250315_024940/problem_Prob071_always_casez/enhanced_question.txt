@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - Name: in
+  - Width: 8 bits
+  - Sign: Unsigned
+  - Description: An 8-bit vector where each bit represents a binary value (0 or 1).
+
+- Output Port:
+  - Name: pos
+  - Width: 3 bits
+  - Sign: Unsigned
+  - Description: A 3-bit output representing the index of the first (least significant) bit that is high (1) in the input vector. If no bits are high, the output should be 3'b000.
+
+Functional Specification:
+- The module implements a combinational logic priority encoder for an 8-bit input vector.
+- The output, pos, should indicate the index of the least significant bit (LSB) that is set to 1 (high) in the input vector, in the following manner:
+  - bit[0] refers to the least significant bit (LSB) of the input vector.
+  - If the input vector has no bits that are high, then pos should output 3'b000.
+  
+Operational Details:
+- For an input vector of 'in' with the binary representation of 8'b10010000, the expected output will be pos = 3'd4, as bit[4] is the first bit that is high.
+
+Edge Case Handling:
+- If all bits in the input vector 'in' are 0 (e.g., 8'b00000000), the output pos must be explicitly set to 3'b000.
+
+Implementation Considerations:
+- Ensure there are no race conditions in determining the output based on the input.
+- The module should handle all possible values of the input vector, including cases where multiple bits are set to high.
+</ENHANCED_SPEC>

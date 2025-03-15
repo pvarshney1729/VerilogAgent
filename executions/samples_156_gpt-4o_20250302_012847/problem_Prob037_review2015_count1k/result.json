@@ -1,8 +1,0 @@
-{
-    "code": "module counter (\n    input logic clk,\n    input logic reset,\n    output logic [3:0] q\n);\n\n    // Declare 'q' as a reg\n    reg [3:0] q;\n\n    // Initial block to set 'q' upon instantiation\n    initial begin\n        q = 4'b0000;\n    end\n\n    // Always block for synchronous reset and counting\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 4'b0000; // Reset condition has priority\n        end else begin\n            q <= q + 1; // Normal counting behavior\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 3
-}

@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [9:0] q\n);\n\nlogic [9:0] counter;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        counter <= 10'b0000000000; // Reset counter to 0\n    end else if (counter < 10'd999) begin\n        counter <= counter + 1; // Increment counter\n    end else begin\n        counter <= 10'b0000000000; // Wrap around to 0\n    end\nend\n\nassign q = counter; // Assign counter value to output q\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

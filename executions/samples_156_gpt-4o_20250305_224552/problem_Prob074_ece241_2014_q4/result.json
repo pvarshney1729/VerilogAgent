@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    logic dff1, dff2, dff3;\n    logic xor_out, and_out, or_out;\n\n    // Asynchronous reset logic\n    always_ff @(posedge clk or posedge 1'b0) begin\n        if (1'b0) begin\n            dff1 <= 1'b0;\n            dff2 <= 1'b0;\n            dff3 <= 1'b0;\n        end else begin\n            dff1 <= xor_out;\n            dff2 <= and_out;\n            dff3 <= or_out;\n        end\n    end\n\n    // Combinational logic\n    always_comb begin\n        xor_out = x ^ dff1;\n        and_out = x & ~dff2;\n        or_out  = x | ~dff3;\n    end\n\n    // NOR gate for output\n    assign z = ~(dff1 | dff2 | dff3);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 45,
-        "passfail": "R"
-    }
-}

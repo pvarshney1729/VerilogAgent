@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input      cpu_overheated,\n    output logic shut_off_computer,\n    input      arrived,\n    input      gas_tank_empty,\n    output logic keep_driving\n);\n\n    always @(*) begin\n        shut_off_computer = cpu_overheated ? 1'b1 : 1'b0;\n    end\n\n    always @(*) begin\n        keep_driving = ~arrived ? ~gas_tank_empty : 1'b0;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "R"
-    }
-}

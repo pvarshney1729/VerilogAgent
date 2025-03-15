@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input  logic [5:0] y,  // Current state input in one-hot encoding\n    input  logic       w,  // Input influencing state transitions\n    output logic       Y1, // Output connected to the input of state flip-flop y[1]\n    output logic       Y3  // Output connected to the input of state flip-flop y[3]\n);\n\n    // State Transition and Output Logic\n    assign Y1 = (y[0] & w) | (y[5] & w);  // Next state B depends on w\n    assign Y3 = (y[1] & ~w) | (y[2] & ~w) | (y[4] & ~w) | (y[5] & ~w);  // Next state D depends on ~w\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

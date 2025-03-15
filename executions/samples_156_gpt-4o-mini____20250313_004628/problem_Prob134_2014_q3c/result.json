@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    input logic [2:0] y,\n    output logic Y0,\n    output logic z\n);\n\n    logic [2:0] next_state;\n    logic [2:0] current_state;\n\n    // Synchronous reset and state update\n    always @(posedge clk) begin\n        current_state <= next_state;\n    end\n\n    // Combinational logic for next state and output\n    always @(*) begin\n        case (current_state)\n            3'b000: begin\n                next_state = (x) ? 3'b001 : 3'b000;\n                z = 1'b0;\n            end\n            3'b001: begin\n                next_state = (x) ? 3'b100 : 3'b001;\n                z = 1'b0;\n            end\n            3'b010: begin\n                next_state = (x) ? 3'b001 : 3'b010;\n                z = 1'b0;\n            end\n            3'b011: begin\n                next_state = (x) ? 3'b010 : 3'b001;\n                z = 1'b1;\n            end\n            3'b100: begin\n                next_state = (x) ? 3'b100 : 3'b011;\n                z = 1'b1;\n            end\n            default: begin\n                next_state = 3'b000;\n                z = 1'b0;\n            end\n        endcase\n    end\n\n    // Output logic\n    assign Y0 = next_state[0];\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

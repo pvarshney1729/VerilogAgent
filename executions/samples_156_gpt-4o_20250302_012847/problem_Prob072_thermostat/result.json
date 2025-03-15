@@ -1,8 +1,0 @@
-{
-    "code": "module temperature_control (\n    input logic clk,\n    input logic reset,\n    input logic [7:0] temperature,\n    output logic heater,\n    output logic aircon,\n    output logic fan\n);\n\n    // Combinational logic for controlling heater, aircon, and fan\n    always @(*) begin\n        // Default outputs\n        heater = 1'b0;\n        aircon = 1'b0;\n        fan = 1'b0;\n\n        // Control logic based on temperature\n        if (temperature < 8'd18) begin\n            heater = 1'b1;\n        end else if (temperature > 8'd24) begin\n            aircon = 1'b1;\n        end\n\n        // Fan is on if either heater or aircon is on\n        fan = heater | aircon;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

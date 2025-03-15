@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire x;  // 1-bit input, unsigned, representing the first operand
+  - input wire y;  // 1-bit input, unsigned, representing the second operand
+
+- Output Port:
+  - output wire z;  // 1-bit output, unsigned, representing the result of the boolean function
+
+Functionality:
+- The module implements the boolean function z = (x XOR y) AND x.
+- The output z is derived from the following operations:
+  1. Compute the XOR of inputs x and y, denoted as (x ^ y).
+  2. Perform a bitwise AND operation between the result of the XOR and input x, resulting in z.
+
+Behavioral Specification:
+- The output z is combinational logic and is updated whenever there is a change in inputs x or y.
+- There are no sequential elements, flip-flops, or registers in this design.
+
+Edge Cases:
+- The module’s behavior is well-defined for all input combinations of x and y (0 or 1). It does not require special handling of edge cases as it operates on single-bit inputs.
+
+Signal Dependencies:
+- The output z depends directly on both input signals x and y without any intermediate states or timing dependencies.
+
+Reset Behavior:
+- There are no reset conditions in this combinational module, as it does not include any storage elements.
+
+Assumptions:
+- Inputs x and y are provided in a valid binary format (0 or 1).
+- The module does not handle any asynchronous or synchronous resets, as it does not maintain state.
+
+End of Specification.
+</ENHANCED_SPEC>

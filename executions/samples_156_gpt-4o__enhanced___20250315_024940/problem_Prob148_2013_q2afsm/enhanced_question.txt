@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Input Ports:
+- clk: 1-bit input (clock signal, positive edge-triggered)
+- resetn: 1-bit input (active-low synchronous reset)
+- r: 3-bit input (request signals from three devices, where r[0] is the most significant bit (MSB) and r[2] is the least significant bit (LSB))
+
+Output Ports:
+- g: 3-bit output (grant signals to three devices, where g[0] is the MSB and g[2] is the LSB)
+
+Definitions:
+- The FSM shall have four states: A, B, C, and D.
+- The state transition behavior is defined as follows:
+  - From state A:
+    - If r[0] = 0, r[1] = 0, r[2] = 0, remain in state A.
+    - If r[0] = 1, transition to state B.
+    - If r[0] = 0 and r[1] = 1, transition to state C.
+    - If r[0] = 0, r[1] = 0, r[2] = 0, transition to state D.
+  - From state B (g[0] = 1):
+    - If r[0] = 1, remain in state B.
+    - If r[0] = 0, transition back to state A.
+  - From state C (g[1] = 1):
+    - If r[1] = 1, remain in state C.
+    - If r[1] = 0, transition back to state A.
+
+Reset Behavior:
+- The reset signal (resetn) is active low and is synchronous. When resetn is low, the FSM will reset to state A.
+- Upon reset, all outputs g[0], g[1], and g[2] shall be set to 0.
+
+Priority System:
+- Device priority is as follows: device 0 > device 1 > device 2.
+- Device 0 will be granted access when r[0] = 1, regardless of the state.
+- Device 1 will be granted access only if device 0 is not requesting (r[0] = 0) and if r[1] = 1.
+- Device 2 will receive a grant only if it is the sole requester (r[2] = 1) while in state A.
+
+Sequential Logic:
+- All sequential elements, including state registers and output registers, will be triggered on the positive edge of the clock (clk).
+- The state register will hold the current state of the FSM.
+- The FSM will utilize separate always blocks for state transitions and state storage.
+
+Output Logic:
+- The output signals g[i] will be defined based on the current state of the FSM and the request signals, using continuous assignments or always blocks as preferred.
+
+Edge Cases:
+- The FSM should handle scenarios where multiple request signals are active simultaneously, adhering to the specified priority.
+- The output grants (g[0], g[1], g[2]) should remain unchanged unless a valid state transition occurs or reset is asserted.
+
+Initial Conditions:
+- All registers and state variables must be initialized to a known state upon reset, specifically to state A with all grant outputs set to 0.
+</ENHANCED_SPEC>

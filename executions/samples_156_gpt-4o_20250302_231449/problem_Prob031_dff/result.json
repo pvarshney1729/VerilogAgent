@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,          // Clock signal, positive edge-triggered\n    input logic d,            // 1-bit data input\n    input logic reset_n,      // Active-low asynchronous reset\n    output logic q            // 1-bit output\n);\n\n    // Asynchronous reset implementation\n    always_ff @(posedge clk or negedge reset_n) begin\n        if (!reset_n) begin\n            q <= 1'b0;       // Reset state\n        end else begin\n            q <= d;          // Capture input on clock's rising edge\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

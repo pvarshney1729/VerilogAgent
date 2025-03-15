@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,          // 1-bit clock input, positive edge triggered\n    input logic arst_n,       // Asynchronous active-low reset\n    input logic [7:0] in,     // 8-bit input vector\n    output logic [7:0] anyedge // 8-bit output vector\n);\n\n    logic [7:0] prev_in; // Register to store the previous state of `in`\n\n    always_ff @(posedge clk or negedge arst_n) begin\n        if (!arst_n) begin\n            anyedge <= 8'b00000000;\n            prev_in <= 8'b00000000;\n        end else begin\n            anyedge <= in ^ prev_in; // XOR to detect any edge\n            prev_in <= in;           // Update previous state\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 2
-}

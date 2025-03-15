@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic reset,\n    input logic load,\n    input logic [9:0] data,\n    output logic tc\n);\n    logic [9:0] counter;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            counter <= 10'd0;\n            tc <= 1'b0;\n        end else if (load) begin\n            counter <= data;\n            tc <= (data == 10'd0);\n        end else if (counter > 10'd0) begin\n            counter <= counter - 10'd1;\n            if (counter == 10'd1) begin\n                tc <= 1'b1;\n            end\n        end\n    end\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

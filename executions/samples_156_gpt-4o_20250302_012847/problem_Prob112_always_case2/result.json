@@ -1,8 +1,0 @@
-{
-    "code": "module priority_encoder (\n    input logic [7:0] in,\n    output logic [2:0] out,\n    output logic valid\n);\n\nalways @(*) begin\n    valid = 1'b0;\n    out = 3'b000;\n    if (in[7]) begin\n        out = 3'b111;\n        valid = 1'b1;\n    end else if (in[6]) begin\n        out = 3'b110;\n        valid = 1'b1;\n    end else if (in[5]) begin\n        out = 3'b101;\n        valid = 1'b1;\n    end else if (in[4]) begin\n        out = 3'b100;\n        valid = 1'b1;\n    end else if (in[3]) begin\n        out = 3'b011;\n        valid = 1'b1;\n    end else if (in[2]) begin\n        out = 3'b010;\n        valid = 1'b1;\n    end else if (in[1]) begin\n        out = 3'b001;\n        valid = 1'b1;\n    end else if (in[0]) begin\n        out = 3'b000;\n        valid = 1'b1;\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

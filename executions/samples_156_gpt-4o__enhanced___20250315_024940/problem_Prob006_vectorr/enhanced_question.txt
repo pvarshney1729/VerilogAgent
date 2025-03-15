@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - Name: in
+  - Width: 8 bits
+  - Type: unsigned
+  - Bit Indexing: bit[0] refers to the least significant bit (LSB) and bit[7] refers to the most significant bit (MSB).
+
+- Output Port:
+  - Name: out
+  - Width: 8 bits
+  - Type: unsigned
+  - Bit Indexing: bit[0] refers to the least significant bit (LSB) and bit[7] refers to the most significant bit (MSB).
+
+Functional Description:
+The TopModule shall reverse the bit ordering of the input port 'in' and assign the result to the output port 'out'. The output shall be defined as follows:
+- out[0] = in[7]
+- out[1] = in[6]
+- out[2] = in[5]
+- out[3] = in[4]
+- out[4] = in[3]
+- out[5] = in[2]
+- out[6] = in[1]
+- out[7] = in[0]
+
+Behavior:
+- The operation is purely combinational; changes in the input 'in' will immediately reflect in the output 'out' without any clock dependency.
+- There are no edge cases or boundary conditions to consider as the output is directly derived from the input without any restrictions on input values.
+
+Implementation Notes:
+- Ensure that there are no race conditions and that the assignment of output values from the input values is done in a deterministic manner.
+</ENHANCED_SPEC>

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule(\n    input wire clk,\n    input wire reset,\n    output reg [3:0] count\n);\n\nalways @(posedge clk) begin\n    if (reset) begin\n        count <= 4'b0001; // Reset to 1\n    end else begin\n        if (count == 4'b1010) begin\n            count <= 4'b0001; // Wrap around to 1\n        end else begin\n            count <= count + 1'b1; // Increment counter\n        end\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 1
-}

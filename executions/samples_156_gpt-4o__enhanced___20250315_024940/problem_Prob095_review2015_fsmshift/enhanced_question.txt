@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Interface:
+- Input Ports:
+  - clk: 1-bit input representing the clock signal. It is a positive-edge-triggered signal.
+  - reset: 1-bit input representing the reset signal. It is active high and synchronous.
+
+- Output Ports:
+  - shift_ena: 1-bit output signal that enables the shift register.
+
+Functional Description:
+This module implements a finite state machine (FSM) that controls the enabling of a shift register. The output signal `shift_ena` indicates whether the shift register should be enabled for shifting data. 
+
+Behavioral Specification:
+1. The `shift_ena` signal will be asserted (high) for exactly 4 clock cycles whenever a specific bit pattern is detected by the FSM.
+2. Upon reset (when the `reset` signal is asserted), the `shift_ena` signal will be asserted (high) for 4 consecutive clock cycles, followed by a deassertion (low) of the `shift_ena` signal, which will persist until the next reset event occurs.
+3. The reset state of the `shift_ena` signal is low (0) when the reset is asserted.
+
+Sequential Logic Details:
+- The module's sequential logic is triggered on the positive edge of the `clk` signal.
+- All registers within the module, including the state register that governs the output `shift_ena`, must have explicitly defined initial values upon reset.
+
+Edge Case Handling:
+- If the reset signal is asserted while `shift_ena` is already high, the module must ensure that `shift_ena` resets immediately to high for the defined 4 clock cycles before transitioning to low.
+- The module must handle input signal changes and ensure that `shift_ena` does not inadvertently remain high beyond the specified 4 clock cycles unless a new valid bit pattern is detected.
+
+Signal Dependencies:
+- The output `shift_ena` is dependent on the FSM's state and the detection of the proper bit pattern.
+- The precedence of operations must be clearly defined to avoid potential race conditions, ensuring that the reset signal takes priority over the detection logic.
+
+Note: The specific conditions for detecting the bit pattern must be defined in the implementation details of the FSM.
+</ENHANCED_SPEC>

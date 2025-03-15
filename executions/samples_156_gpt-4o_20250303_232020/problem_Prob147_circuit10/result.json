@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n\n    // Initial conditions\n    initial begin\n        state = 1'b0;\n        q = 1'b0;\n    end\n\n    always_ff @(posedge clk) begin\n        if (b) begin\n            q <= ~q; // Toggle q when b is high\n        end\n\n        if (a) begin\n            state <= a & b; // Update state based on a and b\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 30,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

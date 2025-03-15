@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input wire heat_mode,    // 1 bit, indicates heating mode when high\n    input wire too_cold,     // 1 bit, high if temperature is below desired in heating mode\n    input wire too_hot,      // 1 bit, high if temperature is above desired in cooling mode\n    input wire fan_on,       // 1 bit, user-requested fan activation\n    output reg heater,       // 1 bit, controls the heater\n    output reg aircon,       // 1 bit, controls the air conditioner\n    output reg fan           // 1 bit, controls the blower fan\n);\n\nalways @(*) begin\n    if (heat_mode) begin\n        // Heating mode\n        heater = too_cold;\n        aircon = 1'b0;\n        fan = too_cold || fan_on;\n    end else begin\n        // Cooling mode\n        aircon = too_hot;\n        heater = 1'b0;\n        fan = too_hot || fan_on;\n    end\nend\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input  logic [99:0] in,          // 100-bit input vector\n    output logic [99:0] out_both,    // 100-bit output vector\n    output logic [99:0] out_any,     // 100-bit output vector\n    output logic [99:0] out_different // 100-bit output vector\n);\n\n    // Combinational logic for out_both\n    assign out_both = {1'b0, in[98:0] & in[99:1]};\n\n    // Combinational logic for out_any\n    assign out_any = {in[98:0] | in[99:1], 1'b0};\n\n    // Combinational logic for out_different\n    assign out_different = {in[99] ^ in[0], in[98:0] ^ in[99:1]};\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

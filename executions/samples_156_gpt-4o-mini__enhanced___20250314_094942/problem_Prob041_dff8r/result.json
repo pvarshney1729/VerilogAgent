@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,          // Clock signal (1 bit, positive edge triggered)\n    input logic reset,        // Reset signal (1 bit, active high, synchronous)\n    input logic [7:0] d,      // Input data (8 bits, d[0] is LSB, d[7] is MSB)\n    output logic [7:0] q       // Output data (8 bits, q[0] is LSB, q[7] is MSB)\n);\n\nalways @(posedge clk) begin\n    if (reset) begin\n        q <= 8'b00000000; // On reset, set output q to zero.\n    end else begin\n        q <= d; // On clock edge, transfer input d to output q.\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

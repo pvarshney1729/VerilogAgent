@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule(\n    input logic clk,         // Clock signal, positive edge-triggered\n    input logic load,        // Synchronous active high load enable\n    input logic [1:0] ena,   // Two-bit enable signal for rotation\n    input logic [99:0] data, // 100-bit input data, bit 0 is LSB\n    output logic [99:0] q    // 100-bit output register, bit 0 is LSB\n);\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            case (ena)\n                2'b01: q <= {q[0], q[99:1]}; // Rotate right\n                2'b10: q <= {q[98:0], q[99]}; // Rotate left\n                default: q <= q; // No operation\n            endcase\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

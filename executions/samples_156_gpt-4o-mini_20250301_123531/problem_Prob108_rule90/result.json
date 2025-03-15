@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic load,\n    input logic [511:0] data,\n    output logic [511:0] q\n);\n\n    always @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            for (int i = 0; i < 512; i++) begin\n                if (i == 0) begin\n                    q[i] <= 1'b0 ^ q[i + 1];\n                end else if (i == 511) begin\n                    q[i] <= q[i - 1] ^ 1'b0;\n                end else begin\n                    q[i] <= q[i - 1] ^ q[i + 1];\n                end\n            end\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

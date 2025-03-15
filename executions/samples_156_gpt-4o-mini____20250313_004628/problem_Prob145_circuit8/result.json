@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clock,\n    input logic a,\n    output logic p,\n    output logic q\n);\n\n    logic state;\n    logic next_state;\n\n    // Sequential logic to update state\n    always @(posedge clock) begin\n        if (state == 1'b0 && a == 1'b1) begin\n            next_state <= 1'b1;\n        end else if (state == 1'b1 && a == 1'b0) begin\n            next_state <= 1'b0;\n        end\n    end\n\n    // Output logic\n    always @(*) begin\n        p = state;\n        q = (state == 1'b1) ? 1'b0 : 1'b1;\n    end\n\n    // Initialize state\n    initial begin\n        state = 1'b0;\n        next_state = 1'b0;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 194,
-        "passfail": "R"
-    }
-}

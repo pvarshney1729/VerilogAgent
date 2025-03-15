@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,          // Clock input\n    input logic reset,        // Active-high synchronous reset\n    input logic j,            // Input controlling transition to ON state\n    input logic k,            // Input controlling transition to OFF state\n    output logic out          // Output reflecting the current state\n);\n\n    // Internal state representation\n    typedef enum logic {\n        STATE_OFF = 1'b0,\n        STATE_ON = 1'b1\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= STATE_OFF;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            STATE_OFF: next_state = j ? STATE_ON : STATE_OFF;\n            STATE_ON:  next_state = k ? STATE_OFF : STATE_ON;\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        out = (current_state == STATE_ON);\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

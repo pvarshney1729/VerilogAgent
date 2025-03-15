@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic d,\n    input logic rst_n,\n    output logic q\n);\n\n    logic q_rise, q_fall;\n\n    // Rising edge flip-flop\n    always_ff @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            q_rise <= 1'b0;\n        else\n            q_rise <= d;\n    end\n\n    // Falling edge flip-flop\n    always_ff @(negedge clk or negedge rst_n) begin\n        if (!rst_n)\n            q_fall <= 1'b0;\n        else\n            q_fall <= d;\n    end\n\n    // Combine rising and falling edge flip-flops\n    always_comb begin\n        q = clk ? q_rise : q_fall;\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

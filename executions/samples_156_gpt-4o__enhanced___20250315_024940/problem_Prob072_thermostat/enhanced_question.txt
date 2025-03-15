@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - mode: bit (1 bit, where bit[0] is the least significant bit; mode = 1 indicates heating mode, mode = 0 indicates cooling mode)
+  - too_cold: bit (1 bit, indicates if the temperature is too cold; too_cold = 1 when the temperature is below the set threshold)
+  - too_hot: bit (1 bit, indicates if the temperature is too hot; too_hot = 1 when the temperature is above the set threshold)
+  - fan_on: bit (1 bit, user control for the fan; fan_on = 1 to request the fan to be turned on)
+
+- Output Ports:
+  - heater: bit (1 bit, indicates the state of the heater; heater = 1 when the heater is turned on)
+  - aircon: bit (1 bit, indicates the state of the air conditioner; aircon = 1 when the air conditioner is turned on)
+  - fan: bit (1 bit, indicates the state of the fan; fan = 1 when the fan is turned on)
+
+Functional Specification:
+The module implements a heating/cooling thermostat controller with the following behavior:
+
+1. Modes:
+   - The module operates in one of two modes based on the value of the `mode` input:
+     - Heating Mode (mode = 1):
+       - If `too_cold` = 1, then set `heater` = 1 and `aircon` = 0.
+       - If `too_cold` = 0, then set `heater` = 0 and `aircon` = 0.
+     - Cooling Mode (mode = 0):
+       - If `too_hot` = 1, then set `aircon` = 1 and `heater` = 0.
+       - If `too_hot` = 0, then set `aircon` = 0 and `heater` = 0.
+
+2. Fan Control:
+   - The `fan` output should be set to 1 if either the `fan_on` input is 1 or if either the `heater` or `aircon` output is 1 (indicating that either heating or cooling is active). It should be set to 0 otherwise.
+
+3. Edge Cases:
+   - Ensure that when both `too_cold` and `too_hot` are 1, the module will prioritize the mode based on the `mode` input (heating mode will take precedence if mode = 1).
+   - The fan should never be off when either heating or cooling is active, regardless of the `fan_on` input.
+
+Reset Behavior:
+- The module does not specify a reset; therefore, it is assumed that the initial state of all outputs is `heater` = 0, `aircon` = 0, and `fan` = 0 upon initialization.
+
+Sequential Logic:
+- The module's logic is combinational; the outputs depend solely on the current values of the inputs with no memory or state retention required.
+
+Signal Dependencies:
+- The outputs `heater`, `aircon`, and `fan` depend on the values of inputs `mode`, `too_cold`, `too_hot`, and `fan_on` without any timing or delay constraints.
+
+</ENHANCED_SPEC>

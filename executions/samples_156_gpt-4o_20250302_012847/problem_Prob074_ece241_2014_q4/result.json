@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic a,\n    input logic b,\n    input logic c,\n    output logic y\n);\n\n    logic q1, q2, q3;\n    logic xor_out, and_out, or_out;\n\n    // D Flip-Flop with synchronous reset for q1\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q1 <= 1'b0;\n        end else begin\n            q1 <= a ^ b; // XOR operation\n        end\n    end\n\n    // D Flip-Flop with synchronous reset for q2\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q2 <= 1'b0;\n        end else begin\n            q2 <= a & c; // AND operation\n        end\n    end\n\n    // D Flip-Flop with synchronous reset for q3\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q3 <= 1'b0;\n        end else begin\n            q3 <= b | c; // OR operation\n        end\n    end\n\n    // Combinational logic for output y\n    always @(*) begin\n        y = ~(q1 | q2 | q3); // NOR operation\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 3
-}

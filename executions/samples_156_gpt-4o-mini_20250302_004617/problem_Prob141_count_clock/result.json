@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [4:0] hours,\n    output logic [5:0] minutes,\n    output logic [5:0] seconds\n);\n\n    // State registers\n    logic [4:0] hours_reg;\n    logic [5:0] minutes_reg;\n    logic [5:0] seconds_reg;\n\n    // Synchronous reset and increment logic\n    always @(*) begin\n        if (reset) begin\n            hours_reg = 5'b00000;\n            minutes_reg = 6'b000000;\n            seconds_reg = 6'b000000;\n        end else begin\n            if (seconds_reg == 6'b111011) begin // 59 seconds\n                seconds_reg = 6'b000000;\n                if (minutes_reg == 6'b111011) begin // 59 minutes\n                    minutes_reg = 6'b000000;\n                    if (hours_reg == 5'b10100) begin // 24 hours\n                        hours_reg = 5'b00000; // Reset to 0\n                    end else begin\n                        hours_reg = hours_reg + 5'b00001;\n                    end\n                end else begin\n                    minutes_reg = minutes_reg + 6'b000001;\n                end\n            end else begin\n                seconds_reg = seconds_reg + 6'b000001;\n            end\n        end\n    end\n\n    // Assign outputs\n    assign hours = hours_reg;\n    assign minutes = minutes_reg;\n    assign seconds = seconds_reg;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 3
-}

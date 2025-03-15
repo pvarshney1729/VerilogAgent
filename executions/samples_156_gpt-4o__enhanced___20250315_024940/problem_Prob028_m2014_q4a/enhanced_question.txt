@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - d: bit[0] (1-bit wide; represents the data input)
+  - ena: bit[0] (1-bit wide; represents the enable signal)
+
+- Output Ports:
+  - q: bit[0] (1-bit wide; represents the output of the D latch)
+
+Functionality:
+The TopModule shall implement a level-sensitive D latch. The behavior of the D latch is defined as follows:
+- When ena (enable) is high (logic '1'), the output q shall follow the input d.
+- When ena is low (logic '0'), the output q shall hold its previous state (i.e., remain unchanged).
+
+Logic Description:
+- The module will use an always block to implement the D latch's behavior.
+- The latch is sensitive to changes in the ena signal.
+
+Sequential Logic Characteristics:
+- The D latch behavior is level-sensitive; thus, it does not depend on clock edges.
+- The output q is updated immediately when ena transitions to high.
+
+Reset Conditions:
+- The design does not specify an asynchronous or synchronous reset. The default behavior will assume that there is no reset condition, and q will retain its last value when ena is low.
+
+Initial Conditions:
+- The initial value of output q must be defined. For simulation purposes, we will assume that q initializes to '0' at the start of the simulation.
+
+Edge Cases:
+- The module shall be tested for all possible combinations of d and ena to verify correct operation, particularly at the transitions of ena from low to high and high to low.
+
+Dependencies:
+- The output q depends on the current state of d and the enable signal ena.
+
+Precedence of Operations:
+- The enable signal ena takes precedence over the data input d when determining the output q.
+
+Potential Race Conditions:
+- There are no race conditions anticipated, as the design is intended to operate as a level-sensitive latch.
+
+Please ensure that all implementation details adhere to the specified behaviors and conditions.
+</ENHANCED_SPEC>

@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic [5:0] y,\n    input logic w,\n    output logic Y1,\n    output logic Y3\n);\n    // Next-state logic for Y2 (corresponding to y[1])\n    logic Y2;\n    // Next-state logic for Y4 (corresponding to y[3])\n    logic Y4;\n\n    // Logic for next-state signal Y2 based on state transitions\n    assign Y2 = (y[0] & w) | (y[2] & ~w) | (y[3] & ~w) | (y[5]);\n\n    // Logic for next-state signal Y4 based on state transitions\n    assign Y4 = (y[1] & ~w) | (y[4] & w);\n\n    // Output assignments based on derived logic\n    assign Y1 = Y2;\n    assign Y3 = Y4;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    }
-}

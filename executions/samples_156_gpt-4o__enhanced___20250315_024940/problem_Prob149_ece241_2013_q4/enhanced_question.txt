@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input clk: 1-bit clock signal (rising edge triggered).
+  - input reset: 1-bit active-high synchronous reset signal. When asserted, the module state is reset to a condition as if the water level has been low for an extended period.
+  - input s: 3-bit sensor input (s[2:0]), where:
+    - s[2] is the most significant bit (MSB) representing the highest sensor.
+    - s[0] is the least significant bit (LSB) representing the lowest sensor.
+  
+- Output Ports:
+  - output fr2: 1-bit flow rate control signal for maximum flow (asserted when water level is below the lowest sensor).
+  - output fr1: 1-bit flow rate control signal for intermediate flow.
+  - output fr0: 1-bit flow rate control signal for nominal flow.
+  - output dfr: 1-bit signal to control the opening of the Supplemental flow valve. Asserted when the water level increases compared to the previous level.
+
+Functionality Description:
+The module controls the flow rate of water based on the state of three vertical sensors, which detect the water level at 5-inch intervals. The flow rate behavior is defined as follows:
+
+1. When the water level is above the highest sensor (s[2] asserted):
+   - Output: fr2 = 0, fr1 = 0, fr0 = 0, dfr = 0.
+
+2. When the water level is between the highest sensor (s[2]) and the middle sensor (s[1]):
+   - Outputs: fr2 = 0, fr1 = 0, fr0 = 1, dfr is determined by previous level indication.
+
+3. When the water level is between the middle sensor (s[1]) and the lowest sensor (s[0]):
+   - Outputs: fr2 = 0, fr1 = 1, fr0 = 1, dfr is determined by previous level indication.
+
+4. When the water level is below the lowest sensor (s[0] not asserted):
+   - Outputs: fr2 = 1, fr1 = 1, fr0 = 1, dfr = 0.
+
+The flow rate control signal dfr is activated when there is an increase in the water level (previous level lower than the current level).
+
+Reset Conditions:
+Upon the assertion of the reset signal:
+- All outputs (fr2, fr1, fr0, dfr) are set to 1 (indicating maximum flow rate as if no sensors are asserted).
+
+State Dependencies:
+- The outputs depend on the current state of the sensors (s[2:0]) and the previous state of the water level to determine the appropriate flow rate adjustments. 
+
+Edge Cases:
+- If the input signal s transitions quickly, ensure that the outputs reflect the proper flow rate based on the most recent water level detected.
+- Ensure that there is no race condition between the sensor state changes and the flow control outputs.
+
+Ensure that all sequential elements (e.g., registers for tracking previous water levels) are initialized to a known state upon reset.
+</ENHANCED_SPEC>

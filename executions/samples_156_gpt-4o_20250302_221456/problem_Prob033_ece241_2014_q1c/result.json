@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input  wire signed [7:0] a,   // 8-bit signed input\n    input  wire signed [7:0] b,   // 8-bit signed input\n    output wire signed [7:0] s,   // 8-bit signed output\n    output wire overflow          // 1-bit overflow flag\n);\n\n    assign s = a + b;\n\n    // Detect signed overflow\n    assign overflow = ((a[7] == b[7]) && (s[7] != a[7]));\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 3
-}

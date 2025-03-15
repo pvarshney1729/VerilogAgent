@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,            // Clock signal for synchronous operations\n    input logic rst_n,          // Active-low synchronous reset\n    input logic in,             // 1-bit input signal\n    input logic [3:0] state,    // 4-bit one-hot encoded current state\n    output logic [3:0] next_state, // 4-bit one-hot encoded next state\n    output logic out             // 1-bit output signal\n);\n\nalways @(posedge clk) begin\n    if (!rst_n) begin\n        next_state <= 4'b0001; // Reset to State A\n        out <= 0;\n    end else begin\n        case (state)\n            4'b0001: begin // State A\n                next_state <= (in) ? 4'b0010 : 4'b0001;\n                out <= 0;\n            end\n            4'b0010: begin // State B\n                next_state <= (in) ? 4'b0010 : 4'b0100;\n                out <= 0;\n            end\n            4'b0100: begin // State C\n                next_state <= (in) ? 4'b1000 : 4'b0001;\n                out <= 0;\n            end\n            4'b1000: begin // State D\n                next_state <= (in) ? 4'b0010 : 4'b0100;\n                out <= 1;\n            end\n            default: begin // Illegal state handling\n                next_state <= 4'b0001; // Reset to State A\n                out <= 0;\n            end\n        endcase\n    end\nend\nendmodule",
-    "test_results": {
-        "num_mismatch": 199,
-        "passfail": "R"
-    }
-}

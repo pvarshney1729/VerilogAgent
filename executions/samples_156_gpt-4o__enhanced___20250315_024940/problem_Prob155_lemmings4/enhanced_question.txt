@@ -1,0 +1,68 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input clk: Clock signal (1 bit, rising edge-triggered)
+  - input areset: Asynchronous active-high reset signal (1 bit)
+  - input bump_left: Signal indicating a bump from the left (1 bit)
+  - input bump_right: Signal indicating a bump from the right (1 bit)
+  - input ground: Ground presence signal (1 bit, where ground=0 indicates no ground)
+  - input dig: Signal indicating the request to dig (1 bit)
+
+- Output Ports:
+  - output walk_left: Signal indicating that the Lemming is walking left (1 bit)
+  - output walk_right: Signal indicating that the Lemming is walking right (1 bit)
+  - output aaah: Signal indicating that the Lemming is falling (1 bit)
+  - output digging: Signal indicating that the Lemming is digging (1 bit)
+
+Specifications:
+1. States:
+   - The Lemming can be in one of the following states:
+     - Walking Left (walk_left = 1, walk_right = 0)
+     - Walking Right (walk_left = 0, walk_right = 1)
+     - Falling (aaah = 1)
+     - Digging (digging = 1)
+     - Splattered (all outputs = 0)
+
+2. State Transitions:
+   - The Lemming switches walking direction based on bump signals:
+     - If bump_left = 1, switch to walking right (walk_left = 0, walk_right = 1).
+     - If bump_right = 1, switch to walking left (walk_left = 1, walk_right = 0).
+     - If both bump_left and bump_right = 1, the direction will switch to the opposite of the current walking direction.
+
+3. Falling Logic:
+   - When ground = 0, the Lemming enters the falling state (aaah = 1).
+   - Upon returning to ground (ground = 1), the Lemming resumes walking in the last direction before falling.
+   - Being bumped while falling does not affect the walking direction.
+   - Transitioning to falling takes precedence over all other actions.
+
+4. Digging Logic:
+   - The Lemming can dig only if ground = 1 and it is not currently falling.
+   - Once digging starts (dig = 1), it continues until ground = 0, at which point the Lemming falls.
+   - Being bumped while digging does not affect the walking direction.
+   - Digging is ignored if the Lemming is falling or if there is no ground.
+
+5. Precedence of Actions:
+   - The precedence of actions is as follows: 
+     1. Falling (ground = 0)
+     2. Digging (dig = 1)
+     3. Direction Change (bump_left = 1 or bump_right = 1)
+
+6. Splattering Condition:
+   - If the Lemming falls for more than 20 clock cycles and then hits the ground (ground = 1), it splatters.
+   - Upon splattering, all outputs (walk_left, walk_right, aaah, digging) are set to 0 and the Lemming will not resume any actions until areset is activated.
+   - The falling state duration must be tracked using a counter.
+
+7. Reset Condition:
+   - The areset signal is asynchronous and active high, resetting the state machine to the walking left state (walk_left = 1, walk_right = 0) immediately upon detection of a high signal.
+   - All registers must be initialized to their respective states upon reset.
+
+8. Clocking:
+   - All sequential logic elements within this module are triggered on the positive edge of the clk signal.
+
+Edge Cases:
+- Define behavior explicitly for situations where bump_left and bump_right are high simultaneously.
+- Address conditions where ground transitions occur during a state change (falling, digging, walking).
+
+</ENHANCED_SPEC>

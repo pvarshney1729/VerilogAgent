@@ -1,7 +1,0 @@
-{
-    "code": "module A (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    assign z = (x ^ y) & x;\nendmodule\n\nmodule B (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    always @(*) begin\n        if (x == 0 && y == 0)\n            z = 1;\n        else if (x == 1 && y == 0)\n            z = 0;\n        else if (x == 0 && y == 1)\n            z = 0;\n        else if (x == 1 && y == 1)\n            z = 1;\n    end\nendmodule\n\nmodule top (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    logic a1_out, a2_out, b1_out, b2_out;\n    logic or_out, and_out;\n\n    A a1 (.x(x), .y(y), .z(a1_out));\n    B b1 (.x(x), .y(y), .z(b1_out));\n    A a2 (.x(x), .y(y), .z(a2_out));\n    B b2 (.x(x), .y(y), .z(b2_out));\n\n    assign or_out = a1_out | b1_out;\n    assign and_out = a2_out & b2_out;\n    assign z = or_out ^ and_out;\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    }
-}

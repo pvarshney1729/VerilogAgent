@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire in1 : 1-bit input (unsigned) 
+  - input wire in2 : 1-bit input (unsigned)
+  
+- Output Ports:
+  - output wire out : 1-bit output (unsigned)
+
+Description:
+The TopModule implements a digital logic circuit where two 1-bit inputs, in1 and in2, are processed through a logic gate. The circuit functionality is defined as follows:
+
+1. The AND gate receives in1 and the inverted version of in2 (denoted as NOT in2).
+2. The output of the AND gate is assigned to the output port 'out'.
+
+Logic Operation:
+- The relationship can be expressed in Boolean algebra as:
+  out = in1 AND (NOT in2)
+  
+- Truth Table:
+  | in1 | in2 | out |
+  |-----|-----|-----|
+  |  0  |  0  |  0  |
+  |  0  |  1  |  0  |
+  |  1  |  0  |  1  |
+  |  1  |  1  |  0  |
+
+Signal Dependencies:
+- The output 'out' is solely dependent on the current values of 'in1' and 'in2' with the inversion applied to 'in2'.
+- There are no flip-flops or sequential elements; thus, no clock cycle relationships or reset conditions are applicable.
+
+Edge Cases:
+- The module handles all input combinations of in1 and in2, providing a defined output for each potential state based on the truth table above.
+
+Reset Conditions:
+- There are no reset conditions since the module is purely combinational logic.
+
+Initial Values:
+- Not applicable as there are no sequential elements in this design.
+
+Precedence of Operations:
+- The NOT operation on 'in2' is performed before the AND operation with 'in1'.
+
+Race Conditions:
+- There are no race conditions present due to the combinational nature of the design.
+
+End of specification for TopModule.
+</ENHANCED_SPEC>

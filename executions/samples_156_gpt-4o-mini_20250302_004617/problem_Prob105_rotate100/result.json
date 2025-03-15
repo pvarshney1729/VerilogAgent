@@ -1,8 +1,0 @@
-{
-    "code": "module rotation_register (\n    input logic clk,\n    input logic rst_n,\n    input logic [99:0] data_in,\n    input logic [1:0] rotate_dir,\n    output logic [99:0] data_out\n);\n\n    logic [99:0] reg_data;\n\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            reg_data <= 100'b0;\n        end else begin\n            case (rotate_dir)\n                2'b00: reg_data <= data_in; // Load data\n                2'b01: reg_data <= {reg_data[98:0], reg_data[99]}; // Rotate right\n                2'b10: reg_data <= {reg_data[0], reg_data[99:1]}; // Rotate left\n                default: reg_data <= reg_data; // No operation\n            endcase\n        end\n    end\n\n    assign data_out = reg_data;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

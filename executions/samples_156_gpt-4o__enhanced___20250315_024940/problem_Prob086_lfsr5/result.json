@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic reset,\n    output logic [4:0] q\n);\n\n    // Initialize the output register\n    always @(posedge clk) begin\n        if (reset) begin\n            // Synchronous reset to 1\n            q <= 5'b00001;\n        end else begin\n            // Galois LFSR operation\n            q[4] <= q[4] ^ q[2]; // New MSB from XOR of tap bits\n            q[3] <= q[4];        // Shift right\n            q[2] <= q[3];        // Shift right\n            q[1] <= q[2];        // Shift right\n            q[0] <= q[1];        // Shift right\n        end\n    end\n\n    // Initialize q to a known state for simulation purposes\n    initial begin\n        q = 5'b00001; // Initial state\n    end\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input signal (clock signal, active on rising edge)
+  - load: 1-bit input signal (active high, used to load data into the shift register)
+  - ena: 2-bit input signal (controls the rotation direction)
+    - ena[1]: 1-bit input for direction control
+    - ena[0]: 1-bit input for direction control
+  - data: 100-bit input signal (data to be loaded into the shift register)
+  
+- Output Ports:
+  - q: 100-bit output signal (contains the contents of the rotator)
+
+Specifications:
+1. Synchronous Operation:
+   - All operations are triggered on the rising edge of clk.
+
+2. Load Operation:
+   - When load is asserted (active high), the shift register will be loaded with data[99:0], replacing the current contents of the register.
+   - The contents of q will reflect the loaded data immediately after the load operation.
+
+3. Rotation Operation:
+   - The rotation operation is controlled by the ena input:
+     - If ena[1:0] == 2'b01: Rotate the contents of the shift register to the right by one bit.
+       - The least significant bit (LSB, q[0]) will be shifted out and will enter the most significant bit (MSB, q[99]).
+     - If ena[1:0] == 2'b10: Rotate the contents of the shift register to the left by one bit.
+       - The most significant bit (MSB, q[99]) will be shifted out and will enter the least significant bit (LSB, q[0]).
+     - If ena[1:0] == 2'b00 or 2'b11: The contents of the shift register will remain unchanged (no rotation).
+   
+4. Reset Conditions:
+   - No explicit reset signal is defined in this specification; however, the initial state of the shift register and output q is undefined unless otherwise specified. It is recommended to define an initial state prior to the first load.
+
+5. Edge Cases:
+   - The module will handle all input edge cases according to the specified behavior of the load and rotation operations.
+   - If both load and ena are asserted simultaneously, load takes precedence on the next clock cycle.
+
+6. Bit Indexing Convention:
+   - The bit indexing follows the convention where q[0] refers to the least significant bit (LSB) and q[99] refers to the most significant bit (MSB).
+   - Similarly, data[0] refers to the least significant bit (LSB) and data[99] refers to the most significant bit (MSB).
+
+7. Dependencies and Race Conditions:
+   - The behavior of the output q is determined solely by the input signals load and ena in relation to the clk. Care should be taken to avoid race conditions by ensuring that load and ena are mutually exclusive in their operations during any given clock cycle.
+</ENHANCED_SPEC>

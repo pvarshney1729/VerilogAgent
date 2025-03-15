@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input clk,\n    input load,\n    input [511:0] data,\n    output reg [511:0] q\n);\n\n    reg [511:0] q_next;\n\n    always @(*) begin\n        q_next[0] = (q[0] & q[1]) | (q[1] & 1'b0) | (~q[0] & q[1]);\n        for (integer i = 1; i < 511; i = i + 1) begin\n            q_next[i] = (q[i-1] & q[i]) | (q[i] & ~q[i+1]) | (~q[i-1] & q[i]);\n        end\n        q_next[511] = (q[510] & q[511]) | (q[511] & 1'b0) | (~q[510] & q[511]);\n    end\n\n    always @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            q <= q_next;\n        end\n    end\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
-    "test_results": {
-        "num_mismatch": 6220,
-        "passfail": "R"
-    }
-}

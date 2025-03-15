@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic d,\n    output logic q\n);\n\n    logic q_pos, q_neg;\n\n    // Capture data on the rising edge\n    always_ff @(posedge clk) begin\n        q_pos <= d;\n    end\n\n    // Capture data on the falling edge\n    always_ff @(negedge clk) begin\n        q_neg <= d;\n    end\n\n    // Combine the results to mimic dual-edge triggering\n    always_comb begin\n        q = clk ? q_pos : q_neg;\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

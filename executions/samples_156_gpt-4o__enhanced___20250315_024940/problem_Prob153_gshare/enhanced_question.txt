@@ -1,0 +1,58 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+
+1. **Input Ports:**
+   - `input clk`: Clock signal (1 bit, rising edge triggered).
+   - `input areset`: Asynchronous active-high reset signal (1 bit).
+
+   - `input predict_valid`: Signal indicating a valid prediction request (1 bit).
+   - `input [6:0] predict_pc`: 7-bit program counter for prediction (LSB is bit[0], MSB is bit[6]).
+   - `output predict_taken`: Output indicating the predicted branch direction (1 bit).
+   - `output [6:0] predict_history`: 7-bit output representing the state of the global history register used for prediction (LSB is bit[0], MSB is bit[6]).
+
+   - `input train_valid`: Signal indicating a valid training request (1 bit).
+   - `input train_taken`: Signal indicating the actual outcome of the branch (1 bit).
+   - `input train_mispredicted`: Signal indicating if the branch was mispredicted (1 bit).
+   - `input [6:0] train_history`: 7-bit global history register value for training (LSB is bit[0], MSB is bit[6]).
+   - `input [6:0] train_pc`: 7-bit program counter for training (LSB is bit[0], MSB is bit[6]).
+
+2. **Functional Description:**
+   - The module implements a gshare branch predictor that utilizes a 7-bit program counter and a 7-bit global history to generate a 7-bit index through an XOR operation. This index accesses a 128-entry Pattern History Table (PHT) composed of two-bit saturating counters.
+
+   - The branch predictor maintains a 7-bit Global Branch History Register (GBHR).
+
+3. **Operational Behavior:**
+   - **Prediction Interface:**
+     - When `predict_valid` is high (1), the module should produce a predicted branch direction on `predict_taken` and the current state of the `predict_history` output. The GBHR is updated at the next positive edge of `clk` based on the predicted branch direction.
+
+   - **Training Interface:**
+     - When `train_valid` is high (1), the module updates the PHT based on the provided `train_pc` and `train_history`. The module will also consider the `train_taken` outcome to adjust the PHT for better future predictions. If `train_mispredicted` is high (1), the GBHR must be restored to the state it held immediately after the mispredicted branch completed execution.
+
+4. **Timing and Precedence:**
+   - If both training and prediction requests are active in the same clock cycle, training operations take precedence over prediction updates. The prediction will reflect the state of the PHT prior to the training modification, as the PHT updates occur on the next positive edge of `clk`.
+
+5. **Reset Behavior:**
+   - The reset signal `areset` is asynchronous and active-high. Upon activation, all registers, including the GBHR and PHT, should be initialized to a known state. The initial state of the GBHR will be all zeros, and the PHT entries will be initialized to a neutral state (typically 00 for saturating counters).
+
+6. **Edge Case Handling:**
+   - The module must define behaviors for edge cases, such as simultaneous activation of training and prediction, and ensure that all transitions and outputs are well-defined.
+
+7. **Signal Dependencies:**
+   - Ensure that all signal dependencies are explicitly stated, and race conditions are considered in design to maintain predictable behavior across clock cycles.
+
+8. **Indexing Convention:**
+   - All bit indexing follows the convention where bit[0] refers to the least significant bit (LSB) and bit[6] refers to the most significant bit (MSB) for all 7-bit signals.
+
+9. **Mathematical Description:**
+   - The PHT index is calculated as:
+     \[
+     index = (predict\_pc[6:0] \oplus train\_history[6:0]) \mod 128
+     \]
+   - The output `predict_taken` is derived from the PHT entry corresponding to the computed index.
+
+10. **Documentation:**
+    - The implementation should be thoroughly documented to clarify the behavior of each signal under various scenarios, especially focusing on the interactions between prediction and training phases.
+
+</ENHANCED_SPEC>

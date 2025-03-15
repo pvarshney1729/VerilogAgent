@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    // Internal signals for flip-flop outputs\n    logic Q1, Q2, Q3;\n\n    // Combinational logic for gate outputs\n    logic xor_out, and_out, or_out;\n\n    // XOR gate logic\n    always @(*) begin\n        xor_out = x ^ Q1;\n    end\n\n    // AND gate logic\n    always @(*) begin\n        and_out = x & ~Q2;\n    end\n\n    // OR gate logic\n    always @(*) begin\n        or_out = x | ~Q3;\n    end\n\n    // Sequential logic for D flip-flops with asynchronous reset\n    always_ff @(posedge clk or posedge reset) begin\n        if (reset) begin\n            Q1 <= 1'b0;\n            Q2 <= 1'b0;\n            Q3 <= 1'b0;\n        end else begin\n            Q1 <= xor_out;\n            Q2 <= and_out;\n            Q3 <= or_out;\n        end\n    end\n\n    // Output logic using NOR gate\n    always @(*) begin\n        z = ~(Q1 | Q2 | Q3);\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

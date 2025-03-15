@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input clk,\n    input a,\n    output reg [2:0] q\n);\n\ninitial begin\n    q = 3'b000;\nend\n\nalways @(posedge clk) begin\n    if (a) begin\n        q <= 3'b100;\n    end else begin\n        if (q == 3'b110) \n            q <= 3'b000;\n        else\n            q <= q + 1;\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

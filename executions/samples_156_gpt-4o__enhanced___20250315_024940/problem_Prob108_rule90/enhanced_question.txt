@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input representing the clock signal. 
+  - load: 1-bit input for loading initial data into the system.
+  - data: 512-bit input representing the initial state of the cellular automaton (data[511:0]).
+
+- Output Ports:
+  - q: 512-bit output representing the current state of the cellular automaton (q[511:0]).
+
+Specifications:
+1. The module implements Rule 90, a one-dimensional cellular automaton.
+2. The state of each cell in the array is determined by the XOR of its two immediate neighbors.
+3. The cell array is indexed as follows:
+   - q[0] is the least significant cell (LSB).
+   - q[511] is the most significant cell (MSB).
+   - For boundary conditions, assume q[-1] and q[512] are both zero (off) for all calculations.
+
+4. The module operates as follows:
+   - On the rising edge of clk:
+     - If load is high (1), initialize the state of the cellular automaton with data[511:0] (i.e., set q <= data).
+     - If load is low (0), compute the next state of q based on the current values of q using the following rule:
+       - For each cell q[i] (where 1 ≤ i ≤ 510):
+         - q[i] = (q[i-1] XOR q[i+1]), with the following initial conditions:
+           - q[0] = (0 XOR q[1])
+           - q[511] = (q[510] XOR 0)
+
+5. Reset Conditions:
+   - The module does not specify a reset signal; consider implementing an asynchronous active-low reset signal if needed for initialization.
+
+6. Sequential Logic:
+   - All state updates occur on the positive edge of the clk signal.
+   - Ensure all registers (including the q register) are initialized to a defined state when loaded.
+
+7. Edge Cases:
+   - If the load signal is asserted (high) while clk is high, the data should be loaded without affecting the current state of q until the next clock cycle.
+   - Ensure proper handling of the boundaries where q[-1] and q[512] are considered zero.
+
+8. Signal Dependencies:
+   - Ensure that the computation of the next state for each cell does not introduce race conditions due to concurrent updates.
+
+9. Operational Characteristics:
+   - The module should exhibit stable behavior for all possible input combinations within the defined boundaries.
+
+End of Specification.
+</ENHANCED_SPEC>

@@ -1,8 +1,0 @@
-{
-    "code": "module revised_module (\n    input logic clk,\n    input logic async_reset_n,\n    input logic [7:0] data_in,\n    output logic [7:0] data_out\n);\n\n    always_ff @(posedge clk or negedge async_reset_n) begin\n        if (!async_reset_n)\n            data_out <= 8'b0;\n        else\n            data_out <= data_in;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

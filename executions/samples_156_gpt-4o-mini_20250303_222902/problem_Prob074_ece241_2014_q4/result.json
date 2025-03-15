@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk, // Clock signal, triggers on the positive edge\n    input logic x,   // Primary data input, unsigned, 1 bit\n    output logic z   // Output of the module, unsigned, 1 bit\n);\n\n    logic q1, q2, q3; // Internal flip-flop outputs\n\n    // D flip-flop for q1\n    always @(posedge clk) begin\n        q1 <= x ^ q1; // XOR gate logic\n    end\n\n    // D flip-flop for q2\n    always @(posedge clk) begin\n        q2 <= x & ~q2; // AND gate logic\n    end\n\n    // D flip-flop for q3\n    always @(posedge clk) begin\n        q3 <= x | ~q3; // OR gate logic\n    end\n\n    // Output logic using NOR gate\n    assign z = ~(q1 | q2 | q3); // NOR gate logic\n\n    // Asynchronous reset logic\n    always @(posedge clk) begin\n        if (reset) begin\n            q1 <= 1'b0;\n            q2 <= 1'b0;\n            q3 <= 1'b0;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "p"
-    }
-}

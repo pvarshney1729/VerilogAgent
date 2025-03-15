@@ -190,8 +190,8 @@ def parse_args():
     parser.add_argument('--examples', type=int, default=2, 
                        choices=range(5),
                        help='Number of examples (0-4, default: 2)')
-    parser.add_argument('--temperature', type=float, default=0.2,  # Changed from 0.85
-                       help='Temperature (default: 0.2)')
+    parser.add_argument('--temperature', type=float, default=0.85,  # Changed from 0.85
+                       help='Temperature (default: 0.85)')
     parser.add_argument('--top-p', type=float, default=0.9,  # Changed from 0.95
                        help='Top-p value (default: 0.9)')
     parser.add_argument('--enhance_spec', type=bool, default=False,

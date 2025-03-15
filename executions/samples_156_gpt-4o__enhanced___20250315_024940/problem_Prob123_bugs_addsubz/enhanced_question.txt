@@ -1,0 +1,58 @@
+<ENHANCED_SPEC>
+Consider the following adder-subtractor with a zero flag:
+
+```verilog
+synthesis verilog_input_version verilog_2001
+module TopModule (
+    input wire do_sub,               // Control signal to select addition (0) or subtraction (1)
+    input wire [7:0] a,              // First operand (8-bit unsigned)
+    input wire [7:0] b,              // Second operand (8-bit unsigned)
+    output reg [7:0] out = 8'b00000000,  // Output result (8-bit unsigned), initialized to 0
+    output reg result_is_zero = 1'b0  // Zero flag (1-bit), initialized to 0
+);
+```
+
+1. **Functional Description**:
+   - The module performs either addition or subtraction on two 8-bit unsigned inputs `a` and `b`, based on the control signal `do_sub`.
+   - When `do_sub` is `0`, the module computes the sum of `a` and `b`.
+   - When `do_sub` is `1`, the module computes the difference `a - b`.
+
+2. **Combinational Logic**:
+   - The output `out` is updated in a combinational logic block based on the value of `do_sub`.
+   - The calculation for `out` and the evaluation of the zero flag `result_is_zero` must occur in the same always block to ensure the correct dependency and timing.
+
+3. **Zero Flag Calculation**:
+   - The zero flag `result_is_zero` is asserted high (`1`) if the output `out` is equal to `8'b00000000`.
+   - The assignment for `result_is_zero` must occur immediately after the calculation of `out`.
+
+4. **Reset Conditions**:
+   - There are no explicit reset signals defined. If a reset condition is required, it should be added to the specification.
+
+5. **Edge Cases**:
+   - The behavior of the module should be defined for all possible values of `a` and `b`, including edge cases where the result of subtraction may lead to negative values, which should be treated as unsigned wrapping.
+
+6. **Bit Indexing**:
+   - The bits of `a`, `b`, and `out` are indexed from `bit[7]` (most significant bit, MSB) to `bit[0]` (least significant bit, LSB).
+   - `out[0]` refers to the least significant bit of the output.
+
+7. **Race Conditions**:
+   - The sequential dependencies must be clearly defined to avoid race conditions. The output must be updated in a single always block to ensure that the calculations are always consistent.
+
+```verilog
+always @(*) begin
+    case (do_sub)
+        1'b0: out = a + b;                     // Addition
+        1'b1: out = a - b;                     // Subtraction
+        default: out = 8'b00000000;            // Default case to avoid latches
+    endcase
+
+    result_is_zero = (out == 8'b00000000);     // Set zero flag if out is zero
+end
+```
+
+8. **Output Initialization**:
+   - The output `out` and the zero flag `result_is_zero` are initialized to `0` to ensure known states at module instantiation.
+
+endmodule
+```
+</ENHANCED_SPEC>

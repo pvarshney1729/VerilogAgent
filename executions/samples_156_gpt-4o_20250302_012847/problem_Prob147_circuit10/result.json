@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input wire clk,\n    input wire a,\n    input wire b,\n    output reg q,\n    output reg state\n);\n\nalways @(*) begin\n    q = (a & ~b) | (~a & b);\nend\n\nalways @(posedge clk) begin\n    if (a & b) begin\n        state <= ~state;\n    end else if (a) begin\n        state <= 1'b0;\n    end else if (b) begin\n        state <= 1'b1;\n    end\nend\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

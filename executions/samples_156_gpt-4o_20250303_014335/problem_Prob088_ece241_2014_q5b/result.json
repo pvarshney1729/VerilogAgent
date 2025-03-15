@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,        // Clock input, triggers on positive edge\n    input logic areset,     // Asynchronous active-high reset\n    input logic x,          // Input signal\n    output logic z          // Output signal\n);\n\n    // State encoding using one-hot\n    typedef enum logic [1:0] {\n        STATE_A = 2'b10,\n        STATE_B = 2'b01\n    } state_t;\n\n    state_t state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (state)\n            STATE_A: begin\n                if (x) begin\n                    next_state = STATE_B;\n                    z = 1'b1;\n                end else begin\n                    next_state = STATE_A;\n                    z = 1'b0;\n                end\n            end\n            STATE_B: begin\n                if (x) begin\n                    next_state = STATE_B;\n                    z = 1'b0;\n                end else begin\n                    next_state = STATE_B;\n                    z = 1'b1;\n                end\n            end\n            default: begin\n                next_state = STATE_A;\n                z = 1'b0;\n            end\n        endcase\n    end\n\n    // State register with asynchronous reset\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            state <= STATE_A;\n        end else begin\n            state <= next_state;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

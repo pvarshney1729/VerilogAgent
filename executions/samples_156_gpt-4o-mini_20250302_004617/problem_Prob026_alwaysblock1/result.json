@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic clk,\n    input logic reset,\n    output logic y_assign,\n    output logic y_always\n);\n\nassign y_assign = a & b;\n\nalways @(*) begin\n    if (reset) begin\n        y_always = 1'b0;\n    end else begin\n        y_always = a & b;\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 3
-}

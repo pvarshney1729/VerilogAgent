@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - Name: in
+  - Width: 16 bits
+  - Description: Represents a 16-bit input signal, where bit[0] refers to the least significant bit (LSB) and bit[15] refers to the most significant bit (MSB). The input is treated as an unsigned integer.
+
+- Output Ports:
+  - Name: out_hi
+  - Width: 8 bits
+  - Description: Represents the upper byte of the input signal, corresponding to bits [15:8] of the 'in' signal, outputting as an unsigned integer.
+  
+  - Name: out_lo
+  - Width: 8 bits
+  - Description: Represents the lower byte of the input signal, corresponding to bits [7:0] of the 'in' signal, outputting as an unsigned integer.
+
+Functional Description:
+- The module implements a combinational logic circuit that splits the 16-bit input signal 'in' into two separate 8-bit output signals:
+  - 'out_hi' shall output the upper byte (bits [15:8]) of the input signal.
+  - 'out_lo' shall output the lower byte (bits [7:0]) of the input signal.
+
+Behavioral Specifications:
+- The module operates such that for every change in the 'in' signal, the outputs 'out_hi' and 'out_lo' will reflect the corresponding upper and lower bytes of 'in' immediately, without any delay.
+
+Edge Cases:
+- The module shall properly handle all values of the 16-bit input, including the minimum value (0) and the maximum value (65535).
+
+Signal Dependencies:
+- The outputs 'out_hi' and 'out_lo' are directly dependent on the 'in' signal. Changes in 'in' will immediately affect the outputs as per the defined behavior above.
+</ENHANCED_SPEC>

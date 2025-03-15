@@ -1,0 +1,55 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - input clk: 1-bit clock signal (active rising edge)
+  - input reset: 1-bit asynchronous reset signal (active high)
+  - input data: 1-bit serial data input
+  - input ack: 1-bit acknowledgment signal from the user
+
+- Output Ports:
+  - output [3:0] count: 4-bit output representing the remaining timer count (active when counting)
+  - output counting: 1-bit signal indicating when the timer is actively counting (high when counting)
+  - output done: 1-bit signal indicating that the timer has completed its counting (high when done)
+
+Functional Specification:
+1. The timer module should detect the specific input pattern 1101 (binary) on the `data` input to initiate the timer. The detection of this pattern should be done serially, with the most-significant-bit (MSB) received first:
+   - `data[3]`: MSB (1st bit of the pattern)
+   - `data[2]`: 2nd bit
+   - `data[1]`: 3rd bit
+   - `data[0]`: LSB (4th bit of the pattern)
+
+2. Upon successful detection of the pattern 1101, the module must then shift in the next 4 bits (also received serially, MSB first) to determine the delay duration, referred to as `delay[3:0]`.
+
+3. The timer must count for exactly `(delay[3:0] + 1) * 1000` clock cycles. For example:
+   - If `delay = 0`, the timer counts for 1000 cycles.
+   - If `delay = 5`, the timer counts for 6000 cycles.
+
+4. During the counting process, the `count[3:0]` output must reflect the remaining time in a decrementing manner:
+   - For the first 1000 cycles, `count` should equal `delay`.
+   - For the next 1000 cycles, `count` should equal `delay - 1`.
+   - This continues until `count` reaches 0 for the last 1000 cycles.
+
+5. When the timer is not counting, the `count[3:0]` output may be in an undefined state (don't care). At this point, the `done` output should be high to notify the user that the timer has timed out. 
+
+6. The module must wait for the `ack` signal to be high before resetting and searching for the next occurrence of the start sequence (1101).
+
+7. Upon reset (active high), the module should enter a state where it begins searching for the input sequence 1101. All flip-flops and registers should be initialized to a known state:
+   - For the counting register, initialize to 0.
+   - For the `count` output, initialize to a don't-care state.
+   - For the `counting` output, initialize to low (0).
+   - For the `done` output, initialize to low (0).
+
+8. The reset and all sequential logic are synchronous to the positive edge of the clock signal.
+
+Edge Cases:
+- Ensure proper handling of cases where the `data` input signal transitions during counting, which should not affect the current operation.
+- Clearly specify behavior and output when `ack` is not asserted before the timer times out.
+
+Signal Dependencies:
+- The detection of the pattern and subsequent operations must be clearly sequenced to avoid race conditions.
+- Ensure that the counting state is only entered after the complete sequence of 1101 and the 4-bit delay is received.
+
+End of Specification.
+</ENHANCED_SPEC>

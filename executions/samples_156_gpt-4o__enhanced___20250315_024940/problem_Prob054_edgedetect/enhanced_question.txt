@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+I. Interface Description:
+1. Input Ports:
+   - clk: 1-bit input signal (clock)
+   - in: 8-bit input vector (bit[7:0], where bit[0] refers to the least significant bit, LSB)
+
+2. Output Ports:
+   - pedge: 8-bit output vector (bit[7:0], where bit[0] refers to the least significant bit, LSB)
+
+II. Functional Description:
+The module shall perform the following operations:
+- It shall detect positive edges on each bit of the 8-bit input vector 'in'. A positive edge is defined as a transition from 0 to 1 between two consecutive clock cycles.
+- For each bit in 'in':
+  - The corresponding output bit in 'pedge' shall be set to 1 in the clock cycle immediately following the detection of a 0 to 1 transition.
+  - If no transition occurs, the output bit shall remain at its previous state (0 or 1).
+
+III. Logic Type:
+- The module shall implement combinational logic to determine the output 'pedge' based on the previous state of the input 'in' and the current state of 'in'.
+
+IV. Clock Cycle Relationships:
+- The detection of transitions and output setting shall occur on the rising edge of the 'clk' signal.
+
+V. Reset Conditions:
+- No reset functionality is specified for this module. The output 'pedge' will retain its previous values until a transition is detected.
+
+VI. Initial Values:
+- The initial state of the output vector 'pedge' shall be defined as 8'b00000000 (all bits are 0) at the start of the simulation.
+
+VII. Signal Dependencies:
+- The output 'pedge' at clock cycle n+1 depends on the input 'in' at clock cycle n and the previous state of 'pedge' at clock cycle n.
+
+VIII. Edge Cases:
+- If 'in' remains constant (either all 0s or all 1s) for multiple clock cycles, 'pedge' should remain unchanged during those cycles.
+- The module should handle all transitions within the specified 8-bit width without overflow or underflow.
+
+IX. Implementation Notes:
+- Ensure that the logic correctly identifies transitions without race conditions or glitches during the clock cycles.
+</ENHANCED_SPEC>

@@ -1,0 +1,52 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire clk;            // Clock signal (1-bit)
+  - input wire load;           // Load signal (1-bit)
+  - input wire [9:0] data;     // 10-bit data input representing the countdown value
+
+- Output Ports:
+  - output reg tc;             // Terminal count output signal (1-bit), indicates when the countdown has reached zero
+
+Functional Description:
+The TopModule implements a countdown timer using a down-counter. The timer counts down from a specified number of clock cycles, loaded via the data input, and asserts the tc output signal when the countdown reaches zero.
+
+Behavioral Specification:
+1. The internal counter is a 10-bit register (counter_reg) initialized to 0. The counter is loaded and decremented based on the load signal:
+   - If load == 1:
+     - On every positive edge of the clk, the internal counter (counter_reg) is loaded with the value from the data input, effectively setting the countdown value.
+     - This loading operation can occur at any time, including during an active countdown.
+   - If load == 0:
+     - On every positive edge of the clk, if the counter_reg is greater than 0, it decrements the counter_reg by 1.
+     - The tc output signal is set to 1 (asserted) when counter_reg == 0, and remains asserted until the counter is loaded again. Once asserted, tc remains high, indicating that the timer has finished counting down.
+
+- The internal counter (counter_reg) shall be reset to 0 during the loading operation. The tc output shall be reset to 0 when a new value is loaded.
+
+Signal Definitions:
+- The counter_reg is defined as a 10-bit unsigned integer: counter_reg[9:0].
+- The output tc is defined as a 1-bit register, initialized to 0.
+
+Clock Cycle Relationships:
+- All operations occur on the positive edge of the clk signal.
+- The outputs are updated synchronously, based on the current state of the inputs at the positive edge of the clk.
+
+Reset Behavior:
+- The module does not have a dedicated reset input; however, loading the counter with a new value resets the internal state of the counter.
+
+Edge Case Handling:
+- If load is asserted while the counter is at 0, the counter will load the new value immediately. 
+- If load is asserted again while the counter is counting down, the new value from data will overwrite the current countdown without delay.
+- The tc signal should transition to high only when the counter_reg reaches exactly 0.
+
+Dependencies and Precedence:
+- The load operation takes precedence over the decrement operation during the same clock cycle. If load is high, the counter will load before it may potentially decrement.
+
+Race Condition Considerations:
+- Care should be taken to ensure that the loading and decrementing operations do not interfere with each other, as both operations occur on the same clock edge.
+
+Initial Conditions:
+- The internal counter (counter_reg) must be initialized to 0.
+- The output signal tc must be initialized to 0.
+</ENHANCED_SPEC>

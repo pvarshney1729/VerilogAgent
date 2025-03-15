@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule(\n    input logic a, // 1-bit input\n    input logic b, // 1-bit input\n    input logic c, // 1-bit input\n    input logic d, // 1-bit input\n    output logic out_sop, // 1-bit output for SOP\n    output logic out_pos  // 1-bit output for POS\n);\n\n    // Minimum Sum-of-Products (SOP) form\n    assign out_sop = (~a & ~b & c & ~d) | (~a & b & c & d) | (a & b & c & d);\n\n    // Minimum Product-of-Sums (POS) form\n    assign out_pos = (a | ~b | ~c | d) & (~a | b | ~c | ~d) & (a | b | c | d);\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

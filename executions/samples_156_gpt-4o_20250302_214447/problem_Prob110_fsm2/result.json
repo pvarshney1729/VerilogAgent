@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,         // Clock input, positive edge-triggered\n    input logic areset,      // Asynchronous reset, active high\n    input logic j,           // Input signal j\n    input logic k,           // Input signal k\n    output logic out         // Output signal out\n);\n\n    // State Definitions\n    parameter logic OFF = 1'b0;\n    parameter logic ON = 1'b1;\n\n    // Current state of the state machine\n    logic state;\n\n    // State transition logic\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            state <= OFF;\n        end else begin\n            case (state)\n                OFF: begin\n                    if (j) begin\n                        state <= ON;\n                    end else begin\n                        state <= OFF;\n                    end\n                end\n                ON: begin\n                    if (k) begin\n                        state <= OFF;\n                    end else begin\n                        state <= ON;\n                    end\n                end\n            endcase\n        end\n    end\n\n    // Output logic\n    always_comb begin\n        case (state)\n            OFF: out = 1'b0;\n            ON:  out = 1'b1;\n            default: out = 1'b0; // Default case for safety\n        endcase\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

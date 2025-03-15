@@ -1,0 +1,108 @@
+Generated Response:
+
+Here is the Verilog implementation of the `TopModule` that adheres to the specified interface and requirements for Rule 110 cellular automaton:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic load,
+    input  logic [511:0] data,
+    output logic [511:0] q
+);
+
+    // Intermediate storage for next state
+    logic [511:0] next_q;
+
+    // Always block for updating the state on clock edge
+    always @(posedge clk) begin
+        if (load) begin
+            q <= data;  // Load new data if load signal is high
+        end else begin
+            // Compute next state based on Rule 110
+            next_q[0]   = 0;                              // q[-1] is considered as 0
+            next_q[511] = 0;                              // q[512] is considered as 0
+            
+            for (int i = 0; i < 511; i++) begin
+                next_q[i+1] = ( (q[i] == 1 && q[i+1] == 1 && (i == 0 ? 0 : q[i-1] == 1)) ? 0 :
+                                 (q[i] == 1 && (i == 0 ? 0 : q[i-1] == 0) && q[i+1] == 1) ? 1 :
+                                 (q[i] == 1 && (i == 0 ? 0 : q[i-1] == 1) && q[i+1] == 0) ? 1 :
+                                 (q[i] == 1 && (i == 0 ? 0 : q[i-1] == 0) && q[i+1] == 0) ? 0 :
+                                 (q[i] == 0 && q[i+1] == 1 && (i == 0 ? 0 : q[i-1] == 1)) ? 1 :
+                                 (q[i] == 0 && q[i+1] == 0 && (i == 0 ? 0 : q[i-1] == 0)) ? 0 :
+                                 (q[i] == 0 && q[i+1] == 1 && (i == 0 ? 0 : q[i-1] == 0)) ? 1 :
+                                 (q[i] == 0 && (i == 0 ? 0 : q[i-1] == 0) && (q[i+1] == 0)) ? 0 : 0) ) );
+            end
+            
+            // Update the state to the next state
+            q <= next_q;
+        end
+    end
+
+    // Initialize q to 0 in simulation
+    initial begin
+        q = 512'b0;  // All cells off
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation of the Code:
+1. **Module Declaration**: The module `TopModule` is defined with the specified input and output ports.
+   
+2. **Intermediate Storage**: A logic array `next_q` is created to store the next state of the cells before updating `q`.
+
+3. **State Update Logic**: An `always` block is used, which triggers on the positive edge of the clock. Inside this block:
+   - If `load` is high, the output `q` is directly assigned the value of `data`.
+   - If `load` is low, the next state of each cell is computed based on Rule 110's rules, considering boundary conditions (where `q[-1]` and `q[512]` are treated as `0`).
+
+4. **Next State Calculation**: The logic uses nested conditional statements to evaluate the current state of the cell and its neighbors to determine the next state according to the provided truth table.
+
+5. **Initial State**: An `initial` block sets all cells in `q` to `0` at the start of simulation.
+
+This implementation meets the requirements and adheres to the coding conventions specified.
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic load,
+    input  logic [511:0] data,
+    output logic [511:0] q
+);
+
+    // Intermediate storage for next state
+    logic [511:0] next_q;
+
+    // Always block for updating the state on clock edge
+    always @(posedge clk) begin
+        if (load) begin
+            q <= data;  // Load new data if load signal is high
+        end else begin
+            // Compute next state based on Rule 110
+            next_q[0]   = 0;                              // q[-1] is considered as 0
+            next_q[511] = 0;                              // q[512] is considered as 0
+            
+            for (int i = 0; i < 511; i++) begin
+                next_q[i+1] = ( (q[i] == 1 && q[i+1] == 1 && (i == 0 ? 0 : q[i-1] == 1)) ? 0 :
+                                 (q[i] == 1 && (i == 0 ? 0 : q[i-1] == 0) && q[i+1] == 1) ? 1 :
+                                 (q[i] == 1 && (i == 0 ? 0 : q[i-1] == 1) && q[i+1] == 0) ? 1 :
+                                 (q[i] == 1 && (i == 0 ? 0 : q[i-1] == 0) && q[i+1] == 0) ? 0 :
+                                 (q[i] == 0 && q[i+1] == 1 && (i == 0 ? 0 : q[i-1] == 1)) ? 1 :
+                                 (q[i] == 0 && q[i+1] == 0 && (i == 0 ? 0 : q[i-1] == 0)) ? 0 :
+                                 (q[i] == 0 && q[i+1] == 1 && (i == 0 ? 0 : q[i-1] == 0)) ? 1 :
+                                 (q[i] == 0 && (i == 0 ? 0 : q[i-1] == 0) && (q[i+1] == 0)) ? 0 : 0) ) );
+            end
+            
+            // Update the state to the next state
+            q <= next_q;
+        end
+    end
+
+    // Initialize q to 0 in simulation
+    initial begin
+        q = 512'b0;  // All cells off
+    end
+
+endmodule

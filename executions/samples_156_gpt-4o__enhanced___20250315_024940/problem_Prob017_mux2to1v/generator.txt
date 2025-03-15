@@ -1,0 +1,56 @@
+Generated Response:
+
+Here is the Verilog code for the `TopModule` implementing the specified 2-to-1 multiplexer:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input  logic [99:0] a,
+    input  logic [99:0] b,
+    input  logic sel,
+    output logic [99:0] out
+);
+
+    always @(*) begin
+        if (sel == 1'b0) begin
+            out = a;
+        end else begin
+            out = b;
+        end
+    end
+
+endmodule
+[DONE]
+```
+
+### Reasoning Behind the Implementation:
+1. **Module Declaration**: The module is named `TopModule` and has the appropriate input and output ports defined in accordance with the specifications.
+  
+2. **Input and Output Types**: All ports (`a`, `b`, `sel`, and `out`) are declared as `logic`, which is a preferred type in SystemVerilog for representing digital logic values.
+
+3. **Combinational Logic**: The `always @(*)` block is utilized to ensure that the output `out` is updated whenever any of the inputs (`a`, `b`, or `sel`) change. The sensitivity list is implicit, as per the coding conventions.
+
+4. **Selection Logic**: Inside the `always` block, a simple conditional statement checks the value of `sel`. If `sel` is 0, `out` is assigned the value of `a`. If `sel` is 1, `out` gets the value of `b`. This effectively implements the 2-to-1 multiplexer functionality.
+
+5. **Initialization and Stability**: Since the module is combinational logic, there is no need for a reset mechanism, and the output is determined directly from the inputs without needing any initial value setting.
+
+This implementation is straightforward and adheres strictly to the specifications provided, ensuring that the functionality of the multiplexer is correctly realized.
+
+Generated Code:
+
+module TopModule (
+    input  logic [99:0] a,
+    input  logic [99:0] b,
+    input  logic sel,
+    output logic [99:0] out
+);
+
+    always @(*) begin
+        if (sel == 1'b0) begin
+            out = a;
+        end else begin
+            out = b;
+        end
+    end
+
+endmodule

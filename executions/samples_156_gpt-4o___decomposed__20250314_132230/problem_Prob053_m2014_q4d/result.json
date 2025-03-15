@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic in,\n    output logic out\n);\n\n    logic intermediate_signal;\n\n    // XOR gate to produce intermediate signal\n    assign intermediate_signal = in ^ out;\n\n    // D flip-flop to capture the XOR output on positive edge of clk\n    always_ff @(posedge clk) begin\n        out <= intermediate_signal;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 1,
-        "passfail": "R"
-    }
-}

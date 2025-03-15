@@ -1,0 +1,91 @@
+Generated Response:
+
+Based on the provided specifications and guidelines, I will implement a dual-edge triggered flip-flop in Verilog. To achieve this, we'll utilize the clock to sample the input `d` on both its rising and falling edges. Since FPGAs do not support true dual-edge triggered flip-flops directly, we will use a combination of registers and combinational logic to simulate this behavior.
+
+Here is the Verilog code for the `TopModule`:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic d,
+    output logic q
+);
+    logic d_latched;
+
+    // Capture the input d on the rising edge of clk
+    always @ (posedge clk) begin
+        d_latched <= d;
+    end
+
+    // Capture the input d on the falling edge of clk
+    always @ (negedge clk) begin
+        q <= d_latched;
+    end
+
+    // Ensure q reflects d on both edges
+    always @ (posedge clk or negedge clk) begin
+        q <= d;
+    end
+
+    // Initial condition for simulation
+    initial begin
+        q = 1'b0; // Initialize q to 0
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation of the Verilog Code:
+
+1. **Module Declaration**: The module `TopModule` is defined with input ports `clk` and `d`, and output port `q`.
+
+2. **Signal Declaration**: 
+   - A temporary signal `d_latched` is declared to hold the value of `d` captured on the rising edge of the clock.
+
+3. **Rising Edge Capture**:
+   - An `always` block is triggered on the positive edge of `clk`, where the input `d` is latched into `d_latched`.
+
+4. **Falling Edge Capture**:
+   - Another `always` block is triggered on the negative edge of `clk`, where the output `q` is updated with the value of `d_latched`.
+
+5. **Output Update**:
+   - An additional `always` block updates `q` on both clock edges to ensure that `q` correctly reflects the value of `d` immediately. However, this last block is redundant for the dual-edge behavior since we already capture both edges separately.
+
+6. **Initial Condition**:
+   - An `initial` block sets the output `q` to `0` at the start, ensuring that the flip-flop starts in a known state during simulation.
+
+### Note:
+While the code captures the essence of a dual-edge triggered flip-flop, the exact simulation behavior may differ based on the synthesis tools and FPGA architecture. Typically, a dual-edge flip-flop is implemented using specific constructs in synthesis tools, but this code reflects the intended functionality in a straightforward manner.
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic d,
+    output logic q
+);
+    logic d_latched;
+
+    // Capture the input d on the rising edge of clk
+    always @ (posedge clk) begin
+        d_latched <= d;
+    end
+
+    // Capture the input d on the falling edge of clk
+    always @ (negedge clk) begin
+        q <= d_latched;
+    end
+
+    // Ensure q reflects d on both edges
+    always @ (posedge clk or negedge clk) begin
+        q <= d;
+    end
+
+    // Initial condition for simulation
+    initial begin
+        q = 1'b0; // Initialize q to 0
+    end
+
+endmodule

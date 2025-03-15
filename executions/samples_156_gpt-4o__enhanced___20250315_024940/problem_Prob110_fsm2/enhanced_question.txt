@@ -1,0 +1,58 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: bit (1 bit, active rising edge)
+  - areset: bit (1 bit, active high asynchronous reset)
+  - j: bit (1 bit, input signal for state transition)
+  - k: bit (1 bit, input signal for state transition)
+
+- Output Ports:
+  - out: bit (1 bit, indicates the current state of the state machine)
+
+State Machine Description:
+The module implements a Moore state machine with two states: OFF and ON. The output signal 'out' reflects the current state of the machine as follows:
+- OFF state: out = 0
+- ON state: out = 1
+
+State Transitions:
+1. From OFF to OFF:
+   - Condition: j = 0
+   - Transition: Remains in OFF state.
+  
+2. From OFF to ON:
+   - Condition: j = 1
+   - Transition: Moves to ON state.
+
+3. From ON to ON:
+   - Condition: k = 0
+   - Transition: Remains in ON state.
+
+4. From ON to OFF:
+   - Condition: k = 1
+   - Transition: Moves to OFF state.
+
+Reset Conditions:
+- The reset (areset) is active high and asynchronous.
+- Upon activation of the areset signal, the state machine transitions to the OFF state, and the output (out) is set to 0.
+
+Initial Values:
+- The state machine initializes to the OFF state with out = 0 when areset is asserted.
+
+Clock Cycle Relationships:
+- The state transitions occur on the rising edge of the clk signal, following the evaluation of j and k inputs.
+
+Edge Case Behavior:
+- The module must handle simultaneous transitions where both j and k are asserted. In this case, precedence is defined such that transitions occur as per the state transition rules defined above without ambiguity.
+  
+Signal Dependencies:
+- The output 'out' is solely dependent on the current state of the state machine.
+- The next state is determined by the inputs j and k based on the current state.
+
+Potential Race Conditions:
+- Ensure that the state transitions based on inputs j and k do not conflict and are resolved deterministically based on the clock edge.
+
+Bit Indexing:
+- All input and output ports are single bits, with bit[0] as the least significant bit (LSB).
+</ENHANCED_SPEC>

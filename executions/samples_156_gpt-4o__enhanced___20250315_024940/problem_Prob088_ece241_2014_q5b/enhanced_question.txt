@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge triggered)
+  - areset: 1-bit input (asynchronous active-high reset signal)
+  - x: 1-bit input (data signal)
+
+- Output Ports:
+  - z: 1-bit output (result signal)
+
+State Encoding:
+The module implements a Mealy finite-state machine (FSM) using one-hot encoding for the states. The following states are defined:
+- State A: 2'b01 (active)
+- State B: 2'b10 (active)
+
+Reset Behavior:
+- The FSM resets into State A when the areset signal is asserted (high).
+- The reset is asynchronous, meaning the state will reset immediately upon areset being high, regardless of the clk signal.
+
+State Transition and Output Logic:
+The state transitions and output behavior are defined as follows:
+
+1. From State A:
+   - If x = 0, remain in State A and output z = 0.
+   - If x = 1, transition to State B and output z = 1.
+
+2. From State B:
+   - If x = 0, remain in State B and output z = 1.
+   - If x = 1, remain in State B and output z = 0.
+
+Sequential Logic:
+- All sequential logic (state transitions) are triggered on the positive edge of the clk signal. The state of the FSM is updated on the rising edge of clk.
+
+Initial Condition:
+- Upon reset (when areset is high), the FSM should initialize to State A.
+
+Edge Cases:
+- The module should handle the case when areset is asserted while clk is high, ensuring that the FSM resets immediately to State A.
+
+Signal Dependencies:
+- Ensure that the output z is immediately updated based on the current state and the input x.
+- There should be no race conditions; the outputs are determined solely by the current state and the input x.
+
+Bit Indexing:
+- All input and output signals are defined as single bits where bit[0] refers to the least significant bit (LSB).
+
+Compliance:
+- The implementation must adhere strictly to the above specifications to ensure correct functionality of the 2's complementer as a Mealy FSM.
+</ENHANCED_SPEC>

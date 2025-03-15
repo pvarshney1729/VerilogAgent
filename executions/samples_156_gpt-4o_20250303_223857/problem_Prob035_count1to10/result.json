@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,        // 1-bit clock signal, positive edge-triggered\n    input logic reset,      // 1-bit active-high synchronous reset signal\n    output logic [3:0] q    // 4-bit output representing the counter value\n);\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q <= 4'b0001;  // Reset to binary 1\n        end else if (q == 4'b1010) begin\n            q <= 4'b0001;  // Roll over to binary 1 after reaching 10\n        end else begin\n            q <= q + 1;    // Increment counter\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

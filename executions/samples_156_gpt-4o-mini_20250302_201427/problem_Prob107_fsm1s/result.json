@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n  input logic clk,          // Clock input\n  input logic reset,        // Active-high synchronous reset\n  input logic in,           // Input signal\n  output logic out          // Output signal\n);\n\n  typedef enum logic {A, B} state_t;\n  state_t current_state, next_state;\n\n  always_ff @(posedge clk) begin\n    if (reset) begin\n      current_state <= B;\n      out <= 1'b1;\n    end else begin\n      current_state <= next_state;\n      out <= (current_state == B) ? 1'b1 : 1'b0;\n    end\n  end\n\n  always_comb begin\n    case (current_state)\n      A: begin\n        if (in) begin\n          next_state = A;\n        end else begin\n          next_state = B;\n        end\n      end\n      B: begin\n        if (in) begin\n          next_state = B;\n        end else begin\n          next_state = A;\n        end\n      end\n      default: next_state = A; // Default case to avoid latches\n    endcase\n  end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 83,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

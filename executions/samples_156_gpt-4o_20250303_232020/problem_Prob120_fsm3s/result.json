@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,           // Clock signal, positive edge triggered\n    input logic reset,         // Synchronous active high reset\n    input logic in,            // FSM input signal\n    output logic out           // FSM output signal\n);\n\n    // State encoding using binary representation\n    typedef enum logic [1:0] {\n        STATE_A = 2'b00,\n        STATE_B = 2'b01,\n        STATE_C = 2'b10,\n        STATE_D = 2'b11\n    } state_t;\n\n    state_t state;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            state <= STATE_A;\n            out <= 1'b0;\n        end else begin\n            case (state)\n                STATE_A: begin\n                    state <= in ? STATE_B : STATE_A;\n                    out <= 1'b0;\n                end\n                STATE_B: begin\n                    state <= in ? STATE_B : STATE_C;\n                    out <= 1'b0;\n                end\n                STATE_C: begin\n                    state <= in ? STATE_D : STATE_A;\n                    out <= 1'b0;\n                end\n                STATE_D: begin\n                    state <= in ? STATE_B : STATE_C;\n                    out <= 1'b1;\n                end\n                default: begin\n                    state <= STATE_A; // Fallback to a known state\n                    out <= 1'b0;\n                end\n            endcase\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 62,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

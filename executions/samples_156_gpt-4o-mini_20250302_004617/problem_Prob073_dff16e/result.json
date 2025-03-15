@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule my_module (\n    input logic clk,\n    input logic rst_n,\n    input logic [1:0] sel,\n    output logic byteena0,\n    output logic byteena1\n);\n\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            byteena0 <= 1'b0;\n            byteena1 <= 1'b0;\n        end else begin\n            case (sel)\n                2'b00: begin\n                    byteena0 <= 1'b1;\n                    byteena1 <= 1'b0;\n                end\n                2'b01: begin\n                    byteena0 <= 1'b0;\n                    byteena1 <= 1'b1;\n                end\n                2'b10: begin\n                    byteena0 <= 1'b1;\n                    byteena1 <= 1'b1;\n                end\n                2'b11: begin\n                    byteena0 <= 1'b0;\n                    byteena1 <= 1'b0;\n                end\n            endcase\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 3
-}

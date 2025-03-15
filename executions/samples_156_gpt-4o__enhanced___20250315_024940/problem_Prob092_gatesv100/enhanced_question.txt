@@ -1,0 +1,63 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specifications:
+- Input Port:
+  - Name: in
+  - Width: 100 bits
+  - Declaration: input logic [99:0] in; // in[0] is the least significant bit (LSB), in[99] is the most significant bit (MSB)
+
+- Output Ports:
+  - Name: out_both
+  - Width: 100 bits
+  - Declaration: output logic [99:0] out_both; // out_both[0] corresponds to LSB, out_both[99] to MSB
+
+  - Name: out_any
+  - Width: 100 bits
+  - Declaration: output logic [99:0] out_any; // out_any[0] corresponds to LSB, out_any[99] to MSB
+
+  - Name: out_different
+  - Width: 100 bits
+  - Declaration: output logic [99:0] out_different; // out_different[0] corresponds to LSB, out_different[99] to MSB
+
+Functional Description:
+The module processes a 100-bit input vector, in[99:0], to produce three output vectors as follows:
+
+1. **out_both**:
+   - Each bit of out_both indicates whether both the corresponding input bit and its immediate left neighbor are '1'.
+   - For each bit index i (0 ≤ i ≤ 98), the output is defined as:
+     - out_both[i] = (in[i] == 1) AND (in[i + 1] == 1)
+   - For the most significant bit (MSB):
+     - out_both[99] = 0 (as in[99] has no neighbor to the left).
+
+2. **out_any**:
+   - Each bit of out_any indicates whether either the corresponding input bit or its immediate right neighbor is '1'.
+   - For each bit index i (1 ≤ i ≤ 99), the output is defined as:
+     - out_any[i] = (in[i] == 1) OR (in[i - 1] == 1)
+   - For the least significant bit (LSB):
+     - out_any[0] = 0 (as in[0] has no neighbor to the right).
+
+3. **out_different**:
+   - Each bit of out_different indicates whether the corresponding input bit is different from its immediate left neighbor.
+   - For each bit index i (0 ≤ i ≤ 98), the output is defined as:
+     - out_different[i] = (in[i] != in[i + 1])
+   - For the bit wrapping condition:
+     - out_different[99] = (in[99] != in[0]) (in[99] wraps around to in[0]).
+
+Reset Behavior:
+- The module does not specify a reset mechanism; however, all output vectors should be initialized to zero at the start of the operation to avoid undefined behavior.
+
+Timing and Logic:
+- The outputs are to be computed combinationally based on the values of the input simultaneously, without any clock cycle dependencies.
+- No sequential logic is involved; thus, there are no flip-flops or registers within this module.
+
+Edge Cases:
+- The module should account for all input bits in the range of 0 to 99. The outputs for out_both[99] and out_any[0] are fixed to zero as specified, which avoids any potential out-of-bounds errors.
+
+Precedence and Dependencies:
+- The outputs of out_both depend on the values of in[i] and in[i + 1].
+- The outputs of out_any depend on the values of in[i] and in[i - 1].
+- The outputs of out_different depend on the values of in[i] and in[i + 1], with a wrapping condition for bit 99.
+
+No race conditions are anticipated as the module operates purely in combinational logic without feedback loops.
+</ENHANCED_SPEC>

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,         // Clock signal for sequential logic\n    input logic reset,       // Synchronous reset signal\n    input logic L,           // Load enable signal\n    input logic q_in,        // Input for the flip-flop\n    input logic r_in,        // Input for the multiplexer\n    output logic Q           // Output from the flip-flop\n);\n\n    always @(posedge clk) begin\n        if (reset) begin\n            Q <= 1'b0;       // Initialize Q to zero on reset\n        end else begin\n            Q <= L ? r_in : q_in;  // Select between r_in and q_in based on L\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 1,
-        "passfail": "R"
-    },
-    "iterations_used": 2
-}

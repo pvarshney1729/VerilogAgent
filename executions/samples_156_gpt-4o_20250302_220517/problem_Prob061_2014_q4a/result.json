@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input  logic clk,     // Clock signal, positive edge-triggered\n    input  logic rst_n,   // Active-low synchronous reset\n    input  logic w,       // Input from the previous stage of the shift register\n    input  logic R,       // Value to load into the register\n    input  logic E,       // Enable signal for shifting\n    input  logic L,       // Load signal, high when loading the value R\n    output logic Q        // Output to the next stage\n);\n\nalways @(posedge clk) begin\n    if (!rst_n)\n        Q <= 1'b0;  // Reset state\n    else if (L)\n        Q <= R;  // Load operation\n    else if (E)\n        Q <= w;  // Shift operation\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

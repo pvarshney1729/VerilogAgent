@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input  logic clock,          // Clock signal (1-bit input)\n    input  logic a,              // Input signal (1-bit input)\n    output logic p,              // Output signal p (1-bit output)\n    output logic q               // Output signal q (1-bit output)\n);\n\n    // Initial states\n    initial begin\n        p = 1'b0;\n        q = 1'b0;\n    end\n\n    // Sequential logic\n    always @(posedge clock) begin\n        if (a) begin\n            p <= 1'b1;\n            q <= 1'b0;\n        end else begin\n            q <= ~q; // Toggle q on every clock cycle when a is low\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 179,
-        "passfail": "R"
-    }
-}

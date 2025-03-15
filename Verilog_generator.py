@@ -82,24 +82,12 @@ class VerilogGenerator:
         if self.task == "code-complete-iccad2023":
             full_prompt += self._format_code_complete_prompt(prompt_text)
         else:  # spec-to-rtl
-            full_prompt += "\nQuestion:\n" + prompt_text.strip() + "\n"
+            full_prompt += f"<Question>\n{prompt_text.strip()}\n</Question>\n"
 
             # Add generation plan
-            full_prompt += """
-            The following plan/guidelines might be useful for generating the correct Verilog code:
-            - Ensure synchronous reset is implemented as specified.
-            - Initialize all flip-flops to zero in simulation.
-            - Adhere strictly to the provided interface and signal names.
-            - Generate results in the specified cycle timing.
-            - Infer logic correctly, especially when using Karnaugh maps.
-            - Handle bitwise operations and signal broadcasting correctly.
-            """
-            
-            if include_rules:
-                full_prompt += prompts['prompt_rules_suffix']
+            full_prompt += prompts['prompt_rules']
                 
-            full_prompt += "\nAnswer:\n"
-            full_prompt += prompts['prompt_no_explain_suffix']
+            # full_prompt += "\nAnswer:\n"
             
         return full_prompt
     
@@ -129,6 +117,7 @@ class VerilogGenerator:
             {"role": "user", "content": full_prompt}
         ]
 
+        # print("<Full message>" + full_prompt + "</Full message>")
         # import json
         # print("Full message: ")
         # print(json.dumps(messages, indent=4))
@@ -174,7 +163,7 @@ class VerilogGenerator:
         # print("Extracted code: ")
         # print(extracted_code)
         # print(f"Extracted code: {extracted_code}")  # Debug line
-        return extracted_code
+        return response, extracted_code
 
     def _extract_code(self, response: str, prompt_filename: str = None) -> str:
         """Extracts code from response using the same logic as sv-generate"""
@@ -339,6 +328,28 @@ class VerilogGenerator:
             {"role": "user", "content": prompt}
         ]
         
+        if "gpt" in model:
+            response = generate_openai(messages=messages, model=model, temperature=temperature)
+        elif "claude" in model:
+            response = generate_anthropic(messages=messages, model=model, temperature=temperature)
+        else:
+            response = generate_together(messages=messages, model=model, temperature=temperature)
+        
+        return response
+    
+
+
+    def generate_with_messages(self, messages: List[Dict], model: str = "gpt-4o-mini", temperature: float = 0.7) -> List[Dict]:
+        """
+        INPUT:
+            messages: List[Dict] - List of messages for generation
+            model: str - The model to use for generation
+            temperature: float - Temperature setting for generation
+        OUTPUT:
+            response: List[Dict] - Generated response
+        """
+        
+        # Use a default system prompt if none is provided    
         if "gpt" in model:
             response = generate_openai(messages=messages, model=model, temperature=temperature)
         elif "claude" in model:

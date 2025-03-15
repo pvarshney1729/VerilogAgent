@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic [1023:0] in,    // 1024-bit input vector, unsigned\n    input logic [7:0] sel,      // 8-bit selection signal, unsigned\n    output logic [3:0] out       // 4-bit output vector, unsigned\n);\n\n    always @(*) begin\n        out = in[(sel * 4) +: 4]; // Select 4 bits based on sel\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

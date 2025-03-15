@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - clk: 1-bit input (clock signal, positive edge triggered)
+  - shift_ena: 1-bit input (shift enable signal, active high)
+  - count_ena: 1-bit input (count enable signal, active high)
+  - data: 1-bit input (data input for shifting)
+
+- Outputs:
+  - q: 4-bit output (current value of the shift register and down counter)
+
+Specifications:
+1. The module implements a four-bit shift register that also functions as a down counter.
+2. The shift register is configured such that:
+   - Data is shifted in from the most significant bit (MSB) to the least significant bit (LSB) when the `shift_ena` signal is high (1).
+   - The internal representation of the shift register is indexed as `q[3]` (MSB) to `q[0]` (LSB), where `q[0]` refers to the least significant bit.
+3. The down counter behavior is as follows:
+   - The value currently held in the shift register (`q`) is decremented by 1 when the `count_ena` signal is high (1).
+4. The module shall not perform any operation when both `shift_ena` and `count_ena` are high (1). The behavior in this case is not defined and may be treated as a "don't care" condition.
+5. All sequential logic is triggered on the positive edge of the `clk` signal.
+6. The initial state of the output register `q` shall be defined as `q = 4'b0000` (all bits cleared) upon reset or power-up conditions.
+7. The behavior of the module in edge cases (e.g., when the counter reaches zero and `count_ena` is activated) should be clearly handled to prevent underflow.
+8. Signal dependencies should be explicitly noted: the output `q` is dependent on the states of `shift_ena`, `count_ena`, and the `data` input. 
+9. It is imperative to ensure that the operations of shifting and counting do not occur simultaneously to avoid race conditions; thus, a mutual exclusion mechanism is inherently assumed in design.
+</ENHANCED_SPEC>

@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire clock,\n    input wire a,\n    output reg p = 1'b0,\n    output reg q = 1'b0\n);\n\n    always @(posedge clock) begin\n        if (a) \n            p <= 1'b1;\n        else \n            p <= 1'b0;\n        \n        q <= 1'b0; // Reset q on rising edge\n    end\n\n    always @(negedge clock) begin\n        if (p)\n            q <= 1'b1;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 149,
-        "passfail": "R"
-    }
-}

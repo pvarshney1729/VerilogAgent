@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic [31:0] in,\n    output logic [31:0] out\n);\n\n    // Reverse the byte order of the 32-bit input vector\n    always @(*) begin\n        out[7:0]   = in[31:24];\n        out[15:8]  = in[23:16];\n        out[23:16] = in[15:8];\n        out[31:24] = in[7:0];\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

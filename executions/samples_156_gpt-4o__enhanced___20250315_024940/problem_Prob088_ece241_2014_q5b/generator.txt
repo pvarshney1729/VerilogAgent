@@ -1,0 +1,126 @@
+Generated Response:
+
+Here is the Verilog code for the specified `TopModule` implementing the Mealy finite-state machine with the given interface and specifications:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic x,
+    output logic z
+);
+    // State encoding
+    typedef enum logic [1:0] {
+        A = 2'b01, // State A
+        B = 2'b10  // State B
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // Asynchronous reset to State A
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) 
+            current_state <= A; // Reset to State A
+        else 
+            current_state <= next_state; // Update to next state
+    end
+
+    // Next state logic and output logic
+    always_comb begin
+        // Default values
+        next_state = current_state;
+        z = 1'b0; // Default output value
+
+        case (current_state)
+            A: begin
+                if (x) begin
+                    next_state = B; // Transition to State B
+                    z = 1'b1;       // Output 1
+                end else begin
+                    z = 1'b0;       // Remain in State A, output 0
+                end
+            end
+            B: begin
+                if (x) begin
+                    z = 1'b0;       // Remain in State B, output 0
+                end else begin
+                    z = 1'b1;       // Remain in State B, output 1
+                end
+            end
+            default: begin
+                // Should never reach here, but safe to handle
+                next_state = A; // Default to State A
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+``` 
+
+### Reasoning:
+1. **State Encoding**: The states are defined using an enumeration for clarity and easy management. State A is represented as `2'b01` and State B as `2'b10`.
+
+2. **Asynchronous Reset**: The reset condition checks if the `areset` signal is high. If so, it resets the FSM to State A on the next positive clock edge.
+
+3. **Next State and Output Logic**: The `always_comb` block handles the combinational logic for determining the next state and the output `z`. It uses a case statement to manage the transitions based on the current state and the input `x`.
+
+4. **Output Logic**: The output `z` is determined immediately based on the state and input conditions as specified in the problem statement, ensuring that it follows the Mealy FSM model.
+
+This implementation adheres strictly to the provided guidelines and conventions, ensuring correct functionality of the 2's complementer FSM.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic x,
+    output logic z
+);
+    // State encoding
+    typedef enum logic [1:0] {
+        A = 2'b01, // State A
+        B = 2'b10  // State B
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // Asynchronous reset to State A
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) 
+            current_state <= A; // Reset to State A
+        else 
+            current_state <= next_state; // Update to next state
+    end
+
+    // Next state logic and output logic
+    always_comb begin
+        // Default values
+        next_state = current_state;
+        z = 1'b0; // Default output value
+
+        case (current_state)
+            A: begin
+                if (x) begin
+                    next_state = B; // Transition to State B
+                    z = 1'b1;       // Output 1
+                end else begin
+                    z = 1'b0;       // Remain in State A, output 0
+                end
+            end
+            B: begin
+                if (x) begin
+                    z = 1'b0;       // Remain in State B, output 0
+                end else begin
+                    z = 1'b1;       // Remain in State B, output 1
+                end
+            end
+            default: begin
+                // Should never reach here, but safe to handle
+                next_state = A; // Default to State A
+            end
+        endcase
+    end
+
+endmodule

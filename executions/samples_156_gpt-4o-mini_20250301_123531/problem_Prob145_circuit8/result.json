@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clock,\n    input logic a,\n    input logic reset,\n    output logic p,\n    output logic q\n);\n\n    // Internal state to track if p was set\n    logic p_was_set;\n\n    // Sequential logic for p and q\n    always @(posedge clock) begin\n        if (reset) begin\n            p <= 1'b0;\n            p_was_set <= 1'b0;\n        end else begin\n            // Update p based on input a\n            p <= a ? 1'b1 : 1'b0;\n            // Track if p was set\n            p_was_set <= p;\n        end\n    end\n\n    // Update q on falling edge of clock\n    always @(negedge clock) begin\n        if (reset) begin\n            q <= 1'b0;\n        end else begin\n            // Set q if p was set on the previous rising edge\n            q <= p_was_set ? 1'b1 : 1'b0;\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

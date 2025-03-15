@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic ar,\n    input logic d,\n    output logic q\n);\n\nalways_ff @(posedge clk or posedge ar) begin\n    if (ar) begin\n        q <= 1'b0;  // Reset output to 0\n    end else begin\n        q <= d;     // Sample input d on rising edge of clk\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 2
-}

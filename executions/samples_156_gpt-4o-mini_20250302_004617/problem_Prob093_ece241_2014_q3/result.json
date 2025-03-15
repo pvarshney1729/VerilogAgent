@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic [1:0] a,\n    input logic [1:0] b,\n    output logic [3:0] out\n);\n\n    logic [3:0] mux_out;\n\n    // Combinational logic using multiplexers based on K-map\n    always @(*) begin\n        case ({a, b})\n            4'b00: mux_out = 4'b0001; // Example output for a=0, b=0\n            4'b01: mux_out = 4'b0010; // Example output for a=0, b=1\n            4'b10: mux_out = 4'b0100; // Example output for a=1, b=0\n            4'b11: mux_out = 4'b1000; // Example output for a=1, b=1\n            default: mux_out = 4'b0000; // Default case\n        endcase\n    end\n\n    // Synchronous reset implementation\n    always @(posedge clk) begin\n        if (reset) begin\n            out <= 4'b0000; // Initialize output to zero on reset\n        end else begin\n            out <= mux_out; // Update output with mux result\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 3
-}

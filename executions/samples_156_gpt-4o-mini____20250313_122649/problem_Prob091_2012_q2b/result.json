@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic [5:0] y,\n    input logic w,\n    output logic Y1,\n    output logic Y3\n);\n\n    logic [5:0] next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (y)\n            6'b000001: next_state = (w) ? 6'b000010 : 6'b000001; // A\n            6'b000010: next_state = (w) ? 6'b000100 : 6'b001000; // B\n            6'b000100: next_state = (w) ? 6'b010000 : 6'b001000; // C\n            6'b001000: next_state = (w) ? 6'b100000 : 6'b000001; // D\n            6'b010000: next_state = (w) ? 6'b010000 : 6'b001000; // E\n            6'b100000: next_state = (w) ? 6'b000100 : 6'b001000; // F\n            default:   next_state = 6'b000001; // Reset to A\n        endcase\n    end\n\n    // Output logic\n    assign Y1 = y[1]; // Output Y1 is the state of flip-flop y[1]\n    assign Y3 = y[3]; // Output Y3 is the state of flip-flop y[3]\n\n    // State update logic with synchronous reset\n    always @(posedge w) begin\n        if (w) begin\n            y <= next_state; // Update state on clock edge\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "w"
-    }
-}

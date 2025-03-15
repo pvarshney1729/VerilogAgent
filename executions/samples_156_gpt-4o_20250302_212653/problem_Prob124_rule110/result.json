@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,                   // Clock signal\n    input logic load,                  // Synchronous load signal, active high\n    input logic [511:0] data,          // 512-bit input data for loading state\n    output logic [511:0] q             // 512-bit output representing current state\n);\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            logic [511:0] next_q;\n            for (int i = 0; i < 512; i++) begin\n                logic left = (i < 511) ? q[i+1] : 1'b0;\n                logic right = (i > 0) ? q[i-1] : 1'b0;\n                logic center = q[i];\n                \n                next_q[i] = (left & center & right) ? 1'b0 :\n                            (left & center & ~right) ? 1'b1 :\n                            (left & ~center & right) ? 1'b1 :\n                            (left & ~center & ~right) ? 1'b0 :\n                            (~left & center & right) ? 1'b1 :\n                            (~left & center & ~right) ? 1'b1 :\n                            (~left & ~center & right) ? 1'b1 :\n                            1'b0;\n            end\n            q <= next_q;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 6220,
-        "passfail": "R"
-    },
-    "iterations_used": 2
-}

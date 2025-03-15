@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n\n    always @(*) begin\n        q = (a & ~b) ^ state;\n    end\n\n    always @(posedge clk) begin\n        state <= (b & ~a) ^ q;\n    end\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
-    "test_results": {
-        "num_mismatch": 229,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

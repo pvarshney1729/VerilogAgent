@@ -1,0 +1,71 @@
+Generated Response:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic w,
+    input logic R,
+    input logic E,
+    input logic L,
+    output logic Q
+);
+
+    // Sequential logic for the D flip-flop
+    always @(posedge clk) begin
+        if (L) begin
+            Q <= R; // Load R into Q when L is asserted
+        end else if (E) begin
+            Q <= w; // Shift in w when E is asserted
+        end
+        // If neither L nor E are asserted, Q retains its previous value
+    end
+
+    // Initialize Q to 0 in simulation
+    initial begin
+        Q = 1'b0; // Set initial state of Q to 0
+    end
+
+endmodule
+[DONE]
+``` 
+
+### Explanation of the Code:
+1. **Module Declaration**: The module `TopModule` is declared with the specified input and output ports.
+2. **Sequential Logic**: An `always` block is used to define the behavior of the D flip-flop. The logic is triggered on the positive edge of the clock (`clk`).
+3. **Load and Shift Logic**:
+   - When the load signal (`L`) is asserted, the module loads the value from `R` into `Q`.
+   - If `L` is not asserted and the enable signal (`E`) is asserted, the module shifts in the value from `w`.
+   - If neither `L` nor `E` is asserted, `Q` retains its previous value.
+4. **Initialization**: The `initial` block ensures that `Q` is set to `0` at the start of the simulation, complying with the requirement for initialization.
+5. **No Reset Handling**: Since there is no asynchronous reset in the specification, this design does not include any such logic.
+
+This implementation adheres strictly to the provided interface and guidelines, ensuring correct functionality for a single stage of an n-bit shift register.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic w,
+    input logic R,
+    input logic E,
+    input logic L,
+    output logic Q
+);
+
+    // Sequential logic for the D flip-flop
+    always @(posedge clk) begin
+        if (L) begin
+            Q <= R; // Load R into Q when L is asserted
+        end else if (E) begin
+            Q <= w; // Shift in w when E is asserted
+        end
+        // If neither L nor E are asserted, Q retains its previous value
+    end
+
+    // Initialize Q to 0 in simulation
+    initial begin
+        Q = 1'b0; // Set initial state of Q to 0
+    end
+
+endmodule

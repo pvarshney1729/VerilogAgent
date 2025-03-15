@@ -1,0 +1,55 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Input/Output Interface:
+- input clk: 1-bit clock signal (rising edge-triggered)
+- input reset: 1-bit asynchronous reset signal (active high)
+- input w: 1-bit input signal
+- output z: 1-bit output signal
+
+State Machine Specification:
+The module implements a finite state machine (FSM) with the following states:
+- State A (encoded as 2'b00)
+- State B (encoded as 2'b01)
+- State C (encoded as 2'b10)
+- State D (encoded as 2'b11)
+- State E (encoded as 2'b100)
+- State F (encoded as 2'b101)
+
+State Transition Table:
+| Current State | Input w | Next State |
+|---------------|---------|------------|
+| A (00)       | 0       | B (01)     |
+| A (00)       | 1       | A (00)     |
+| B (01)       | 0       | C (10)     |
+| B (01)       | 1       | D (11)     |
+| C (10)       | 0       | E (100)    |
+| C (10)       | 1       | D (11)     |
+| D (11)       | 0       | F (101)    |
+| D (11)       | 1       | A (00)     |
+| E (100)      | 0       | E (100)    |
+| E (100)      | 1       | D (11)     |
+| F (101)      | 0       | C (10)     |
+| F (101)      | 1       | D (11)     |
+
+Reset Behavior:
+- The reset signal is asynchronous and active high.
+- Upon activation of the reset signal, the FSM transitions to State A (00).
+
+Initial Conditions:
+- All state registers should be initialized to State A (00) upon reset.
+- The output z should be driven based on the current state as follows:
+  - z = 1 when in state E (100)
+  - z = 0 for all other states.
+
+Clock Cycle Relationships:
+- All state transitions and output updates occur on the positive edge of the clk signal, contingent upon the reset not being asserted.
+
+Edge Case Handling:
+- Ensure that transitions from any state to State A (00) occur reliably when the reset is activated, regardless of the state or input signal w.
+- Input w should be sampled on the rising edge of clk.
+
+Signal Dependencies:
+- The next state logic is dependent on both the current state and the value of the input signal w.
+- Ensure that no race conditions occur in the state transition logic.
+</ENHANCED_SPEC>

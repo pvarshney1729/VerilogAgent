@@ -1,0 +1,52 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: bit (1-bit wide, positive edge-triggered)
+  - reset: bit (1-bit wide, active-high synchronous reset)
+  - in: bit (1-bit wide, represents incoming serial data)
+  
+- Output Ports:
+  - done: bit (1-bit wide, indicates completion of byte reception)
+
+Protocol Description:
+The module implements a finite state machine (FSM) designed to receive data bytes according to a standard serial communication protocol consisting of:
+- 1 Start Bit (value: 0)
+- 8 Data Bits (LSB first)
+- 1 Stop Bit (value: 1)
+The line is at logic high (1) when idle, meaning no data is being transmitted.
+
+Functional Operation:
+1. The FSM shall identify the start bit (0) to signify the beginning of a byte.
+2. Upon detecting the start bit, the FSM will proceed to receive 8 data bits in the following order:
+   - Bit[0]: Least Significant Bit (LSB)
+   - Bit[7]: Most Significant Bit (MSB)
+3. After receiving the data bits, the FSM will expect a stop bit (1) to complete the byte reception.
+4. If the stop bit does not appear after the expected reception of 8 data bits, the FSM must remain in the current state until a valid stop bit is detected before attempting to receive a new byte.
+
+Reset Behavior:
+- The reset input is active-high and synchronous. When reset is asserted (reset = 1), all internal state registers must be initialized to a known state, which includes:
+  - Resetting the FSM to the idle state.
+  - Ensuring that the output signal 'done' is deasserted (0).
+
+Timing and Dependencies:
+- All sequential logic, including state transitions and data reception, is triggered on the positive edge of the clk signal.
+- Ensure there are no race conditions by clearly defining the order of operations within the FSM.
+
+Edge Cases:
+- The FSM shall properly handle cases where noise or invalid signals occur before a valid start bit and ensure robust detection of start and stop bits.
+- The FSM should maintain its state during periods of idle (logic high) until a valid start bit is detected.
+
+State Definitions:
+- Clearly define all states required for the FSM:
+  - Idle State
+  - Start Bit State
+  - Data Bit Reception States (8 states for each data bit)
+  - Stop Bit State
+  - Error State (if applicable)
+
+Output Behavior:
+- The output signal 'done' should transition to high (1) once a complete byte has been correctly received, meaning a valid start bit was detected, followed by 8 valid data bits, and a valid stop bit was received.
+
+</ENHANCED_SPEC>

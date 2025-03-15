@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic load,\n    input logic ena,\n    input logic [3:0] data,\n    output logic [3:0] q\n);\n\nalways @(posedge clk) begin\n    if (areset) begin\n        q <= 4'b0000;\n    end else if (load) begin\n        q <= data;\n    end else if (ena) begin\n        q <= {1'b0, q[3:1]};\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 6,
-        "passfail": "R"
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire clk,  // Clock signal, triggers on the positive edge\n    input wire a,    // Input signal a, 1-bit\n    input wire b,    // Input signal b, 1-bit\n    output reg q,    // Output signal q, 1-bit\n    output reg state // Output signal state, 1-bit (observable state of the flip-flop)\n);\n\n    // Initial state configuration\n    initial begin\n        q = 1'b0;\n        state = 1'b0;\n    end\n\n    always @(posedge clk) begin\n        // Define the logic for state and q based on a, b, and current state\n        case ({state, a, b})\n            3'b000: begin\n                state <= 1'b0;\n                q <= 1'b0;\n            end\n            3'b001: begin\n                state <= 1'b0;\n                q <= 1'b1;\n            end\n            3'b010: begin\n                state <= 1'b1;\n                q <= 1'b0;\n            end\n            3'b011: begin\n                state <= 1'b1;\n                q <= 1'b1;\n            end\n            3'b100: begin\n                state <= 1'b0;\n                q <= 1'b0;\n            end\n            3'b101: begin\n                state <= 1'b0;\n                q <= 1'b1;\n            end\n            3'b110: begin\n                state <= 1'b1;\n                q <= 1'b0;\n            end\n            3'b111: begin\n                state <= 1'b1;\n                q <= 1'b1;\n            end\n            default: begin\n                state <= 1'b0;\n                q <= 1'b0;\n            end\n        endcase\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 16,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

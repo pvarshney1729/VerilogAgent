@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire clk,        // Clock signal for synchronous operations\n    input wire reset,      // Asynchronous active-high reset\n    input wire load,       // Active-high load signal\n    input wire ena,        // Active-high enable signal for shifting\n    input wire [1:0] amount,  // 2-bit signal to determine shift direction and amount\n    input wire [63:0] data,   // 64-bit input data for loading\n    output reg [63:0] q       // 64-bit output register, contents of the shifter\n);\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        q <= 64'b0;\n    end else begin\n        if (load) begin\n            q <= data;\n        end else if (ena) begin\n            case (amount)\n                2'b00: q <= q << 1;\n                2'b01: q <= q << 8;\n                2'b10: q <= $signed(q) >>> 1;\n                2'b11: q <= $signed(q) >>> 8;\n                default: q <= q;\n            endcase\n        end\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

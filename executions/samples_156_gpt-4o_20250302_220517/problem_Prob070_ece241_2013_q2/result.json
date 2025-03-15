@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic a,    // MSB of the input binary number\n    input logic b,    // Second MSB\n    input logic c,    // Third MSB\n    input logic d,    // LSB of the input binary number\n    output logic out_sop,  // Output in minimum sum-of-products form\n    output logic out_pos   // Output in minimum product-of-sums form\n);\n\n    // Sum-of-Products (SOP) form\n    // out_sop = (a'b'cd) + (a'bcd) + (abcd)\n    assign out_sop = (~a & ~b & c & d) | (~a & b & c & d) | (a & b & c & d);\n\n    // Product-of-Sums (POS) form\n    // out_pos = (a + b + ~c + ~d) * (a + ~b + ~c + d) * (~a + ~b + c + d)\n    assign out_pos = (a | b | ~c | ~d) & (a | ~b | ~c | d) & (~a | ~b | c | d);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 83,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

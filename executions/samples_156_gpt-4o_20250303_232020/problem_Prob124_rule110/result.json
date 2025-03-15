@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule(\n    input wire clk,\n    input wire load,\n    input wire [511:0] data,\n    output reg [511:0] q\n);\n\n    always @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            integer i;\n            reg [511:0] next_q;\n            for (i = 0; i < 512; i = i + 1) begin\n                case ({(i < 511) ? q[i+1] : 1'b0, q[i], (i > 0) ? q[i-1] : 1'b0})\n                    3'b111: next_q[i] = 1'b0;\n                    3'b110: next_q[i] = 1'b1;\n                    3'b101: next_q[i] = 1'b1;\n                    3'b100: next_q[i] = 1'b0;\n                    3'b011: next_q[i] = 1'b1;\n                    3'b010: next_q[i] = 1'b1;\n                    3'b001: next_q[i] = 1'b1;\n                    3'b000: next_q[i] = 1'b0;\n                    default: next_q[i] = 1'b0;\n                endcase\n            end\n            q <= next_q;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

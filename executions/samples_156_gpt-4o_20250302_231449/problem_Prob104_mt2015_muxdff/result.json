@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic L,\n    input logic q_in,\n    input logic r_in,\n    output logic Q\n);\n\n    logic Q_next;\n\n    always @(*) begin\n        Q_next = (L) ? r_in : q_in;\n    end\n\n    always_ff @(posedge clk) begin\n        Q <= Q_next;\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

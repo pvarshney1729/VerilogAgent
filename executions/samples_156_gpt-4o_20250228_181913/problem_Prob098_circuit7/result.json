@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic a,\n    output logic q\n);\n    logic prev_a; // Register to track the previous state of 'a'\n\n    initial begin\n        q = 1'b0;      // Initialize output\n        prev_a = 1'b0; // Initialize previous 'a'\n    end\n\n    always @(posedge clk) begin\n        if (a && !prev_a) begin\n            q <= ~q; // Toggle q when 'a' transitions from 0 to 1\n        end\n        prev_a <= a; // Update prev_a to current 'a'\n    end\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

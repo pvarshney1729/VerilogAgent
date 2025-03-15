@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic train_valid,\n    input logic train_taken,\n    output logic [1:0] state\n);\n\n    logic [1:0] counter;\n\n    always @(posedge clk) begin\n        if (areset) begin\n            counter <= 2'b01; // Reset to weakly not-taken\n        end else if (train_valid) begin\n            if (train_taken) begin\n                if (counter < 2'b11) begin\n                    counter <= counter + 2'b01; // Increment\n                end\n            end else begin\n                if (counter > 2'b00) begin\n                    counter <= counter - 2'b01; // Decrement\n                end\n            end\n        end\n    end\n\n    assign state = counter; // Assign the current state of the counter to the output port state[1:0]\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 5,
-        "passfail": "R"
-    }
-}

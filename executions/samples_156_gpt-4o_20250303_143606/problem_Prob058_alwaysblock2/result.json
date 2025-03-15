@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,          // Clock signal\n    input logic reset_n,      // Active-low synchronous reset\n    input logic a,            // Input signal a\n    input logic b,            // Input signal b\n    output logic out_assign,  // Output signal using assign statement\n    output logic out_always_comb, // Output signal using always_comb block\n    output logic out_always_ff // Output signal using always_ff block\n);\n\n    // Implement XOR using assign statement\n    assign out_assign = a ^ b;\n\n    // Implement XOR using always_comb block\n    always_comb begin\n        out_always_comb = a ^ b;\n    end\n\n    // Implement XOR using always_ff block with synchronous reset\n    always_ff @(posedge clk) begin\n        if (!reset_n)\n            out_always_ff <= 1'b0;\n        else\n            out_always_ff <= a ^ b;\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic rst_n,  // Asynchronous active-low reset\n    input logic [7:0] d,  // 8-bit data input\n    output logic [7:0] q   // 8-bit data output\n);\n\n  always_ff @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n      q <= 8'b00000000;  // Reset output to 0\n    end else begin\n      q <= d;  // Transfer input to output\n    end\n  end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

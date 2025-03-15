@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire c;            // 1-bit input representing 'c'
+  - input wire d;            // 1-bit input representing 'd'
+  
+- Output Ports:
+  - output wire [3:0] mux_in; // 4-bit output representing the inputs to the 4-to-1 multiplexer
+
+Functional Description:
+The module implements a combinational logic circuit based on the provided Karnaugh map. The outputs of the module are defined based on the values of the input signals 'c' and 'd', which serve as inputs to the logic that generates 'mux_in'.
+
+Karnaugh Map Representation:
+The output 'mux_in' is determined according to the following Karnaugh map:
+
+      ab
+  cd  00  01  11  10
+  00 | 0 | 0 | 0 | 1 |
+  01 | 1 | 0 | 0 | 0 |
+  11 | 1 | 0 | 1 | 1 |
+  10 | 1 | 0 | 0 | 1 |
+
+Where:
+- 'a' and 'b' are the selector inputs for the 4-to-1 multiplexer.
+- The output conditions for 'mux_in' based on the selector inputs {a, b} are as follows:
+  - mux_in[0] corresponds to ab = 00
+  - mux_in[1] corresponds to ab = 01
+  - mux_in[2] corresponds to ab = 11
+  - mux_in[3] corresponds to ab = 10
+
+Implementation Constraints:
+- The module must exclusively utilize one 4-to-1 multiplexer and the minimum number of 2-to-1 multiplexers necessary to realize the logic defined by the K-map.
+- No additional logic gates are permitted in the implementation.
+
+Signal Dependencies and Definitions:
+- The output 'mux_in' should be defined combinationally based on the values of 'c' and 'd'. 
+- No sequential logic is present in this module, and it does not require any clock signal or reset functionality.
+
+Edge Cases:
+- The behavior of 'mux_in' must be clearly defined for all combinations of inputs 'c' and 'd'. 
+
+Note:
+- Ensure that all connections and selector assignments to the multiplexers are accurately defined to prevent any race conditions or ambiguities in signal flow.
+</ENHANCED_SPEC>

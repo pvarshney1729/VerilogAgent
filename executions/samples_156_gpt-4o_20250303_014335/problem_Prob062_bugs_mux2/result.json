@@ -1,8 +1,0 @@
-{
-    "code": "// Enhanced Specification for an 8-bit 2-to-1 Multiplexer\n\n// Module Interface\nmodule TopModule (\n    input logic       sel,    // Selection line, determines output source\n    input logic [7:0] a,      // 8-bit input source A\n    input logic [7:0] b,      // 8-bit input source B\n    output logic [7:0] mux_out // 8-bit output of the multiplexer\n);\n\n// Description:\n// This module implements an 8-bit 2-to-1 multiplexer. The output 'mux_out' \n// selects between input 'a' and input 'b' based on the control signal 'sel'.\n// When 'sel' is low (0), 'mux_out' will output the value of 'a'. \n// When 'sel' is high (1), 'mux_out' will output the value of 'b'.\n\n// Signal Definitions:\n// - All signals are unsigned and use little-endian bit ordering (bit[0] is LSB).\n// - 'sel' is a single-bit input used to select between data sources 'a' and 'b'.\n\n// Combinational Logic Implementation:\nassign mux_out = sel ? b : a;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 2
-}

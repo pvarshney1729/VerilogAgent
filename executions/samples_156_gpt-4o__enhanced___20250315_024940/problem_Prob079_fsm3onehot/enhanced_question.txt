@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+Module Specification for TopModule:
+
+Module Name: TopModule
+
+Input/Output Interface:
+- Input Ports:
+  - input wire in: 1-bit input signal
+  - input wire [3:0] state: 4-bit input signal representing the current state (one-hot encoded)
+- Output Ports:
+  - output wire [3:0] next_state: 4-bit output signal representing the next state (one-hot encoded)
+  - output wire out: 1-bit output signal
+
+State Encoding:
+- One-hot state encoding is defined as follows:
+  - State A: 4'b0001
+  - State B: 4'b0010
+  - State C: 4'b0100
+  - State D: 4'b1000
+
+State Transition Logic:
+- The module implements the combinational logic of a Moore state machine based on the following state transition table:
+
+| Current State | Input (in) | Next State | Output (out) |
+|---------------|------------|-------------|--------------|
+| A (4'b0001)   | 0          | A (4'b0001) | 0            |
+| A (4'b0001)   | 1          | B (4'b0010) | 0            |
+| B (4'b0010)   | 0          | C (4'b0100) | 0            |
+| B (4'b0010)   | 1          | B (4'b0010) | 0            |
+| C (4'b0100)   | 0          | A (4'b0001) | 0            |
+| C (4'b0100)   | 1          | D (4'b1000) | 0            |
+| D (4'b1000)   | 0          | C (4'b0100) | 1            |
+| D (4'b1000)   | 1          | B (4'b0010) | 1            |
+
+Behavioral Description:
+- The output (out) is determined solely by the current state of the machine and not by the input (in).
+- The next state (next_state) is derived from the current state and the value of the input (in).
+
+Implementation Requirements:
+- Clearly separate combinational logic from any potential sequential logic.
+- Ensure that there is no race condition in the combinational logic.
+- The module does not include any storage elements or sequential elements; hence, no reset conditions are defined.
+
+Edge Case Handling:
+- The module should handle transitions appropriately for each defined state and input combination as outlined in the state transition table.
+
+Initial Values:
+- As this module is purely combinational, there are no flip-flops or registers that require initial values or reset states.
+
+End of Specification.
+</ENHANCED_SPEC>

@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,                // Clock signal, positive edge-triggered\n    input logic reset,              // Active high synchronous reset\n    input logic [7:0] in,           // 8-bit input data stream from PS/2 mouse\n    output logic done               // Output signal indicating message receipt\n);\n\n    typedef enum logic [1:0] {\n        IDLE = 2'b00,\n        BYTE1 = 2'b01,\n        BYTE2 = 2'b10,\n        DONE = 2'b11\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            IDLE: begin\n                if (in[3] == 1) \n                    next_state = BYTE1;\n                else \n                    next_state = IDLE;\n            end\n            BYTE1: begin\n                next_state = BYTE2;\n            end\n            BYTE2: begin\n                next_state = DONE;\n            end\n            DONE: begin\n                next_state = IDLE;\n            end\n            default: next_state = IDLE;\n        endcase\n    end\n\n    // State update and output logic\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= IDLE;\n            done <= 0;\n        end else begin\n            current_state <= next_state;\n            if (next_state == DONE) \n                done <= 1;\n            else \n                done <= 0;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 68,
-        "passfail": "R"
-    }
-}

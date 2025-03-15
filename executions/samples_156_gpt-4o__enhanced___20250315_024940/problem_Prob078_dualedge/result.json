@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic d,\n    output logic q\n);\n    logic d_latched;\n\n    // Capture the input d on the rising edge of clk\n    always @ (posedge clk) begin\n        d_latched <= d;\n    end\n\n    // Capture the input d on the falling edge of clk\n    always @ (negedge clk) begin\n        q <= d_latched;\n    end\n\n    // Ensure q reflects d on both edges\n    always @ (posedge clk or negedge clk) begin\n        q <= d;\n    end\n\n    // Initial condition for simulation\n    initial begin\n        q = 1'b0; // Initialize q to 0\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 52,
+        "passfail": "R"
+    }
+}

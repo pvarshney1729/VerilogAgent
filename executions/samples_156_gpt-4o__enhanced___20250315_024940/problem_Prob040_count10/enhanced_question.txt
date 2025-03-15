@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input representing the clock signal. This signal is used to trigger the sequential logic on the positive edge.
+  - reset: 1-bit input representing the reset signal. This signal is active high and is used for synchronous reset of the counter.
+
+- Output Ports:
+  - q: 4-bit output representing the current count of the decade counter. The bit indexing is defined as follows: 
+    - q[0] refers to the least significant bit (LSB)
+    - q[3] refers to the most significant bit (MSB)
+
+Functionality:
+- The module implements a decade counter that counts from 0 to 9, inclusive, and then resets back to 0, completing a full cycle every 10 clock cycles.
+- The counter should increment on the positive edge of the clk signal.
+
+Reset Behavior:
+- The reset input is active high and synchronous. When the reset signal is asserted (set to '1'), the counter output (q) will be reset to '0000' (binary representation of 0) on the next positive edge of clk.
+
+Initial Values:
+- Upon reset, all bits of the output q (q[3:0]) are initialized to '0000'.
+
+Edge Case Handling:
+- The counter must ensure that it does not exceed the value of 9. After reaching 9, the next positive edge of clk should reset the counter back to 0 if the reset signal is not asserted.
+
+Signal Dependencies:
+- The output q is solely dependent on the clk and reset inputs. There are no other external signals that influence the counter's operation.
+- Ensure that there are no race conditions between the reset and clock edges.
+
+Clarity on Count Sequence:
+- The count sequence is as follows: 0 (0000) → 1 (0001) → 2 (0010) → 3 (0011) → 4 (0100) → 5 (0101) → 6 (0110) → 7 (0111) → 8 (1000) → 9 (1001) → 0 (0000).
+
+Timing:
+- Assume a clock period sufficient to accommodate the operations of the counter without timing violations.
+</ENHANCED_SPEC>

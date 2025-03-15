@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input  logic        clk,    // Clock input\n    input  logic        reset,  // Active high synchronous reset\n    input  logic [31:0] in,     // 32-bit input vector, unsigned\n    output logic [31:0] out     // 32-bit output vector, unsigned\n);\n\n    logic [31:0] prev_in; // Register to hold the previous state of 'in'\n\n    // Sequential logic to capture 1-to-0 transitions\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            out <= 32'b0; // Reset output to zero\n            prev_in <= 32'b0; // Reset previous input to zero\n        end else begin\n            // Detect 1-to-0 transitions and set corresponding bits in 'out'\n            out <= out | (prev_in & ~in);\n            // Update previous input\n            prev_in <= in;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 91,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Interface:
+- Input Ports:
+  - in: bit[3:0] (4 bits, unsigned) 
+    - Description: A 4-bit input vector where bit[0] is the least significant bit (LSB) and bit[3] is the most significant bit (MSB).
+  
+- Output Ports:
+  - pos: bit[1:0] (2 bits, unsigned)
+    - Description: A 2-bit output representing the position of the highest priority (first) '1' bit in the input vector. The output is defined such that pos = 2'b00 if no input bits are high.
+
+Functional Description:
+- The module implements a 4-bit priority encoder, which is a combinational logic circuit. The output pos indicates the index of the first '1' bit present in the input vector 'in'.
+- If there are no '1' bits in the input vector (i.e., in == 4'b0000), the output pos shall be 2'b00.
+  
+Behavioral Definitions:
+- The outputs are determined based on the following conditions:
+  - If in[0] == 1, pos = 2'b00
+  - If in[1] == 1, pos = 2'b01
+  - If in[2] == 1, pos = 2'b10
+  - If in[3] == 1, pos = 2'b11
+  - If in == 4'b0000, pos = 2'b00
+
+Edge Cases:
+- The output pos must be 2'b00 when in is 4'b0000.
+- For any valid input combination of the 4-bit 'in', the output pos must reflect the position of the first '1' bit, with priority given to the MSB.
+
+Implementation Constraints:
+- Ensure there are no race conditions in the logic determining the output pos.
+- Since this is a combinational circuit, there are no clock cycles or sequential elements involved. 
+
+Reset Conditions:
+- There are no reset conditions as this is purely a combinational circuit.
+
+Signal Dependencies:
+- The output pos is directly dependent on the values of the input bits in 'in'. The evaluation of outputs must be performed in a manner that guarantees correct priorities based on the input conditions stated.
+
+</ENHANCED_SPEC>

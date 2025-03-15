@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic a,\n    input logic b,\n    output logic out_assign,\n    output logic out_always_comb,\n    output logic out_always_ff\n);\n\n    // Combinational logic using assign\n    assign out_assign = a ^ b;\n\n    // Combinational logic using always_comb\n    always_comb begin\n        out_always_comb = a ^ b;\n    end\n\n    // Sequential logic using always_ff\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            out_always_ff <= 1'b0;\n        end else begin\n            out_always_ff <= out_always_comb;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

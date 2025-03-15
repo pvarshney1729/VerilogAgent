@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (active high), used for clock signal.
+  - reset: 1-bit input (active high), used for synchronous reset.
+
+- Output Ports:
+  - q: 32-bit output (unsigned), represents the current state of the Galois LFSR.
+
+Description:
+The module implements a 32-bit Galois Linear Feedback Shift Register (LFSR). The LFSR shifts its contents to the right, with specific tap positions that influence the next state of the register. The tap positions for this LFSR are defined as follows:
+- Tap positions are at bit indices 31, 21, 1, and 0 (with bit[0] being the least significant bit and bit[31] being the most significant bit).
+
+Reset Behavior:
+- The reset signal is active high and synchronous. When the reset signal is asserted (reset = 1), the output q will be set to the value 32'h00000001.
+- All registers in the LFSR are initialized to this reset value when the reset signal is activated.
+
+Clock Behavior:
+- All sequential logic within the module is triggered on the positive edge of the clock (clk), ensuring that all updates to the state of q occur synchronously with the clock signal.
+
+Operational Behavior:
+- On each positive edge of clk, if reset is not asserted, the LFSR will perform the following operations:
+  - Shift the current value of q to the right by one bit.
+  - The new least significant bit (q[0]) will be determined by XORing the bits at the specified tap positions (31, 21, 1) with the current least significant bit (q[0]).
+- The feedback logic is critical for the operation of the LFSR and must be implemented correctly to ensure proper functionality.
+
+Edge Cases:
+- When the LFSR is reset, it immediately sets q to 32'h00000001, regardless of its previous state.
+- The output q must always be a valid 32-bit value, either representing the reset state or the shifted state of the LFSR.
+
+Signal Dependencies:
+- The output q depends on its previous state and the specified tap positions. Ensure that the XOR operations and shifts are handled correctly to avoid race conditions during clock edges.
+</ENHANCED_SPEC>

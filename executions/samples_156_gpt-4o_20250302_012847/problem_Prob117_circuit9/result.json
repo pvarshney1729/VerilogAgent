@@ -1,8 +1,0 @@
-{
-    "code": "module counter(\n    input logic clk,\n    input logic reset_n, // Active low synchronous reset\n    output logic [2:0] q\n);\n\n    always_ff @(posedge clk) begin\n        if (!reset_n) begin\n            q <= 3'b000; // Initialize to zero on reset\n        end else if (q == 3'b110) begin\n            q <= 3'b000; // Wrap around after reaching 3'b110\n        end else begin\n            q <= q + 1'b1; // Increment counter\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

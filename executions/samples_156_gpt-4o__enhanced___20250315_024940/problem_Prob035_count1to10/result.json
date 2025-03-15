@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [3:0] q\n);\n\n    // Counter state initialization\n    always @(posedge clk) begin\n        if (reset) begin\n            // Synchronous reset to 1\n            q <= 4'b0001;\n        end else begin\n            // Increment counter on clock edge\n            if (q == 4'b1010) begin\n                // Reset to 1 if count reaches 10\n                q <= 4'b0001;\n            end else begin\n                // Increment the counter\n                q <= q + 1;\n            end\n        end\n    end\n\n    // Initialize q to 1 in simulation\n    initial begin\n        q = 4'b0001;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

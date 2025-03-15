@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input signal representing the clock. The most significant bit (MSB) is bit[0].
+  - areset: 1-bit input signal for active high asynchronous reset. The MSB is bit[0].
+  - d: 8-bit input data signal (d[7:0]), where d[0] is the least significant bit (LSB) and d[7] is the MSB.
+
+- Output Ports:
+  - q: 8-bit output signal (q[7:0]), where q[0] is the LSB and q[7] is the MSB.
+
+Functional Description:
+- The module will contain 8 D flip-flops (DFFs) with the following characteristics:
+  - Triggering: Each DFF will be triggered on the positive edge of the clk signal.
+  - Reset: Each DFF will have an active high asynchronous reset, meaning that when areset is high, each DFF will reset its output to 0 regardless of the clk signal.
+
+Sequential Logic Details:
+- The reset state of all DFF outputs (q[7:0]) will be initialized to 0 when areset is high.
+- The output q will reflect the input d after the positive edge of clk when areset is low.
+
+Edge Cases and Input Boundaries:
+- Ensure that the module behaves correctly when:
+  - areset is asserted while clk is stable.
+  - clk transitions while areset is asserted.
+  - d changes while areset is asserted.
+
+Signal Dependencies:
+- The output q[7:0] depends on the input d[7:0] and the clk signal, with precedence given to areset during its active state.
+
+Race Conditions:
+- Ensure that the design avoids race conditions by maintaining clear timing relationships between areset, clk, and d inputs.
+
+Initial Values:
+- All DFF outputs (q[7:0]) should be explicitly defined to reset to 0 upon an active high areset signal.
+</ENHANCED_SPEC>

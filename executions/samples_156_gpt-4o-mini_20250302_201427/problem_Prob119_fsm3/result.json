@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    logic clk,\n    logic areset,\n    logic in,\n    logic out\n);\n\n    // State encoding\n    parameter A = 2'b00, B = 2'b01, C = 2'b10, D = 2'b11;\n    logic [1:0] state, next_state;\n\n    // Next state logic\n    always @(*) begin\n        case (state)\n            A: next_state = (in) ? B : A;\n            B: next_state = (in) ? B : C;\n            C: next_state = (in) ? D : A;\n            D: next_state = (in) ? B : C;\n            default: next_state = A; // Default case for safety\n        endcase\n    end\n\n    // Sequential logic\n    always @(posedge clk) begin\n        if (areset) begin\n            state <= A;\n        end else begin\n            state <= next_state;\n        end\n    end\n\n    // Output logic\n    always @(*) begin\n        case (state)\n            A, B, C: out = 0;\n            D: out = 1;\n            default: out = 0; // Default case for safety\n        endcase\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 3
-}

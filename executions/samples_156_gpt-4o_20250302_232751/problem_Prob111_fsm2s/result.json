@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input  wire i_clk,         // Clock signal, active on the rising edge\n    input  wire i_reset,       // Active-high synchronous reset\n    input  wire i_j,           // Input signal j\n    input  wire i_k,           // Input signal k\n    output reg  o_out          // Output signal, depends on the current state\n);\n\n    // State encoding\n    typedef enum logic [0:0] {\n        OFF = 1'b0,\n        ON  = 1'b1\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            OFF: begin\n                if (i_j)\n                    next_state = ON;\n                else\n                    next_state = OFF;\n            end\n            ON: begin\n                if (i_k)\n                    next_state = OFF;\n                else\n                    next_state = ON;\n            end\n            default: next_state = OFF;\n        endcase\n    end\n\n    // State register and output logic\n    always @(posedge i_clk) begin\n        if (i_reset) begin\n            current_state <= OFF;\n            o_out <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            o_out <= (current_state == ON) ? 1'b1 : 1'b0;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 1
-}

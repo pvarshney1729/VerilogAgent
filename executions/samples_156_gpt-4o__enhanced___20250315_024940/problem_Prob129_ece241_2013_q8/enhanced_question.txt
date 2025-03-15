@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, rising edge triggered)
+  - aresetn: 1-bit input (active low asynchronous reset)
+  - x: 1-bit input (input signal for sequence detection)
+
+- Output Ports:
+  - z: 1-bit output (output signal asserted high when sequence "101" is detected)
+
+Functional Specification:
+1. The module implements a Mealy-type finite state machine (FSM) that recognizes the bit sequence "101" on the input signal x.
+2. The output signal z shall be asserted to logic high (1) immediately upon detecting the "101" sequence, including overlapping occurrences.
+3. The FSM consists of exactly 3 states to track the detection of the sequence. The states are as follows:
+   - State 0 (S0): Initial state, waiting for '1'.
+   - State 1 (S1): Detected '1', waiting for '0'.
+   - State 2 (S2): Detected '10', waiting for '1' to complete the sequence.
+
+4. Asynchronous Reset:
+   - The aresetn input is an active low asynchronous reset. When aresetn is low (0), the FSM shall reset to State 0 (S0) regardless of the clock signal.
+   - Upon asserting aresetn, the output z shall be de-asserted (0).
+
+5. Sequential Logic:
+   - The state transitions occur on the rising edge of the clk signal.
+   - The next state logic must be defined based on the current state and the value of x at the time of the clock edge.
+
+6. Initial Conditions:
+   - All state registers should be initialized to State 0 (S0) when the module is reset.
+
+7. Edge Cases:
+   - If x is continuously high or low, the FSM shall properly maintain its state until a transition occurs.
+   - The FSM must handle rapid changes in x without missing transitions or causing erroneous outputs.
+
+8. Signal Dependencies:
+   - The state transitions and output logic must be clearly defined to avoid race conditions based on the current state and the input x.
+
+9. State Transition Table:
+   - The state transition logic should be clearly documented in a state transition table that defines the next state and output for each combination of current state and input x.
+
+10. Output Behavior:
+    - The output z should be defined for all state transitions, ensuring that it reflects the correct detection of the sequence "101".
+
+</ENHANCED_SPEC>

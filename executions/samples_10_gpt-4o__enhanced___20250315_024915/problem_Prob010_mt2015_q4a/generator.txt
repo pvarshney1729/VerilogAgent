@@ -1,0 +1,48 @@
+Generated Response:
+
+Based on the provided specifications and guidelines, here is the implementation of the `TopModule` in Verilog. The module takes two 1-bit inputs, `x` and `y`, and produces a 1-bit output, `z`, according to the specified boolean function.
+
+### Reasoning
+1. **Input and Output Declaration**: The inputs `x` and `y` are declared as `logic` type, as well as the output `z`.
+2. **Combinational Logic**: Since `z` is a combinational output depending on `x` and `y`, we will use an `always @(*)` block to compute `z`.
+3. **Boolean Function Implementation**: The function `z = (x ^ y) & x` is implemented directly inside the always block.
+4. **No Reset Logic**: As specified, there is no synchronous reset condition since this module does not have any sequential elements.
+
+### Verilog Code
+Here is the complete code for the `TopModule`:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic x,
+    input logic y,
+    output logic z
+);
+
+    always @(*) begin
+        z = (x ^ y) & x;
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation of the Code
+- The module is named `TopModule` and has the specified input and output ports.
+- The `always @(*)` block is used to ensure that the output `z` is updated whenever there is a change in inputs `x` or `y`.
+- The expression `(x ^ y) & x` computes the value of `z` according to the desired boolean function.
+- This implementation adheres to the coding conventions and guidelines provided, ensuring correct syntax and logic generation.
+
+Generated Code:
+
+module TopModule (
+    input logic x,
+    input logic y,
+    output logic z
+);
+
+    always @(*) begin
+        z = (x ^ y) & x;
+    end
+
+endmodule

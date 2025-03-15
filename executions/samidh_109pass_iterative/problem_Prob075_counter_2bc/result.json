@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire clk,             // Clock input, triggers on positive edge\n    input wire areset,          // Asynchronous reset, active high\n    input wire train_valid,     // Training validity signal\n    input wire train_taken,     // Training taken signal\n    output reg [1:0] state      // 2-bit counter output\n);\n\n    // Initial state on power-up\n    initial begin\n        state = 2'b01;\n    end\n\n    always @(posedge clk or posedge areset) begin\n        if (areset) begin\n            state <= 2'b01; // Asynchronous reset to weakly not-taken\n        end else if (train_valid) begin\n            if (train_taken) begin\n                if (state < 2'b11) begin\n                    state <= state + 1;\n                end\n            end else begin\n                if (state > 2'b00) begin\n                    state <= state - 1;\n                end\n            end\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

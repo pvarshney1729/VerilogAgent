@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule(\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    // Internal signals for flip-flop outputs\n    logic ff_xor, ff_and, ff_or;\n\n    // XOR Gate Logic\n    logic xor_d;\n    assign xor_d = x ^ ff_xor;\n\n    // AND Gate Logic\n    logic and_d;\n    assign and_d = x & ~ff_and;\n\n    // OR Gate Logic\n    logic or_d;\n    assign or_d = x | ~ff_or;\n\n    // Flip-Flops with synchronous reset\n    always_ff @(posedge clk) begin\n        ff_xor <= xor_d;\n        ff_and <= and_d;\n        ff_or <= or_d;\n    end\n\n    // NOR Gate for output logic\n    assign z = ~(ff_xor | ff_and | ff_or);\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

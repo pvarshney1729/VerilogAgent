@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input representing the clock signal (positive edge-triggered).
+  - reset: 1-bit input representing the synchronous reset signal (active high).
+  - slowena: 1-bit input indicating whether the counter should increment (active high).
+  
+- Output Ports:
+  - q: 4-bit output representing the current count of the decade counter. The bit indexing is defined as follows:
+    - q[3]: Most Significant Bit (MSB)
+    - q[2]:  
+    - q[1]:  
+    - q[0]: Least Significant Bit (LSB)
+
+Functional Description:
+The module implements a decade counter that counts from 0 to 9 (inclusive), with a cycle period of 10 clock cycles. The counter increments its value on the rising edge of the clk signal only when the slowena input is high. The counter should reset to 0 upon receiving a high signal on the reset input.
+
+Behavioral Details:
+- Reset Behavior:
+  - The reset is synchronous and active high. All internal registers (including the counter) should be set to 0 when reset is high during the clock cycle.
+  
+- Counter Behavior:
+  - On each positive edge of clk:
+    - If reset is high, set q to 0000 (4'b0000).
+    - If reset is low and slowena is high, increment the counter (q) by 1.
+    - If the counter reaches 10 (i.e., 4'b1010), it should roll over to 0 (i.e., 4'b0000).
+  
+Signal Dependencies:
+- The counter's next state depends on the current state of q and the state of the slowena signal.
+- Ensure there are no race conditions by only allowing the counter to be incremented when both reset is low and slowena is high.
+  
+Edge Cases:
+- If reset is activated while slowena is also high, the counter must immediately reset to 0 on the next clock edge.
+
+Initial Values:
+- The output q should be initialized to 0 (4'b0000) at power-up or upon reset.
+
+End of Specification.
+</ENHANCED_SPEC>

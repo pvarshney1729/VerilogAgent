@@ -1,8 +1,0 @@
-{
-    "code": "module transition_detector (\n    input logic clk,\n    input logic rst_n,\n    input logic [31:0] data_in,\n    output logic [31:0] transition_out\n);\n\n    logic [31:0] data_reg;\n\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            data_reg <= 32'b0;\n            transition_out <= 32'b0;\n        end else begin\n            transition_out <= (data_reg & ~data_in);\n            data_reg <= data_in;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

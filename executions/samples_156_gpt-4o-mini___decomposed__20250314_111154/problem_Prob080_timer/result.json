@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic load,\n    input logic [9:0] data,\n    output logic tc\n);\n    logic [9:0] counter;\n\n    always @(posedge clk) begin\n        if (load) begin\n            counter <= data; // Load the counter with data\n            tc <= 0;        // Reset tc when loading new value\n        end else if (counter > 0) begin\n            counter <= counter - 1; // Decrement the counter\n            tc <= 0;                // tc remains low while counting\n        end\n        if (counter == 0) begin\n            tc <= 1; // Assert tc when counter reaches 0\n        end\n    end\nendmodule",
-    "test_results": {
-        "num_mismatch": 248,
-        "passfail": "R"
-    }
-}

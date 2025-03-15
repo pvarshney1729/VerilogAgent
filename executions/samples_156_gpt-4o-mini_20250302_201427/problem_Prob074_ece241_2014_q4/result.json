@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    logic Q1, Q2, Q3;\n    logic next_Q1, next_Q2, next_Q3;\n\n    // D flip-flops with asynchronous reset\n    always @(posedge clk) begin\n        Q1 <= next_Q1;\n        Q2 <= next_Q2;\n        Q3 <= next_Q3;\n    end\n\n    // Combinational logic for next state\n    always @(*) begin\n        next_Q1 = x ^ Q1;\n        next_Q2 = x & ~Q2;\n        next_Q3 = x | ~Q3;\n    end\n\n    // Output logic\n    assign z = ~(Q1 | Q2 | Q3);\n\n    // Asynchronous reset logic\n    initial begin\n        Q1 = 1'b0;\n        Q2 = 1'b0;\n        Q3 = 1'b0;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

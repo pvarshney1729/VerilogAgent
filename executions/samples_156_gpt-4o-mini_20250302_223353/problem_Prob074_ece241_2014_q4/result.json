@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    logic xor_ff, and_ff, or_ff;\n\n    // D flip-flops with asynchronous reset\n    always @(posedge clk) begin\n        xor_ff <= x ^ xor_ff; // XOR operation\n        and_ff <= x & ~and_ff; // AND operation\n        or_ff <= x | ~or_ff; // OR operation\n    end\n\n    // Three-input NOR gate\n    assign z = ~(xor_ff | and_ff | or_ff);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 45,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

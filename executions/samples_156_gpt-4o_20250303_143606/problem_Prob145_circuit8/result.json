@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clock,\n    input logic a,\n    output logic p,\n    output logic q\n);\n\n    // Internal registers for state\n    logic p_next, q_next;\n\n    // Initial block for simulation purposes\n    initial begin\n        p = 1'b0;\n        q = 1'b0;\n    end\n\n    // Sequential logic for p and q\n    always_ff @(posedge clock) begin\n        p <= p_next;\n        q <= q_next;\n    end\n\n    // Combinational logic to determine next state\n    always_comb begin\n        p_next = a ? 1'b1 : p;\n        q_next = p;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 128,
-        "passfail": "R"
-    }
-}

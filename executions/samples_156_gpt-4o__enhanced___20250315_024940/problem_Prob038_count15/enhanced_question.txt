@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal) 
+  - reset: 1-bit input (active high synchronous reset signal)
+  
+- Output Ports:
+  - q: 4-bit output (binary counter value) 
+    - q[3:0]: bit[3] is the most significant bit (MSB), and bit[0] is the least significant bit (LSB).
+
+Functional Specification:
+- The module shall implement a 4-bit binary counter that counts from 0 to 15, inclusive, with a reset functionality.
+- The counter increments its value on the positive edge of the clk signal.
+- The counter shall wrap around to 0 after reaching 15, effectively creating a counting period of 16.
+
+Reset Behavior:
+- The reset signal (reset) is active high and synchronous. When reset is asserted (high), the counter (q) shall be set to 0 (0000).
+- The counter shall only reset on the positive edge of the clk when reset is asserted.
+
+Sequential Logic:
+- The counter shall be implemented using flip-flops that are clocked on the rising edge of the clk signal.
+- The counter state (q) shall be updated in accordance with the following behavior:
+  - If reset is low (deasserted), on the next rising edge of clk, if the counter is less than 15, it shall increment by 1.
+  - If the counter reaches 15, it shall reset to 0 on the next increment.
+
+Edge Cases:
+- When reset is asserted, q should immediately be set to 0 regardless of the current counter state.
+- When clk transitions from low to high, and reset is not asserted, the counter should follow the specified counting behavior.
+
+Initialization:
+- Upon instantiation, the counter value (q) shall be initialized to 0 (0000) in the event that reset is not asserted during the first clk cycle.
+
+Signal Dependencies:
+- The output q is dependent on the clk and reset inputs, with precedence given to the reset signal during its active state.
+
+</ENHANCED_SPEC>

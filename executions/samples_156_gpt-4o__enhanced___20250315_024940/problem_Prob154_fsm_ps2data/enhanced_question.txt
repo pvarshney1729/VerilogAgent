@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, active on the rising edge)
+  - reset: 1-bit input (active high, synchronous reset)
+  - in: 8-bit input (input byte stream, with bit[0] as the least significant bit (LSB) and bit[7] as the most significant bit (MSB))
+
+- Output Ports:
+  - out_bytes: 24-bit output (contains the received message bytes)
+    - out_bytes[23:16]: First byte of the message
+    - out_bytes[15:8]: Second byte of the message
+    - out_bytes[7:0]: Third byte of the message
+  - done: 1-bit output (signals the completion of a message reception)
+
+Functional Description:
+The module implements a finite state machine (FSM) that processes the incoming byte stream on the 'in' input to detect message boundaries. The FSM shall operate as follows:
+1. Initially, the FSM shall be in the IDLE state, discarding incoming bytes until it detects a byte where in[3] = 1. 
+2. Upon detection of such a byte, the FSM transitions to the RECEIVING state, where it will accept the next two bytes as part of a message.
+3. The FSM will output the concatenated 24-bit message in 'out_bytes' once all three bytes have been received.
+4. The 'done' signal shall be asserted in the clock cycle immediately following the successful reception of the third byte.
+
+Reset Behavior:
+- The reset signal is active high and synchronous. When reset is asserted, all registers, including those storing the state of the FSM and the 'out_bytes', shall be initialized to zero.
+
+Output Validity:
+- The 'out_bytes' signal shall be valid only when the 'done' signal is asserted. At all other times, 'out_bytes' may output don't-care values.
+
+Clock Cycle Relationships:
+- All sequential logic within the module is triggered on the positive edge of the clock signal.
+
+Edge Cases and Input Boundaries:
+- The module assumes that the input stream may contain arbitrary byte values.
+- The behavior of the FSM at the boundaries of the input stream (e.g., when no valid byte is found) must be well-defined to avoid race conditions or undefined behavior.
+
+Signal Dependencies:
+- The state of the FSM depends on the input byte stream and the state of the 'reset' signal.
+- Proper precedence of operations must be maintained to ensure correct state transitions and output generation.
+
+Example Waveform:
+- The timing diagram provided in the original specification captures the expected behavior of the module under various input sequences. Each transition and output corresponds to the defined operation of the FSM.
+
+</ENHANCED_SPEC>

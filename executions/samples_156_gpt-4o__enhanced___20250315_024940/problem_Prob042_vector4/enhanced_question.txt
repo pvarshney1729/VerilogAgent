@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - in: bit[7:0] (8 bits, unsigned) 
+    - Description: This input represents an 8-bit unsigned binary number.
+
+- Output Ports:
+  - out: bit[31:0] (32 bits, signed)
+    - Description: This output represents a 32-bit signed binary number resulting from the sign-extension of the input.
+
+Functional Description:
+The module will perform a sign-extension operation on the 8-bit input 'in' to produce a 32-bit output 'out'. The sign extension is accomplished by replicating the most significant bit (MSB) of the input (bit[7]) a total of 24 times to the left of the original 8-bit value.
+
+1. Sign Extension Rule:
+   - If in[7] (the sign bit) is 0, then out will be 32'b00000000000000000000000000[in].
+   - If in[7] (the sign bit) is 1, then out will be 32'b11111111111111111111111111[in].
+
+Bit Indexing Convention:
+- The least significant bit (LSB) of the input 'in' is referred to as in[0].
+- The most significant bit (MSB) of the input 'in' is referred to as in[7].
+- The LSB of the output 'out' is referred to as out[0].
+- The MSB of the output 'out' is referred to as out[31].
+
+Implementation Notes:
+- Ensure that the sign bit (in[7]) is correctly replicated 24 times to create the upper part of the output.
+- The operation should be purely combinational, with no sequential elements or registers involved.
+- No synchronous or asynchronous resets are applied in this module.
+- The output must be valid and stable as soon as the input is provided, with no additional clock cycle dependencies.
+
+Edge Cases:
+- The module must handle all valid 8-bit input values (0 to 255 for unsigned, -128 to 127 for signed).
+- Output must correctly reflect sign extension for all possible input values, ensuring no overflow or unexpected behavior occurs.
+
+</ENHANCED_SPEC>

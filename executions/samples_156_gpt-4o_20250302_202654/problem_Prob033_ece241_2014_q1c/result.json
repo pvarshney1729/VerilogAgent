@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input [7:0] a,\n    input [7:0] b,\n    output [7:0] s,\n    output overflow\n);\n    wire [7:0] sum;\n    wire carry_out;\n\n    assign sum = a + b;\n    assign s = sum;\n    assign overflow = (a[7] & b[7] & ~sum[7]) | (~a[7] & ~b[7] & sum[7]);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

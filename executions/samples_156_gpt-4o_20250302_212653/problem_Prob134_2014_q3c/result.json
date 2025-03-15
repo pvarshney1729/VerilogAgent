@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic x,\n    input logic [2:0] y,\n    output logic Y0,\n    output logic z\n);\n\n    logic [2:0] next_state;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            next_state <= 3'b000;\n        end else begin\n            case (y)\n                3'b000: begin\n                    if (x) next_state <= 3'b001;\n                    else next_state <= 3'b000;\n                    z <= 1'b0;\n                end\n                3'b001: begin\n                    if (x) next_state <= 3'b100;\n                    else next_state <= 3'b001;\n                    z <= 1'b0;\n                end\n                3'b010: begin\n                    if (x) next_state <= 3'b001;\n                    else next_state <= 3'b010;\n                    z <= 1'b0;\n                end\n                3'b011: begin\n                    if (x) next_state <= 3'b010;\n                    else next_state <= 3'b001;\n                    z <= 1'b1;\n                end\n                3'b100: begin\n                    if (x) next_state <= 3'b100;\n                    else next_state <= 3'b011;\n                    z <= 1'b1;\n                end\n                default: begin\n                    next_state <= 3'b000;\n                    z <= 1'b0;\n                end\n            endcase\n        end\n    end\n\n    assign Y0 = next_state[0];\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 86,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

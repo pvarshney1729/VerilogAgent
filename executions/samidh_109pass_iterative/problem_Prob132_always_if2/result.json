@@ -1,8 +1,0 @@
-{
-    "code": "module ComputerVehicleControl (\n    input logic cpu_overheated,\n    input logic arrived,\n    input logic gas_tank_empty,\n    output logic shut_off_computer,\n    output logic keep_driving\n);\n\n    always_comb begin\n        // Default state\n        shut_off_computer = 1'b0;\n        keep_driving = 1'b0;\n\n        // Control logic\n        if (cpu_overheated) begin\n            shut_off_computer = 1'b1;\n        end\n        \n        if (~arrived) begin\n            keep_driving = ~gas_tank_empty;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 2
-}

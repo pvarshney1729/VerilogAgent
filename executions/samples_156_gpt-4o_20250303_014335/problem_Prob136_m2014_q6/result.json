@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input  logic clk,       // Clock signal, triggers on the rising edge\n    input  logic reset,     // Asynchronous reset signal, active high\n    input  logic w,         // Input signal\n    output logic z          // Output signal\n);\n\n    // State encoding\n    parameter STATE_A = 3'b000;\n    parameter STATE_B = 3'b001;\n    parameter STATE_C = 3'b010;\n    parameter STATE_D = 3'b011;\n    parameter STATE_E = 3'b100;\n    parameter STATE_F = 3'b101;\n\n    logic [2:0] current_state, next_state;\n\n    // State transition logic\n    always_ff @(posedge clk or posedge reset) begin\n        if (reset) begin\n            current_state <= STATE_A;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always_comb begin\n        case (current_state)\n            STATE_A: next_state = (w == 1'b0) ? STATE_B : STATE_A;\n            STATE_B: next_state = (w == 1'b0) ? STATE_C : STATE_D;\n            STATE_C: next_state = (w == 1'b0) ? STATE_E : STATE_D;\n            STATE_D: next_state = (w == 1'b0) ? STATE_F : STATE_A;\n            STATE_E: next_state = (w == 1'b0) ? STATE_E : STATE_D;\n            STATE_F: next_state = (w == 1'b0) ? STATE_C : STATE_D;\n            default: next_state = STATE_A; // Fail-safe for undefined states\n        endcase\n    end\n\n    // Output logic\n    always_comb begin\n        case (current_state)\n            STATE_E, STATE_F: z = 1'b1;\n            default: z = 1'b0;\n        endcase\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 6,
-        "passfail": "r"
-    },
-    "iterations_used": 2
-}

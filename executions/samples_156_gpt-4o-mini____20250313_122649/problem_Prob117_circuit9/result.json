@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    output logic [2:0] q\n);\n    logic [2:0] state;\n\n    always @(posedge clk) begin\n        if (state == 3'b000 && a == 1'b1) begin\n            state <= 3'b000; // Stay in state 0\n        end else if (state == 3'b000 && a == 1'b0) begin\n            state <= 3'b001; // Move to state 1\n        end else if (state == 3'b001 && a == 1'b0) begin\n            state <= 3'b010; // Move to state 2\n        end else if (state == 3'b010 && a == 1'b0) begin\n            state <= 3'b011; // Move to state 3\n        end else if (state == 3'b011 && a == 1'b0) begin\n            state <= 3'b100; // Move to state 4\n        end else if (state == 3'b100 && a == 1'b0) begin\n            state <= 3'b000; // Move back to state 0\n        end else begin\n            state <= state; // Hold state\n        end\n    end\n\n    assign q = state;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 244,
-        "passfail": "R"
-    }
-}

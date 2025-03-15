@@ -1,7 +1,0 @@
-{
-    "code": "module ShiftRegister4Bit (\n    input logic clk,            // Clock signal, positive edge-triggered\n    input logic resetn,         // Active-low synchronous reset signal\n    input logic in,             // Serial input to the shift register\n    output logic out            // Output from the most significant bit of the shift register\n);\n\n// Shift Register Internal State\nlogic [3:0] shift_reg; // 4-bit register to hold the state of the shift register\n\n// Sequential logic for shift register\nalways_ff @(posedge clk) begin\n    if (~resetn) begin\n        shift_reg <= 4'b0000; // Reset state\n    end else begin\n        shift_reg <= {shift_reg[2:0], in}; // Shift left and insert 'in' at LSB\n    end\nend\n\n// Continuous assignment for output\nassign out = shift_reg[3]; // Output the MSB\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    }
-}

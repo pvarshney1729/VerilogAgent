@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\n// Module: TopModule\n// Description: This module takes a 100-bit input vector and produces a 100-bit output vector\n//              by reversing the order of the bits in the input vector. \n//              The operation is purely combinational with no clock or reset involved.\n\n// Interface Definition\nmodule TopModule (\n    input  logic [99:0] in,  // 100-bit input vector\n    output logic [99:0] out  // 100-bit output vector\n);\n\n// Signal Interfaces\n// - The input and output ports are 100 bits wide.\n// - Bit indexing follows a little-endian convention: bit[0] is the least significant bit (LSB).\n\n// Behavior\n// - The module performs a bit-reversal operation on the input.\n// - The output bit at position i is assigned the value of the input bit at position (99-i).\n//   For example, out[0] = in[99], out[1] = in[98], ..., out[99] = in[0].\n\n// Implementation Notes\nassign out[0]  = in[99];\nassign out[1]  = in[98];\nassign out[2]  = in[97];\n// ...\nassign out[98] = in[1];\nassign out[99] = in[0];\n\n// This is a purely combinational module, so no clock or reset signals are required.\n// This design assumes the input data is treated as unsigned.\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

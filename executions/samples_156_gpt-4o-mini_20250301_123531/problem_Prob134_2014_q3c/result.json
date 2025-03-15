@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input  logic clk,           // Clock signal\n    input  logic x,             // Input trigger\n    input  logic [2:0] y,       // 3-bit input state\n    output logic Y0,            // Output Y0 from the least significant bit of next state\n    output logic z              // Output z\n);\n\n    logic [2:0] next_state;\n\n    // Synchronous reset and state transition\n    always @(posedge clk) begin\n        if (y === 3'bx) begin\n            next_state <= 3'b000; // Handle undefined states\n        end else begin\n            case (y)\n                3'b000: next_state <= (x ? 3'b001 : 3'b000);\n                3'b001: next_state <= (x ? 3'b100 : 3'b001);\n                3'b010: next_state <= (x ? 3'b001 : 3'b010);\n                3'b011: begin\n                    next_state <= (x ? 3'b010 : 3'b001);\n                    z <= 1;\n                end\n                3'b100: begin\n                    next_state <= (x ? 3'b100 : 3'b011);\n                    z <= 1;\n                end\n                default: next_state <= 3'b000; // Handle undefined states\n            endcase\n        end\n    end\n\n    // Output logic\n    always @(*) begin\n        Y0 = next_state[0];\n        z = (y == 3'b011 || y == 3'b100) ? 1 : 0; // Update z based on current state\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 56,
-        "passfail": "R"
-    }
-}

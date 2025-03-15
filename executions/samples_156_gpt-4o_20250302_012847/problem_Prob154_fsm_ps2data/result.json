@@ -1,8 +1,0 @@
-{
-    "code": "module byte_capture (\n    input logic clk,\n    input logic reset,\n    input logic [7:0] byte_in,\n    input logic capture,\n    output logic [23:0] data_out,\n    output logic done\n);\n\n    typedef enum logic [1:0] {\n        IDLE = 2'b00,\n        BYTE1 = 2'b01,\n        BYTE2 = 2'b10,\n        BYTE3 = 2'b11\n    } state_t;\n\n    state_t current_state, next_state;\n    logic [23:0] data_reg;\n\n    // State transition logic\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            current_state <= IDLE;\n            data_reg <= 24'b0;\n        end else begin\n            current_state <= next_state;\n            if (capture) begin\n                case (current_state)\n                    BYTE1: data_reg[23:16] <= byte_in;\n                    BYTE2: data_reg[15:8] <= byte_in;\n                    BYTE3: data_reg[7:0] <= byte_in;\n                endcase\n            end\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        next_state = current_state;\n        done = 1'b0;\n        case (current_state)\n            IDLE: if (capture) next_state = BYTE1;\n            BYTE1: if (capture) next_state = BYTE2;\n            BYTE2: if (capture) next_state = BYTE3;\n            BYTE3: begin\n                if (capture) begin\n                    next_state = IDLE;\n                    done = 1'b1;\n                end\n            end\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        data_out = data_reg;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

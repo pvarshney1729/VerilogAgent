@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input, clock signal (positive edge triggered).
+  - reset: 1-bit input, active-high synchronous reset signal.
+  - ena: 1-bit input, enable signal for clock increment.
+
+- Output Ports:
+  - pm: 1-bit output, indicates if the current time is PM (1) or AM (0).
+  - hh: 8-bit output, represents hours in Binary-Coded Decimal (BCD) format (01-12).
+  - mm: 8-bit output, represents minutes in Binary-Coded Decimal (BCD) format (00-59).
+  - ss: 8-bit output, represents seconds in Binary-Coded Decimal (BCD) format (00-59).
+
+Functional Description:
+- The module implements a 12-hour clock with AM/PM indication.
+- The clock is incremented once per second based on the ena signal, which is pulsed when the clock should increment.
+- The enable signal (ena) is used to control the increment of the clock, while the reset signal (reset) takes higher priority and can reset the clock regardless of the enable state.
+- The output pm is asserted (set to 1) when the time is in the PM period (after 12:00 PM and before 12:00 AM), and de-asserted (set to 0) otherwise (AM period).
+
+Clocking and Reset Behavior:
+- All sequential logic (counters for hours, minutes, and seconds) is triggered on the positive edge of the clk signal.
+- The reset signal (reset) is active-high and synchronous to the clk. When asserted, it resets the clock to "12:00 AM" (hh = 01, mm = 00, ss = 00) and sets the pm output to 0.
+
+BCD Representation:
+- The hh, mm, and ss outputs are represented in BCD format:
+  - For hours (hh): valid range is 01 to 12 (BCD representation).
+  - For minutes (mm) and seconds (ss): valid range is 00 to 59 (BCD representation).
+
+Edge Cases:
+- On reset, regardless of the clk or ena state, the clock outputs must be set to "12:00 AM."
+- Ensure that the transition from 12:59:59 to 01:00:00 correctly updates the pm signal and resets seconds and minutes appropriately.
+
+Signal Dependencies:
+- The pm output depends on the current value of hh: if hh is 01 to 11, pm = 0 (AM); if hh is 12, pm = 1 (PM).
+- The increment of seconds triggers the increment of minutes, and the increment of minutes triggers the increment of hours, maintaining the correct time format.
+</ENHANCED_SPEC>

@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - in: bit[1023:0] (1024 bits, unsigned) 
+    - Description: This input vector contains 256 groups of 4 bits each, packed sequentially. 
+    - Bit[0] refers to the least significant bit of in, and bit[1023] refers to the most significant bit.
+  - sel: bit[7:0] (8 bits, unsigned) 
+    - Description: This selection input determines which group of 4 bits from the in vector is to be output. 
+    - The value of sel ranges from 0 to 255, where sel=0 selects bits in[3:0], sel=1 selects bits in[7:4], sel=2 selects bits in[11:8], and so forth up to sel=255 selecting bits in[1023:1020].
+
+- Output Ports:
+  - out: bit[3:0] (4 bits, unsigned) 
+    - Description: This output will hold the selected 4 bits from the in input vector based on the value of sel.
+
+Functional Description:
+- The module implements a 256-to-1 multiplexer that outputs a 4-bit value based on the sel input. 
+- The output out will reflect the selected 4 bits from the in input vector according to the sel input.
+
+Sequential Logic:
+- The module is entirely combinational with no sequential elements (flip-flops or registers). 
+
+Edge Cases:
+- If sel is greater than 255, the behavior of the module is undefined. It is the responsibility of the user to ensure that sel remains within the valid range of 0 to 255.
+
+Resets:
+- There are no reset conditions specified for this module as it does not contain any sequential elements.
+
+Signal Dependencies:
+- The output out directly depends on the sel input and the in input vector. Specifically, out = in[(sel * 4) +: 4], where the notation [start +: width] indicates a bit-slice of width bits starting from the index start.
+
+Precedence of Operations:
+- There are no complex operations in this combinational logic, thus no precedence issues arise.
+
+Potential Race Conditions:
+- The module does not have race conditions as it is purely combinational and does not involve clocked elements.
+
+Behavior at Input Boundaries:
+- The module does not define behavior for sel values outside the range of 0 to 255. Users must ensure that inputs remain within specified boundaries.
+</ENHANCED_SPEC>

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,           // Clock signal\n    input logic reset,         // Active high synchronous reset\n    input logic [7:0] d,       // 8-bit data input\n    output logic [7:0] q        // 8-bit data output, registered\n);\n\nalways @(negedge clk) begin\n    if (reset) begin\n        q <= 8'b00110100;    // Reset value 0x34\n    end else begin\n        q <= d;              // Regular D flip-flop operation\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

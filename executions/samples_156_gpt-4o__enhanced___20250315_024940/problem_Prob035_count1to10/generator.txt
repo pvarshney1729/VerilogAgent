@@ -1,0 +1,80 @@
+Generated Response:
+
+Based on the provided specifications and guidelines, here is the Verilog implementation of the `TopModule` that functions as a decade counter:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    // Counter state initialization
+    always @(posedge clk) begin
+        if (reset) begin
+            // Synchronous reset to 1
+            q <= 4'b0001;
+        end else begin
+            // Increment counter on clock edge
+            if (q == 4'b1010) begin
+                // Reset to 1 if count reaches 10
+                q <= 4'b0001;
+            end else begin
+                // Increment the counter
+                q <= q + 1;
+            end
+        end
+    end
+
+    // Initialize q to 1 in simulation
+    initial begin
+        q = 4'b0001;
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation of the Code:
+1. **Module Declaration**: The module `TopModule` is declared with input ports `clk` and `reset`, and output port `q` which is a 4-bit signal.
+
+2. **Synchronous Reset Logic**: Inside the `always` block, the counter checks for the rising edge of the `clk`. If the `reset` signal is high, it immediately sets `q` to `4'b0001`.
+
+3. **Counting Logic**: If `reset` is not asserted, the counter checks if `q` has reached `4'b1010` (which is 10 in decimal). If it has, the counter resets back to `4'b0001`. Otherwise, it increments `q` by 1.
+
+4. **Initial State**: An `initial` block is included to set the initial value of `q` to `4'b0001` for simulation purposes.
+
+This implementation adheres to the guidelines provided, ensuring synchronous reset behavior and proper initialization of the counter.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    // Counter state initialization
+    always @(posedge clk) begin
+        if (reset) begin
+            // Synchronous reset to 1
+            q <= 4'b0001;
+        end else begin
+            // Increment counter on clock edge
+            if (q == 4'b1010) begin
+                // Reset to 1 if count reaches 10
+                q <= 4'b0001;
+            end else begin
+                // Increment the counter
+                q <= q + 1;
+            end
+        end
+    end
+
+    // Initialize q to 1 in simulation
+    initial begin
+        q = 4'b0001;
+    end
+
+endmodule

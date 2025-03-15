@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, rising edge triggered)
+  - reset: 1-bit input (active high synchronous reset)
+  - in: bit[31:0] (32-bit input vector; bit[0] is the least significant bit (LSB) and bit[31] is the most significant bit (MSB))
+
+- Output Ports:
+  - out: bit[31:0] (32-bit output vector; bit[0] corresponds to the capture status of in[0], and bit[31] corresponds to the capture status of in[31])
+
+Functional Description:
+The TopModule captures transitions of the 32-bit input vector 'in' from a logical high state (1) in one clock cycle to a logical low state (0) in the subsequent clock cycle. The output vector 'out' will reflect this transition, maintaining a high (1) state for the corresponding bit position until the 'reset' signal is asserted. 
+
+Behavior Specifications:
+- The capture of a transition occurs on the rising edge of the clock signal (clk).
+- The output 'out' should be set to 1 at the bit position corresponding to the input bit that transitions from 1 to 0, while all other bits in 'out' remain unchanged.
+- The output will reset to 0 at all bit positions when the 'reset' signal is activated (high), regardless of the input state.
+
+Reset Conditions:
+- The reset operation is synchronous, meaning that the state of the output 'out' will only change upon the rising edge of the clock signal when 'reset' is high.
+- Upon activation of the reset, all bits in the output vector 'out' will be set to 0.
+
+Edge Case Handling:
+- If 'in' remains at 1, the corresponding bit in 'out' should not change until a transition from 1 to 0 occurs.
+- If 'in' transitions from 0 to 1, no change should occur in 'out' until the subsequent transition from 1 to 0.
+
+Signal Dependencies:
+- The output bits in 'out' are directly dependent on the previous state of the corresponding input bit in 'in' as sampled at the previous rising edge of clk.
+- Care must be taken to avoid potential race conditions by ensuring that the logic for detecting transitions is evaluated consistently within the clock cycle.
+
+Initial Values:
+- Upon power-up or initial conditions, the output vector 'out' should be initialized to bit[31:0] = 0.
+</ENHANCED_SPEC>

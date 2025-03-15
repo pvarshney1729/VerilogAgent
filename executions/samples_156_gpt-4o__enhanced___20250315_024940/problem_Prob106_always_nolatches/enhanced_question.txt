@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- Input Port:
+  - Name: scancode
+  - Width: 16 bits
+  - Signedness: Unsigned
+  - Bit Indexing: bit[0] refers to the least significant bit (LSB), bit[15] refers to the most significant bit (MSB).
+
+- Output Ports:
+  - Name: left
+    - Width: 1 bit
+    - Description: Asserts high (1) when the left arrow key is pressed, low (0) otherwise.
+  - Name: down
+    - Width: 1 bit
+    - Description: Asserts high (1) when the down arrow key is pressed, low (0) otherwise.
+  - Name: right
+    - Width: 1 bit
+    - Description: Asserts high (1) when the right arrow key is pressed, low (0) otherwise.
+  - Name: up
+    - Width: 1 bit
+    - Description: Asserts high (1) when the up arrow key is pressed, low (0) otherwise.
+
+Functional Description:
+The module shall process the 16-bit input scancode from a PS/2 keyboard to detect the state of the arrow keys. The detection mechanism will utilize a combinational logic approach, such as a case statement or an if-elseif structure, to map the given scancode values to the appropriate output signals.
+
+Arrow Key Scancode Mapping:
+- When scancode == 16'hE06B, then left = 1, down = 0, right = 0, up = 0
+- When scancode == 16'hE072, then left = 0, down = 1, right = 0, up = 0
+- When scancode == 16'hE074, then left = 0, down = 0, right = 1, up = 0
+- When scancode == 16'hE075, then left = 0, down = 0, right = 0, up = 1
+- For any other value of scancode, then left = 0, down = 0, right = 0, up = 0
+
+Behavior at Edge Cases:
+- The module shall ensure that all outputs are low (0) when the scancode does not match any of the specified arrow key values.
+- The outputs must not be asserted high (1) for multiple keys simultaneously; they must be mutually exclusive.
+
+Signal Dependencies and Timing:
+- The output signals (left, down, right, up) are to be driven based solely on the current value of the scancode input. This is purely combinational logic with no memory elements, thus no clock cycles or sequential logic are involved.
+- The module does not utilize any resets, and initial output states are assumed to be low (0) until the corresponding scancode is detected.
+
+Implementation Note:
+This specification requires careful attention to the mapping of scancode values to ensure that the correct output signals are asserted based on the received input.
+</ENHANCED_SPEC>

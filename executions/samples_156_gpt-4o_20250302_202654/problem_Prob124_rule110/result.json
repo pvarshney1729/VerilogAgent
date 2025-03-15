@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic load,\n    input logic [511:0] data,\n    output logic [511:0] q\n);\n\n    logic [511:0] next_q;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q <= 512'b0;\n        end else if (load) begin\n            q <= data;\n        end else begin\n            q <= next_q;\n        end\n    end\n\n    always_comb begin\n        for (int i = 0; i < 512; i++) begin\n            logic left, center, right;\n            left = (i == 511) ? 1'b0 : q[i+1];\n            center = q[i];\n            right = (i == 0) ? 1'b0 : q[i-1];\n\n            next_q[i] = (left & ~center & ~right) |\n                        (left & center & ~right) |\n                        (~left & center & right) |\n                        (~left & center & ~right);\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 6220,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

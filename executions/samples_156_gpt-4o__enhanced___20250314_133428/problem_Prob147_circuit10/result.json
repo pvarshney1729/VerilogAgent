@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n\n    logic next_state;\n\n    // Combinational logic to determine the next state\n    always @(*) begin\n        case ({a, b})\n            2'b11: next_state = ~state; // Toggle state\n            2'b10: next_state = 1'b1;   // Set state to 1\n            2'b01: next_state = 1'b0;   // Set state to 0\n            2'b00: next_state = state;  // Maintain current state\n            default: next_state = state;\n        endcase\n    end\n\n    // Sequential logic to update the state and output q\n    always @(posedge clk) begin\n        state <= next_state;\n        q <= state;\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic shutdown_request,\n    output logic shutdown_signal,\n    output logic drive_signal\n);\n\n    logic state;\n    logic next_state;\n\n    // State encoding\n    localparam IDLE = 1'b0;\n    localparam SHUTDOWN = 1'b1;\n\n    // Synchronous reset and state transition\n    always @(posedge clk) begin\n        if (reset) begin\n            state <= 1'b0; // Initialize to IDLE state\n        end else begin\n            state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (state)\n            IDLE: begin\n                if (shutdown_request) begin\n                    next_state = SHUTDOWN;\n                end else begin\n                    next_state = IDLE;\n                end\n            end\n            SHUTDOWN: begin\n                next_state = SHUTDOWN; // Remain in SHUTDOWN state\n            end\n            default: begin\n                next_state = IDLE; // Default to IDLE\n            end\n        endcase\n    end\n\n    // Output logic\n    assign shutdown_signal = (state == SHUTDOWN);\n    assign drive_signal = (state == IDLE);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 3
-}

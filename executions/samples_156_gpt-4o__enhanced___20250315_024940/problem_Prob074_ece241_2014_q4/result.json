@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic x,\n    output logic z\n);\n\n    logic FF1_out, FF2_out, FF3_out;\n    logic xor_out, and_out, or_out;\n\n    // Combinational logic\n    always @(*) begin\n        xor_out = x ^ FF1_out;\n        and_out = x & ~FF2_out;\n        or_out  = x | ~FF3_out;\n    end\n\n    // D flip-flops with synchronous reset\n    always @(posedge clk) begin\n        FF1_out <= xor_out;\n        FF2_out <= and_out;\n        FF3_out <= or_out;\n    end\n\n    // Output z as the NOR of the flip-flop outputs\n    assign z = ~(FF1_out | FF2_out | FF3_out);\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

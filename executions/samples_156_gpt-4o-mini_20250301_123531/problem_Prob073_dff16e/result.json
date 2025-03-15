@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,         // Clock signal, positive edge triggered\n    input logic resetn,      // Active-low synchronous reset\n    input logic [1:0] byteena, // Byte enable signals\n    input logic [15:0] d,    // 16-bit data input\n    output logic [15:0] q     // 16-bit data output\n);\n\nalways @(posedge clk) begin\n    if (!resetn) begin\n        q <= 16'b0; // Reset q to 0\n    end else begin\n        if (byteena[1] && !byteena[0]) begin\n            q[15:8] <= d[15:8]; // Update upper byte\n        end else if (!byteena[1] && byteena[0]) begin\n            q[7:0] <= d[7:0];   // Update lower byte\n        end else if (byteena[1] && byteena[0]) begin\n            q <= d;             // Update entire q\n        end\n        // If both byteena are low, retain previous state of q\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

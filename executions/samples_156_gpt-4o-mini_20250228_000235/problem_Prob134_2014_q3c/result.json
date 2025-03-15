@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    input logic [2:0] y,\n    output logic Y0,\n    output logic z\n);\n\n    logic [2:0] next_state;\n    logic [2:0] current_state;\n\n    // State update logic\n    always @(posedge clk) begin\n        current_state <= (current_state == 3'b000 && x == 1'b0) ? 3'b000 :\n                         (current_state == 3'b000 && x == 1'b1) ? 3'b001 :\n                         (current_state == 3'b001 && x == 1'b0) ? 3'b001 :\n                         (current_state == 3'b001 && x == 1'b1) ? 3'b100 :\n                         (current_state == 3'b010 && x == 1'b0) ? 3'b010 :\n                         (current_state == 3'b010 && x == 1'b1) ? 3'b001 :\n                         (current_state == 3'b011 && x == 1'b0) ? 3'b001 :\n                         (current_state == 3'b011 && x == 1'b1) ? 3'b010 :\n                         (current_state == 3'b100 && x == 1'b0) ? 3'b011 :\n                         (current_state == 3'b100 && x == 1'b1) ? 3'b100 : \n                         current_state; // Retain current state if no condition matches\n    end\n\n    // Output logic\n    always @(*) begin\n        Y0 = next_state[0];\n        z = (current_state == 3'b011 && x == 1'b1) ? 1'b1 : 1'b0;\n    end\n\n    // Initialize current state\n    initial begin\n        current_state = 3'b000;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 117,
-        "passfail": "R"
-    }
-}

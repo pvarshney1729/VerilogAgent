@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,  // Clock signal, active on the rising edge\n    input logic j,    // J input of the JK flip-flop, 1-bit, unsigned\n    input logic k,    // K input of the JK flip-flop, 1-bit, unsigned\n    output logic Q    // Output of the JK flip-flop, 1-bit, unsigned\n);\n\n    // Initialize Q to 0 at power-up or simulation start\n    initial begin\n        Q = 1'b0;\n    end\n\n    // JK flip-flop behavior on rising edge of clk\n    always_ff @(posedge clk) begin\n        case ({j, k})\n            2'b00: Q <= Q;         // Retain previous state\n            2'b01: Q <= 1'b0;      // Reset to 0\n            2'b10: Q <= 1'b1;      // Set to 1\n            2'b11: Q <= ~Q;        // Toggle state\n            default: Q <= Q;       // Default case to retain state\n        endcase\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

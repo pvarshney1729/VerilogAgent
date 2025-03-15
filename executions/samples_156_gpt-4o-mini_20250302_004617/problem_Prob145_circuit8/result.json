@@ -1,8 +1,0 @@
-{
-    "code": "module my_module (\n    input logic clk,\n    input logic rst,\n    input logic a,\n    output logic p,\n    output logic q\n);\n\nlogic p_reg;\nlogic q_reg;\n\nalways @(posedge clk) begin\n    if (rst) begin\n        p_reg <= 1'b0;\n        q_reg <= 1'b0;\n    end else begin\n        p_reg <= a; // Example logic for p\n        q_reg <= ~a; // Example logic for q\n    end\nend\n\nassign p = p_reg;\nassign q = q_reg;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

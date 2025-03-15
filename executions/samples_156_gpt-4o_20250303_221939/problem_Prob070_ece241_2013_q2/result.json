@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input  wire [3:0] in_bits,    // 4-bit input representing a, b, c, d collectively\n    output wire       out_sop,    // Sum-of-products form output\n    output wire       out_pos     // Product-of-sums form output\n);\n\n    // Sum-of-Products (SOP) form\n    assign out_sop = (in_bits == 4'b0010) | (in_bits == 4'b0111) | (in_bits == 4'b1111);\n\n    // Product-of-Sums (POS) form\n    assign out_pos = ~((in_bits[3] | in_bits[2] | ~in_bits[1] | in_bits[0]) & \n                       (in_bits[3] | ~in_bits[2] | in_bits[1] | in_bits[0]) & \n                       (~in_bits[3] | ~in_bits[2] | in_bits[1] | ~in_bits[0]));\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    }
-}

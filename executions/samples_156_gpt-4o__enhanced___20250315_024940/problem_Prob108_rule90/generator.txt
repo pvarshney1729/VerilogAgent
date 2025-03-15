@@ -1,0 +1,93 @@
+Generated Response:
+
+Here is the Verilog code for the `TopModule` that implements Rule 90 as specified:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic load,
+    input  logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] next_q;
+
+    always @(*) begin
+        next_q[0] = 1'b0 ^ q[1]; // q[-1] is assumed to be 0
+        for (int i = 1; i < 511; i++) begin
+            next_q[i] = q[i-1] ^ q[i+1];
+        end
+        next_q[511] = q[510] ^ 1'b0; // q[512] is assumed to be 0
+    end
+
+    always @(posedge clk) begin
+        if (load) begin
+            q <= data; // Load data into q
+        end else begin
+            q <= next_q; // Update q with the next state
+        end
+    end
+
+    // Initialize q to zero at the beginning of simulation
+    initial begin
+        q = 512'b0;
+    end
+
+endmodule
+[DONE]
+```
+
+### Reasoning Behind the Implementation:
+
+1. **Module Declaration**: The module is named `TopModule` and includes input and output ports as specified.
+
+2. **Signal Declaration**: 
+   - `next_q` is declared to hold the next state of the cellular automaton before it is assigned to `q`.
+
+3. **Combinational Logic**:
+   - The `always @(*)` block computes the `next_q` based on the current state of `q`. 
+   - The leftmost cell (`next_q[0]`) considers `q[-1]` as 0, and the rightmost cell (`next_q[511]`) considers `q[512]` as 0.
+   - A loop iterates through the cells from `1` to `510` to calculate the next state using the XOR of the left and right neighbors.
+
+4. **Sequential Logic**:
+   - The `always @(posedge clk)` block updates the state of `q` on the rising edge of the clock.
+   - If `load` is high, `q` is loaded with the provided `data`. Otherwise, `q` is updated with `next_q`.
+
+5. **Initialization**: The initial block sets `q` to zero at the beginning of the simulation, ensuring a defined starting state.
+
+This implementation adheres strictly to the provided specifications and coding conventions, ensuring correctness in the design of the Rule 90 cellular automaton.
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic load,
+    input  logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] next_q;
+
+    always @(*) begin
+        next_q[0] = 1'b0 ^ q[1]; // q[-1] is assumed to be 0
+        for (int i = 1; i < 511; i++) begin
+            next_q[i] = q[i-1] ^ q[i+1];
+        end
+        next_q[511] = q[510] ^ 1'b0; // q[512] is assumed to be 0
+    end
+
+    always @(posedge clk) begin
+        if (load) begin
+            q <= data; // Load data into q
+        end else begin
+            q <= next_q; // Update q with the next state
+        end
+    end
+
+    // Initialize q to zero at the beginning of simulation
+    initial begin
+        q = 512'b0;
+    end
+
+endmodule

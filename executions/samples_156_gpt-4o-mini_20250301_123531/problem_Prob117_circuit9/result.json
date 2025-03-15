@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    output logic [2:0] q\n);\n\n    initial begin\n        q = 3'b000; // Initial state of q\n    end\n\n    always @(posedge clk) begin\n        if (a) begin\n            q <= 3'b100; // Hold at 4 when a is high\n        end else begin\n            q <= (q + 1) % 8; // Increment q when a is low\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 192,
-        "passfail": "R"
-    }
-}

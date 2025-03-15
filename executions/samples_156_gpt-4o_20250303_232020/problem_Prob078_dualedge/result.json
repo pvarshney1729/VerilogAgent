@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire clk,     // Clock signal, assumed to be a standard square wave\n    input wire d,       // Data input, single bit\n    output reg q        // Data output, single bit, carrying the latched value\n);\n\nreg d_posedge, d_negedge;\n\nalways @(posedge clk) begin\n    d_posedge <= d;\nend\n\nalways @(negedge clk) begin\n    d_negedge <= d;\nend\n\nalways @(*) begin\n    q = d_posedge | d_negedge; // Combine the values captured on both edges\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 47,
-        "passfail": "R"
-    },
-    "iterations_used": 2
-}

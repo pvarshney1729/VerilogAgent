@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out_sop,\n    output logic out_pos\n);\n\n    // Generate out_sop (minimum sum-of-products form)\n    assign out_sop = (d & c & b & a) |         // Decimal 15\n                     (1'b0 & c & b & a) |     // Decimal 2\n                     (d & 1'b0 & 1'b1 & 1'b1); // Decimal 7\n\n    // Generate out_pos (minimum product-of-sums form)\n    assign out_pos = (d | c | ~b | ~a) &        // Not 0\n                     (d | c | ~b | a) &        // Not 1\n                     (~d | c | b | ~a) &       // Not 4\n                     (~d | c | b | a) &        // Not 5\n                     (~d | ~c | b | a) &       // Not 6\n                     (d | ~c | ~b | a) &       // Not 9\n                     (d | ~c | b | ~a) &       // Not 10\n                     (d | c | ~b | ~a) &       // Not 13\n                     (d | c | b | ~a);         // Not 14\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 59,
+        "passfail": "R"
+    }
+}

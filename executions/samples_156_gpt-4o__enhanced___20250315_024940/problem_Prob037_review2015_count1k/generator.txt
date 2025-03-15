@@ -1,0 +1,80 @@
+Generated Response:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [9:0] q
+);
+    // Internal signal to hold the counter value
+    logic [9:0] counter;
+
+    // Synchronous reset and counting logic
+    always @(*) begin
+        if (reset) begin
+            counter = 10'b000000000; // Reset counter to 0
+        end else begin
+            if (counter < 10'd999) begin
+                counter = counter + 10'b000000001; // Increment counter
+            end else begin
+                counter = 10'b000000000; // Roll over to 0 after 999
+            end
+        end
+    end
+
+    // Output the counter value
+    assign q = counter;
+
+    // Always block to update counter on clock edge
+    always @(posedge clk) begin
+        counter = counter; // Maintain current counter value
+    end
+
+endmodule
+[DONE]
+```
+
+### Reasoning
+1. **Module Declaration**: The module `TopModule` is declared with the specified input and output ports.
+2. **Internal Counter Declaration**: A 10-bit internal counter signal is declared to hold the counting value.
+3. **Synchronous Reset Logic**: The always block is used to implement the synchronous reset and counting logic. If `reset` is high, the counter is set to zero; otherwise, it increments until it reaches 999, at which point it rolls over to 0.
+4. **Counter Update on Clock Edge**: The counter value is maintained during the positive edge of the clock. This ensures that the counting occurs in sync with the clock.
+5. **Output Assignment**: The output `q` is assigned the value of the internal counter, making sure it reflects the current count value.
+
+### Notes
+- The `always @(*)` block is used to evaluate the reset and counting logic, ensuring it responds immediately to changes in `reset`.
+- The behavior of the counter is implemented according to the specified requirements, ensuring it counts correctly and resets as intended.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [9:0] q
+);
+    // Internal signal to hold the counter value
+    logic [9:0] counter;
+
+    // Synchronous reset and counting logic
+    always @(*) begin
+        if (reset) begin
+            counter = 10'b000000000; // Reset counter to 0
+        end else begin
+            if (counter < 10'd999) begin
+                counter = counter + 10'b000000001; // Increment counter
+            end else begin
+                counter = 10'b000000000; // Roll over to 0 after 999
+            end
+        end
+    end
+
+    // Output the counter value
+    assign q = counter;
+
+    // Always block to update counter on clock edge
+    always @(posedge clk) begin
+        counter = counter; // Maintain current counter value
+    end
+
+endmodule

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input        clk,      // Clock signal\n    input        enable,   // Enable signal, synchronous active high\n    input        S,        // Serial input for the shift register\n    input        A,        // Address bit 0 for the multiplexer\n    input        B,        // Address bit 1 for the multiplexer\n    input        C,        // Address bit 2 for the multiplexer\n    output logic Z         // Output logic signal\n);\n\n    logic [7:0] Q; // 8-bit shift register\n\n    // Shift register logic\n    always_ff @(posedge clk) begin\n        if (enable) begin\n            Q <= {S, Q[7:1]}; // Shift right and insert S at MSB\n        end\n    end\n\n    // Multiplexer logic\n    always_comb begin\n        case ({C, B, A})\n            3'b000: Z = Q[0];\n            3'b001: Z = Q[1];\n            3'b010: Z = Q[2];\n            3'b011: Z = Q[3];\n            3'b100: Z = Q[4];\n            3'b101: Z = Q[5];\n            3'b110: Z = Q[6];\n            3'b111: Z = Q[7];\n            default: Z = 1'b0; // Default case, though not needed\n        endcase\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 233,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

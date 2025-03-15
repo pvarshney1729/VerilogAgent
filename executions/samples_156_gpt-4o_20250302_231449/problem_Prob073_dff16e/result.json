@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input  logic        clk,       // Clock signal, positive edge triggered.\n    input  logic        resetn,    // Synchronous active-low reset.\n    input  logic [1:0]  byteena,   // 2-bit byte enable, controlling write operations.\n    input  logic [15:0] d,         // 16-bit data input, unsigned.\n    output logic [15:0] q          // 16-bit data output, unsigned.\n);\n\n    always_ff @(posedge clk) begin\n        if (!resetn) begin\n            q <= 16'b0;\n        end else begin\n            if (byteena[1]) begin\n                q[15:8] <= d[15:8];\n            end\n            if (byteena[0]) begin\n                q[7:0] <= d[7:0];\n            end\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

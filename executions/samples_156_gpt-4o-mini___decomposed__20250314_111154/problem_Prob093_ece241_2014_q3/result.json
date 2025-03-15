@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic c,\n    input logic d,\n    output logic [3:0] mux_in\n);\n\n    assign mux_in[0] = 1'b0;        // ab = 00\n    assign mux_in[1] = c & ~d;      // ab = 01\n    assign mux_in[2] = c & d | ~c & d; // ab = 11\n    assign mux_in[3] = ~c & d;      // ab = 10\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 60,
-        "passfail": "R"
-    }
-}

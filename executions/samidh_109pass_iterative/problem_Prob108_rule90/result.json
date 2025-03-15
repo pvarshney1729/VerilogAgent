@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,               // Clock signal, triggers on positive edge\n    input logic load,              // Load control signal, active high\n    input logic [511:0] data,      // 512-bit wide data input\n    output logic [511:0] q         // 512-bit wide output representing the state of the cellular automaton\n);\n\n    logic [511:0] next_q;          // Next state of the cellular automaton\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            next_q[0] = 0 ^ q[1];\n            next_q[511] = q[510] ^ 0;\n            for (int i = 1; i < 511; i++) begin\n                next_q[i] = q[i-1] ^ q[i+1];\n            end\n            q <= next_q;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

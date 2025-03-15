@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input  logic clk,        // Clock signal, positive edge-triggered\n    input  logic resetn,     // Active-low synchronous reset\n    input  logic in,         // Serial input to the shift register\n    output logic out         // Output from the shift register (MSB)\n);\n\n    logic [3:0] shift_reg;   // 4-bit shift register\n\n    always_ff @(posedge clk) begin\n        if (!resetn) begin\n            shift_reg <= 4'b0000;  // Synchronous reset to 0000\n        end else begin\n            shift_reg <= {shift_reg[2:0], in};  // Shift left and input new bit\n        end\n    end\n\n    assign out = shift_reg[3];  // Output the MSB\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

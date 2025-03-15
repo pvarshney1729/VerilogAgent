@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - areset: 1-bit input (asynchronous reset)
+  - load: 1-bit input (load signal, active high)
+  - ena: 1-bit input (enable signal, active high)
+  - data: 4-bit input (data to be loaded into the shift register, where data[3] is the most significant bit (MSB) and data[0] is the least significant bit (LSB))
+
+- Output Ports:
+  - q: 4-bit output (current contents of the shift register, where q[3] is the MSB and q[0] is the LSB)
+
+Functional Specification:
+1. Asynchronous Reset (areset):
+   - When areset is asserted (high), the contents of the shift register (q) are reset to zero (q = 4'b0000), regardless of the clk, load, or ena inputs.
+
+2. Load Operation (load):
+   - When load is asserted (high) during the positive edge of clk, the shift register shall load the value from data[3:0] into q regardless of the state of ena. The operation is as follows: 
+     - If load = 1, then q = data[3:0].
+
+3. Enable and Shift Operation (ena):
+   - If ena is asserted (high) and load is not asserted during the positive edge of clk, the shift register performs a right shift operation. The operation is defined as follows:
+     - q[3] becomes 0 (MSB is cleared).
+     - q[2] is assigned the value of q[3].
+     - q[1] is assigned the value of q[2].
+     - q[0] is assigned the value of q[1].
+     - q[0] is shifted out and disappears.
+
+4. Priority of Inputs:
+   - The load input has higher priority than the ena input. If both load and ena are asserted during the same clock cycle, the shift register will load the data from data[3:0] into q, overriding the shift operation.
+
+5. Sequential Logic:
+   - All sequential logic operations are triggered on the positive edge of the clk signal.
+
+Edge Cases:
+- If areset is asserted while load or ena are also asserted, the shift register should immediately reset to zero before any load or shift operation can occur.
+
+Initial Conditions:
+- Upon initialization (after areset is deasserted and prior to any clock cycles), the contents of the shift register q shall be defined as q = 4'b0000.
+
+Signal Dependency and Race Conditions:
+- Ensure to handle conditions where multiple inputs may change simultaneously, particularly the interaction between load and ena, with load taking precedence.
+
+</ENHANCED_SPEC>

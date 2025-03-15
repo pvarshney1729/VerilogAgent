@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,          // Clock signal for synchronous operation\n    input logic reset_n,      // Active-low asynchronous reset\n    input logic in,           // 1-bit input signal\n    input logic [3:0] state,  // 4-bit input representing the current state\n    output logic [3:0] next_state, // 4-bit output representing the next state\n    output logic out          // 1-bit output signal\n);\n\n    // State transition logic\n    always @(posedge clk or negedge reset_n) begin\n        if (!reset_n)\n            next_state <= 4'b0001; // Reset to State A\n        else begin\n            case (state)\n                4'b0001: next_state <= (in) ? 4'b0010 : 4'b0001; // A\n                4'b0010: next_state <= (in) ? 4'b0010 : 4'b0100; // B\n                4'b0100: next_state <= (in) ? 4'b1000 : 4'b0001; // C\n                4'b1000: next_state <= (in) ? 4'b0010 : 4'b0100; // D\n                default: next_state <= 4'b0001; // Default to A\n            endcase\n        end\n    end\n\n    // Output logic\n    always @(*) begin\n        case (state)\n            4'b1000: out = 1'b1; // State D\n            default: out = 1'b0;\n        endcase\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 199,
-        "passfail": "r"
-    },
-    "iterations_used": 1
-}

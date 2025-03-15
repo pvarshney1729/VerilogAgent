@@ -1,7 +1,0 @@
-{
-    "code": "module digital_clock(\n    input logic clk,\n    input logic reset,\n    input logic ena,\n    output logic pm,\n    output logic [7:0] hh,\n    output logic [7:0] mm,\n    output logic [7:0] ss\n);\n\n    // BCD constants\n    localparam BCD_ZERO = 8'b0000_0000;\n    localparam BCD_ONE = 8'b0000_0001;\n    localparam BCD_TWELVE = 8'b0001_0010;\n    localparam BCD_SIXTY = 8'b0110_0000;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            hh <= BCD_TWELVE;\n            mm <= BCD_ZERO;\n            ss <= BCD_ZERO;\n            pm <= 1'b0;\n        end else if (ena) begin\n            // Increment seconds\n            if (ss == BCD_SIXTY - 1) begin\n                ss <= BCD_ZERO;\n                // Increment minutes\n                if (mm == BCD_SIXTY - 1) begin\n                    mm <= BCD_ZERO;\n                    // Increment hours\n                    if (hh == BCD_TWELVE) begin\n                        hh <= BCD_ONE;\n                        pm <= ~pm; // Toggle PM/AM\n                    end else begin\n                        hh <= hh + BCD_ONE;\n                    end\n                end else begin\n                    mm <= mm + BCD_ONE;\n                end\n            end else begin\n                ss <= ss + BCD_ONE;\n            end\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    }
-}

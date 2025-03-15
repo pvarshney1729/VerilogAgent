@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description:
+The TopModule computes an even parity bit for an 8-bit input data byte. The parity bit is the result of the XOR operation applied to all 8 data bits. This module is intended for use in error detection for data transmission.
+
+Interface:
+- Input Ports:
+  - input wire [7:0] in: An 8-bit wide input representing the data byte. 
+    - Bit [0] refers to the least significant bit (LSB).
+    - Bit [7] refers to the most significant bit (MSB).
+  
+- Output Ports:
+  - output wire parity: A single bit output representing the computed parity bit.
+    - This output will be high (1) if there is an odd number of 1s in the input byte, and low (0) if there is an even number of 1s.
+
+Functional Specification:
+- The parity bit shall be computed using the following equation:
+  parity = in[0] XOR in[1] XOR in[2] XOR in[3] XOR in[4] XOR in[5] XOR in[6] XOR in[7]
+
+- The module shall operate as combinational logic, meaning the output (parity) is computed continuously based on the current state of the input (in).
+
+Edge Cases:
+- The module shall handle all possible combinations of the 8-bit input, including all zeroes (in = 8'b00000000) and all ones (in = 8'b11111111). The parity output for all zeroes should be 0, and for all ones, it should be 1.
+
+Reset Behavior:
+- There is no reset state defined for this module as it is purely combinational.
+
+Signal Dependencies:
+- The output parity is directly dependent on the values of the 8 input bits and is recomputed whenever any of the input bits change.
+
+Precedence of Operations:
+- The XOR operations shall be evaluated in a left-to-right manner as specified in the functional specification.
+
+Potential Race Conditions:
+- As a combinational circuit, there are no clock cycles or registers involved. Thus, race conditions are not applicable.
+
+This specification explicitly defines all input and output widths, naming conventions, and the behavior of the module under specified conditions.
+</ENHANCED_SPEC>

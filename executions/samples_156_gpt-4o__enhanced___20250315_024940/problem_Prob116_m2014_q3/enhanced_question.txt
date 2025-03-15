@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - x: 4-bit vector (x[3:0]), where:
+    - x[0] is the least significant bit (LSB)
+    - x[3] is the most significant bit (MSB)
+    - The bits represent the binary values in the following order: x[3] (MSB), x[2], x[1], x[0] (LSB).
+- Output Port:
+  - f: 1-bit output
+
+Functionality:
+The module implements a combinational logic function f based on the provided Karnaugh map representation of the inputs. The output f is determined by the following conditions:
+
+Karnaugh Map:
+                x[1] x[2]
+          x[3] x[4]   00  01  11  10
+                00 | d | 0 | d | d |
+                01 | 0 | d | 1 | 0 |
+                11 | 1 | 1 | d | d |
+                10 | 1 | 1 | 0 | d |
+
+Where:
+- 'd' indicates don't-care conditions, allowing flexibility in the implementation of the function f for those inputs.
+- The value of f should be defined as follows:
+  - For input combinations corresponding to '1' in the K-map, set f to 1.
+  - For input combinations corresponding to '0' in the K-map, set f to 0.
+  - For input combinations corresponding to 'd', the output f can be either 0 or 1 based on implementation convenience.
+
+Edge Cases:
+- The module should handle all possible 4-bit input combinations (0 to 15) and provide defined output for each combination based on the above rules.
+
+Assumptions:
+- The module does not utilize any clock or sequential logic; it is purely combinational.
+- There are no resets required for this module as it does not contain any state-holding elements.
+
+Dependencies:
+- Ensure that the implementation accurately reflects the Karnaugh map conditions without introducing race conditions or ambiguous outputs.
+
+Output Behavior:
+- The output f is stable and valid for any valid 4-bit input in accordance with the defined conditions based on the Karnaugh map.
+</ENHANCED_SPEC>

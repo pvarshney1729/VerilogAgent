@@ -15,9 +15,21 @@ You are a Verilog RTL designer that only writes code using correct Verilog synta
         'prompt_prefix': ""
     },
     
-    'prompt_rules_suffix': """
-Here are some additional rules and coding conventions.
+    'prompt_rules': """
 
+
+The following plan/guidelines might be useful for generating the correct Verilog code:
+<Guidelines>
+- Ensure synchronous reset is implemented as specified.
+- Initialize all flip-flops to zero in simulation.
+- Adhere strictly to the provided interface and signal names.
+- Generate results in the specified cycle timing.
+- Infer logic correctly, especially when using Karnaugh maps.
+- Handle bitwise operations and signal broadcasting correctly.
+</Guidelines>
+
+Here are some additional rules and coding conventions.
+<Coding Conventions>
  - Declare all ports and signals as logic; do not to use wire or reg.
  - For combinational logic with an always block do not explicitly specify
    the sensitivity list; instead use always @(*).
@@ -30,58 +42,59 @@ Here are some additional rules and coding conventions.
    signal is sampled with respect to the clock. When implementing a
    synchronous reset signal, do not include posedge reset in the
    sensitivity list of any sequential always block.
+</Coding Conventions>
+
+<REASONING>
+Your reasoning behind your implementation here. Think step by step.
+</REASONING>
+
+<CODE>
+IMPORTANT: Enclose your code with [BEGIN] and [DONE].
+</CODE>
 """,
 
-    'prompt_no_explain_suffix': """
-Enclose your code with [BEGIN] and [DONE]. Only output the code snippet
-and do NOT output anything else.
-""",
 
+'enhance_spec_system': """You are an expert in formal hardware design specification and Verilog implementation. Your task is to analyze user-provided specifications for digital logic circuits and rewrite them by improving clarity, removing ambiguities, and making implicit assumptions explicit.""",
 
-'enhance_spec_system': """You are an expert in formal hardware design specification and Verilog implementation. Your task is to analyze user-provided specifications for digital logic circuits and enhance them by improving clarity, removing ambiguities, and making implicit assumptions explicit.""",
+'enhance_spec_rules': """You should NOT change the functional intent of the specification but should refine it to ensure correctness in implementation. 
 
-'enhance_spec_rules': """You should not change the functional intent of the specification but should refine it to ensure correctness in implementation. 
+You may edit or add more details to the original specification to ensure correctness in implementation.
+<ENHANCEMENT GUIDELINES>
+- Explicitly define input/output port widths, signedness, and naming conventions.
+- Clearly specify MSB/LSB conventions and bit indexing (e.g., "bit[0] refers to the least significant bit").
+- Clearly distinguish combinational vs. sequential logic and define clock cycle relationships.
+- Explicitly state whether resets are synchronous or asynchronous and the reset state of all registers.
+- Ensure all flip-flops, registers, and sequential elements have explicitly defined initial values.
+- Clarify signal dependencies, precedence of operations, and potential race conditions.
+- Where Karnaugh maps, truth tables, FSMs, or bitwise operations are involved, provide both textual and formal mathematical descriptions.
+- Specify behavior at edge cases and input boundaries.
+</ENHANCEMENT GUIDELINES>
 
-ANALYSIS APPROACH:
-1. First, identify and list all potential ambiguities, under-specifications, and implicit assumptions in the original specification.
-2. For each issue, determine the most appropriate clarification based on standard hardware design practices.
-
-ENHANCEMENT PRINCIPLES:
-- Clarify signal interfaces: Explicitly define input/output port widths, signedness, and naming conventions.
-- Define bit-ordering: Clearly specify MSB/LSB conventions and bit indexing (e.g., "bit[0] refers to the least significant bit").
-- Specify timing behavior: Clearly distinguish combinational vs. sequential logic and define clock cycle relationships.
-- Define reset behavior: Explicitly state whether resets are synchronous or asynchronous and the reset state of all registers.
-- Specify initial states: Ensure all flip-flops, registers, and sequential elements have explicitly defined initial values.
-- Resolve dependencies: Clarify signal dependencies, precedence of operations, and potential race conditions.
-- Enhance logical descriptions: Where Karnaugh maps, truth tables, FSMs, or bitwise operations are involved, provide both textual and formal mathematical descriptions.
-- Add boundary conditions: Specify behavior at edge cases and input boundaries.
-
-Given the following user specification for a Verilog module, analyze it for issues, then provide an enhanced specification between <ENHANCED_SPEC> tags.
+Given the following user specification for a Verilog module, rewrite it between <ENHANCED_SPEC> tags.
 
 Original Specification:
 {user_spec}
 
-Analysis of Ambiguities and Issues:
-[List and explain each identified issue]
-
 <ENHANCED_SPEC>
-[Provide the complete enhanced specification here, structured with clear sections for interface, behavior, timing, and implementation notes]
+[Provide the rewritten specification here using the enhancementguidelines above. DO NOT WRITE DOWN YOUR VERILOG IMPLEMENTATION FOR THE MODULE.]
 </ENHANCED_SPEC>
+
+DO NOT include any explanations, notes, or text outside the <ENHANCED_SPEC> tags. Return ONLY the enhanced specification.
 """,
 
-'decomposition_system_prompt': """You are an expert Verilog RTL designer that can break down complicated implementations into sequential subtasks. You MUST return valid JSON in the exact format requested.""",
+'decomposition_system_prompt': """You are an expert Verilog RTL designer that can break down complicated implementations into modules. You MUST return valid JSON in the exact format requested.""",
 
 'decomposition_prompt': """
-[Target Problem]
-### Problem
+<Target Problem>
 {spec}
+</Target Problem>
 
-[Instruction]
-Let's think step by step.
-Based on the Problem description, set up a sequential implementation plan. Each subtask should focus on implementing only one signal or logical component at a time.
-Extract the corresponding source contexts in the [Target Problem] section of each subtask into the 'source' field.
-The task id number indicates the sequential orders.
-
+<Instructions>
+- Let's think step by step.
+- Based on the Problem description, set up an implementation plan. Each subtask should focus on implementing only one signal or logical component at a time.
+-Extract the corresponding source contexts in the [Target Problem] section of each subtask into the 'source' field.
+-The task id number indicates the sequential orders.
+</Instructions>
 IMPORTANT: Return ONLY a valid JSON object with this EXACT structure:
 {{
   "subtasks": [

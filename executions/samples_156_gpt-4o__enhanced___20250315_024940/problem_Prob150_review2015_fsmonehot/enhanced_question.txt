@@ -1,0 +1,73 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+**Port Interface:**
+- **Input Ports:**
+  - `input logic d;`                // 1-bit input signal
+  - `input logic done_counting;`    // 1-bit input signal
+  - `input logic ack;`              // 1-bit input signal
+  - `input logic [9:0] state;`      // 10-bit input signal representing the current state (LSB is state[0])
+
+- **Output Ports:**
+  - `output logic B3_next;`         // 1-bit output signal, asserts when next-state is B3
+  - `output logic S_next;`          // 1-bit output signal, asserts when next-state is S
+  - `output logic S1_next;`         // 1-bit output signal, asserts when next-state is S1
+  - `output logic Count_next;`      // 1-bit output signal, asserts when next-state is Count
+  - `output logic Wait_next;`       // 1-bit output signal, asserts when next-state is Wait
+  - `output logic done;`            // 1-bit output signal indicating completion
+  - `output logic counting;`        // 1-bit output signal indicating counting status
+  - `output logic shift_ena;`       // 1-bit output signal enabling shifting
+
+**Functionality:**
+The module implements a Moore state machine with the following characteristics:
+- **Inputs:** `d`, `done_counting`, `ack` (all 1-bit inputs)
+- **Outputs:** `shift_ena`, `counting`, `done` (1-bit outputs)
+
+**State Transition Table:**
+The state transition table is defined as follows, with the output behavior specified for each state as necessary:
+
+| Current State | Input (d) | Next State | Output Signals                |
+|---------------|-----------|------------|-------------------------------|
+| S             | 0         | S          |                             |
+| S             | 1         | S1         |                             |
+| S1            | 0         | S          |                             |
+| S1            | 1         | S11        |                             |
+| S11           | 0         | S110       |                             |
+| S11           | 1         | S11        |                             |
+| S110          | 0         | S          |                             |
+| S110          | 1         | B0         |                             |
+| B0            | -         | B1         | shift_ena = 1               |
+| B1            | -         | B2         | shift_ena = 1               |
+| B2            | -         | B3         | shift_ena = 1               |
+| B3            | -         | Count       | shift_ena = 1               |
+| Count         | 0         | Count       | counting = 1                 |
+| Count         | 1         | Wait        | counting = 1                 |
+| Wait          | -         | Wait        | done = 1                     |
+| Wait          | 1         | S          | done = 1                     |
+
+**State Encoding:**
+The state machine uses one-hot encoding for its states as follows:
+- S: 10'b0000000001
+- S1: 10'b0000000010
+- S11: 10'b0000000100
+- S110: 10'b0000001000
+- B0: 10'b0000010000
+- B1: 10'b0000100000
+- B2: 10'b0001000000
+- B3: 10'b0010000000
+- Count: 10'b0100000000
+- Wait: 10'b1000000000
+
+**Reset Behavior:**
+- The state machine begins operation in the state `S` upon reset.
+- The reset is assumed to be asynchronous.
+
+**Output Logic Derivation:**
+- Output signals `B3_next`, `S_next`, `S1_next`, `Count_next`, `Wait_next`, `done`, `counting`, and `shift_ena` are derived from the next state based on the state transition logic.
+
+**Signal Behavior at Edge Cases:**
+- The module should handle undefined or unexpected input scenarios gracefully, asserting no output changes unless specified by the state transition rules.
+
+**Implementation Guidance:**
+- Only the combinational logic portion, which includes the state transition logic and output logic, is required for implementation.
+</ENHANCED_SPEC>

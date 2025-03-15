@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic rst_n,\n    input logic d,\n    output logic q\n);\n\nlogic q_rising;\nlogic q_falling;\n\nalways_ff @(posedge clk or negedge rst_n) begin\n    if (!rst_n)\n        q_rising <= 1'b0;\n    else\n        q_rising <= d;\nend\n\nalways_ff @(negedge clk or negedge rst_n) begin\n    if (!rst_n)\n        q_falling <= 1'b0;\n    else\n        q_falling <= d;\nend\n\nalways_comb begin\n    q = (clk) ? q_rising : q_falling;\nend\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,          // Clock signal for synchronous operations\n    input logic reset,        // Active-high synchronous reset\n    input logic j,            // Input signal for state transition\n    input logic k,            // Input signal for state transition\n    output logic out          // Output signal reflecting current state\n);\n    typedef enum logic [0:0] {\n        OFF = 1'b0,\n        ON  = 1'b1\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // Synchronous reset and state transition logic\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= OFF;\n            out <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            out <= current_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            OFF: begin\n                if (j) begin\n                    next_state = ON;\n                end else begin\n                    next_state = OFF;\n                end\n            end\n            ON: begin\n                if (k) begin\n                    next_state = OFF;\n                end else begin\n                    next_state = ON;\n                end\n            end\n            default: begin\n                next_state = OFF; // Default case to avoid latches\n            end\n        endcase\n    end\nendmodule",
-    "test_results": {
-        "num_mismatch": 94,
-        "passfail": "R"
-    }
-}

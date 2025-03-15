@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic reset,\n    input  logic [31:0] in,\n    output logic [31:0] out\n);\n\n    logic [31:0] in_prev; // To store the previous state of 'in'\n\n    always @(posedge clk) begin\n        if (reset) begin\n            out <= 32'b0; // Reset output to 0\n            in_prev <= 32'b0; // Reset previous state of 'in'\n        end else begin\n            in_prev <= in; // Store the current state of 'in'\n\n            // Check for transitions from 1 to 0\n            out <= (in_prev & ~in) | out; // Capture transitions, maintain current output\n        end\n    end\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

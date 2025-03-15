@@ -1,0 +1,132 @@
+Generated Response:
+
+Based on the provided specifications and guidelines, here is the implementation of the `TopModule` as a Moore state machine in Verilog:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    input  logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic {B, A} state_t;
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            B: begin
+                if (in == 1'b0) begin
+                    next_state = A;
+                end else begin
+                    next_state = B;
+                end
+            end
+            A: begin
+                if (in == 1'b0) begin
+                    next_state = B;
+                end else begin
+                    next_state = A;
+                end
+            end
+            default: next_state = B; // default state
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            B: out = 1'b1;
+            A: out = 1'b0;
+            default: out = 1'b1; // default output
+        endcase
+    end
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= B; // reset to state B
+        end else begin
+            current_state <= next_state; // transition to next state
+        end
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation of the Implementation:
+
+1. **State Encoding**: 
+   - A `typedef` is used to define the states A and B. This allows for clearer state management and transition logic.
+
+2. **State Transition Logic**: 
+   - A combinational `always @(*)` block is used to define the next state based on the current state and the input signal `in`. The state transition follows the rules specified in the state transition table.
+
+3. **Output Logic**: 
+   - Another combinational `always @(*)` block is used to determine the output `out` based on the current state. This adheres to the Moore state machine definition where the output depends solely on the state.
+
+4. **State Register with Synchronous Reset**: 
+   - A sequential `always @(posedge clk)` block handles the state transitions. If the `reset` signal is high, the current state is set to state B. Otherwise, the current state transitions to the next state determined by the combinational logic.
+
+5. **Initialization and Default Values**: 
+   - The `current_state` is initialized to state B upon reset, ensuring that the state machine starts in the correct initial state, and the `out` signal defaults as per the state.
+
+This implementation follows all the guidelines and conventions provided, ensuring that the module behaves as specified for the Moore state machine.
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    input  logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic {B, A} state_t;
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            B: begin
+                if (in == 1'b0) begin
+                    next_state = A;
+                end else begin
+                    next_state = B;
+                end
+            end
+            A: begin
+                if (in == 1'b0) begin
+                    next_state = B;
+                end else begin
+                    next_state = A;
+                end
+            end
+            default: next_state = B; // default state
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            B: out = 1'b1;
+            A: out = 1'b0;
+            default: out = 1'b1; // default output
+        endcase
+    end
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= B; // reset to state B
+        end else begin
+            current_state <= next_state; // transition to next state
+        end
+    end
+
+endmodule

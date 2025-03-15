@@ -1,0 +1,79 @@
+Generated Response:
+
+Here is the Verilog code for the `TopModule` as per your specifications:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic areset,
+    input  logic predict_valid,
+    input  logic predict_taken,
+    input  logic train_mispredicted,
+    input  logic train_taken,
+    input  logic [31:0] train_history,
+    output logic [31:0] predict_history
+);
+
+    // Internal register to hold the history
+    logic [31:0] history_reg;
+
+    always @(posedge clk) begin
+        if (areset) begin
+            history_reg <= 32'b0; // Asynchronous reset
+        end else if (train_mispredicted) begin
+            history_reg <= {train_history[30:0], train_taken}; // Load history after misprediction
+        end else if (predict_valid) begin
+            history_reg <= {history_reg[30:0], predict_taken}; // Shift in predicted result
+        end
+    end
+
+    assign predict_history = history_reg; // Output the current history
+
+endmodule
+[DONE]
+```
+
+### Explanation:
+1. **Module Declaration**: The module is defined with input and output ports as specified.
+2. **Internal Register**: A 32-bit register (`history_reg`) is used to maintain the state of the history.
+3. **Always Block**: The `always` block is triggered on the positive edge of `clk`:
+   - When `areset` is high, `history_reg` is reset to zero.
+   - If `train_mispredicted` is high, the `history_reg` is updated with `train_history` concatenated with `train_taken`. This reflects the correct history after a misprediction.
+   - If `predict_valid` is high, it shifts the current history to the right and updates the least significant bit with `predict_taken`.
+4. **Output Assignment**: The current state of the history register is assigned to `predict_history`.
+
+### Key Points:
+- The use of non-blocking assignments (`<=`) ensures that the register updates occur in a synchronous manner.
+- The precedence of `train_mispredicted` over `predict_valid` is respected by ordering the conditions accordingly in the `always` block.
+- The module adheres to all the specified coding conventions and guidelines, ensuring proper functionality.
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic areset,
+    input  logic predict_valid,
+    input  logic predict_taken,
+    input  logic train_mispredicted,
+    input  logic train_taken,
+    input  logic [31:0] train_history,
+    output logic [31:0] predict_history
+);
+
+    // Internal register to hold the history
+    logic [31:0] history_reg;
+
+    always @(posedge clk) begin
+        if (areset) begin
+            history_reg <= 32'b0; // Asynchronous reset
+        end else if (train_mispredicted) begin
+            history_reg <= {train_history[30:0], train_taken}; // Load history after misprediction
+        end else if (predict_valid) begin
+            history_reg <= {history_reg[30:0], predict_taken}; // Shift in predicted result
+        end
+    end
+
+    assign predict_history = history_reg; // Output the current history
+
+endmodule

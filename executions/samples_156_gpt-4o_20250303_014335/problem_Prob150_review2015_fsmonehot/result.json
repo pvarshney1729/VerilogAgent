@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,                 // Clock signal for sequential logic\n    input logic reset,               // Active-high reset signal\n    input logic d,                   // Data input\n    input logic done_counting,       // Input signal indicating counting completion\n    input logic ack,                 // Acknowledge signal\n    input logic [9:0] state,         // One-hot encoded state input (10 bits)\n    output logic B3_next,            // Next state is B3 state\n    output logic S_next,             // Next state is S state\n    output logic S1_next,            // Next state is S1 state\n    output logic Count_next,         // Next state is Count state\n    output logic Wait_next,          // Next state is Wait state\n    output logic done,               // Output signal indicating completion\n    output logic counting,           // Output signal indicating counting in progress\n    output logic shift_ena           // Output signal enabling shift operation\n);\n\n    // State Transitions and Output Logic\n    always @(*) begin\n        S_next    = (state[0] & ~d) | (state[1] & ~d) | (state[7] & ack);\n        S1_next   = (state[0] & d) | (state[1] & d);\n        B3_next   = state[6];\n        Count_next = state[7];\n        Wait_next  = (state[8] & done_counting);\n\n        done      = state[9];\n        counting  = state[8];\n        shift_ena = state[4] | state[5] | state[6] | state[7];\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 89,
-        "passfail": "R"
-    },
-    "iterations_used": 2
-}

@@ -1,0 +1,65 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (Clock signal)
+  - load: 1-bit input (Load signal, active high)
+  - ena: 1-bit input (Enable signal for shifting, active high)
+  - amount: 2-bit input (Shift amount and direction)
+    - bit[1:0] indexing: 
+      - bit[0]: Least Significant Bit (LSB)
+      - bit[1]: Most Significant Bit (MSB)
+  - data: 64-bit input (Data input for loading the shift register)
+    - bit[63:0] indexing:
+      - bit[0]: LSB
+      - bit[63]: MSB
+- Output Ports:
+  - q: 64-bit output (Contents of the shift register)
+    - bit[63:0] indexing:
+      - bit[0]: LSB
+      - bit[63]: MSB
+
+Functionality:
+- The module implements a 64-bit arithmetic shift register with synchronous load capabilities.
+- The shift register supports shifting in both left and right directions and can shift by either 1 bit or 8 bits based on the "amount" input.
+
+Signal Definitions:
+1. load: When high, the shift register is loaded with data[63:0] instead of performing a shift operation.
+2. ena: When high, the module performs the shift operation if not loading.
+3. amount: Determines the shift direction and magnitude:
+   - 2'b00: Shift left by 1 bit.
+   - 2'b01: Shift left by 8 bits.
+   - 2'b10: Shift right by 1 bit (arithmetic right shift).
+   - 2'b11: Shift right by 8 bits (arithmetic right shift).
+4. q: Outputs the current value of the shift register after the shift or load operation.
+
+Sequential Logic:
+- The shift register operates on the rising edge of clk.
+- The load operation takes precedence over shifting. If load is high during the clock edge, the register loads data, ignoring the ena signal for that cycle.
+- If load is low and ena is high, the shift operation is performed according to the amount input.
+
+Reset Behavior:
+- The shift register should be initialized to a known state (e.g., all bits zero) upon reset. Reset behavior is assumed to be synchronous and will reset the register state on the next clock cycle.
+
+Initial Values:
+- All flip-flops and registers should have an initial value of 64'b0.
+
+Edge Cases:
+- Ensure that the behavior of the shift register is defined for all possible values of the amount input, including transitions between shift directions and magnitudes.
+- Special attention should be given to the arithmetic nature of right shifts to ensure that sign extension occurs correctly.
+
+Dependencies and Race Conditions:
+- Clearly define the precedence of operations: load > shift.
+- Ensure that simultaneous changes to load and ena in the same clock cycle are handled correctly to avoid indeterminate states.
+
+Mathematical Description:
+- The output q[n] after a shift operation can be defined as follows:
+  - For left shifts: q[n] = data[n - amount] for n = 0 to 62 (shift left)
+  - For right shifts (arithmetic): 
+    - q[63] = q[63] (sign bit remains unchanged)
+    - q[n] = data[n + amount] for n = 0 to 61 (shift right)
+
+Behavior at Input Boundaries:
+- Clearly specify behavior when the load signal is asserted while ena is also asserted, and ensure that only one operation occurs at a time.
+</ENHANCED_SPEC>

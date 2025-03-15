@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic d,\n    output logic q\n);\n\n    // Intermediate register for dual-edge emulation\n    logic d_rising;\n\n    always_ff @(posedge clk) begin\n        d_rising <= d;\n    end\n\n    always_ff @(negedge clk) begin\n        q <= d_rising;\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

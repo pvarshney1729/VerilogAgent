@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    logic [2:0] state;  // 3-bit state register to represent different states\n    parameter S0 = 3'b000, S1 = 3'b001, S2 = 3'b010, S3 = 3'b011, S4 = 3'b100; // State definitions\n\n    always @(posedge clk) begin\n        case (state)\n            S0: if (x == 1'b1) state <= S1; // Transition from S0 to S1\n            S1: if (y == 1'b1) state <= S2; // Transition from S1 to S2\n            S2: state <= S3; // Transition to S3\n            S3: if (x == 1'b1) state <= S4; // Transition from S3 to S4\n            S4: if (y == 1'b0) state <= S0; // Back to S0\n            default: state <= S0; // Default state\n        endcase\n    end\n\n    always @(*) begin\n        case (state)\n            S0: z = 1'b1;\n            S1: z = 1'b0;\n            S2: z = 1'b0;\n            S3: z = 1'b1;\n            S4: z = 1'b0;\n            default: z = 1'b1; // Default case\n        endcase\n    end\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "c"
-    }
-}

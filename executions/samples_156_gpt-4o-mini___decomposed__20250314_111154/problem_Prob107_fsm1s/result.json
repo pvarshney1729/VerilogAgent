@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic in,\n    output logic out\n);\n    typedef enum logic [1:0] {B, A} state_t;\n    state_t current_state, next_state;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            current_state <= B;\n            out <= 1;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    always_comb begin\n        case (current_state)\n            B: begin\n                out = 1;\n                if (in) \n                    next_state = B;\n                else \n                    next_state = A;\n            end\n            A: begin\n                out = 0;\n                if (in) \n                    next_state = A;\n                else \n                    next_state = B;\n            end\n        endcase\n    end\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

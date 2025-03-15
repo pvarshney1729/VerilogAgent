@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,          // Clock signal, positive edge-triggered\n    input logic reset,        // Synchronous active-high reset signal\n    input logic slowena,      // Enable signal for counter increment\n    output logic [3:0] q      // 4-bit output representing the counter value\n);\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q <= 4'd0;\n        end else if (slowena) begin\n            if (q == 4'd9) begin\n                q <= 4'd0;\n            end else begin\n                q <= q + 4'd1;\n            end\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 2
-}

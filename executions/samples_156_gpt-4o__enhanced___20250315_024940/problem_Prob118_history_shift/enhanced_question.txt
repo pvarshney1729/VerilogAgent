@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - input clk: 1-bit clock signal (positive edge-triggered)
+  - input areset: 1-bit asynchronous reset signal (active high)
+  - input predict_valid: 1-bit signal indicating if the branch prediction is valid (active high)
+  - input predict_taken: 1-bit signal indicating the predicted branch direction (1 for taken, 0 for not taken)
+  - input train_mispredicted: 1-bit signal indicating if a branch misprediction has occurred (active high)
+  - input train_taken: 1-bit signal indicating the actual branch direction after misprediction (1 for taken, 0 for not taken)
+  - input [31:0] train_history: 32-bit signal representing the history prior to the mispredicted branch
+  
+- Output Ports:
+  - output [31:0] predict_history: 32-bit output representing the current state of the global history shift register
+
+Functionality:
+1. The module implements a 32-bit global history shift register (predict_history), with the least significant bit (LSB) at index [0] representing the most recent branch direction.
+2. On the positive edge of clk:
+   - If areset is asserted (high), the entire predict_history register is asynchronously reset to 32'b0.
+   - If train_mispredicted is asserted (high), the predict_history register is updated to the concatenation of train_history (the history before the mispredicted branch) and train_taken (the actual result of the branch). 
+   - If predict_valid is asserted (high), the predict_taken signal is shifted into the predict_history register from the LSB (predict_history[0] is updated with predict_taken), and all other bits are shifted right. 
+   - In the event that both predict_valid and train_mispredicted are asserted simultaneously, the module prioritizes the update from train_mispredicted, effectively ignoring the predict_valid input for that clock cycle.
+
+Signal Dependencies:
+- The shift operation for predict_history is dependent on the clk edge and is conditioned on the status of areset and train_mispredicted.
+- The predict_history update occurs only if areset is not asserted.
+- The behavior of the module must account for the precedence of train_mispredicted over predict_valid.
+
+Edge Cases:
+- If both predict_valid and train_mispredicted are asserted at the same time, the predict_history register should reflect the state resulting from the train_mispredicted operation only.
+- Ensure that predict_history does not retain any prior state when areset is asserted.
+
+Initialization:
+- All flip-flops and registers within the module must be initialized to a known state (predict_history[31:0] = 32'b0) when areset is asserted.
+
+Clock Cycle Relationships:
+- All sequential logic is triggered on the positive edge of the clk signal.
+
+</ENHANCED_SPEC>

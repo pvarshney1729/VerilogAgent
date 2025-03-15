@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,                    // Clock input, active on rising edge\n    input logic rst_n,                  // Asynchronous reset, active low\n    input logic [7:0] in,               // 8-bit unsigned input signal\n    output logic [7:0] anyedge          // 8-bit unsigned output signal\n);\n\nlogic [7:0] prev_in;  // Register to hold the previous state of `in`\n\nalways_ff @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        anyedge <= 8'b0;\n        prev_in <= 8'b0;\n    end else begin\n        anyedge <= in ^ prev_in;  // XOR to detect changes\n        prev_in <= in;            // Update previous state\n    end\nend\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

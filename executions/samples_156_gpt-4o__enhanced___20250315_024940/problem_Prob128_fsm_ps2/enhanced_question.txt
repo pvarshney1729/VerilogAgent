@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - reset: 1-bit input (active high synchronous reset)
+  - in: 8-bit input (data byte stream, with in[3] indicating the start of a message)
+
+- Output Ports:
+  - done: 1-bit output (indicates the successful receipt of a complete message)
+
+Input/Output Port Widths and Naming Conventions:
+- All input and output ports are clearly defined as either 1-bit or 8-bit.
+- The data input 'in' is an 8-bit vector, where:
+  - in[0] refers to the least significant bit (LSB)
+  - in[7] refers to the most significant bit (MSB)
+
+Functional Description:
+- The module implements a finite state machine (FSM) that detects message boundaries in a continuous byte stream based on the PS/2 mouse protocol.
+- A message consists of three bytes, with the first byte indicated by in[3] = 1.
+- The FSM will continuously monitor the input stream and discard bytes until it detects a byte where in[3] = 1, indicating the start of a new message.
+- The FSM will then wait for two additional bytes to complete the message.
+- The output signal 'done' will be asserted (set to high) in the clock cycle immediately following the successful reception of the third byte of a message.
+- Upon assertion of the 'done' signal, the FSM will return to the initial state to await the next message.
+
+Reset and Initialization:
+- The reset signal is active high and synchronous to the rising edge of the clock.
+- Upon reset, all internal registers and state variables within the FSM shall be initialized to their respective default states, ensuring a known state of operation.
+
+Sequential Logic Characteristics:
+- All sequential elements within the module will be clocked on the positive edge of the clk signal.
+- The behavior of the FSM shall be clearly defined for all states, including handling edge cases where input data may not conform to expected patterns.
+
+Signal Dependencies and Edge Cases:
+- The FSM must consider the implications of receiving bytes with in[3] = 1 immediately followed by zero or more bytes with in[3] = 0.
+- The design must ensure that there are no race conditions during state transitions, particularly between the detection of message boundaries and the assertion of the 'done' signal.
+
+Mathematical Description:
+- Let M denote a complete message consisting of three bytes: M = {B1, B2, B3}.
+- The FSM will transition to a state 'S1' upon detecting B1 (where B1 = in and in[3] = 1), then transition to 'S2' upon receiving B2, and finally to 'S3' upon receiving B3.
+- The output 'done' will be asserted in the cycle following the transition to 'S3'.
+
+Behavior at Edge Cases:
+- If no byte is received with in[3] = 1, the FSM remains in its initial state, continuously discarding bytes.
+- The FSM should handle cases where bytes are received in rapid succession without any valid message start byte.
+
+</ENHANCED_SPEC>

@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire x3: 1-bit input representing the most significant bit (MSB).
+  - input wire x2: 1-bit input representing the middle bit.
+  - input wire x1: 1-bit input representing the least significant bit (LSB).
+
+- Output Ports:
+  - output wire f: 1-bit output.
+
+Functional Description:
+The module implements a combinational logic circuit based on the following truth table:
+
+  | x3 | x2 | x1 | f |
+  |----|----|----|---|
+  | 0  | 0  | 0  | 0 |
+  | 0  | 0  | 1  | 0 |
+  | 0  | 1  | 0  | 1 |
+  | 0  | 1  | 1  | 1 |
+  | 1  | 0  | 0  | 0 |
+  | 1  | 0  | 1  | 1 |
+  | 1  | 1  | 0  | 0 |
+  | 1  | 1  | 1  | 1 |
+
+Signal Dependencies:
+- The output f is generated based on the values of inputs x3, x2, and x1. The logical relationships between these inputs must be derived to achieve the desired output values as specified in the truth table.
+
+Behavior at Edge Cases:
+- The circuit must be capable of handling all possible combinations of the three input bits (x3, x2, x1) in accordance with the truth table provided, covering the full range of binary values from 000 to 111.
+
+Initial Values:
+- As this is a combinational circuit, there are no registers or flip-flops to initialize. The output f should be computed directly based on the current input values.
+
+Implementation considerations:
+- Ensure that the implementation avoids any race conditions by clearly defining the logic gates or expressions used to derive the output from the inputs without any ambiguous dependencies.
+</ENHANCED_SPEC>

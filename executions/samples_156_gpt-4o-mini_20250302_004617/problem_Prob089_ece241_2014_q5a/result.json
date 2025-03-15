@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic serial_in,\n    output logic [7:0] result\n);\n\n    logic [7:0] data;\n    logic [3:0] state;\n    logic [3:0] next_state;\n\n    // State encoding\n    localparam IDLE = 4'b0000;\n    localparam READ = 4'b0001;\n    localparam COMPUTE = 4'b0010;\n    localparam OUTPUT = 4'b0011;\n\n    // Synchronous reset and state transition\n    always @(*) begin\n        case (state)\n            IDLE: next_state = (serial_in) ? READ : IDLE;\n            READ: next_state = (data[7] == 1'b1) ? COMPUTE : READ;\n            COMPUTE: next_state = OUTPUT;\n            OUTPUT: next_state = IDLE;\n            default: next_state = IDLE;\n        endcase\n    end\n\n    always @(posedge clk) begin\n        if (reset) begin\n            state <= 4'b0000;\n            data <= 8'b00000000;\n        end else begin\n            state <= next_state;\n            if (state == READ) begin\n                data <= {data[6:0], serial_in}; // Shift in serial data\n            end else if (state == COMPUTE) begin\n                data <= ~data + 1'b1; // Compute 2's complement\n            end\n        end\n    end\n\n    assign result = (state == OUTPUT) ? data : 8'b00000000;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 3
-}

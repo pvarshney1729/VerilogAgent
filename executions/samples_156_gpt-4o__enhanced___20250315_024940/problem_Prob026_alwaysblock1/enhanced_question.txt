@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a: 1-bit input signal representing operand A. (a[0] refers to the least significant bit)
+  - input wire b: 1-bit input signal representing operand B. (b[0] refers to the least significant bit)
+
+- Output Ports:
+  - output wire out_assign: 1-bit output signal representing the result of the AND operation using an assign statement. (out_assign[0] refers to the least significant bit)
+  - output wire out_alwaysblock: 1-bit output signal representing the result of the AND operation using a combinational always block. (out_alwaysblock[0] refers to the least significant bit)
+
+Functional Requirements:
+1. The module shall compute the logical AND of inputs 'a' and 'b' and provide the result on both output ports.
+2. The output 'out_assign' shall be driven by a continuous assignment statement (assign) reflecting the AND operation: out_assign = a & b.
+3. The output 'out_alwaysblock' shall be driven by a combinational always block that triggers on changes to either 'a' or 'b':
+   - Always block sensitivity list: @(a, b)
+   - Inside the always block, the output shall be assigned the value of the AND operation: out_alwaysblock = a & b.
+
+Implementation Notes:
+- Both outputs must be updated immediately in response to changes in inputs 'a' or 'b' without introducing any delays or race conditions.
+- Ensure that the outputs are initialized to a known state prior to any operation.
+
+Edge Cases:
+- The behavior of the module should be defined for all input combinations:
+  - If a = 0 and b = 0, then out_assign and out_alwaysblock should be 0.
+  - If a = 0 and b = 1, then out_assign and out_alwaysblock should be 0.
+  - If a = 1 and b = 0, then out_assign and out_alwaysblock should be 0.
+  - If a = 1 and b = 1, then out_assign and out_alwaysblock should be 1.
+
+Reset Conditions:
+- No reset conditions or asynchronous/synchronous resets are specified in this module.
+</ENHANCED_SPEC>

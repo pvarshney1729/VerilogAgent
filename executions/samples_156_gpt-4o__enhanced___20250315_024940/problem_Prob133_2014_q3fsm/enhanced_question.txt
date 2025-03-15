@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: bit (1-bit input, rising edge-triggered clock signal)
+  - reset: bit (1-bit input, active high synchronous reset signal)
+  - s: bit (1-bit input)
+  - w: bit (1-bit input)
+  
+- Output Ports:
+  - z: bit (1-bit output)
+
+Functional Description:
+This module implements a finite state machine (FSM) with two states: State A and State B. The FSM behavior is as follows:
+
+1. Initial State:
+   - The FSM begins in State A upon power-up or when the reset signal is asserted (reset = 1). In this state, the output z is initially set to 0.
+
+2. State A:
+   - The FSM remains in State A as long as the input s = 0. 
+   - If s transitions to 1 (s = 1), the FSM changes its state to State B on the next positive edge of the clock.
+
+3. State B:
+   - Upon entering State B, the FSM will observe the value of the input w for the next three clock cycles (counting from the clock edge when the FSM transitioned to State B).
+   - After three clock cycles, if the value of w equals 1 for exactly two of those cycles (i.e., the input w has the pattern 110, 101, or 011), then the output z is set to 1 on the following clock cycle.
+   - If w does not equal 1 in exactly two of the three clock cycles, then z is set to 0 on the following clock cycle.
+   - The FSM continues to check the input w in subsequent sequences of three clock cycles, resetting the count after each evaluation.
+
+4. Reset Behavior:
+   - The reset signal is active high and synchronous. Upon reset, all internal registers and states are initialized to their defined states, with the FSM starting in State A and output z set to 0.
+
+5. Timing:
+   - All sequential logic is triggered on the positive edge of the clock signal (clk).
+   - The transitions between states and the output z will occur on the rising edge of clk.
+
+Edge Cases:
+- If reset is asserted while in State B, the FSM must immediately return to State A and set z to 0.
+- If s is toggled during State B, the FSM will not return to State A until the next reset or the next clock edge where s = 0.
+
+Signal Dependencies:
+- The FSM's transition from State A to State B depends solely on the input s.
+- The evaluation of the output z is dependent on the value of w over the specified three clock cycles after the state transition to State B.
+
+State Encoding:
+- The FSM should use the minimum number of states necessary to achieve the required functionality while maintaining clarity in state transitions and output behavior.
+
+</ENHANCED_SPEC>

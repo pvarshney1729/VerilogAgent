@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic load,\n    input  logic ena,\n    input  logic [1:0] amount,\n    input  logic [63:0] data,\n    output logic [63:0] q\n);\n\n    // Internal register to hold the shift register value\n    logic [63:0] shift_reg;\n\n    // Synchronous process for shift register operation\n    always @(posedge clk) begin\n        if (load) begin\n            // Load data into the shift register\n            shift_reg <= data;\n        end else if (ena) begin\n            // Perform shifting operation based on amount\n            case (amount)\n                2'b00: shift_reg <= {shift_reg[62:0], 1'b0}; // Shift left by 1\n                2'b01: shift_reg <= {shift_reg[55:0], 8'b0}; // Shift left by 8\n                2'b10: shift_reg <= {shift_reg[63], shift_reg[63:1]}; // Arithmetic shift right by 1\n                2'b11: shift_reg <= {shift_reg[63], shift_reg[63:8]}; // Arithmetic shift right by 8\n                default: shift_reg <= shift_reg; // Default case (no change)\n            endcase\n        end\n    end\n\n    // Assign the output to the shift register value\n    assign q = shift_reg;\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

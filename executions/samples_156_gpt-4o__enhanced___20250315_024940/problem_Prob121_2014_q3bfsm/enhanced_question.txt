@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (rising edge-triggered clock signal)
+  - reset: 1-bit input (synchronous active-high reset signal)
+  - x: 1-bit input (data signal)
+
+- Output Ports:
+  - z: 1-bit output (output signal)
+
+State Encoding:
+- The finite-state machine (FSM) uses a 3-bit state representation, denoted as y[2:0]. 
+- The most significant bit (MSB) is y[2] and the least significant bit (LSB) is y[0].
+
+Reset Condition:
+- The FSM will reset synchronously on the rising edge of clk when reset is high (1). 
+- Upon reset, the FSM will transition to the state y = 3'b000.
+
+State Transition Table:
+Present State y[2:0] | Next State (x=0) y[2:0] | Next State (x=1) y[2:0] | Output z
+-----------------------|---------------------------|---------------------------|---------
+000                    | 000                       | 001                       | 0
+001                    | 001                       | 100                       | 0
+010                    | 010                       | 001                       | 0
+011                    | 001                       | 010                       | 1
+100                    | 011                       | 100                       | 1
+
+Behavior Specifications:
+- The FSM operates based on the input signal x. The transitions between states and the output z are determined by the current state y and the value of x at the positive edge of clk.
+- Ensure that all state transitions and outputs are correctly implemented according to the state transition table provided above.
+- The output z should reflect the correct value based on the current state and the input x as specified.
+
+Edge Cases:
+- Proper handling of the reset condition should be ensured, with the FSM returning to state 000 regardless of the current state or input.
+- The behavior of the FSM should be well-defined for all values of x (0 and 1) from each state, and no undefined states should exist.
+
+Initialization:
+- The FSM's state should be initialized to 3'b000 during the synchronous reset condition.
+- Ensure that all registers used to hold the current state y[2:0] have a clearly defined initial state upon reset.
+</ENHANCED_SPEC>

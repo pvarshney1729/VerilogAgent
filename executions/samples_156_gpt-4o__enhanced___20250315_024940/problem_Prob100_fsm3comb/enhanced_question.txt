@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - in: 1-bit, unsigned (bit[0] refers to the least significant bit)
+  - state: 2 bits, unsigned (bit[1] is the most significant bit, bit[0] is the least significant bit)
+  
+- Output Ports:
+  - next_state: 2 bits, unsigned (bit[1] is the most significant bit, bit[0] is the least significant bit)
+  - out: 1-bit, unsigned
+
+Functional Description:
+The module implements a Moore state machine with four states: A, B, C, and D, encoded as follows:
+- State A: 2'b00
+- State B: 2'b01
+- State C: 2'b10
+- State D: 2'b11
+
+State Transition Logic:
+The next_state and output (out) are determined based on the following state transition table:
+
+| Current State (state) | Input (in) | Next State (next_state) | Output (out) |
+|-----------------------|------------|--------------------------|--------------|
+| A (2'b00)             | 0          | A (2'b00)                | 0            |
+| A (2'b00)             | 1          | B (2'b01)                | 0            |
+| B (2'b01)             | 0          | C (2'b10)                | 0            |
+| B (2'b01)             | 1          | B (2'b01)                | 0            |
+| C (2'b10)             | 0          | A (2'b00)                | 0            |
+| C (2'b10)             | 1          | D (2'b11)                | 0            |
+| D (2'b11)             | 0          | C (2'b10)                | 1            |
+| D (2'b11)             | 1          | B (2'b01)                | 1            |
+
+Implementation Notes:
+- The module should only implement the combinational logic for state transition and output generation. 
+- There are no sequential elements or clock cycles defined within this specification as it focuses solely on combinational logic.
+- Ensure that the output (out) aligns with the state transitions as defined above.
+- The module does not incorporate any reset logic, thus it is assumed that the initial state is A (2'b00) upon power-up or reset unless specified otherwise.
+- The behavior of the module at edge cases and input boundaries has been defined through the state transition table.
+</ENHANCED_SPEC>

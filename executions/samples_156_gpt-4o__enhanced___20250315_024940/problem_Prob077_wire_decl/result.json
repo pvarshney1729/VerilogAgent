@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out,\n    output logic out_n\n);\n\n    logic and_output1;\n    logic and_output2;\n\n    // First layer: two AND gates\n    assign and_output1 = a & b; // AND gate for inputs a and b\n    assign and_output2 = c & d; // AND gate for inputs c and d\n\n    // Second layer: OR gate\n    assign out = and_output1 | and_output2; // OR gate for the outputs of the AND gates\n\n    // Inverted output\n    assign out_n = ~out; // NOT gate for output out\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

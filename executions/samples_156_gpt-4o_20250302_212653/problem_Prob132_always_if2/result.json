@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic cpu_overheated,   // Indicates if the CPU is overheated\n    input logic arrived,          // Indicates if the destination has been reached\n    input logic gas_tank_empty,   // Indicates if the gas tank is empty\n    output logic shut_off_computer, // Output signal to shut off the computer\n    output logic keep_driving       // Output signal to continue driving\n);\n\n    // Combinational logic for shutting off the computer\n    always_comb begin\n        if (cpu_overheated) begin\n            shut_off_computer = 1'b1; // Shut off computer if CPU is overheated\n        end else begin\n            shut_off_computer = 1'b0; // Do not shut off computer if CPU is not overheated\n        end\n    end\n\n    // Combinational logic for driving behavior\n    always_comb begin\n        if (~arrived) begin\n            keep_driving = ~gas_tank_empty; // Continue driving if not arrived and gas tank is not empty\n        end else begin\n            keep_driving = 1'b0; // Stop driving if arrived\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 2
-}

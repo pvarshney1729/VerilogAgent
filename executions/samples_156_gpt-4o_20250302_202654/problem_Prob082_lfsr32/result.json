@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire clk,         // Clock signal, triggers on positive edge\n    input wire reset,       // Synchronous active high reset\n    output reg [31:0] q     // 32-bit output register representing the LFSR state\n);\n\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 32'h1; // Initialize LFSR to known state on reset\n        end else begin\n            // Compute new bit as XOR of tapped positions\n            wire new_bit;\n            new_bit = q[31] ^ q[21] ^ q[1] ^ q[0];\n            q <= {new_bit, q[31:1]}; // Shift right and insert new_bit at MSB\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 3
-}

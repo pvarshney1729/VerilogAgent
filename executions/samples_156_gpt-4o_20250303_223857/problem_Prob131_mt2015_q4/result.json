@@ -1,7 +1,0 @@
-{
-    "code": "module ModuleA (\n    input logic [0:0] x, y,\n    output logic [0:0] z\n);\n    always @(*) begin\n        z = (x ^ y) & x;\n    end\nendmodule\n\nmodule ModuleB (\n    input logic clk,\n    input logic [0:0] x, y,\n    output logic [0:0] z\n);\n    always_ff @(posedge clk) begin\n        if (x == 0 && y == 0)\n            z <= 1'b1;\n        else if (x == 1 && y == 0)\n            z <= 1'b0;\n        else if (x == 0 && y == 1)\n            z <= 1'b0;\n        else if (x == 1 && y == 1)\n            z <= 1'b1;\n    end\nendmodule\n\nmodule TopLevel (\n    input logic clk,\n    input logic [0:0] x, y,\n    output logic [0:0] z\n);\n    logic [0:0] zA1, zB1, zA2, zB2;\n    logic [0:0] or_out, and_out;\n\n    ModuleA u1_ModuleA (\n        .x(x),\n        .y(y),\n        .z(zA1)\n    );\n\n    ModuleB u1_ModuleB (\n        .clk(clk),\n        .x(x),\n        .y(y),\n        .z(zB1)\n    );\n\n    ModuleA u2_ModuleA (\n        .x(x),\n        .y(y),\n        .z(zA2)\n    );\n\n    ModuleB u2_ModuleB (\n        .clk(clk),\n        .x(x),\n        .y(y),\n        .z(zB2)\n    );\n\n    always @(*) begin\n        or_out = zA1 | zB1;\n        and_out = zA2 & zB2;\n        z = or_out ^ and_out;\n    end\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    }
-}

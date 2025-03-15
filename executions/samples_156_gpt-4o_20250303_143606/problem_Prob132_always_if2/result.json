@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input  logic cpu_overheated,\n    output logic shut_off_computer,\n    input  logic arrived,\n    input  logic gas_tank_empty,\n    output logic keep_driving\n);\n\n    // Combinational logic for shutting off the computer\n    always_comb begin\n        shut_off_computer = cpu_overheated ? 1'b1 : 1'b0;\n    end\n\n    // Combinational logic for keeping driving\n    always_comb begin\n        if (~arrived)\n            keep_driving = ~gas_tank_empty;\n        else\n            keep_driving = 1'b0;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

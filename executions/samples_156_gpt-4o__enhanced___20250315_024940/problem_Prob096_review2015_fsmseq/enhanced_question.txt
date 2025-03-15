@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input signal representing the clock. This signal is used to trigger all sequential logic on the positive edge.
+  - reset: 1-bit input signal representing the active high synchronous reset. When asserted high, it will reset the state of the module.
+  - data: 1-bit input signal representing the incoming bit stream to be analyzed for the sequence 1101.
+
+- Output Ports:
+  - start_shifting: 1-bit output signal. When the sequence 1101 is detected in the data input stream, this signal will be set high (1) and will remain high until the reset signal is asserted.
+
+Functional Description:
+The TopModule implements a finite-state machine (FSM) designed to search for the specific bit sequence 1101 within the incoming data stream. 
+
+State Transition and Output Behavior:
+1. On the rising edge of clk, if reset is asserted, then:
+   - All internal state variables should be reset to their initial values.
+   - start_shifting should be set to 0.
+   
+2. If reset is not asserted, the FSM will monitor the data input. 
+   - Upon detecting the sequence 1101, the output signal start_shifting should transition to high (1) and remain high until the next assertion of the reset signal.
+   
+3. The FSM should account for potential edge cases, such as:
+   - The sequence being detected immediately at the start of the input stream.
+   - The sequence being split across two clock cycles.
+   - Continuous input of bits that do not form the sequence.
+
+State Definitions:
+- Define all necessary states for the FSM, including states for tracking the detection of each bit in the sequence 1101, and ensure that transitions between states are clearly specified.
+
+Initial Values:
+- All state variables must have explicitly defined initial values upon reset, ensuring predictable behavior.
+
+Reset Behavior:
+- The FSM must clearly define the reset state of all registers and flip-flops, ensuring they return to a known state.
+
+Signal Dependencies:
+- Clearly outline dependencies of states on the data input and ensure that any potential race conditions are handled through proper state management.
+
+Testing and Verification:
+- Provide a truth table or state transition diagram to describe the expected behavior of the FSM for each combination of input data.
+
+End of Specification.
+</ENHANCED_SPEC>

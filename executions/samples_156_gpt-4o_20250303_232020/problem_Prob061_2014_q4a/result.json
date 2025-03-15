@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic w,\n    input logic R,\n    input logic E,\n    input logic L,\n    output logic Q\n);\n\n    always_ff @(posedge clk or posedge R) begin\n        if (R) begin\n            Q <= 1'b0;\n        end else begin\n            if (L) begin\n                Q <= R;\n            end else if (E) begin\n                Q <= w;\n            end\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 104,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

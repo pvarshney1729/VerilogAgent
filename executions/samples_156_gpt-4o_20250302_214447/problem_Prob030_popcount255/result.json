@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input  logic [254:0] in_vector, // 255-bit input vector\n    output logic [7:0]   out_count  // 8-bit output count\n);\n\n    // Combinational Logic for Population Count\n    integer i;\n    logic [7:0] count;\n\n    always @(*) begin\n        count = 8'b0; // Initialize count to zero\n        for (i = 0; i < 255; i = i + 1) begin\n            count = count + in_vector[i];\n        end\n    end\n\n    assign out_count = count;\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "R"
-    }
-}

@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input  logic        clk,\n    input  logic        load,\n    input  logic [511:0] data,\n    output logic [511:0] q\n);\n\n    logic [511:0] q_next;\n\n    always @(*) begin\n        // Compute next state based on Rule 110\n        for (int i = 0; i < 512; i++) begin\n            logic left, center, right;\n            left = (i == 511) ? 1'b0 : q[i+1];\n            center = q[i];\n            right = (i == 0) ? 1'b0 : q[i-1];\n            q_next[i] = (left & ~center & right) | (~left & center) | (~left & ~center & right);\n        end\n    end\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else begin\n            q <= q_next;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 6214,
-        "passfail": "R"
-    }
-}

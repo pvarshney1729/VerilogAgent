@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+The module shall be named `TopModule` and shall implement a JK flip-flop. The interface of the module is defined as follows:
+
+**Input Ports:**
+- `input clk`: One-bit clock signal. The flip-flop shall trigger on the rising edge of this signal.
+- `input j`: One-bit input signal representing the J input of the JK flip-flop.
+- `input k`: One-bit input signal representing the K input of the JK flip-flop.
+
+**Output Ports:**
+- `output reg Q`: One-bit output signal representing the current state of the flip-flop. The output Q shall be stored in a register and must be initialized to a known state.
+
+**Behavior:**
+The module implements the following truth table for the JK flip-flop, where `Qold` is the state of the output `Q` prior to the rising edge of the `clk` signal:
+
+| J | K | Q (after clk rising edge) |
+|---|---|---------------------------|
+| 0 | 0 | Qold                      |
+| 0 | 1 | 0                         |
+| 1 | 0 | 1                         |
+| 1 | 1 | ~Qold                     |
+
+**Timing and Initialization:**
+- The flip-flop shall operate synchronously with the clock signal `clk`. 
+- The flip-flop shall be updated on the rising edge of the `clk`.
+- The output `Q` must be initialized to `0` at the start of operation or upon a reset condition if implemented.
+
+**Reset Specification:**
+- If a reset signal is implemented, it must be specified as either synchronous or asynchronous, along with the reset state of `Q`.
+
+**Additional Considerations:**
+- The module shall handle edge cases, including transitions of `j` and `k` that occur simultaneously with the rising edge of `clk`.
+- Potential race conditions should be analyzed and mitigated as necessary, particularly in scenarios where both `j` and `k` are high at the same clock edge.
+
+**Bit Indexing:**
+- For clarity, bit[0] refers to the least significant bit (LSB) of the output `Q`.
+
+All signals must adhere to the defined widths and behaviors to ensure correct implementation of the JK flip-flop functionality.
+</ENHANCED_SPEC>

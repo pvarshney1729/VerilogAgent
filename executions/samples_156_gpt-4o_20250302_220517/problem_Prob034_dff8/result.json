@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n   input logic clk,                // Clock signal (assumed edge-triggered)\n   input logic [7:0] d,            // 8-bit data input, unsigned\n   output logic [7:0] q,           // 8-bit data output, unsigned\n   input logic rst_n               // Asynchronous active-low reset\n);\n\n   // Module Description:\n   // - This module implements 8 D flip-flops that capture the input `d` on the positive edge of the `clk`.\n   // - Each flip-flop is asynchronously reset to 0 when `rst_n` is low.\n\n   always_ff @(posedge clk or negedge rst_n) begin\n      if (!rst_n)\n         q <= 8'b00000000;       // Reset state: all outputs zero\n      else\n         q <= d;                 // Capture input `d` on clock's rising edge\n   end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 1,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

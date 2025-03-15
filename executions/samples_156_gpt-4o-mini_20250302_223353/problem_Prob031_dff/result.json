@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    logic clk,\n    logic d,\n    logic rst_n, // Active-low reset\n    logic q\n);\n\n// D Flip-Flop with asynchronous reset\nalways @(posedge clk) begin\n    if (!rst_n) begin\n        q <= 1'b0; // Asynchronous reset\n    end else begin\n        q <= d;    // Data capture on clock edge\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 3
-}

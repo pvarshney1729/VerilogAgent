@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic ring,          // Incoming call signal, active high\n    input logic vibrate_mode,  // Vibrate mode control, active high\n    output logic ringer,       // Ring control output, active high\n    output logic motor         // Vibration motor control output, active high\n);\n\n    // Combinational logic to determine the state of ringer and motor\n    assign ringer = ring && ~vibrate_mode;\n    assign motor = ring && vibrate_mode;\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module SafetyControl (\n    input logic cpu_overheated,     // Indicates if the CPU is overheated\n    output logic shut_off_computer, // Controls whether the computer should shut off\n    input logic arrived,            // Indicates if the destination has been reached\n    input logic gas_tank_empty,     // Indicates if the gas tank is empty\n    output logic keep_driving       // Controls whether to continue driving\n);\n\n    // Combinational logic block with explicit default assignments\n    always @(*) begin\n        // Default assignments to prevent latches\n        shut_off_computer = 1'b0;\n        keep_driving = 1'b0;\n\n        // Logic to determine if the computer should be shut off\n        if (cpu_overheated) begin\n            shut_off_computer = 1'b1;\n        end\n        \n        // Logic to determine if the vehicle should keep driving\n        if (~arrived) begin\n            keep_driving = ~gas_tank_empty;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 2
-}

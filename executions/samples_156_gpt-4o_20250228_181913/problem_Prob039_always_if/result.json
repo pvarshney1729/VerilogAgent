@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input  wire a,         // 1-bit input signal\n    input  wire b,         // 1-bit input signal\n    input  wire sel_b1,    // 1-bit selection control\n    input  wire sel_b2,    // 1-bit selection control\n    output wire out_assign,// 1-bit output from assign-based mux\n    output reg  out_always // 1-bit output from procedural-based mux\n);\n\n    // Assign-based implementation\n    assign out_assign = (sel_b1 & sel_b2) ? b : a;\n\n    // Procedural-based implementation\n    always @(*) begin\n        if (sel_b1 & sel_b2)\n            out_always = b;\n        else\n            out_always = a;\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

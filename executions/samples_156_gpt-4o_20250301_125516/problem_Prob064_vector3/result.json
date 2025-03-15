@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule(\n    input  [4:0] a,\n    input  [4:0] b,\n    input  [4:0] c,\n    input  [4:0] d,\n    input  [4:0] e,\n    input  [4:0] f,\n    output [7:0] w,\n    output [7:0] x,\n    output [7:0] y,\n    output [7:0] z\n);\n\n    // Concatenate inputs and append two '1' bits at the LSB\n    logic [31:0] concatenated;\n    assign concatenated = {a, b, c, d, e, f, 2'b11};\n\n    // Assign the 32-bit concatenated vector to 8-bit outputs\n    assign w = concatenated[31:24];\n    assign x = concatenated[23:16];\n    assign y = concatenated[15:8];\n    assign z = concatenated[7:0];\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module combinational_logic (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out_sop,\n    output logic out_pos\n);\n\n    // Sum of Products for decimal numbers 2 (0010), 7 (0111), and 15 (1111)\n    assign out_sop = (a & ~b & ~c & d) | (~a & b & c & d) | (a & b & c & d);\n\n    // Product of Sums considering don't-care conditions\n    // Don't-care conditions can be represented as 'x' in K-map simplification\n    assign out_pos = (~a | b | ~c) & (~a | ~b | ~d) & (a | ~b | ~c | ~d);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

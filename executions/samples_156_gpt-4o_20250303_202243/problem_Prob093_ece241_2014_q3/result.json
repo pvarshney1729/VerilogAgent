@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire c,        // 1-bit input, unsigned\n    input wire d,        // 1-bit input, unsigned\n    input wire a,        // 1-bit input, unsigned, selector for 4-to-1 mux\n    input wire b,        // 1-bit input, unsigned, selector for 4-to-1 mux\n    output wire [3:0] mux_in  // 4-bit output, unsigned\n);\n\n    // Combinational logic for mux_in based on Karnaugh map\n    assign mux_in[0] = (!c & !d) | (c & d) | (c & !d);\n    assign mux_in[1] = (!c & d);\n    assign mux_in[2] = (c & d);\n    assign mux_in[3] = (!c & !d) | (c & d);\n\n    // 4-to-1 multiplexer logic\n    wire mux_out;\n    assign mux_out = (a == 1'b0 && b == 1'b0) ? mux_in[0] :\n                     (a == 1'b0 && b == 1'b1) ? mux_in[1] :\n                     (a == 1'b1 && b == 1'b0) ? mux_in[3] :\n                     mux_in[2];\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 60,
-        "passfail": "R"
-    }
-}

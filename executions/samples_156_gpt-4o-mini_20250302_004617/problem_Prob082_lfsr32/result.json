@@ -1,8 +1,0 @@
-{
-    "code": "module galois_lfsr (\n    input logic clk,\n    input logic reset,\n    output logic [31:0] lfsr_out\n);\n\n    logic [31:0] lfsr_reg;\n\n    // Initialize all flip-flops to zero in simulation\n    initial begin\n        lfsr_reg = 32'b0;\n    end\n\n    // Synchronous reset and LFSR update\n    always @(*) begin\n        if (reset) begin\n            lfsr_reg = 32'b0;\n        end else begin\n            // Galois LFSR feedback polynomial: x^32 + x^22 + x^21 + x^17 + x^16 + x^15 + x^14 + x^11 + x^10 + x^7 + x^5 + x^4 + x^3 + x^1 + 1\n            lfsr_reg = {lfsr_reg[30:0], lfsr_reg[31] ^ lfsr_reg[22] ^ lfsr_reg[21] ^ lfsr_reg[17] ^ lfsr_reg[16] ^ lfsr_reg[15] ^ lfsr_reg[14] ^ lfsr_reg[11] ^ lfsr_reg[10] ^ lfsr_reg[7] ^ lfsr_reg[5] ^ lfsr_reg[4] ^ lfsr_reg[3] ^ lfsr_reg[1]};\n        end\n    end\n\n    assign lfsr_out = lfsr_reg;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [4:0] q\n);\n\nlogic [4:0] q_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        q_reg <= 5'b00001; // Reset to 1\n    end else begin\n        q_reg <= {q_reg[3] ^ q_reg[4], q_reg[4:1]}; // Galois LFSR with taps at positions 5 and 3\n    end\nend\n\nassign q = q_reg;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 4412,
-        "passfail": "R"
-    }
-}

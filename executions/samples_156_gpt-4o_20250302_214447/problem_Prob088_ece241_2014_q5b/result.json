@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic areset,\n    input logic x,\n    output logic z\n);\n\n    // State encoding\n    logic state_A, state_B;\n\n    // State transition and output logic\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            state_A <= 1'b1;\n            state_B <= 1'b0;\n            z <= 1'b0;\n        end else begin\n            if (state_A) begin\n                if (x) begin\n                    state_A <= 1'b0;\n                    state_B <= 1'b1;\n                    z <= 1'b1;\n                end else begin\n                    z <= 1'b0;\n                end\n            end else if (state_B) begin\n                if (x) begin\n                    z <= 1'b0;\n                end else begin\n                    z <= 1'b1;\n                end\n            end\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

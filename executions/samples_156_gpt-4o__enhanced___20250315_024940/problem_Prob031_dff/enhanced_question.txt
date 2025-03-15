@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Interface:
+- Input Ports:
+  - clk: bit (1) [clock signal, positive edge-triggered]
+  - d: bit (1) [data input]
+- Output Ports:
+  - q: bit (1) [data output]
+
+Port Descriptions:
+- clk: The clock signal that drives the flip-flop. The flip-flop will be triggered on the rising edge of this clock signal.
+- d: The input data signal for the flip-flop.
+- q: The output data signal that reflects the state of the flip-flop.
+
+Functional Description:
+- The module shall implement a single D flip-flop with the following characteristics:
+  - The flip-flop shall capture the value of the input signal 'd' on the rising edge of the clock signal 'clk'.
+  - The output signal 'q' shall reflect the captured value of 'd' immediately after the positive edge of 'clk'.
+
+Sequential Logic:
+- The operation of the flip-flop is defined as follows:
+  - At the positive edge of clk (i.e., when clk transitions from 0 to 1):
+    - q <= d;  // Capture the value of d
+
+Reset Behavior:
+- The module specification does not include a reset signal. Therefore, the initial value of the output 'q' is not defined, and it is the responsibility of the user to ensure that the flip-flop is properly initialized before use.
+
+Edge Cases:
+- The specification does not define behavior for clock signal glitches or transitions other than the defined positive edge trigger.
+
+Signal Dependencies:
+- The output 'q' depends solely on the previous value of 'd' at the last positive edge of 'clk'.
+- There are no other signal dependencies indicated in this specification.
+
+Assumptions:
+- It is assumed that no asynchronous reset or enable signals are included in this design.
+- The design will operate correctly under the assumption that the clk signal is stable before and after the triggering edge.
+</ENHANCED_SPEC>

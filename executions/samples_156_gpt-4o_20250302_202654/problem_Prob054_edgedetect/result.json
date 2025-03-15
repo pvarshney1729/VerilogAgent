@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,          // Clock signal\n    input logic rst,          // Active-high reset signal\n    input logic [7:0] in,     // 8-bit input vector\n    output logic [7:0] pedge  // 8-bit output vector for positive edge detection\n);\n\n    // Register to store the previous state of 'in'\n    logic [7:0] in_prev;\n\n    // Sequential logic to detect positive edges\n    always_ff @(posedge clk) begin\n        if (rst) begin\n            // Reset behavior: Initialize pedge and in_prev to 0\n            pedge <= 8'b0;\n            in_prev <= 8'b0;\n        end else begin\n            // Detect positive edge for each bit\n            pedge <= in & ~in_prev;\n            // Update in_prev with the current state of 'in'\n            in_prev <= in;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,          // Clock input, 1 bit\n    input logic [7:0] in,     // 8-bit input vector\n    output logic [7:0] anyedge // 8-bit output vector\n);\n\n    logic [7:0] prev_in; // Register to store the previous state of `in`\n\n    always_ff @(posedge clk) begin\n        anyedge <= in ^ prev_in; // Detect edges by XORing current and previous states\n        prev_in <= in;           // Update previous state\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

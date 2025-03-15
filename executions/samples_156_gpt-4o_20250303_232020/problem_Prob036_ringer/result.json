@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire ring,          // Incoming call signal, 1-bit input\n    input wire vibrate_mode,  // Vibrate mode control, 1-bit input\n    output reg ringer,        // Ringer control, 1-bit output\n    output reg motor          // Motor control, 1-bit output\n);\n\nalways @(*) begin\n    if (ring) begin\n        if (vibrate_mode) begin\n            motor = 1'b1;\n            ringer = 1'b0;\n        end else begin\n            motor = 1'b0;\n            ringer = 1'b1;\n        end\n    end else begin\n        motor = 1'b0;\n        ringer = 1'b0;\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

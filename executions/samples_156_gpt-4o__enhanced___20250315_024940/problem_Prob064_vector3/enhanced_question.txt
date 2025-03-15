@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- **Inputs**:
+  - `input [4:0] a;`  // 5 bits, least significant bit (LSB) is bit[0]
+  - `input [4:0] b;`  // 5 bits, LSB is bit[0]
+  - `input [4:0] c;`  // 5 bits, LSB is bit[0]
+  - `input [4:0] d;`  // 5 bits, LSB is bit[0]
+  - `input [4:0] e;`  // 5 bits, LSB is bit[0]
+  - `input [4:0] f;`  // 5 bits, LSB is bit[0]
+
+- **Outputs**:
+  - `output [7:0] w;`  // 8 bits, LSB is bit[0]
+  - `output [7:0] x;`  // 8 bits, LSB is bit[0]
+  - `output [7:0] y;`  // 8 bits, LSB is bit[0]
+  - `output [7:0] z;`  // 8 bits, LSB is bit[0]
+
+Functional Description:
+The TopModule shall concatenate the six 5-bit input vectors (a, b, c, d, e, f) into a single 30-bit vector. This 30-bit vector will be followed by two additional bits, both set to '1', making the total output length 32 bits. The output vectors (w, x, y, z) will be populated as follows:
+- `w` will receive the first 8 bits of the concatenated vector.
+- `x` will receive the next 8 bits.
+- `y` will receive the next 8 bits.
+- `z` will receive the final 8 bits of the concatenated vector including two extra bits '11' at the least significant positions.
+
+Behavior at Edge Cases:
+- The outputs (w, x, y, z) shall be valid and must reflect the correct concatenation of inputs even if any input vector is at its maximum ('11111') or minimum ('00000') values.
+- The module shall ensure that the output signals are stable during the concatenation process and that no race conditions occur.
+
+Initial Conditions:
+- All output signals (w, x, y, z) should be initialized to zero ('00000000') upon reset.
+
+Clock and Reset:
+- The module will operate under a synchronous reset mechanism. Upon a reset signal, all outputs shall be set to zero ('00000000').
+
+Signal Dependencies:
+- The output signals are directly dependent on the inputs a, b, c, d, e, and f. There are no intermediate signals between inputs and outputs, ensuring simple and clear signal dependencies.
+
+</ENHANCED_SPEC>

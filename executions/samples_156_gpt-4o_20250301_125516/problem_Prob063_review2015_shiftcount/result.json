@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic shift_ena,\n    input logic count_ena,\n    input logic data,\n    output logic [3:0] q\n);\n\n    // Internal register to hold the state of the shift register\n    logic [3:0] q_reg;\n\n    // Asynchronous reset to initialize the register to 4'b0000\n    initial begin\n        q_reg = 4'b0000;\n    end\n\n    // Sequential logic for shift register and counter\n    always_ff @(posedge clk) begin\n        if (shift_ena && !count_ena) begin\n            // Shift operation\n            q_reg <= {data, q_reg[3:1]};\n        end else if (!shift_ena && count_ena) begin\n            // Count operation\n            q_reg <= q_reg - 1;\n        end\n        // If both shift_ena and count_ena are high, behavior is unspecified\n    end\n\n    // Assign the internal register to the output\n    assign q = q_reg;\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

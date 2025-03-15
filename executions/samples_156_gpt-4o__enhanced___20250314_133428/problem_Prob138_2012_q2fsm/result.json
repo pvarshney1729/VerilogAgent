@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic reset,\n    input logic w,\n    output logic z\n);\n\n    // State encoding\n    typedef enum logic [2:0] {\n        STATE_A = 3'b000,\n        STATE_B = 3'b001,\n        STATE_C = 3'b010,\n        STATE_D = 3'b011,\n        STATE_E = 3'b100,\n        STATE_F = 3'b101\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            STATE_A: next_state = (w) ? STATE_B : STATE_A;\n            STATE_B: next_state = (w) ? STATE_C : STATE_D;\n            STATE_C: next_state = (w) ? STATE_E : STATE_D;\n            STATE_D: next_state = (w) ? STATE_F : STATE_A;\n            STATE_E: next_state = (w) ? STATE_E : STATE_D;\n            STATE_F: next_state = (w) ? STATE_C : STATE_D;\n            default: next_state = STATE_A;\n        endcase\n    end\n\n    // State register logic\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            current_state <= STATE_A;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Output logic\n    always @(*) begin\n        case (current_state)\n            STATE_E, STATE_F: z = 1'b1;\n            default: z = 1'b0;\n        endcase\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

@@ -1,0 +1,90 @@
+Generated Response:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic shift_ena,
+    input logic count_ena,
+    input logic data,
+    output logic [3:0] q
+);
+
+    // Internal register to hold the shift register value
+    logic [3:0] shift_reg;
+
+    // Synchronous logic for the shift register and down counter
+    always @(posedge clk) begin
+        if (shift_ena) begin
+            // Shift left and insert new data at the LSB
+            shift_reg <= {shift_reg[2:0], data};
+        end else if (count_ena) begin
+            // Down count
+            if (shift_reg != 4'b0000) begin
+                shift_reg <= shift_reg - 1;
+            end
+        end
+    end
+
+    // Assign the internal shift register to the output
+    assign q = shift_reg;
+
+    // Initialize the shift register to 0 on reset (implicitly done in simulation)
+    initial begin
+        shift_reg = 4'b0000;
+    end
+
+endmodule
+[DONE]
+``` 
+
+### Explanation of the Code:
+1. **Module Declaration**: The `TopModule` is defined with the specified input and output ports.
+
+2. **Internal Register**: A 4-bit internal register `shift_reg` is declared to hold the current state of the shift register.
+
+3. **Sequential Logic**: An `always` block is used to implement the behavior of the shift register and down counter. It triggers on the positive edge of the `clk`.
+   - If `shift_ena` is high, the register shifts left, and the new `data` bit is inserted at the LSB (least significant bit).
+   - If `count_ena` is high and the register is not already at zero, it decrements the `shift_reg` by 1.
+   
+4. **Output Assignment**: The output `q` is continuously assigned the value of `shift_reg`.
+
+5. **Initialization**: The shift register is initialized to zero in the initial block to ensure it starts from a known state.
+
+This design meets all the requirements specified in the prompt and adheres to the provided guidelines and coding conventions.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic shift_ena,
+    input logic count_ena,
+    input logic data,
+    output logic [3:0] q
+);
+
+    // Internal register to hold the shift register value
+    logic [3:0] shift_reg;
+
+    // Synchronous logic for the shift register and down counter
+    always @(posedge clk) begin
+        if (shift_ena) begin
+            // Shift left and insert new data at the LSB
+            shift_reg <= {shift_reg[2:0], data};
+        end else if (count_ena) begin
+            // Down count
+            if (shift_reg != 4'b0000) begin
+                shift_reg <= shift_reg - 1;
+            end
+        end
+    end
+
+    // Assign the internal shift register to the output
+    assign q = shift_reg;
+
+    // Initialize the shift register to 0 on reset (implicitly done in simulation)
+    initial begin
+        shift_reg = 4'b0000;
+    end
+
+endmodule

@@ -1,0 +1,68 @@
+Generated Response:
+
+Here is the corrected Verilog code for the adder-subtractor with a zero flag, ensuring to address the identified bug and adhere to the specified guidelines and coding conventions.
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic do_sub,                // Control signal to select addition (0) or subtraction (1)
+    input logic [7:0] a,               // First operand (8-bit unsigned)
+    input logic [7:0] b,               // Second operand (8-bit unsigned)
+    output logic [7:0] out,            // Output result (8-bit unsigned)
+    output logic result_is_zero         // Zero flag (1-bit)
+);
+
+    always @(*) begin
+        case (do_sub)
+            1'b0: out = a + b;           // Perform addition
+            1'b1: out = a - b;           // Perform subtraction
+            default: out = 8'b00000000;  // Default case to prevent latches
+        endcase
+
+        result_is_zero = (out == 8'b00000000); // Set zero flag
+    end
+
+endmodule
+[DONE]
+```
+
+### Reasoning Behind the Implementation:
+
+1. **Logic Declaration**:
+   - All ports are declared as `logic` types, which is a recommended practice in SystemVerilog and ensures compatibility with various synthesis tools.
+
+2. **Combinational Logic**:
+   - The output `out` is computed in a single `always @(*)` block, ensuring that it reacts to any changes in the inputs (`do_sub`, `a`, or `b`).
+
+3. **Handling Default Cases**:
+   - A default case is included in the `case` statement to prevent unintended latches, although in practice, `out` is always assigned in both cases.
+
+4. **Zero Flag Calculation**:
+   - The `result_is_zero` flag is computed immediately after the calculation of `out`, ensuring that it reflects the correct state based on the latest result.
+
+5. **Initialization**:
+   - The output `out` and `result_is_zero` are not explicitly initialized in the module declaration but will be set in the always block.
+
+This implementation fixes the bug by ensuring that the `result_is_zero` flag correctly reflects whether `out` is zero.
+
+Generated Code:
+
+module TopModule (
+    input logic do_sub,                // Control signal to select addition (0) or subtraction (1)
+    input logic [7:0] a,               // First operand (8-bit unsigned)
+    input logic [7:0] b,               // Second operand (8-bit unsigned)
+    output logic [7:0] out,            // Output result (8-bit unsigned)
+    output logic result_is_zero         // Zero flag (1-bit)
+);
+
+    always @(*) begin
+        case (do_sub)
+            1'b0: out = a + b;           // Perform addition
+            1'b1: out = a - b;           // Perform subtraction
+            default: out = 8'b00000000;  // Default case to prevent latches
+        endcase
+
+        result_is_zero = (out == 8'b00000000); // Set zero flag
+    end
+
+endmodule

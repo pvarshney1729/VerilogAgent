@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input signal representing the clock. The least significant bit (LSB) is denoted as clk[0].
+  - reset: 1-bit input signal for the synchronous reset. The LSB is denoted as reset[0].
+  - d: 8-bit input signal (d[7:0]) representing the data to be stored in the flip-flops. The most significant bit (MSB) is d[7] and the LSB is d[0].
+  
+- Output Ports:
+  - q: 8-bit output signal (q[7:0]) representing the stored data in the flip-flops. The MSB is q[7] and the LSB is q[0].
+
+Functional Description:
+- The module implements eight (8) D flip-flops (DFFs) with the following characteristics:
+  - Each D flip-flop is triggered on the negative edge of the clk signal.
+  - All D flip-flops have an active high synchronous reset input (reset).
+  - Upon activation of the reset signal, all D flip-flops will reset their output (q) to the value 0x34 (binary: 00110100).
+  - In the absence of a reset, the D flip-flops will sample the value of the input signal d on the negative edge of clk and store this value.
+
+Sequential Logic Definition:
+- The flip-flops are defined such that:
+  - If reset is high (reset == 1), then for each flip-flop, q[i] will be set to 0x34 for i = 0 to 7.
+  - If reset is low (reset == 0), then on the negative edge of clk, each flip-flop will take the value of the corresponding input from d, i.e., q[i] = d[i] for i = 0 to 7.
+
+Initial State:
+- The initial value of each flip-flop is undefined until the reset signal is activated or the first clock cycle occurs.
+
+Edge Cases:
+- During the first clock cycle, if reset is low, the output q will take the value from d.
+- The behavior of the flip-flops must ensure that there are no race conditions between the reset and the clock edge.
+
+Signal Dependencies:
+- The output q is dependent on both the reset signal and the input d, with precedence given to the reset signal during its active state.
+</ENHANCED_SPEC>

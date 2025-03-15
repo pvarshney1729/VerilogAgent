@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule(\n    input wire clk,          // Clock signal\n    input wire a,            // Input signal 'a'\n    output reg [2:0] q       // 3-bit output 'q'\n);\n\n    // Initialize q to 3'b000 at the first rising edge of clk\n    initial begin\n        q = 3'bxxx; // Undefined state at time 0\n    end\n\n    always @(posedge clk) begin\n        if (q === 3'bxxx) begin\n            q <= 3'b100; // Initialize q to 4 on the first rising edge\n        end else if (a == 1'b1) begin\n            q <= q; // q remains constant at 4 if a is 1\n        end else begin\n            q <= q + 1'b1; // Increment q by 1 modulo 8 if a is 0\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule(\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    // Internal signals for flip-flop outputs\n    logic FF1_Q, FF2_Q, FF3_Q;\n\n    // Combinational logic\n    logic XOR_out, AND_out, OR_out;\n\n    always @(*) begin\n        XOR_out = x ^ FF1_Q;\n        AND_out = x & ~FF2_Q;\n        OR_out = x | ~FF3_Q;\n    end\n\n    // Sequential logic with synchronous reset\n    always_ff @(posedge clk) begin\n        FF1_Q <= XOR_out;\n        FF2_Q <= AND_out;\n        FF3_Q <= OR_out;\n    end\n\n    // Output logic\n    assign z = ~(FF1_Q | FF2_Q | FF3_Q);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 45,
-        "passfail": "R"
-    },
-    "iterations_used": 2
-}

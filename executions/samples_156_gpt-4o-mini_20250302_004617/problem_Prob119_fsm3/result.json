@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic input_signal,\n    output logic output_signal\n);\n\n    typedef enum logic [1:0] {\n        STATE_0 = 2'b00,\n        STATE_1 = 2'b01,\n        STATE_2 = 2'b10,\n        STATE_3 = 2'b11\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // Synchronous reset and state transition\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= STATE_0;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            STATE_0: next_state = input_signal ? STATE_1 : STATE_0;\n            STATE_1: next_state = input_signal ? STATE_2 : STATE_0;\n            STATE_2: next_state = input_signal ? STATE_3 : STATE_0;\n            STATE_3: next_state = input_signal ? STATE_3 : STATE_0;\n            default: next_state = STATE_0;\n        endcase\n    end\n\n    // Output logic (Moore machine)\n    always @(*) begin\n        case (current_state)\n            STATE_0: output_signal = 1'b0;\n            STATE_1: output_signal = 1'b1;\n            STATE_2: output_signal = 1'b1;\n            STATE_3: output_signal = 1'b1;\n            default: output_signal = 1'b0;\n        endcase\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "e"
-    },
-    "iterations_used": 3
-}

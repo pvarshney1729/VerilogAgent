@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule ModuleA (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    assign z = (x ^ y) & x;\nendmodule\n\nmodule ModuleB (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    // Placeholder for the actual logic derived from the waveform\n    // Assuming some logic function for demonstration\n    assign z = x | y; // Replace with actual logic as per waveform\nendmodule\n\nmodule TopModule (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    logic a1_out, a2_out, b1_out, b2_out;\n    logic or_out, and_out;\n\n    // Instantiate Module A\n    ModuleA a1 (.x(x), .y(y), .z(a1_out));\n    ModuleA a2 (.x(x), .y(y), .z(a2_out));\n\n    // Instantiate Module B\n    ModuleB b1 (.x(x), .y(y), .z(b1_out));\n    ModuleB b2 (.x(x), .y(y), .z(b2_out));\n\n    // OR gate for first pair of outputs\n    assign or_out = a1_out | b1_out;\n\n    // AND gate for second pair of outputs\n    assign and_out = a2_out & b2_out;\n\n    // XOR gate for final output\n    assign z = or_out ^ and_out;\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

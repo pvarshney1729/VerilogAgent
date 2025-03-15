@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic [7:0] d,\n    output logic [7:0] q\n);\n\n    logic [7:0] q_reg;\n\n    always @(negedge clk) begin\n        if (reset) begin\n            q_reg <= 8'h34;\n        end else begin\n            q_reg <= d;\n        end\n    end\n\n    assign q = q_reg;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

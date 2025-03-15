@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Interface:
+- Inputs:
+  - input [3:0] a : 4-bit input (unsigned)
+  - input [3:0] b : 4-bit input (unsigned)
+  - input [3:0] c : 4-bit input (unsigned)
+  - input [3:0] d : 4-bit input (unsigned)
+  - input [3:0] e : 4-bit input (unsigned)
+  
+- Outputs:
+  - output [3:0] q : 4-bit output (unsigned)
+
+Specification:
+- The module implements a combinational logic circuit.
+- The output q will depend on the inputs a, b, c, d, and e based on specific conditions as observed in the simulation waveforms provided.
+
+Input/Output Timing:
+- The behavior of the module will be evaluated based on the simulation waveform timings provided below:
+  
+  | Time (ns) | a | b | c | d | e | q |
+  |-----------|---|---|---|---|---|---|
+  | 0         | x | x | x | x | x | x |
+  | 5         | x | x | x | x | x | x |
+  | 10        | x | x | x | x | x | x |
+  | 15        | a | b | 0 | d | e | b |
+  | 20        | a | b | 1 | d | e | e |
+  | 25        | a | b | 2 | d | e | a |
+  | 30        | a | b | 3 | d | e | d |
+  | 35        | a | b | 4 | d | e | f |
+  | 40        | a | b | 5 | d | e | f |
+  | 45        | a | b | 6 | d | e | f |
+  | 50        | a | b | 7 | d | e | f |
+  | 55        | a | b | 8 | d | e | f |
+  | 60        | a | b | 9 | d | e | f |
+  | 65        | a | b | a | d | e | f |
+  | 70        | a | b | b | d | e | f |
+  | 75        | a | b | c | d | e | f |
+  | 80        | a | b | d | d | e | f |
+  | 85        | a | b | e | d | e | f |
+  | 90        | a | b | f | d | e | f |
+
+Notes:
+- The values above indicate the relationship between the inputs and the output at various simulation time points.
+- The implementation must ensure that the output q is computed based on the specified conditions and does not change unless the input values change, maintaining combinational logic behavior.
+</ENHANCED_SPEC>

@@ -1,8 +1,0 @@
-{
-    "code": "module AdderSubtractorWithZeroFlag (\n    input logic cpu_overheated,      // Input indicating if the CPU is overheated\n    input logic arrived,             // Input indicating if the destination is reached\n    input logic gas_tank_empty,      // Input indicating if the gas tank is empty\n    output logic shut_off_computer,  // Output to shut off the computer\n    output logic keep_driving        // Output to keep driving\n);\n\n    // Combinational logic block for controlling the computer's shut-off\n    always_comb begin\n        if (cpu_overheated) begin\n            shut_off_computer = 1'b1;  // Shut off the computer if CPU is overheated\n        end else begin\n            shut_off_computer = 1'b0;  // Ensure the computer stays on otherwise\n        end\n    end\n\n    // Combinational logic block for controlling the driving state\n    always_comb begin\n        if (~arrived) begin\n            keep_driving = gas_tank_empty ? 1'b0 : 1'b1; // Keep driving if not arrived and gas is not empty\n        end else begin\n            keep_driving = 1'b0;            // Stop driving if arrived\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 2
-}

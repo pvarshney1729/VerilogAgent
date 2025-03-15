@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [4:0] q\n);\n\nalways_ff @(posedge clk) begin\n    if (reset) begin\n        q <= 5'b00001; // Reset state\n    end else begin\n        q <= {q[3:0], q[0] ^ q[2]}; // Shift and feedback\n    end\nend\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

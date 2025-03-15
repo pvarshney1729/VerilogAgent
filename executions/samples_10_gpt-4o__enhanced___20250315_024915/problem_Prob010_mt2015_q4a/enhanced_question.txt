@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input logic x;  // 1-bit input (x[0] refers to the least significant bit)
+  - input logic y;  // 1-bit input (y[0] refers to the least significant bit)
+  
+- Output Ports:
+  - output logic z;  // 1-bit output (z[0] refers to the least significant bit)
+
+Functional Specification:
+- The module implements the boolean function defined by the equation:
+  z = (x XOR y) AND x
+- The operations are to be performed based on the following precedence:
+  1. XOR operation between inputs x and y.
+  2. AND operation between the result of the XOR and input x.
+
+Signal Dependencies:
+- The output z is combinationally dependent on inputs x and y.
+- There are no sequential elements or clock cycles involved in this module.
+
+Edge Cases and Input Boundaries:
+- The module is designed for binary inputs; therefore, inputs x and y will only take values of 0 or 1.
+- The output z will also strictly be either 0 or 1 based on the provided boolean function.
+
+Reset Conditions:
+- No reset conditions are applicable for this module as it purely implements combinational logic.
+</ENHANCED_SPEC>

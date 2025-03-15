@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a: 1-bit input representing the first operand (bit[0] refers to the least significant bit).
+  - input wire b: 1-bit input representing the second operand (bit[0] refers to the least significant bit).
+  - input wire cin: 1-bit input representing the carry-in (bit[0] refers to the least significant bit).
+
+- Output Ports:
+  - output wire cout: 1-bit output representing the carry-out (bit[0] refers to the least significant bit).
+  - output wire sum: 1-bit output representing the sum of the three inputs (bit[0] refers to the least significant bit).
+
+Functional Description:
+The TopModule implements a full adder. The full adder takes three 1-bit inputs (a, b, cin) and produces two outputs: sum and cout. The relationship between inputs and outputs can be described by the following equations:
+- sum = a XOR b XOR cin
+- cout = (a AND b) OR (cin AND (a XOR b))
+
+Behavior:
+- The module operates on combinational logic, meaning outputs are immediately updated based on the inputs without any clock cycle dependency.
+- There are no explicit sequential elements, and thus no clock or reset signals are defined.
+- The module's behavior will properly handle all combinations of the three input bits, including edge cases where inputs may be 0 or 1.
+
+Edge Cases:
+- When all inputs are 0 (a = 0, b = 0, cin = 0), the sum output will be 0 and the cout output will be 0.
+- When inputs are at their maximum (a = 1, b = 1, cin = 1), the sum output will be 1 and the cout output will be 1.
+
+Note:
+- Ensure that all inputs and outputs are treated as unsigned values, as they represent binary bits.
+</ENHANCED_SPEC>

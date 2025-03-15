@@ -1,8 +1,0 @@
-{
-    "code": "module two_bit_saturating_counter (\n    input logic clk,\n    input logic reset,\n    input logic train_valid,\n    input logic train_taken,\n    output logic [1:0] counter\n);\n\n    // Internal signal for the next state of the counter\n    logic [1:0] next_counter;\n\n    // Combinational logic to determine the next state of the counter\n    always @(*) begin\n        if (train_valid) begin\n            if (train_taken) begin\n                // Increment logic with saturation\n                if (counter == 2'b11)\n                    next_counter = 2'b11;\n                else\n                    next_counter = counter + 2'b01;\n            end else begin\n                // Decrement logic with saturation\n                if (counter == 2'b00)\n                    next_counter = 2'b00;\n                else\n                    next_counter = counter - 2'b01;\n            end\n        end else begin\n            // If train_valid is not asserted, maintain the current state\n            next_counter = counter;\n        end\n    end\n\n    // Sequential logic for the counter with synchronous reset\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            counter <= 2'b01; // Reset state\n        end else begin\n            counter <= next_counter;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

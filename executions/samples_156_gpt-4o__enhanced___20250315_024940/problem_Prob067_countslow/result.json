@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic slowena,\n    output logic [3:0] q\n);\n\n    // Synchronous reset and counter logic\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 4'b0000; // Reset counter to 0\n        end else if (slowena) begin\n            if (q == 4'b1001) begin\n                q <= 4'b0000; // Roll over to 0 after 9\n            end else begin\n                q <= q + 1; // Increment counter\n            end\n        end\n    end\n\n    // Initialize counter to 0 in simulation (not synthesizable, but good for simulation)\n    initial begin\n        q = 4'b0000; // Initialize counter\n    end\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

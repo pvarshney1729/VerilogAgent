@@ -1,0 +1,95 @@
+Generated Response:
+
+Here is the implementation of the `TopModule` that fulfills the specified requirements for a JK flip-flop:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic j,
+    input logic k,
+    output logic Q
+);
+
+    // Initialize Q to 0
+    always_ff @(posedge clk) begin
+        if (j == 1'b0 && k == 1'b0) begin
+            // Q remains unchanged
+            Q <= Q; // This is valid since Qold is the current value of Q
+        end
+        else if (j == 1'b0 && k == 1'b1) begin
+            // Reset Q to 0
+            Q <= 1'b0;
+        end
+        else if (j == 1'b1 && k == 1'b0) begin
+            // Set Q to 1
+            Q <= 1'b1;
+        end
+        else if (j == 1'b1 && k == 1'b1) begin
+            // Toggle Q
+            Q <= ~Q;
+        end
+    end
+
+    // Initial block for simulation purposes (initialize Q to 0)
+    initial begin
+        Q = 1'b0;
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation of the Code
+
+1. **Module Declaration**: The module `TopModule` is defined with inputs `clk`, `j`, and `k`, and output `Q`.
+  
+2. **Signal Type**: All ports are declared as `logic` type, as per the coding conventions provided.
+
+3. **Always Block**: The sequential logic is implemented in an `always_ff` block that triggers on the positive edge of the `clk` signal. The behavior of the JK flip-flop is implemented based on the truth table provided:
+   - If both `j` and `k` are `0`, the output `Q` remains unchanged.
+   - If `j` is `0` and `k` is `1`, `Q` is reset to `0`.
+   - If `j` is `1` and `k` is `0`, `Q` is set to `1`.
+   - If both `j` and `k` are `1`, `Q` toggles its state.
+
+4. **Initialization**: An `initial` block is included to initialize `Q` to `0` on simulation start. This ensures that the flip-flop starts in a known state.
+
+5. **Sensitivity List**: The sensitivity list is implicit for `always_ff`, as specified in the coding conventions.
+
+This module effectively implements the desired JK flip-flop functionality while adhering to the provided guidelines and conventions.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic j,
+    input logic k,
+    output logic Q
+);
+
+    // Initialize Q to 0
+    always_ff @(posedge clk) begin
+        if (j == 1'b0 && k == 1'b0) begin
+            // Q remains unchanged
+            Q <= Q; // This is valid since Qold is the current value of Q
+        end
+        else if (j == 1'b0 && k == 1'b1) begin
+            // Reset Q to 0
+            Q <= 1'b0;
+        end
+        else if (j == 1'b1 && k == 1'b0) begin
+            // Set Q to 1
+            Q <= 1'b1;
+        end
+        else if (j == 1'b1 && k == 1'b1) begin
+            // Toggle Q
+            Q <= ~Q;
+        end
+    end
+
+    // Initial block for simulation purposes (initialize Q to 0)
+    initial begin
+        Q = 1'b0;
+    end
+
+endmodule

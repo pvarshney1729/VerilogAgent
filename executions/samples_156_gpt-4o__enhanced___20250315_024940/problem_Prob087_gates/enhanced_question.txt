@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Definition:
+- Input Ports:
+  - input logic a;  // 1-bit input, representing the first operand
+  - input logic b;  // 1-bit input, representing the second operand
+
+- Output Ports:
+  - output logic out_and;   // 1-bit output, result of a AND b
+  - output logic out_or;    // 1-bit output, result of a OR b
+  - output logic out_xor;   // 1-bit output, result of a XOR b
+  - output logic out_nand;  // 1-bit output, result of a NAND b
+  - output logic out_nor;   // 1-bit output, result of a NOR b
+  - output logic out_xnor;  // 1-bit output, result of a XNOR b
+  - output logic out_anotb; // 1-bit output, result of a AND NOT b
+
+Functional Description:
+The TopModule implements a combinational logic circuit that takes two 1-bit inputs, 'a' and 'b', and produces seven 1-bit outputs based on basic logical operations. The outputs are defined as follows:
+1. out_and = a AND b
+2. out_or = a OR b
+3. out_xor = a XOR b
+4. out_nand = NOT (a AND b)
+5. out_nor = NOT (a OR b)
+6. out_xnor = NOT (a XOR b)
+7. out_anotb = a AND NOT b
+
+Bit Indexing:
+- The inputs 'a' and 'b' are treated as single-bit values, where bit[0] refers to the least significant bit (LSB).
+- All outputs are also single-bit values, with the same indexing convention applied.
+
+Signal Dependencies:
+- All outputs are directly dependent on the values of the inputs 'a' and 'b'.
+- The operations performed on the inputs are purely combinational and exhibit no sequential logic.
+
+Edge Cases:
+- The module should handle all possible combinations of the input values 'a' and 'b', which can be either 0 or 1, resulting in defined outputs for all combinations.
+
+Reset Conditions:
+- No reset conditions are specified for this combinational logic module, as it does not contain any sequential elements that require initialization or reset behavior.
+
+Race Conditions:
+- There are no race conditions in this design as all outputs are derived from combinational logic without feedback loops or sequential dependencies.
+
+This specification ensures clarity in the functional intent while providing explicit details necessary for correct implementation in Verilog.
+</ENHANCED_SPEC>

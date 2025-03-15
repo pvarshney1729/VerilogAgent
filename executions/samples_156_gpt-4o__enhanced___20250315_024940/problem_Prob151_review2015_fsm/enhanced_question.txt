@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input  clk           // Clock signal (1 bit, active on rising edge)
+  - input  reset         // Synchronous reset signal (1 bit, active high)
+  - input  data          // Serial data input (1 bit)
+  - input  done_counting  // Indicates that counting is complete (1 bit)
+  - input  ack           // Acknowledgment signal from user (1 bit)
+
+- Output Ports:
+  - output shift_ena     // Enable signal to start shifting in bits (1 bit)
+  - output counting       // Indicates that counting is in progress (1 bit)
+  - output done          // Notification signal when timer has timed out (1 bit)
+
+Functional Description:
+The TopModule implements a finite-state machine (FSM) that controls a timer with the following behavior:
+
+1. **Pattern Detection**: The FSM starts scanning for the specific bit pattern "1101" (binary) on the `data` input. 
+   - The detection sequence will be considered valid when the last four bits received match "1101".
+
+2. **Shift Operation**: Upon detecting the pattern "1101", the FSM will assert the `shift_ena` output signal for exactly 4 clock cycles. 
+   - During these cycles, the module will shift in 4 additional bits from the `data` input to determine the delay duration.
+
+3. **Counting State**: After shifting, the FSM will assert the `counting` output signal to indicate that it is waiting for the counting operation to complete. 
+   - The FSM will remain in this state until the `done_counting` input signal goes high.
+
+4. **Completion Notification**: Once `done_counting` is asserted high, the FSM will then assert the `done` output signal to notify the user that the timer has timed out. 
+   - The FSM will then wait for the `ack` input signal to be high before resetting and returning to the initial state to look for the next occurrence of the start sequence "1101".
+
+Reset Behavior:
+- The FSM has an active high synchronous reset. Upon asserting `reset`, the FSM will clear its state and return to the initial state where it begins searching for the input sequence "1101". All output signals (`shift_ena`, `counting`, `done`) will be deasserted when reset.
+
+Initial State:
+- The FSM will start in the state waiting for the bit pattern "1101" upon power-up or after a reset.
+
+Clocking:
+- All sequential logic is triggered on the positive edge of the `clk` signal.
+
+Edge Cases:
+- The FSM must handle cases where the `data` input does not contain the pattern "1101" and must ensure that outputs are correctly initialized and deasserted during transitions between states.
+
+Signal Dependencies:
+- The assertion of `shift_ena`, `counting`, and `done` outputs are dependent on the detection of the pattern and the completion of counting. The FSM should be designed to avoid race conditions between the detection of the pattern and the assertion of these outputs.
+</ENHANCED_SPEC>

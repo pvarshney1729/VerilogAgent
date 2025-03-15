@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - input logic a;  // 1-bit input, unsigned, LSB at bit[0]
+  - input logic b;  // 1-bit input, unsigned, LSB at bit[0]
+  
+- Output Ports:
+  - output logic q;  // 1-bit output, unsigned, LSB at bit[0]
+
+Functional Description:
+The module implements a combinational logic circuit that produces the output signal q based on the input signals a and b. The output q is determined by the following truth table derived from the provided simulation waveforms:
+
+| a | b | q |
+|---|---|---|
+| 0 | 0 | 0 |
+| 0 | 1 | 0 |
+| 1 | 0 | 0 |
+| 1 | 1 | 1 |
+
+- The output q is high (1) only when both a and b are high (1). In all other cases, the output q is low (0).
+
+Simulation Waveform Timing:
+- The module should reflect the following behavior at specified time intervals:
+  - At time 0ns to 20ns: a = 0, b = 0, q = 0
+  - At time 25ns to 30ns: a = 0, b = 1, q = 0
+  - At time 35ns to 40ns: a = 1, b = 0, q = 0
+  - At time 45ns to 50ns: a = 1, b = 1, q = 1
+  - At time 55ns to 70ns: a = 0, b = 0, q = 0
+  - At time 75ns to 80ns: a = 1, b = 0, q = 0
+  - At time 85ns to 90ns: a = 1, b = 1, q = 1
+
+Edge Cases:
+- Ensure to handle transitions when a or b changes from 0 to 1 or from 1 to 0, resulting in the appropriate change in q based on the truth table.
+
+Implementation Notes:
+- The module does not utilize any sequential logic elements, hence no need for clock or reset definitions.
+- All operations should be purely combinational based on the current values of inputs a and b, with no need for memory states.
+</ENHANCED_SPEC>

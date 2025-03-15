@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - in: bit[2:0] (3 bits, unsigned)
+    - Description: A 3-bit input vector representing the data for which the population count will be computed. 
+    - Bit Indexing: 
+      - bit[0]: Least Significant Bit (LSB)
+      - bit[2]: Most Significant Bit (MSB)
+
+- Output Ports:
+  - out: bit[1:0] (2 bits, unsigned)
+    - Description: A 2-bit output representing the number of '1's in the input vector. 
+    - The value will range from 0 to 3, corresponding to a possible population count for the 3-bit input.
+
+Functional Specification:
+- The module implements a combinational logic circuit that computes the population count of the input vector 'in'.
+- The output 'out' will be updated based on the current state of 'in' without any clock dependencies or delays.
+
+Edge Case Behavior:
+- If 'in' is all '0's (000), then 'out' should be 2'b00.
+- If 'in' has one '1' (e.g., 001, 010, or 100), then 'out' should be 2'b01.
+- If 'in' has two '1's (e.g., 011, 101, or 110), then 'out' should be 2'b10.
+- If 'in' has three '1's (111), then 'out' should be 2'b11.
+
+Implementation Considerations:
+- Ensure that the combinational logic correctly handles all possible values of 'in' and does not have any race conditions.
+- Verify that the output 'out' is stable and reflects the correct population count within the same logic cycle as the input 'in'.
+</ENHANCED_SPEC>

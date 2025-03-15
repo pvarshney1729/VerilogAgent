@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire clk,              // Clock signal, positive-edge triggered\n    input wire reset_n,          // Asynchronous active-low reset\n    input wire shift_ena,        // Shift enable control signal\n    input wire count_ena,        // Count enable control signal\n    input wire data,             // Data input to the shift register\n    output reg [3:0] q           // 4-bit output from the shift register\n);\n\n    always @(posedge clk or negedge reset_n) begin\n        if (!reset_n) begin\n            q <= 4'b0000;\n        end else begin\n            if (shift_ena) begin\n                q <= {data, q[3:1]};\n            end else if (count_ena) begin\n                q <= q - 1;\n            end\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 1886,
-        "passfail": "r"
-    }
-}

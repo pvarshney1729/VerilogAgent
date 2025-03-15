@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - clk: 1-bit input signal representing the clock, where bit[0] is the least significant bit (LSB).
+  - d: 1-bit input signal representing the data input, where bit[0] is the LSB.
+  
+- Output Ports:
+  - q: 1-bit output signal representing the data output, where bit[0] is the LSB.
+
+Functional Description:
+This module implements a dual-edge triggered flip-flop, which mimics the behavior of a flip-flop that captures the input data on both the rising and falling edges of the clock signal. 
+
+Sequential Logic Details:
+- The flip-flop shall update its output (q) on both the rising edge (posedge) and falling edge (negedge) of the clock signal (clk).
+- The module must ensure that the output q follows the input d, such that:
+  - q is updated to the value of d on the rising edge of clk.
+  - q is updated to the value of d on the falling edge of clk.
+
+Reset Behavior:
+- The module shall include an asynchronous reset input (reset) with the following specifications:
+  - Input Port:
+    - reset: 1-bit input signal that, when asserted high, resets the output q to a defined initial state.
+  - Reset State:
+    - When reset is asserted, q shall be set to '0' (logic low).
+  
+Initial State:
+- At power-up or upon assertion of the reset signal, the initial state of output q shall be '0' (logic low).
+
+Signal Dependencies:
+- The output q is dependent on the input d and the clock signal clk, with precedence given to the clock edge events to determine when to sample d.
+
+Edge Case Behavior:
+- The module must handle potential race conditions that could arise from simultaneous changes in d near the clock edges. Ensure that q is stable and reflects the correct value of d during the clock transitions.
+
+This specification ensures clarity in the design and correctness in the implementation of the dual-edge triggered flip-flop functionality.
+</ENHANCED_SPEC>

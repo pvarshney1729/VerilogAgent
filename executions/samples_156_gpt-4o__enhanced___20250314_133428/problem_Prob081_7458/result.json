@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule(\n    input logic p1a, p1b, p1c, p1d, p1e, p1f,\n    input logic p2a, p2b, p2c, p2d,\n    output logic p1y, p2y\n);\n    // Intermediate signals for AND gate outputs\n    logic and1_out, and2_out, and3_out, and4_out;\n    \n    // AND gate implementations\n    assign and1_out = p1a & p1b & p1c;\n    assign and2_out = p1d & p1e & p1f;\n    assign and3_out = p2a & p2b;\n    assign and4_out = p2c & p2d;\n    \n    // OR gate implementations for outputs\n    assign p1y = and1_out | and2_out;\n    assign p2y = and3_out | and4_out;\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

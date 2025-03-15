@@ -1,0 +1,62 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - y: 6-bit input (y[5:0]), where:
+    - y[0] refers to the least significant bit (LSB) and y[5] refers to the most significant bit (MSB).
+    - Bit representation follows one-hot encoding: 
+      - 000001 represents state A,
+      - 000010 represents state B,
+      - 000100 represents state C,
+      - 001000 represents state D,
+      - 010000 represents state E,
+      - 100000 represents state F.
+  - w: 1-bit input (w)
+
+- Output Ports:
+  - Y1: 1-bit output (Y1)
+  - Y3: 1-bit output (Y3)
+
+Finite-State Machine (FSM) Description:
+The FSM consists of the following states and transitions:
+1. State A (y = 000001):
+   - Input 1: Transition to state B (y = 000010)
+   - Input 0: Remain in state A (y = 000001)
+
+2. State B (y = 000010):
+   - Input 1: Transition to state C (y = 000100)
+   - Input 0: Transition to state D (y = 001000)
+
+3. State C (y = 000100):
+   - Input 1: Transition to state E (y = 010000)
+   - Input 0: Transition to state D (y = 001000)
+
+4. State D (y = 001000):
+   - Input 1: Transition to state F (y = 100000)
+   - Input 0: Transition to state A (y = 000001)
+
+5. State E (y = 010000):
+   - Input 1: Remain in state E (y = 010000)
+   - Input 0: Transition to state D (y = 001000)
+
+6. State F (y = 100000):
+   - Input 1: Transition to state C (y = 000100)
+   - Input 0: Transition to state D (y = 001000)
+
+Output Logic:
+- The output signal Y1 should be driven by the state of flip-flop y[1].
+- The output signal Y3 should be driven by the state of flip-flop y[3].
+
+Sequential Logic:
+- The module will implement sequential logic to determine the state transitions based on the input w.
+- All state flip-flops (y[1] and y[3]) must have defined reset states; specify whether the resets are synchronous or asynchronous.
+- Define the initial values for all flip-flops upon reset.
+
+Edge Case Handling:
+- Clearly specify behavior for edge cases, including possible inputs such as simultaneous transitions or invalid states.
+
+Signal Dependencies:
+- Ensure all output signals and state transitions are dependent on the defined inputs and state conditions.
+- Specify the precedence of operations to avoid potential race conditions during state transitions.
+</ENHANCED_SPEC>

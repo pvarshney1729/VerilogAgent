@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Interface:
+- Input:
+  - Name: in
+  - Width: 100 bits
+  - Definition: in[99:0] where in[0] refers to the least significant bit (LSB) and in[99] refers to the most significant bit (MSB).
+  - Signedness: Unsigned
+
+- Output:
+  - Name: out
+  - Width: 100 bits
+  - Definition: out[99:0] where out[0] corresponds to the least significant bit (LSB) and out[99] corresponds to the most significant bit (MSB).
+  - Signedness: Unsigned
+
+Functionality:
+- The module shall implement a combinational logic function that reverses the bit order of the input signal. Specifically, the output signal out shall be defined as:
+  - out[0] = in[99]
+  - out[1] = in[98]
+  - ...
+  - out[98] = in[1]
+  - out[99] = in[0]
+
+Behavioral Characteristics:
+- The module shall have no internal state, as it is purely combinational.
+- There are no clock edges or sequential elements in this design.
+- There is no reset mechanism as this is not a sequential circuit.
+
+Edge Cases:
+- The module should handle all 100-bit input values, including all possible combinations of ‘0’ and ‘1’ in the input vector. The output will reflect the exact reversed bit order for all valid 100-bit input values.
+</ENHANCED_SPEC>

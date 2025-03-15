@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic rst, // Synchronous reset\n    input logic d,\n    output logic q\n);\n\n    logic temp_q_pos, temp_q_neg;\n\n    // Rising edge capture\n    always @(posedge clk) begin\n        if (rst) begin\n            temp_q_pos <= 1'b0;\n        end else begin\n            temp_q_pos <= d;\n        end\n    end\n\n    // Falling edge capture\n    always @(negedge clk) begin\n        if (rst) begin\n            temp_q_neg <= 1'b0;\n        end else begin\n            temp_q_neg <= d;\n        end\n    end\n\n    // Combine results to simulate dual-edge behavior\n    always @(posedge clk or negedge clk) begin\n        if (rst) begin\n            q <= 1'b0;\n        end else begin\n            q <= temp_q_pos | temp_q_neg;\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

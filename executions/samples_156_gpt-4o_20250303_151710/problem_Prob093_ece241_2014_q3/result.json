@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire c,          // Input signal 'c'\n    input wire d,          // Input signal 'd'\n    output wire [3:0] mux_in // 4-bit output connecting to the 4-to-1 multiplexer\n);\n\n    // Assign mux_in based on the Karnaugh map interpretation\n    assign mux_in[0] = (~c & ~d); // ab = 00\n    assign mux_in[1] = (c & ~d);  // ab = 01\n    assign mux_in[2] = (c & d);   // ab = 11\n    assign mux_in[3] = (~c & d);  // ab = 10\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 60,
-        "passfail": "R"
-    }
-}

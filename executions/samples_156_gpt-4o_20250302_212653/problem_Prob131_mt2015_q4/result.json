@@ -1,8 +1,0 @@
-{
-    "code": "module top_module (\n    input logic x,\n    input logic y,\n    input logic clk,  // Added clock input\n    output logic z\n);\n\n    logic a1_out, a2_out, b1_out, b2_out;\n    logic or_out, and_out;\n\n    // Instantiate Module A\n    module_a a1 (\n        .x(x),\n        .y(y),\n        .z(a1_out)\n    );\n\n    module_a a2 (\n        .x(x),\n        .y(y),\n        .z(a2_out)\n    );\n\n    // Instantiate Module B\n    module_b b1 (\n        .clk(clk),  // Connect clock to module B\n        .x(x),\n        .y(y),\n        .z(b1_out)\n    );\n\n    module_b b2 (\n        .clk(clk),  // Connect clock to module B\n        .x(x),\n        .y(y),\n        .z(b2_out)\n    );\n\n    // OR gate\n    assign or_out = a1_out | b1_out;\n\n    // AND gate\n    assign and_out = a2_out & b2_out;\n\n    // XOR gate\n    assign z = or_out ^ and_out;\n\nendmodule\n\nmodule module_a (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    always @(*) begin\n        z = (x ^ y) & x;\n    end\nendmodule\n\nmodule module_b (\n    input logic clk,  // Added clock input\n    input logic x,\n    input logic y,\n    output logic z\n);\n    logic [1:0] state;\n    always_ff @(posedge clk) begin\n        case (state)\n            2'b00: z <= 1;\n            2'b01: z <= 0;\n            2'b10: z <= 0;\n            2'b11: z <= 1;\n            default: z <= 1;\n        endcase\n    end\n\n    always_ff @(posedge clk) begin\n        state <= {x, y};\n    end\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 2
-}

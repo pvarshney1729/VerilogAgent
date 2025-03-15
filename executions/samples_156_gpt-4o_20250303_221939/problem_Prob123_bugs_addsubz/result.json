@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic do_sub,              // Control signal for operation: 0 for addition, 1 for subtraction\n    input logic [7:0] a,             // Unsigned 8-bit input operand\n    input logic [7:0] b,             // Unsigned 8-bit input operand\n    output logic [7:0] out,          // Unsigned 8-bit result of the operation\n    output logic result_is_zero      // Zero flag: 1 if result is zero, else 0\n);\n\n    // Combinational logic block\n    // Computes the result based on the operation selected by `do_sub`\n    always_comb begin\n        // Initialize outputs to default values\n        out = 8'b00000000;\n        result_is_zero = 1'b0;\n        \n        // Perform operation based on `do_sub`\n        case (do_sub)\n            1'b0: out = a + b;      // Addition\n            1'b1: out = a - b;      // Subtraction\n            default: out = 8'b00000000;    // Undefined `do_sub` values result in zero output\n        endcase\n        \n        // Zero flag logic\n        if (out == 8'b00000000) begin\n            result_is_zero = 1'b1;\n        end else begin\n            result_is_zero = 1'b0;\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

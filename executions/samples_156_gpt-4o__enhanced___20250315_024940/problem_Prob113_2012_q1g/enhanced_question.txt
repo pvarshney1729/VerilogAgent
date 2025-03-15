@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - x: bit[3:0] (4 bits, unsigned)
+    - Description: A 4-bit input vector where bit[0] is the least significant bit (LSB) and bit[3] is the most significant bit (MSB).
+- Output Ports:
+  - f: bit (1 bit, unsigned)
+    - Description: A single-bit output representing the result of the function defined by the Karnaugh map.
+
+Functional Description:
+The output f is determined by the following Karnaugh map, which represents a combinational logic function based on the input vector x:
+
+             x[0] x[1]
+x[2] x[3]  00    01    11    10
+  00     |  1  |  0  |  0  |  1  |
+  01     |  0  |  0  |  0  |  0  |
+  11     |  1  |  1  |  1  |  0  |
+  10     |  1  |  1  |  0  |  1  |
+
+Truth Table:
+The truth table for the function f based on the input vector x is as follows:
+
+| x[3] | x[2] | x[1] | x[0] | f |
+|------|------|------|------|---|
+|  0   |  0   |  0   |  0   | 1 |
+|  0   |  0   |  0   |  1   | 0 |
+|  0   |  0   |  1   |  0   | 0 |
+|  0   |  0   |  1   |  1   | 1 |
+|  0   |  1   |  0   |  0   | 0 |
+|  0   |  1   |  0   |  1   | 0 |
+|  0   |  1   |  1   |  0   | 0 |
+|  0   |  1   |  1   |  1   | 0 |
+|  1   |  0   |  0   |  0   | 1 |
+|  1   |  0   |  0   |  1   | 1 |
+|  1   |  0   |  1   |  0   | 0 |
+|  1   |  0   |  1   |  1   | 1 |
+|  1   |  1   |  0   |  0   | 0 |
+|  1   |  1   |  0   |  1   | 0 |
+|  1   |  1   |  1   |  0   | 1 |
+|  1   |  1   |  1   |  1   | 0 |
+
+Design Considerations:
+- The module implements combinational logic without any clocking elements.
+- Ensure that the output f does not have any undefined states for the input range of x[3:0].
+- The implementation should not include race conditions, and dependencies among inputs should be clearly defined according to the truth table and Karnaugh map.
+
+Edge Cases:
+- The behavior of f should be well-defined for all possible combinations of x[3:0] ranging from 0000 to 1111 (0 to 15 in decimal).
+</ENHANCED_SPEC>

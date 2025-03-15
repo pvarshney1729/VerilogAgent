@@ -1,0 +1,60 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, active on the positive edge)
+  - x: 1-bit input (data signal)
+  
+- Output Ports:
+  - z: 1-bit output (result of the NOR gate)
+
+Description:
+The module implements a finite state machine (FSM) with three D flip-flops (FF1, FF2, FF3) and three combinational logic gates (XOR, AND, OR). Each D flip-flop and gate has specific connections and logic behaviors as described below:
+
+1. **Combinational Logic:**
+   - The input signal `x` is fed into three different two-input gates:
+     - XOR Gate (XOR1): 
+       - Inputs: `x` and FF1 output (denote as `FF1_out`)
+       - Output: `xor_out`
+     - AND Gate (AND1):
+       - Inputs: `x` and complemented FF2 output (denote as `~FF2_out`)
+       - Output: `and_out`
+     - OR Gate (OR1):
+       - Inputs: `x` and complemented FF3 output (denote as `~FF3_out`)
+       - Output: `or_out`
+
+2. **D Flip-Flops:**
+   - FF1: 
+     - Input: `xor_out`
+     - Reset State: 1-bit output initialized to 0
+   - FF2: 
+     - Input: `and_out`
+     - Reset State: 1-bit output initialized to 0
+   - FF3: 
+     - Input: `or_out`
+     - Reset State: 1-bit output initialized to 0
+
+3. **Sequential Logic:**
+   - All D flip-flops are triggered on the positive edge of the `clk` signal.
+   - On the positive edge of `clk`, the outputs of the flip-flops (FF1_out, FF2_out, FF3_out) are updated with their respective inputs.
+
+4. **Final Output:**
+   - The outputs of the three D flip-flops (FF1_out, FF2_out, FF3_out) are fed into a three-input NOR gate (NOR1).
+   - The output `z` is defined as the result of the NOR gate:
+     - z = ~(FF1_out | FF2_out | FF3_out)
+
+Reset Behavior:
+- The reset is asynchronous.
+- Upon reset, all D flip-flops (FF1, FF2, FF3) are set to 0.
+
+Edge Cases:
+- Ensure that the behavior of the FSM is well-defined for all input combinations of `x`, including transitions between states when `x` changes.
+
+Signal Dependencies:
+- The output `z` is dependent on the states of the D flip-flops, which in turn depend on the outputs of the combinational logic gates influenced by the input `x`.
+
+Bit Indexing:
+- All signal widths are defined as 1-bit, with the least significant bit (LSB) being bit[0].
+
+</ENHANCED_SPEC>

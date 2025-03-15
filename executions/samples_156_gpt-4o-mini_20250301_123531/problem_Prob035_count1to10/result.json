@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n  input  logic clk,        // Clock signal, positive edge triggered\n  input  logic reset,      // Active high, synchronous reset\n  output logic [3:0] q     // 4-bit output representing the counter value\n);\n\nalways @(posedge clk) begin\n  if (reset) begin\n    q <= 4'b0001; // Reset to 1\n  end else begin\n    if (q == 4'b1010) begin\n      q <= 4'b0001; // Wrap around to 1 after reaching 10\n    end else begin\n      q <= q + 4'b0001; // Increment counter\n    end\n  end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module ModuleA (\n    input wire x,\n    input wire y,\n    output wire z_A\n);\n    assign z_A = (x ^ y) & x;\nendmodule\n\nmodule ModuleB (\n    input wire x,\n    input wire y,\n    output wire z_B\n);\n    assign z_B = (x & y) | (~x & ~y);\nendmodule\n\nmodule TopLevel (\n    input wire x,\n    input wire y,\n    output wire z\n);\n    wire z_A1, z_A2, z_B1, z_B2;\n    wire or_out, and_out;\n\n    // Instantiate Module A\n    ModuleA A1 (\n        .x(x),\n        .y(y),\n        .z_A(z_A1)\n    );\n\n    ModuleA A2 (\n        .x(x),\n        .y(y),\n        .z_A(z_A2)\n    );\n\n    // Instantiate Module B\n    ModuleB B1 (\n        .x(x),\n        .y(y),\n        .z_B(z_B1)\n    );\n\n    ModuleB B2 (\n        .x(x),\n        .y(y),\n        .z_B(z_B2)\n    );\n\n    // OR gate\n    assign or_out = z_A1 | z_B1;\n\n    // AND gate\n    assign and_out = z_A2 & z_B2;\n\n    // XOR gate\n    assign z = or_out ^ and_out;\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 1
-}

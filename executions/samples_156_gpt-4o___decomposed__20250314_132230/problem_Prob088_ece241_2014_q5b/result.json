@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic x,\n    output logic z\n);\n\n    // State encoding using one-hot\n    logic state_A, state_B;\n\n    always @(posedge clk or posedge areset) begin\n        if (areset) begin\n            state_A <= 1'b1;\n            state_B <= 1'b0;\n        end else begin\n            case (1'b1) // One-hot encoded current state\n                state_A: begin\n                    if (x) begin\n                        state_A <= 1'b0;\n                        state_B <= 1'b1;\n                    end\n                end\n                state_B: begin\n                    if (~x) begin\n                        state_A <= 1'b0;\n                        state_B <= 1'b1;\n                    end\n                end\n            endcase\n        end\n    end\n\n    always @(*) begin\n        case (1'b1) // One-hot encoding for output logic\n            state_A: z = x ? 1'b1 : 1'b0;\n            state_B: z = x ? 1'b0 : 1'b1;\n            default: z = 1'b0; // default case for safety\n        endcase\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

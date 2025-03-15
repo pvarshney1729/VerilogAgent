@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic j,\n    input logic k,\n    output logic out\n);\n\n    // State encoding\n    typedef enum logic {OFF, ON} state_t;\n    state_t current_state, next_state;\n\n    // Synchronous reset and state transition logic\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= OFF; // Reset to OFF state\n        end else begin\n            current_state <= next_state; // Transition to next state\n        end\n    end\n\n    // Next state logic based on current state and inputs\n    always @(*) begin\n        case (current_state)\n            OFF: begin\n                if (j) begin\n                    next_state = ON; // Transition to ON state\n                end else begin\n                    next_state = OFF; // Remain in OFF state\n                end\n            end\n            ON: begin\n                if (k) begin\n                    next_state = OFF; // Transition to OFF state\n                end else begin\n                    next_state = ON; // Remain in ON state\n                end\n            end\n            default: begin\n                next_state = OFF; // Default to OFF state\n            end\n        endcase\n    end\n\n    // Output logic based on current state\n    assign out = (current_state == ON); // Output is 1 when in ON state\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

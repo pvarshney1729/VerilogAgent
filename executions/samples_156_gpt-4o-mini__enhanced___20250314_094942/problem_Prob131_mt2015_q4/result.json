@@ -1,7 +1,0 @@
-{
-    "code": "module A (\n    input logic x,    // 1-bit input\n    input logic y,    // 1-bit input\n    output logic z    // 1-bit output\n);\n    // Boolean function: z = (x ^ y) & x\n    assign z = (x ^ y) & x;\nendmodule\n\nmodule B (\n    input logic x,    // 1-bit input\n    input logic y,    // 1-bit input\n    output logic z    // 1-bit output\n);\n    // Output behavior based on simulation waveform\n    always @(*) begin\n        case ({x, y})\n            2'b00: z = 1;  // For x=0, y=0\n            2'b01: z = 0;  // For x=0, y=1\n            2'b10: z = 0;  // For x=1, y=0\n            2'b11: z = 1;  // For x=1, y=1\n            default: z = 0; // Default case for safety\n        endcase\n    end\nendmodule\n\nmodule TopLevel (\n    input logic x,    // 1-bit input\n    input logic y,    // 1-bit input\n    output logic z    // 1-bit output\n);\n\n    logic z_A1, z_A2, z_B1, z_B2; // Internal wires for submodule outputs\n\n    // Instantiate Module A\n    A A1 (.x(x), .y(y), .z(z_A1));\n    A A2 (.x(x), .y(y), .z(z_A2));\n\n    // Instantiate Module B\n    B B1 (.x(x), .y(y), .z(z_B1));\n    B B2 (.x(x), .y(y), .z(z_B2));\n\n    // Logic Combination\n    logic or_output = z_A1 | z_B1; // OR gate for first pair\n    logic and_output = z_A2 & z_B2; // AND gate for second pair\n\n    // Final output based on XOR operation\n    assign z = or_output ^ and_output;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    }
-}

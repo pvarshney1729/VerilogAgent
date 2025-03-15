@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic a,\n    output logic q\n);\n\n    // Initialize q to 0 at the beginning\n    initial begin\n        q = 1'b0;  // Set initial value of q\n    end\n\n    // Sequential logic that updates q on the positive edge of clk\n    always @(posedge clk) begin\n        // Update q based on the value of a at the rising edge of clk\n        if (clk) begin\n            q <= a ? 1'b0 : 1'b1; // Logic inferred from the waveform\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

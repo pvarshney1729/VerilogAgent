@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule(\n    input  logic [3:0] in,\n    output logic out_sop,\n    output logic out_pos\n);\n\n    // Minimum Sum-of-Products (SOP) form\n    assign out_sop = (in == 4'd2) | (in == 4'd7) | (in == 4'd15);\n\n    // Minimum Product-of-Sums (POS) form\n    assign out_pos = (in[3] | in[2] | ~in[1] | in[0]) & \n                     (in[3] | ~in[2] | in[1] | ~in[0]) & \n                     (~in[3] | in[2] | in[1] | in[0]);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 1
-}

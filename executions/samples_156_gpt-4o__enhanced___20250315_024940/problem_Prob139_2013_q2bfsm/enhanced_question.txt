@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (rising edge-triggered clock signal)
+  - resetn: 1-bit input (synchronous active-low reset signal)
+  - x: 1-bit input (motor control signal)
+  - y: 1-bit input (motor control signal)
+
+- Output Ports:
+  - f: 1-bit output (motor control signal)
+  - g: 1-bit output (motor control signal)
+
+State Machine Description:
+The module implements a finite state machine (FSM) that regulates the operation of a motor based on inputs x and y. The FSM operates as follows:
+
+1. **Reset Behavior**:
+   - The reset input (resetn) is synchronous and active-low. When resetn is asserted (logic level 0), the FSM enters the initial state, referred to as State A. All registers, including the outputs f and g, are initialized to 0 during this state.
+
+2. **Initial Output Behavior**:
+   - When the resetn signal is de-asserted (logic level 1), on the next positive edge of the clk signal, the FSM sets the output f to 1 for one clock cycle. Thus, f transitions from 0 to 1 and then returns to 0 on the subsequent clock cycle.
+
+3. **Monitoring Input x**:
+   - The FSM continues to monitor the input signal x. It observes the last three clock cycles' values of x. If the values observed are 1 (current), 0 (previous), and 1 (two cycles prior), the FSM sets the output g to 1 on the next clock cycle.
+
+4. **Monitoring Input y**:
+   - Once g is set to 1, the FSM will monitor the input signal y. The FSM has a maximum of two clock cycles to detect if y transitions to 1. The behavior is as follows:
+     - If y = 1 is detected within two clock cycles after g is asserted, g remains 1 permanently (until the next reset).
+     - If y does not transition to 1 within two clock cycles, g is set to 0 permanently (until the next reset).
+
+5. **Clock Cycle Relationships**:
+   - All sequential logic is triggered on the positive edge of the clk signal.
+
+Edge Cases:
+- If resetn is asserted during any state, the FSM immediately transitions to State A, resetting f and g to 0.
+- If x or y inputs change state during the FSM operation, their values will only influence the FSM behavior on the next positive edge of the clk signal.
+
+Signal Dependencies:
+- The output f depends solely on the state of the FSM and the resetn signal.
+- The output g depends on the sequential detection of the x input pattern and the subsequent monitoring of the y input.
+
+Initial State:
+- All registers and outputs are initialized to 0 when the FSM is in State A or after a reset event.
+
+</ENHANCED_SPEC>

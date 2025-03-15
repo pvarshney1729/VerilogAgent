@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out_sop,\n    output logic out_pos\n);\n\nassign out_sop = (a & ~b & c & d) | (~a & b & c & d) | (~a & ~b & ~c & ~d); // 2, 7, 15\nassign out_pos = (~(a | b) & ~(a & ~c & ~d) & ~(b & ~c & d)); // 0, 1, 4, 5, 6, 9, 10, 13, 14\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 39,
-        "passfail": "R"
-    }
-}

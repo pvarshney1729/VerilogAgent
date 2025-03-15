@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic a, // Least Significant Bit\n    input logic b,\n    input logic c,\n    input logic d, // Most Significant Bit\n    output logic out_sop,\n    output logic out_pos\n);\n\n    // Minimum Sum-of-Products (SOP) for out_sop\n    // Logic-1 for 2 (0010), 7 (0111), 15 (1111)\n    assign out_sop = (~d & ~c & b & ~a) | (~d & c & b & a) | (d & c & b & a);\n\n    // Minimum Product-of-Sums (POS) for out_pos\n    // Logic-0 for 0 (0000), 1 (0001), 4 (0100), 5 (0101), 6 (0110), 9 (1001), 10 (1010), 13 (1101), 14 (1110)\n    assign out_pos = (d | c | ~b | a) & (d | ~c | b | a) & (d | ~c | b | ~a) & (~d | c | ~b | a) &\n                     (~d | c | ~b | ~a) & (~d | ~c | b | a) & (~d | ~c | b | ~a);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 66,
-        "passfail": "R"
-    }
-}

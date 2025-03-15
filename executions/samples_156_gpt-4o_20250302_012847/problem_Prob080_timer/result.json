@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset_n,\n    input logic load,\n    input logic [9:0] load_value,\n    output logic [9:0] count,\n    output logic tc\n);\n\n    always_ff @(posedge clk) begin\n        if (!reset_n) begin\n            count <= 10'b0;\n        end else if (load) begin\n            count <= load_value;\n        end else begin\n            count <= count + 1;\n        end\n    end\n\n    always_comb begin\n        if (load) begin\n            tc = 1'b0;\n        end else begin\n            tc = (count == 10'b1111111111);\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 3
-}

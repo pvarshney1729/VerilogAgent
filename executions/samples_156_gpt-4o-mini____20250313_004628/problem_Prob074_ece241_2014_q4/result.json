@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input  logic clk,\n    input  logic x,\n    output logic z\n);\n\n    logic ff_xor, ff_and, ff_or;\n    logic xor_out, and_out, or_out;\n\n    // D Flip-Flops with synchronous reset\n    always @(posedge clk) begin\n        ff_xor <= xor_out;\n        ff_and <= and_out;\n        ff_or  <= or_out;\n    end\n\n    // Combinational logic\n    always @(*) begin\n        xor_out = x ^ ff_xor;\n        and_out = x & ~ff_and;\n        or_out  = x | ~ff_or;\n    end\n\n    // Output from the three-input NOR gate\n    assign z = ~(ff_xor | ff_and | ff_or);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 45,
-        "passfail": "R"
-    }
-}

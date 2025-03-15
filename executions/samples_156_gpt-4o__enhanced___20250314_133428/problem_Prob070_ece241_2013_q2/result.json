@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input wire a,  // 1-bit input, least significant bit (LSB)\n    input wire b,  // 1-bit input\n    input wire c,  // 1-bit input\n    input wire d,  // 1-bit input, most significant bit (MSB)\n    output wire out_sop,  // 1-bit output\n    output wire out_pos   // 1-bit output\n);\n\n    // Sum-of-Products (SOP) form\n    assign out_sop = (~d & ~c & b & ~a) | (~d & c & b & a) | (d & c & b & a);\n\n    // Product-of-Sums (POS) form\n    assign out_pos = (d | ~c | ~b | a) & (d | c | ~b | ~a) & (~d | ~c | b | a) & (~d | c | b | a);\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module pattern_detector (\n    input logic clk,\n    input logic reset,\n    input logic pattern_in,\n    output logic detected,\n    output logic ack\n);\n\n    logic [3:0] delay_counter;\n    logic pattern_detected;\n    \n    // State for pattern detection\n    always @(*) begin\n        if (pattern_in) begin\n            pattern_detected = 1'b1;\n        end else begin\n            pattern_detected = 1'b0;\n        end\n    end\n\n    // Synchronous reset and delay counter\n    always @(posedge clk) begin\n        if (reset) begin\n            delay_counter <= 4'b0000;\n            detected <= 1'b0;\n            ack <= 1'b0;\n        end else begin\n            if (pattern_detected) begin\n                delay_counter <= 4'b1111; // Set delay to maximum\n                detected <= 1'b1;\n            end else if (delay_counter > 4'b0000) begin\n                delay_counter <= delay_counter - 4'b0001; // Count down\n            end else begin\n                detected <= 1'b0;\n            end\n            \n            // Acknowledge signal handling\n            if (detected && delay_counter == 4'b0000) begin\n                ack <= 1'b1; // Acknowledge when delay is complete\n            end else begin\n                ack <= 1'b0;\n            end\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

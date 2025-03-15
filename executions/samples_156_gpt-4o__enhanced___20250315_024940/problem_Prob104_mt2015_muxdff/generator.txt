@@ -1,0 +1,67 @@
+Generated Response:
+
+Here is the implementation of the `TopModule` according to the specified requirements:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic L,
+    input logic q_in,
+    input logic r_in,
+    output logic Q
+);
+
+    // State register for the flip-flop
+    always @(posedge clk) begin
+        if (L) begin
+            Q <= r_in;  // Load r_in when L is asserted
+        end else begin
+            Q <= q_in;  // Retain the current state when L is not asserted
+        end
+    end
+
+    // Initial value for simulation
+    initial begin
+        Q = 1'b0;  // Initialize Q to 0
+    end
+
+endmodule
+[DONE]
+```
+
+### Reasoning:
+1. **Module Declaration**: The module named `TopModule` is declared with the specified input and output ports.
+2. **Logic Type**: All ports are declared as `logic` type as per the coding conventions provided.
+3. **Synchronous Behavior**: The `always @(posedge clk)` block is used to define the behavior of the flip-flop, which updates its output `Q` based on the input conditions.
+4. **Load Condition**: Inside the `always` block, if `L` is high, `Q` is assigned the value of `r_in`. If `L` is low, `Q` retains the value of `q_in`, demonstrating the behavior of the flip-flop.
+5. **Initial Condition**: An `initial` block is used to set the initial value of `Q` to `0` for simulation purposes, which ensures that the flip-flop starts in a known state.
+6. **No Asynchronous Reset**: There is no asynchronous reset in this design, adhering to the described behavior.
+
+This module can be instantiated three times in the `full_module` to create a 3-bit storage element.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic L,
+    input logic q_in,
+    input logic r_in,
+    output logic Q
+);
+
+    // State register for the flip-flop
+    always @(posedge clk) begin
+        if (L) begin
+            Q <= r_in;  // Load r_in when L is asserted
+        end else begin
+            Q <= q_in;  // Retain the current state when L is not asserted
+        end
+    end
+
+    // Initial value for simulation
+    initial begin
+        Q = 1'b0;  // Initialize Q to 0
+    end
+
+endmodule

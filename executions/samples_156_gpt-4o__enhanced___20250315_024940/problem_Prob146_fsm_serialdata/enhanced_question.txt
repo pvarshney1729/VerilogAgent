@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - in: 1-bit input (serial data input)
+  - reset: 1-bit input (active-high synchronous reset)
+
+- Output Ports:
+  - out_byte: 8-bit output (data byte received, valid when done is high)
+  - done: 1-bit output (indicates that a valid byte has been received)
+
+Protocol Description:
+This module implements a finite state machine (FSM) for a serial communication protocol that transmits data in the following format:
+- 1 start bit (logic 0)
+- 8 data bits (LSB first)
+- 1 stop bit (logic 1)
+
+Behavioral Specifications:
+1. The FSM shall identify the start bit (0) and transition to a receiving state.
+2. Upon detecting a valid start bit, the FSM shall wait for the subsequent 8 data bits, ensuring they are received in the correct order (from LSB to MSB).
+3. After receiving all 8 data bits, the FSM shall verify the presence of a stop bit (1).
+4. The `out_byte` output shall hold the received data byte when `done` is asserted (logic 1). The value of `out_byte` is considered don't-care when `done` is not asserted (logic 0).
+5. If the expected stop bit is not detected after receiving the data bits, the FSM shall remain in a waiting state until a valid stop bit is received before attempting to process the next byte.
+6. The `done` signal shall be asserted high each time a stop bit is successfully detected.
+7. The FSM is designed to operate with a synchronous reset. Upon the assertion of the reset signal, all internal state variables shall be reset to their initial states:
+   - `out_byte` shall be set to 8'b00000000.
+   - The FSM state shall transition to an idle state, ready to receive the next start bit.
+
+Edge Case Handling:
+- The module shall handle the idle state where the line is held at logic 1 (no transmission).
+- The FSM must account for noise or invalid bit patterns and shall only transition upon detecting valid start and stop conditions.
+
+Timing and Signal Dependencies:
+- All sequential logic is triggered on the positive edge of the `clk`.
+- The FSM must ensure that no race conditions occur by clearly defining the state transitions and dependencies based on input signals.
+
+Bit Indexing:
+- The `out_byte` output is indexed as `out_byte[0]` (LSB) to `out_byte[7]` (MSB).
+
+Additional Notes:
+- The design must consider proper timing margins for detecting state transitions and ensure that the sampling of the `in` signal occurs at appropriate times relative to the `clk` signal.
+
+</ENHANCED_SPEC>

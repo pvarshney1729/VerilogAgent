@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    // Internal flip-flop outputs\n    logic xor_ff_output, and_ff_output, or_ff_output;\n\n    // XOR Path\n    logic xor_output;\n    always_ff @(posedge clk) begin\n        xor_output <= x ^ xor_ff_output;\n    end\n\n    // AND Path\n    logic and_output;\n    always_ff @(posedge clk) begin\n        and_output <= x & ~and_ff_output;\n    end\n\n    // OR Path\n    logic or_output;\n    always_ff @(posedge clk) begin\n        or_output <= x | ~or_ff_output;\n    end\n\n    // D flip-flops for storing the outputs\n    always_ff @(posedge clk) begin\n        xor_ff_output <= xor_output;\n        and_ff_output <= and_output;\n        or_ff_output <= or_output;\n    end\n\n    // NOR gate for final output\n    assign z = ~(xor_ff_output | and_ff_output | or_ff_output);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 61,
-        "passfail": "R"
-    }
-}

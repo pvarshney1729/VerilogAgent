@@ -1,8 +1,0 @@
-{
-    "code": "module state_machine (\n    input logic clk,\n    input logic rst_n,\n    input logic a,\n    output logic [2:0] q\n);\n\n    logic [2:0] state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (state)\n            3'b000: next_state = a ? 3'b001 : 3'b000;\n            3'b001: next_state = a ? 3'b010 : 3'b000;\n            3'b010: next_state = a ? 3'b011 : 3'b000;\n            3'b011: next_state = a ? 3'b100 : 3'b000;\n            3'b100: next_state = a ? 3'b000 : 3'b000; // wrap-around\n            default: next_state = 3'b000;\n        endcase\n    end\n\n    // Synchronous reset and state update\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            state <= 3'b000; // reset state\n        end else begin\n            state <= next_state;\n        end\n    end\n\n    // Output assignment\n    assign q = state;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

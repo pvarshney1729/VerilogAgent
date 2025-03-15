@@ -1,8 +1,0 @@
-{
-    "code": "module adder_subtractor (\n    input logic [7:0] a,\n    input logic [7:0] b,\n    input logic sel, // 0 for addition, 1 for subtraction\n    input logic clk,\n    input logic rst,\n    output logic [7:0] result,\n    output logic zero_flag,\n    output logic overflow\n);\n\nlogic [8:0] sum; // 9 bits to detect overflow\n\nalways @(*) begin\n    sum = (sel) ? {1'b0, a} - {1'b0, b} : {1'b0, a} + {1'b0, b};\nend\n\nalways @(posedge clk) begin\n    if (rst) begin\n        result <= 8'b0;\n        overflow <= 1'b0;\n    end else begin\n        result <= sum[7:0];\n        overflow <= sum[8] ^ sum[7]; // Overflow detection\n    end\nend\n\nassign zero_flag = (result == 8'b0);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

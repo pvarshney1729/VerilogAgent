@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule bcd_counter (\n    input logic clk,\n    input logic reset,\n    input logic [2:0] ena,\n    output logic [3:0] digit0,\n    output logic [3:0] digit1,\n    output logic [3:0] digit2\n);\n\n    // Synchronous reset and enable logic for digit0\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            digit0 <= 4'd0;\n        end else if (ena[0]) begin\n            if (digit0 == 4'd9) begin\n                digit0 <= 4'd0;\n            end else begin\n                digit0 <= digit0 + 4'd1;\n            end\n        end\n    end\n\n    // Synchronous reset and enable logic for digit1\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            digit1 <= 4'd0;\n        end else if (ena[1] && digit0 == 4'd9) begin\n            if (digit1 == 4'd9) begin\n                digit1 <= 4'd0;\n            end else begin\n                digit1 <= digit1 + 4'd1;\n            end\n        end\n    end\n\n    // Synchronous reset and enable logic for digit2\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            digit2 <= 4'd0;\n        end else if (ena[2] && digit0 == 4'd9 && digit1 == 4'd9) begin\n            if (digit2 == 4'd9) begin\n                digit2 <= 4'd0;\n            end else begin\n                digit2 <= digit2 + 4'd1;\n            end\n        end\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 3
-}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic [7:0] in,\n    output logic [7:0] pedge\n);\n\n    // Internal register to hold the previous state of 'in'\n    logic [7:0] in_prev;\n\n    // Always block to detect edges on the rising edge of the clock\n    always @(posedge clk) begin\n        // Shift the current input 'in' to 'in_prev' at the next clock cycle\n        in_prev <= in;\n\n        // Detect positive edges and set the 'pedge' output accordingly\n        pedge <= (in & ~in_prev);\n    end\n\n    // Initialize 'pedge' to 0 during simulation\n    initial begin\n        pedge = 8'b00000000;\n        in_prev = 8'b00000000;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

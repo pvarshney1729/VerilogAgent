@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,         // Clock signal\n    input logic load,        // Active high load signal\n    input logic ena,         // Active high enable for shifting\n    input logic [1:0] amount, // 2-bit control for shift direction and amount\n    input logic [63:0] data,  // 64-bit input data\n    output logic [63:0] q     // 64-bit output register\n);\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            q <= data;\n        end else if (ena) begin\n            case (amount)\n                2'b00: q <= q << 1;  // Shift left by 1 bit\n                2'b01: q <= q << 8;  // Shift left by 8 bits\n                2'b10: q <= $signed(q) >>> 1; // Arithmetic shift right by 1 bit\n                2'b11: q <= $signed(q) >>> 8; // Arithmetic shift right by 8 bits\n                default: q <= q; // Default case to retain value\n            endcase\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

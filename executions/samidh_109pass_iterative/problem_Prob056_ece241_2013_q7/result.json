@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,  // Clock signal\n    input logic j,    // J input of the JK flip-flop\n    input logic k,    // K input of the JK flip-flop\n    output logic Q    // Registered output of the JK flip-flop\n);\n\n    always_ff @(posedge clk) begin\n        case ({j, k})\n            2'b00: Q <= Q;         // Retain previous state\n            2'b01: Q <= 1'b0;      // Reset to 0\n            2'b10: Q <= 1'b1;      // Set to 1\n            2'b11: Q <= ~Q;        // Toggle state\n            default: Q <= Q;       // Default case for safety\n        endcase\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

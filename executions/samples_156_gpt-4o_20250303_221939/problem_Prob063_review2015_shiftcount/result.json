@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic shift_ena,\n    input logic count_ena,\n    input logic data,\n    input logic reset,\n    output logic [3:0] q\n);\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q <= 4'b0000;\n        end else if (shift_ena) begin\n            q <= {data, q[3:1]};\n        end else if (count_ena) begin\n            q <= q - 1'b1;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 1886,
-        "passfail": "R"
-    }
-}

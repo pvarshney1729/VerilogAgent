@@ -1,0 +1,48 @@
+Generated Response:
+
+Based on the specifications and guidelines provided, here's the implementation of the `TopModule`. This module sign-extends an 8-bit input to a 32-bit output by replicating the sign bit as required.
+
+```verilog
+[BEGIN]
+module TopModule (
+    input  logic [7:0] in,   // 8-bit input
+    output logic [31:0] out   // 32-bit output
+);
+
+    // Combinational logic to sign-extend the 8-bit input to 32 bits
+    always @(*) begin
+        out = { {24{in[7]}}, in }; // Replicate the sign bit 24 times and concatenate with the input
+    end
+
+endmodule
+[DONE]
+```
+
+### Reasoning Behind the Implementation:
+1. **Module Declaration**: The module is named `TopModule`, and it has a defined interface with one 8-bit input `in` and one 32-bit output `out`.
+
+2. **Input and Output Declaration**: The input `in` is declared as an 8-bit logic vector, while the output `out` is declared as a 32-bit logic vector, adhering to the requirement for using `logic` type.
+
+3. **Combinational Logic**: 
+   - The `always @(*)` block is used to define combinational logic. This block automatically triggers whenever any of its input signals change.
+   - Inside the block, the output `out` is calculated using concatenation:
+     - The replication operator `{24{in[7]}}` creates a 24-bit vector where the MSB of `in` (the sign bit) is replicated 24 times.
+     - This is concatenated with the original 8-bit input `in` to form the full 32-bit output.
+
+4. **Sign Extension**: The method effectively sign-extends the 8-bit input to a 32-bit output by ensuring that the sign bit is correctly propagated.
+
+This implementation follows all guidelines and coding conventions provided, ensuring clarity and correct functionality.
+
+Generated Code:
+
+module TopModule (
+    input  logic [7:0] in,   // 8-bit input
+    output logic [31:0] out   // 32-bit output
+);
+
+    // Combinational logic to sign-extend the 8-bit input to 32 bits
+    always @(*) begin
+        out = { {24{in[7]}}, in }; // Replicate the sign bit 24 times and concatenate with the input
+    end
+
+endmodule

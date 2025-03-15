@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic bump_left,\n    input logic bump_right,\n    output logic walk_left,\n    output logic walk_right\n);\n\n    typedef enum logic {STATE_WALK_LEFT, STATE_WALK_RIGHT} state_t;\n    state_t current_state, next_state;\n\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            current_state <= STATE_WALK_LEFT;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    always_comb begin\n        case (current_state)\n            STATE_WALK_LEFT: begin\n                if (bump_left) begin\n                    next_state = STATE_WALK_RIGHT;\n                end else begin\n                    next_state = STATE_WALK_LEFT;\n                end\n            end\n            STATE_WALK_RIGHT: begin\n                if (bump_right) begin\n                    next_state = STATE_WALK_LEFT;\n                end else begin\n                    next_state = STATE_WALK_RIGHT;\n                end\n            end\n            default: next_state = STATE_WALK_LEFT; // Default case\n        endcase\n    end\n\n    always_comb begin\n        walk_left = (current_state == STATE_WALK_LEFT);\n        walk_right = (current_state == STATE_WALK_RIGHT);\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

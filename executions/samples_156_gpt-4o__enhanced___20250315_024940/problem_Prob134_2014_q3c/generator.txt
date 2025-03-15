@@ -1,0 +1,102 @@
+Generated Response:
+
+```verilog
+module TopModule (
+    input  logic clk,
+    input  logic x,
+    input  logic [2:0] y,
+    output logic Y0,
+    output logic z
+);
+
+    logic [2:0] next_state;
+
+    // Next state logic
+    always @(*) begin
+        case (y)
+            3'b000: next_state = (x) ? 3'b001 : 3'b000;
+            3'b001: next_state = (x) ? 3'b100 : 3'b001;
+            3'b010: next_state = (x) ? 3'b001 : 3'b010;
+            3'b011: next_state = (x) ? 3'b010 : 3'b001;
+            3'b100: next_state = (x) ? 3'b100 : 3'b011;
+            default: next_state = 3'b000; // default state
+        endcase
+    end
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (y == 3'b000) begin // Assuming synchronous reset condition
+            next_state <= 3'b000; // Reset state
+        end else begin
+            next_state <= next_state;
+        end
+    end
+
+    // Output logic
+    assign Y0 = next_state[0];
+    assign z = (y == 3'b011 || y == 3'b100) ? 1'b1 : 1'b0;
+
+endmodule
+``` 
+
+### Explanation of the Code
+
+1. **Module Definition**: The module `TopModule` is defined with the specified ports for inputs and outputs.
+
+2. **Next State Logic**: 
+   - An `always @(*)` block is used to define the combinational logic that determines the `next_state` based on the current state `y` and the control input `x`.
+   - A `case` statement is used to implement the state transitions according to the provided state transition table.
+
+3. **State Register**: 
+   - An `always @(posedge clk)` block is used to update the state on the rising edge of the clock.
+   - The reset condition is simulated by checking if the current state `y` equals `3'b000`. This is not a typical reset, but it ensures the state can be reset. For actual synchronous reset behavior, an explicit reset input would be required.
+
+4. **Output Logic**: 
+   - The output `Y0` is assigned the least significant bit of the `next_state`.
+   - The output `z` is determined based on the current state `y`, where `z` is `1` if the state is `011` or `100`, and `0` otherwise.
+
+5. **Synthesis Considerations**: The use of `logic` for all signals allows proper synthesis and simulation, adhering to the coding conventions specified.
+
+### Note
+- The implementation assumes that the reset behavior is based on the current state `y`, as no explicit reset signal was provided. For a proper synchronous reset, an additional reset input would typically be included in the module interface.
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic x,
+    input  logic [2:0] y,
+    output logic Y0,
+    output logic z
+);
+
+    logic [2:0] next_state;
+
+    // Next state logic
+    always @(*) begin
+        case (y)
+            3'b000: next_state = (x) ? 3'b001 : 3'b000;
+            3'b001: next_state = (x) ? 3'b100 : 3'b001;
+            3'b010: next_state = (x) ? 3'b001 : 3'b010;
+            3'b011: next_state = (x) ? 3'b010 : 3'b001;
+            3'b100: next_state = (x) ? 3'b100 : 3'b011;
+            default: next_state = 3'b000; // default state
+        endcase
+    end
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (y == 3'b000) begin // Assuming synchronous reset condition
+            next_state <= 3'b000; // Reset state
+        end else begin
+            next_state <= next_state;
+        end
+    end
+
+    // Output logic
+    assign Y0 = next_state[0];
+    assign z = (y == 3'b011 || y == 3'b100) ? 1'b1 : 1'b0;
+
+endmodule
+
+// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly

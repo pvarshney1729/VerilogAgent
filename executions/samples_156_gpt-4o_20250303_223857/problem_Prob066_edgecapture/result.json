@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic [31:0] in,\n    output logic [31:0] out\n);\n\n    logic [31:0] prev_in;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            out <= 32'b0;\n            prev_in <= 32'b0;\n        end else begin\n            for (int i = 0; i < 32; i++) begin\n                if (prev_in[i] == 1'b1 && in[i] == 1'b0) begin\n                    out[i] <= 1'b1;\n                end\n            end\n            prev_in <= in;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 99,
-        "passfail": "R"
-    }
-}

@@ -1,7 +1,0 @@
-{
-    "code": "module FullAdder (\n    input logic a,\n    input logic b,\n    input logic cin,\n    output logic sum,\n    output logic cout\n);\n    assign sum = a ^ b ^ cin;\n    assign cout = (a & b) | (cin & (a ^ b));\nendmodule\n\nmodule TopModule (\n    input logic [3:0] x,\n    input logic [3:0] y,\n    output logic [4:0] sum\n);\n    logic carry[3:0]; // Intermediate carry signals\n\n    FullAdder FA0 (\n        .a(x[0]),\n        .b(y[0]),\n        .cin(1'b0), // No initial carry\n        .sum(sum[0]),\n        .cout(carry[0])\n    );\n\n    FullAdder FA1 (\n        .a(x[1]),\n        .b(y[1]),\n        .cin(carry[0]), // Carry from the previous stage\n        .sum(sum[1]),\n        .cout(carry[1])\n    );\n\n    FullAdder FA2 (\n        .a(x[2]),\n        .b(y[2]),\n        .cin(carry[1]), // Carry from the previous stage\n        .sum(sum[2]),\n        .cout(carry[2])\n    );\n\n    FullAdder FA3 (\n        .a(x[3]),\n        .b(y[3]),\n        .cin(carry[2]), // Carry from the previous stage\n        .sum(sum[3]),\n        .cout(sum[4])   // Overflow bit\n    );\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

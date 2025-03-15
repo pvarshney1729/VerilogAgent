@@ -1,8 +1,0 @@
-{
-    "code": "`timescale 1ns/1ps\n\nmodule TopModule (\n    input logic do_sub,                // Control signal: 0 for addition, 1 for subtraction\n    input logic [7:0] a,               // 8-bit input operand A\n    input logic [7:0] b,               // 8-bit input operand B\n    output logic [7:0] out,            // 8-bit output result\n    output logic result_is_zero        // Output flag: 1 if result is zero\n);\n\n    // Combinational Logic\n    always @(*) begin\n        // Initialize defaults\n        out = 8'b0;\n        result_is_zero = 1'b0;\n\n        // Select operation based on `do_sub`\n        case (do_sub)\n            1'b0: out = a + b;  // Addition when `do_sub` is 0\n            1'b1: out = a - b;  // Subtraction when `do_sub` is 1\n            default: out = 8'b0; // Default case for safety\n        endcase\n\n        // Set zero flag if the result is zero\n        result_is_zero = (out == 8'b0) ? 1'b1 : 1'b0;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

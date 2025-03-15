@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,      // Clock input, positive edge-triggered\n    input logic j,       // JK input J, one bit\n    input logic k,       // JK input K, one bit\n    output logic Q       // Output Q, one bit, initialized to 0\n);\n\nalways @(posedge clk) begin\n    case ({j, k})  // Concatenating j and k to create a 2-bit vector\n        2'b00: Q <= Q;           // If J=0, K=0, maintain previous state (Qold)\n        2'b01: Q <= 1'b0;        // If J=0, K=1, reset Q to 0\n        2'b10: Q <= 1'b1;        // If J=1, K=0, set Q to 1\n        2'b11: Q <= ~Q;          // If J=1, K=1, toggle Q (complement Qold)\n        default: Q <= Q;         // Default case, maintain state\n    endcase\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

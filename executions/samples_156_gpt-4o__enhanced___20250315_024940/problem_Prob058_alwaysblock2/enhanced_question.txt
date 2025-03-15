@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, active on the rising edge)
+  - a: 1-bit input (data input)
+  - b: 1-bit input (data input)
+
+- Output Ports:
+  - out_assign: 1-bit output (result of XOR operation using assign statement)
+  - out_always_comb: 1-bit output (result of XOR operation using a combinational always block)
+  - out_always_ff: 1-bit output (result of XOR operation using a clocked always block with a flip-flop)
+
+Functional Specification:
+- The module should implement an XOR operation between inputs 'a' and 'b' in three different ways:
+  1. **out_assign**: This output is generated using a continuous assignment statement (`assign`). The output is defined as:
+     - out_assign = a XOR b
+     
+  2. **out_always_comb**: This output is generated using a combinational always block. The output is assigned as follows:
+     - Always block sensitivity list: (a, b) 
+     - out_always_comb = a XOR b
+
+  3. **out_always_ff**: This output is generated using a clocked always block which contains a flip-flop. The output is assigned only on the rising edge of the clock signal. The output is defined as:
+     - Always block sensitivity list: (posedge clk)
+     - reset behavior: The initial value of out_always_ff should be 0 (asynchronous reset behavior is not specified, hence assume no reset).
+     - out_always_ff will hold the value of (a XOR b) at the rising edge of clk.
+
+Timing and Sequential Logic:
+- All sequential logic is triggered on the positive edge of the clk.
+- The output out_always_ff introduces a delay due to the flip-flop, whereas out_assign and out_always_comb provide immediate results based on the current values of inputs 'a' and 'b'.
+
+Edge Cases:
+- The module should handle all combinations of inputs 'a' and 'b', ensuring that for every combination, the outputs reflect the correct XOR operation as specified.
+
+Signal Dependencies:
+- Ensure that the outputs are computed based solely on the current values of inputs 'a' and 'b' for out_assign and out_always_comb.
+- For out_always_ff, the output depends on the clk signal and the values of 'a' and 'b' at the time of the clk's positive edge.
+
+Precedence of Operations:
+- The module should be designed to avoid race conditions by clearly defining the sensitivity lists and ensuring that all outputs are driven correctly based on their respective blocks.
+
+</ENHANCED_SPEC>

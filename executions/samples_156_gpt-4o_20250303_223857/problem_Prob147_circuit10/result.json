@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire clk,  // Clock signal, positive edge triggered\n    input wire a,    // Input signal a, 1-bit, unsigned\n    input wire b,    // Input signal b, 1-bit, unsigned\n    output reg q,    // Output signal q, 1-bit, reflects combinational logic\n    output reg state // Output signal state, 1-bit, reflects flip-flop state\n);\n\n    // Initial state of the flip-flop\n    initial begin\n        state = 1'b0;\n    end\n\n    // Combinational logic for q\n    always @(*) begin\n        if (b == 1'b1) begin\n            q = ~state;\n        end else begin\n            q = a;\n        end\n    end\n\n    // Sequential logic for state\n    always @(posedge clk) begin\n        state <= state; // Assuming state remains unchanged unless specified\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 16,
-        "passfail": "R"
-    }
-}

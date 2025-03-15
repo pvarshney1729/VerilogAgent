@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule(\n  input [15:0] scancode,\n  output reg left,\n  output reg down,\n  output reg right,\n  output reg up\n);\n\nalways @(*) begin\n  left = 0;\n  down = 0;\n  right = 0;\n  up = 0;\n  \n  case (scancode)\n    16'hE06B: left = 1;\n    16'hE072: down = 1;\n    16'hE074: right = 1;\n    16'hE075: up = 1;\n    default: ; // All outputs remain 0\n  endcase\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

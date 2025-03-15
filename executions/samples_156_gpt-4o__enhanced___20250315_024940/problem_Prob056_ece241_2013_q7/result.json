@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic j,\n    input logic k,\n    output logic Q\n);\n\n    // Initialize Q to 0\n    always_ff @(posedge clk) begin\n        if (j == 1'b0 && k == 1'b0) begin\n            // Q remains unchanged\n            Q <= Q; // This is valid since Qold is the current value of Q\n        end\n        else if (j == 1'b0 && k == 1'b1) begin\n            // Reset Q to 0\n            Q <= 1'b0;\n        end\n        else if (j == 1'b1 && k == 1'b0) begin\n            // Set Q to 1\n            Q <= 1'b1;\n        end\n        else if (j == 1'b1 && k == 1'b1) begin\n            // Toggle Q\n            Q <= ~Q;\n        end\n    end\n\n    // Initial block for simulation purposes (initialize Q to 0)\n    initial begin\n        Q = 1'b0;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

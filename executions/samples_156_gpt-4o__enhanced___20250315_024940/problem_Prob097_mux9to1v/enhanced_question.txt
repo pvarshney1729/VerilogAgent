@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Interface:
+- Input Ports:
+  - input wire [15:0] a   // 16 bits, represents the first input
+  - input wire [15:0] b   // 16 bits, represents the second input
+  - input wire [15:0] c   // 16 bits, represents the third input
+  - input wire [15:0] d   // 16 bits, represents the fourth input
+  - input wire [15:0] e   // 16 bits, represents the fifth input
+  - input wire [15:0] f   // 16 bits, represents the sixth input
+  - input wire [15:0] g   // 16 bits, represents the seventh input
+  - input wire [15:0] h   // 16 bits, represents the eighth input
+  - input wire [15:0] i   // 16 bits, represents the ninth input
+  - input wire [3:0] sel  // 4 bits, selects the input to be output
+
+- Output Ports:
+  - output reg [15:0] out // 16 bits, the selected output
+
+Functional Description:
+The TopModule implements a 16-bit wide, 9-to-1 multiplexer. The selection signal 'sel' determines which of the 9 input data lines (a through i) is passed to the output port 'out'. The selection operates as follows:
+- When sel = 0, out will be assigned the value of input a.
+- When sel = 1, out will be assigned the value of input b.
+- When sel = 2, out will be assigned the value of input c.
+- When sel = 3, out will be assigned the value of input d.
+- When sel = 4, out will be assigned the value of input e.
+- When sel = 5, out will be assigned the value of input f.
+- When sel = 6, out will be assigned the value of input g.
+- When sel = 7, out will be assigned the value of input h.
+- When sel = 8, out will be assigned the value of input i.
+- For any value of sel from 9 to 15, out will be set to '1111_1111_1111_1111' (all bits high).
+
+Behavioral Notes:
+- The output 'out' is a combinational signal, updated immediately based on the input 'sel' and the corresponding input data.
+- The module does not include any synchronous or asynchronous resets; the output will default to '1111_1111_1111_1111' if none of the valid cases are selected.
+- The selection of inputs is based solely on the binary value of 'sel', and no additional flip-flops or registers are utilized in the output logic.
+
+Edge Cases:
+- The module should handle all values of 'sel' within the range [0, 15], with proper outputs defined for each case as specified.
+- Ensure that the input signals a through i are valid and stable at the time of selection.
+</ENHANCED_SPEC>

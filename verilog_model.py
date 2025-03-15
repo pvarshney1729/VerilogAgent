@@ -762,6 +762,8 @@ class VerilogModel:
             {"role": "system", "content": "You are a helpful assistant that generates responses to user queries."},
             {"role": "user", "content": prompt}
         ]
+
+        
         
         if "gpt" in model:
             response = generate_openai(messages=messages, model=model, temperature=self.generation_temp)
@@ -785,7 +787,7 @@ class VerilogModel:
 
         
         # Generate initial code using the existing generator
-        initial_code = self.generator.generate(
+        initial_response, initial_code = self.generator.generate(
             base_query,
             include_rules=True,
             include_examples=False
@@ -942,26 +944,52 @@ class VerilogModel:
                 enhanced_query = self.generator.generate_with_system_prompt(
                     prompt=prompts['enhance_spec_rules'].format(user_spec=base_query),
                     system_prompt=prompts['enhance_spec_system'],
-                    model=model,
+                    model='gpt-4o-mini',
                 )
-                base_query += f"""Here is the enhanced specification which might be useful to you:
-                {extract_between_tags(enhanced_query, "ENHANCED_SPEC")}
-                """
+                # base_query += f"""Here is the enhanced specification which might be useful to you:
+                # {extract_between_tags(enhanced_query, "ENHANCED_SPEC")}
+                # """
 
                 with open(problem_dir / "enhanced_question.txt", 'w') as f:
-                    f.write(base_query)
+                    f.write(enhanced_query)
+
+                full_prompt = self.generator._construct_prompt(base_query, include_rules=True, include_examples=False)
+        
+                messages = [
+                    {"role": "system", "content": 'You are a Verilog RTL designer that only writes code using correct Verilog syntax.'},
+                    {"role": "user", "content": full_prompt},
+                    {"role": "assistant", "content": f"""Here is the enhanced specification which might be useful:
+                    {extract_between_tags(enhanced_query, "ENHANCED_SPEC")}
+                    """}
+                ]
+
+                with open(problem_dir / "messages.txt", 'w') as f:
+                    f.write(json.dumps(messages, indent=4))
                 
-                # print("Enhanced query:", flush=True)
-                # print(enhanced_query, flush=True)
-                # print("\n\n", flush=True)
-                # print("Enhanced specification:", flush=True)
-                # print(base_query, flush=True)
-                # print("\n\n", flush=True)
+                response = self.generator.generate_with_messages(messages, model='gpt-4o-mini')
+
+                extracted_code = self.generator._extract_code(response, base_query)
+
+                with open(problem_dir / "generator.txt", 'w') as f:
+                    f.write("Generated Response:")
+                    f.write(f"\n\n{response}")
+                    f.write("\n\nGenerated Code:")
+                    f.write(f"\n\n{extracted_code}")
+                
+                # Generate testbench and verify
+                verifier = Verifier(problem_name=self.problem_name)
+                test_results = verifier.functional_verify(extracted_code, self.problem_name)
+                
+                return {
+                    "code": extracted_code,
+                    "test_results": test_results.to_dict()
+                }
                 
             if decompose:
                 print("Decomposing the problem into subtasks...")
                 decomposition_result = self.decompose_and_implement(base_query, model=model)
-        
+
+
 
                 implementation_hints = "\n\n".join([
                     f"SUBTASK {impl['id']}: {impl['content']}\nIMPLEMENTATION:\n{impl['implementation']}"
@@ -969,10 +997,19 @@ class VerilogModel:
                 ])
                 
                 base_query += f"""
-                Further, I have broken down this specification into subtasks and tried implementing each one separately.
-                THESE MIGHT BE INCORRECT BUT IF YOU WANT, you can use these implementations as hints to create a complete, integrated Verilog module:
+                <Specification Decomposed>
+                Further, I have broken down this specification into subtasks and tried an approach for each one separately.
+                THESE MIGHT BE INCORRECT BUT IF YOU WANT, but you can use these as hints to create a complete, integrated Verilog module for the original specification:
                 {implementation_hints}
+                </Specification Decomposed>
                 """
+
+                with open(problem_dir / "decomposition.txt", 'w') as f:
+                    f.write("Decomposition Result:")
+                    f.write(json.dumps(decomposition_result, indent=4))
+                    f.write("\n\nModified Base Query:")
+                    f.write(f"\n\n{base_query}")
+        
 
                 # print("Specification after decomposition:", flush=True)
                 # print(base_query, flush=True)
@@ -990,18 +1027,24 @@ class VerilogModel:
         
             else:
                 # Refinement approach
-                base_response = self.generator.generate(
+                base_response, base_code = self.generator.generate(
                     base_query,
                     include_rules=True,
                     include_examples=False
                 )  # Get just the code, ignore stats
+
+                with open(problem_dir / "generator.txt", 'w') as f:
+                    f.write("Generated Response:")
+                    f.write(f"\n\n{base_response}")
+                    f.write("\n\nGenerated Code:")
+                    f.write(f"\n\n{base_code}")
                 
                 # Generate testbench and verify
                 verifier = Verifier(problem_name=self.problem_name)
                 test_results = verifier.functional_verify(base_response, self.problem_name)
                 
                 return {
-                    "code": base_response,
+                    "code": base_code,
                     "test_results": test_results.to_dict()
                 }
                 

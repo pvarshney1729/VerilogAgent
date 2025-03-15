@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - code: input wire [7:0] (8 bits, unsigned) 
+    - Represents the 8-bit keyboard scancode.
+
+- Output Ports:
+  - out: output wire [3:0] (4 bits, unsigned) 
+    - Represents the detected key value (0 to 9) corresponding to the keyboard scancode.
+  - valid: output wire (1 bit, unsigned)
+    - Indicates whether a valid key (0 to 9) was detected (1 if valid, 0 if not).
+
+Functional Description:
+The TopModule is designed to decode specific 8-bit keyboard scancodes corresponding to keys 0 through 9. The valid scancodes and their corresponding outputs are as follows:
+
+- If code = 8'h45, then out = 4'b0000 (0), valid = 1
+- If code = 8'h16, then out = 4'b0001 (1), valid = 1
+- If code = 8'h1e, then out = 4'b0010 (2), valid = 1
+- If code = 8'h26, then out = 4'b0011 (3), valid = 1
+- If code = 8'h25, then out = 4'b0100 (4), valid = 1
+- If code = 8'h2e, then out = 4'b0101 (5), valid = 1
+- If code = 8'h36, then out = 4'b0110 (6), valid = 1
+- If code = 8'h3d, then out = 4'b0111 (7), valid = 1
+- If code = 8'h3e, then out = 4'b1000 (8), valid = 1
+- If code = 8'h46, then out = 4'b1001 (9), valid = 1
+
+If the input code does not match any of the specified 8-bit cases, then:
+  - out = 4'b0000 (0)
+  - valid = 0
+
+Implementation Notes:
+- The detection logic should be combinational, ensuring that the output is updated immediately based on the input without any clock cycles.
+- There are no synchronous or asynchronous resets defined in this specification; the outputs should default to the specified values when no valid input is detected.
+- Ensure that the precedence of operations is clear to avoid race conditions, particularly in cases where multiple conditions may seem valid.
+
+Edge Cases:
+- Handle all input values that are outside the specified scancode range (0x00 to 0xFF). All such cases should result in out = 4'b0000 and valid = 0.
+
+Bit Indexing:
+- The input 'code' is indexed as code[7:0], where code[0] is the least significant bit (LSB) and code[7] is the most significant bit (MSB).
+- The output 'out' is indexed as out[3:0], where out[0] is the LSB and out[3] is the MSB.
+</ENHANCED_SPEC>

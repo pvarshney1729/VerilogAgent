@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic [2:0] y,\n    input logic w,\n    input logic clk,\n    input logic rst_n,\n    output logic Y1\n);\n\n    logic [2:0] state, next_state;\n\n    // State encoding\n    localparam STATE_A = 3'b000;\n    localparam STATE_B = 3'b001;\n    localparam STATE_C = 3'b010;\n    localparam STATE_D = 3'b011;\n    localparam STATE_E = 3'b100;\n    localparam STATE_F = 3'b101;\n\n    // Synchronous state transition\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            state <= STATE_A; // Reset to State A\n        end else begin\n            state <= next_state; // Update state\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (state)\n            STATE_A: next_state = (w == 1'b0) ? STATE_B : STATE_A;\n            STATE_B: next_state = (w == 1'b0) ? STATE_C : STATE_D;\n            STATE_C: next_state = (w == 1'b0) ? STATE_E : STATE_D;\n            STATE_D: next_state = (w == 1'b0) ? STATE_F : STATE_A;\n            STATE_E: next_state = (w == 1'b0) ? STATE_E : STATE_D;\n            STATE_F: next_state = (w == 1'b0) ? STATE_C : STATE_D;\n            default: next_state = STATE_A; // Undefined state handling\n        endcase\n    end\n\n    // Output logic\n    assign Y1 = state[1]; // Output Y1 reflects y[1]\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 68,
-        "passfail": "R"
-    },
-    "iterations_used": 2
-}

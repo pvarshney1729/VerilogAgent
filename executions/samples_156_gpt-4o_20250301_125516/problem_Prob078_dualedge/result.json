@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic d,\n    input logic reset,\n    output logic q\n);\n\n    logic q_rising, q_falling;\n\n    // Rising edge flip-flop\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q_rising <= 1'b0;\n        end else begin\n            q_rising <= d;\n        end\n    end\n\n    // Falling edge flip-flop\n    always_ff @(negedge clk) begin\n        if (reset) begin\n            q_falling <= 1'b0;\n        end else begin\n            q_falling <= d;\n        end\n    end\n\n    // Combinational logic to determine the output q\n    always_comb begin\n        q = q_rising | q_falling;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 47,
-        "passfail": "R"
-    }
-}

@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+The TopModule shall have the following input and output ports:
+
+Inputs:
+- input wire a [1 bit]: First data input.
+- input wire b [1 bit]: Second data input.
+- input wire sel_b1 [1 bit]: Select signal for the second input.
+- input wire sel_b2 [1 bit]: Select signal for the second input.
+
+Outputs:
+- output wire out_assign [1 bit]: Output of the mux using continuous assignment.
+- output reg out_always [1 bit]: Output of the mux using procedural assignment.
+
+Functional Description:
+The TopModule implements a 2-to-1 multiplexer (mux) that selects between the inputs 'a' and 'b' based on the values of the select signals 'sel_b1' and 'sel_b2'. 
+
+Selection Logic:
+- The mux shall output 'b' if both 'sel_b1' and 'sel_b2' are high (true).
+- In all other cases, the mux shall output 'a'.
+
+Implementation:
+1. The output 'out_assign' shall be implemented using a continuous assignment statement.
+2. The output 'out_always' shall be implemented using a procedural block with an 'if' statement.
+
+Reset Condition:
+- The module does not include any reset functionality, so all registers are initialized to an undefined state by default.
+
+Edge Cases:
+- The module must be tested to ensure correct behavior when both select signals are high, as well as when both are low, and any combinations in between.
+- Ensure that the outputs are stable and correctly reflect the selected input under all conditions, including rapid changes in select signals.
+
+Timing and Signal Dependencies:
+- There are no clocked elements in this module; thus, all outputs are combinational and dependent solely on the inputs and their respective select signals.
+
+All signals are defined as unsigned 1-bit wide.
+</ENHANCED_SPEC>

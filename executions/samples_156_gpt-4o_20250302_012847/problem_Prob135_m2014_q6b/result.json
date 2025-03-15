@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic rst_n,\n    input logic w,\n    output logic Y1\n);\n\n    // State encoding\n    typedef enum logic [2:0] {\n        A = 3'b000,\n        B = 3'b001,\n        C = 3'b010,\n        D = 3'b011,\n        E = 3'b100,\n        F = 3'b101\n    } state_t;\n\n    state_t y, y_next;\n\n    // State transition logic\n    always_ff @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            y <= A;\n        else\n            y <= y_next;\n    end\n\n    // Next state logic\n    always_comb begin\n        case (y)\n            A: y_next = (w == 1'b0) ? B : A;\n            B: y_next = (w == 1'b0) ? C : D;\n            C: y_next = (w == 1'b0) ? E : D;\n            D: y_next = (w == 1'b0) ? F : A;\n            E: y_next = (w == 1'b0) ? E : D;\n            F: y_next = (w == 1'b0) ? C : D;\n            default: y_next = A; // Safe state transition\n        endcase\n    end\n\n    // Output logic\n    assign Y1 = y[1];\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 1
-}

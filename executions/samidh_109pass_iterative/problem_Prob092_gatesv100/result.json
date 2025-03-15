@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule(\n    input  wire [99:0] in,           // 100-bit input vector\n    output wire [99:0] out_both,     // 100-bit output vector\n    output wire [99:0] out_any,      // 100-bit output vector\n    output wire [99:0] out_different // 100-bit output vector\n);\n\n    // out_both logic\n    genvar i;\n    generate\n        for (i = 0; i < 99; i = i + 1) begin : gen_out_both\n            assign out_both[i] = in[i] & in[i+1];\n        end\n    endgenerate\n    assign out_both[99] = 1'b0;\n\n    // out_any logic\n    generate\n        for (i = 1; i < 100; i = i + 1) begin : gen_out_any\n            assign out_any[i] = in[i] | in[i-1];\n        end\n    endgenerate\n    assign out_any[0] = 1'b0;\n\n    // out_different logic\n    assign out_different[0] = in[0] ^ in[99];\n    generate\n        for (i = 1; i < 100; i = i + 1) begin : gen_out_different\n            assign out_different[i] = in[i] ^ in[i-1];\n        end\n    endgenerate\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 201,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

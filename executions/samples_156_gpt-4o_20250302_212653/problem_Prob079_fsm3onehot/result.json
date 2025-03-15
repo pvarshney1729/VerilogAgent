@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic rst_n,\n    input logic in,\n    output logic [3:0] next_state,\n    output logic out\n);\n\n    logic [3:0] current_state;\n\n    // State Transition and Output Logic\n    always @(*) begin\n        case (current_state)\n            4'b0001: begin // State A\n                next_state = in ? 4'b0010 : 4'b0001;\n                out = 0;\n            end\n            4'b0010: begin // State B\n                next_state = in ? 4'b0010 : 4'b0100;\n                out = 0;\n            end\n            4'b0100: begin // State C\n                next_state = in ? 4'b1000 : 4'b0001;\n                out = 0;\n            end\n            4'b1000: begin // State D\n                next_state = in ? 4'b0010 : 4'b0100;\n                out = 1;\n            end\n            default: begin // Undefined states\n                next_state = 4'b0001; // Reset to A\n                out = 0;\n            end\n        endcase\n    end\n\n    // Sequential Logic for State Register\n    always @(posedge clk) begin\n        if (!rst_n)\n            current_state <= 4'b0001; // Reset state to A\n        else\n            current_state <= next_state;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 1
-}

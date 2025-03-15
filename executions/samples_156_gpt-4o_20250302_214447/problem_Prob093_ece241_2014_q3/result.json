@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input wire a,       // Selector input for the 4-to-1 multiplexer\n    input wire b,       // Selector input for the 4-to-1 multiplexer\n    input wire c,       // Input for the Karnaugh map\n    input wire d,       // Input for the Karnaugh map\n    output wire [3:0] mux_in  // Outputs connected to the 4-to-1 multiplexer\n);\n\n    // Calculate mux_in[3:0] based on the Karnaugh map\n    assign mux_in[0] = (~c & ~d) | (c & d);\n    assign mux_in[1] = 1'b0; // Always zero based on the Karnaugh map\n    assign mux_in[2] = c & d;\n    assign mux_in[3] = (c & ~d) | (c & d);\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}

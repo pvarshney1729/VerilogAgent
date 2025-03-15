@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic areset,\n    input  logic [7:0] d,\n    output logic [7:0] q\n);\n\n    always @(posedge clk or posedge areset) begin\n        if (areset) begin\n            q <= 8'b00000000; // Reset all outputs to 0\n        end else begin\n            q <= d; // Capture input d on the positive edge of clk\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

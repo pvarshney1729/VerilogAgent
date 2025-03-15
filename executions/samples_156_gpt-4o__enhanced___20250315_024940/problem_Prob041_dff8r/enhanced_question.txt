@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - reset: 1-bit input (active high synchronous reset)
+  - d: 8-bit input (data input, bit[0] refers to the least significant bit (LSB), bit[7] refers to the most significant bit (MSB))
+
+- Output Ports:
+  - q: 8-bit output (data output, bit[0] refers to the LSB, bit[7] refers to the MSB)
+
+Functional Description:
+- The module consists of 8 D flip-flops (DFFs) arranged in a parallel configuration.
+- Each DFF has an active high synchronous reset. When the reset signal is asserted (high) during a clock cycle, the output of all DFFs (q) is set to zero (i.e., q <= 8'b00000000).
+- On the positive edge of the clk signal, if reset is not asserted, each DFF captures the corresponding bit from the input data signal d. Specifically:
+  - q[0] will capture d[0]
+  - q[1] will capture d[1]
+  - q[2] will capture d[2]
+  - q[3] will capture d[3]
+  - q[4] will capture d[4]
+  - q[5] will capture d[5]
+  - q[6] will capture d[6]
+  - q[7] will capture d[7]
+
+Sequential Logic:
+- The behavior of the DFFs is synchronous, triggered on the rising edge of the clk signal.
+- All flip-flops will maintain their state unless reset or clocked to capture new data.
+
+Initial Conditions:
+- Upon reset, all outputs (q[0] to q[7]) are initialized to zero (8'b00000000).
+
+Edge Cases:
+- If the reset signal is asserted during the clock cycle, the outputs will immediately transition to zero on the next clock edge.
+- If the reset signal is deasserted and the clk signal goes high, the DFFs will update with the current values from the input d.
+
+Signal Dependencies:
+- The output states q are directly dependent on the clk and d inputs, with the reset input taking precedence during the reset condition.
+</ENHANCED_SPEC>

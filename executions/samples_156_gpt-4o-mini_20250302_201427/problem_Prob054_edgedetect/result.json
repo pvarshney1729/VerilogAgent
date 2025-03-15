@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,             // Clock input, positive edge-triggered\n    input logic [7:0] in,        // 8-bit input vector\n    output logic [7:0] pedge      // 8-bit output vector for positive edge detection\n);\n\n    logic [7:0] in_prev; // To hold previous state of in\n\n    always @(posedge clk) begin\n        integer i;\n        for (i = 0; i < 8; i = i + 1) begin\n            pedge[i] <= (in[i] && !in_prev[i]);\n        end\n        in_prev <= in; // Update previous state\n    end\n\n    initial begin\n        pedge = 8'b00000000; // Initialize pedge to 0\n        in_prev = 8'b00000000; // Initialize in_prev to 0\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

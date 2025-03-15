@@ -1,8 +1,0 @@
-{
-    "code": "module mux2to1_8bit (\n    input logic [7:0] a,\n    input logic [7:0] b,\n    input logic sel,\n    input logic clk,\n    input logic rst_n,\n    output logic [7:0] y\n);\n\nalways @(*) begin\n    if (!rst_n) begin\n        y = 8'b00000000;\n    end else begin\n        y = sel ? b : a;\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

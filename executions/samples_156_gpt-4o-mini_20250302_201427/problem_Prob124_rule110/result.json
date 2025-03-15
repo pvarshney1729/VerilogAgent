@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic rst,\n    input logic load,\n    input logic [511:0] data,\n    output logic [511:0] q\n);\n\n    logic [511:0] q_next;\n\n    always @(*) begin\n        q_next[0] = (q[1] & q[0]) | (q[0] & 1'b0) | (q[1] & 1'b0);\n        for (int i = 1; i < 511; i++) begin\n            q_next[i] = (q[i+1] & q[i]) | (q[i] & ~q[i-1]) | (q[i+1] & ~q[i-1]);\n        end\n        q_next[511] = (1'b0 & q[511]) | (q[511] & ~q[510]) | (1'b0 & ~q[510]);\n    end\n\n    always @(posedge clk) begin\n        if (rst) begin\n            q <= 512'b0;\n        end else if (load) begin\n            q <= data;\n        end else begin\n            q <= q_next;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 6220,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

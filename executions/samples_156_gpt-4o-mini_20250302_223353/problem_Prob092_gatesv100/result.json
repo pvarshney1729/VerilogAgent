@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic [99:0] in,\n    output logic [99:0] out_both,\n    output logic [99:0] out_any,\n    output logic [99:0] out_different\n);\n\n    // Generate out_both\n    assign out_both[99] = 1'b0; // out_both[99] is always 0\n    genvar i;\n    generate\n        for (i = 0; i < 99; i = i + 1) begin : both_logic\n            assign out_both[i] = in[i] & in[i + 1];\n        end\n    endgenerate\n\n    // Generate out_any\n    assign out_any[0] = 1'b0; // out_any[0] is always 0\n    generate\n        for (i = 1; i < 100; i = i + 1) begin : any_logic\n            assign out_any[i] = in[i] | in[i - 1];\n        end\n    endgenerate\n\n    // Generate out_different\n    generate\n        for (i = 0; i < 100; i = i + 1) begin : different_logic\n            assign out_different[i] = in[i] ^ in[(i + 99) % 100]; // Wrap-around comparison\n        end\n    endgenerate\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
-    "test_results": {
-        "num_mismatch": 201,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,             // Clock input, positive edge-triggered\n    input logic enable,          // Synchronous active-high enable for shifting\n    input logic S,               // Serial input for shift register\n    input logic [2:0] ABC,       // 3-bit input for multiplexer selection\n    output logic Z               // Output based on selected Q[n] value\n);\n\n    logic [7:0] Q; // 8-bit shift register\n\n    // Shift register logic\n    always_ff @(posedge clk) begin\n        if (enable) begin\n            Q <= {S, Q[7:1]};\n        end\n    end\n\n    // Multiplexer logic for output Z\n    always_comb begin\n        case (ABC)\n            3'b000: Z = Q[0];\n            3'b001: Z = Q[1];\n            3'b010: Z = Q[2];\n            3'b011: Z = Q[3];\n            3'b100: Z = Q[4];\n            3'b101: Z = Q[5];\n            3'b110: Z = Q[6];\n            3'b111: Z = Q[7];\n            default: Z = 1'b0; // Default case to handle unexpected values\n        endcase\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 1
-}

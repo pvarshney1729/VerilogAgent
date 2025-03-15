@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - Name: a
+  - Width: 3 bits
+  - Description: a[2:0] where a[0] is the least significant bit (LSB) and a[2] is the most significant bit (MSB). The input 'a' represents a 3-bit unsigned integer.
+
+- Output Port:
+  - Name: q
+  - Width: 16 bits
+  - Description: q[15:0] where q[0] is the least significant bit (LSB) and q[15] is the most significant bit (MSB). The output 'q' represents a 16-bit hexadecimal value.
+
+Functional Specification:
+- The module implements a combinational logic circuit that produces the output 'q' based on the input 'a'. 
+- The relationship between the input 'a' and the output 'q' is determined by the provided simulation waveforms. 
+
+Simulation Waveform Behavior:
+- The output 'q' is expected to change based on specific values of 'a' at defined time intervals. The values observed in the simulation are as follows:
+
+  | Time (ns) | Input a (3 bits) | Output q (16 bits) |
+  |-----------|-------------------|---------------------|
+  | 0         | x                 | x                   |
+  | 5         | x                 | x                   |
+  | 10        | x                 | x                   |
+  | 15        | 000               | 1232                |
+  | 20        | 001               | aee0                |
+  | 25        | 010               | 27d4                |
+  | 30        | 011               | 5a0e                |
+  | 35        | 100               | 2066                |
+  | 40        | 101               | 64ce                |
+  | 45        | 110               | c526                |
+  | 50        | 111               | 2f19                |
+  | 55        | 000               | 1232                |
+  | 60        | 001               | aee0                |
+  | 65        | 010               | 27d4                |
+  | 70        | 100               | 2066                |
+  | 75        | 001               | aee0                |
+  | 80        | 001               | aee0                |
+  | 85        | 011               | 5a0e                |
+  | 90        | 101               | 64ce                |
+
+- The output 'q' must reflect the correct values corresponding to the input 'a' as specified in the table above. 
+
+Edge Cases:
+- The output 'q' should be defined for all possible values of 'a' (000 to 111). Any undefined states must be clearly handled, ensuring that the module does not produce invalid outputs.
+
+Additional Notes:
+- Ensure that inputs are valid and do not lead to any race conditions or undefined behavior during the simulation.
+</ENHANCED_SPEC>

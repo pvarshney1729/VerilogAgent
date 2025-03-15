@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+The `TopModule` implements a finite state machine (FSM) with the following interface. All input and output ports are explicitly defined in terms of width, signedness, and naming conventions. 
+
+**Input Ports:**
+- `input clk;`              // Clock signal (1 bit, rising edge triggered)
+- `input x;`                // Control input (1 bit)
+- `input [2:0] y;`          // Current state input (3 bits, unsigned, y[2] is the most significant bit (MSB), y[0] is the least significant bit (LSB))
+
+**Output Ports:**
+- `output Y0;`              // Output Y0 (1 bit, represents Y[0] of the next state signal)
+- `output z;`               // Output z (1 bit)
+
+**FSM State Transition Table:**
+The FSM behavior is defined by the present state `y[2:0]` and the control input `x`. The next state and output logic are determined as follows:
+
+| Present State `y[2:0]` | Next State if `x=0` | Next State if `x=1` | Output `z` |
+|-------------------------|----------------------|----------------------|-------------|
+| 000                     | 000                  | 001                  | 0           |
+| 001                     | 001                  | 100                  | 0           |
+| 010                     | 010                  | 001                  | 0           |
+| 011                     | 001                  | 010                  | 1           |
+| 100                     | 011                  | 100                  | 1           |
+
+**Sequential Logic:**
+- The FSM transitions occur on the rising edge of the `clk` signal.
+- The state transition is synchronous, meaning the next state is updated based on the current state and inputs after each clock cycle.
+
+**Reset Behavior:**
+- The module shall have a synchronous reset which is not explicitly defined in the current specification.
+- The initial state of the FSM (upon reset) will be state `000`.
+
+**Output Behavior:**
+- The output `Y0` represents the least significant bit of the next state after the FSM has transitioned.
+- The output `z` is determined based on the current state and the value of `x` as specified in the state transition table.
+
+**Edge Cases:**
+- Ensure that the module properly handles transitions when `x` is at its boundaries (0 and 1).
+- The behavior of the FSM must be verified for all combinations of `y[2:0]` and input `x`.
+
+**Signal Dependencies:**
+- The next state is determined by both the current state `y[2:0]` and the input `x`.
+- The output `Y0` and `z` are dependent on the next state determined at the clock edge.
+
+**Potential Race Conditions:**
+- Ensure that all state transitions and output logic occur without race conditions by properly synchronizing on the clock edge.
+
+All registers and flip-flops within the module must be initialized to their defined reset state upon the synchronous reset condition.
+</ENHANCED_SPEC>

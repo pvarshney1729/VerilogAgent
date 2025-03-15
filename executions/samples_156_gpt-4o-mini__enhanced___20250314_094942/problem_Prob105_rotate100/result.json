@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,               // Clock signal, 1 bit\n    input logic load,              // Load signal, 1 bit, synchronous active high\n    input logic [1:0] ena,         // Enable signal for rotation, 2 bits\n    input logic [99:0] data,       // Data input, 100 bits\n    output logic [99:0] q          // Output register, 100 bits\n);\n\nalways @(posedge clk) begin\n    if (!load) begin\n        case (ena)\n            2'b01: q <= {q[0], q[99:1]}; // Rotate right\n            2'b10: q <= {q[98:0], q[99]}; // Rotate left\n            default: q <= q; // No rotation\n        endcase\n    end else begin\n        q <= data; // Load data into q\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    }
-}

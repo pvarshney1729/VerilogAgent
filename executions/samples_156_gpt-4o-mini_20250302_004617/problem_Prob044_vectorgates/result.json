@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic [2:0] a,\n    input logic [2:0] b,\n    input logic clk,\n    input logic reset,\n    output logic [2:0] out_or_bitwise,\n    output logic out_or_logical,\n    output logic [2:0] out_not\n);\n\n    // Combinational logic for bitwise OR\n    assign out_or_bitwise = a | b;\n\n    // Combinational logic for logical OR\n    assign out_or_logical = |(a | b);\n\n    // Combinational logic for NOT operation\n    assign out_not = ~a;\n\n    // Sequential logic with synchronous reset\n    always @(posedge clk) begin\n        if (reset) begin\n            // Initialize outputs to zero on reset\n            out_or_bitwise <= 3'b000;\n            out_or_logical <= 1'b0;\n            out_not <= 3'b000;\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

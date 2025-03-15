@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Definition:
+- Input Ports:
+  - input clk: 1-bit clock signal (positive edge triggered)
+  - input areset: 1-bit asynchronous reset signal (active high)
+  - input bump_left: 1-bit signal indicating a bump from the left (active high)
+  - input bump_right: 1-bit signal indicating a bump from the right (active high)
+
+- Output Ports:
+  - output reg walk_left: 1-bit output indicating Lemming is walking left (active high)
+  - output reg walk_right: 1-bit output indicating Lemming is walking right (active high)
+
+State Definitions:
+- The module implements a Moore finite state machine (FSM) with the following states:
+  - State 0: Walking Left (walk_left = 1, walk_right = 0)
+  - State 1: Walking Right (walk_left = 0, walk_right = 1)
+
+State Transition Logic:
+- The Lemming transitions between states based on the following conditions:
+  - If bump_left is asserted (1), transition to State 1 (walk_right = 1).
+  - If bump_right is asserted (1), transition to State 0 (walk_left = 1).
+  - If both bump_left and bump_right are asserted simultaneously, the Lemming will switch directions according to the last bump detected.
+
+Reset Behavior:
+- The areset signal resets the state machine to State 0 (walking left) on the positive edge of the clk signal.
+- Upon reset, the output signals are defined as follows:
+  - walk_left = 1
+  - walk_right = 0
+
+Sequential Logic:
+- All state transitions and output assignments occur on the positive edge of the clk signal, ensuring synchronous behavior.
+- The outputs walk_left and walk_right will only reflect the current state after the clk positive edge.
+
+Edge Case Behavior:
+- The FSM must be designed to handle simultaneous bumps (bump_left and bump_right both being high) consistently, prioritizing the last change detected before the clock edge.
+- Ensure correct initialization of the FSM and outputs to avoid undefined behavior upon startup.
+
+Signal Dependencies:
+- Ensure that the bump signals are checked immediately upon the positive edge of clk for state transitions, to avoid race conditions.
+
+Initialization:
+- All registers and outputs should have defined initial values upon reset.
+
+</ENHANCED_SPEC>

@@ -1,0 +1,54 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- **Input Ports:**
+  - `input [5:0] y`: 6-bit input representing the state in one-hot encoded format, where:
+    - `y[0]` corresponds to state A
+    - `y[1]` corresponds to state B
+    - `y[2]` corresponds to state C
+    - `y[3]` corresponds to state D
+    - `y[4]` corresponds to state E
+    - `y[5]` corresponds to state F
+  - `input w`: 1-bit input signal.
+
+- **Output Ports:**
+  - `output Y1`: 1-bit output signal.
+  - `output Y3`: 1-bit output signal.
+
+State Transition Diagram:
+- The state transitions occur based on the following conditions:
+  - From state A (`y[0]` = 1):
+    - If `w = 0`, transition to state B (`y[1]` = 1).
+    - If `w = 1`, remain in state A (`y[0]` = 1).
+  - From state B (`y[1]` = 1):
+    - If `w = 0`, transition to state C (`y[2]` = 1).
+    - If `w = 1`, transition to state D (`y[3]` = 1).
+  - From state C (`y[2]` = 1):
+    - If `w = 0`, transition to state E (`y[4]` = 1).
+    - If `w = 1`, transition to state D (`y[3]` = 1).
+  - From state D (`y[3]` = 1):
+    - If `w = 0`, transition to state F (`y[5]` = 1).
+    - If `w = 1`, transition to state A (`y[0]` = 1).
+  - From state E (`y[4]` = 1):
+    - If `w = 0`, remain in state E (`y[4]` = 1).
+    - If `w = 1`, transition to state D (`y[3]` = 1).
+  - From state F (`y[5]` = 1):
+    - If `w = 0`, transition to state C (`y[2]` = 1).
+    - If `w = 1`, transition to state D (`y[3]` = 1).
+
+Reset Condition:
+- The module shall reset asynchronously to state A (`y[0]` = 1).
+- All other state signals (`y[1]`, `y[2]`, `y[3]`, `y[4]`, `y[5]`) shall be reset to 0.
+
+Next-State Signal Logic:
+- The next-state signals `Y2` and `Y4` corresponding to `y[1]` and `y[3]` shall be derived from the current state and the input signal `w` using combinational logic.
+- Provide the logic equations for `Y2` and `Y4` based on the state transitions described.
+
+Edge Cases:
+- Ensure that the state machine behaves correctly for edge cases, such as invalid states (i.e., when multiple bits in `y` are set to 1).
+- Define behavior when `w` transitions rapidly between 0 and 1.
+
+Clarity Requirements:
+- Clearly document all signal dependencies, ensuring that the precedence of operations is understood to prevent race conditions in the implementation.
+</ENHANCED_SPEC>

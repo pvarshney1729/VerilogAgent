@@ -1,0 +1,52 @@
+<ENHANCED_SPEC>
+**Module Name:** TopModule
+
+**Interface:**
+- **Input Ports:**
+  - `input logic a;`  // 1-bit input
+  - `input logic b;`  // 1-bit input
+  - `input logic c;`  // 1-bit input
+  - `input logic d;`  // 1-bit input
+
+- **Output Port:**
+  - `output logic q;` // 1-bit output
+
+**Functional Description:**
+The module implements a combinational logic circuit that determines the output `q` based on the values of the inputs `a`, `b`, `c`, and `d`. The output is defined as a function of the input values, as observed from the provided simulation waveforms.
+
+**Simulation Waveform Behavior:** 
+The following table summarizes the output `q` based on the input combinations over time (in nanoseconds):
+
+| Time (ns) | a | b | c | d | q |
+|-----------|---|---|---|---|---|
+| 0         | 0 | 0 | 0 | 0 | 1 |
+| 5         | 0 | 0 | 0 | 0 | 1 |
+| 10        | 0 | 0 | 0 | 0 | 1 |
+| 15        | 0 | 0 | 0 | 0 | 1 |
+| 20        | 0 | 0 | 0 | 1 | 0 |
+| 25        | 0 | 0 | 1 | 0 | 0 |
+| 30        | 0 | 0 | 1 | 1 | 1 |
+| 35        | 0 | 1 | 0 | 0 | 0 |
+| 40        | 0 | 1 | 0 | 1 | 1 |
+| 45        | 0 | 1 | 1 | 0 | 1 |
+| 50        | 0 | 1 | 1 | 1 | 0 |
+| 55        | 1 | 0 | 0 | 0 | 0 |
+| 60        | 1 | 0 | 0 | 1 | 1 |
+| 65        | 1 | 0 | 1 | 0 | 1 |
+| 70        | 1 | 0 | 1 | 1 | 0 |
+| 75        | 1 | 1 | 0 | 0 | 1 |
+| 80        | 1 | 1 | 0 | 1 | 0 |
+| 85        | 1 | 1 | 1 | 0 | 0 |
+| 90        | 1 | 1 | 1 | 1 | 1 |
+
+**Design Constraints:**
+- The module operates under the assumption that input signals `a`, `b`, `c`, and `d` change at any time without defined clock edges, as it is purely combinational logic.
+- There are no sequential elements, and thus no clock or reset signals are specified.
+
+**Edge Cases and Input Boundaries:**
+- The behavior of the output `q` should be explicitly defined for all combinations of inputs as shown in the simulation table.
+- Undefined input states (e.g., when `a`, `b`, `c`, and `d` are not explicitly 0 or 1) are not specified and should be treated as invalid.
+
+**Implementation Note:**
+- Ensure that the logic implemented does not violate any combinational circuit principles, such as avoiding race conditions or glitches.
+</ENHANCED_SPEC>

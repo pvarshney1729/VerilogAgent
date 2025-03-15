@@ -1,0 +1,65 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire in; // 1-bit input signal
+  - input wire [9:0] state; // 10-bit input signal representing current states (one-hot encoded)
+  
+- Output Ports:
+  - output reg [9:0] next_state; // 10-bit output signal for next states (one-hot encoded)
+  - output reg out1; // 1-bit output signal
+  - output reg out2; // 1-bit output signal
+
+State Encoding:
+- The 10-bit input 'state[9:0]' uses one-hot encoding to represent states S0 through S9, where:
+  - state[0] corresponds to S0
+  - state[1] corresponds to S1
+  - state[2] corresponds to S2
+  - state[3] corresponds to S3
+  - state[4] corresponds to S4
+  - state[5] corresponds to S5
+  - state[6] corresponds to S6
+  - state[7] corresponds to S7
+  - state[8] corresponds to S8
+  - state[9] corresponds to S9
+
+Output Logic:
+- The outputs 'out1' and 'out2' are initialized to 0 unless specified otherwise during state transitions.
+- The next state logic transitions based on the input 'in' and the current active states represented in 'state'.
+
+State Transition Logic:
+- The next_state[9:0] determines the subsequent state based on the current states in 'state[9:0]' and the input 'in' according to the following state transition table:
+
+  | Current State | Input | Next State | out1 | out2 |
+  |---------------|-------|------------|------|------|
+  | S0            | 0     | S0         | 0    | 0    |
+  | S0            | 1     | S1         | 0    | 0    |
+  | S1            | 0     | S0         | 0    | 0    |
+  | S1            | 1     | S2         | 0    | 0    |
+  | S2            | 0     | S0         | 0    | 0    |
+  | S2            | 1     | S3         | 0    | 0    |
+  | S3            | 0     | S0         | 0    | 0    |
+  | S3            | 1     | S4         | 0    | 0    |
+  | S4            | 0     | S0         | 0    | 0    |
+  | S4            | 1     | S5         | 0    | 0    |
+  | S5            | 0     | S8         | 0    | 0    |
+  | S5            | 1     | S6         | 0    | 0    |
+  | S6            | 0     | S9         | 0    | 0    |
+  | S6            | 1     | S7         | 0    | 0    |
+  | S7            | 0     | S0         | 0    | 1    |
+  | S7            | 1     | S7         | 0    | 1    |
+  | S8            | 0     | S0         | 1    | 0    |
+  | S8            | 1     | S1         | 1    | 0    |
+  | S9            | 0     | S0         | 1    | 1    |
+  | S9            | 1     | S1         | 1    | 1    |
+
+Implementation Notes:
+- The module does not include any flip-flops or registers for state storage; it only implements combinational logic for the next state and outputs.
+- Ensure that the control logic properly handles state transitions based on the active states indicated in 'state[9:0]' and the input 'in'.
+- Edge cases and input boundaries must be considered, ensuring that the state machine correctly responds to all possible combinations of the input signals.
+
+Reset Conditions:
+- The module does not include synchronous or asynchronous reset conditions. The behavior upon power-up or reset is not defined within this specification.
+
+</ENHANCED_SPEC>

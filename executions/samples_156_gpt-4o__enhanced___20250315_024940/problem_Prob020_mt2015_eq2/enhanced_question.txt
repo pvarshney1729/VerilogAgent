@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Interface:
+- Input Ports:
+  - A: bit[1:0] (2 bits, unsigned)
+    - bit[0] refers to the least significant bit (LSB)
+    - bit[1] refers to the most significant bit (MSB)
+  - B: bit[1:0] (2 bits, unsigned)
+    - bit[0] refers to the least significant bit (LSB)
+    - bit[1] refers to the most significant bit (MSB)
+
+- Output Port:
+  - z: bit (1 bit, unsigned)
+
+Functional Specification:
+The module shall implement a combinational logic circuit that compares two 2-bit unsigned inputs, A and B. The output z shall be determined as follows:
+- If A == B, then z = 1 (true)
+- If A ≠ B, then z = 0 (false)
+
+Behavior:
+- The comparison shall consider all possible values of A and B (from 0 (00) to 3 (11)).
+- The output z shall be updated immediately based on the values of A and B without any delay, as this is a pure combinational circuit.
+- No clock or reset signal is defined since the module does not implement sequential logic.
+
+Edge Cases:
+- The module shall handle all possible combinations of A and B, including the cases where both inputs are at their minimum (00) and maximum (11) values.
+
+Signal Dependencies:
+- The output z depends directly on the values of inputs A and B with no additional intermediate signals.
+- There are no potential race conditions as the circuit is entirely combinational.
+
+Initial Values:
+- Since this is a combinational circuit, there are no registers or flip-flops, and thus no initial values are required.
+
+End of Specification.
+</ENHANCED_SPEC>

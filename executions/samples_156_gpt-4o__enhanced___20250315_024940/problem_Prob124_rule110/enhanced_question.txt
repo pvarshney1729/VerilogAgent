@@ -1,0 +1,52 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- **Input Ports**:
+  - `input  clk;`                     // Clock signal, 1 bit, active on the rising edge
+  - `input  load;`                    // Load signal, 1 bit, active high
+  - `input  [511:0] data;`            // Input data, 512 bits, represents initial state of the cells
+
+- **Output Ports**:
+  - `output [511:0] q;`               // Output state of the cells, 512 bits
+
+Cellular Automaton Specification:
+- The module implements Rule 110, a one-dimensional cellular automaton with 512 cells, indexed from `q[0]` (least significant bit) to `q[511]` (most significant bit). 
+- Each cell's next state depends on its current state and the states of its immediate neighbors.
+- The boundary conditions are defined as follows:
+  - `q[-1]` and `q[512]` are treated as `0` (off).
+
+State Transition Logic:
+- The state transition for each cell `q[i]` (where `0 <= i <= 511`) is determined based on the following truth table:
+
+| Left[i+1] | Center[i] | Right[i-1] | Center's next state |
+|-----------|-----------|-------------|---------------------|
+|     1     |     1     |      1      |          0          |
+|     1     |     1     |      0      |          1          |
+|     1     |     0     |      1      |          1          |
+|     1     |     0     |      0      |          0          |
+|     0     |     1     |      1      |          1          |
+|     0     |     1     |      0      |          1          |
+|     0     |     0     |      1      |          1          |
+|     0     |     0     |      0      |          0          |
+
+Operational Behavior:
+- The output `q` is updated every clock cycle. 
+- If `load` is high, the current state of `q` should be loaded with the values from `data[511:0]`.
+- If `load` is low, the output will update according to the Rule 110 state transition logic based on the current state of `q`.
+
+Sequential Logic:
+- All sequential logic is triggered on the positive edge of `clk`.
+- The state of the register `q` should be initialized to `0` (all cells off) on reset or when `load` is high.
+
+Reset Behavior:
+- A synchronous active high reset signal should be defined to initialize `q` to `0` if included in the final design.
+
+Edge Case Behavior:
+- The module should appropriately handle cases where `load` is asserted during normal operation, ensuring proper loading of new data without corruption of current state.
+
+Signal Dependencies:
+- Ensure that state updates only occur after the completion of the previous state evaluation to prevent race conditions.
+
+Please ensure all conditions are adhered to for successful implementation of the Rule 110 cellular automaton within the specified constraints.
+</ENHANCED_SPEC>

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic j,\n    input logic k,\n    output logic Q\n);\n\n    logic Qold;\n\n    always @(posedge clk) begin\n        case ({j, k})\n            2'b00: Q <= Qold;        // Q remains unchanged\n            2'b01: Q <= 1'b0;        // Q reset to 0\n            2'b10: Q <= 1'b1;        // Q set to 1\n            2'b11: Q <= ~Qold;       // Q toggles\n        endcase\n        Qold <= Q;                  // Update Qold to current Q\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 87,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

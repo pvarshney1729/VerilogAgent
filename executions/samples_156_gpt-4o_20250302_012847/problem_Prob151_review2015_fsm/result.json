@@ -1,8 +1,0 @@
-{
-    "code": "```verilog\nmodule pattern_detector (\n    input logic clk,\n    input logic reset,\n    input logic data_in,\n    output logic pattern_detected\n);\n\n    typedef enum logic [2:0] {\n        IDLE = 3'b000,\n        S1   = 3'b001,\n        S11  = 3'b010,\n        S110 = 3'b011,\n        S1101= 3'b100\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            current_state <= IDLE;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            IDLE:  next_state = (data_in) ? S1 : IDLE;\n            S1:    next_state = (data_in) ? S11 : IDLE;\n            S11:   next_state = (data_in) ? S11 : S110;\n            S110:  next_state = (data_in) ? S1101 : IDLE;\n            S1101: next_state = (data_in) ? S11 : IDLE;\n            default: next_state = IDLE;\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        pattern_detected = (current_state == S1101);\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 3
-}

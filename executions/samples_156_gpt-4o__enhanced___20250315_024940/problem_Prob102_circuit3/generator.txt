@@ -1,0 +1,55 @@
+Generated Response:
+
+Based on the provided truth table and requirements, I will implement the `TopModule` that generates the output `q` based on the inputs `a`, `b`, `c`, and `d`. 
+
+The output `q` can be derived from the truth table provided, and it appears to follow a certain pattern based on the values of the inputs. By analyzing the truth table, we can deduce the conditions under which `q` should be high (1) and low (0).
+
+After analyzing the truth table, the boolean expression for `q` can be simplified. It appears that:
+- `q` is high when:
+  - `b` is 1 and (`c` is 0 and `d` is 1) or (`c` is 1)
+  - `a` is 1 and (`b` is 0 and `d` is 1) or (`b` is 1 and `c` is 1)
+
+From the above points, the logic can be implemented using combinational logic as follows:
+
+Here’s the Verilog code for the module:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input  logic a,
+    input  logic b,
+    input  logic c,
+    input  logic d,
+    output logic q
+);
+
+    always @(*) begin
+        q = (b & ((~c & d) | c)) | (a & ((~b & d) | (b & c)));
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation of the Code:
+1. **Module Declaration**: The module is defined with input ports `a`, `b`, `c`, `d`, and output port `q`, all declared as `logic`.
+2. **Combinational Logic**: An `always @(*)` block is used to implement the combinational logic. This block automatically infers the sensitivity list based on the signals used within it.
+3. **Output Logic Calculation**: The output `q` is calculated using the derived boolean expression based on the truth table provided. The expression combines conditions using bitwise AND (`&`), OR (`|`), and NOT (`~`) operations to determine the value of `q`.
+
+The implementation adheres to the guidelines and conventions outlined, ensuring proper syntax and functionality in a combinational context.
+
+Generated Code:
+
+module TopModule (
+    input  logic a,
+    input  logic b,
+    input  logic c,
+    input  logic d,
+    output logic q
+);
+
+    always @(*) begin
+        q = (b & ((~c & d) | c)) | (a & ((~b & d) | (b & c)));
+    end
+
+endmodule

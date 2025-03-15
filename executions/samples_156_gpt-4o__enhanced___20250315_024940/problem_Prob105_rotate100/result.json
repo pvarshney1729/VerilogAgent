@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic load,\n    input logic [1:0] ena,\n    input logic [99:0] data,\n    output logic [99:0] q\n);\n\n    // Internal register to hold the current contents of the rotator\n    logic [99:0] rotator;\n\n    always @(posedge clk) begin\n        if (load) begin\n            // Load new data into the rotator\n            rotator <= data;\n        end else begin\n            // Rotate based on ena input\n            case (ena)\n                2'b01: begin\n                    // Rotate right\n                    rotator <= {rotator[0], rotator[99:1]};\n                end\n                2'b10: begin\n                    // Rotate left\n                    rotator <= {rotator[98:0], rotator[99]};\n                end\n                2'b00, 2'b11: begin\n                    // No rotation\n                    rotator <= rotator;\n                end\n            endcase\n        end\n    end\n\n    // Assign the output q to the current value of the rotator\n    assign q = rotator;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic x,\n    output logic z\n);\n\n    typedef enum logic [1:0] {\n        INIT = 2'b00,\n        COMPLEMENT = 2'b01\n    } state_t;\n\n    state_t current_state, next_state;\n    logic complement_bit;\n\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            current_state <= INIT;\n            z <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            z <= complement_bit;\n        end\n    end\n\n    always_comb begin\n        next_state = current_state;\n        complement_bit = z;\n\n        case (current_state)\n            INIT: begin\n                if (!areset) begin\n                    next_state = COMPLEMENT;\n                end\n            end\n            COMPLEMENT: begin\n                complement_bit = ~x;\n            end\n        endcase\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 22,
-        "passfail": "R"
-    }
-}

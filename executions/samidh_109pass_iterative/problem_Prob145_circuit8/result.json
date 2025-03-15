@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clock,\n    input logic a,\n    output logic p,\n    output logic q\n);\n\n    // Initialize outputs to zero\n    initial begin\n        p = 1'b0;\n        q = 1'b0;\n    end\n\n    // Sequential logic with synchronous reset\n    always_ff @(posedge clock) begin\n        p <= a;\n        q <= p;\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 180,
-        "passfail": "R"
-    },
-    "iterations_used": 2
-}

@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: bit (1) [Clock signal, positive edge-triggered]
+  - enable: bit (1) [Synchronous active-high signal to control shifting operation]
+  - S: bit (1) [Serial input for the shift register, MSB is shifted in first]
+  - A: bit (1) [First select input for the multiplexer]
+  - B: bit (1) [Second select input for the multiplexer]
+  - C: bit (1) [Third select input for the multiplexer]
+
+- Output Ports:
+  - Z: bit (1) [Output from the multiplexing logic]
+
+Functional Description:
+1. The module implements an 8x1 memory using an 8-bit shift register constructed from 8 D-type flip-flops.
+2. The outputs of the flip-flops will be labeled Q[7:0], where Q[0] is the least significant bit (LSB) and Q[7] is the most significant bit (MSB).
+3. The shift register operates as follows:
+   - On the positive edge of clk, if enable is high, the shift register will shift left, with the input S being fed into Q[0].
+   - If enable is low, the contents of the shift register remain unchanged.
+4. The output Z is determined based on the values of inputs A, B, and C as follows:
+   - When (A, B, C) = (0, 0, 0), Z = Q[0]
+   - When (A, B, C) = (0, 0, 1), Z = Q[1]
+   - When (A, B, C) = (0, 1, 0), Z = Q[2]
+   - When (A, B, C) = (0, 1, 1), Z = Q[3]
+   - When (A, B, C) = (1, 0, 0), Z = Q[4]
+   - When (A, B, C) = (1, 0, 1), Z = Q[5]
+   - When (A, B, C) = (1, 1, 0), Z = Q[6]
+   - When (A, B, C) = (1, 1, 1), Z = Q[7]
+
+Reset Behavior:
+- There shall be no specified asynchronous reset. The initial state of all Q outputs is undefined upon first power-up unless otherwise stated; however, it is recommended to define a reset behavior for production use.
+
+Additional Notes:
+- Ensure that all sequential elements (i.e., flip-flops) are triggered solely by the positive edge of the clk signal.
+- The circuit should consist only of the 8-bit shift register and multiplexers as specified.
+- Consider edge cases where enable is toggled or where S is not provided for multiple clock cycles.
+
+</ENHANCED_SPEC>

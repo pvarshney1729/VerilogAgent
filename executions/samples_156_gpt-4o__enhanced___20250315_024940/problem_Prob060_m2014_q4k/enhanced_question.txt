@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Input/Output Ports:
+- Input:
+  - clk: 1-bit input (active on the rising edge)
+  - resetn: 1-bit input (active-low synchronous reset)
+  - in: 1-bit input (data to be shifted into the register)
+  
+- Output:
+  - out: 1-bit output (the most significant bit of the shift register)
+
+Port Widths:
+- All input and output ports are defined as 1-bit wide.
+
+Bit Indexing:
+- The bit indexing follows the convention where bit[0] refers to the least significant bit (LSB).
+
+Functional Description:
+The module implements a 4-bit shift register composed of four D flip-flops (DFFs). The DFFs are arranged in a series where the output of each DFF connects to the input of the next DFF, facilitating the shift operation. 
+
+Sequential Logic:
+- All sequential logic is triggered on the positive edge of the clk signal.
+- The behavior of the shift register during each clock cycle is as follows:
+  - On the rising edge of clk:
+    - If resetn is low (active), all flip-flops are reset to '0'.
+    - If resetn is high (inactive), each DFF captures the input signal from the previous stage:
+      - DFF0 (LSB) captures the input signal 'in'.
+      - DFF1 captures the output of DFF0.
+      - DFF2 captures the output of DFF1.
+      - DFF3 (MSB) captures the output of DFF2.
+
+Reset Behavior:
+- The reset is synchronous and active-low. When resetn is low, all DFFs are reset to '0'.
+
+Initial Values:
+- Upon reset (resetn = 0), all DFFs (DFF0, DFF1, DFF2, DFF3) are initialized to '0'.
+
+Output Behavior:
+- The output 'out' is assigned the value of DFF3 (the most significant bit of the shift register).
+
+Edge Cases:
+- Consider the behavior when the input signal 'in' is asserted immediately after reset; the output 'out' will remain '0' on the next clock cycle until the input is shifted into the register.
+
+Signal Dependencies:
+- Ensure the correct sequencing of signals to avoid race conditions, particularly during the reset condition and the capturing of inputs in the DFFs.
+</ENHANCED_SPEC>

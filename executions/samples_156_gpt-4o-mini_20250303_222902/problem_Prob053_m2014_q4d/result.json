@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,     // Clock signal, 1-bit\n    input logic in,      // Input signal, 1-bit\n    output logic out     // Output signal, 1-bit, driven by a D flip-flop\n);\n\n    initial begin\n        out = 1'b0; // Initialize output to 0\n    end\n\n    always @(*) begin\n        logic xor_out;\n        xor_out = in ^ out; // XOR operation\n    end\n\n    always @(posedge clk) begin\n        out <= xor_out; // D flip-flop operation\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "p"
-    }
-}

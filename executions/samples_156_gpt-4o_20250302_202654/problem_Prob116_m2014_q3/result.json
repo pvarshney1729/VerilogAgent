@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic [3:0] x,  // 4-bit input vector: x[3] is MSB, x[0] is LSB\n    output logic f        // 1-bit output\n);\n\n    assign f = (x[3] & ~x[2] & ~x[1] & x[0]) |  // Covers 10 row, 11 column\n               (x[3] & ~x[2] & x[1] & x[0]) |   // Covers 10 row, 10 column\n               (x[3] & x[2] & ~x[1]) |          // Covers 11 row, 00 and 01 columns\n               (~x[3] & x[2] & x[1] & ~x[0]) |  // Covers 01 row, 11 column\n               (~x[3] & x[2] & ~x[1] & x[0]);   // Covers 00 row, 01 column\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 13,
-        "passfail": "R"
-    },
-    "iterations_used": 2
-}

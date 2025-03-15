@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n  logic clk,\n  logic reset,\n  logic [31:0] in,\n  logic [31:0] out\n);\n\n  logic [31:0] prev_in; // Register to hold the previous state of 'in'\n\n  always @(posedge clk) begin\n    if (reset) begin\n      out <= 32'h0; // Reset output to zero\n    end else begin\n      // Capture 1-to-0 transitions\n      out <= out | (prev_in & ~in);\n    end\n    prev_in <= in; // Update the previous input state\n  end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    },
-    "iterations_used": 3
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,          // Clock signal (1 bit)\n    input logic d,            // Data input (1 bit)\n    output logic q,           // Flip-flop output (1 bit)\n    input logic rst_n         // Active-low asynchronous reset (1 bit)\n);\n\n    always_ff @(posedge clk or negedge rst_n) begin\n        if (!rst_n)\n            q <= 1'b0;  // Reset output to 0\n        else\n            q <= d;     // Capture data on rising edge of the clock\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clock,\n    input logic a,\n    output logic p,\n    output logic q\n);\n\n    // Internal register to hold the previous state of p\n    logic p_reg;\n\n    // Initial block to set initial states for simulation\n    initial begin\n        p = 1'b0;\n        q = 1'b0;\n        p_reg = 1'b0;\n    end\n\n    // Sequential logic for p and q\n    always_ff @(posedge clock) begin\n        p_reg <= p; // Store the current state of p\n        p <= a;     // Update p based on input a\n        q <= p_reg; // Update q based on the previous state of p\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 166,
-        "passfail": "R"
-    },
-    "iterations_used": 1
-}

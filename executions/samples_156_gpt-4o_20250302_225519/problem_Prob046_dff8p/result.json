@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input wire clk,           // 1-bit clock input\n    input wire reset,         // 1-bit synchronous active high reset input\n    input wire [7:0] d,       // 8-bit data input, unsigned\n    output reg [7:0] q        // 8-bit data output, unsigned\n);\n\n    always @(negedge clk) begin\n        if (reset) begin\n            q <= 8'b00110100; // Set to 0x34 on reset\n        end else begin\n            q <= d; // Load data from input\n        end\n    end\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 2
-}

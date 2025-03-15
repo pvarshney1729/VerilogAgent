@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic a,     // Single-bit input: First operand\n    input logic b,     // Single-bit input: Second operand\n    input logic cin,   // Single-bit input: Carry-in from previous stage\n    output logic cout, // Single-bit output: Carry-out to the next stage\n    output logic sum   // Single-bit output: Sum of the three inputs\n);\n\n    // Combinational logic for sum and carry-out\n    assign sum = a ^ b ^ cin;\n    assign cout = (a & b) | (b & cin) | (a & cin);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 1
-}

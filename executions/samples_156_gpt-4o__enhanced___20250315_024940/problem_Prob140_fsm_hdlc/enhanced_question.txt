@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- Input Ports:
+  - input logic clk : Clock signal (1-bit, active on the positive edge).
+  - input logic reset : Synchronous reset signal (1-bit, active high).
+  - input logic in : Input data stream (1-bit).
+  
+- Output Ports:
+  - output logic disc : Discard signal (1-bit, asserted for one clock cycle when a bit needs to be discarded).
+  - output logic flag : Frame boundary signal (1-bit, asserted for one clock cycle when a frame boundary is detected).
+  - output logic err : Error signal (1-bit, asserted for one clock cycle when 7 or more consecutive 1s are detected).
+
+Functional Description:
+The module implements a Moore-type finite state machine (FSM) to decode a continuous bit stream of data according to the HDLC framing protocol. The FSM must recognize the following sequences:
+
+1. **Sequence 0111110**: 
+   - Action: Assert `disc` for one clock cycle on the next clock edge following detection.
+
+2. **Sequence 01111110**: 
+   - Action: Assert `flag` for one clock cycle on the next clock edge following detection.
+
+3. **Sequence 01111111...**: 
+   - Action: Assert `err` for one clock cycle on the next clock edge following detection.
+
+State Initialization and Reset Behavior:
+- Upon activation of the reset signal (active high), the FSM will initialize to a state that behaves as though the last input was `0`. All output signals (`disc`, `flag`, `err`) should be deasserted during the reset state.
+
+Clock Cycle Relationships:
+- All sequential logic will be triggered on the positive edge of the clock signal (`clk`).
+- Output signals will be asserted during the clock cycle immediately following the detection of the respective sequence.
+
+Signal Dependencies:
+- The FSM will monitor the `in` signal for changes in state based on the sequential input stream.
+- Ensure to prevent race conditions by synchronizing the state transitions with the clock edge.
+
+Edge Case Handling:
+- Ensure the FSM correctly handles inputs at the boundaries of valid sequences, such as transitions from 0 to 1 and vice versa, as well as sequences that may overlap.
+
+Output Signal Timing:
+- The output signals (`disc`, `flag`, `err`) are to be asserted for exactly one clock cycle and will be deasserted in the subsequent cycle unless reasserted by the FSM based on new input conditions.
+</ENHANCED_SPEC>

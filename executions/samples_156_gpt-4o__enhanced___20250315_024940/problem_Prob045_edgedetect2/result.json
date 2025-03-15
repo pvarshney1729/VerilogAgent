@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic [7:0] in,\n    output logic [7:0] anyedge\n);\n\n    // Internal signal to hold the previous state of 'in'\n    logic [7:0] prev_in;\n\n    // Sequential logic to detect edges on the rising clock edge\n    always @(posedge clk) begin\n        // Update 'anyedge' based on the transition from 'prev_in' to 'in'\n        anyedge <= (in ^ prev_in) & (prev_in != in);\n        // Update 'prev_in' to the current 'in' for the next clock cycle\n        prev_in <= in;\n    end\n\n    // Initialize 'prev_in' to zero at the start of simulation\n    initial begin\n        prev_in = 8'b0;\n        anyedge = 8'b0; // Initialize anyedge to zero\n    end\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    }
+}

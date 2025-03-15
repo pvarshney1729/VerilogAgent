@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic branch_taken,\n    input logic [1:0] predict_history,\n    output logic prediction,\n    output logic [1:0] updated_history\n);\n\n    logic [1:0] history_reg;\n\n    // Synchronous reset and history update logic\n    always @(posedge clk) begin\n        if (reset) begin\n            history_reg <= 2'b00; // Initialize to zero on reset\n        end else begin\n            // Update history based on branch taken\n            if (branch_taken) begin\n                history_reg <= {history_reg[0], 1'b1}; // Shift in 1\n            end else begin\n                history_reg <= {history_reg[0], 1'b0}; // Shift in 0\n            end\n        end\n    end\n\n    // Prediction logic based on history\n    always @(*) begin\n        case (history_reg)\n            2'b00: prediction = 1'b0; // Strongly not taken\n            2'b01: prediction = 1'b0; // Weakly not taken\n            2'b10: prediction = 1'b1; // Weakly taken\n            2'b11: prediction = 1'b1; // Strongly taken\n            default: prediction = 1'b0; // Default case\n        endcase\n    end\n\n    // Assign updated history to output\n    assign updated_history = history_reg;\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    },
-    "iterations_used": 3
-}

@@ -1,7 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,              // Clock input, active on rising edge\n    input logic L,                // Load signal; when high, loads input data\n    input logic [2:0] r_in,      // 3-bit input data for loading registers\n    input logic q_in,            // Input for multiplexer (1 bit)\n    output logic q_out           // Output from the flip-flop (1 bit)\n);\n\nalways @(posedge clk) begin\n    if (L) begin\n        // Load behavior\n        q_out <= r_in[0]; // Assuming q_out is the least significant bit\n    end else begin\n        // Multiplexing behavior: select q_in when L is low\n        q_out <= q_in;\n    end\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "C"
-    }
-}

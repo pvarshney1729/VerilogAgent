@@ -1,0 +1,7 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input [3:0] a,\n    input [3:0] b,\n    input [3:0] c,\n    input [3:0] d,\n    input [3:0] e,\n    output [3:0] q\n);\n    logic [3:0] f;\n\n    always @(*) begin\n        case (c)\n            4'b0000: q = b; // When c is 0\n            4'b0001: q = e; // When c is 1\n            4'b0010: q = a; // When c is 2\n            4'b0011: q = d; // When c is 3\n            default: q = 4'b1111; // Assuming f is 4'b1111 for c >= 4\n        endcase\n    end\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "w"
+    }
+}

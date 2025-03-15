@@ -1,0 +1,29 @@
+module TopModule (
+    input  logic clk,
+    input  logic x,
+    output logic z
+);
+
+    logic FF1_out, FF2_out, FF3_out;
+    logic xor_out, and_out, or_out;
+
+    // Combinational logic
+    always @(*) begin
+        xor_out = x ^ FF1_out;
+        and_out = x & ~FF2_out;
+        or_out  = x | ~FF3_out;
+    end
+
+    // D flip-flops with synchronous reset
+    always @(posedge clk) begin
+        FF1_out <= xor_out;
+        FF2_out <= and_out;
+        FF3_out <= or_out;
+    end
+
+    // Output z as the NOR of the flip-flop outputs
+    assign z = ~(FF1_out | FF2_out | FF3_out);
+
+endmodule
+
+// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly

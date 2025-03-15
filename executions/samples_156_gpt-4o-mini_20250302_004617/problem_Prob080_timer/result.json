@@ -1,8 +1,0 @@
-{
-    "code": "module counter (\n    input logic clk,\n    input logic rst_n,\n    input logic [9:0] load_val,\n    output logic [9:0] count,\n    output logic terminal_count\n);\n\n    logic [9:0] count_reg;\n\n    // Synchronous reset and counting logic\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            count_reg <= 10'b0; // Initialize to zero on reset\n        end else if (count_reg == 10'b1111111111) begin\n            count_reg <= 10'b0; // Reset count on terminal count\n        end else begin\n            count_reg <= count_reg + 1'b1; // Increment count\n        end\n    end\n\n    // Load value logic\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            count_reg <= 10'b0; // Initialize to zero on reset\n        end else begin\n            count_reg <= load_val; // Load value when not resetting\n        end\n    end\n\n    assign count = count_reg;\n    assign terminal_count = (count_reg == 10'b1111111111);\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "m"
-    },
-    "iterations_used": 3
-}

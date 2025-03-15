@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (synchronous clock signal, active on the rising edge)
+  - in: 8-bit input vector (bit[0] is the least significant bit (LSB), bit[7] is the most significant bit (MSB))
+
+- Output Ports:
+  - anyedge: 8-bit output vector (bit[0] corresponds to the LSB, bit[7] corresponds to the MSB)
+
+Functional Specification:
+The TopModule shall implement combinational logic to detect transitions (edges) in the 8-bit input vector 'in' from one clock cycle to the next. For each bit in 'in':
+- The output bit 'anyedge[i]' (where i ranges from 0 to 7) shall be set to '1' in the clock cycle immediately following a transition from '0' to '1' or from '1' to '0' of the corresponding input bit 'in[i]'.
+- If no transition occurs for a given input bit during the current clock cycle, the output bit 'anyedge[i]' shall be set to '0'.
+
+Sequential Logic:
+- The output 'anyedge' will be updated on the positive edge of the 'clk' signal.
+- The output state is latched and will hold its value until the next rising edge of 'clk'.
+
+Reset Condition:
+- There shall be no explicit reset condition defined in this specification. The initial state of 'anyedge' will be undefined until the first clock cycle is processed.
+
+Edge Cases:
+- If 'in' remains constant (no transitions) across multiple clock cycles, the corresponding bits in 'anyedge' shall remain '0'.
+- The behavior of 'anyedge' during the first clock cycle after powering up is dependent on the state of 'in' and should not be relied upon until the first transition is detected.
+
+Implementation Notes:
+- Ensure to handle all bits of the input vector independently.
+- All output bits should not be driven simultaneously; ensure proper timing to avoid race conditions.
+</ENHANCED_SPEC>

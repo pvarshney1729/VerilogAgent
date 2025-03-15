@@ -1,8 +1,0 @@
-{
-    "code": "module TopModule (\n    input logic clk,    // Clock signal\n    input logic in,     // Data input\n    output logic out    // Output of the D flip-flop\n);\n\n// Initialize the output on startup\ninitial begin\n    out = 1'b0;\nend\n\n// Sequential logic: D flip-flop with XOR feedback\nalways_ff @(posedge clk) begin\n    out <= in ^ out;\nend\n\nendmodule",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "."
-    },
-    "iterations_used": 3
-}

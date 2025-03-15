@@ -1,7 +1,0 @@
-{
-    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic a,\n    output logic q\n);\n\n    // Internal register to hold the state of q\n    logic q_next;\n\n    // Sequential logic to update q on the rising edge of clk\n    always_ff @(posedge clk) begin\n        q <= q_next;\n    end\n\n    // Combinational logic to determine the next state of q\n    always_comb begin\n        if (a == 1'b0) begin\n            q_next = 1'b1;\n        end else begin\n            q_next = 1'b0;\n        end\n    end\n\n    // Initial condition to set q to 0 at time 0ns\n    initial begin\n        q = 1'b0;\n    end\n\nendmodule\n```",
-    "test_results": {
-        "num_mismatch": 0,
-        "passfail": "S"
-    }
-}
