@@ -1,0 +1,8 @@
+{
+    "code": "module shift_register (\n    input logic clk,\n    input logic reset,\n    input logic load,\n    input logic shift_left,\n    input logic [5:0] shift_amount,\n    input logic [63:0] data_in,\n    output logic [63:0] data_out\n);\n\n    logic [63:0] reg_data;\n\n    always @(*) begin\n        if (reset) begin\n            reg_data = 64'b0;\n        end else if (load) begin\n            reg_data = data_in;\n        end else begin\n            if (shift_left) begin\n                reg_data = reg_data << shift_amount;\n            end else begin\n                reg_data = reg_data >> shift_amount; // Arithmetic right shift\n            end\n        end\n    end\n\n    assign data_out = reg_data;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [9:0] state\n);\n\n    logic [9:0] current_state, next_state;\n\n    // Synchronous reset and state transition\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= 10'b0000000001; // Initialize to state 0\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Combinational logic for next state\n    always @(*) begin\n        case (current_state)\n            10'b0000000001: next_state = 10'b0000000010; // State 0 to State 1\n            10'b0000000010: next_state = 10'b0000000100; // State 1 to State 2\n            10'b0000000100: next_state = 10'b0000001000; // State 2 to State 3\n            10'b0000001000: next_state = 10'b0000010000; // State 3 to State 4\n            10'b0000010000: next_state = 10'b0000100000; // State 4 to State 5\n            10'b0000100000: next_state = 10'b0001000000; // State 5 to State 6\n            10'b0001000000: next_state = 10'b0010000000; // State 6 to State 7\n            10'b0010000000: next_state = 10'b0100000000; // State 7 to State 8\n            10'b0100000000: next_state = 10'b1000000000; // State 8 to State 9\n            10'b1000000000: next_state = 10'b0000000001; // State 9 to State 0\n            default: next_state = 10'b0000000001; // Default to State 0\n        endcase\n    end\n\n    assign state = current_state;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

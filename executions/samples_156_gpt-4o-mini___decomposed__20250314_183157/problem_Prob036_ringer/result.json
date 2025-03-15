@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic ring,\n    input  logic vibrate_mode,\n    output logic ringer,\n    output logic motor\n);\n\nalways @(*) begin\n    if (ring) begin\n        ringer = ~vibrate_mode;\n        motor = vibrate_mode;\n    end else begin\n        ringer = 0;\n        motor = 0;\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

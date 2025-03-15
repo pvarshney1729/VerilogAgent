@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic load,\n    input logic [511:0] data,\n    output logic [511:0] q\n);\n\n    logic [511:0] current_state, next_state;\n\n    always @(posedge clk) begin\n        if (load) begin\n            current_state <= data;\n        end else begin\n            current_state[0] <= 1'b0; // Boundary condition\n            current_state[511] <= 1'b0; // Boundary condition\n            for (integer i = 1; i < 511; i = i + 1) begin\n                case ({current_state[i+1], current_state[i], current_state[i-1]})\n                    3'b111: next_state[i] = 1'b0;\n                    3'b110: next_state[i] = 1'b1;\n                    3'b101: next_state[i] = 1'b1;\n                    3'b100: next_state[i] = 1'b0;\n                    3'b011: next_state[i] = 1'b1;\n                    3'b010: next_state[i] = 1'b1;\n                    3'b001: next_state[i] = 1'b1;\n                    3'b000: next_state[i] = 1'b0;\n                endcase\n            end\n            current_state <= next_state;\n        end\n    end\n\n    assign q = current_state;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 6220,
+        "passfail": "R"
+    }
+}

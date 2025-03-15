@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic rst_n,\n    input logic [2:0] a,\n    input logic [2:0] b,\n    output logic [2:0] bitwise_or,\n    output logic [2:0] logical_or,\n    output logic [2:0] not_a\n);\n\n    always @(*) begin\n        bitwise_or = a | b;\n        logical_or = {a[2] | b[2], a[1] | b[1], a[0] | b[0]};\n        not_a = ~a;\n    end\n\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            bitwise_or <= 3'b000;\n            logical_or <= 3'b000;\n            not_a <= 3'b000;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

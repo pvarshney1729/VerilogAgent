@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [3:0] state\n);\n\n    // One-hot state representation\n    logic [3:0] current_state, next_state;\n\n    // State encoding\n    localparam S0 = 4'b0001;\n    localparam S1 = 4'b0010;\n    localparam S2 = 4'b0100;\n    localparam S3 = 4'b1000;\n\n    // Synchronous reset and state transition\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= 4'b0000; // Initialize to zero\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            S0: next_state = S1;\n            S1: next_state = S2;\n            S2: next_state = S3;\n            S3: next_state = S0;\n            default: next_state = 4'b0000; // Default case\n        endcase\n    end\n\n    // Output state\n    assign state = current_state;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

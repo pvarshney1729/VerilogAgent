@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic w,\n    input logic R,\n    input logic E,\n    input logic L,\n    output logic Q\n);\n    logic Q_reg;\n\n    always @(posedge clk) begin\n        if (L) begin\n            Q_reg <= R; // Load R into Q_reg when L is asserted\n        end else if (E) begin\n            Q_reg <= w; // Shift logic when E is asserted\n        end\n    end\n\n    assign Q = Q_reg; // Assign Q_reg to output Q\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

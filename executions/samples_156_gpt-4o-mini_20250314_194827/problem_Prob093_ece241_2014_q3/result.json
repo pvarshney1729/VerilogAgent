@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    output logic y\n);\n\n    logic mux_in1, mux_in2, mux_in3, mux_in4;\n\n    // K-map logic implementation for mux_in assignments\n    assign mux_in1 = a & b;          // Example logic for mux_in1\n    assign mux_in2 = a & ~b & c;     // Example logic for mux_in2\n    assign mux_in3 = ~a & b & c;     // Example logic for mux_in3\n    assign mux_in4 = a & b & c;       // Example logic for mux_in4\n\n    // Final output logic based on mux_in assignments\n    assign y = mux_in1 | mux_in2 | mux_in3 | mux_in4;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

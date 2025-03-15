@@ -1,0 +1,8 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic rst_n,\n    input logic load,\n    input logic [9:0] load_value,\n    output logic [9:0] counter,\n    output logic tc\n);\n\n    logic [9:0] count_reg;\n    logic tc_reg;\n\n    assign counter = count_reg;\n    assign tc = tc_reg;\n\n    always @(*) begin\n        if (!rst_n) begin\n            count_reg = 10'b0;\n            tc_reg = 1'b0;\n        end else if (load) begin\n            count_reg = load_value;\n            tc_reg = 1'b0;\n        end else if (count_reg == 10'b1111111111) begin\n            tc_reg = 1'b1;\n            count_reg = count_reg; // Hold the value until load occurs\n        end else begin\n            count_reg = count_reg + 1'b1;\n            tc_reg = 1'b0;\n        end\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

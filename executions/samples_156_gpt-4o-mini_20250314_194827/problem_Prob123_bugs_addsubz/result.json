@@ -1,0 +1,8 @@
+{
+    "code": "module combinational_design (\n    input logic clk,\n    input logic reset,\n    input logic [7:0] a,\n    input logic [7:0] b,\n    output logic [7:0] result,\n    output logic overflow,\n    output logic underflow\n);\n\nlogic [8:0] sum; // Extra bit for overflow detection\n\nalways @(*) begin\n    if (reset) begin\n        result = 8'b00000000;\n        overflow = 1'b0;\n        underflow = 1'b0;\n    end else begin\n        sum = {1'b0, a} + {1'b0, b}; // Perform addition with overflow bit\n        result = sum[7:0]; // Assign lower 8 bits to result\n        overflow = sum[8]; // Set overflow if the 9th bit is set\n        underflow = 1'b0; // Underflow handling can be added if needed\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

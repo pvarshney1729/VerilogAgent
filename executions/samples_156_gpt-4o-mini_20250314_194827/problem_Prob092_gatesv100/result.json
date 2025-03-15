@@ -1,0 +1,8 @@
+{
+    "code": "module combinational_logic (\n    input logic [99:0] in_vector,\n    input logic clk,\n    input logic rst_n,\n    output logic [99:0] out_both,\n    output logic [99:0] out_any,\n    output logic [99:0] out_different\n);\n\n    always @(*) begin\n        out_both = in_vector & in_vector; // Both bits are the same\n        out_any = in_vector | in_vector;  // Any bit is high\n        out_different = in_vector ^ in_vector; // Different bits\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

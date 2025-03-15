@@ -1,0 +1,8 @@
+{
+    "code": "module xor_with_ff (\n    input logic a,\n    input logic b,\n    input logic clk,\n    input logic reset,\n    output logic xor_out,\n    output logic ff_out\n);\n\n    // Combinational logic for XOR operation\n    assign xor_out = a ^ b;\n\n    // Flip-flop with synchronous reset\n    always @(*) begin\n        if (reset) begin\n            ff_out = 1'b0; // Asynchronous reset to 0\n        end else begin\n            ff_out = ff_out; // Retain previous value\n        end\n    end\n\n    // Sequential logic for flip-flop\n    always @(posedge clk) begin\n        if (reset) begin\n            ff_out <= 1'b0; // Reset on clock edge\n        end else begin\n            ff_out <= xor_out; // Capture XOR output\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

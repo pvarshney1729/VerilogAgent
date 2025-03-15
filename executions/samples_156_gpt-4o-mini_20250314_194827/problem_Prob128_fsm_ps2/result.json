@@ -1,0 +1,8 @@
+{
+    "code": "module fsm (\n    input logic clk,\n    input logic reset,\n    input logic input_signal,\n    output logic done\n);\n\n    typedef enum logic [1:0] {\n        STATE_IDLE = 2'b00,\n        STATE_PROCESS = 2'b01,\n        STATE_DONE = 2'b10\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // Synchronous reset and state transition\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= STATE_IDLE;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            STATE_IDLE: begin\n                if (input_signal) begin\n                    next_state = STATE_PROCESS;\n                end else begin\n                    next_state = STATE_IDLE;\n                end\n            end\n            STATE_PROCESS: begin\n                next_state = STATE_DONE;\n            end\n            STATE_DONE: begin\n                next_state = STATE_IDLE;\n            end\n            default: begin\n                next_state = STATE_IDLE;\n            end\n        endcase\n    end\n\n    // Done signal logic\n    assign done = (current_state == STATE_DONE);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

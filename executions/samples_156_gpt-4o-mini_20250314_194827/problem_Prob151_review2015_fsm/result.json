@@ -1,0 +1,8 @@
+{
+    "code": "module sequence_detector (\n    input logic clk,\n    input logic reset,\n    input logic din,\n    output logic detected\n);\n\n    typedef enum logic [2:0] {\n        S0 = 3'b000,\n        S1 = 3'b001,\n        S2 = 3'b010,\n        S3 = 3'b011,\n        S4 = 3'b100\n    } state_t;\n\n    state_t current_state, next_state;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            current_state <= S0;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    always_comb begin\n        case (current_state)\n            S0: begin\n                if (din) next_state = S1;\n                else next_state = S0;\n                detected = 1'b0;\n            end\n            S1: begin\n                if (din) next_state = S2;\n                else next_state = S0;\n                detected = 1'b0;\n            end\n            S2: begin\n                if (din) next_state = S3;\n                else next_state = S0;\n                detected = 1'b0;\n            end\n            S3: begin\n                if (din) next_state = S4;\n                else next_state = S0;\n                detected = 1'b0;\n            end\n            S4: begin\n                next_state = S0;\n                detected = 1'b1;\n            end\n            default: begin\n                next_state = S0;\n                detected = 1'b0;\n            end\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

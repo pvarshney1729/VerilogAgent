@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic train_valid,\n    input logic train_taken,\n    output logic [3:0] state\n);\n\n    logic [3:0] current_state;\n    logic [3:0] next_state;\n\n    // Synchronous reset and state update\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= 4'b0000; // Initialize state to zero\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            4'b0000: next_state = train_valid ? (train_taken ? 4'b0001 : 4'b0010) : 4'b0000;\n            4'b0001: next_state = train_valid ? (train_taken ? 4'b0011 : 4'b0000) : 4'b0001;\n            4'b0010: next_state = train_valid ? (train_taken ? 4'b0000 : 4'b0011) : 4'b0010;\n            4'b0011: next_state = train_valid ? (train_taken ? 4'b0010 : 4'b0000) : 4'b0011;\n            default: next_state = 4'b0000; // Default case\n        endcase\n    end\n\n    // Output the current state\n    assign state = current_state;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

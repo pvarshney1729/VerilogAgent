@@ -1,0 +1,8 @@
+{
+    "code": "module shift_register_mux (\n    input logic clk,\n    input logic rst_n,\n    input logic shift_en,\n    input logic [7:0] data_in,\n    input logic [2:0] sel,\n    output logic [7:0] mux_out\n);\n\n    logic [7:0] shift_reg;\n\n    // Synchronous reset and shift operation\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            shift_reg <= 8'b00000000;\n        end else if (shift_en) begin\n            shift_reg <= {shift_reg[6:0], data_in[0]};\n        end\n    end\n\n    // 8-to-1 multiplexer\n    always @(*) begin\n        case (sel)\n            3'b000: mux_out = shift_reg[0];\n            3'b001: mux_out = shift_reg[1];\n            3'b010: mux_out = shift_reg[2];\n            3'b011: mux_out = shift_reg[3];\n            3'b100: mux_out = shift_reg[4];\n            3'b101: mux_out = shift_reg[5];\n            3'b110: mux_out = shift_reg[6];\n            3'b111: mux_out = shift_reg[7];\n            default: mux_out = 8'b00000000; // Default case\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

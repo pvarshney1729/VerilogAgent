@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic x,\n    output logic z\n);\n    // State encoding\n    logic state_A, state_B;\n\n    // Asynchronous reset and state transition\n    always @(posedge clk) begin\n        if (areset) begin\n            state_A <= 1'b1; // Reset to state A\n            state_B <= 1'b0;\n            z <= 1'b0;\n        end else begin\n            case ({state_A, state_B})\n                2'b10: begin // State A\n                    if (x) begin\n                        state_A <= 1'b0;\n                        state_B <= 1'b1;\n                        z <= 1'b1; // Transition to B when x=1\n                    end else begin\n                        z <= 1'b0; // Remain in A when x=0\n                    end\n                end\n                2'b01: begin // State B\n                    z <= x ? 1'b0 : 1'b1; // z=0 when x=1, z=1 when x=0\n                    // Remain in B regardless of x\n                end\n            endcase\n        end\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 210,
+        "passfail": "R"
+    }
+}

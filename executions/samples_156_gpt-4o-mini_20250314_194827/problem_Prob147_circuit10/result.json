@@ -1,0 +1,8 @@
+{
+    "code": "```verilog\nmodule my_module (\n    input logic clk,\n    input logic reset,\n    input logic b,\n    output logic q\n);\n\nlogic state;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        state <= 1'b0;\n    end else begin\n        state <= b ? 1'b1 : 1'b0; // Example condition based on input 'b'\n    end\nend\n\nalways @(*) begin\n    q = state; // Combinational logic for output 'q'\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

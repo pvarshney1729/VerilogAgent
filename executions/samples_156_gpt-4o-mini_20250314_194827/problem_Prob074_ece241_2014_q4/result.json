@@ -1,0 +1,8 @@
+{
+    "code": "module my_module (\n    input logic clk,\n    input logic rst_n,\n    input logic a,\n    input logic b,\n    output logic y\n);\n\nlogic dff_out;\n\nalways @(*) begin\n    y = a & b; // Example combinational logic (AND gate)\nend\n\nalways @(posedge clk) begin\n    if (!rst_n) begin\n        dff_out <= 1'b0; // Asynchronous reset\n    end else begin\n        dff_out <= y; // D flip-flop behavior\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

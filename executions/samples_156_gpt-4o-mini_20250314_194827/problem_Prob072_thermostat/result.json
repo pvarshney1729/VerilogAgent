@@ -1,0 +1,8 @@
+{
+    "code": "module climate_control (\n    input logic temperature,\n    input logic humidity,\n    input logic sunlight,\n    output logic fan,\n    output logic heater,\n    output logic humidifier\n);\n\n    always @(*) begin\n        fan = (temperature > 75) ? 1'b1 : 1'b0;\n        heater = (temperature < 65) ? 1'b1 : 1'b0;\n        humidifier = (humidity < 30) ? 1'b1 : 1'b0;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

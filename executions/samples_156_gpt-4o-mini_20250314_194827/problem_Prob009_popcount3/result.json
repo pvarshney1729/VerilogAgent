@@ -1,0 +1,8 @@
+{
+    "code": "module count_ones (\n    input logic [2:0] data_in,\n    input logic clk,\n    input logic rst_n,\n    output logic [1:0] count_out\n);\n\nalways @(*) begin\n    count_out = 2'b00; // Initialize count\n    if (data_in[0] == 1'b1) count_out = count_out + 2'b01;\n    if (data_in[1] == 1'b1) count_out = count_out + 2'b01;\n    if (data_in[2] == 1'b1) count_out = count_out + 2'b01;\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

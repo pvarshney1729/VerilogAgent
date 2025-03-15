@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic a,\n    input  logic b,\n    input  logic c,\n    input  logic d,\n    output logic out,\n    output logic out_n\n);\n    logic and1_out; // Intermediate wire for the AND gate output of a and b\n    logic and2_out; // Intermediate wire for the AND gate output of c and d\n\n    assign and1_out = a & b; // First AND gate\n    assign and2_out = c & d; // Second AND gate\n    assign out = and1_out | and2_out; // OR gate\n    assign out_n = ~out; // NOT gate\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

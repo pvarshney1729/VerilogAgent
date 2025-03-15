@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [4:0] q\n);\n\nlogic [4:0] lfsr_reg;\nlogic feedback;\n\nassign feedback = lfsr_reg[4] ^ lfsr_reg[2]; // Taps at positions 5 (q[4]) and 3 (q[2])\nassign q = lfsr_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        lfsr_reg <= 5'b00001; // Reset to 1\n    end else begin\n        lfsr_reg <= {feedback, lfsr_reg[4:1]}; // Shift right and insert feedback\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 4412,
+        "passfail": "R"
+    }
+}

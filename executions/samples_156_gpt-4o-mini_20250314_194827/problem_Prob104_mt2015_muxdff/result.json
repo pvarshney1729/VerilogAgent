@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic rst_n,\n    input logic load,\n    input logic [7:0] data_in,\n    output logic [7:0] data_out\n);\n\n    logic [7:0] reg_data;\n\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            reg_data <= 8'b00000000; // Asynchronous reset to zero\n        end else if (load) begin\n            reg_data <= data_in; // Load data when load signal is high\n        end\n    end\n\n    assign data_out = reg_data; // Output the current value of the register\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

@@ -1,0 +1,8 @@
+{
+    "code": "```verilog\nmodule JK_flip_flop (\n    input logic J,\n    input logic K,\n    input logic clk,\n    input logic rst,\n    output logic Q\n);\n    logic Q_next;\n\n    always @(*) begin\n        if (J == 1'b0 && K == 1'b0) begin\n            Q_next = Q; // No change\n        end else if (J == 1'b1 && K == 1'b0) begin\n            Q_next = 1'b1; // Set\n        end else if (J == 1'b0 && K == 1'b1) begin\n            Q_next = 1'b0; // Reset\n        end else begin\n            Q_next = ~Q; // Toggle\n        end\n    end\n\n    always @(posedge clk) begin\n        if (rst == 1'b1) begin\n            Q <= 1'b0; // Synchronous reset\n        end else begin\n            Q <= Q_next; // Update Q on clock edge\n        end\n    end\n\n    initial begin\n        Q = 1'b0; // Initialize Q to zero\n    end\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

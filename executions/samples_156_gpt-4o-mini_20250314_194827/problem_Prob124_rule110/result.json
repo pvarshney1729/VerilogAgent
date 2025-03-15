@@ -1,0 +1,8 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,\n    input logic reset,\n    input logic load,\n    input logic [511:0] initial_state,\n    output logic [511:0] current_state\n);\n\n    logic [511:0] state;\n\n    // Initialize state to zero\n    initial begin\n        state = 512'b0;\n    end\n\n    // Synchronous reset and load functionality\n    always @(posedge clk) begin\n        if (reset) begin\n            state <= 512'b0;\n        end else if (load) begin\n            state <= initial_state;\n        end else begin\n            // Apply Rule 110\n            logic [511:0] next_state;\n            next_state[0] = state[0] ^ (state[1] | state[2]);\n            for (int i = 1; i < 511; i++) begin\n                next_state[i] = state[i-1] ^ (state[i] | state[i+1]);\n            end\n            next_state[511] = state[510] ^ (state[511] | state[0]);\n            state <= next_state;\n        end\n    end\n\n    // Output current state\n    assign current_state = state;\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

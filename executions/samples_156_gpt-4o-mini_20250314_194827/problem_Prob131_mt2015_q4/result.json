@@ -1,0 +1,8 @@
+{
+    "code": "module A (\n    input logic clk,\n    input logic rst,\n    input logic a,\n    input logic b,\n    output logic y\n);\n    always @(posedge clk) begin\n        if (rst) begin\n            y <= 1'b0;\n        end else begin\n            y <= a & b; // Example combinational logic\n        end\n    end\nendmodule\n\nmodule B (\n    input logic clk,\n    input logic rst,\n    input logic c,\n    input logic d,\n    output logic z\n);\n    always @(posedge clk) begin\n        if (rst) begin\n            z <= 1'b0;\n        end else begin\n            z <= c | d; // Example combinational logic\n        end\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

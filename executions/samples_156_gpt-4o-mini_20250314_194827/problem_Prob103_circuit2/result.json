@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    output logic q\n);\n\nalways @(*) begin\n    case ({a, b, c})\n        3'b000: q = 1'b0;\n        3'b001: q = 1'b1;\n        3'b010: q = 1'b1;\n        3'b011: q = 1'b0;\n        3'b100: q = 1'b1;\n        3'b101: q = 1'b1;\n        3'b110: q = 1'b0;\n        3'b111: q = 1'b0;\n        default: q = 1'b0;\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

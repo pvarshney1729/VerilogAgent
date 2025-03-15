@@ -1,0 +1,8 @@
+{
+    "code": "module rotation_load (\n    input logic clk,\n    input logic rst_n,\n    input logic ena,\n    input logic [7:0] data_in,\n    output logic [7:0] data_out\n);\n\n    logic [7:0] reg_data;\n\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            reg_data <= 8'b00000000;\n        end else if (ena) begin\n            reg_data <= {reg_data[6:0], reg_data[7]}; // Left rotation\n        end\n    end\n\n    assign data_out = reg_data;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module water_flow_control (\n    input logic clk,\n    input logic reset,\n    input logic water_level_high,\n    input logic water_level_low,\n    output logic flow_rate_control,\n    output logic dfr\n);\n\n    logic previous_dfr;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            flow_rate_control <= 1'b0;\n            dfr <= 1'b0;\n            previous_dfr <= 1'b0;\n        end else begin\n            // Flow rate control logic based on water level sensors\n            if (water_level_high) begin\n                flow_rate_control <= 1'b0; // Stop flow if high\n            end else if (water_level_low) begin\n                flow_rate_control <= 1'b1; // Allow flow if low\n            end\n            \n            // Track previous state for dfr\n            previous_dfr <= dfr;\n            dfr <= flow_rate_control; // Update dfr based on flow rate control\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

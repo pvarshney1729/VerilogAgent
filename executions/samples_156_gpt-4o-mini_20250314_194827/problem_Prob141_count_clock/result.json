@@ -1,0 +1,8 @@
+{
+    "code": "module bcd_clock (\n    input logic clk,\n    input logic reset,\n    output logic [3:0] hours,\n    output logic [3:0] minutes,\n    output logic [3:0] seconds,\n    output logic am_pm\n);\n\n    logic [3:0] hour_count;\n    logic [5:0] minute_count;\n    logic [5:0] second_count;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            hour_count <= 4'b0000;\n            minute_count <= 6'b000000;\n            second_count <= 6'b000000;\n            am_pm <= 1'b0; // AM\n        end else begin\n            // Increment seconds\n            if (second_count == 6'b111011) begin // 59\n                second_count <= 6'b000000;\n                // Increment minutes\n                if (minute_count == 6'b111011) begin // 59\n                    minute_count <= 6'b000000;\n                    // Increment hours\n                    if (hour_count == 4'b1100) begin // 12\n                        hour_count <= 4'b0001; // Reset to 1\n                        am_pm <= ~am_pm; // Toggle AM/PM\n                    end else begin\n                        hour_count <= hour_count + 4'b0001;\n                    end\n                end else begin\n                    minute_count <= minute_count + 6'b000001;\n                end\n            end else begin\n                second_count <= second_count + 6'b000001;\n            end\n        end\n    end\n\n    assign hours = hour_count;\n    assign minutes = minute_count[5:4] * 4'b1010 + minute_count[3:0]; // Convert to BCD\n    assign seconds = second_count[5:4] * 4'b1010 + second_count[3:0]; // Convert to BCD\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

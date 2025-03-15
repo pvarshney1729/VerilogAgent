@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic shift_ena,\n    input logic count_ena,\n    input logic data,\n    output logic [3:0] q\n);\n    logic [3:0] shift_reg;\n\n    always @(posedge clk) begin\n        if (shift_ena) begin\n            shift_reg <= {shift_reg[2:0], data}; // Shift in data\n        end else if (count_ena) begin\n            shift_reg <= shift_reg - 4'b0001; // Decrement the counter\n        end\n    end\n\n    assign q = shift_reg;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

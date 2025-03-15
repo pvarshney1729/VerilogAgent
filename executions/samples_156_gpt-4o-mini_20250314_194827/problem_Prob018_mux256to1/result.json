@@ -1,0 +1,8 @@
+{
+    "code": "module mux256to1 (\n    input logic [255:0] data,\n    input logic [7:0] sel,\n    output logic out\n);\n\n    always @(*) begin\n        if (sel < 8'd256) begin\n            out = data[sel];\n        end else begin\n            out = 1'b0; // Define behavior for out-of-range 'sel' values\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "R"
+    },
+    "iterations_used": 3
+}

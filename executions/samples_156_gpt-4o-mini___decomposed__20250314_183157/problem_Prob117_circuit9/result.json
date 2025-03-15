@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input clk,\n    input a,\n    output reg [2:0] q\n);\n\n    always @(posedge clk) begin\n        case (q)\n            3'b100: if (a) q <= 3'b100; else q <= 3'b100; // 4\n            3'b101: if (a) q <= 3'b110; else q <= 3'b000; // 5\n            3'b110: if (a) q <= 3'b000; else q <= 3'b001; // 6\n            3'b000: if (a) q <= 3'b001; else q <= 3'b000; // 0\n            3'b001: if (a) q <= 3'b100; else q <= 3'b000; // 1\n            default: q <= 3'b100; // reset to state 4\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 194,
+        "passfail": "R"
+    }
+}

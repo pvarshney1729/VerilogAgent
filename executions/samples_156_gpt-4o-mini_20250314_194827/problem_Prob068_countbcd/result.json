@@ -1,0 +1,8 @@
+{
+    "code": "module bcd_counter (\n    input logic clk,\n    input logic rst_n,\n    input logic enable,\n    output logic [15:0] count\n);\n\n    logic [15:0] count_next;\n\n    always @(*) begin\n        if (!rst_n) begin\n            count_next = 16'b0;\n        end else if (enable) begin\n            if (count == 16'd9999) begin\n                count_next = 16'b0;\n            end else if (count[3:0] == 4'd9) begin\n                if (count[7:4] == 4'd9) begin\n                    if (count[11:8] == 4'd9) begin\n                        count_next = count + 16'd1;\n                    end else begin\n                        count_next = {count[15:12], count[11:8] + 4'd1, 4'b0};\n                    end\n                end else begin\n                    count_next = {count[15:8], count[7:4] + 4'd1, 4'b0};\n                end\n            end else begin\n                count_next = count + 16'd1;\n            end\n        end else begin\n            count_next = count;\n        end\n    end\n\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            count <= 16'b0;\n        end else if (enable) begin\n            count <= count_next;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

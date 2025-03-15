@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic slowena,\n    output logic [3:0] count\n);\n\n    logic [3:0] count_reg;\n\n    always @(*) begin\n        if (reset) begin\n            count_reg = 4'b0000;\n        end else if (slowena) begin\n            if (count_reg == 4'b1001) begin\n                count_reg = 4'b0000;\n            end else begin\n                count_reg = count_reg + 4'b0001;\n            end\n        end else begin\n            count_reg = count_reg; // Hold current value if slowena is not asserted\n        end\n    end\n\n    assign count = count_reg;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "R"
+    },
+    "iterations_used": 3
+}

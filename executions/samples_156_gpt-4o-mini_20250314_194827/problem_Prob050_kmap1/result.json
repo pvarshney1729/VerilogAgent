@@ -1,0 +1,8 @@
+{
+    "code": "module combinational_logic (\n    input logic A,\n    input logic B,\n    input logic C,\n    output logic F\n);\n\nalways @(*) begin\n    case ({A, B, C})\n        3'b000: F = 1'b0;\n        3'b001: F = 1'b1;\n        3'b010: F = 1'b1;\n        3'b011: F = 1'b0;\n        3'b100: F = 1'b1;\n        3'b101: F = 1'b0;\n        3'b110: F = 1'b0;\n        3'b111: F = 1'b1;\n        default: F = 1'b0;\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

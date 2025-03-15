@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\nlogic q_xor, q_and, q_or;\n\n// D Flip-Flops for XOR, AND, OR gates with synchronous reset\nalways @(posedge clk) begin\n    q_xor <= 1'b0; // Reset D flip-flop for XOR\n    q_and <= 1'b0; // Reset D flip-flop for AND\n    q_or  <= 1'b0; // Reset D flip-flop for OR\nend\n\n// D flip-flops to hold the outputs of the gates\nalways @(posedge clk) begin\n    q_xor <= x ^ q_xor;\n    q_and <= x & ~q_and;\n    q_or  <= x | ~q_or;\nend\n\n// Three-input NOR gate\nassign z = ~(q_xor | q_and | q_or);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 70,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic x,\n    input logic y,\n    output logic z\n);\n\nalways @(*) begin\n    case ({x, y})\n        2'b00: z = 1; // State 1\n        2'b01: z = 0; // State 2\n        2'b10: z = 0; // State 3\n        2'b11: z = 1; // State 4\n        default: z = 0; // Default state\n    endcase\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

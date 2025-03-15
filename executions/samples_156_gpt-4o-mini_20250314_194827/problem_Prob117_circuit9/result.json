@@ -1,0 +1,8 @@
+{
+    "code": "module my_module (\n    input logic clk,\n    input logic rst_n,\n    input logic a,\n    output logic q\n);\n    logic state;\n\n    always @(posedge clk) begin\n        if (!rst_n) begin\n            state <= 1'b0;\n        end else begin\n            state <= a; // Example state behavior\n        end\n    end\n\n    assign q = state;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [3:0] count\n);\n\n    logic [3:0] counter;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            counter <= 4'b0000; // Initialize counter to 0 on reset\n        end else if (counter < 4'b1010) begin\n            counter <= counter + 4'b0001; // Increment counter\n        end else begin\n            counter <= 4'b0001; // Reset to 1 after reaching 10\n        end\n    end\n\n    assign count = counter;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations_used": 3
+}

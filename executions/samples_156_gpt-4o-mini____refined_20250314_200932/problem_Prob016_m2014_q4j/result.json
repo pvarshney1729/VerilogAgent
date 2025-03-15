@@ -1,0 +1,25 @@
+{
+    "code": "module TopModule (\n    input logic [3:0] x,\n    input logic [3:0] y,\n    output logic [4:0] sum\n);\n\n    logic [4:0] a, b, c; // Intermediate signals for full adder\n\n    always @(*) begin\n        {c[0], a[0]} = x[0] + y[0]; // Full adder for bit 0\n        {c[1], a[1]} = x[1] + y[1] + c[0]; // Full adder for bit 1\n        {c[2], a[2]} = x[2] + y[2] + c[1]; // Full adder for bit 2\n        {c[3], a[3]} = x[3] + y[3] + c[2]; // Full adder for bit 3\n        sum = {c[3], a[3:0]}; // Concatenate overflow bit with sum\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input logic [3:0] x,\n    input logic [3:0] y,\n    output logic [4:0] sum\n);\n\n    logic [4:0] a, b, c; // Intermediate signals for full adder\n\n    always @(*) begin\n        {c[0], a[0]} = x[0] + y[0]; // Full adder for bit 0\n        {c[1], a[1]} = x[1] + y[1] + c[0]; // Full adder for bit 1\n        {c[2], a[2]} = x[2] + y[2] + c[1]; // Full adder for bit 2\n        {c[3], a[3]} = x[3] + y[3] + c[2]; // Full adder for bit 3\n        sum = {c[3], a[3:0]}; // Concatenate overflow bit with sum\n    end\n\nendmodule",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)"
+            ]
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": [
+        "Numeric constants should have explicit size (e.g., 1'b0 not 0)"
+    ],
+    "testbench_results": {
+        "passed": true,
+        "output": "Simulation finished at 110 ps\nTEST PASSED\n",
+        "testbench": "`timescale 1ns/1ps\n\nmodule TopModule_tb;\n\n    logic [3:0] x;\n    logic [3:0] y;\n    logic [4:0] sum;\n\n    // Stats for tracking errors\n      int errors;\n    // Instantiate the Device Under Test (DUT)\n    TopModule dut (\n        .x(x),\n        .y(y),\n        .sum(sum)\n    );\n\n    // Test stimulus\n    initial begin\n        // Initialize inputs\n        x = 4'b0;\n        y = 4'b0;\n\n        // Wait for reset\n        #10;\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n\n        // Apply input stimulus\n        #10;\n\n        // Check output\n    end\n\n    // Final reporting\n    final begin\n        $display(\"Simulation finished at %0d ps\", $time);\n        if (errors == 0)\n            $display(\"TEST PASSED\");\n        else\n            $display(\"TEST FAILED with %0d errors\", errors);\n    end\n\nendmodule\n"
+    }
+}

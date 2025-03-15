@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic rst,\n    output logic z\n);\n\n    logic internal_signal;\n\n    // Initialize z to 1 at simulation start\n    initial begin\n        z = 1'b1;\n    end\n\n    // Synchronous reset implementation\n    always @(posedge clk) begin\n        if (rst) begin\n            internal_signal <= 1'b0; // Reset internal signal\n            z <= 1'b1; // Reset z to 1\n        end else begin\n            // Implement the correct logical operation for z\n            internal_signal <= /* logic operation here */;\n            z <= internal_signal; // Update z based on internal_signal\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 3
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic [3:0] x,\n    input  logic [3:0] y,\n    output logic [4:0] sum\n);\n    logic c1, c2, c3; // Carry bits between full adders\n    logic sum0, sum1, sum2, sum3; // Sum outputs from full adders\n\n    // First full adder\n    FullAdder FA0 (\n        .x(x[0]),\n        .y(y[0]),\n        .cin(1'b0),\n        .sum(sum0),\n        .cout(c1)\n    );\n\n    // Second full adder\n    FullAdder FA1 (\n        .x(x[1]),\n        .y(y[1]),\n        .cin(c1),\n        .sum(sum1),\n        .cout(c2)\n    );\n\n    // Third full adder\n    FullAdder FA2 (\n        .x(x[2]),\n        .y(y[2]),\n        .cin(c2),\n        .sum(sum2),\n        .cout(c3)\n    );\n\n    // Fourth full adder\n    FullAdder FA3 (\n        .x(x[3]),\n        .y(y[3]),\n        .cin(c3),\n        .sum(sum3),\n        .cout(sum[4]) // Overflow bit\n    );\n\n    // Combine the sum outputs\n    assign sum[3:0] = {sum3, sum2, sum1, sum0};\n\nendmodule\n\nmodule FullAdder (\n    input logic x,\n    input logic y,\n    input logic cin,\n    output logic sum,\n    output logic cout\n);\n    assign sum = x ^ y ^ cin;      // Sum is the XOR of x, y, and carry-in\n    assign cout = (x & y) | (cin & (x ^ y)); // Carry-out logic\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

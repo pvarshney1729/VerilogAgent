@@ -1,0 +1,8 @@
+{
+    "code": "module game_of_life (\n    input logic clk,\n    input logic reset,\n    input logic load,\n    input logic [255:0] init_data,\n    output logic [255:0] current_state\n);\n\n    logic [255:0] state;\n\n    always @(*) begin\n        if (reset) begin\n            state = 256'b0;\n        end else if (load) begin\n            state = init_data;\n        end else begin\n            logic [255:0] next_state;\n            for (int i = 0; i < 256; i++) begin\n                int live_neighbors = 0;\n                for (int j = -1; j <= 1; j++) begin\n                    for (int k = -1; k <= 1; k++) begin\n                        if (j == 0 && k == 0) continue;\n                        int neighbor_index = (i + j * 16 + k);\n                        if (neighbor_index >= 0 && neighbor_index < 256) begin\n                            live_neighbors += state[neighbor_index];\n                        end\n                    end\n                end\n                next_state[i] = (state[i] && (live_neighbors == 2 || live_neighbors == 3)) || \n                                 (!state[i] && live_neighbors == 3);\n            end\n            state = next_state;\n        end\n    end\n\n    assign current_state = state;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations_used": 3
+}

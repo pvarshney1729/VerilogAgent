@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic s,\n    input logic w,\n    output logic z\n);\n    typedef enum logic [1:0] {A, B} state_t;\n    state_t current_state, next_state;\n    logic [2:0] w_history;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            current_state <= A;\n            w_history <= 3'b000;\n            z <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            if (current_state == B) begin\n                w_history <= {w_history[1:0], w}; // Shift in new w value\n                if (w_history[2] + w_history[1] + w_history[0] == 2'b10) begin\n                    z <= 1'b1;\n                end else begin\n                    z <= 1'b0;\n                end\n            end\n        end\n    end\n\n    always_comb begin\n        case (current_state)\n            A: begin\n                if (s) begin\n                    next_state = B;\n                end else begin\n                    next_state = A;\n                end\n            end\n            B: begin\n                next_state = B; // Stay in B to continue checking w\n            end\n            default: next_state = A;\n        endcase\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 502,
+        "passfail": "R"
+    }
+}

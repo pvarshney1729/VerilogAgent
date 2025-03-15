@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic clk,  // Clock signal, positive edge-triggered\n    input logic ar,   // Asynchronous reset signal, active high\n    input logic d,    // Data input\n    output logic q    // Data output\n);\n\nalways @(posedge clk or posedge ar) begin\n    if (ar) begin\n        q <= 1'b0;  // Reset state\n    end else begin\n        q <= d;     // Data storage\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

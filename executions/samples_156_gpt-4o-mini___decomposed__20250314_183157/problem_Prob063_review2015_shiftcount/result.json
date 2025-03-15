@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic shift_ena,\n    input logic count_ena,\n    input logic data,\n    output logic [3:0] q\n);\n\nlogic [3:0] shift_reg;\n\nalways @(posedge clk) begin\n    if (shift_ena) begin\n        shift_reg <= {data, shift_reg[3:1]}; // Shift in data MSB first\n    end else if (count_ena) begin\n        shift_reg <= shift_reg - 1; // Decrement the register value\n    end\nend\n\nassign q = shift_reg;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 1886,
+        "passfail": "R"
+    }
+}

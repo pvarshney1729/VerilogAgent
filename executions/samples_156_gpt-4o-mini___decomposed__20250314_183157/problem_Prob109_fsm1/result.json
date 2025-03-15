@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic in,\n    output logic out\n);\n    // State encoding\n    parameter logic A = 1'b0;\n    parameter logic B = 1'b1;\n\n    logic state; // Current state\n\n    // State transition logic\n    always @(*) begin\n        case (state)\n            B: begin\n                if (in == 1'b0)\n                    next_state = A; // Transition to A\n                else\n                    next_state = B; // Remain in B\n            end\n            A: begin\n                if (in == 1'b0)\n                    next_state = B; // Transition to B\n                else\n                    next_state = A; // Remain in A\n            end\n        endcase\n    end\n\n    // State register with synchronous reset\n    always @(posedge clk) begin\n        if (areset) begin\n            state <= B; // Reset to state B\n        end else begin\n            state <= next_state; // Update state\n        end\n    end\n\n    // Output logic for Moore machine\n    assign out = state; // Output is the current state\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    }
+}

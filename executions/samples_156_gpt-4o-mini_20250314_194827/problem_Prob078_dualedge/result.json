@@ -1,0 +1,8 @@
+{
+    "code": "module dual_edge_ff (\n    input logic clk,\n    input logic reset,\n    input logic d,\n    output logic q\n);\n\n    logic q_next;\n\n    // Combinational logic to determine next state\n    always @(*) begin\n        if (reset) begin\n            q_next = 1'b0;\n        end else begin\n            q_next = d;\n        end\n    end\n\n    // Rising edge triggered\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 1'b0;\n        end else begin\n            q <= q_next;\n        end\n    end\n\n    // Falling edge triggered\n    always @(negedge clk) begin\n        if (reset) begin\n            q <= 1'b0;\n        end else begin\n            q <= q_next;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations_used": 3
+}

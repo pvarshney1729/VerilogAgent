@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic [3:0] in,\n    input logic clk,\n    input logic reset,\n    output logic [1:0] pos\n);\n\nalways @(*) begin\n    if (reset) begin\n        pos = 2'b00;\n    end else begin\n        case (in)\n            4'b0000: pos = 2'b00; // No high bit\n            4'b0001: pos = 2'b00; // First high bit at position 0\n            4'b0010: pos = 2'b01; // First high bit at position 1\n            4'b0100: pos = 2'b10; // First high bit at position 2\n            4'b1000: pos = 2'b11; // First high bit at position 3\n            4'b0011: pos = 2'b00; // First high bit at position 0\n            4'b0110: pos = 2'b01; // First high bit at position 1\n            4'b1100: pos = 2'b10; // First high bit at position 2\n            4'b0111: pos = 2'b00; // First high bit at position 0\n            4'b1110: pos = 2'b01; // First high bit at position 1\n            4'b1111: pos = 2'b00; // First high bit at position 0\n            default: pos = 2'b00; // Default case\n        endcase\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 7,
+        "passfail": "R"
+    },
+    "iterations_used": 3
+}

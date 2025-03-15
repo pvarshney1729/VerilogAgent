@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic [31:0] in,\n    output logic [31:0] out\n);\n\nalways @(posedge clk) begin\n    if (reset) begin\n        out <= 32'b0;\n    end else begin\n        out <= (out | (in & ~{1'b0, in[31:1]})); // Capture transitions from 1 to 0\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 161,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    output logic q\n);\n\nalways @(posedge clk) begin\n    if (a == 0) begin\n        // Maintain current state\n        q <= q;\n    end else begin\n        // Toggle logic based on previous state\n        if (q == 0) begin\n            q <= 1; // Set when q was 0\n        end else begin\n            q <= 0; // Reset when q was 1\n        end\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 56,
+        "passfail": "R"
+    }
+}

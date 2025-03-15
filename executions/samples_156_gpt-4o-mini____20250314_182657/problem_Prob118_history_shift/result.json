@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic areset,\n    input  logic predict_valid,\n    input  logic predict_taken,\n    input  logic train_mispredicted,\n    input  logic train_taken,\n    input  logic [31:0] train_history,\n    output logic [31:0] predict_history\n);\n\n    logic [31:0] history;\n\n    always @(posedge clk) begin\n        if (areset) begin\n            history <= 32'b0;\n        end else if (train_mispredicted) begin\n            history <= {train_taken, train_history[31:1]};\n        end else if (predict_valid) begin\n            history <= {predict_taken, history[31:1]};\n        end\n    end\n\n    assign predict_history = history;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 2044,
+        "passfail": "C"
+    }
+}

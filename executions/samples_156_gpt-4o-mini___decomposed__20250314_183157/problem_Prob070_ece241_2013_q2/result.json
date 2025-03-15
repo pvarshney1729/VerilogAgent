@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out_sop,\n    output logic out_pos\n);\n\n// out_sop (Sum of Products) for 2, 7, 15\nassign out_sop = (a & ~b & ~c & d) | (a & b & c & d) | (~a & b & c & d); // 2, 7, 15\n\n// out_pos (Product of Sums) for 0, 1, 4, 5, 6, 9, 10, 13, 14\nassign out_pos = (~a | b | c | ~d) & (~a | ~b | c | d) & (~a | ~b | ~c | d) & \n                 (a | ~b | ~c | d) & (a | b | ~c | ~d) & (a | b | c | ~d);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 71,
+        "passfail": "R"
+    }
+}

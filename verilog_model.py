@@ -782,7 +782,6 @@ class VerilogModel:
         Returns:
             Dict containing the final code, test results, and iteration history
         """
-
         
         # Generate initial code using the existing generator
         initial_code = self.generator.generate(
@@ -791,8 +790,8 @@ class VerilogModel:
             include_examples=False
         )
         
-        # Initialize the simple verifier
-        simple_verifier = SimpleVerifier()
+        # Initialize the verifier
+        verifier = Verifier(problem_name=self.problem_name)
         
         # Keep track of iterations and improvements
         iterations = 0
@@ -802,47 +801,55 @@ class VerilogModel:
             "code": best_code,
             "issues": []
         }]
-        
-
-        # Get stimulus for the initial code
-        initial_stimulus = simple_verifier.generate_stimulus(base_query, best_code, model=model)
-        initial_stimulus = initial_stimulus.get("stimuli", [])
 
         # Iterative refinement loop
         while iterations < max_iterations:
-            # Verify current code
-            verification_results = simple_verifier.verify(best_code, initial_stimulus)
-
-            # If no issues found, we're done
-            if not verification_results["has_issues"]:
-                print(f"No issues found after {iterations} iterations. Early exit.")
+            # Verify current code with the official verifier
+            verification_result = verifier.functional_verify(best_code, self.problem_name)
+            
+            # Access the verification result through the to_dict() method instead of treating it as a dictionary
+            verification_dict = verification_result.to_dict()
+            num_mismatch = verification_dict.get("num_mismatch", 1)
+            
+            # If no mismatches, we're done
+            if num_mismatch == 0:
+                print(f"No mismatches found after {iterations} iterations. Early exit.")
                 break
             
+            # Add basic issues based on verification result
+            issues = []
+            if verification_dict.get("passfail") != ".":
+                status_code = verification_dict.get("passfail", "?")
+                issue_messages = {
+                    "S": "Syntax error detected",
+                    "e": "Assignment requires explicit cast",
+                    "0": "Sized numeric constant must have size greater than zero",
+                    "n": "Always_comb process has no sensitivities",
+                    "w": "Signal declared as wire incorrectly",
+                    "m": "Unknown module type",
+                    "p": "Unable to bind wire/reg",
+                    "c": "Unable to bind wire/reg/memory clk",
+                    "T": "Timeout during verification",
+                    "r": "Reset signal issue",
+                    "R": "Runtime issue detected",
+                    "C": "Compilation error",
+                    "?": f"Unknown issue, mismatches: {num_mismatch}"
+                }
+                issues.append(issue_messages.get(status_code, f"Unknown issue (code: {status_code})"))
+                
             # Record issues for this iteration
-            all_iterations[-1]["issues"] = verification_results["issues"]
-            print(f"Iteration {iterations}: Found {len(verification_results['issues'])} issues")
+            all_iterations[-1]["issues"] = issues
+            print(f"Iteration {iterations}: Found issues with status code {verification_dict.get('passfail', '?')}")
             
-            # Include testbench results if available
-            testbench_info = ""
-            if verification_results.get("testbench_results") and verification_results["testbench_results"].get("success"):
-                tb_results = verification_results["testbench_results"]
-                testbench_info = f"""
-                TESTBENCH OUTPUT:
-                {tb_results.get('output', 'No output')}
-
-                The testbench {'PASSED' if tb_results.get('passed', False) else 'FAILED'}.
-                """
-            
-            # Create refinement prompt with detailed feedback
+            # Create refinement prompt with feedback
             refinement_prompt = f"""
             I need you to refine the following Verilog/SystemVerilog code to fix these issues:
 
-            ISSUES:
-            {chr(10).join(verification_results["issues"])}
+            VERIFICATION RESULT:
+            Number of mismatches: {num_mismatch}
+            Status code: {verification_dict.get("passfail", "?")}
+            Issues: {', '.join(issues)}
 
-            COMPILER OUTPUT:
-            {verification_results["compile_output"]}
-            {testbench_info}
             CURRENT CODE:
             {best_code}
 
@@ -892,33 +899,21 @@ class VerilogModel:
             print(f"Completed iteration {iterations}")
         
         # Final verification
-        final_verification = simple_verifier.verify(best_code, initial_stimulus)
+        final_test_results = verifier.functional_verify(best_code, self.problem_name)
+        final_dict = final_test_results.to_dict()
         
-        # Update the final iteration with verification results
-        if all_iterations:
-            all_iterations[-1]["issues"] = final_verification["issues"]
-        
-        # Include testbench results in the final output
-        testbench_data = {}
-        if final_verification.get("testbench_results") and final_verification["testbench_results"].get("success"):
-            tb_results = final_verification["testbench_results"]
-            testbench_data = {
-                "passed": tb_results.get("passed", False),
-                "output": tb_results.get("output", ""),
-                "testbench": tb_results.get("testbench", "")
-            }
-        
-        # Now run the official verifier on our best code
-        verifier = Verifier(problem_name=self.problem_name)
-        test_results = verifier.functional_verify(best_code, self.problem_name)
+        # Check for remaining issues
+        remaining_issues = []
+        if final_dict.get("num_mismatch", 0) > 0:
+            status_code = final_dict.get("passfail", "?")
+            remaining_issues.append(f"Status code: {status_code}, Mismatches: {final_dict.get('num_mismatch', 0)}")
         
         return {
             "code": best_code,
-            "test_results": test_results.to_dict(),
+            "test_results": final_dict,
             "iterations": all_iterations,
             "refinement_count": iterations,
-            "remaining_issues": final_verification["issues"] if final_verification["has_issues"] else [],
-            "testbench_results": testbench_data
+            "remaining_issues": remaining_issues
         }
 
     def run_pipeline(self, base_query: str, enhance_spec: bool = True, decompose: bool = True, iterative_refinement: bool = True, max_iterations: int = 2, model: str = "gpt-4o-mini", problem_dir: str = None) -> Dict:

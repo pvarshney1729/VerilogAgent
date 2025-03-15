@@ -1,0 +1,8 @@
+{
+    "code": "module TopModule (\n    input logic a,   // Unsigned 1-bit input\n    input logic b,   // Unsigned 1-bit input\n    input logic c,   // Unsigned 1-bit input\n    input logic d,   // Unsigned 1-bit input\n    output logic out,    // Unsigned 1-bit output\n    output logic out_n   // Unsigned 1-bit output, inverted version of 'out'\n);\n\n    logic and1_out; // Intermediate wire for the output of the first AND gate\n    logic and2_out; // Intermediate wire for the output of the second AND gate\n\n    // Layer 1: AND gates\n    assign and1_out = a & b; // AND gate connected to inputs a and b\n    assign and2_out = c & d; // AND gate connected to inputs c and d\n\n    // Layer 2: OR gate\n    assign out = and1_out | and2_out; // OR gate combining outputs of the AND gates\n\n    // Inverted output\n    assign out_n = ~out; // NOT gate inverting the output\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations_used": 1
+}

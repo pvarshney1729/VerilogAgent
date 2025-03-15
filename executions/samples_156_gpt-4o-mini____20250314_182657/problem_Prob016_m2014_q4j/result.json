@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic [3:0] x,\n    input  logic [3:0] y,\n    output logic [4:0] sum\n);\n\n    logic [4:0] full_sum;\n\n    always @(*) begin\n        full_sum = {1'b0, x} + {1'b0, y}; // Perform 4-bit addition with overflow\n    end\n\n    assign sum = full_sum; // Assign the result to the output\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

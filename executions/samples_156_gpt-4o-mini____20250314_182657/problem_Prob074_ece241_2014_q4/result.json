@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    logic ff_xor_out;\n    logic ff_and_out;\n    logic ff_or_out;\n\n    // D flip-flops with synchronous reset\n    always @(posedge clk) begin\n        ff_xor_out <= x ^ ff_xor_out;\n        ff_and_out <= x & ~ff_and_out;\n        ff_or_out <= x | ~ff_or_out;\n    end\n\n    // NOR gate output\n    assign z = ~(ff_xor_out | ff_and_out | ff_or_out);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 45,
+        "passfail": "R"
+    }
+}
