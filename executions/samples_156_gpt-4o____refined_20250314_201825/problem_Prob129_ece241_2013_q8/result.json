@@ -1,0 +1,16 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic aresetn,\n    input  logic x,\n    output logic z\n);\n\n    typedef enum logic [1:0] {\n        S0 = 2'b00,\n        S1 = 2'b01,\n        S2 = 2'b10\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            S0: next_state = x ? S1 : S0;\n            S1: next_state = x ? S1 : S2;\n            S2: next_state = x ? S1 : S0;\n            default: next_state = S0;\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        z = (current_state == S2) && x;\n    end\n\n    // State register with asynchronous reset\n    always @(posedge clk or negedge aresetn) begin\n        if (!aresetn)\n            current_state <= S0;\n        else\n            current_state <= next_state;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "e"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input  logic clk,\n    input  logic aresetn,\n    input  logic x,\n    output logic z\n);\n\n    typedef enum logic [1:0] {\n        S0 = 2'b00,\n        S1 = 2'b01,\n        S2 = 2'b10\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            S0: next_state = x ? S1 : S0;\n            S1: next_state = x ? S1 : S2;\n            S2: next_state = x ? S1 : S0;\n            default: next_state = S0;\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        z = (current_state == S2) && x;\n    end\n\n    // State register with asynchronous reset\n    always @(posedge clk or negedge aresetn) begin\n        if (!aresetn)\n            current_state <= S0;\n        else\n            current_state <= next_state;\n    end\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}

@@ -772,7 +772,7 @@ class VerilogModel:
         return response
 
 
-    def iterative_refinement(self, base_query: str, max_iterations: int = 5, model: str = "gpt-4o-mini") -> Dict[str, Any]:
+    def iterative_refinement(self, base_query: str, max_iterations: int = 2, model: str = "gpt-4o-mini") -> Dict[str, Any]:
         """Implement iterative refinement for Verilog code generation.
         
         Args:

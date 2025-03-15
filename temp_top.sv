@@ -1,100 +1,92 @@
 module TopModule (
-    input  logic clk,
-    input  logic reset,
-    input  logic data,
-    output logic [3:0] count,
-    output logic counting,
-    output logic done,
-    input  logic ack
+    input logic clk,
+    input logic areset,
+    input logic bump_left,
+    input logic bump_right,
+    input logic ground,
+    input logic dig,
+    output logic walk_left,
+    output logic walk_right,
+    output logic aaah,
+    output logic digging
 );
 
     typedef enum logic [2:0] {
-        IDLE,
-        SEARCH,
-        READ_DELAY,
-        COUNTING,
-        DONE
+        WALK_LEFT  = 3'b000,
+        WALK_RIGHT = 3'b001,
+        FALL_LEFT  = 3'b010,
+        FALL_RIGHT = 3'b011,
+        DIG_LEFT   = 3'b100,
+        DIG_RIGHT  = 3'b101
     } state_t;
 
-    state_t current_state, next_state;
-    logic [3:0] delay;
-    logic [9:0] counter; // 1000 cycles max
-    logic [3:0] remaining_time;
+    state_t state, next_state;
 
-    always_ff @(posedge clk) begin
-        if (reset) begin
-            current_state <= IDLE;
-            counter <= 10'b0;
-            delay <= 4'b0;
-            counting <= 1'b0;
-            done <= 1'b0;
-        end else begin
-            current_state <= next_state;
-            if (current_state == COUNTING) begin
-                if (counter < 10'd999) begin
-                    counter <= counter + 10'b1;
-                end else begin
-                    counter <= 10'b0;
-                    if (remaining_time > 4'b0) begin
-                        remaining_time <= remaining_time - 4'b1;
-                    end else begin
-                        done <= 1'b1;
-                    end
-                end
+    // State transition logic
+    always @(*) begin
+        case (state)
+            WALK_LEFT: begin
+                if (!ground)
+                    next_state = FALL_LEFT;
+                else if (dig)
+                    next_state = DIG_LEFT;
+                else if (bump_left || bump_right)
+                    next_state = WALK_RIGHT;
+                else
+                    next_state = WALK_LEFT;
             end
-        end
+            WALK_RIGHT: begin
+                if (!ground)
+                    next_state = FALL_RIGHT;
+                else if (dig)
+                    next_state = DIG_RIGHT;
+                else if (bump_left || bump_right)
+                    next_state = WALK_LEFT;
+                else
+                    next_state = WALK_RIGHT;
+            end
+            FALL_LEFT: begin
+                if (ground)
+                    next_state = WALK_LEFT;
+                else
+                    next_state = FALL_LEFT;
+            end
+            FALL_RIGHT: begin
+                if (ground)
+                    next_state = WALK_RIGHT;
+                else
+                    next_state = FALL_RIGHT;
+            end
+            DIG_LEFT: begin
+                if (!ground)
+                    next_state = FALL_LEFT;
+                else
+                    next_state = DIG_LEFT;
+            end
+            DIG_RIGHT: begin
+                if (!ground)
+                    next_state = FALL_RIGHT;
+                else
+                    next_state = DIG_RIGHT;
+            end
+            default: next_state = WALK_LEFT;
+        endcase
     end
 
-    always_ff @(posedge clk) begin
-        if (reset) begin
-            delay <= 4'b0;
-            counting <= 1'b0;
-        end else begin
-            case (current_state)
-                IDLE: begin
-                    done <= 1'b0;
-                    if (data == 1'b1) begin
-                        next_state <= SEARCH;
-                    end else begin
-                        next_state <= IDLE;
-                    end
-                end
-                SEARCH: begin
-                    if (data == 1'b1) begin
-                        next_state <= READ_DELAY;
-                    end else begin
-                        next_state <= IDLE;
-                    end
-                end
-                READ_DELAY: begin
-                    delay <= {delay[2:0], data}; // Shift in the next bit
-                    if (delay[3] == 1'b1) begin
-                        next_state <= COUNTING;
-                        remaining_time <= delay;
-                        counting <= 1'b1;
-                    end else begin
-                        next_state <= IDLE;
-                    end
-                end
-                COUNTING: begin
-                    if (done) begin
-                        next_state <= DONE;
-                    end else begin
-                        next_state <= COUNTING;
-                    end
-                end
-                DONE: begin
-                    if (ack) begin
-                        next_state <= IDLE;
-                    end else begin
-                        next_state <= DONE;
-                    end
-                end
-                default: next_state <= IDLE;
-            endcase
-        end
+    // State register with synchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset)
+            state <= WALK_LEFT;
+        else
+            state <= next_state;
     end
 
-    assign count = (counting) ? remaining_time : 4'bxxxx;
+    // Output logic
+    always @(*) begin
+        walk_left = (state == WALK_LEFT);
+        walk_right = (state == WALK_RIGHT);
+        aaah = (state == FALL_LEFT) || (state == FALL_RIGHT);
+        digging = (state == DIG_LEFT) || (state == DIG_RIGHT);
+    end
 
 endmodule

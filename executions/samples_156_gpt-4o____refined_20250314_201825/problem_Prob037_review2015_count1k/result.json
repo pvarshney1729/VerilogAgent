@@ -1,0 +1,16 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic reset,\n    output logic [9:0] q\n);\n\n    logic [9:0] counter;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            counter <= 10'd0;\n        end else if (counter == 10'd999) begin\n            counter <= 10'd0;\n        end else begin\n            counter <= counter + 10'd1;\n        end\n    end\n\n    assign q = counter;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input  logic clk,\n    input  logic reset,\n    output logic [9:0] q\n);\n\n    logic [9:0] counter;\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            counter <= 10'd0;\n        end else if (counter == 10'd999) begin\n            counter <= 10'd0;\n        end else begin\n            counter <= counter + 10'd1;\n        end\n    end\n\n    assign q = counter;\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}

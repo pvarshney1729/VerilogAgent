@@ -1,0 +1,16 @@
+{
+    "code": "module A (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    always @(*) begin\n        z = (x ^ y) & x;\n    end\nendmodule\n\nmodule B (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    always @(*) begin\n        case ({x, y})\n            2'b00: z = 1'b1;\n            2'b01: z = 1'b0;\n            2'b10: z = 1'b0;\n            2'b11: z = 1'b1;\n            default: z = 1'b0;\n        endcase\n    end\nendmodule\n\nmodule top_module (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    logic a1_out, a2_out, b1_out, b2_out;\n    logic or_out, and_out;\n\n    A a1 (.x(x), .y(y), .z(a1_out));\n    A a2 (.x(x), .y(y), .z(a2_out));\n    B b1 (.x(x), .y(y), .z(b1_out));\n    B b2 (.x(x), .y(y), .z(b2_out));\n\n    always @(*) begin\n        or_out = a1_out | b1_out;\n        and_out = a2_out & b2_out;\n        z = or_out ^ and_out;\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "m"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module A (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    always @(*) begin\n        z = (x ^ y) & x;\n    end\nendmodule\n\nmodule B (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    always @(*) begin\n        case ({x, y})\n            2'b00: z = 1'b1;\n            2'b01: z = 1'b0;\n            2'b10: z = 1'b0;\n            2'b11: z = 1'b1;\n            default: z = 1'b0;\n        endcase\n    end\nendmodule\n\nmodule top_module (\n    input logic x,\n    input logic y,\n    output logic z\n);\n    logic a1_out, a2_out, b1_out, b2_out;\n    logic or_out, and_out;\n\n    A a1 (.x(x), .y(y), .z(a1_out));\n    A a2 (.x(x), .y(y), .z(a2_out));\n    B b1 (.x(x), .y(y), .z(b1_out));\n    B b2 (.x(x), .y(y), .z(b2_out));\n\n    always @(*) begin\n        or_out = a1_out | b1_out;\n        and_out = a2_out & b2_out;\n        z = or_out ^ and_out;\n    end\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}

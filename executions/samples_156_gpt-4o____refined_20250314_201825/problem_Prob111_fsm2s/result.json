@@ -1,0 +1,16 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic reset,\n    input  logic j,\n    input  logic k,\n    output logic out\n);\n\n    typedef enum logic [1:0] {\n        OFF = 2'b00,\n        ON  = 2'b01\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            OFF: begin\n                if (j)\n                    next_state = ON;\n                else\n                    next_state = OFF;\n            end\n            ON: begin\n                if (k)\n                    next_state = OFF;\n                else\n                    next_state = ON;\n            end\n            default: next_state = OFF;\n        endcase\n    end\n\n    // State register with synchronous reset\n    always @(posedge clk) begin\n        if (reset)\n            current_state <= OFF;\n        else\n            current_state <= next_state;\n    end\n\n    // Output logic\n    assign out = (current_state == ON);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input  logic clk,\n    input  logic reset,\n    input  logic j,\n    input  logic k,\n    output logic out\n);\n\n    typedef enum logic [1:0] {\n        OFF = 2'b00,\n        ON  = 2'b01\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            OFF: begin\n                if (j)\n                    next_state = ON;\n                else\n                    next_state = OFF;\n            end\n            ON: begin\n                if (k)\n                    next_state = OFF;\n                else\n                    next_state = ON;\n            end\n            default: next_state = OFF;\n        endcase\n    end\n\n    // State register with synchronous reset\n    always @(posedge clk) begin\n        if (reset)\n            current_state <= OFF;\n        else\n            current_state <= next_state;\n    end\n\n    // Output logic\n    assign out = (current_state == ON);\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}
