@@ -106,6 +106,12 @@ class Verifier:
             os.remove(solution_path)
 
         with open(solution_path, "w") as f:
+            if "[BEGIN]" in solution and "[DONE]" in solution:
+                solution = extract_content(solution)
+            
+            if "```verilog" in solution:
+                solution = solution.replace("```verilog", "").replace("```", "")
+
             f.write(solution)
  
         compile_log_path = os.path.join(os.getcwd(), "compile_log.txt") 
@@ -915,7 +921,7 @@ class VerilogModel:
             "testbench_results": testbench_data
         }
 
-    def run_pipeline(self, base_query: str, enhance_spec: bool = True, decompose: bool = True, iterative_refinement: bool = True, max_iterations: int = 2, model: str = "gpt-4o-mini") -> Dict:
+    def run_pipeline(self, base_query: str, enhance_spec: bool = True, decompose: bool = True, iterative_refinement: bool = True, max_iterations: int = 2, model: str = "gpt-4o-mini", problem_dir: str = None) -> Dict:
         """
         INPUT:
             base_query: str - Base query to generate testbench
@@ -941,6 +947,9 @@ class VerilogModel:
                 base_query += f"""Here is the enhanced specification which might be useful to you:
                 {extract_between_tags(enhanced_query, "ENHANCED_SPEC")}
                 """
+
+                with open(problem_dir / "enhanced_question.txt", 'w') as f:
+                    f.write(base_query)
                 
                 # print("Enhanced query:", flush=True)
                 # print(enhanced_query, flush=True)

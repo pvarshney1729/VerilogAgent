@@ -87,7 +87,7 @@ def run_problem(problem_path, config, exec_folder,  enhance_spec, decompose, ite
         )
                 
         # Generate and verify code using VerilogModel
-        result = model.run_pipeline(base_query, enhance_spec=enhance_spec, decompose=decompose, iterative_refinement=iterative_refinement, model=config['model'] )
+        result = model.run_pipeline(base_query, enhance_spec=enhance_spec, decompose=decompose, iterative_refinement=iterative_refinement, model=config['model'], problem_dir=problem_dir)
 
         # Save the generated code
         with open(problem_dir / "initial_solution.sv", 'w') as f:
@@ -103,12 +103,15 @@ def run_problem(problem_path, config, exec_folder,  enhance_spec, decompose, ite
             
             # Check the number of mismatches directly
             num_mismatch = result['test_results'].get('num_mismatch', 1)  # Default to 1 if not found
-            status = "success" if num_mismatch == 0 else "failure"
+            if num_mismatch == 0 and result['test_results'].get('passfail', '?') in ['R', '.']:
+                status = "success"
+            else:
+                status = "failure"
             with open(problem_dir / "status.txt", 'w') as f:
                 f.write(status)
                 f.write(f"\n\nTest Results:\n{result['test_results']}")
             
-            return num_mismatch == 0
+            return status == "success"
 
     except Exception as e:
         print(f"Error processing {problem_name}: {str(e)}")
