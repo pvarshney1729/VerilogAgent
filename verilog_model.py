@@ -541,6 +541,7 @@ class SimpleVerifier:
                     for in_signal in stim["input"]:
                         tb += f"            $display(\"            %s = %h\", \"{in_signal['signal_name']}\", {in_signal['signal_value']});\n"            
                     tb += f"            $display(\"Time %0t: Output %s = %h\", $time, \"{port}\", {port});\n"
+                    tb += f"            $display(\"Expected %s = %h\", \"{port}\", {port_value});\n"
                     tb += f"            errors++;\n"
                     tb += f"        end\n"
             
@@ -783,6 +784,8 @@ class VerilogModel:
             Dict containing the final code, test results, and iteration history
         """
 
+        debug_file = "debug.txt"
+
         
         # Generate initial code using the existing generator
         initial_code = self.generator.generate(
@@ -813,6 +816,9 @@ class VerilogModel:
             # Verify current code
             verification_results = simple_verifier.verify(best_code, initial_stimulus)
 
+
+
+        
             # If no issues found, we're done
             if not verification_results["has_issues"]:
                 print(f"No issues found after {iterations} iterations. Early exit.")
@@ -821,6 +827,8 @@ class VerilogModel:
             # Record issues for this iteration
             all_iterations[-1]["issues"] = verification_results["issues"]
             print(f"Iteration {iterations}: Found {len(verification_results['issues'])} issues")
+
+            # print(verification_results["testbench_results"])
             
             # Include testbench results if available
             testbench_info = ""
@@ -832,6 +840,10 @@ class VerilogModel:
 
                 The testbench {'PASSED' if tb_results.get('passed', False) else 'FAILED'}.
                 """
+
+            # print(testbench_info)
+            
+
             
             # Create refinement prompt with detailed feedback
             refinement_prompt = f"""
@@ -853,7 +865,7 @@ class VerilogModel:
             Follow these Verilog coding guidelines:
             1. Use 'logic' type instead of 'wire' or 'reg'
             2. Use always @(*) for combinational logic
-            3. Numeric constants must have size (e.g., 1'b0 not 0)
+            3. Numeric constants must have size (e.g., 1'b0 not 0) and approriate width (e.g., 256 is 9 bits wide, should be 9'b256)
             4. Always blocks must read at least one signal
             5. For reset, use synchronous reset (sampled with clock)
 
@@ -957,11 +969,72 @@ class VerilogModel:
                 # print("Enhanced specification:", flush=True)
                 # print(base_query, flush=True)
                 # print("\n\n", flush=True)
+            
+            design_rules = """The following plan/guidelines might be useful for generating the correct Verilog code:
+            - Initialize the flip-flops to zero in simulation.
+            - Ensure synchronous reset is implemented as specified.
+            - Adhere strictly to the provided interface and signal names.
+            - Generate results in the specified cycle timing.
+            - Infer logic correctly, especially when using Karnaugh maps.
+            - Handle bitwise operations and signal broadcasting correctly.
+            - Don't introduce redundant components or signals
+            - Order of precedence for multiplexers is important, and infer from the module specification.
+            """
+
+            gen_truth_table_prompt = f"""Here is the base query: {base_query}, 
+            1. If you can generate a truth table from the specification,
+            it might help you understand the problem better and generate the correct Verilog code, generate one.
+            2. If you can't generate a truth table, you can skip this step, say "NO TRUTH TABLE".
+            Example truth table generation:
+            If the specification is the following:
+                          ab
+                cd   00  01  11  10
+                00 | 1 | 1 | 0 | 1 |
+                01 | 1 | 0 | 0 | 1 |
+                11 | 0 | 1 | 1 | 1 |
+                10 | 1 | 1 | 0 | 0 |
+
+            The truth table should be like, stress on the order of ab, cd
+            cd ab out
+            00 00 1
+            00 01 1
+            00 11 0
+            00 10 1
+            01 00 1
+            01 01 0
+            01 11 0
+            01 10 1
+            11 00 0
+            11 01 1
+            11 11 1
+            11 10 1
+            10 00 1
+            10 01 1
+            10 11 0
+            10 10 0
+            """
+
+           
+            client = OpenAI()
+            gen_truth_table_response = client.chat.completions.create(
+                model=model,
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant that extracts truth tables from user queries."},
+                    {"role": "user", "content": gen_truth_table_prompt}
+                ]
+            ) 
+
+            if "NO TRUTH TABLE" not in gen_truth_table_response.choices[0].message.content:
+                base_query += f"""Here is the truth table generated from the specification:
+                {gen_truth_table_response.choices[0].message.content}, 
+                use this truth table to generate the correct Verilog code, using a case
+                statement, don't try to minimise the logic, you may correct the truth table if needed.
+                """
                 
+            print(base_query)
             if decompose:
-                print("Decomposing the problem into subtasks...")
-                decomposition_result = self.decompose_and_implement(base_query, model=model)
-        
+                decomposition_prompt = base_query + f"""Here are some guidelines to help you decompose the problem into subtasks: {design_rules}"""
+                decomposition_result = self.decompose_and_implement(decomposition_prompt, model=model)        
 
                 implementation_hints = "\n\n".join([
                     f"SUBTASK {impl['id']}: {impl['content']}\nIMPLEMENTATION:\n{impl['implementation']}"
