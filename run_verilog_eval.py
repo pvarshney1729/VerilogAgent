@@ -200,6 +200,8 @@ def parse_args():
                        help='Iterative Refinement (default: False)')
     parser.add_argument('--decompose', type=bool, default=False,
                        help='Decompose the problem into subtasks (default: False)')
+    parser.add_argument('--problem-name', type=str, 
+                        help='Specific problem name to process. For example: Prob001_zero_prompt')
     return parser.parse_args()
 
 
@@ -225,20 +227,35 @@ def main():
     
     # Find all problem prompts
     dataset_dir = f"dataset_{config['task']}"
-    problem_files = sorted(glob.glob(f"{dataset_dir}/*_prompt.txt"))
-    
-    if not problem_files:
-        print(f"No problem files found in {dataset_dir}")
-        sys.exit(1)
-    
-    # Limit number of samples if specified
-    if args.num_samples:
-        problem_files = problem_files[:args.num_samples]
-        print(f"Processing {len(problem_files)} samples...")
-    else:
-        print(f"Processing all {len(problem_files)} samples...")
 
-    num_samples = args.num_samples if args.num_samples else len(problem_files)
+
+    if args.problem_name:
+        problem_file = os.path.join(dataset_dir, f"{args.problem_name}_prompt.txt")
+        if not os.path.exists(problem_file):
+            print(f"Error: Problem file {problem_file} not found")
+            sys.exit(1)
+        problem_files = [problem_file]
+        print(f"Processing specific problem: {args.problem_name}")
+    else:
+        problem_files = sorted(glob.glob(f"{dataset_dir}/*_prompt.txt"))
+        
+        if not problem_files:
+            print(f"No problem files found in {dataset_dir}")
+            sys.exit(1)
+        
+
+    # Limit number of samples if specified
+    if args.problem_name:
+        num_samples = 1  # Set num_samples to 1 for single problem
+    else:
+        # Limit number of samples if specified
+        if args.num_samples:
+            problem_files = problem_files[:args.num_samples]
+            print(f"Processing {len(problem_files)} samples...")
+        else:
+            print(f"Processing all {len(problem_files)} samples...")
+
+        num_samples = args.num_samples if args.num_samples else len(problem_files)
     exec_folder = create_execution_directory(num_samples, args.model, args.enhance_spec, args.decompose, args.iterative_refinement)
     
     problem_results = {}  # Dictionary to store results for each problem
