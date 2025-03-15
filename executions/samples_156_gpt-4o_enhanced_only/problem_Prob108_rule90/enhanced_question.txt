@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, shall be implemented with the following interface. All input and output ports are one bit unless otherwise specified:
+
+- Input Ports:
+  - `input wire clk`: Clock signal, active on the rising edge.
+  - `input wire load`: Load control signal. When high, loads the `data` input into the `q` output.
+  - `input wire [511:0] data`: 512-bit wide input data bus used to initialize the system state when `load` is asserted.
+
+- Output Ports:
+  - `output reg [511:0] q`: 512-bit wide output representing the current state of the cellular automaton.
+
+The module implements Rule 90, a one-dimensional cellular automaton. This system consists of 512 cells, each cell being either on (1) or off (0). The evolution rule for each cell's next state is determined by the XOR of its two immediate neighbors:
+
+```
+Left | Center | Right | Center's next state
+  1  |    1   |   1   |          0
+  1  |    1   |   0   |          1
+  1  |    0   |   1   |          0
+  1  |    0   |   0   |          1
+  0  |    1   |   1   |          1
+  0  |    1   |   0   |          0
+  0  |    0   |   1   |          1
+  0  |    0   |   0   |          0
+```
+
+Boundary Conditions:
+- The left boundary (q[-1]) and the right boundary (q[512]) are both assumed to be 0 (off).
+
+Operational Details:
+- The system advances by one time step with each rising edge of the `clk`.
+- If `load` is asserted on a rising edge of `clk`, the content of `data[511:0]` is loaded into `q[511:0]`, overriding the current state.
+- In the absence of `load`, the cellular automaton progresses according to Rule 90.
+
+Assumptions:
+- All sequential elements are triggered on the positive edge of the `clk`.
+- The reset state and behavior upon power-up are not specified in this document.
+
+The implementation should ensure correct operation under all conditions, including edge cases and input boundaries, as described.
+</ENHANCED_SPEC>

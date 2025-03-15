@@ -1,0 +1,25 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock input. The module operates on the rising edge of this signal.
+  - `reset`: 1-bit active-high synchronous reset. Resets the counter to 0 when high on the rising edge of `clk`.
+  - `slowena`: 1-bit control signal. When high, the counter increments; when low, the counter holds its current value.
+
+- Output Ports:
+  - `q`: 4-bit output representing the current count value of the decade counter. The count ranges from 0 to 9.
+
+Operational Details:
+- The module implements a decade counter, cycling through values 0 to 9, inclusive.
+- The counter increments only when `slowena` is high and on the rising edge of `clk`.
+- Upon activation of the `reset` signal on the rising edge of `clk`, the counter `q` is set to 0 regardless of the state of `slowena`.
+- The counter holds its value if `slowena` is low on the rising edge of `clk`.
+
+Bit Indexing:
+- Bit indexing for `q` is such that `q[3]` represents the most significant bit (MSB), and `q[0]` represents the least significant bit (LSB).
+
+Edge Cases and Initial Conditions:
+- The counter initializes to 0 at the start of the simulation or upon reset.
+- If the counter reaches 9 and `slowena` is high on the next clock edge, it wraps around to 0.
+</ENHANCED_SPEC>

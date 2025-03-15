@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+Implement a Verilog module named `TopModule` with the following interface details. The module will model a finite state machine (FSM) with specified transitions and outputs. All input and output ports should conform to the specified bit widths and characteristics.
+
+### Port Specification
+- `input wire [2:0] y`: A 3-bit input representing the current state of the FSM. Bit indexing is MSB-first, with `y[2]` being the most significant bit and `y[0]` the least significant bit.
+- `input wire w`: A 1-bit input controlling state transitions.
+- `output wire Y1`: A 1-bit output representing the state of `y[1]` at any given time.
+
+### FSM Design
+The FSM consists of six states, labeled A through F, encoded as follows:
+- State A: `y = 3'b000`
+- State B: `y = 3'b001`
+- State C: `y = 3'b010`
+- State D: `y = 3'b011`
+- State E: `y = 3'b100`
+- State F: `y = 3'b101`
+
+### State Transition Table
+The state transitions based on the current state (`y`) and the input (`w`) are described below:
+
+- **State A (y = 000):**
+  - `w = 0`: Transition to State B
+  - `w = 1`: Remain in State A
+- **State B (y = 001):**
+  - `w = 0`: Transition to State C
+  - `w = 1`: Transition to State D
+- **State C (y = 010):**
+  - `w = 0`: Transition to State E
+  - `w = 1`: Transition to State D
+- **State D (y = 011):**
+  - `w = 0`: Transition to State F
+  - `w = 1`: Transition to State A
+- **State E (y = 100):**
+  - `w = 0`: Remain in State E
+  - `w = 1`: Transition to State D
+- **State F (y = 101):**
+  - `w = 0`: Transition to State C
+  - `w = 1`: Transition to State D
+
+### Output Logic
+- `Y1` is directly the value of `y[1]`. Thus, `Y1 = y[1]`.
+
+### Implementation Notes
+- The FSM should be implemented using three flip-flops to represent the state `y`.
+- The flip-flops should be initialized to represent State A (`y = 000`) on reset.
+- All state transitions should occur synchronously on the rising edge of a clock signal.
+- The design assumes the reset to be synchronous and active high, initializing the state to A (`y = 000`).
+- Implement only the next-state logic for `y[1]` within this specification. The complete state transitions will be handled using the entire `y` vector.
+- Ensure that there are no race conditions in the state transitions by proper sequencing and clock management.
+</ENHANCED_SPEC>

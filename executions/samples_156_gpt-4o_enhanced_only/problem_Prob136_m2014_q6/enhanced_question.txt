@@ -1,0 +1,58 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Inputs:
+  - `input wire clk` : Clock signal, triggering on the positive edge.
+  - `input wire reset` : Asynchronous reset signal. Active high.
+  - `input wire w` : Control input, 1-bit width.
+- Output:
+  - `output reg z` : Output signal, 1-bit width.
+
+State Machine Description:
+- The state machine is defined with six states: A, B, C, D, E, and F.
+- States are encoded as follows:
+  - A: 3'b000
+  - B: 3'b001
+  - C: 3'b010
+  - D: 3'b011
+  - E: 3'b100
+  - F: 3'b101
+  
+State Transitions:
+- From state A:
+  - On input `w = 0`, transition to state B.
+  - On input `w = 1`, remain in state A.
+- From state B:
+  - On input `w = 0`, transition to state C.
+  - On input `w = 1`, transition to state D.
+- From state C:
+  - On input `w = 0`, transition to state E.
+  - On input `w = 1`, transition to state D.
+- From state D:
+  - On input `w = 0`, transition to state F.
+  - On input `w = 1`, transition to state A.
+- From state E:
+  - On input `w = 0`, remain in state E.
+  - On input `w = 1`, transition to state D.
+- From state F:
+  - On input `w = 0`, transition to state C.
+  - On input `w = 1`, transition to state D.
+
+Output Logic:
+- The output `z` is determined by the current state:
+  - State E or F: `z = 1`
+  - All other states: `z = 0`
+
+Reset Behavior:
+- The module initializes to state A upon reset. The output `z` is set to 0 in this state.
+- The reset is asynchronous, meaning it can occur at any time and will immediately place the state machine back to state A.
+
+Clocking and Sequential Logic:
+- All state transitions occur on the positive edge of the clock signal.
+- Ensure that state transitions and output logic are free of race conditions by updating states and outputs synchronously with the clock.
+
+Edge Case Handling:
+- The state machine is designed to handle all possible input combinations for each defined state.
+- Any unexpected conditions or undefined states should be handled to default back to state A on the next clock cycle (though no such undefined states exist in the current design).
+</ENHANCED_SPEC>

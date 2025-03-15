@@ -1,0 +1,43 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementing a 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3. The module includes a synchronous reset that initializes the LFSR to 1.
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 5'b00001; // Reset to 1
+        end else begin
+            // Shift right and apply XOR feedback for taps at positions 5 and 3
+            q <= {q[3:0], q[4] ^ q[2]};
+        end
+    end
+
+endmodule
+[DONE]
+
+This module uses a synchronous reset to initialize the LFSR to a non-zero state (5'b00001) and implements the Galois LFSR logic by shifting the register right and applying XOR feedback from the specified tap positions. The feedback is calculated using the XOR of q[4] and q[2], and the result is shifted into the least significant bit of the register.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 5'b00001; // Reset to 1
+        end else begin
+            // Shift right and apply XOR feedback for taps at positions 5 and 3
+            q <= {q[3:0], q[4] ^ q[2]};
+        end
+    end
+
+endmodule

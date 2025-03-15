@@ -1,0 +1,42 @@
+Generated Response:
+
+Certainly! Below is the implementation of the `TopModule` based on the provided specifications and guidelines.
+
+[BEGIN]
+module TopModule(
+    input logic [3:0] in,
+    output logic out_and,
+    output logic out_or,
+    output logic out_xor
+);
+
+    // Combinational logic for the outputs
+    assign out_and = &in;   // 4-input AND operation
+    assign out_or  = |in;   // 4-input OR operation
+    assign out_xor = ^in;   // 4-input XOR operation
+
+endmodule
+[DONE] 
+
+This implementation makes use of Verilog's reduction operators:
+- `&`: Reduction AND, which performs an AND operation across all bits of the input vector.
+- `|`: Reduction OR, which performs an OR operation across all bits of the input vector.
+- `^`: Reduction XOR, which performs an XOR operation across all bits of the input vector.
+
+Each assign statement directly computes the respective logic operation on the 4-bit input vector `in`. The module adheres to the guidelines provided, using `logic` for port declarations and ensuring the combinational logic is correctly implemented using assign statements.
+
+Generated Code:
+
+module TopModule(
+    input logic [3:0] in,
+    output logic out_and,
+    output logic out_or,
+    output logic out_xor
+);
+
+    // Combinational logic for the outputs
+    assign out_and = &in;   // 4-input AND operation
+    assign out_or  = |in;   // 4-input OR operation
+    assign out_xor = ^in;   // 4-input XOR operation
+
+endmodule

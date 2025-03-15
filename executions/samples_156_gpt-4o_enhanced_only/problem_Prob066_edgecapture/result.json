@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    input logic [31:0] in,\n    output logic [31:0] out\n);\n\n    // Internal signal to store the previous state of the input\n    logic [31:0] prev_in;\n\n    // Synchronous logic block for capturing 1-to-0 transitions\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            // Reset output and previous input when reset is asserted\n            out <= 32'b0;\n            prev_in <= 32'b0;\n        end else begin\n            // Detect 1-to-0 transitions and set the corresponding output bits\n            out <= out | (prev_in & ~in);\n            // Update the previous input state\n            prev_in <= in;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 91,
+        "passfail": "R"
+    }
+}

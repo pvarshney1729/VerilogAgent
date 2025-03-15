@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [3:0] q\n);\n\n    // Internal register to hold the current count value\n    logic [3:0] count_reg;\n\n    // Sequential logic for the counter with synchronous reset\n    always @(posedge clk) begin\n        if (reset) begin\n            count_reg <= 4'b0000; // Reset the counter to 0\n        end else begin\n            count_reg <= count_reg + 1; // Increment the counter\n        end\n    end\n\n    // Assign the current count value to the output port q\n    assign q = count_reg;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

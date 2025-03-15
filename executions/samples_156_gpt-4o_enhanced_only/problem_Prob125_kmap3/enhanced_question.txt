@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- Inputs:
+  - `input wire a`: Single-bit input, considered as `bit[0]` (least significant bit).
+  - `input wire b`: Single-bit input, considered as `bit[0]` (least significant bit).
+  - `input wire c`: Single-bit input, considered as `bit[0]` (least significant bit).
+  - `input wire d`: Single-bit input, considered as `bit[0]` (least significant bit), acting as a don't-care condition in certain output scenarios.
+- Output:
+  - `output wire out`: Single-bit output, considered as `bit[0]` (least significant bit).
+
+Functional Specification:
+- The module implements a logical function defined by the specified Karnaugh map.
+- The input combination `(c, d, a, b)` is used to determine the output as follows (where `d` is a don't-care condition):
+  - For `c = 0`, `d = 0`:
+    - If `(a, b) = (0, 1)`, then `out = d` (don't care, can be 0 or 1).
+    - If `(a, b) = (0, 0)`, then `out = 0`.
+    - If `(a, b) = (1, 0)`, then `out = 1`.
+    - If `(a, b) = (1, 1)`, then `out = 1`.
+  - For `c = 0`, `d = 1`:
+    - If `(a, b) = (0, 1)`, then `out = 0`.
+    - If `(a, b) = (0, 0)`, then `out = 0`.
+    - If `(a, b) = (1, 0)`, then `out = d` (don't care, can be 0 or 1).
+    - If `(a, b) = (1, 1)`, then `out = d` (don't care, can be 0 or 1).
+  - For `c = 1`, `d = 1`:
+    - If `(a, b) = (0, 1)`, then `out = 0`.
+    - If `(a, b) = (0, 0)`, then `out = 1`.
+    - If `(a, b) = (1, 0)`, then `out = 1`.
+    - If `(a, b) = (1, 1)`, then `out = 1`.
+  - For `c = 1`, `d = 0`:
+    - If `(a, b) = (0, 1)`, then `out = 0`.
+    - If `(a, b) = (0, 0)`, then `out = 1`.
+    - If `(a, b) = (1, 0)`, then `out = 1`.
+    - If `(a, b) = (1, 1)`, then `out = 1`.
+
+- Prioritize correct implementation of the truth table as per the Karnaugh map over the treatment of don't-care conditions.
+
+Additional Implementation Notes:
+- This module is purely combinational and does not involve any sequential logic elements such as flip-flops or registers.
+- Ensure the logic is optimized, potentially allowing flexibility in handling don't-care conditions to simplify the circuit.
+</ENHANCED_SPEC>

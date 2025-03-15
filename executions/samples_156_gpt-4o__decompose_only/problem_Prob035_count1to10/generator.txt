@@ -1,0 +1,59 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for the decade counter as specified:
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    // Internal register to hold the current count value
+    logic [3:0] count;
+
+    // Sequential logic for the decade counter
+    always @(posedge clk) begin
+        if (reset) begin
+            count <= 4'b0001; // Reset to 1
+        end else if (count == 4'b1010) begin
+            count <= 4'b0001; // Wrap from 10 back to 1
+        end else begin
+            count <= count + 1; // Increment count
+        end
+    end
+
+    // Assign the current count value to the output port q
+    assign q = count;
+
+endmodule
+[DONE]
+
+This module implements a decade counter that counts from 1 to 10 and wraps back to 1. The counter is reset to 1 when the `reset` signal is high on the positive edge of the clock. The output `q` reflects the current count value.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    // Internal register to hold the current count value
+    logic [3:0] count;
+
+    // Sequential logic for the decade counter
+    always @(posedge clk) begin
+        if (reset) begin
+            count <= 4'b0001; // Reset to 1
+        end else if (count == 4'b1010) begin
+            count <= 4'b0001; // Wrap from 10 back to 1
+        end else begin
+            count <= count + 1; // Increment count
+        end
+    end
+
+    // Assign the current count value to the output port q
+    assign q = count;
+
+endmodule

@@ -1,0 +1,52 @@
+Generated Response:
+
+Certainly! Below is the implementation of the `TopModule` that performs a population count on a 255-bit input vector and outputs the count in an 8-bit output.
+
+```verilog
+[BEGIN]
+module TopModule(
+    input  logic [254:0] in,
+    output logic [7:0]   out
+);
+
+    always @(*) begin
+        integer i;
+        out = 8'b0; // Initialize the output to zero
+        for (i = 0; i < 255; i = i + 1) begin
+            out = out + in[i]; // Count the number of '1's
+        end
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation
+
+1. **Module Definition**: The module is named `TopModule` with a 255-bit input `in` and an 8-bit output `out`.
+
+2. **Combinational Logic**: The combinational logic is implemented using an `always @(*)` block to ensure that the logic is evaluated whenever there is a change in the input vector `in`.
+
+3. **Bit Counting**: 
+   - An integer `i` is used to iterate over each bit of the input vector `in`.
+   - The output `out` is initialized to zero at the beginning of the logic block.
+   - For each bit in the input vector, the count is incremented by the value of the bit (`in[i]`), which will be either '0' or '1'.
+
+This implementation ensures that the output `out` always contains the correct population count of '1's in the input vector `in`.
+
+Generated Code:
+
+module TopModule(
+    input  logic [254:0] in,
+    output logic [7:0]   out
+);
+
+    always @(*) begin
+        integer i;
+        out = 8'b0; // Initialize the output to zero
+        for (i = 0; i < 255; i = i + 1) begin
+            out = out + in[i]; // Count the number of '1's
+        end
+    end
+
+endmodule

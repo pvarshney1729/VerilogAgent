@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input  logic [7:0] a,\n    input  logic [7:0] b,\n    output logic [7:0] s,\n    output logic overflow\n);\n\n    always @(*) begin\n        // Perform the addition\n        s = a + b;\n        \n        // Check for signed overflow\n        // Overflow occurs if:\n        // - MSB of a and b are the same and different from the MSB of the result s\n        overflow = (a[7] == b[7]) && (s[7] != a[7]);\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "R"
+    }
+}

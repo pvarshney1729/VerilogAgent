@@ -1,0 +1,66 @@
+Generated Response:
+
+Certainly! Here's the implementation of the `TopModule` with the specified behavior and interface:
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic in,
+    output logic out
+);
+
+    // Internal registers for the shift register stages
+    logic [3:0] shift_reg;
+
+    // Sequential logic for the shift register with synchronous reset
+    always_ff @(posedge clk) begin
+        if (!resetn) begin
+            // Active-low synchronous reset
+            shift_reg <= 4'b0000;
+        end else begin
+            // Shift operation
+            shift_reg <= {shift_reg[2:0], in};
+        end
+    end
+
+    // Output assignment
+    assign out = shift_reg[3];
+
+endmodule
+[DONE]
+
+**Explanation:**
+- The module defines a 4-bit shift register using a `logic` vector `shift_reg`.
+- The `always_ff` block triggers on the positive edge of `clk`.
+- If `resetn` is low, the shift register is reset to `4'b0000`.
+- Otherwise, the shift register shifts left, with `in` being the new least significant bit.
+- The `out` port outputs the most significant bit of the shift register (`shift_reg[3]`).
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic in,
+    output logic out
+);
+
+    // Internal registers for the shift register stages
+    logic [3:0] shift_reg;
+
+    // Sequential logic for the shift register with synchronous reset
+    always_ff @(posedge clk) begin
+        if (!resetn) begin
+            // Active-low synchronous reset
+            shift_reg <= 4'b0000;
+        end else begin
+            // Shift operation
+            shift_reg <= {shift_reg[2:0], in};
+        end
+    end
+
+    // Output assignment
+    assign out = shift_reg[3];
+
+endmodule

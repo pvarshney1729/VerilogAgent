@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- Input Ports:
+  - `input clk`: Clock signal for synchronization, active on the rising edge.
+  - `input load`: Synchronous load signal, active high. When asserted, the shift register is loaded with `data`.
+  - `input ena`: Enable signal to allow shifting, active high. Shifting occurs only when `ena` is high and `load` is low.
+  - `input [1:0] amount`: 2-bit control signal to determine the shift direction and magnitude.
+  - `input [63:0] data`: 64-bit input data to be loaded into the shift register when `load` is high.
+
+- Output Ports:
+  - `output reg [63:0] q`: 64-bit output representing the current contents of the shift register.
+
+Functional Description:
+1. The module implements a 64-bit arithmetic shift register with a synchronous load feature.
+2. Shift operations and loading are synchronized with the rising edge of `clk`.
+3. The `load` signal, when high, takes precedence over shifting and loads `q` with the value of `data` on the next rising edge of `clk`.
+4. If `load` is low and `ena` is high, the shift register performs a shift operation based on the `amount` signal:
+   - `amount = 2'b00`: Shift left by 1 bit. New LSB is filled with 0.
+   - `amount = 2'b01`: Shift left by 8 bits. New LSBs are filled with 0.
+   - `amount = 2'b10`: Arithmetic shift right by 1 bit. New MSB retains the previous MSB value.
+   - `amount = 2'b11`: Arithmetic shift right by 8 bits. New MSBs retain the previous MSB value.
+
+Initial Conditions and Assumptions:
+- All registers, including `q`, should be initialized to 0 at the start.
+- The shift register is implemented using sequential logic and operates based on the clock cycle.
+- No asynchronous resets are considered; the design relies on synchronous operations driven by `clk`.
+
+Boundary and Edge Case Considerations:
+- During power-up or reset, ensure that `q` is initialized to 0.
+- If `ena` is low, the content of `q` remains unchanged irrespective of the `amount` value.
+- Ensure that overflow and underflow conditions during shifts are handled by maintaining consistent MSB and LSB padding as described.
+
+Signal Precedence:
+- `load` has the highest precedence, followed by `ena` for shifting operations.
+- When `load` is active, the `amount` and `ena` signals are ignored.
+
+The design intent is to ensure a predictable and stable operation of the shift register under the described conditions.
+</ENHANCED_SPEC>

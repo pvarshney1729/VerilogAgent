@@ -1,0 +1,80 @@
+Generated Response:
+
+Let's implement the `TopModule` based on the specification and guidelines provided. This module will be a simple finite state machine (FSM) that counts up to 4 clock cycles after a reset, during which it asserts the `shift_ena` signal.
+
+```verilog
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    // Internal register to keep track of the FSM state/count
+    logic [2:0] counter; // 3 bits to count up to 4
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            // Upon reset, initialize the counter and enable signal
+            counter <= 3'd0;
+            shift_ena <= 1'b1;
+        end else if (shift_ena) begin
+            // If shift_ena is asserted, count up
+            if (counter == 3'd3) begin
+                // After 4 cycles, deassert shift_ena
+                shift_ena <= 1'b0;
+            end else begin
+                // Increment the counter
+                counter <= counter + 1;
+            end
+        end
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation
+
+- **Ports:** The module has three ports: `clk`, `reset`, and `shift_ena`, all of which are declared as `logic` for compatibility with SystemVerilog.
+  
+- **Counter:** A 3-bit counter is used to keep track of the number of clock cycles that `shift_ena` has been asserted. This counter can count from 0 to 7, but we only need it to count to 3 for a total of 4 cycles.
+
+- **Reset Logic:** 
+  - When `reset` is asserted (`1`), both the `counter` and `shift_ena` are initialized. The counter is set to `0`, and `shift_ena` is set to `1`.
+  
+- **Counting Logic:**
+  - On each positive edge of `clk`, if `shift_ena` is `1`, the counter increments.
+  - If the counter reaches `3`, indicating that `shift_ena` has been asserted for 4 cycles, `shift_ena` is deasserted (`0`).
+
+This implementation ensures that `shift_ena` is asserted for exactly 4 clock cycles following a reset and remains deasserted until the next reset event.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    // Internal register to keep track of the FSM state/count
+    logic [2:0] counter; // 3 bits to count up to 4
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            // Upon reset, initialize the counter and enable signal
+            counter <= 3'd0;
+            shift_ena <= 1'b1;
+        end else if (shift_ena) begin
+            // If shift_ena is asserted, count up
+            if (counter == 3'd3) begin
+                // After 4 cycles, deassert shift_ena
+                shift_ena <= 1'b0;
+            end else begin
+                // Increment the counter
+                counter <= counter + 1;
+            end
+        end
+    end
+
+endmodule

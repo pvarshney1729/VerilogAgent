@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a: 1-bit input signal.
+  - input wire b: 1-bit input signal.
+  - input wire sel_b1: 1-bit input selection signal.
+  - input wire sel_b2: 1-bit input selection signal.
+
+- Output Ports:
+  - output wire out_assign: 1-bit output signal, implemented using continuous assignment.
+  - output reg out_always: 1-bit output signal, implemented using procedural logic.
+
+Functional Description:
+1. The module functions as a 2-to-1 multiplexer with inputs a and b.
+2. Selection Logic:
+   - The output should select input 'b' when both sel_b1 and sel_b2 are asserted (high).
+   - Otherwise, the output should select input 'a'.
+
+Implementation Details:
+- Continuous Assignment:
+  - Use an 'assign' statement to drive the 'out_assign' output based on the selection logic.
+- Procedural Logic:
+  - Use an 'always' block with an 'if' statement to drive the 'out_always' output based on the selection logic.
+
+Signal Conventions:
+- All inputs and outputs are active high.
+- Bit[0] refers to the least significant bit of any multi-bit signal.
+
+Edge Cases:
+- Ensure that if sel_b1 or sel_b2 is not asserted (low), the output defaults to selecting input 'a'.
+
+Reset and Initialization:
+- This module does not include any state-holding elements requiring reset behavior.
+
+Dependencies and Timing:
+- The design is purely combinational and does not depend on any clock or reset signals.
+
+Constraints:
+- The module should be implemented to avoid any timing violations or race conditions.
+</ENHANCED_SPEC>

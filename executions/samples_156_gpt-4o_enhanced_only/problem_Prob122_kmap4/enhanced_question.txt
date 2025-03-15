@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Specification: TopModule
+
+Interface Definition:
+- Input Ports:
+  - `input logic a;` // 1-bit input
+  - `input logic b;` // 1-bit input
+  - `input logic c;` // 1-bit input
+  - `input logic d;` // 1-bit input
+- Output Ports:
+  - `output logic out;` // 1-bit output
+
+Circuit Functionality:
+- The module implements the logic derived from the following Karnaugh map, with 'ab' as the column selectors and 'cd' as the row selectors:
+
+```
+      ab
+ cd   00  01  11  10
+ 00 |  0 |  1 |  0 |  1 |
+ 01 |  1 |  0 |  1 |  0 |
+ 11 |  0 |  1 |  0 |  1 |
+ 10 |  1 |  0 |  1 |  0 |
+```
+
+Bit Indexing and Conventions:
+- All inputs and outputs are 1-bit signals.
+- Bit[0] refers to the least significant bit in any multi-bit signals; however, all signals in this specification are single-bit.
+
+Operational Description:
+- The output `out` is determined by evaluating the combination of inputs `a`, `b`, `c`, and `d` according to the Karnaugh map provided. 
+- The conditions for setting `out` to high ('1') are:
+  - (c == 0 && d == 1 && a == 0 && b == 0) || (c == 0 && d == 0 && a == 0 && b == 1) || 
+  - (c == 1 && d == 0 && a == 0 && b == 0) || (c == 1 && d == 1 && a == 0 && b == 1)
+
+- The conditions for setting `out` to low ('0') are the inverse of the above conditions.
+
+Additional Considerations:
+- The logic is purely combinational with no sequential elements.
+- The design assumes ideal conditions without consideration for propagation delays or race conditions typical in logic simulation.
+- Edge cases for invalid states are inherently handled as all possible states are defined within the Karnaugh map.
+
+Reset Behavior:
+- Not applicable, as there are no sequential elements or stateful logic in this module.
+</ENHANCED_SPEC>

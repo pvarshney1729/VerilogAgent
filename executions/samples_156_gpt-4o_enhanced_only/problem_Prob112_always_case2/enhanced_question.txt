@@ -1,0 +1,20 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input [3:0] in`: A 4-bit unsigned input vector where bit[0] is the least significant bit (LSB) and bit[3] is the most significant bit (MSB).
+
+- Output Ports:
+  - `output [1:0] pos`: A 2-bit unsigned output vector representing the position of the first '1' encountered in the input vector, with bit[0] as the LSB and bit[1] as the MSB. If no '1' is present, the output should be zero.
+
+Functional Description:
+- The module implements a combinational logic priority encoder.
+- The priority encoder examines the input vector `in` and identifies the position of the first high ('1') bit starting from the most significant bit towards the least significant bit.
+- Specifically, if `in` is `4'b0001`, `pos` should output `2'b00`. If `in` is `4'b0010`, `pos` should output `2'b01`. If `in` is `4'b0100`, `pos` should output `2'b10`. If `in` is `4'b1000`, `pos` should output `2'b11`.
+- In the case where `in` is `4'b0000`, indicating no high bits are present, `pos` should output `2'b00`.
+
+Additional Notes:
+- The module utilizes combinational logic only; there is no clock or reset signal involved, as it does not contain sequential elements.
+- Ensure that the logic captures all possible 16 input combinations for a 4-bit input, with specific attention to edge cases where the input is zero.
+</ENHANCED_SPEC>

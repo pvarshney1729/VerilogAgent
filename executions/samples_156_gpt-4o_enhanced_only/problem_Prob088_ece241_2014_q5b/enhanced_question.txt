@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, triggers on the positive edge.
+  - `input areset`: Asynchronous active-high reset signal.
+  - `input x`: 1-bit input signal to the Mealy FSM.
+- Output Ports:
+  - `output z`: 1-bit output signal from the Mealy FSM.
+
+Functional Description:
+The module implements a Mealy finite-state machine (FSM) that performs a 2's complement operation on the input `x` using one-hot encoding. The FSM consists of two states, A and B, and transitions between these states based on the input `x` as follows:
+
+State Transitions and Output Logic:
+- State A:
+  - `x=0`: Remain in State A, output `z=0`.
+  - `x=1`: Transition to State B, output `z=1`.
+- State B:
+  - `x=0`: Remain in State B, output `z=1`.
+  - `x=1`: Remain in State B, output `z=0`.
+
+Encoding:
+- One-hot encoding is used for state representation:
+  - State A: (1, 0)
+  - State B: (0, 1)
+
+Reset Behavior:
+- On an asynchronous active-high reset (`areset`), the FSM initializes to State A, where the output `z` is `0`.
+
+Signal and Logic Details:
+- All state transitions are triggered on the positive edge of the clock (`clk`).
+- The reset (`areset`) takes precedence over state transitions and is asynchronous. If `areset` is high, the FSM immediately resets to State A regardless of the clock.
+
+Edge Cases and Boundaries:
+- Ensure that the FSM correctly handles rapid changes in `x` and `areset` signals without causing erroneous state transitions or outputs.
+- All state transitions and output assignments are to be evaluated in a single clock cycle, reflecting the Mealy machine's characteristic of output depending on current state and input.
+
+Initial Conditions:
+- On power-up or reset, the FSM is guaranteed to be in State A with `z` set to `0`.
+</ENHANCED_SPEC>

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    // Internal signals for the D flip-flop outputs\n    logic q_xor, q_and, q_or;\n    \n    // XOR, AND, OR gate outputs\n    logic d_xor, d_and, d_or;\n    \n    // Combinational logic for the D inputs of the flip-flops\n    always @(*) begin\n        d_xor = x ^ q_xor;\n        d_and = x & ~q_and;\n        d_or  = x | ~q_or;\n    end\n\n    // Sequential logic for the D flip-flops\n    always_ff @(posedge clk) begin\n        q_xor <= d_xor;\n        q_and <= d_and;\n        q_or  <= d_or;\n    end\n    \n    // Three-input NOR gate for the output z\n    assign z = ~(q_xor | q_and | q_or);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 45,
+        "passfail": "R"
+    }
+}

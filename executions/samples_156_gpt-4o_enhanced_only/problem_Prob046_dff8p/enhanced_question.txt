@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit clock signal. The flip-flops are triggered on the negative edge of this clock.
+  - reset: 1-bit active high synchronous reset signal.
+  - d: 8-bit data input, where bit[0] is the least significant bit (LSB) and bit[7] is the most significant bit (MSB).
+
+- Output Ports:
+  - q: 8-bit registered output, where bit[0] is the least significant bit (LSB) and bit[7] is the most significant bit (MSB).
+
+Functional Description:
+- The module comprises 8 D flip-flops.
+- Each flip-flop stores one bit of the 8-bit input `d`.
+- All flip-flops share a common clock (`clk`) and synchronous reset (`reset`).
+- Flip-flops are triggered on the negative edge of the clock signal (`clk`).
+
+Reset Behavior:
+- The reset is synchronous and active high.
+- On asserting `reset` (i.e., `reset` goes high) during the next negative edge of `clk`, the output `q` is set to the specific 8-bit binary value `0x34` (00110100 in binary).
+- If `reset` is low, the flip-flops capture the input `d` on the next negative edge of `clk`.
+
+Initial Values:
+- Upon power-up, the flip-flops should be initialized to hold the value `0x34`, ensuring a known start state regardless of the `reset` signal status at power-up.
+
+Operational Details:
+- The transition of `q` depends on the negative edge of `clk`.
+- In the absence of a reset, the output `q` updates to match the input `d` at every negative clock edge.
+- Ensure no race conditions by maintaining the synchronous nature of the reset and clear definition of clock edge triggering.
+
+Edge Cases:
+- If `clk` has glitches or does not have a clear negative edge, the behavior is undefined.
+- Ensure that `reset` remains stable during the clock's negative edge to avoid unintended behavior.
+
+Constraints:
+- All input and output signals must be stable and free from metastability issues at the time of clock transition.
+
+This specification ensures clarity for a correct Verilog implementation of the described behavior.
+</ENHANCED_SPEC>

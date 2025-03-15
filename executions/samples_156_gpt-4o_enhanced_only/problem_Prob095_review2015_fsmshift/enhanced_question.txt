@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Specification for TopModule:
+
+1. **Module Name:**
+   - `TopModule`
+
+2. **Ports:**
+   - Input: `clk` (1-bit, Clock Signal)
+   - Input: `reset` (1-bit, Active High Synchronous Reset)
+   - Output: `shift_ena` (1-bit, Shift Register Enable Signal)
+
+3. **Behavioral Description:**
+   - This module is part of a Finite State Machine (FSM) intended for controlling a shift register.
+   - The primary function is to enable the shift register for exactly 4 consecutive clock cycles upon detecting a specified bit pattern.
+   - Upon receiving an active high reset signal, the FSM should assert `shift_ena` for exactly 4 clock cycles and then deassert it (hold it low) indefinitely until the next reset signal.
+
+4. **Clock and Reset:**
+   - All sequential logic should be triggered on the rising edge (positive edge) of `clk`.
+   - The reset is active high and synchronous, meaning it will affect the FSM only on the rising edge of `clk`.
+   - On reset, the FSM should initialize its state to ensure `shift_ena` is asserted for exactly 4 clock cycles.
+
+5. **Signal and Operation Precedence:**
+   - `shift_ena` should be asserted for 4 consecutive clock cycles following a reset.
+   - After these 4 cycles, `shift_ena` should be deasserted and remain deasserted until another reset signal is applied.
+   - The detection logic for the proper bit pattern, which triggers `shift_ena`, is not part of this module specification and should be handled externally.
+
+6. **Sequential Element Initialization:**
+   - All internal registers or state elements responsible for counting the 4 clock cycles must be initialized to ensure correct behavior on reset.
+   - The initial state of the FSM should be defined such that upon reset, it correctly transitions to enable `shift_ena` for the required duration.
+
+7. **Edge Case Handling:**
+   - Ensure that during the 4-cycle enable period, no external conditions or signals can prematurely deassert `shift_ena`.
+   - The module should be robust to glitches on the `clk` signal, maintaining proper operation across the specified clock cycles.
+
+8. **Bit Indexing and Conventions:**
+   - As all ports are 1-bit, there is no need for further bit indexing in this specification.
+
+This enhanced specification provides a clear guide for implementing the `TopModule` while ensuring correct and consistent behavior as part of an FSM controlling a shift register.
+</ENHANCED_SPEC>

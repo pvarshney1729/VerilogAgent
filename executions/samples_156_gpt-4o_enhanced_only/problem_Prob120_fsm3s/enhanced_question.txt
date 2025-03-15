@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input  logic clk  // Clock signal; triggers sequential logic on rising edge
+- input  logic reset  // Synchronous active high reset signal; resets FSM to state A
+- input  logic in  // Input signal for state transitions
+- output logic out  // Output signal reflecting current state output
+
+State Machine Description:
+- This module is a Moore state machine with four states: A, B, C, and D.
+- The state transitions and outputs are based on the following table:
+
+  State | Next state (in=0), Next state (in=1) | Output
+  --------------------------------------------------------
+  A     | A, B                                 | 0
+  B     | C, B                                 | 0
+  C     | A, D                                 | 0
+  D     | C, B                                 | 1
+
+- Upon receiving a synchronous active high reset signal, the FSM will reset to state A.
+
+Clock and Reset Behavior:
+- All sequential logic, including state transitions, is triggered on the positive edge of the clock signal.
+- The reset is synchronous: the FSM will enter state A on the next rising edge of the clock when reset is high.
+
+State Encoding:
+- Each state will be encoded using a minimum number of bits to represent four states. For example, a 2-bit representation may be used, with a specific encoding chosen for each state (e.g., A = 2'b00, B = 2'b01, C = 2'b10, D = 2'b11).
+
+Output:
+- The output 'out' directly corresponds to the current state:
+  - 'out' = 0 for states A, B, and C.
+  - 'out' = 1 for state D.
+
+Initial Conditions:
+- Upon power-up or reset, the FSM will initialize to state A, and the output 'out' will be set to 0.
+</ENHANCED_SPEC>

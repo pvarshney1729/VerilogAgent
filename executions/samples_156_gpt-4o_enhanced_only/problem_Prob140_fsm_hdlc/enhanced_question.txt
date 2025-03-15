@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input wire clk`: Clock signal, positive edge-triggered.
+  - `input wire reset`: Active-high synchronous reset.
+  - `input wire in`: Serial data input.
+  
+- Outputs:
+  - `output reg disc`: Asserted for one cycle when a bit needs to be discarded.
+  - `output reg flag`: Asserted for one cycle when a flag sequence is detected.
+  - `output reg err`: Asserted for one cycle when an error condition is detected.
+  
+Port Widths:
+- All inputs and outputs are 1-bit wide.
+
+Bit Indexing:
+- Bit indexing is not applicable as all inputs and outputs are single-bit signals.
+
+Operation Description:
+- The module implements a synchronous HDLC framing protocol to decode a serial data stream and detect specific bit patterns using a Moore-type finite state machine (FSM).
+
+Finite State Machine (FSM) States:
+- Initial State: The FSM starts in the initial state upon reset, as if the previous input was '0'.
+- State transitions occur on the rising edge of `clk`.
+
+Pattern Recognition:
+1. Bit pattern `0111110`: Recognize as a discard sequence. Assert `disc` for one cycle following the detection.
+2. Bit pattern `01111110`: Recognize as a flag sequence indicating frame boundaries. Assert `flag` for one cycle following the detection.
+3. Bit pattern `01111111...`: Recognize as an error condition (7 or more consecutive '1's). Assert `err` for one cycle following the detection.
+
+Reset Behavior:
+- The FSM should reset to the initial state when `reset` is asserted high during a clock cycle. All outputs (`disc`, `flag`, `err`) are deasserted during reset.
+
+Output Timing:
+- Outputs (`disc`, `flag`, `err`) should be asserted for a full clock cycle, starting on the cycle immediately after the condition is detected.
+
+Edge Cases:
+- The FSM must handle transitions between patterns without missing any valid sequences, ensuring that outputs are correctly asserted for boundary conditions and transitions.
+
+Clock Cycle Relationships:
+- All sequential logic is triggered on the positive edge of the `clk`.
+
+Special Considerations:
+- Ensure no race conditions occur by strictly adhering to synchronous design principles.
+- Properly handle input sequences that include transitions from one pattern to another without intermediate reset.
+
+Note: The FSM design will require careful state management to ensure precise pattern recognition and response timing. 
+</ENHANCED_SPEC>

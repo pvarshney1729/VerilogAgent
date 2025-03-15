@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic c,\n    input logic d,\n    output logic [3:0] mux_in\n);\n\n    // mux_in[0] corresponds to ab = 00\n    // From K-map: mux_in[0] = c'd + cd'\n    assign mux_in[0] = (~c & d) | (c & ~d);\n\n    // mux_in[1] corresponds to ab = 01\n    // From K-map: mux_in[1] = 0\n    assign mux_in[1] = 1'b0;\n\n    // mux_in[2] corresponds to ab = 11\n    // From K-map: mux_in[2] = cd\n    assign mux_in[2] = c & d;\n\n    // mux_in[3] corresponds to ab = 10\n    // From K-map: mux_in[3] = c + d\n    assign mux_in[3] = c | d;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 60,
+        "passfail": "R"
+    }
+}

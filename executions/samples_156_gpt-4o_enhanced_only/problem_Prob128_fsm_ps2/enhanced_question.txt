@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+The TopModule is designed to process a continuous byte stream from a PS/2 mouse and identify message boundaries within this stream. The module's interface and behavior are as follows:
+
+**Interface Definition:**
+- `input clk`: The clock signal, utilized for synchronizing sequential logic. The module operates on the positive edge of this clock.
+- `input reset`: A synchronous reset signal, active high. When asserted, it will reset all internal state elements to their initial states on the next rising edge of the clock.
+- `input [7:0] in`: An 8-bit input representing each byte of the PS/2 data stream. The least significant bit is `in[0]`, and the most significant bit is `in[7]`.
+- `output done`: A 1-bit output signal indicating the successful receipt of a complete 3-byte message. This signal is asserted high for one clock cycle, immediately following the reception of the third byte of the message.
+
+**Operational Behavior:**
+- The module implements a finite state machine (FSM) to detect message boundaries in the byte stream.
+- The detection algorithm discards incoming bytes until a byte is received with `in[3]` set to 1, which marks the first byte of a message.
+- Upon detecting a byte with `in[3]` equal to 1, the FSM assumes this is the start of a new message and begins counting the bytes.
+- The FSM transitions through states to track the reception of the second and third bytes of the message.
+- After successfully receiving the third byte, the `done` signal is asserted high for one clock cycle on the next rising edge of the clock.
+
+**Reset Behavior:**
+- The synchronous reset initializes all FSM states and internal registers to their default state on the rising edge of the clock if the reset signal is high.
+- During reset, the `done` signal is deasserted.
+
+**State and Signal Definitions:**
+- The FSM consists of three states: `IDLE`, `BYTE1`, `BYTE2`, and `BYTE3`.
+  - `IDLE`: Default state, awaiting a byte with `in[3]` = 1.
+  - `BYTE1`: Indicates the first byte of a message has been detected.
+  - `BYTE2`: Indicates the second byte is being processed.
+  - `BYTE3`: Indicates the third and final byte of the message is being processed.
+- State transitions occur on the rising edge of the clock and are dependent on the current state and the value of `in[3]`.
+
+**Edge Case Handling:**
+- If a reset is asserted at any point, the FSM returns to the `IDLE` state, and `done` is deasserted.
+- The module assumes that input bytes are continuously provided and that the stream is unidirectional and non-interruptible.
+
+This specification ensures that the module correctly identifies the start and end of 3-byte messages in the PS/2 mouse data stream, providing a clear signal (`done`) upon successful message receipt.
+</ENHANCED_SPEC>

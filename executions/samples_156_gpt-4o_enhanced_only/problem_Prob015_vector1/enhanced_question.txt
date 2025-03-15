@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description:
+The TopModule is a combinational logic circuit that takes a 16-bit input and splits it into two separate 8-bit outputs. The input is treated as a half-word, and the output consists of the upper and lower bytes of this input.
+
+Interface:
+- Input Ports:
+  - `input [15:0] in`
+    - A 16-bit wide input port where `in[15]` represents the most significant bit (MSB) and `in[0]` represents the least significant bit (LSB).
+
+- Output Ports:
+  - `output [7:0] out_hi`
+    - An 8-bit wide output port that represents the upper byte of the input. Specifically, it captures `in[15:8]`.
+  - `output [7:0] out_lo`
+    - An 8-bit wide output port that represents the lower byte of the input. Specifically, it captures `in[7:0]`.
+
+Operational Details:
+- The operation is purely combinational, with no sequential elements or clock dependencies involved.
+- The splitting of the input into `out_hi` and `out_lo` is based on direct bit assignments:
+  - `out_hi` = `in[15:8]`
+  - `out_lo` = `in[7:0]`
+
+Edge Cases and Considerations:
+- The module behaves identically for all possible 16-bit input values without any special handling required for particular patterns or boundary values.
+- There are no reset conditions or initial values required for the outputs, as this is a purely combinational design.
+
+Signal Integrity:
+- The module assumes clean, stable inputs at all times as it does not incorporate any error-checking or buffering mechanisms.
+
+Naming Conventions:
+- All signal names follow the convention of lower case with underscores separating words, ensuring consistency and readability throughout the design.
+</ENHANCED_SPEC>

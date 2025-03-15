@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` with the following interface. All input and output ports are one bit unless otherwise specified. The module is designed to work with a 32-bit global history shift register, supporting rollback on a branch misprediction.
+
+- `input  wire clk` : Clock signal, positive edge triggered.
+- `input  wire areset` : Asynchronous reset signal, active high, which resets the history register to zero.
+- `input  wire predict_valid` : Signal indicating a valid branch prediction is being made.
+- `input  wire predict_taken` : Signal indicating the predicted branch direction (taken or not taken).
+- `input  wire train_mispredicted` : Signal indicating a branch misprediction has occurred.
+- `input  wire train_taken` : Signal indicating the actual direction of the branch that was mispredicted.
+- `input  wire [31:0] train_history` : 32-bit history of branches before the mispredicted branch.
+- `output reg [31:0] predict_history` : 32-bit output reflecting the current state of the branch history register.
+
+Functional Details:
+
+1. **Global History Shift Register**: 
+   - The `predict_history` register maintains the global branch history. It is updated on the positive edge of the clock.
+
+2. **Branch Prediction**:
+   - When `predict_valid` is high, the `predict_taken` value is shifted into the least significant bit (LSB) of the `predict_history` register. The bit `predict_history[0]` represents the direction of the most recent (youngest) branch.
+
+3. **Branch Misprediction**:
+   - When `train_mispredicted` is high, the `predict_history` register is loaded with the `train_history` concatenated with the `train_taken` value. This operation restores the history to the state before the mispredicted branch, with the actual result of the branch appended as the new youngest branch.
+
+4. **Precedence**:
+   - If both a prediction (`predict_valid = 1`) and misprediction (`train_mispredicted = 1`) occur simultaneously, the misprediction takes precedence, as the pipeline flush will invalidate the branch currently being predicted.
+
+5. **Asynchronous Reset**:
+   - When `areset` is high, regardless of the clock, the `predict_history` register is reset to zero.
+
+6. **Sequential Logic**:
+   - All sequential logic in the module is triggered on the positive edge of the `clk` signal.
+
+Edge Cases and Initial Conditions:
+- Upon system start or reset (`areset` asserted), the `predict_history` register is initialized to zero.
+- Ensure correct handling of simultaneous prediction and misprediction, with priority given to misprediction.
+- Explicitly define all register initial states and behaviors under reset conditions to prevent undefined behavior.
+
+The module must ensure correct operation under all specified scenarios, maintaining accurate branch history management through predictions and mispredictions.
+</ENHANCED_SPEC>

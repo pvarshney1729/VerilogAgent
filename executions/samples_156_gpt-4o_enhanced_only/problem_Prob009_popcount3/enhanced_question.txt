@@ -1,0 +1,23 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input [2:0] in`: A 3-bit unsigned vector where `in[0]` is the least significant bit (LSB) and `in[2]` is the most significant bit (MSB).
+
+- Output Ports:
+  - `output [1:0] out`: A 2-bit unsigned vector representing the population count of '1's in the input vector.
+
+Functional Description:
+- The module computes the population count (also known as the Hamming weight) of the 3-bit input vector `in`.
+- The population count is defined as the number of bits set to '1' within the input vector.
+- The result of this count is provided on the 2-bit output vector `out`. The output range is from 0 to 3, corresponding to the valid number of '1's that can exist in a 3-bit vector.
+
+Operational Details:
+- This module performs combinational logic; there is no clock or sequential elements involved.
+- There is no need for reset logic as there are no state elements within this module.
+- The output `out` is directly dependent on the current value of the input `in` and will reflect any changes to `in` immediately.
+
+Edge Cases:
+- As the input is a fixed 3-bit vector, all possible values are inherently within expected operational bounds. No additional handling for edge cases is required beyond the standard 3-bit input range.
+</ENHANCED_SPEC>

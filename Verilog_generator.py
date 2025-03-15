@@ -6,6 +6,24 @@ from typing import List, Dict, Tuple, Optional
 
 DEBUG_PRINTS = True
 
+def extract_between_tags(text: str, tag: str) -> str:
+    """Extract content between XML-style tags"""
+    start_tag = f"<{tag}>"
+    end_tag = f"</{tag}>"
+    try:
+        start_idx = text.find(start_tag)
+        end_idx = text.find(end_tag)
+        
+        # Check if both tags exist before proceeding
+        if start_idx == -1 or end_idx == -1:
+            return text  # Return original text if tags not found
+            
+        start = start_idx + len(start_tag)
+        return text[start:end_idx].strip()
+    except Exception as e:
+        print(f"Error extracting content between {tag} tags: {str(e)}")
+        return text
+    
 class GenerationStats:
     def __init__(self):
         self.prompt_tokens = 0
@@ -308,7 +326,7 @@ class VerilogGenerator:
         return code_lines
 
 
-    def generate_with_system_prompt(self, prompt: str, system_prompt: Optional[str] = None, model: str = "gpt-4o-mini", temperature: float = 0.7) -> List[Dict]:
+    def generate_with_system_prompt(self, prompt: str, system_prompt: Optional[str] = None, model: str = "gpt-4o-mini", temperature: float = 0.7, top_p: float = 0.2) -> List[Dict]:
         """
         INPUT:
             prompt: str - Input prompt for generation
@@ -329,7 +347,7 @@ class VerilogGenerator:
         ]
         
         if "gpt" in model:
-            response = generate_openai(messages=messages, model=model, temperature=temperature)
+            response = generate_openai(messages=messages, model=model, temperature=temperature, top_p=top_p)
         elif "claude" in model:
             response = generate_anthropic(messages=messages, model=model, temperature=temperature)
         else:
@@ -339,7 +357,7 @@ class VerilogGenerator:
     
 
 
-    def generate_with_messages(self, messages: List[Dict], model: str = "gpt-4o-mini", temperature: float = 0.7) -> List[Dict]:
+    def generate_with_messages(self, messages: List[Dict], model: str = "gpt-4o-mini", temperature: float = 0.7, top_p: float = 0.2) -> List[Dict]:
         """
         INPUT:
             messages: List[Dict] - List of messages for generation
@@ -351,7 +369,7 @@ class VerilogGenerator:
         
         # Use a default system prompt if none is provided    
         if "gpt" in model:
-            response = generate_openai(messages=messages, model=model, temperature=temperature)
+            response = generate_openai(messages=messages, model=model, temperature=temperature, top_p=top_p)
         elif "claude" in model:
             response = generate_anthropic(messages=messages, model=model, temperature=temperature)
         else:

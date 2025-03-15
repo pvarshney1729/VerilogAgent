@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock signal. All sequential operations occur on the positive edge of this clock.
+- input wire areset: Asynchronous reset signal. Active high, resets the module to the initial state.
+- input wire bump_left: Active high signal indicating an obstacle on the left.
+- input wire bump_right: Active high signal indicating an obstacle on the right.
+- output reg walk_left: Indicates the Lemming is walking left. A high signal (1) represents walking left.
+- output reg walk_right: Indicates the Lemming is walking right. A high signal (1) represents walking right.
+
+State Machine Description:
+- The module implements a Moore state machine with two states:
+  1. State 0 (Walking Left): walk_left = 1, walk_right = 0.
+  2. State 1 (Walking Right): walk_left = 0, walk_right = 1.
+
+State Transition Logic:
+- Initial State: On areset, the state machine resets to the Walking Left state, regardless of other inputs.
+- Transition from Walking Left to Walking Right: Occurs on the next clock edge if bump_left is high.
+- Transition from Walking Right to Walking Left: Occurs on the next clock edge if bump_right is high.
+- If both bump_left and bump_right are high simultaneously, the Lemming will switch directions.
+
+Reset Behavior:
+- The areset signal is asynchronous and resets the state machine to the Walking Left state on its positive edge.
+- During reset, walk_left is set to 1 and walk_right to 0.
+
+Signal Conventions:
+- bit[0] refers to the least significant bit in any multi-bit signal.
+- All state transitions and output updates occur synchronously with the clock, except for the asynchronous reset.
+
+Edge Cases:
+- If bump_left and bump_right are both 0, the Lemming continues walking in its current direction.
+- Simultaneous high signals on bump_left and bump_right will cause a direction switch.
+
+Ensure that all state transitions and outputs are defined according to the above logic to maintain correct functionality.
+</ENHANCED_SPEC>

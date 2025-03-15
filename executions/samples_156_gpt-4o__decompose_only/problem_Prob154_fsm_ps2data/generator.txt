@@ -1,0 +1,142 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for the `TopModule` that adheres to the given specifications and guidelines:
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic [23:0] out_bytes,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [23:0] message_buffer;
+
+    // Synchronous state transition and output logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            message_buffer <= 24'b0;
+            out_bytes <= 24'b0;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (done) begin
+                out_bytes <= message_buffer;
+            end
+        end
+    end
+
+    // Next state logic and message buffering
+    always_comb begin
+        next_state = current_state;
+        done = 1'b0;
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;
+                    message_buffer[23:16] = in;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+                message_buffer[15:8] = in;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+                message_buffer[7:0] = in;
+            end
+            BYTE3: begin
+                next_state = IDLE;
+                done = 1'b1;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation:
+- **State Encoding**: The FSM has four states: `IDLE`, `BYTE1`, `BYTE2`, and `BYTE3`.
+- **State Transition**: The FSM transitions from `IDLE` to `BYTE1` when `in[3]` is `1`. It then sequentially moves through `BYTE1`, `BYTE2`, and `BYTE3`.
+- **Message Buffering**: The `message_buffer` stores the incoming bytes. The first byte is stored when transitioning from `IDLE` to `BYTE1`, the second byte in `BYTE2`, and the third byte in `BYTE3`.
+- **Output Logic**: The `done` signal is asserted in the cycle immediately after the third byte is received, and `out_bytes` is updated with the complete message.
+- **Synchronous Reset**: The reset is active high and synchronous, resetting the state and outputs when asserted.
+
+This implementation should meet the requirements and function as specified in the problem statement.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic [23:0] out_bytes,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [23:0] message_buffer;
+
+    // Synchronous state transition and output logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            message_buffer <= 24'b0;
+            out_bytes <= 24'b0;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (done) begin
+                out_bytes <= message_buffer;
+            end
+        end
+    end
+
+    // Next state logic and message buffering
+    always_comb begin
+        next_state = current_state;
+        done = 1'b0;
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;
+                    message_buffer[23:16] = in;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+                message_buffer[15:8] = in;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+                message_buffer[7:0] = in;
+            end
+            BYTE3: begin
+                next_state = IDLE;
+                done = 1'b1;
+            end
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,159 @@
+Generated Response:
+
+Certainly! Below is the implementation of the `TopModule` as specified. The module uses a finite state machine to process the serial communication protocol with start, data, and stop bits.
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        IDLE = 3'b000,
+        START_BIT = 3'b001,
+        DATA_BITS = 3'b010,
+        STOP_BIT = 3'b011,
+        ERROR = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [3:0] bit_count; // Counter for the 8 data bits
+    logic [7:0] data_byte; // Storage for the data byte
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 4'b0;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always_comb begin
+        next_state = current_state;
+        done = 1'b0; // Default output
+
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) begin // Detect start bit
+                    next_state = START_BIT;
+                end
+            end
+            START_BIT: begin
+                next_state = DATA_BITS;
+                bit_count = 4'b0; // Initialize bit counter
+            end
+            DATA_BITS: begin
+                data_byte[bit_count] = in; // Capture data bit
+                if (bit_count == 4'd7) begin
+                    next_state = STOP_BIT;
+                end else begin
+                    bit_count = bit_count + 1;
+                end
+            end
+            STOP_BIT: begin
+                if (in == 1'b1) begin // Check for stop bit
+                    done = 1'b1; // Byte successfully received
+                    next_state = IDLE;
+                end else begin
+                    next_state = ERROR;
+                end
+            end
+            ERROR: begin
+                if (in == 1'b1) begin // Wait for idle line
+                    next_state = IDLE;
+                end
+            end
+            default: begin
+                next_state = IDLE; // Default transition
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+
+This implementation uses a simple finite state machine to handle the start bit detection, data reception, stop bit verification, and error handling for the given serial communication protocol. The `done` signal is asserted when a complete byte is successfully received and verified.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        IDLE = 3'b000,
+        START_BIT = 3'b001,
+        DATA_BITS = 3'b010,
+        STOP_BIT = 3'b011,
+        ERROR = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [3:0] bit_count; // Counter for the 8 data bits
+    logic [7:0] data_byte; // Storage for the data byte
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 4'b0;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always_comb begin
+        next_state = current_state;
+        done = 1'b0; // Default output
+
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) begin // Detect start bit
+                    next_state = START_BIT;
+                end
+            end
+            START_BIT: begin
+                next_state = DATA_BITS;
+                bit_count = 4'b0; // Initialize bit counter
+            end
+            DATA_BITS: begin
+                data_byte[bit_count] = in; // Capture data bit
+                if (bit_count == 4'd7) begin
+                    next_state = STOP_BIT;
+                end else begin
+                    bit_count = bit_count + 1;
+                end
+            end
+            STOP_BIT: begin
+                if (in == 1'b1) begin // Check for stop bit
+                    done = 1'b1; // Byte successfully received
+                    next_state = IDLE;
+                end else begin
+                    next_state = ERROR;
+                end
+            end
+            ERROR: begin
+                if (in == 1'b1) begin // Wait for idle line
+                    next_state = IDLE;
+                end
+            end
+            default: begin
+                next_state = IDLE; // Default transition
+            end
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input a`: 1-bit signal.
+  - `input b`: 1-bit signal.
+  - `input c`: 1-bit signal.
+- Output Ports:
+  - `output out`: 1-bit signal.
+
+Port Naming and Conventions:
+- All ports are active high and unsigned.
+- Bit[0] refers to the least significant bit (LSB).
+
+Circuit Description:
+- The module implements a combinational logic circuit.
+- The output `out` is determined by the Karnaugh map provided.
+
+Karnaugh Map:
+- The map is defined with `a` as the column variable and `bc` as the row variables.
+- The truth table derived from the Karnaugh map is as follows:
+
+          a
+   bc   0   1
+   00 | 0 | 1 |
+   01 | 1 | 1 |
+   11 | 1 | 1 |
+   10 | 1 | 1 |
+
+Truth Table:
+- Given inputs `a`, `b`, and `c`, the output `out` is determined as follows:
+  - When `bc = 00` and `a = 0`, `out` = 0.
+  - For all other cases, `out` = 1.
+
+Additional Notes:
+- No sequential logic elements or clock signals are involved in this implementation.
+- The module does not require a reset signal, as it is purely combinational.
+- Ensure no race conditions exist since the logic is combinational.
+- The logic should be optimized for minimal gate usage while maintaining the specified behavior.
+</ENHANCED_SPEC>

@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+The module is intended to control two outputs based on specific input conditions, managing a computer shutdown and vehicle driving status. The specification for this module is as follows:
+
+Module Name: TopModule
+
+Inputs:
+1. `cpu_overheated` (1-bit, active high): Indicates whether the CPU is overheated.
+2. `arrived` (1-bit, active high): Indicates whether the destination has been reached.
+3. `gas_tank_empty` (1-bit, active high): Indicates whether the gas tank is empty.
+
+Outputs:
+1. `shut_off_computer` (1-bit, active high): Controls whether the computer should be shut off.
+2. `keep_driving` (1-bit, active high): Controls whether to continue driving.
+
+Behavioral Description:
+1. `shut_off_computer` should be asserted (set to 1) whenever `cpu_overheated` is high. It is a combinational logic output.
+2. `keep_driving` should be asserted (set to 1) when `arrived` is low (indicating that the destination has not been reached) and `gas_tank_empty` is low (indicating that there is gas in the tank). This output is also combinational logic.
+
+Initialization and Reset:
+- Since the module does not contain flip-flops or registers, no initial values or reset conditions are required.
+
+Clarifications:
+- The module should not rely on any implicit default values for outputs. Both outputs should be explicitly defined for all input conditions.
+- The logic is purely combinational, with no clock dependencies or sequential elements involved.
+- Ensure that precedence and potential race conditions are handled by ensuring each condition independently controls its respective output, as described.
+
+Edge Cases:
+- When both `cpu_overheated` and `arrived` are high, `shut_off_computer` should be high, and `keep_driving` should be low, irrespective of the `gas_tank_empty` signal.
+- When `arrived` is high, `keep_driving` should be low, regardless of the `gas_tank_empty` signal.
+
+This specification aims to correct the previous bug by ensuring that outputs are defined for all logical conditions without ambiguity.
+</ENHANCED_SPEC>

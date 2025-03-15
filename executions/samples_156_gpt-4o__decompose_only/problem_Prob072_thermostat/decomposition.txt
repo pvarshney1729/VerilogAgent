@@ -1,0 +1,54 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with inputs: mode, too_cold, too_hot, fan_on, and outputs: heater, aircon, fan.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule(\n    input mode,\n    input too_cold,\n    input too_hot,\n    input fan_on,\n    output reg heater,\n    output reg aircon,\n    output reg fan\n);\n\nalways @(*) begin\n    // Default outputs\n    heater = 0;\n    aircon = 0;\n    fan = 0;\n\n    if (mode) begin\n        // Heating mode\n        if (too_cold) begin\n            heater = 1;\n            fan = 1;\n        end\n    end else begin\n        // Cooling mode\n        if (too_hot) begin\n            aircon = 1;\n            fan = 1;\n        end\n    end\n\n    // Fan control\n    if (fan_on) begin\n        fan = 1;\n    end\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement logic to turn on the heater when in heating mode (mode = 1) and it is too cold (too_cold = 1).",
+        "source": "In heating mode, turn the heater on when it is too cold (too_cold = 1) but do not use the air conditioner.",
+        "implementation": "assign heater = (mode == 1) && (too_cold == 1);"
+    },
+    {
+        "id": "3",
+        "content": "Implement logic to turn on the air conditioner when in cooling mode (mode = 0) and it is too hot (too_hot = 1).",
+        "source": "In cooling mode, turn the air conditioner on when it is too hot (too_hot = 1), but do not turn on the heater.",
+        "implementation": "assign aircon = (mode == 0) && (too_hot == 1);\nassign fan = aircon || fan_on;\nassign heater = 0; // Ensure heater is off in cooling mode"
+    },
+    {
+        "id": "4",
+        "content": "Implement logic to turn on the fan when either the heater or air conditioner is on, or when the fan_on input is high.",
+        "source": "When the heater or air conditioner are on, also turn on the fan to circulate the air. In addition, the user can also request the fan to turn on (fan_on = 1), even if the heater and air conditioner are off.",
+        "implementation": "assign fan = heater || aircon || fan_on;"
+    }
+]
+
+Modified Base Query:
+
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  mode
+ - input  too_cold
+ - input  too_hot
+ - input  fan_on
+ - output heater
+ - output aircon
+ - output fan
+
+The module should implement a heating/cooling thermostat controller which
+controls both a heater (during winter) and an air conditioner (during
+summer). The module should on and off the heater, air conditioning, and
+blower fan as appropriate. The thermostat can be in one of two modes:
+heating (mode = 1) and cooling (mode = 0). In heating mode, turn the
+heater on when it is too cold (too_cold = 1) but do not use the air
+conditioner. In cooling mode, turn the air conditioner on when it is too
+hot (too_hot = 1), but do not turn on the heater. When the heater or air
+conditioner are on, also turn on the fan to circulate the air. In
+addition, the user can also request the fan to turn on (fan_on = 1), even
+if the heater and air conditioner are off.
+

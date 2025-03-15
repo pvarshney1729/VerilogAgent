@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic resetn,\n    input logic in,\n    output logic out\n);\n\n    // Internal registers for the shift register stages\n    logic [3:0] shift_reg;\n\n    // Sequential logic for the shift register with synchronous reset\n    always_ff @(posedge clk) begin\n        if (!resetn) begin\n            // Active-low synchronous reset\n            shift_reg <= 4'b0000;\n        end else begin\n            // Shift operation\n            shift_reg <= {shift_reg[2:0], in};\n        end\n    end\n\n    // Output assignment\n    assign out = shift_reg[3];\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,28 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `in`: 8-bit wide, signed input (bit[7] is the most significant bit, and bit[0] is the least significant bit).
+
+- Output Ports:
+  - `out`: 32-bit wide, signed output.
+
+Functional Description:
+- The module performs sign extension of the 8-bit signed input `in` to a 32-bit signed output `out`.
+- Sign extension is achieved by replicating the sign bit (bit[7] of the input) 24 times to the left, followed by the original 8-bit input.
+- This ensures that the signed value of the input is preserved when converted to a larger bit width.
+
+Operational Details:
+- `out[31:8]`: These bits are filled with 24 copies of the sign bit of the input, `in[7]`.
+- `out[7:0]`: These bits are directly mapped from the input `in[7:0]`.
+
+Edge Cases and Behavior:
+- If `in` represents a positive number (i.e., `in[7]` is 0), `out[31:8]` will be filled with zeroes.
+- If `in` represents a negative number (i.e., `in[7]` is 1), `out[31:8]` will be filled with ones.
+
+Reset and Initialization:
+- This module does not contain any sequential elements or state; thus, no reset behavior is specified.
+
+Note: This module assumes all arithmetic operations with the output are performed considering its signed nature.
+</ENHANCED_SPEC>

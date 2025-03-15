@@ -1,0 +1,51 @@
+Generated Response:
+
+Based on the waveform analysis and the specifications provided, here's the implementation for the `TopModule`. The logic for updating `q` is derived from the simulation where `q` transitions to `0` when `a` is `1` at the rising edge of `clk` and remains `1` when `a` is `0`.
+
+Here is the Verilog code for the module:
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic a,
+    output logic q
+);
+
+    // Initial state of q is undefined, but we assume it's initialized to 1
+    initial begin
+        q = 1'b1;
+    end
+
+    // Sequential logic block triggered on the rising edge of clk
+    always_ff @(posedge clk) begin
+        if (a == 1'b1) begin
+            q <= 1'b0; // Set q to 0 when a is 1
+        end
+    end
+
+endmodule
+[DONE]
+
+This code initializes `q` to `1` and specifies that on each rising edge of the clock, if `a` is `1`, then `q` is set to `0`. Otherwise, it retains its current state. This behavior matches the description derived from the simulation waveform.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic a,
+    output logic q
+);
+
+    // Initial state of q is undefined, but we assume it's initialized to 1
+    initial begin
+        q = 1'b1;
+    end
+
+    // Sequential logic block triggered on the rising edge of clk
+    always_ff @(posedge clk) begin
+        if (a == 1'b1) begin
+            q <= 1'b0; // Set q to 0 when a is 1
+        end
+    end
+
+endmodule

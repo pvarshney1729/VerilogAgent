@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input  clk: Clock signal for synchronous operations, positive edge triggered.
+- input  areset: Asynchronous reset, active high, resets the Lemming to the initial state.
+- input  bump_left: Active high signal indicating an obstacle on the left.
+- input  bump_right: Active high signal indicating an obstacle on the right.
+- input  ground: Active high signal indicating ground is present under the Lemming.
+- input  dig: Active high signal indicating the command to start digging.
+- output walk_left: Active high signal indicating the Lemming is walking left.
+- output walk_right: Active high signal indicating the Lemming is walking right.
+- output aaah: Active high signal indicating the Lemming is falling.
+- output digging: Active high signal indicating the Lemming is digging.
+
+State Definitions:
+- Walking Left: Lemming is moving left. Output walk_left = 1, walk_right = 0.
+- Walking Right: Lemming is moving right. Output walk_right = 1, walk_left = 0.
+- Falling: Lemming is falling. Output aaah = 1, walk_left = 0, walk_right = 0.
+- Digging: Lemming is digging. Output digging = 1, walk_left = 0, walk_right = 0.
+
+State Transitions:
+- On areset: Reset the Lemming to Walking Left state.
+- On bump_left = 1: Switch from Walking Left to Walking Right.
+- On bump_right = 1: Switch from Walking Right to Walking Left.
+- On ground = 0: Transition to Falling state regardless of bumps.
+- On ground = 1 after falling: Resume the previous walking direction.
+- On dig = 1 and ground = 1: Enter Digging state from Walking states.
+- On ground = 0 while digging: Transition to Falling state.
+- Falling for more than 20 clock cycles and hitting ground: Enter a terminal state where all outputs are 0.
+
+Precedence of Operations:
+1. Falling (ground = 0) has the highest precedence.
+2. Digging (dig = 1 and ground = 1) has the second highest precedence.
+3. Direction change (bump signals) has the lowest precedence.
+
+Edge Cases:
+- Simultaneous bump_left and bump_right: Change direction.
+- Bump while falling or digging: No effect.
+- Dig command while falling or no ground: Ignored.
+- Falling cycle count resets upon hitting ground.
+
+All state transitions and output evaluations occur at the positive edge of the clock.
+
+Reset State:
+- On areset: Lemming is in the Walking Left state with walk_left = 1, all other outputs = 0.
+
+Note:
+- The falling duration counter should reset upon hitting the ground or on areset.
+- The system should ensure no race conditions exist between falling, digging, and direction changes.
+</ENHANCED_SPEC>

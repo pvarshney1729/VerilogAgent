@@ -1,0 +1,71 @@
+Generated Response:
+
+Certainly! To emulate a dual-edge triggered flip-flop using available FPGA resources, we can use two single-edge triggered flip-flops along with combinational logic. Here's how you can implement this:
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic d,
+    output logic q
+);
+
+    logic q_pos, q_neg;
+
+    // Rising edge triggered flip-flop
+    always_ff @(posedge clk) begin
+        q_pos <= d;
+    end
+
+    // Falling edge triggered flip-flop
+    always_ff @(negedge clk) begin
+        q_neg <= d;
+    end
+
+    // Combining logic to simulate dual-edge behavior
+    always_comb begin
+        q = clk ? q_neg : q_pos;
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+1. **Rising Edge Flip-Flop (`q_pos`)**:
+   - Captures the input `d` on the rising edge of `clk`.
+
+2. **Falling Edge Flip-Flop (`q_neg`)**:
+   - Captures the input `d` on the falling edge of `clk`.
+
+3. **Combinational Logic**:
+   - The output `q` is determined based on the current clock level:
+     - If `clk` is high, `q` takes the value from `q_neg`.
+     - If `clk` is low, `q` takes the value from `q_pos`.
+
+This implementation effectively mimics a dual-edge triggered flip-flop by using two single-edge flip-flops and some combinatorial logic to handle the output selection.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic d,
+    output logic q
+);
+
+    logic q_pos, q_neg;
+
+    // Rising edge triggered flip-flop
+    always_ff @(posedge clk) begin
+        q_pos <= d;
+    end
+
+    // Falling edge triggered flip-flop
+    always_ff @(negedge clk) begin
+        q_neg <= d;
+    end
+
+    // Combining logic to simulate dual-edge behavior
+    always_comb begin
+        q = clk ? q_neg : q_pos;
+    end
+
+endmodule

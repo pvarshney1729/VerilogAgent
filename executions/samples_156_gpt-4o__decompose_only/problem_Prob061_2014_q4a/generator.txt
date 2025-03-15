@@ -1,0 +1,53 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for `TopModule` based on the provided specifications and guidelines:
+
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic w,
+    input  logic R,
+    input  logic E,
+    input  logic L,
+    output logic Q
+);
+
+    always @(posedge clk) begin
+        if (L)
+            Q <= R;
+        else if (E)
+            Q <= w;
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Module Declaration**: The module is named `TopModule` with inputs `clk`, `w`, `R`, `E`, `L`, and output `Q`.
+- **Port Types**: All ports are declared as `logic` to adhere to the coding conventions.
+- **Sequential Logic**: An `always` block is used, triggered on the positive edge of `clk`.
+- **Load Logic**: If `L` is asserted, `Q` is loaded with `R`.
+- **Shift Logic**: If `E` is asserted and `L` is not, `Q` is updated with `w`.
+- **Output**: `Q` is declared as `reg` to hold its value across clock cycles, which is necessary for sequential logic.
+
+This implementation ensures that the module behaves as a single stage in an n-bit shift register, with the ability to load a value or shift based on the control signals.
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic w,
+    input  logic R,
+    input  logic E,
+    input  logic L,
+    output logic Q
+);
+
+    always @(posedge clk) begin
+        if (L)
+            Q <= R;
+        else if (E)
+            Q <= w;
+    end
+
+endmodule

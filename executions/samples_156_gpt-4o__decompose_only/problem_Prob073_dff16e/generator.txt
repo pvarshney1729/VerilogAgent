@@ -1,0 +1,73 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for `TopModule` based on the provided specifications and guidelines:
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic resetn,
+    input logic [1:0] byteena,
+    input logic [15:0] d,
+    output logic [15:0] q
+);
+
+    // Internal register to hold the state of the flip-flops
+    logic [15:0] q_reg;
+
+    // Sequential logic block triggered on the positive edge of the clock
+    always @(posedge clk) begin
+        if (!resetn) begin
+            // Synchronous active-low reset: set all flip-flops to 0
+            q_reg <= 16'b0;
+        end else begin
+            // Byte-enable logic
+            if (byteena[0]) begin
+                q_reg[7:0] <= d[7:0];  // Update lower byte if byteena[0] is high
+            end
+            if (byteena[1]) begin
+                q_reg[15:8] <= d[15:8]; // Update upper byte if byteena[1] is high
+            end
+        end
+    end
+
+    // Assign the internal register to the output
+    assign q = q_reg;
+
+endmodule
+[DONE]
+
+This module uses a synchronous, active-low reset and byte-enable logic to control which parts of the 16-bit register are updated on each clock cycle. The `always` block is triggered on the positive edge of `clk`, and the reset logic ensures that all flip-flops are initialized to zero when `resetn` is low. The byte-enable logic selectively updates the lower or upper byte of the register based on the `byteena` inputs.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic resetn,
+    input logic [1:0] byteena,
+    input logic [15:0] d,
+    output logic [15:0] q
+);
+
+    // Internal register to hold the state of the flip-flops
+    logic [15:0] q_reg;
+
+    // Sequential logic block triggered on the positive edge of the clock
+    always @(posedge clk) begin
+        if (!resetn) begin
+            // Synchronous active-low reset: set all flip-flops to 0
+            q_reg <= 16'b0;
+        end else begin
+            // Byte-enable logic
+            if (byteena[0]) begin
+                q_reg[7:0] <= d[7:0];  // Update lower byte if byteena[0] is high
+            end
+            if (byteena[1]) begin
+                q_reg[15:8] <= d[15:8]; // Update upper byte if byteena[1] is high
+            end
+        end
+    end
+
+    // Assign the internal register to the output
+    assign q = q_reg;
+
+endmodule

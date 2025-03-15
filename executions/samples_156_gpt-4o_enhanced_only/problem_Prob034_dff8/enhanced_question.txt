@@ -1,0 +1,23 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Descriptions:
+- input clk: 1-bit clock signal used to trigger all D flip-flops on the positive edge.
+- input [7:0] d: 8-bit wide input data vector, where d[0] refers to the least significant bit (LSB) and d[7] refers to the most significant bit (MSB).
+- output reg [7:0] q: 8-bit wide output data vector, initialized to 0 upon system reset, where q[0] refers to the LSB and q[7] refers to the MSB.
+
+Operational Details:
+- The module contains 8 D flip-flops, each corresponding to a bit in the input vector 'd'.
+- All D flip-flops are triggered by the positive edge of the 'clk' signal.
+- Each flip-flop captures the corresponding bit from the input vector 'd' and transfers it to the output vector 'q' on the next clock cycle.
+
+Reset Behavior:
+- Although not originally specified, it is recommended to include a synchronous reset for initializing the output vector 'q' to a default state of 0. This reset should be active on the next positive edge of the clock if implemented.
+
+Additional Considerations:
+- Ensure that there are no race conditions by strictly adhering to the positive edge triggering of the clock signal.
+- The design assumes that the clk signal is stable and free of glitches.
+- Input data 'd' must be stable before the rising edge of 'clk' to ensure proper data capture by the D flip-flops.
+
+End of Specification
+</ENHANCED_SPEC>

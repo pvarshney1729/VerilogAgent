@@ -1,0 +1,26 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire [254:0] in` : A 255-bit wide input vector where `in[0]` is the least significant bit (LSB) and `in[254]` is the most significant bit (MSB).
+
+- Output Ports:
+  - `output reg [7:0] out` : An 8-bit wide output vector representing the population count of '1's in the input vector `in`.
+
+Functionality:
+- The module implements a "population count" circuit that counts the number of '1's present in the 255-bit input vector `in`.
+- The result of this count is provided on the 8-bit output port `out`.
+
+Design Considerations:
+- Combinational Logic: The population count should be implemented using purely combinational logic, ensuring that the output `out` reflects the count immediately based on the current state of the input `in`.
+  
+- Edge Cases:
+  - If the input vector `in` contains all zeros (`255'b0`), the output `out` should be `8'b00000000`.
+  - If the input vector `in` contains all ones (`255'b1`), the output `out` should be `8'b11111111` (since 255 is the maximum count representable by the 8-bit output).
+
+- Input and Output Naming Conventions:
+  - All ports use lowercase with underscores if needed; vectors are defined with explicit width and bit indexing.
+
+- There are no clock, reset, or sequential elements in this design as the circuit is fully combinational.
+</ENHANCED_SPEC>

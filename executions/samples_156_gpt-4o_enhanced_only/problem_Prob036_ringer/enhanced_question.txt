@@ -1,0 +1,25 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input ring`: 1-bit signal indicating an incoming call.
+  - `input vibrate_mode`: 1-bit signal indicating whether the phone is set to vibrate mode.
+- Output Ports:
+  - `output ringer`: 1-bit signal to control the phone's ringer.
+  - `output motor`: 1-bit signal to control the phone's vibration motor.
+
+Functional Description:
+- The module controls the ringer and vibration motor of a cellphone based on the following logic:
+  - When `ring` is asserted (`ring = 1`), the module must activate either the `ringer` or the `motor`, but not both simultaneously.
+  - If `vibrate_mode` is asserted (`vibrate_mode = 1`), the module should activate the `motor` (`motor = 1`) and ensure that the `ringer` is deactivated (`ringer = 0`).
+  - If `vibrate_mode` is not asserted (`vibrate_mode = 0`), the module should activate the `ringer` (`ringer = 1`) and ensure that the `motor` is deactivated (`motor = 0`).
+
+Implementation Details:
+- The module uses combinational logic to determine the output states (`ringer` and `motor`) based on the current values of the inputs (`ring` and `vibrate_mode`).
+- The combinational logic must ensure there are no race conditions, and only one of the outputs (`ringer` or `motor`) is active at any given time when `ring` is asserted.
+- The inactive state for both `ringer` and `motor` is `0`.
+- The logic should be designed to handle edge cases where inputs change simultaneously, ensuring consistent and correct output behavior.
+
+Note: This specification assumes that all input signals (`ring` and `vibrate_mode`) are stable during the evaluation of the combinational logic, and no latching or memory elements are required.
+</ENHANCED_SPEC>

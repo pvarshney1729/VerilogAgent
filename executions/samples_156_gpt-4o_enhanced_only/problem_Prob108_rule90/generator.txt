@@ -1,0 +1,71 @@
+Generated Response:
+
+Sure, let's implement the `TopModule` according to the specified requirements and guidelines. This module will use a clock signal to update the state of a 512-cell Rule 90 cellular automaton. Here's the Verilog code:
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] next_q;
+
+    // Combinational logic for calculating the next state of the automaton
+    always @(*) begin
+        // Initialize the next state based on the current state and Rule 90
+        next_q[0] = q[1]; // q[-1] is considered 0, so q[0]'s next state is q[1]
+        next_q[511] = q[510]; // q[512] is considered 0, so q[511]'s next state is q[510]
+        
+        for (int i = 1; i < 511; i = i + 1) begin
+            next_q[i] = q[i-1] ^ q[i+1];
+        end
+    end
+
+    // Sequential logic to update the state on the positive edge of the clock
+    always_ff @(posedge clk) begin
+        if (load) begin
+            q <= data; // Load the initial state when load is high
+        end else begin
+            q <= next_q; // Otherwise, update to the next state
+        end
+    end
+
+endmodule
+[DONE]
+
+This code implements a 512-cell Rule 90 cellular automaton, where the cells are updated each clock cycle based on their neighbors' states. The `load` signal allows the state of the automaton to be set initially. The boundaries are assumed to be zero, as specified.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] next_q;
+
+    // Combinational logic for calculating the next state of the automaton
+    always @(*) begin
+        // Initialize the next state based on the current state and Rule 90
+        next_q[0] = q[1]; // q[-1] is considered 0, so q[0]'s next state is q[1]
+        next_q[511] = q[510]; // q[512] is considered 0, so q[511]'s next state is q[510]
+        
+        for (int i = 1; i < 511; i = i + 1) begin
+            next_q[i] = q[i-1] ^ q[i+1];
+        end
+    end
+
+    // Sequential logic to update the state on the positive edge of the clock
+    always_ff @(posedge clk) begin
+        if (load) begin
+            q <= data; // Load the initial state when load is high
+        end else begin
+            q <= next_q; // Otherwise, update to the next state
+        end
+    end
+
+endmodule

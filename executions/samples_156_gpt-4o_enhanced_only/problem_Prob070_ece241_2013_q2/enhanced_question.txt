@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a, // Bit 0 (LSB)
+  - input wire b, // Bit 1
+  - input wire c, // Bit 2
+  - input wire d  // Bit 3 (MSB)
+  
+- Output Ports:
+  - output wire out_sop, // Output determined using minimum sum-of-products form
+  - output wire out_pos  // Output determined using minimum product-of-sums form
+
+Functional Description:
+- This module is a combinational logic circuit that evaluates its inputs (a, b, c, d) as a 4-bit binary number.
+- The inputs are considered to form a binary number where 'd' is the most significant bit (MSB) and 'a' is the least significant bit (LSB).
+- The outputs are determined by specific input combinations as follows:
+
+  - Outputs:
+    - out_sop (Sum of Products):
+      - out_sop = 1 when the input binary number is 2, 7, or 15.
+      - out_sop = 0 when the input binary number is 0, 1, 4, 5, 6, 9, 10, 13, or 14.
+    
+    - out_pos (Product of Sums):
+      - out_pos = 1 when the input binary number is 2, 7, or 15.
+      - out_pos = 0 when the input binary number is 0, 1, 4, 5, 6, 9, 10, 13, or 14.
+
+- Unused Input Combinations:
+  - The input combinations corresponding to the numbers 3, 8, 11, and 12 do not occur and hence do not affect the outputs.
+
+Implementation Details:
+- Ensure that the logic for determining out_sop and out_pos adheres strictly to the conditions described above.
+- This is a purely combinational logic design; no clock or reset signals are involved.
+- There are no sequential elements or state dependencies; outputs are solely dependent on the current inputs.
+- Prioritize minimizing logic complexity while adhering to the given conditions for both SOP and POS forms.
+</ENHANCED_SPEC>

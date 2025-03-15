@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire a` : 1-bit input signal.
+  - `input wire b` : 1-bit input signal.
+
+- Output Ports:
+  - `output wire out_assign` : 1-bit output signal, representing the AND operation result using an assign statement.
+  - `output wire out_alwaysblock` : 1-bit output signal, representing the AND operation result using a combinational always block.
+
+Specifications:
+1. The module `TopModule` performs an AND operation on two 1-bit input signals, `a` and `b`.
+
+2. The output `out_assign` should be the result of the AND operation implemented using an `assign` statement. The logic expression is `out_assign = a & b;`.
+
+3. The output `out_alwaysblock` should be the result of the AND operation implemented using a combinational `always` block. The block should be sensitive to changes in both inputs `a` and `b`, ensuring it updates `out_alwaysblock` whenever `a` or `b` changes.
+
+4. All input and output signals are 1-bit wide, with `bit[0]` being the least significant bit.
+
+5. Ensure that the always block is defined correctly for combinational logic (i.e., using `@(*)` sensitivity list).
+
+6. No resets are involved as this is purely combinational logic with no sequential elements or state storage.
+
+7. This module does not involve any clock signals as it only implements combinational logic.
+
+Edge Cases and Input Boundaries:
+- Both outputs should correctly reflect the logical AND operation for all possible combinations of the inputs `a` and `b` (00, 01, 10, 11).
+- Ensure consistent logical behavior for both outputs across all input scenarios.
+</ENHANCED_SPEC>

@@ -1,0 +1,60 @@
+```verilog
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- Inputs:
+  - clk: 1-bit clock signal; all sequential logic is triggered on the positive edge.
+  - areset: 1-bit asynchronous reset signal; active high, resets the state machine to walk left.
+  - bump_left: 1-bit signal; indicates a bump on the left side.
+  - bump_right: 1-bit signal; indicates a bump on the right side.
+  - ground: 1-bit signal; indicates whether the ground is present (1) or absent (0).
+
+- Outputs:
+  - walk_left: 1-bit output; high when the Lemming is walking left.
+  - walk_right: 1-bit output; high when the Lemming is walking right.
+  - aaah: 1-bit output; high when the Lemming is falling.
+
+Finite State Machine (FSM) Description:
+- The FSM is a Moore machine with the following states:
+  1. WALK_LEFT: Lemming walks left.
+  2. WALK_RIGHT: Lemming walks right.
+  3. FALL_LEFT: Lemming is falling, was last walking left.
+  4. FALL_RIGHT: Lemming is falling, was last walking right.
+
+- State Transition Logic:
+  - From WALK_LEFT:
+    - Transitions to WALK_RIGHT if bump_left = 1.
+    - Transitions to FALL_LEFT if ground = 0.
+  - From WALK_RIGHT:
+    - Transitions to WALK_LEFT if bump_right = 1.
+    - Transitions to FALL_RIGHT if ground = 0.
+  - From FALL_LEFT:
+    - Transitions to WALK_LEFT if ground = 1.
+  - From FALL_RIGHT:
+    - Transitions to WALK_RIGHT if ground = 1.
+
+- Signal Definitions:
+  - walk_left = 1 when in state WALK_LEFT.
+  - walk_right = 1 when in state WALK_RIGHT.
+  - aaah = 1 when in states FALL_LEFT or FALL_RIGHT.
+
+- Reset Behavior:
+  - On areset = 1, the FSM asynchronously resets to the WALK_LEFT state, regardless of the clock edge.
+
+- Edge Case Handling:
+  - If bump_left and bump_right are both 1 simultaneously, the Lemming switches direction.
+  - Bumps during falling (states FALL_LEFT or FALL_RIGHT) do not affect walking direction.
+  - A bump coinciding with ground = 0 does not affect the current walking direction after falling.
+  - When transitioning back to walking from a fall (ground transitions from 0 to 1), the Lemming resumes walking in the last known direction.
+
+- Bit Indexing:
+  - All signals are treated as single-bit, hence no specific bit indexing is required.
+  - All operations involving signal assignments are based on the current state and input conditions.
+
+- Initial Values:
+  - On power-up and reset, the FSM starts in the WALK_LEFT state, with walk_left = 1, walk_right = 0, and aaah = 0.
+
+This specification is designed to ensure a clear, concise, and correct implementation of the Lemming's behavior as described.
+</ENHANCED_SPEC>
+```

@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+The module, named TopModule, is specified with the following interface. All input and output ports are one bit in width unless otherwise specified.
+
+- `input clk`: Clock signal for synchronizing sequential logic, triggering on the positive edge.
+- `input enable`: Synchronous active-high signal controlling the shift operation.
+- `input S`: Input bit for the shift register, where the most significant bit (MSB) is shifted in first.
+- `input A`: Address bit used for selecting output from the shift register.
+- `input B`: Address bit used for selecting output from the shift register.
+- `input C`: Address bit used for selecting output from the shift register.
+- `output Z`: Output bit determined by the state of bits A, B, and C.
+
+The module implements an 8x1 memory using an 8-bit shift register composed of 8 D-type flip-flops. The outputs of these flip-flops are labeled Q[0] through Q[7], where Q[0] is the least significant bit (LSB) and Q[7] is the most significant bit (MSB).
+
+- Shift Register: 
+  - The shift register is constructed using 8 D-type flip-flops, each triggered on the positive edge of `clk`.
+  - The flip-flop input for Q[0] is driven by the input `S`.
+  - The enable input is synchronous and, when high, allows the shift operation to occur on the rising edge of `clk`.
+  - Initial values of all flip-flops are assumed to be zero on reset.
+
+- Address Decoding:
+  - The inputs A, B, and C together form a 3-bit address used to select which bit Q[0] through Q[7] is routed to the output Z.
+  - The output Z is defined as follows based on the address:
+    - When ABC = 000, Z = Q[0]
+    - When ABC = 001, Z = Q[1]
+    - When ABC = 010, Z = Q[2]
+    - When ABC = 011, Z = Q[3]
+    - When ABC = 100, Z = Q[4]
+    - When ABC = 101, Z = Q[5]
+    - When ABC = 110, Z = Q[6]
+    - When ABC = 111, Z = Q[7]
+
+This design ensures that the circuit consists only of the 8-bit shift register and multiplexers for selecting the appropriate output based on the 3-bit input address.
+</ENHANCED_SPEC>

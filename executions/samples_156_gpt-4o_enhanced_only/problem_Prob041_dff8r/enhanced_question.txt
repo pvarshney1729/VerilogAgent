@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Definition:
+- Inputs:
+  - `input wire clk`: Clock signal for synchronization. This is a single-bit input.
+  - `input wire reset`: Active high reset signal. This is a single-bit input.
+  - `input wire [7:0] d`: 8-bit data input where bit[0] is the least significant bit (LSB) and bit[7] is the most significant bit (MSB).
+
+- Outputs:
+  - `output reg [7:0] q`: 8-bit data output with the same bit ordering as the input `d`. 
+
+Behavioral Specification:
+- The module consists of 8 D-type flip-flops.
+- Each flip-flop corresponds to one bit of the 8-bit `d` input and one bit of the `q` output.
+- All flip-flops are triggered on the positive edge of `clk`.
+- The reset signal is synchronous and active high:
+  - When `reset` is asserted (logic high) during a clock edge, all bits of `q` should be set to zero.
+  - If `reset` is not asserted, the output `q` should capture and hold the value of `d` at each positive edge of `clk`.
+
+Initial Conditions and Edge Cases:
+- Upon assertion of the `reset` signal, the output `q` is initialized to zero regardless of the `d` input value.
+- Ensure that the reset operation takes precedence over data capturing, meaning `reset` will override `d` when asserted.
+- The module does not specify behavior for metastability or setup/hold violations, these should be managed at the system design level.
+
+Note: Ensure that timing constraints are met to avoid race conditions, especially around the clock edge where `reset` and `d` can change.
+</ENHANCED_SPEC>

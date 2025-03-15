@@ -1,0 +1,61 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementing the specified functionality for Rule 90 with a 512-bit cellular automaton.
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] q_reg, q_next;
+
+    always @(posedge clk) begin
+        if (load) begin
+            q_reg <= data;
+        end else begin
+            q_next[0] <= q_reg[1]; // q[-1] is assumed to be 0
+            q_next[511] <= q_reg[510]; // q[512] is assumed to be 0
+            for (int i = 1; i < 511; i = i + 1) begin
+                q_next[i] <= q_reg[i-1] ^ q_reg[i+1];
+            end
+            q_reg <= q_next;
+        end
+    end
+
+    assign q = q_reg;
+
+endmodule
+[DONE]
+
+This module uses a register `q_reg` to store the current state of the cellular automaton and a register `q_next` to compute the next state. The `always` block updates `q_reg` on the positive edge of the clock. If `load` is high, `q_reg` is loaded with `data`. Otherwise, the next state is computed using Rule 90 logic, considering the boundary conditions where the neighbors outside the array are zero. The output `q` is continuously assigned the value of `q_reg`.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] q_reg, q_next;
+
+    always @(posedge clk) begin
+        if (load) begin
+            q_reg <= data;
+        end else begin
+            q_next[0] <= q_reg[1]; // q[-1] is assumed to be 0
+            q_next[511] <= q_reg[510]; // q[512] is assumed to be 0
+            for (int i = 1; i < 511; i = i + 1) begin
+                q_next[i] <= q_reg[i-1] ^ q_reg[i+1];
+            end
+            q_reg <= q_next;
+        end
+    end
+
+    assign q = q_reg;
+
+endmodule

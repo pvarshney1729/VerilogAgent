@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n\n    always_ff @(posedge clk) begin\n        // Flip-flop logic to update the state\n        state <= (a & b) ? ~state : ((a & ~b) ? state : (~a & b) ? ~state : state);\n        \n        // Output logic based on the state and inputs\n        q <= (a & b) ? ~state : ((a & ~b) ? state : (~a & b) ? ~state : state);\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 229,
+        "passfail": "R"
+    }
+}

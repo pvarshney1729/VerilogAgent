@@ -1,0 +1,43 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for `TopModule` that includes 8 D flip-flops with an active high synchronous reset. The flip-flops are triggered by the positive edge of the clock (`clk`), and the reset sets the output to zero.
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 8'b0; // Set all bits to zero on reset
+        end else begin
+            q <= d; // Transfer input d to output q
+        end
+    end
+
+endmodule
+[DONE]
+
+This module adheres to the specified interface and coding conventions, ensuring that the synchronous reset is correctly implemented and that the flip-flops are triggered on the positive edge of the clock. The use of `logic` for port declarations is consistent with modern Verilog practices.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 8'b0; // Set all bits to zero on reset
+        end else begin
+            q <= d; // Transfer input d to output q
+        end
+    end
+
+endmodule

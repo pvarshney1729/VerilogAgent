@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, is to be implemented with the following interface specifications. All input and output ports are one bit wide unless otherwise specified.
+
+- `input logic clk` : The clock signal, triggering all sequential logic on its positive edge.
+- `input logic reset` : A synchronous reset signal, active high. When asserted, it resets the state of the finite-state machine to its initial state.
+- `input logic data` : A serial input bit stream that is evaluated by the module.
+- `output logic start_shifting` : An output signal that is set to 1 when the sequence "1101" is detected in the input bit stream. Once set, it remains 1 until reset.
+
+The module implements a finite-state machine (FSM) with the following characteristics:
+
+1. **States Definition**:
+   - The FSM will have multiple states representing the progress of detecting the sequence "1101". At minimum, these states should include an initial state and states for recognizing each bit of the sequence.
+   
+2. **State Transitions**:
+   - The FSM transitions occur on the positive edge of the `clk`.
+   - The sequence detection begins from an initial state. The FSM transitions between intermediate states as it matches each bit of the sequence "1101".
+   - Upon detecting the complete sequence "1101", the FSM transitions to a final state where `start_shifting` is set to 1.
+
+3. **Output Behavior**:
+   - `start_shifting` is initially 0 and remains 0 until the complete sequence "1101" is detected.
+   - Once the sequence is detected, `start_shifting` is set to 1 and remains 1 until the `reset` signal is asserted, regardless of further input.
+
+4. **Reset Behavior**:
+   - The `reset` signal, when asserted (logic high), will synchronously reset the FSM to its initial state on the next positive edge of `clk`.
+   - When reset, `start_shifting` is set back to 0.
+
+5. **Edge Cases**:
+   - The FSM should handle overlapping sequences correctly. For example, in a continuous input of "1101101", it should detect the sequence twice.
+   - Ensure that no race conditions occur between state transitions and output assignments.
+
+6. **Signal Conventions**:
+   - Bit indexing is not applicable as all signals are single-bit.
+   - Ensure all sequential elements, including any registers used to hold the current state, have well-defined initial values corresponding to the reset state.
+
+This specification aims to ensure clarity and correctness in the implementation of the `TopModule`'s intended functionality.
+</ENHANCED_SPEC>

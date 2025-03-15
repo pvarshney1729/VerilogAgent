@@ -1,0 +1,26 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, is defined with the following interface. All input and output ports are single-bit signals unless otherwise specified:
+
+- `input wire clk`: The clock signal. The `D` flip-flop is triggered on the positive edge of this clock signal.
+- `input wire ar`: An asynchronous reset signal. When asserted (`ar = 1`), this signal will reset the flip-flop output `q` to its initial state immediately, regardless of the clock.
+- `input wire d`: The data input for the `D` flip-flop.
+- `output reg q`: The output of the `D` flip-flop, which holds the data.
+
+Specifications for the behavior and implementation of the `D` flip-flop:
+
+1. **Positive Edge Triggered**: The `D` flip-flop captures the value of the data input `d` on the rising edge of the clock signal (`clk`), provided the asynchronous reset (`ar`) is not asserted.
+
+2. **Asynchronous Reset**: The reset signal `ar` is active-high. When `ar` is high (`1`), the output `q` is reset to `0` immediately, overriding any clock or data signals. This reset is asynchronous, meaning it does not wait for the clock edge to occur.
+
+3. **Initial State**: On power-up or initialization, the output `q` should be considered undefined until a reset operation occurs or the first clock edge with valid data is captured.
+
+4. **Output Update**: 
+   - If `ar` is low (`0`), on the rising edge of `clk`, the output `q` will update to the value of the input `d`.
+   - If `ar` is high (`1`), the output `q` will be set to `0` regardless of the clock or data input.
+
+5. **Signal Dependencies**: The precedence of operations is such that the asynchronous reset `ar` has the highest priority, overriding all other operations.
+
+6. **Edge Cases**: Ensure that any changes in the signal `d` are only captured on the positive edge of `clk` when `ar` is not asserted. Any spurious signals on `d` outside of these conditions should not affect `q`.
+
+This description ensures that the flip-flop operates correctly under all specified conditions, providing a reliable output based on input signals and reset conditions.
+</ENHANCED_SPEC>

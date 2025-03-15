@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal (1 bit). The module operates on the positive edge of this clock.
+  - `reset`: Active high synchronous reset (1 bit). When high, the module resets all outputs to their initial state.
+  - `in`: 32-bit input vector. Each bit can independently trigger a capture event.
+
+- Output Ports:
+  - `out`: 32-bit output vector. Each bit corresponds to a respective bit in the input vector.
+
+Port and Signal Conventions:
+- The `in` and `out` ports are 32 bits wide, with bit indexing ranging from 31 (most significant bit) to 0 (least significant bit).
+
+Operational Details:
+- The module monitors each bit in the `in` vector. If a bit transitions from 1 to 0 between consecutive clock cycles, the corresponding bit in the `out` vector is set to 1.
+- Once a bit in the `out` vector is set to 1, it remains 1 until the module is reset.
+
+Reset Behavior:
+- The reset is synchronous and active high. During the positive edge of the clock, if `reset` is high, all bits in the `out` vector are set to 0.
+- The reset affects the output on the next clock edge after `reset` is asserted.
+
+Initial Conditions:
+- At power-up or after a reset, all bits in the `out` vector are initialized to 0.
+
+Clock and Timing:
+- All sequential logic is triggered on the positive edge of the `clk` signal.
+- The `in` vector is sampled at each positive edge of the clock.
+
+Edge Case Handling:
+- If the `in` vector is constant or transitions from 0 to 1, the `out` vector remains unaffected.
+- Race conditions are avoided by ensuring all logic is synchronous to the `clk` signal with a clearly defined reset behavior. 
+
+This specification ensures a clear and precise implementation of the desired functionality, with explicit signal dependencies and timing relationships.
+</ENHANCED_SPEC>

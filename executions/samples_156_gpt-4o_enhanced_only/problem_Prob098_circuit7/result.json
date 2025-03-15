@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic a,\n    output logic q\n);\n\n    // Initial state of q is undefined, but we assume it's initialized to 1\n    initial begin\n        q = 1'b1;\n    end\n\n    // Sequential logic block triggered on the rising edge of clk\n    always_ff @(posedge clk) begin\n        if (a == 1'b1) begin\n            q <= 1'b0; // Set q to 0 when a is 1\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 46,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,61 @@
+Generated Response:
+
+Let's implement the `TopModule` as per the specifications provided. The module will handle a 100-bit rotational shift register with synchronous load and directional control.
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [1:0] ena,
+    input logic [99:0] data,
+    output logic [99:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            q <= data;
+        end else begin
+            case (ena)
+                2'b01: q <= {q[0], q[99:1]};  // Rotate right
+                2'b10: q <= {q[98:0], q[99]}; // Rotate left
+                default: q <= q;              // No rotation
+            endcase
+        end
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Clock Edge**: The operations are synchronous with the positive edge of the `clk` signal.
+- **Load Functionality**: When `load` is asserted (`1`), the register `q` is loaded with the value from `data[99:0]`.
+- **Rotation Functionality**:
+  - **Rotate Right**: For `ena = 2'b01`, the bits are rotated to the right by one position. The least significant bit `q[0]` wraps around to become the most significant bit.
+  - **Rotate Left**: For `ena = 2'b10`, the bits are rotated to the left by one position. The most significant bit `q[99]` wraps around to become the least significant bit.
+  - **No Rotation**: For `ena = 2'b00` or `ena = 2'b11`, no changes are made to the contents of `q`.
+
+This implementation ensures that all operations are handled synchronously and according to the specified behavior.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [1:0] ena,
+    input logic [99:0] data,
+    output logic [99:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            q <= data;
+        end else begin
+            case (ena)
+                2'b01: q <= {q[0], q[99:1]};  // Rotate right
+                2'b10: q <= {q[98:0], q[99]}; // Rotate left
+                default: q <= q;              // No rotation
+            endcase
+        end
+    end
+
+endmodule

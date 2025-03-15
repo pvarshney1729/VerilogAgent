@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input: 
+  - `input logic a`, a 1-bit logic input signal.
+  - `input logic b`, a 1-bit logic input signal.
+
+- Output:
+  - `output logic out`, a 1-bit logic output signal.
+
+Functionality:
+- The module implements an XNOR gate. The output `out` should be high (logic 1) if and only if the inputs `a` and `b` are equal. Otherwise, `out` should be low (logic 0).
+
+Logical Expression:
+- The output `out` is defined by the logical expression: 
+  - `out = ~(a ^ b);`
+  - This expression uses the bitwise XOR operator `^` and the bitwise NOT operator `~`.
+
+Signal Behavior:
+- All signals are combinational, with the output `out` being immediately responsive to changes in inputs `a` and `b`.
+
+Edge Case Handling:
+- This module does not include sequential elements, and thus, no reset behavior is required.
+- Ensure both inputs `a` and `b` are stable before sampling the output to avoid glitches.
+
+Bit Indexing:
+- Each bit signal is treated as a single entity due to their 1-bit width, hence no specific bit indexing is required.
+</ENHANCED_SPEC>

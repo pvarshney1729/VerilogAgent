@@ -55,7 +55,19 @@ def extract_content(text):
         if start_index == -1 or end_index == -1 or start_index >= end_index:
             return ""
         
-        return text[start_index:end_index].strip()
+        content = text[start_index:end_index].strip()
+        
+        # Remove Markdown code block formatting
+        if content.startswith("```") and "```" in content[3:]:
+            first_tick = content.find("```")
+            second_tick = content.find("```", first_tick + 3)
+            if second_tick != -1:
+                # Extract just the code inside the code block
+                language_end = content.find("\n", first_tick)
+                code_start = language_end + 1 if language_end != -1 else first_tick + 3
+                content = content[code_start:second_tick].strip()
+        
+        return content
     except Exception as e:
         print(f"Error extracting content: {e}")
         return ""
@@ -111,6 +123,9 @@ class Verifier:
             
             if "```verilog" in solution:
                 solution = solution.replace("```verilog", "").replace("```", "")
+
+            if "```" in solution    :
+                solution = re.sub(r'```(?:verilog)?\s*|\s*```', '', solution)
 
             f.write(solution)
  
@@ -938,13 +953,15 @@ class VerilogModel:
             # print("\n\n", flush=True)
             if enhance_spec:
                 # Enhance the specification using the prompts
+
+                enhance_model = 'gpt-4o'
                 if DEBUG_PRINTS: 
-                    print("Enhancing the spec, using model:", model)
+                    print("Enhancing the spec, using model:", enhance_model)
 
                 enhanced_query = self.generator.generate_with_system_prompt(
                     prompt=prompts['enhance_spec_rules'].format(user_spec=base_query),
                     system_prompt=prompts['enhance_spec_system'],
-                    model='gpt-4o-mini',
+                    model=enhance_model,
                 )
                 # base_query += f"""Here is the enhanced specification which might be useful to you:
                 # {extract_between_tags(enhanced_query, "ENHANCED_SPEC")}
@@ -958,15 +975,16 @@ class VerilogModel:
                 messages = [
                     {"role": "system", "content": 'You are a Verilog RTL designer that only writes code using correct Verilog syntax.'},
                     {"role": "user", "content": full_prompt},
-                    {"role": "assistant", "content": f"""Here is the enhanced specification which might be useful:
+                    {"role": "assistant", "content": f"""To implement your requested module, I have rewritten the specification to be more clear and concise. Here is the enhanced specification:
                     {extract_between_tags(enhanced_query, "ENHANCED_SPEC")}
-                    """}
+                    """},
+                    {"role": "user", "content": "Okay, now please implement the module, ensuring syntactical and functional correctness."},
                 ]
 
                 with open(problem_dir / "messages.txt", 'w') as f:
                     f.write(json.dumps(messages, indent=4))
                 
-                response = self.generator.generate_with_messages(messages, model='gpt-4o-mini')
+                response = self.generator.generate_with_messages(messages, model=model)
 
                 extracted_code = self.generator._extract_code(response, base_query)
 
@@ -989,26 +1007,57 @@ class VerilogModel:
                 print("Decomposing the problem into subtasks...")
                 decomposition_result = self.decompose_and_implement(base_query, model=model)
 
-
-
                 implementation_hints = "\n\n".join([
                     f"SUBTASK {impl['id']}: {impl['content']}\nIMPLEMENTATION:\n{impl['implementation']}"
                     for impl in decomposition_result
                 ])
                 
-                base_query += f"""
-                <Specification Decomposed>
-                Further, I have broken down this specification into subtasks and tried an approach for each one separately.
-                THESE MIGHT BE INCORRECT BUT IF YOU WANT, but you can use these as hints to create a complete, integrated Verilog module for the original specification:
-                {implementation_hints}
-                </Specification Decomposed>
-                """
+                # base_query += f"""
+                # <Specification Decomposed>
+                # Further, I have broken down this specification into subtasks and tried an approach for each one separately.
+                # THESE MIGHT BE INCORRECT BUT IF YOU WANT, but you can use these as hints to create a complete, integrated Verilog module for the original specification:
+                # {implementation_hints}
+                # </Specification Decomposed>
+                # """
+
+                full_prompt = self.generator._construct_prompt(base_query, include_rules=True, include_examples=False)
+        
+                messages = [
+                    {"role": "system", "content": 'You are a Verilog RTL designer that only writes code using correct Verilog syntax.'},
+                    {"role": "user", "content": full_prompt},
+                    {"role": "assistant", "content": f"""To implement your requested module, I have decomposed it into the following subtasks and come up with an approach for each:
+                    {implementation_hints}
+                    """},
+                    {"role": "user", "content": "Okay, now please implement the module, ensuring syntactical and functional correctness. You can use your subtasks as hints to create a single, complete, and coherent Verilog module that satisfies the original specification."},
+                ]
+
+                with open(problem_dir / "messages.txt", 'w') as f:
+                    f.write(json.dumps(messages, indent=4))
 
                 with open(problem_dir / "decomposition.txt", 'w') as f:
                     f.write("Decomposition Result:")
                     f.write(json.dumps(decomposition_result, indent=4))
                     f.write("\n\nModified Base Query:")
                     f.write(f"\n\n{base_query}")
+
+                response = self.generator.generate_with_messages(messages, model=model, temperature=0.2, top_p=0.1)
+
+                extracted_code = self.generator._extract_code(response, base_query)
+
+                with open(problem_dir / "generator.txt", 'w') as f:
+                    f.write("Generated Response:")
+                    f.write(f"\n\n{response}")
+                    f.write("\n\nGenerated Code:")
+                    f.write(f"\n\n{extracted_code}")
+                
+                # Generate testbench and verify
+                verifier = Verifier(problem_name=self.problem_name)
+                test_results = verifier.functional_verify(extracted_code, self.problem_name)
+                
+                return {
+                    "code": extracted_code,
+                    "test_results": test_results.to_dict()
+                }
         
 
                 # print("Specification after decomposition:", flush=True)
@@ -1075,51 +1124,6 @@ class VerilogModel:
         """
         # Step 1: Generate a plan to decompose the specification into subtasks
         try:
-            # # Generate the decomposition plan
-            # decomposition_response = self.generator.generate_with_system_prompt(
-            #     prompt=prompts['decomposition_prompt'].format(spec=spec),
-            #     system_prompt=prompts['decomposition_system_prompt'],
-            #     model=model
-            # )
-            
-            # # Clean the response to extract just the JSON
-            # cleaned_response = decomposition_response.strip()
-            
-            # # Try different patterns to extract JSON
-            # json_patterns = [
-            #     r'```json\s*(.*?)\s*```',  # JSON in code block
-            #     r'({[\s\S]*})',            # Any JSON-like structure
-            #     r'({[\s\S]*"subtasks"[\s\S]*})'  # JSON with subtasks key
-            # ]
-            
-            # json_str = None
-            # for pattern in json_patterns:
-            #     match = re.search(pattern, cleaned_response, re.DOTALL)
-            #     if match:
-            #         json_str = match.group(1).strip()
-            #         break
-            
-            # if not json_str:
-            #     print("Failed to extract JSON from decomposition response")
-            #     print("Raw response:", decomposition_response[:500])  # Print first 500 chars for debugging
-            #     return []
-            
-            # # Try to parse the JSON
-            # try:
-            #     subtasks_data = json.loads(json_str)
-            #     subtasks = subtasks_data.get("subtasks", [])
-            # except json.JSONDecodeError as e:
-            #     print(f"Failed to parse JSON: {e}")
-            #     print("Extracted JSON string:", json_str[:500])  # Print first 500 chars for debugging
-                
-            #     # Try to fix common JSON issues
-            #     fixed_json_str = json_str.replace("'", '"')  # Replace single quotes with double quotes
-            #     try:
-            #         subtasks_data = json.loads(fixed_json_str)
-            #         subtasks = subtasks_data.get("subtasks", [])
-            #     except:
-            #         print("Failed to parse JSON even after fixing")
-            #         return []
             decomposition_schema = {
                 "name": "decompose_verilog_task",
                 "description": "Break down a Verilog implementation task into sequential subtasks",
@@ -1165,7 +1169,9 @@ class VerilogModel:
                     {"role": "user", "content": prompts['decomposition_prompt'].format(spec=spec)}
                 ],
                 tools=[{"type": "function", "function": decomposition_schema}],
-                tool_choice={"type": "function", "function": {"name": "decompose_verilog_task"}}
+                tool_choice={"type": "function", "function": {"name": "decompose_verilog_task"}},
+                temperature=0.3,
+                top_p=0.2
             )
             
             # Extract the function call arguments
@@ -1197,7 +1203,9 @@ class VerilogModel:
                         spec=spec
                     ),
                     system_prompt=prompts['implementation_system_prompt'],
-                    model=model
+                    model=model,
+                    temperature=0.2,
+                    top_p=0.1
                 )
                 
                 # Extract the code from the response

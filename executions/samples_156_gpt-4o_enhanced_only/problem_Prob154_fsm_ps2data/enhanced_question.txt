@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and has the following interface specifications. All input and output ports are one bit unless otherwise specified.
+
+- Input Ports:
+  - `input wire clk`: Clock signal for the module; all sequential elements are triggered on the positive edge.
+  - `input wire reset`: Active high synchronous reset signal; when asserted, all state and output registers should reset to their initial states.
+  - `input wire [7:0] in`: 8-bit input data stream where `in[0]` refers to the least significant bit.
+
+- Output Ports:
+  - `output reg [23:0] out_bytes`: 24-bit output representing the received message; `out_bytes[23:16]` is the first byte, `out_bytes[15:8]` is the second byte, and `out_bytes[7:0]` is the third byte.
+  - `output reg done`: Signal asserted high for one clock cycle immediately after the third byte of a message is received.
+
+The module's functionality involves a finite state machine (FSM) designed to detect message boundaries within a stream of input bytes. The FSM operates as follows:
+
+1. **Initial State**: The FSM remains in this state until it detects a byte with `in[3] = 1`. This byte marks the start of a new message.
+   
+2. **Message Reception**: Once a start byte is detected, the FSM transitions to a state where it expects the next two bytes to complete the three-byte message.
+
+3. **Completion**: After receiving the third byte, the FSM asserts the `done` signal in the subsequent clock cycle, indicating that a full message has been received. The `out_bytes` will hold the valid three-byte message in the order of reception.
+
+4. **Reset Behavior**: When the `reset` signal is asserted, the FSM returns to its initial state, and `out_bytes` and `done` are reset. The initial value for `out_bytes` is don't-care, and `done` should be set to 0.
+
+**Additional Considerations**:
+- The FSM should handle all byte transitions on the positive edge of the clock.
+- The reset operation is synchronous, meaning it only takes effect on the rising edge of `clk` when `reset` is high.
+- Ensure no race conditions by explicitly managing state transitions relative to clock edges.
+- It is acceptable for `out_bytes` to contain undefined values when `done` is not asserted, as these outputs are don't-care in such states.
+
+This specification ensures that the module correctly implements the intended functionality with clear and precise behavior definitions across all operating conditions.
+</ENHANCED_SPEC>

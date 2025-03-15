@@ -1,0 +1,18 @@
+[
+    {
+        "role": "system",
+        "content": "You are a Verilog RTL designer that only writes code using correct Verilog syntax."
+    },
+    {
+        "role": "user",
+        "content": "<Question>\nI would like you to implement a module named TopModule with the following\ninterface. All input and output ports are one bit unless otherwise\nspecified.\n\n - input  in  (100 bits)\n - output out (100 bits)\n\nThe module should reverse the bit ordering of the input and write to the\noutput.\n</Question>\n\n\n\nThe following plan/guidelines might be useful for generating the correct Verilog code:\n<Guidelines>\n- Ensure synchronous reset is implemented as specified.\n- Initialize all flip-flops to zero in simulation.\n- Adhere strictly to the provided interface and signal names.\n- Generate results in the specified cycle timing.\n- Infer logic correctly, especially when using Karnaugh maps.\n- Handle bitwise operations and signal broadcasting correctly.\n</Guidelines>\n\nHere are some additional rules and coding conventions.\n<Coding Conventions>\n - Declare all ports and signals as logic; do not to use wire or reg.\n - For combinational logic with an always block do not explicitly specify\n   the sensitivity list; instead use always @(*).\n - All sized numeric constants must have a size greater than zero\n   (e.g, 0'b0 is not a valid expression).\n - An always block must read at least one signal otherwise it will never\n   be executed; use an assign statement instead of an always block in\n   situations where there is no need to read any signals.\n - if the module uses a synchronous reset signal, this means the reset\n   signal is sampled with respect to the clock. When implementing a\n   synchronous reset signal, do not include posedge reset in the\n   sensitivity list of any sequential always block.\n</Coding Conventions>\n\n<REASONING>\nYour reasoning behind your implementation here. Think step by step.\n</REASONING>\n\n<CODE>\nIMPORTANT: Enclose your code with [BEGIN] and [DONE] tags.\nDo NOT use Markdown code blocks (```) inside the [BEGIN]/[DONE] tags.\nYour code should look like:\n\n[BEGIN]\nmodule TopModule(\n    input in,\n    output out\n);\n    // Your implementation here\nendmodule\n[DONE]\n</CODE>\n"
+    },
+    {
+        "role": "assistant",
+        "content": "To implement your requested module, I have rewritten the specification to be more clear and concise. Here is the enhanced specification:\n                    Module Name: TopModule\n\nInterface:\n- Inputs:\n  - `in`: A 100-bit wide input vector. The most significant bit (MSB) is `in[99]`, and the least significant bit (LSB) is `in[0]`.\n- Outputs:\n  - `out`: A 100-bit wide output vector. The MSB is `out[99]`, and the LSB is `out[0]`.\n\nFunctionality:\n- The module shall reverse the order of the bits in the input vector `in` and assign the reversed bit order to the output vector `out`.\n- Specifically, `out[i]` shall be assigned the value of `in[99-i]` for each bit index `i` ranging from 0 to 99.\n\nBehavior:\n- This operation is purely combinational with no dependency on any clock or reset signals.\n- All bits in the input and output vectors are unsigned.\n\nEdge Cases:\n- The module must handle all possible 100-bit input combinations correctly, ensuring that the output accurately reflects the reversed bit order of the input.\n\nNote:\n- Ensure that the design handles propagation delays appropriately to maintain correct functionality and timing, particularly in longer data paths due to the large width of the input and output vectors.\n                    "
+    },
+    {
+        "role": "user",
+        "content": "Okay, now please implement the module, ensuring syntactical and functional correctness."
+    }
+]

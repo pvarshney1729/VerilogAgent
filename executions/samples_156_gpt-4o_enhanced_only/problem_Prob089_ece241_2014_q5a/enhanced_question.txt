@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal for the module. This signal is used to trigger all sequential elements on the rising edge.
+  - `input areset`: Asynchronous reset signal. When asserted (high), it resets the state machine to its initial state. This reset is active high.
+  - `input x`: Serial input bit stream representing the least-significant bit (LSB) first of a binary number. This input is processed one bit per clock cycle.
+
+- Output Ports:
+  - `output z`: Output representing the 2's complement of the input bit stream. The output is one bit corresponding to each input bit processed.
+
+Functional Description:
+- The module implements a Moore state machine designed to compute the 2's complement of a serially input binary number.
+- The input sequence begins with the least-significant bit (bit[0]) and continues for an arbitrary number of clock cycles.
+- The output `z` provides the 2's complement of the incoming bit stream, bit by bit.
+- The state machine operates based on a Moore model, where the output depends only on the current state, not on the input.
+
+Operational Details:
+- The state machine begins its operation on the release of the asynchronous reset (`areset` goes low).
+- When `areset` is asserted (high), the state machine is reset to its initial state, halting the conversion process immediately.
+- All sequential logic, including state registers, is triggered on the positive edge of the `clk` signal.
+- Upon reset, all state registers and outputs are set to their initial conditions. The specific initial state should be defined to ensure a known starting condition.
+
+Edge Cases and Boundary Conditions:
+- The module must handle input sequences of any length, processing each bit serially on each clock cycle.
+- Proper operation is contingent upon the `areset` being deasserted (low) for the state machine to perform conversions.
+
+Notes on Implementation:
+- Ensure that state transitions and output logic are free from race conditions by carefully defining state and output logic dependencies.
+- Clearly define all state transitions and state encoding to avoid ambiguities in state machine operation.
+- Consider defining a state transition diagram or truth table to aid in implementation, detailing how each input bit is processed to produce the corresponding 2's complement output bit.
+</ENHANCED_SPEC>

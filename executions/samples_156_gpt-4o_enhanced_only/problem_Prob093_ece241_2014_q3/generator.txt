@@ -1,0 +1,63 @@
+Generated Response:
+
+Certainly! Below is the Verilog implementation for the `TopModule` according to the specified requirements and Karnaugh map.
+
+[BEGIN]
+module TopModule(
+    input logic c,
+    input logic d,
+    output logic [3:0] mux_in
+);
+
+    // mux_in[0] corresponds to ab = 00
+    // From K-map: mux_in[0] = c'd + cd'
+    assign mux_in[0] = (~c & d) | (c & ~d);
+
+    // mux_in[1] corresponds to ab = 01
+    // From K-map: mux_in[1] = 0
+    assign mux_in[1] = 1'b0;
+
+    // mux_in[2] corresponds to ab = 11
+    // From K-map: mux_in[2] = cd
+    assign mux_in[2] = c & d;
+
+    // mux_in[3] corresponds to ab = 10
+    // From K-map: mux_in[3] = c + d
+    assign mux_in[3] = c | d;
+
+endmodule
+[DONE]
+
+### Explanation:
+- **mux_in[0]**: Derived from the K-map, it covers the cases where `cd` is either `01` or `10`. This results in `(c'd + cd')`.
+- **mux_in[1]**: According to the K-map, this output is always `0`.
+- **mux_in[2]**: This represents the case where `cd` is `11`, thus `cd`.
+- **mux_in[3]**: Covers the cases `00` and `10` where either `c` or `d` is `1`, giving `c + d`.
+
+This implementation strictly follows the logic derived from the provided Karnaugh map and uses the least number of logic elements as per the restrictions.
+
+Generated Code:
+
+module TopModule(
+    input logic c,
+    input logic d,
+    output logic [3:0] mux_in
+);
+
+    // mux_in[0] corresponds to ab = 00
+    // From K-map: mux_in[0] = c'd + cd'
+    assign mux_in[0] = (~c & d) | (c & ~d);
+
+    // mux_in[1] corresponds to ab = 01
+    // From K-map: mux_in[1] = 0
+    assign mux_in[1] = 1'b0;
+
+    // mux_in[2] corresponds to ab = 11
+    // From K-map: mux_in[2] = cd
+    assign mux_in[2] = c & d;
+
+    // mux_in[3] corresponds to ab = 10
+    // From K-map: mux_in[3] = c + d
+    assign mux_in[3] = c | d;
+
+endmodule

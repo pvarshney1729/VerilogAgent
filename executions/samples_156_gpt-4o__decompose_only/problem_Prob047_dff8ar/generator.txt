@@ -1,0 +1,43 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for `TopModule` that includes 8 D flip-flops with an active high asynchronous reset. The flip-flops are triggered by the positive edge of the clock, and the output is reset to zero when the asynchronous reset is active.
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 8'b0; // Reset all flip-flops to 0
+        end else begin
+            q <= d; // Capture input d on the rising edge of clk
+        end
+    end
+
+endmodule
+[DONE]
+
+This module uses the `always_ff` block, which is a SystemVerilog construct that ensures the block is used for sequential logic. The asynchronous reset is handled by including `areset` in the sensitivity list, and the reset condition is checked first to ensure that `q` is set to zero when `areset` is high. Otherwise, the value of `d` is captured on the rising edge of `clk`.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 8'b0; // Reset all flip-flops to 0
+        end else begin
+            q <= d; // Capture input d on the rising edge of clk
+        end
+    end
+
+endmodule

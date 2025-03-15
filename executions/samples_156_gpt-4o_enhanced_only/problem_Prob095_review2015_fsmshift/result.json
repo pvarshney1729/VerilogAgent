@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    output logic shift_ena\n);\n\n    // Internal register to keep track of the FSM state/count\n    logic [2:0] counter; // 3 bits to count up to 4\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            // Upon reset, initialize the counter and enable signal\n            counter <= 3'd0;\n            shift_ena <= 1'b1;\n        end else if (shift_ena) begin\n            // If shift_ena is asserted, count up\n            if (counter == 3'd3) begin\n                // After 4 cycles, deassert shift_ena\n                shift_ena <= 1'b0;\n            end else begin\n                // Increment the counter\n                counter <= counter + 1;\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    input logic [7:0] d,\n    output logic [7:0] q\n);\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            q <= 8'b0000_0000; // Reset all bits of q to zero\n        end else begin\n            q <= d; // Capture the input data d\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

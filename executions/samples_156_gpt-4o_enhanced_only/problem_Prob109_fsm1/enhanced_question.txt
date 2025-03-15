@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+The module named `TopModule` is to be implemented with the following interface. All input and output ports are one bit wide.
+
+- `input clk` : This is the clock input signal, used for synchronizing the state transitions.
+- `input areset` : This is an asynchronous reset input signal. When high, it resets the state machine to the initial state.
+- `input in` : This is the input signal used for state transitions.
+- `output reg out` : This is the output signal of the Moore machine, driven by the current state.
+
+The module is a Moore state machine with the following characteristics:
+
+1. **States**: The state machine consists of two states:
+   - State A (Output = 0)
+   - State B (Output = 1)
+
+2. **State Transitions**:
+   - From State B:
+     - On `in = 0`, transition to State A.
+     - On `in = 1`, remain in State B.
+   - From State A:
+     - On `in = 0`, transition to State B.
+     - On `in = 1`, remain in State A.
+
+3. **Reset Behavior**:
+   - The reset (`areset`) is asynchronous and active high.
+   - When `areset` is high, the state machine transitions immediately to State B, regardless of the clock.
+   - State B is the initial state upon reset.
+
+4. **Output Behavior**:
+   - The output `out` is determined solely by the current state and remains constant throughout each state.
+   - `out = 0` when in State A.
+   - `out = 1` when in State B.
+
+5. **Implementation Notes**:
+   - The state transitions are synchronized with the rising edge of the `clk`.
+   - Ensure that the `out` signal is updated immediately after a state transition to accurately reflect the current state.
+   - Define states using a two-state enumerated type or equivalent, and manage state transitions via a state register updated on each clock cycle, with the reset condition handled asynchronously.
+
+By adhering to the specification above, the module will function as a Moore state machine with defined behavior, reset conditions, and state-dependent output.
+</ENHANCED_SPEC>

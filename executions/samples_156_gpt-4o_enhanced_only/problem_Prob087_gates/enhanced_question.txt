@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire a`: One-bit input signal.
+  - `input wire b`: One-bit input signal.
+  
+- Output Ports:
+  - `output wire out_and`: One-bit output signal representing the logical AND operation between inputs `a` and `b`.
+  - `output wire out_or`: One-bit output signal representing the logical OR operation between inputs `a` and `b`.
+  - `output wire out_xor`: One-bit output signal representing the logical XOR operation between inputs `a` and `b`.
+  - `output wire out_nand`: One-bit output signal representing the logical NAND operation between inputs `a` and `b`.
+  - `output wire out_nor`: One-bit output signal representing the logical NOR operation between inputs `a` and `b`.
+  - `output wire out_xnor`: One-bit output signal representing the logical XNOR operation between inputs `a` and `b`.
+  - `output wire out_anotb`: One-bit output signal representing the logical AND operation between input `a` and the negation of input `b`.
+
+Design Requirements:
+- The module is a combinational logic circuit.
+- All input and output signals are single-bit wide, with bit[0] representing the least significant bit.
+- There is no clock or reset signal required as the module is purely combinational.
+- The logic operations are defined as follows:
+  1. `out_and`: Output is high (1) if both `a` and `b` are high (1); otherwise, low (0).
+  2. `out_or`: Output is high (1) if either `a` or `b` or both are high (1); otherwise, low (0).
+  3. `out_xor`: Output is high (1) if `a` and `b` are different; otherwise, low (0).
+  4. `out_nand`: Output is low (0) if both `a` and `b` are high (1); otherwise, high (1).
+  5. `out_nor`: Output is low (0) if either `a` or `b` or both are high (1); otherwise, high (1).
+  6. `out_xnor`: Output is high (1) if `a` and `b` are the same; otherwise, low (0).
+  7. `out_anotb`: Output is high (1) if `a` is high (1) and `b` is low (0); otherwise, low (0).
+
+Edge Cases:
+- The outputs are deterministic and depend solely on the current values of inputs `a` and `b`.
+- No undefined behavior or race conditions are expected as the design is fully combinational without any sequential elements.
+</ENHANCED_SPEC>

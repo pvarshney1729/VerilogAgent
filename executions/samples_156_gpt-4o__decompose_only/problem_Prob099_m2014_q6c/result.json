@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input [5:0] y,  // State encoding\n    input w,        // Input signal\n    output logic Y1, // Output signal\n    output logic Y3  // Output signal\n);\n\n    // Logic for output Y1: High for states E and F\n    assign Y1 = y[4] | y[5];\n\n    // Logic for output Y3: High for transitions to state D\n    assign Y3 = (y[1] & w) | (y[2] & w) | (y[4] & ~w) | (y[5] & w);\n\n    // Logic for next-state signal Y2 (corresponding to y[1])\n    logic Y2;\n    assign Y2 = (y[0] & ~w) | (y[2] & ~w);\n\n    // Logic for next-state signal Y4 (corresponding to y[3])\n    logic Y4;\n    assign Y4 = (y[1] & w) | (y[2] & ~w) | (y[4] & w);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    }
+}

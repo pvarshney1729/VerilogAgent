@@ -1,0 +1,74 @@
+Generated Response:
+
+Certainly! Below is the Verilog code for the `TopModule` that implements a 32-bit Galois LFSR with the specified tap positions. The module is designed with a synchronous reset and adheres to the coding conventions provided.
+
+```verilog
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    // Internal signal to hold the state of the LFSR
+    logic [31:0] lfsr_state;
+
+    // Sequential block handling the clock and synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            lfsr_state <= 32'h1; // Reset state
+        end else begin
+            // Next state logic for Galois LFSR
+            lfsr_state <= {lfsr_state[30:0], feedback_bit};
+        end
+    end
+
+    // Feedback calculation
+    logic feedback_bit;
+    assign feedback_bit = lfsr_state[0] ^ lfsr_state[1] ^ lfsr_state[21] ^ lfsr_state[31];
+
+    // Output assignment
+    assign q = lfsr_state;
+
+endmodule
+[DONE]
+```
+
+### Explanation:
+- **Clock and Reset**: The `always_ff` block is used for synthesizing flip-flops, which operate on the positive edge of `clk` and handle the synchronous reset.
+- **LFSR State**: The `lfsr_state` register holds the current state of the LFSR and is updated every clock cycle based on the feedback logic.
+- **Feedback Logic**: The feedback bit is computed by XORing the LSB (`lfsr_state[0]`) with the tapped positions (`lfsr_state[1]`, `lfsr_state[21]`, `lfsr_state[31]`).
+- **State Shifting**: The LFSR shifts to the right by concatenating the `feedback_bit` to the leftmost position of the state.
+- **Output Assignment**: The current state of the LFSR (`lfsr_state`) is continuously assigned to the output `q`. 
+
+This implementation ensures that the LFSR operates correctly with the specified tap positions and handles the synchronous reset appropriately.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    // Internal signal to hold the state of the LFSR
+    logic [31:0] lfsr_state;
+
+    // Sequential block handling the clock and synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            lfsr_state <= 32'h1; // Reset state
+        end else begin
+            // Next state logic for Galois LFSR
+            lfsr_state <= {lfsr_state[30:0], feedback_bit};
+        end
+    end
+
+    // Feedback calculation
+    logic feedback_bit;
+    assign feedback_bit = lfsr_state[0] ^ lfsr_state[1] ^ lfsr_state[21] ^ lfsr_state[31];
+
+    // Output assignment
+    assign q = lfsr_state;
+
+endmodule

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,  // Clock signal\n    input logic w,    // Input from the previous stage\n    input logic R,    // Load value\n    input logic E,    // Enable shift\n    input logic L,    // Load signal\n    output logic Q    // Output of this stage\n);\n\n    always_ff @(posedge clk) begin\n        if (L) begin\n            Q <= R;  // Load mode: load the value R\n        end else if (E) begin\n            Q <= w;  // Shift mode: shift in the value w\n        end\n        // Hold mode implicitly handled: Q retains its value when neither L nor E is asserted\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

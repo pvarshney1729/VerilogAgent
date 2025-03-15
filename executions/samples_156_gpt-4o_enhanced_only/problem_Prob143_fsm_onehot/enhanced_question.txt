@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire in`: A 1-bit input signal used to determine state transitions.
+  - `input wire [9:0] state`: A 10-bit input vector representing the current state using one-hot encoding. Each bit corresponds to a state S0 to S9, where `state[0]` represents S0 and `state[9]` represents S9.
+
+- Output Ports:
+  - `output reg [9:0] next_state`: A 10-bit output vector representing the next state using one-hot encoding. Each bit corresponds to a state S0 to S9, where `next_state[0]` represents S0 and `next_state[9]` represents S9.
+  - `output reg out1`: A 1-bit output signal determined by the current state.
+  - `output reg out2`: A 1-bit output signal determined by the current state.
+
+State Machine Description:
+- This state machine employs one-hot encoding with states S0 through S9.
+- Transitions between states are determined by the 1-bit input `in`.
+- The state machine's outputs `(out1, out2)` are defined for each state.
+
+State Transition Table:
+- S0: Transitions to S0 on `in == 0`, to S1 on `in == 1`. Outputs are (0, 0).
+- S1: Transitions to S0 on `in == 0`, to S2 on `in == 1`. Outputs are (0, 0).
+- S2: Transitions to S0 on `in == 0`, to S3 on `in == 1`. Outputs are (0, 0).
+- S3: Transitions to S0 on `in == 0`, to S4 on `in == 1`. Outputs are (0, 0).
+- S4: Transitions to S0 on `in == 0`, to S5 on `in == 1`. Outputs are (0, 0).
+- S5: Transitions to S8 on `in == 0`, to S6 on `in == 1`. Outputs are (0, 0).
+- S6: Transitions to S9 on `in == 0`, to S7 on `in == 1`. Outputs are (0, 0).
+- S7: Transitions to S0 on `in == 0`, remains in S7 on `in == 1`. Outputs are (0, 1).
+- S8: Transitions to S0 on `in == 0`, to S1 on `in == 1`. Outputs are (1, 0).
+- S9: Transitions to S0 on `in == 0`, to S1 on `in == 1`. Outputs are (1, 1).
+
+State Encoding:
+- Each state is represented by a single high bit in a 10-bit vector.
+- Example: `state[3]` high indicates the machine is in S3.
+
+Output Logic:
+- Outputs `out1` and `out2` are determined by the current state as per the state transition table.
+
+Operational Notes:
+- The module assumes the current state is provided by the `state` input.
+- The next state is determined by evaluating the input `in` against the current state and setting `next_state` accordingly.
+- The outputs `out1` and `out2` are updated based on the current state.
+
+Edge Cases:
+- The module should handle cases where more than one bit in `state` is high by evaluating all active states and determining the correct transitions as per the state table.
+- All unspecified transitions should default to output (0, 0) and transition to S0 unless otherwise stated.
+</ENHANCED_SPEC>

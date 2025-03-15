@@ -1,0 +1,115 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with the specified input and output ports.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input clk,\n    input areset,\n    input bump_left,\n    input bump_right,\n    input ground,\n    input dig,\n    output reg walk_left,\n    output reg walk_right,\n    output reg aaah,\n    output reg digging\n);\n\n    // State encoding\n    typedef enum reg [2:0] {\n        WALK_LEFT = 3'b000,\n        WALK_RIGHT = 3'b001,\n        FALL_LEFT = 3'b010,\n        FALL_RIGHT = 3'b011,\n        DIG_LEFT = 3'b100,\n        DIG_RIGHT = 3'b101,\n        SPLATTER = 3'b110\n    } state_t;\n\n    state_t state, next_state;\n    reg [4:0] fall_counter; // 5-bit counter to count up to 20\n\n    // State transition logic\n    always @(posedge clk or posedge areset) begin\n        if (areset) begin\n            state <= WALK_LEFT;\n            fall_counter <= 0;\n        end else begin\n            state <= next_state;\n            if (state == FALL_LEFT || state == FALL_RIGHT) begin\n                fall_counter <= fall_counter + 1;\n            end else begin\n                fall_counter <= 0;\n            end\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (state)\n            WALK_LEFT: begin\n                if (!ground) begin\n                    next_state = FALL_LEFT;\n                end else if (dig) begin\n                    next_state = DIG_LEFT;\n                end else if (bump_left) begin\n                    next_state = WALK_RIGHT;\n                end else begin\n                    next_state = WALK_LEFT;\n                end\n            end\n            WALK_RIGHT: begin\n                if (!ground) begin\n                    next_state = FALL_RIGHT;\n                end else if (dig) begin\n                    next_state = DIG_RIGHT;\n                end else if (bump_right) begin\n                    next_state = WALK_LEFT;\n                end else begin\n                    next_state = WALK_RIGHT;\n                end\n            end\n            FALL_LEFT, FALL_RIGHT: begin\n                if (ground) begin\n                    if (fall_counter > 20) begin\n                        next_state = SPLATTER;\n                    end else if (state == FALL_LEFT) begin\n                        next_state = WALK_LEFT;\n                    end else begin\n                        next_state = WALK_RIGHT;\n                    end\n                end else begin\n                    next_state = state;\n                end\n            end\n            DIG_LEFT: begin\n                if (!ground) begin\n                    next_state = FALL_LEFT;\n                end else begin\n                    next_state = DIG_LEFT;\n                end\n            end\n            DIG_RIGHT: begin\n                if (!ground) begin\n                    next_state = FALL_RIGHT;\n                end else begin\n                    next_state = DIG_RIGHT;\n                end\n            end\n            SPLATTER: begin\n                next_state = SPLATTER;\n            end\n            default: begin\n                next_state = WALK_LEFT;\n            end\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        walk_left = (state == WALK_LEFT);\n        walk_right = (state == WALK_RIGHT);\n        aaah = (state == FALL_LEFT || state == FALL_RIGHT);\n        digging = (state == DIG_LEFT || state == DIG_RIGHT);\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define the states for the FSM: WALK_LEFT, WALK_RIGHT, FALLING, DIGGING, and SPLATTERED.",
+        "source": "The game Lemmings involves critters with fairly simple brains. So simple that we are going to model it using a finite state machine. In the Lemmings' 2D world, Lemmings can be in one of two states: walking left (walk_left is 1) or walking right (walk_right is 1).",
+        "implementation": "// State encoding for the FSM\n  typedef enum logic [2:0] {\n    WALK_LEFT    = 3'b000,\n    WALK_RIGHT   = 3'b001,\n    FALLING      = 3'b010,\n    DIGGING      = 3'b011,\n    SPLATTERED   = 3'b100\n  } state_t;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state transition logic for walking left and right, including direction changes when bumped.",
+        "source": "It will switch directions if it hits an obstacle. In particular, if a Lemming is bumped on the left (by receiving a 1 on bump_left), it will walk right. If it's bumped on the right (by receiving a 1 on bump_right), it will walk left. If it's bumped on both sides at the same time, it will still switch directions.",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  typedef enum logic [1:0] {\n    WALK_LEFT  = 2'b00,\n    WALK_RIGHT = 2'b01,\n    FALLING    = 2'b10,\n    DIGGING    = 2'b11\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // State transition logic\n  always_comb begin\n    case (current_state)\n      WALK_LEFT: begin\n        if (bump_left || (bump_left && bump_right))\n          next_state = WALK_RIGHT;\n        else\n          next_state = WALK_LEFT;\n      end\n      WALK_RIGHT: begin\n        if (bump_right || (bump_left && bump_right))\n          next_state = WALK_LEFT;\n        else\n          next_state = WALK_RIGHT;\n      end\n      default: next_state = current_state; // For other states like FALLING, DIGGING\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "4",
+        "content": "Implement the state transition logic for falling when ground=0 and resuming walking when ground=1.",
+        "source": "In addition to walking left and right and changing direction when bumped, when ground=0, the Lemming will fall and say \"aaah!\". When the ground reappears (ground=1), the Lemming will resume walking in the same direction as before the fall.",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  typedef enum logic [1:0] {\n    WALK_LEFT  = 2'b00,\n    WALK_RIGHT = 2'b01,\n    FALLING    = 2'b10\n  } state_t;\n\n  state_t current_state, next_state;\n  logic [4:0] fall_counter; // 5-bit counter to track falling duration\n\n  // State transition logic\n  always_ff @(posedge clk or posedge areset) begin\n    if (areset) begin\n      current_state <= WALK_LEFT;\n      fall_counter <= 5'd0;\n    end else begin\n      current_state <= next_state;\n      if (current_state == FALLING) begin\n        fall_counter <= fall_counter + 1;\n      end else begin\n        fall_counter <= 5'd0;\n      end\n    end\n  end\n\n  // Next state logic\n  always_comb begin\n    case (current_state)\n      WALK_LEFT: begin\n        if (!ground) begin\n          next_state = FALLING;\n        end else if (bump_left) begin\n          next_state = WALK_RIGHT;\n        end else begin\n          next_state = WALK_LEFT;\n        end\n      end\n      WALK_RIGHT: begin\n        if (!ground) begin\n          next_state = FALLING;\n        end else if (bump_right) begin\n          next_state = WALK_LEFT;\n        end else begin\n          next_state = WALK_RIGHT;\n        end\n      end\n      FALLING: begin\n        if (ground) begin\n          if (fall_counter > 5'd20) begin\n            next_state = FALLING; // Splattered state, but not explicitly defined\n          end else begin\n            next_state = (current_state == WALK_LEFT) ? WALK_LEFT : WALK_RIGHT;\n          end\n        end else begin\n          next_state = FALLING;\n        end\n      end\n      default: begin\n        next_state = WALK_LEFT;\n      end\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "5",
+        "content": "Implement the state transition logic for digging when dig=1 and ground=1, and transition to falling when ground=0.",
+        "source": "A Lemming can dig if it is currently walking on ground (ground=1 and not falling), and will continue digging until it reaches the other side (ground=0).",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  typedef enum logic [1:0] {\n    WALK_LEFT  = 2'b00,\n    WALK_RIGHT = 2'b01,\n    DIGGING    = 2'b10,\n    FALLING    = 2'b11\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // State transition logic\n  always_comb begin\n    case (current_state)\n      WALK_LEFT: begin\n        if (ground == 0) begin\n          next_state = FALLING;\n        end else if (dig == 1) begin\n          next_state = DIGGING;\n        end else begin\n          next_state = WALK_LEFT;\n        end\n      end\n      WALK_RIGHT: begin\n        if (ground == 0) begin\n          next_state = FALLING;\n        end else if (dig == 1) begin\n          next_state = DIGGING;\n        end else begin\n          next_state = WALK_RIGHT;\n        end\n      end\n      DIGGING: begin\n        if (ground == 0) begin\n          next_state = FALLING;\n        end else begin\n          next_state = DIGGING;\n        end\n      end\n      FALLING: begin\n        if (ground == 1) begin\n          next_state = (current_state == WALK_LEFT) ? WALK_LEFT : WALK_RIGHT;\n        end else begin\n          next_state = FALLING;\n        end\n      end\n      default: begin\n        next_state = WALK_LEFT;\n      end\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "6",
+        "content": "Implement the splatter logic: if a Lemming falls for more than 20 clock cycles and then hits the ground, it will splatter.",
+        "source": "If a Lemming falls for more than 20 clock cycles then hits the ground, it will splatter and cease walking, falling, or digging (all 4 outputs become 0), forever.",
+        "implementation": "```verilog\n[BEGIN]\nreg [4:0] fall_counter;\nreg splattered;\n\nalways @(posedge clk or posedge areset) begin\n    if (areset) begin\n        fall_counter <= 5'd0;\n        splattered <= 1'b0;\n    end else if (!ground && !splattered) begin\n        if (fall_counter < 5'd21)\n            fall_counter <= fall_counter + 1'b1;\n    end else if (ground && !splattered) begin\n        if (fall_counter > 5'd20)\n            splattered <= 1'b1;\n        fall_counter <= 5'd0;\n    end\nend\n[END]\n```"
+    },
+    {
+        "id": "7",
+        "content": "Implement the output logic for each state: walk_left, walk_right, aaah, and digging.",
+        "source": "Implement a Moore state machine that models this behaviour. areset is positive edge triggered asynchronous reseting the Lemming machine to walk left.",
+        "implementation": "// State encoding\n    localparam WALK_LEFT  = 3'b000;\n    localparam WALK_RIGHT = 3'b001;\n    localparam AAAH       = 3'b010;\n    localparam DIGGING    = 3'b011;\n    localparam SPLATTER   = 3'b100;\n\n    // Output logic based on the current state\n    always @(*) begin\n        walk_left  = (state == WALK_LEFT);\n        walk_right = (state == WALK_RIGHT);\n        aaah       = (state == AAAH);\n        digging    = (state == DIGGING);\n    end"
+    },
+    {
+        "id": "8",
+        "content": "Implement the asynchronous reset logic to reset the FSM to the WALK_LEFT state.",
+        "source": "areset is positive edge triggered asynchronous reseting the Lemming machine to walk left.",
+        "implementation": "always @(posedge areset or posedge clk) begin\n    if (areset) begin\n        // Reset the FSM to the WALK_LEFT state\n        walk_left <= 1'b1;\n        walk_right <= 1'b0;\n        aaah <= 1'b0;\n        digging <= 1'b0;\n    end else begin\n        // Other FSM logic would go here\n    end\nend"
+    }
+]
+
+Modified Base Query:
+
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  areset
+ - input  bump_left
+ - input  bump_right
+ - input  ground
+ - input  dig
+ - output walk_left
+ - output walk_right
+ - output aaah
+ - output digging
+
+The game Lemmings involves critters with fairly simple brains. So simple
+that we are going to model it using a finite state machine. In the
+Lemmings' 2D world, Lemmings can be in one of two states: walking left
+(walk_left is 1) or walking right (walk_right is 1). It will switch
+directions if it hits an obstacle. In particular, if a Lemming is bumped
+on the left (by receiving a 1 on bump_left), it will walk right. If it's
+bumped on the right (by receiving a 1 on bump_right), it will walk left.
+If it's bumped on both sides at the same time, it will still switch
+directions.
+
+In addition to walking left and right and changing direction when bumped,
+when ground=0, the Lemming will fall and say ""aaah!"". When the ground
+reappears (ground=1), the Lemming will resume walking in the same
+direction as before the fall. Being bumped while falling does not affect
+the walking direction, and being bumped in the same cycle as ground
+disappears (but not yet falling), or when the ground reappears while
+still falling, also does not affect the walking direction.
+
+In addition to walking and falling, Lemmings can sometimes be told to do
+useful things, like dig (it starts digging when dig=1). A Lemming can dig
+if it is currently walking on ground (ground=1 and not falling), and will
+continue digging until it reaches the other side (ground=0). At that
+point, since there is no ground, it will fall (aaah!), then continue
+walking in its original direction once it hits ground again. As with
+falling, being bumped while digging has no effect, and being told to dig
+when falling or when there is no ground is ignored. (In other words, a
+walking Lemming can fall, dig, or switch directions. If more than one of
+these conditions are satisfied, fall has higher precedence than dig,
+which has higher precedence than switching directions.)
+
+Although Lemmings can walk, fall, and dig, Lemmings aren't invulnerable.
+If a Lemming falls for too long then hits the ground, it can splatter. In
+particular, if a Lemming falls for more than 20 clock cycles then hits
+the ground, it will splatter and cease walking, falling, or digging (all
+4 outputs become 0), forever (Or until the FSM gets reset). There is no
+upper limit on how far a Lemming can fall before hitting the ground.
+Lemmings only splatter when hitting the ground; they do not splatter in
+mid-air.
+
+Implement a Moore state machine that models this behaviour. areset is
+positive edge triggered asynchronous reseting the Lemming machine to walk
+left.
+
+Assume all sequential logic is triggered on the positive edge of the
+clock.
+

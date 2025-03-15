@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic load,\n    input logic [9:0] data,\n    output logic tc\n);\n\n    // Internal 10-bit register for the countdown counter\n    logic [9:0] counter;\n\n    // Sequential logic to update the counter and tc\n    always_ff @(posedge clk) begin\n        if (load) begin\n            // Load the counter with the provided data\n            counter <= data;\n        end else if (counter != 10'b0) begin\n            // Decrement counter if it's not zero\n            counter <= counter - 1;\n        end\n    end\n\n    // Combinational logic to set the tc output\n    always_comb begin\n        // tc is asserted when counter reaches 0\n        tc = (counter == 10'b0);\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

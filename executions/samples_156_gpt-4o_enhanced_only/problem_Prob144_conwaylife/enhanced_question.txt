@@ -1,0 +1,49 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- **Inputs:**
+  - `input clk`: Clock signal, positive-edge triggered.
+  - `input load`: Active high, synchronous load signal for loading initial state into `q`.
+  - `input [255:0] data`: 256-bit input vector representing the initial state of the 16x16 grid.
+
+- **Outputs:**
+  - `output reg [255:0] q`: 256-bit output vector representing the current state of the 16x16 grid.
+
+Grid Details:
+- The game operates on a 16x16 toroidal grid, meaning the edges wrap around.
+- Each cell can be either 1 (alive) or 0 (dead).
+- The grid state is stored in the `q` vector, where:
+  - `q[15:0]` corresponds to row 0,
+  - `q[31:16]` corresponds to row 1,
+  - ...
+  - `q[255:240]` corresponds to row 15.
+
+Cell Neighbor Rules:
+- Each cell's future state depends on its current state and the number of its 8 neighbors:
+  1. 0-1 neighbor: Cell becomes 0 (dead).
+  2. 2 neighbors: Cell state remains unchanged.
+  3. 3 neighbors: Cell becomes 1 (alive).
+  4. 4 or more neighbors: Cell becomes 0 (dead).
+
+Reset and Initial State:
+- There is no explicit reset signal. The initial state is loaded when `load` is high on the positive edge of the clock.
+
+Clock and Timing:
+- The game state advances by one timestep every positive clock edge.
+- When `load` is active high, the state `q` is updated with `data` on the next clock edge.
+- If `load` is not active, the state `q` is updated according to the game rules on each positive clock edge.
+
+Bit and Indexing Conventions:
+- Bit[0] of the vector refers to the least significant bit.
+- The indexing for the grid is row-major, meaning each continuous block of 16 bits in `q` represents a row.
+
+Edge Cases:
+- The grid is treated as toroidal; hence any access outside the bounds of 0 to 15 for row or column indices wraps around to the other side of the grid.
+
+Sequential Logic:
+- All sequential elements update on the positive edge of the clock.
+
+Dependencies:
+- The state of each cell in `q` depends on its 8 neighbors. Ensure no race conditions by evaluating neighbor states before updating the grid.
+</ENHANCED_SPEC>

@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+This module is designed to serve as one stage in a larger n-bit shift register circuit. It has a specific functionality to either shift, load, or hold a value based on control inputs. The module operates using sequential logic triggered by the positive edge of the clock signal.
+
+Interface Definition:
+- Inputs:
+  - `input wire clk`: Clock signal, used to synchronize operations. All sequential elements are triggered on the positive edge.
+  - `input wire w`: Data input from the previous stage of the shift register. This is the bit to be shifted in when enabled.
+  - `input wire R`: The value to be loaded into this stage when load is enabled.
+  - `input wire E`: Enable signal for shifting. When high, the module captures the input `w` at the next clock edge.
+  - `input wire L`: Load control signal. When high, the module loads the value of `R` instead of shifting.
+
+- Output:
+  - `output reg Q`: This is the output of the current stage. It holds the current state of the bit within this stage of the shift register.
+
+Behavioral Description:
+1. **Clock Edge Sensitivity**:
+   - This module is sensitive to the positive edge of `clk`.
+
+2. **Operational Modes**:
+   - **Shift Mode**: If `E` is asserted (high) and `L` is deasserted (low), `Q` is updated with the value of `w` at the next positive edge of `clk`.
+   - **Load Mode**: If `L` is asserted (high), irrespective of `E`, `Q` is updated with the value of `R` at the next positive edge of `clk`.
+   - **Hold Mode**: If both `E` and `L` are deasserted (low), `Q` retains its previous value.
+
+3. **Priority**:
+   - The load operation (`L` active) has priority over the shift operation (`E` active). If both `L` and `E` are high at the same time, `Q` will be updated with the value of `R`.
+
+4. **Initial Conditions**:
+   - Upon reset or power-up, `Q` should have a defined initial state. If not specified, assume `Q` initializes to 0.
+
+5. **Considerations**:
+   - Ensure no race conditions occur by clearly defining the priority of operations as mentioned.
+   - This specification does not include details on resets; if a reset is required, clarify whether it is synchronous or asynchronous and define the reset behavior for `Q`.
+</ENHANCED_SPEC>

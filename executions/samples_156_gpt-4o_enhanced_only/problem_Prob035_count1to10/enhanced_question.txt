@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+The module, named TopModule, should be implemented with the following interface, where all input and output ports are one bit wide unless otherwise specified:
+
+- input  logic clk         // Clock signal input
+- input  logic reset       // Active high synchronous reset signal
+- output logic [3:0] q     // 4-bit output representing the count
+
+The module will function as a decade counter, counting sequentially from 1 to 10 inclusive, and then wrapping back to 1. The following specifications apply:
+
+1. **Clock and Reset:**
+   - The counter logic should be triggered on the positive edge of the clock (`clk`).
+   - The `reset` input is synchronous and active high, meaning that reset actions occur on the positive edge of the clock when `reset` is high.
+   - When the reset is activated, the counter should reset to the value 1 on the next positive clock edge.
+
+2. **Counter Details:**
+   - The counter should increment its value on each positive edge of the clock.
+   - Once the counter reaches 10 (represented as 4'b1010), it should wrap around and reset to 1 on the next clock cycle.
+   - `q` is a 4-bit output where bit[3] is the most significant bit (MSB) and bit[0] is the least significant bit (LSB).
+
+3. **Initial Conditions:**
+   - Upon instantiation, or after an active reset, the counter should start at 1 (represented as 4'b0001).
+
+4. **Edge Cases:**
+   - Ensure that the counter properly handles the transition from 10 back to 1 without skipping any values between 1 and 10.
+   - The implementation should handle the condition where `reset` is asserted during counting, ensuring the counter is properly reset to 1 in the following cycle.
+
+5. **Operation Precedence:**
+   - In the event that both increment and reset conditions occur simultaneously on the same clock edge, the reset condition should have precedence, ensuring the counter is set to 1.
+
+This specification ensures a clear understanding of the module's behavior and its integration within a digital system.
+</ENHANCED_SPEC>

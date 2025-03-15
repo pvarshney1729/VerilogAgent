@@ -1,0 +1,65 @@
+Generated Response:
+
+Certainly! Below is the implementation of the `TopModule` as per the specified requirements. The module uses a 5-bit maximal-length Galois LFSR with taps at positions 5 and 3. The reset is synchronous and active-high, setting the output to 1 when asserted.
+
+[BEGIN]
+module TopModule(
+    input  logic clk,
+    input  logic reset,
+    output logic [4:0] q
+);
+    // Internal register to hold the current state of the LFSR
+    logic [4:0] lfsr_reg;
+
+    // Sequential logic block triggered on the positive edge of the clock
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            // Synchronous reset to initialize LFSR to 1
+            lfsr_reg <= 5'b00001;
+        end else begin
+            // Galois LFSR with taps at bit positions 5 and 3
+            lfsr_reg[4] <= lfsr_reg[0] ^ lfsr_reg[2]; // Tap at position 3
+            lfsr_reg[3] <= lfsr_reg[4];
+            lfsr_reg[2] <= lfsr_reg[3];
+            lfsr_reg[1] <= lfsr_reg[2];
+            lfsr_reg[0] <= lfsr_reg[1];
+        end
+    end
+
+    // Assign the LFSR register to the output
+    assign q = lfsr_reg;
+
+endmodule
+[DONE]
+
+This implementation correctly follows the guidelines and requirements, ensuring that the LFSR operates as a maximal-length sequence generator with a synchronous reset.
+
+Generated Code:
+
+module TopModule(
+    input  logic clk,
+    input  logic reset,
+    output logic [4:0] q
+);
+    // Internal register to hold the current state of the LFSR
+    logic [4:0] lfsr_reg;
+
+    // Sequential logic block triggered on the positive edge of the clock
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            // Synchronous reset to initialize LFSR to 1
+            lfsr_reg <= 5'b00001;
+        end else begin
+            // Galois LFSR with taps at bit positions 5 and 3
+            lfsr_reg[4] <= lfsr_reg[0] ^ lfsr_reg[2]; // Tap at position 3
+            lfsr_reg[3] <= lfsr_reg[4];
+            lfsr_reg[2] <= lfsr_reg[3];
+            lfsr_reg[1] <= lfsr_reg[2];
+            lfsr_reg[0] <= lfsr_reg[1];
+        end
+    end
+
+    // Assign the LFSR register to the output
+    assign q = lfsr_reg;
+
+endmodule

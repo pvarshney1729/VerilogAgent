@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- `input wire clk`: Clock signal for synchronizing the module.
+- `input wire reset`: Active-high synchronous reset signal.
+- `input wire [2:0] s`: 3-bit input vector representing the water level sensors. `s[2]` is the most significant bit (highest sensor), and `s[0]` is the least significant bit (lowest sensor).
+- `output reg fr2`: Output signal to control the nominal flow rate, associated with the lowest water level.
+- `output reg fr1`: Output signal to control the nominal flow rate, associated with the medium water level.
+- `output reg fr0`: Output signal to control the nominal flow rate, associated with the highest water level.
+- `output reg dfr`: Output signal to control the supplemental flow valve.
+
+Operational Description:
+- Water Level Evaluation:
+  - **Above s[2]**: All sensors `s[0]`, `s[1]`, and `s[2]` are asserted. Nominal flow rate inputs `fr0`, `fr1`, and `fr2` should all be deasserted. Supplemental flow valve `dfr` is also deasserted.
+  - **Between s[2] and s[1]**: Sensors `s[0]` and `s[1]` are asserted. Assert `fr0`. `fr1`, `fr2`, and `dfr` should be deasserted.
+  - **Between s[1] and s[0]**: Only sensor `s[0]` is asserted. Assert `fr0` and `fr1`. `fr2` should be deasserted. If transitioning from a lower level, assert `dfr` to increase flow.
+  - **Below s[0]**: No sensors are asserted. Assert `fr0`, `fr1`, and `fr2`. Assert `dfr` to open all valves.
+
+Sequential Logic:
+- The module uses a state machine to track the previous water level state.
+- The reset (`reset`) is synchronous and active-high. Upon reset, the module is set to a state equivalent to the water level being below `s[0]` (all sensors deasserted), with `fr0`, `fr1`, `fr2`, and `dfr` all asserted.
+
+Edge Cases and Initial Conditions:
+- On the first clock cycle after reset, outputs should reflect the state where no sensors are asserted, and all flow control outputs (`fr0`, `fr1`, `fr2`, `dfr`) are asserted.
+- The precedence of operations for sensor evaluation is in descending order: `s[2]`, `s[1]`, `s[0]`.
+
+This specification ensures that the module operates correctly under all specified conditions and transitions, maintaining clarity and precision in the implementation details.
+</ENHANCED_SPEC>

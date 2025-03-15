@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description:
+This module implements a one-bit full adder. A full adder takes three input bits, including a carry-in bit, and produces a sum bit and a carry-out bit.
+
+Port Specification:
+- Input Ports:
+  - `input wire a`: A single-bit input operand.
+  - `input wire b`: A single-bit input operand.
+  - `input wire cin`: A single-bit carry-in input.
+  
+- Output Ports:
+  - `output wire cout`: A single-bit carry-out output.
+  - `output wire sum`: A single-bit sum output.
+
+Functional Description:
+- Inputs:
+  - `a`, `b`, and `cin` are the three input bits to the adder.
+  - All inputs are considered to be unsigned and are single-bit wide.
+
+- Outputs:
+  - `sum` is the least significant bit of the sum of `a`, `b`, and `cin`.
+  - `cout` is the carry-out bit resulting from the addition, indicating overflow into the next significant bit in a multi-bit addition context.
+
+Operation:
+- The full adder performs the following operations:
+  - `sum = a XOR b XOR cin`
+  - `cout = (a AND b) OR (b AND cin) OR (cin AND a)`
+
+- The full adder's operation is combinational, with no clock or reset signals involved. It immediately reflects changes in the input signals on the outputs.
+
+Edge Cases:
+- The module correctly handles all combinations of `a`, `b`, and `cin` (i.e., all possible input states from 000 to 111).
+
+Indexing Conventions:
+- As each input and output is a single bit, specific bit indexing is not applicable beyond the single-bit context.
+
+Timing:
+- The module is purely combinational, with no sequential elements or clock dependencies.
+
+Reset Behavior:
+- Not applicable, as the module contains no sequential logic.
+
+</ENHANCED_SPEC>

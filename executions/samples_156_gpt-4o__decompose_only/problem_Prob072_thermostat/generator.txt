@@ -1,0 +1,85 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for the `TopModule` that adheres to the specified requirements and coding conventions:
+
+[BEGIN]
+module TopModule(
+    input logic mode,
+    input logic too_cold,
+    input logic too_hot,
+    input logic fan_on,
+    output logic heater,
+    output logic aircon,
+    output logic fan
+);
+
+    always @(*) begin
+        // Default outputs
+        heater = 0;
+        aircon = 0;
+        fan = 0;
+
+        if (mode) begin
+            // Heating mode
+            if (too_cold) begin
+                heater = 1;
+                fan = 1;
+            end
+        end else begin
+            // Cooling mode
+            if (too_hot) begin
+                aircon = 1;
+                fan = 1;
+            end
+        end
+
+        // Fan control
+        if (fan_on) begin
+            fan = 1;
+        end
+    end
+
+endmodule
+[DONE]
+
+This module implements the logic for a thermostat controller that switches between heating and cooling modes, controls the heater and air conditioner based on temperature conditions, and manages the fan operation as specified.
+
+Generated Code:
+
+module TopModule(
+    input logic mode,
+    input logic too_cold,
+    input logic too_hot,
+    input logic fan_on,
+    output logic heater,
+    output logic aircon,
+    output logic fan
+);
+
+    always @(*) begin
+        // Default outputs
+        heater = 0;
+        aircon = 0;
+        fan = 0;
+
+        if (mode) begin
+            // Heating mode
+            if (too_cold) begin
+                heater = 1;
+                fan = 1;
+            end
+        end else begin
+            // Cooling mode
+            if (too_hot) begin
+                aircon = 1;
+                fan = 1;
+            end
+        end
+
+        // Fan control
+        if (fan_on) begin
+            fan = 1;
+        end
+    end
+
+endmodule

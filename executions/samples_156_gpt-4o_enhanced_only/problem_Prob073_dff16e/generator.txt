@@ -1,0 +1,71 @@
+Generated Response:
+
+Below is the implementation of the `TopModule` that adheres to your specifications. The code includes 16 D flip-flops with synchronous, active-low reset, and byte-enable functionality:
+
+```verilog
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic [1:0] byteena,
+    input logic [15:0] d,
+    output logic [15:0] q
+);
+
+    // Synchronous logic for the 16 D flip-flops
+    always_ff @(posedge clk) begin
+        if (!resetn) begin
+            // Active-low reset: initialize all flip-flops to 0
+            q <= 16'b0;
+        end else begin
+            // If reset is not active, use byte-enable signals to control writing
+            if (byteena[1]) begin
+                q[15:8] <= d[15:8];  // Write to upper byte if enabled
+            end
+            if (byteena[0]) begin
+                q[7:0] <= d[7:0];    // Write to lower byte if enabled
+            end
+        end
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation:
+- **Module Declaration:** The `TopModule` is declared with the specified inputs and outputs.
+- **always_ff Block:** Used for synchronous sequential logic, triggered on the rising edge of `clk`.
+- **Reset Logic:** If `resetn` is low, the output `q` is reset to 0. This is a synchronous reset, meaning that it only takes effect on the rising edge of the clock.
+- **Byte-enable Logic:** 
+  - If `byteena[1]` is high, `d[15:8]` is written to `q[15:8]`.
+  - If `byteena[0]` is high, `d[7:0]` is written to `q[7:0]`.
+  - If `byteena` bits are not asserted, the respective bytes retain their previous values.
+- **Syntax Compliance:** The implementation follows the coding conventions and guidelines provided, ensuring syntactical correctness and functional adherence to the specification.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic [1:0] byteena,
+    input logic [15:0] d,
+    output logic [15:0] q
+);
+
+    // Synchronous logic for the 16 D flip-flops
+    always_ff @(posedge clk) begin
+        if (!resetn) begin
+            // Active-low reset: initialize all flip-flops to 0
+            q <= 16'b0;
+        end else begin
+            // If reset is not active, use byte-enable signals to control writing
+            if (byteena[1]) begin
+                q[15:8] <= d[15:8];  // Write to upper byte if enabled
+            end
+            if (byteena[0]) begin
+                q[7:0] <= d[7:0];    // Write to lower byte if enabled
+            end
+        end
+    end
+
+endmodule

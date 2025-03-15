@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `clk`: Clock signal, 1-bit, positive-edge triggered.
+  - `reset`: Synchronous reset, active high, 1-bit.
+  - `data`: Serial data input, 1-bit.
+  - `ack`: Acknowledgment signal, 1-bit.
+
+- Outputs:
+  - `count[3:0]`: 4-bit output representing the current countdown value. Bit[0] is the least significant bit.
+  - `counting`: 1-bit signal indicating that the timer is actively counting.
+  - `done`: 1-bit signal indicating the timer has completed its cycle.
+
+Functional Description:
+1. **Pattern Detection and Initialization**:
+   - The module searches for the specific input pattern `1101` on the `data` input.
+   - Upon detecting the pattern `1101`, the module enters a state to shift in the next 4 bits (MSB first) to determine the delay duration, stored in `delay[3:0]`.
+
+2. **Timer Counting**:
+   - Once `delay[3:0]` is captured, the `counting` output is asserted.
+   - The module counts for `(delay[3:0] + 1) * 1000` clock cycles.
+   - The `count[3:0]` output decrements every 1000 cycles, starting from `delay[3:0]` down to `0`.
+
+3. **Completion and Acknowledgment**:
+   - After the countdown completes, the `done` output is asserted.
+   - The module waits for `ack` input to be asserted (logic high) before resetting and resuming the search for the next `1101` pattern.
+
+4. **Reset Behavior**:
+   - On an active high `reset` signal, the module enters an initial state ready to detect the `1101` start pattern.
+   - All registers and sequential elements are initialized to a known state to ensure proper operation upon release of reset.
+
+Edge Cases and Considerations:
+- When the timer is not actively counting (`counting` is low), `count[3:0]` can hold any value (don't-care condition).
+- Ensure no further data is latched from the `data` input once the `1101` pattern and the 4-bit delay are captured until the counting process completes and `ack` is received.
+- Operations are synchronized to the positive edge of the `clk` signal, and care should be taken to avoid race conditions during state transitions and data capturing.
+
+Note: All operations and transitions are synchronous with respect to the `clk` signal, and the `reset` signal is synchronous with the clock.
+</ENHANCED_SPEC>

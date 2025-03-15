@@ -1,0 +1,65 @@
+Generated Response:
+
+Let's implement the `TopModule` as described, focusing on combining a 2:1 multiplexer and a D-type flip-flop. This module will follow the given guidelines and coding conventions.
+
+[BEGIN]
+module TopModule(
+    input wire clk,
+    input wire L,
+    input wire q_in,
+    input wire r_in,
+    output logic Q
+);
+
+    logic mux_out;
+
+    // 2:1 multiplexer
+    always @(*) begin
+        if (L) begin
+            mux_out = r_in;
+        end else begin
+            mux_out = q_in;
+        end
+    end
+
+    // D flip-flop to store the result of the multiplexer
+    always @(posedge clk) begin
+        Q <= mux_out;
+    end
+
+endmodule
+[DONE]
+
+Here, the module `TopModule` includes:
+- A 2:1 multiplexer that selects between `r_in` and `q_in` based on the signal `L`.
+- A positive edge-triggered D flip-flop that captures the output from the multiplexer and updates the output `Q` on the rising edge of `clk`. 
+
+The design adheres strictly to the provided interface and follows the coding conventions specified.
+
+Generated Code:
+
+module TopModule(
+    input wire clk,
+    input wire L,
+    input wire q_in,
+    input wire r_in,
+    output logic Q
+);
+
+    logic mux_out;
+
+    // 2:1 multiplexer
+    always @(*) begin
+        if (L) begin
+            mux_out = r_in;
+        end else begin
+            mux_out = q_in;
+        end
+    end
+
+    // D flip-flop to store the result of the multiplexer
+    always @(posedge clk) begin
+        Q <= mux_out;
+    end
+
+endmodule

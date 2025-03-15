@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+The module "TopModule" implements the functionality of a 7458 logic chip, consisting of four AND gates and two OR gates. This specification defines the module interface and behavior.
+
+**Module Interface:**
+- **Inputs:**
+  - `input wire p1a` : 1-bit input
+  - `input wire p1b` : 1-bit input
+  - `input wire p1c` : 1-bit input
+  - `input wire p1d` : 1-bit input
+  - `input wire p1e` : 1-bit input
+  - `input wire p1f` : 1-bit input
+  - `input wire p2a` : 1-bit input
+  - `input wire p2b` : 1-bit input
+  - `input wire p2c` : 1-bit input
+  - `input wire p2d` : 1-bit input
+
+- **Outputs:**
+  - `output wire p1y` : 1-bit output
+  - `output wire p2y` : 1-bit output
+
+**Functional Description:**
+
+- **Output `p1y`:**
+  - The output `p1y` is the logical OR of two 3-input AND gates.
+  - The first 3-input AND gate takes inputs `p1a`, `p1b`, and `p1c`.
+  - The second 3-input AND gate takes inputs `p1d`, `p1e`, and `p1f`.
+  - Mathematically, `p1y = (p1a AND p1b AND p1c) OR (p1d AND p1e AND p1f)`.
+
+- **Output `p2y`:**
+  - The output `p2y` is the logical OR of two 2-input AND gates.
+  - The first 2-input AND gate takes inputs `p2a` and `p2b`.
+  - The second 2-input AND gate takes inputs `p2c` and `p2d`.
+  - Mathematically, `p2y = (p2a AND p2b) OR (p2c AND p2d)`.
+
+**Additional Notes:**
+- All signals are active-high and operate at logic level 1 for TRUE and logic level 0 for FALSE.
+- The module is purely combinational; hence, no clock or reset signals are necessary.
+- All bit operations assume bit[0] refers to the least significant bit, although this is not directly applicable here as all signals are single-bit.
+- Ensure the correct precedence of operations by grouping AND operations before OR in the implementation.
+</ENHANCED_SPEC>

@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Inputs:
+  - input wire a; // One-bit input signal
+  - input wire b; // One-bit input signal
+  - input wire c; // One-bit input signal
+  - input wire d; // One-bit input signal
+- Output:
+  - output wire out; // One-bit output signal
+
+Functional Description:
+- The module TopModule implements a combinational logic circuit based on the given Karnaugh map, which defines the output for each combination of inputs a, b, c, and d.
+- The inputs a and b are used to form the columns of the Karnaugh map, while c and d form the rows as follows:
+  - 'a' is the most significant bit (MSB) of the columns, and 'b' is the least significant bit (LSB).
+  - 'c' is the most significant bit (MSB) of the rows, and 'd' is the least significant bit (LSB).
+- The output 'out' is determined by the following truth table derived from the Karnaugh map:
+
+              ab
+   cd   00  01  11  10
+   00 |  1  |  1  |  0  |  1  |
+   01 |  1  |  0  |  0  |  1  |
+   11 |  0  |  1  |  1  |  1  |
+   10 |  1  |  1  |  0  |  0  |
+
+- The output 'out' should be true (1) or false (0) according to the above table, mapping each input combination to its corresponding output value.
+
+Additional Implementation Details:
+- This is a purely combinational circuit with no sequential elements (e.g., flip-flops, registers).
+- No clock signal is required as there is no sequential logic involved.
+- The design does not require a reset signal since there are no memory elements.
+- Ensure that the implementation of logic gates accurately reflects the specified truth table to meet the required functional behavior for all input combinations.
+- The order of precedence for logical operations should be clearly defined in the implementation to avoid ambiguity.
+- Edge cases for input combinations are inherently covered by the Karnaugh map, ensuring all possible combinations of inputs are addressed.
+</ENHANCED_SPEC>

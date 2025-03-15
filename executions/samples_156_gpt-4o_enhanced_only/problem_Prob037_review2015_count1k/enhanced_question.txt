@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: Clock signal, used to trigger all sequential logic on its positive edge.
+  - `input wire reset`: Active-high synchronous reset signal, resets the counter to 0 on the rising edge of clk when high.
+
+- Output Ports:
+  - `output reg [9:0] q`: 10-bit output representing the current count value, where q[9] is the most significant bit (MSB) and q[0] is the least significant bit (LSB).
+
+Functional Description:
+- The module implements a binary counter that counts from 0 to 999, inclusive. The counter has a period of 1000 clock cycles.
+- The counter increments its value by 1 on each positive edge of the clock.
+- When the counter reaches 999 and a further clock edge occurs, it wraps around and continues counting from 0.
+
+Reset Behavior:
+- The reset input is synchronous with the clock. When `reset` is asserted (high) during a clock cycle, the counter will reset to 0 on the next positive edge of `clk`.
+- Ensure that the counter output `q` is set to 0 when the reset signal is active during the rising edge of the clock.
+
+Initial Conditions:
+- Upon initialization, the counter should start at 0. This can be assumed as the default state post-reset.
+
+Edge Cases:
+- If the counter is at its maximum value of 999 and a positive clock edge occurs without an active reset, the counter should wrap around to 0.
+- The counter should correctly handle the rollover from 999 to 0 without any glitches or race conditions.
+
+Timing and Logic:
+- All logic is synchronous and should be designed to avoid hazards and race conditions that might affect the counter's correct operation.
+- Ensure that the counter value `q` is updated only on the rising edge of the clock and reflects the correct count value for each clock cycle.
+</ENHANCED_SPEC>

@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - input wire c (1 bit): Represents a single-bit input signal.
+  - input wire d (1 bit): Represents a single-bit input signal.
+- Outputs:
+  - output wire [3:0] mux_in: Represents a 4-bit output vector. Each bit of this vector is connected to the corresponding input of a 4-to-1 multiplexer using {a, b} as the selector.
+
+Specifications:
+- The TopModule takes two 1-bit inputs, 'c' and 'd', and outputs a 4-bit vector 'mux_in' that aligns with the specified Karnaugh map using a combination of 4-to-1 and 2-to-1 multiplexers.
+- The 4-to-1 multiplexer uses 'a' and 'b' as the select lines, where:
+  - mux_in[0] corresponds to selector {a, b} = 00
+  - mux_in[1] corresponds to selector {a, b} = 01
+  - mux_in[2] corresponds to selector {a, b} = 11
+  - mux_in[3] corresponds to selector {a, b} = 10
+
+Karnaugh Map Definition:
+- The Karnaugh map provides the desired output for the inputs 'c' and 'd' based on the values of 'a' and 'b':
+
+      ab
+  cd  00  01  11  10
+  00 | 0 | 0 | 0 | 1 |
+  01 | 1 | 0 | 0 | 0 |
+  11 | 1 | 0 | 1 | 1 |
+  10 | 1 | 0 | 0 | 1 |
+
+Implementation Guidelines:
+- Use one 4-to-1 multiplexer as the primary element to select between the outputs based on {a, b}.
+- Use as few 2-to-1 multiplexers as possible to derive the 'mux_in' values corresponding to each combination of inputs 'c' and 'd'.
+- No additional logic gates (AND, OR, NOT) are allowed in the implementation.
+- The implementation must strictly adhere to the Karnaugh map, ensuring correct mapping from inputs 'c', 'd' to 'mux_in'.
+
+Note:
+- All bit indexing follows the convention where bit[0] refers to the least significant bit.
+- Ensure that the implementation is synchronous, and any potential race conditions are avoided by correct use of multiplexer logic.
+- There are no reset conditions or sequential elements defined in this specification.
+</ENHANCED_SPEC>

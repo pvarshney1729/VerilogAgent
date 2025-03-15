@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Descriptions:
+- `input wire a`: Single-bit input signal.
+- `input wire b`: Single-bit input signal.
+- `input wire c`: Single-bit input signal.
+- `input wire d`: Single-bit input signal.
+- `output wire out`: Single-bit output signal representing the result of the OR gate.
+- `output wire out_n`: Single-bit output signal representing the inverted result of the OR gate.
+
+Circuit Description:
+1. **First Layer (AND Gates):**
+   - Two AND gates are used:
+     - The first AND gate has inputs `a` and `b`. Let the output of this gate be `wire and1_out`.
+     - The second AND gate has inputs `c` and `d`. Let the output of this gate be `wire and2_out`.
+
+2. **Second Layer (OR Gate):**
+   - An OR gate combines the outputs of the two AND gates:
+     - Inputs are `and1_out` and `and2_out`.
+     - The output of this OR gate is connected to `out`.
+
+3. **Inversion:**
+   - The output `out` is also fed into a NOT gate to produce the inverted output `out_n`.
+
+Signal Characteristics:
+- All wires are single-bit signals.
+- Ensure correct wiring such that each wire is driven by exactly one source (e.g., the output of a gate) but can be used as an input to multiple gates.
+
+Functional Intent:
+- The module performs a logical operation where `out` is high when either both `a` and `b` are high or both `c` and `d` are high.
+- The signal `out_n` is the logical NOT of `out`.
+
+Additional Notes:
+- Since no clock or reset is involved, this module consists entirely of combinational logic.
+- Ensure that the naming of wires within the module is consistent with their functionality for clarity in implementation.
+</ENHANCED_SPEC>

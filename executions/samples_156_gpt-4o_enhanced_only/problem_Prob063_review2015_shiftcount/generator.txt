@@ -1,0 +1,56 @@
+Generated Response:
+
+Certainly! Below is the Verilog implementation of the `TopModule` based on the provided specifications.
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic shift_ena,
+    input logic count_ena,
+    input logic data,
+    output logic [3:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (shift_ena) begin
+            // Shift operation: shift in data into MSB
+            q <= {data, q[3:1]};
+        end else if (count_ena) begin
+            // Count operation: decrement the current value
+            q <= q - 1;
+        end
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Ports Declaration**: The module uses `logic` for all inputs and the output, following modern Verilog conventions.
+- **Sequential Logic**: The `always_ff` block is used to infer flip-flops, which operate on the positive edge of the `clk`.
+- **Shift Operation**: When `shift_ena` is high, the `data` bit is shifted into the most significant bit of `q`, and all other bits are shifted right.
+- **Decrement Operation**: When `count_ena` is high, the current value of `q` is decremented by 1.
+- **Priority**: The operations are mutually exclusive by design, so there's no need to define priority between them. The implementation handles each case separately.
+
+This implementation meets the requirements and adheres to the coding conventions provided.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic shift_ena,
+    input logic count_ena,
+    input logic data,
+    output logic [3:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (shift_ena) begin
+            // Shift operation: shift in data into MSB
+            q <= {data, q[3:1]};
+        end else if (count_ena) begin
+            // Count operation: decrement the current value
+            q <= q - 1;
+        end
+    end
+
+endmodule

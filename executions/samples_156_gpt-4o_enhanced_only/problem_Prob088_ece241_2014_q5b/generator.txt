@@ -1,0 +1,117 @@
+Generated Response:
+
+Let's implement the `TopModule` according to the given specifications. We'll use a one-hot encoding for the states and incorporate an asynchronous active-high reset. The code will include the necessary logic for state transitions and output assignments.
+
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic areset,
+    input  logic x,
+    output logic z
+);
+
+    // State encoding using one-hot representation
+    typedef enum logic [1:0] {
+        A = 2'b10,  // State A
+        B = 2'b01   // State B
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // Asynchronous reset and state transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= A;  // Reset to state A
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always_comb begin
+        case (current_state)
+            A: begin
+                if (x) begin
+                    next_state = B;
+                    z = 1;
+                end else begin
+                    next_state = A;
+                    z = 0;
+                end
+            end
+            B: begin
+                if (x) begin
+                    next_state = B;
+                    z = 0;
+                end else begin
+                    next_state = B;
+                    z = 1;
+                end
+            end
+            default: begin
+                next_state = A;  // Default to state A
+                z = 0;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+
+This module uses a one-hot encoding to define the states A and B. The `always_ff` block handles the state transitions on the rising edge of the clock or when the asynchronous reset `areset` is asserted. The `always_comb` block determines the next state and output `z` based on the current state and input `x`. The default state transition is set to A with `z = 0` as a safeguard.
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic areset,
+    input  logic x,
+    output logic z
+);
+
+    // State encoding using one-hot representation
+    typedef enum logic [1:0] {
+        A = 2'b10,  // State A
+        B = 2'b01   // State B
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // Asynchronous reset and state transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= A;  // Reset to state A
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always_comb begin
+        case (current_state)
+            A: begin
+                if (x) begin
+                    next_state = B;
+                    z = 1;
+                end else begin
+                    next_state = A;
+                    z = 0;
+                end
+            end
+            B: begin
+                if (x) begin
+                    next_state = B;
+                    z = 0;
+                end else begin
+                    next_state = B;
+                    z = 1;
+                end
+            end
+            default: begin
+                next_state = A;  // Default to state A
+                z = 0;
+            end
+        endcase
+    end
+
+endmodule

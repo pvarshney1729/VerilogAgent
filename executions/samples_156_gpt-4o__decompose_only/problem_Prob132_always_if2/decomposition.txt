@@ -1,0 +1,49 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module with the given input and output ports: cpu_overheated, shut_off_computer, arrived, gas_tank_empty, and keep_driving.",
+        "source": "module TopModule ( input cpu_overheated, output reg shut_off_computer, input arrived, input gas_tank_empty, output reg keep_driving );",
+        "implementation": "module TopModule (\n    input      cpu_overheated,\n    output reg shut_off_computer,\n    input      arrived,\n    input      gas_tank_empty,\n    output reg keep_driving\n);\n\n    always @(*) begin\n        if (cpu_overheated)\n            shut_off_computer = 1;\n        else\n            shut_off_computer = 0; // Ensure shut_off_computer is reset when not overheated\n    end\n\n    always @(*) begin\n        if (~arrived)\n            keep_driving = ~gas_tank_empty;\n        else\n            keep_driving = 0; // Ensure keep_driving is reset when arrived\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the logic to set shut_off_computer to 1 when cpu_overheated is true, and ensure it is set to 0 otherwise.",
+        "source": "always @(*) begin if (cpu_overheated) shut_off_computer = 1; end",
+        "implementation": "always @(*) begin\n    if (cpu_overheated)\n        shut_off_computer = 1;\n    else\n        shut_off_computer = 0;\nend"
+    },
+    {
+        "id": "3",
+        "content": "Implement the logic to set keep_driving based on the condition that if arrived is false, keep_driving should be the negation of gas_tank_empty. Ensure keep_driving is set to 0 when arrived is true.",
+        "source": "always @(*) begin if (~arrived) keep_driving = ~gas_tank_empty; end",
+        "implementation": "always @(*) begin\n    if (arrived)\n        keep_driving = 0;\n    else\n        keep_driving = ~gas_tank_empty;\nend"
+    }
+]
+
+Modified Base Query:
+
+
+Consider the following adder-subtractor with a zero flag:
+
+  module TopModule (
+      input      cpu_overheated,
+      output reg shut_off_computer,
+      input      arrived,
+      input      gas_tank_empty,
+      output reg keep_driving
+  );
+
+      always @(*) begin
+          if (cpu_overheated)
+             shut_off_computer = 1;
+      end
+
+      always @(*) begin
+          if (~arrived)
+             keep_driving = ~gas_tank_empty;
+      end
+
+  endmodule
+
+Unfortunately, this module has a bug. Implement a new version of this
+module that fixes the bug.
+

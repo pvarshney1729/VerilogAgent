@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+The module named `TopModule` should be implemented with the following interface. All input and output ports are one bit unless otherwise specified. Bit indexing is such that bit[0] refers to the least significant bit.
+
+- `input wire in`: Single-bit input that influences state transitions.
+- `input wire [3:0] state`: Four-bit input representing the current state using one-hot encoding.
+- `output reg [3:0] next_state`: Four-bit output providing the next state using one-hot encoding.
+- `output reg out`: Single-bit output representing the output of the state machine.
+
+The module will implement a Moore state machine with the following characteristics:
+
+1. **State Encoding**: The state machine uses one-hot encoding for its states:
+   - State A: `4'b0001`
+   - State B: `4'b0010`
+   - State C: `4'b0100`
+   - State D: `4'b1000`
+
+2. **State Transition Table**:
+   - **State A**: 
+     - If `in` = 0, transition to State A.
+     - If `in` = 1, transition to State B.
+   - **State B**: 
+     - If `in` = 0, transition to State C.
+     - If `in` = 1, transition to State B.
+   - **State C**: 
+     - If `in` = 0, transition to State A.
+     - If `in` = 1, transition to State D.
+   - **State D**: 
+     - If `in` = 0, transition to State C.
+     - If `in` = 1, transition to State B.
+
+3. **Output Logic**: The output `out` is determined solely by the current state:
+   - State A: `out = 0`
+   - State B: `out = 0`
+   - State C: `out = 0`
+   - State D: `out = 1`
+
+4. **Operational Characteristics**:
+   - The state transition logic and the output logic are purely combinational. There are no sequential elements (e.g., flip-flops) within this module; it assumes external logic to handle state updates.
+   - The state transition logic should directly derive the `next_state` based on the current `state` and `in` input, without involving any clock or reset signals, as these are not part of the combinational logic specification.
+
+5. **Edge Cases**:
+   - Ensure that the input `state` adheres to the one-hot encoding; undefined behavior may occur if multiple bits are set.
+   - Handle potential invalid states (more than one bit set) as per design need or assume they do not occur.
+</ENHANCED_SPEC>

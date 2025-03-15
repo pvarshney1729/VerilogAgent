@@ -1,0 +1,113 @@
+Generated Response:
+
+Certainly! Below is the implementation of the `TopModule` as per your specifications, using the guidelines and coding conventions provided:
+
+[BEGIN]
+```verilog
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State Encoding
+    typedef enum logic [1:0] {
+        A = 2'b00,
+        B = 2'b01,
+        C = 2'b10,
+        D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State Transition Logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= A;  // Synchronous reset to state A
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next State Logic
+    always @(*) begin
+        case (current_state)
+            A: next_state = (in) ? B : A;
+            B: next_state = (in) ? B : C;
+            C: next_state = (in) ? D : A;
+            D: next_state = (in) ? B : C;
+            default: next_state = A;  // Default state
+        endcase
+    end
+
+    // Output Logic
+    always @(*) begin
+        case (current_state)
+            A, B, C: out = 1'b0;
+            D: out = 1'b1;
+            default: out = 1'b0;  // Default output
+        endcase
+    end
+
+endmodule
+```
+[DONE]
+
+This implementation adheres to the given specifications:
+- A synchronous reset is used to reset to state A.
+- The state machine transitions are based on the input `in` and the current state.
+- The output `out` is determined by the current state and matches the specified output for each state.
+- The design follows the coding conventions, including using `logic` for port and signal declarations and using `always @(*)` for combinational logic.
+
+Generated Code:
+
+```verilog
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State Encoding
+    typedef enum logic [1:0] {
+        A = 2'b00,
+        B = 2'b01,
+        C = 2'b10,
+        D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State Transition Logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= A;  // Synchronous reset to state A
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next State Logic
+    always @(*) begin
+        case (current_state)
+            A: next_state = (in) ? B : A;
+            B: next_state = (in) ? B : C;
+            C: next_state = (in) ? D : A;
+            D: next_state = (in) ? B : C;
+            default: next_state = A;  // Default state
+        endcase
+    end
+
+    // Output Logic
+    always @(*) begin
+        case (current_state)
+            A, B, C: out = 1'b0;
+            D: out = 1'b1;
+            default: out = 1'b0;  // Default output
+        endcase
+    end
+
+endmodule
+```

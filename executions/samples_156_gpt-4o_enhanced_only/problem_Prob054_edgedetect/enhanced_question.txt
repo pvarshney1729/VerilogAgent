@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: Clock signal for synchronization.
+  - `input wire [7:0] in`: 8-bit vector input. Bit indexing is 0 to 7, where `in[0]` refers to the least significant bit (LSB).
+- Output Ports:
+  - `output reg [7:0] pedge`: 8-bit vector output. Bit indexing is 0 to 7, where `pedge[0]` refers to the LSB.
+
+Functional Description:
+- The module is designed to perform positive edge detection on each bit of the 8-bit input vector `in`.
+- For each bit `in[i]` (where `i` ranges from 0 to 7), the module will detect a positive edge, which is defined as a transition from 0 to 1 across two consecutive clock cycles.
+
+Behavior:
+- At every positive edge of the `clk`, the module examines each bit `in[i]`.
+- If a bit `in[i]` transitions from 0 in the previous clock cycle to 1 in the current clock cycle, the corresponding bit `pedge[i]` will be set to 1 in the next clock cycle.
+- If no transition from 0 to 1 is detected for a bit `in[i]`, the corresponding bit `pedge[i]` will be 0.
+
+Sequential Logic:
+- The module uses sequential logic elements (flip-flops) for storing the previous state of the input bits.
+- The state of each bit in `in` is stored in a register at each clock cycle for comparison in the next cycle.
+
+Reset and Initialization:
+- The module should include a reset signal (not specified in the original specification):
+  - `input wire reset`: Asynchronous active-high reset signal.
+- On reset, all bits of the output `pedge` are initialized to 0.
+
+Note:
+- Ensure that the implementation avoids potential race conditions by properly synchronizing the state updates with the clock signal.
+- The initial state of the stored previous input values should be set to 0 during reset to prevent incorrect edge detection on startup.
+</ENHANCED_SPEC>

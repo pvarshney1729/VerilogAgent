@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit input, serves as the clock signal for triggering sequential logic. The positive edge is the active edge.
+  - `d`: 1-bit input, the data input to the flip-flop.
+- Output Ports:
+  - `q`: 1-bit output, represents the state of the flip-flop.
+
+Functionality:
+- The module implements a single D flip-flop.
+- The flip-flop captures the value of `d` on the rising edge of `clk`.
+- The output `q` reflects the value of `d` as captured at the last rising edge of `clk`.
+
+Initial Conditions:
+- By default, assume `q` initializes to 0 at reset.
+
+Clock and Reset:
+- Reset behavior should be defined as required, though none is specified here. If a reset is to be implemented, specify whether it is synchronous or asynchronous and its effect on `q`.
+
+Bit Conventions:
+- All signals are 1-bit wide, with no specific signedness applicable.
+
+Notes:
+- Ensure that no race conditions exist between the input `d` and the clock `clk`.
+
+Behavior:
+- On each rising edge of `clk`, `q` is updated to reflect `d`.
+- If any reset is added, explicitly define its behavior and priority over the clock edge-triggered behavior.
+
+Edge Cases:
+- Ensure that input `d` is stable around the clock edge to avoid metastability.
+</ENHANCED_SPEC>

@@ -1,0 +1,23 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `in`: A 100-bit wide input vector. The most significant bit (MSB) is `in[99]`, and the least significant bit (LSB) is `in[0]`.
+- Outputs:
+  - `out`: A 100-bit wide output vector. The MSB is `out[99]`, and the LSB is `out[0]`.
+
+Functionality:
+- The module shall reverse the order of the bits in the input vector `in` and assign the reversed bit order to the output vector `out`.
+- Specifically, `out[i]` shall be assigned the value of `in[99-i]` for each bit index `i` ranging from 0 to 99.
+
+Behavior:
+- This operation is purely combinational with no dependency on any clock or reset signals.
+- All bits in the input and output vectors are unsigned.
+
+Edge Cases:
+- The module must handle all possible 100-bit input combinations correctly, ensuring that the output accurately reflects the reversed bit order of the input.
+
+Note:
+- Ensure that the design handles propagation delays appropriately to maintain correct functionality and timing, particularly in longer data paths due to the large width of the input and output vectors.
+</ENHANCED_SPEC>

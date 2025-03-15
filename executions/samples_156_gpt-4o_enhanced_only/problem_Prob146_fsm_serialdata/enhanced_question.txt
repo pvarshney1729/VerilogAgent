@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description:
+The module, TopModule, implements a finite state machine (FSM) for serial data reception. It identifies correctly received bytes in a stream of bits, including a start bit, 8 data bits, and a stop bit.
+
+Interface:
+- Inputs:
+  - `input clk`: Clock signal. All sequential logic is triggered on the positive edge.
+  - `input in`: Serial data input bit.
+  - `input reset`: Active-high synchronous reset. Resets the FSM to its initial state.
+
+- Outputs:
+  - `output [7:0] out_byte`: 8-bit output representing the received data byte. Valid when `done` is asserted.
+  - `output done`: Indicates a byte has been correctly received and `out_byte` is valid. Asserted for one clock cycle.
+
+Specifications:
+1. Bit Indexing:
+   - The serial protocol sends the least significant bit first, i.e., `bit[0]` is the least significant bit (LSB).
+
+2. FSM Description:
+   - The FSM begins in an idle state, waiting for a start bit (0).
+   - Upon detecting a start bit, the FSM transitions to capturing 8 data bits.
+   - After receiving 8 data bits, the FSM checks for a stop bit (1).
+   - If the stop bit is correct, `out_byte` is updated with the received byte, and `done` is asserted for one clock cycle.
+   - If the stop bit is incorrect, the FSM awaits a stop bit before starting the next byte reception.
+
+3. Reset Behavior:
+   - On reset (active-high), the FSM returns to the idle state.
+   - All registers and internal states are initialized to their default values.
+
+4. Edge Cases:
+   - The `done` output is asserted only when a complete and correct byte is received, including the start and stop bits.
+   - If the FSM is interrupted mid-byte (e.g., due to reset), it must restart the byte reception process.
+
+5. Inputs and Outputs:
+   - All signals are treated as unsigned unless otherwise specified.
+   - `out_byte` holds meaningful data only when `done` is high; otherwise, it is considered don't-care.
+
+6. Clock and Reset:
+   - The module uses a single clock domain with a positive edge-triggered clock.
+   - The reset is synchronous, ensuring that it aligns with the clock edges.
+
+7. Signal Dependencies:
+   - The FSM transitions and output signals depend on the `clk` and `reset` inputs, as well as the serial bit input `in`.
+
+This specification ensures that the module operates correctly under the given conditions and outlines the expected behavior in detail for a robust Verilog implementation.
+</ENHANCED_SPEC>

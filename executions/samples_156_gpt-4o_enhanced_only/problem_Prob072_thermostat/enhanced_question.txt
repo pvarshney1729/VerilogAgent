@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Inputs:
+- `input wire mode`: 1-bit input determining the mode of operation; heating mode if `mode = 1`, cooling mode if `mode = 0`.
+- `input wire too_cold`: 1-bit input signal indicating if the temperature is below the desired level; active high.
+- `input wire too_hot`: 1-bit input signal indicating if the temperature is above the desired level; active high.
+- `input wire fan_on`: 1-bit input signal allowing manual control to turn the fan on; active high.
+
+Outputs:
+- `output reg heater`: 1-bit output to control the heater; active high.
+- `output reg aircon`: 1-bit output to control the air conditioner; active high.
+- `output reg fan`: 1-bit output to control the blower fan; active high.
+
+Behavioral Specification:
+1. The module operates as a thermostat controller with two modes: heating and cooling.
+2. Mode Selection:
+   - Heating Mode (`mode = 1`):
+     - Turn on the `heater` (`heater = 1`) when `too_cold = 1`.
+     - Do not activate the `aircon` (`aircon = 0`) in this mode.
+   - Cooling Mode (`mode = 0`):
+     - Turn on the `aircon` (`aircon = 1`) when `too_hot = 1`.
+     - Do not activate the `heater` (`heater = 0`) in this mode.
+3. Fan Control:
+   - The `fan` must be turned on (`fan = 1`) whenever the `heater` or `aircon` is active.
+   - The `fan` can also be manually activated by the user via the `fan_on` input (`fan_on = 1`), independently of `heater` or `aircon` status.
+4. All registers are initialized to 0 on reset.
+
+Clock and Reset:
+- The module is purely combinational and does not require a clock signal.
+- All output registers assume an initial state of 0 at the start of operation or upon reset.
+
+Edge Cases and Input Boundaries:
+- The outputs follow a priority where the `fan` should be turned on if either `heater` or `aircon` is active, or if `fan_on` is 1.
+- In scenarios where `too_cold` and `too_hot` are both high, the mode determines the active output (heater or aircon), ensuring no conflicting states occur.
+
+Note: This specification does not cover sequential behavior as the module is intended to operate in a combinational manner.
+</ENHANCED_SPEC>

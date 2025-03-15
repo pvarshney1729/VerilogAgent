@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a, b, c, d, e; // Each input is a 1-bit signal.
+- Output Ports:
+  - output wire [24:0] out; // 25-bit output vector, each bit represents a pairwise comparison.
+
+Description:
+- The module performs pairwise comparisons on five 1-bit input signals (a, b, c, d, e).
+- The output vector `out` consists of 25 bits, with each bit representing the equality comparison result between two input bits. If the bits being compared are equal, the corresponding output bit is 1, otherwise it is 0.
+
+Output Vector Indexing:
+- The output vector is indexed from 24 to 0, where `out[24]` is the most significant bit (MSB) and `out[0]` is the least significant bit (LSB).
+- Each bit in the output vector corresponds to a specific pairwise comparison as follows:
+  - out[24] = ~(a ^ a); // Comparison of a with itself.
+  - out[23] = ~(a ^ b); // Comparison of a with b.
+  - out[22] = ~(a ^ c); // Comparison of a with c.
+  - ...
+  - out[1] = ~(e ^ d); // Comparison of e with d.
+  - out[0] = ~(e ^ e); // Comparison of e with itself.
+
+Bitwise Operation Details:
+- The `^` operator represents the XOR operation, which outputs 1 if the input bits are different and 0 if they are the same.
+- The `~` operator inverts the result of the XOR operation, thus performing the equality check.
+
+Implementation Details:
+- The logic is purely combinational and does not involve any sequential elements such as flip-flops or registers.
+- There are no clock or reset signals involved in this module, as it operates solely based on the input signals provided.
+
+Edge Cases:
+- Since each input can only be 0 or 1, the output is fully defined for all input combinations and requires no further handling for edge cases beyond the standard logic described above.
+</ENHANCED_SPEC>

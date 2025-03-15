@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, is designed to implement a finite-state machine (FSM) with the following interface. All input and output ports are one bit unless otherwise specified:
+
+- `input clk` : Clock signal, positive edge-triggered.
+- `input reset` : Synchronous active-high reset signal.
+- `input x` : Input signal affecting state transition.
+- `output z` : Output signal determined by the current state.
+
+### FSM Details
+
+- **State Encoding**: The FSM has states encoded as a 3-bit vector `y[2:0]`. The least significant bit is `y[0]`.
+  - State 000: Initial state after reset.
+  - State transitions depend on the input `x` as specified in the state transition table.
+
+- **Reset Behavior**: The reset is synchronous and active high. When `reset` is asserted (high), the FSM transitions to the initial state `000` on the next positive edge of `clk`.
+
+- **Clocking**: All state changes occur on the positive edge of `clk`.
+
+- **State Transition Table**:
+
+  | Present State `y[2:0]` | Next State `y[2:0]` when `x=0` | Next State `y[2:0]` when `x=1` | Output `z` |
+  |------------------------|---------------------------------|---------------------------------|------------|
+  | 000                    | 000                             | 001                             | 0          |
+  | 001                    | 001                             | 100                             | 0          |
+  | 010                    | 010                             | 001                             | 0          |
+  | 011                    | 001                             | 010                             | 1          |
+  | 100                    | 011                             | 100                             | 1          |
+
+- **Output Logic**: The output `z` is determined solely by the current state `y[2:0]` as indicated in the transition table.
+
+- **Initial Values**: On reset, set `y[2:0]` to `000` and `z` to 0.
+
+### Edge Cases and Input Boundaries
+
+- For undefined states or transitions, ensure the FSM remains stable and defaults to state `000` on reset.
+- The module should handle all possible combinations of input signals (`x` and `reset`) and transition appropriately based on the clock edge.
+
+This specification ensures that the FSM is correctly implemented with clearly defined states, transitions, and output behaviors. It also specifies synchronous reset and edge-triggered state transitions, aligning with typical digital design practices.
+</ENHANCED_SPEC>

@@ -1,0 +1,59 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for a dual-edge triggered flip-flop using two separate flip-flops, one for each clock edge, and a multiplexer to select the appropriate output based on the clock signal.
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic d,
+    output logic q
+);
+
+    logic q_pos, q_neg;
+
+    // Positive edge triggered flip-flop
+    always @(posedge clk) begin
+        q_pos <= d;
+    end
+
+    // Negative edge triggered flip-flop
+    always @(negedge clk) begin
+        q_neg <= d;
+    end
+
+    // Multiplexer to select the output based on the clock edge
+    always @(*) begin
+        q = clk ? q_pos : q_neg;
+    end
+
+endmodule
+[DONE]
+
+This module uses two separate always blocks to capture the input `d` on both the positive and negative edges of the clock. The output `q` is then determined by a combinational logic block that selects between `q_pos` and `q_neg` based on the current state of the clock. This approach effectively simulates a dual-edge triggered flip-flop using standard Verilog constructs.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic d,
+    output logic q
+);
+
+    logic q_pos, q_neg;
+
+    // Positive edge triggered flip-flop
+    always @(posedge clk) begin
+        q_pos <= d;
+    end
+
+    // Negative edge triggered flip-flop
+    always @(negedge clk) begin
+        q_neg <= d;
+    end
+
+    // Multiplexer to select the output based on the clock edge
+    always @(*) begin
+        q = clk ? q_pos : q_neg;
+    end
+
+endmodule

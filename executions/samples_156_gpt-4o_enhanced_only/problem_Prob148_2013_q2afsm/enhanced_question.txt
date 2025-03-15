@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- `input wire clk`: Clock signal, positive-edge triggered.
+- `input wire resetn`: Active-low synchronous reset signal. Upon reset, the FSM enters state A.
+- `input wire [2:0] r`: Request signals from three devices, where `r[0]` is the most significant bit and `r[2]` is the least significant bit. Each bit `r[i]` is a request from device `i`.
+- `output reg [2:0] g`: Grant signals to three devices, where `g[0]` is the most significant bit and `g[2]` is the least significant bit. Each bit `g[i]` is a grant for device `i`.
+
+State Definitions:
+- State A: Initial state, no grants are active.
+- State B: Device 0 is granted access (g0 = 1).
+- State C: Device 1 is granted access (g1 = 1).
+- State D: Device 2 is granted access (g2 = 1).
+
+State Transition and Priority Logic:
+- From State A:
+  - If `r[0] == 1`, transition to State B (highest priority).
+  - Else if `r[1] == 1`, transition to State C.
+  - Else if `r[2] == 1`, transition to State D.
+  - Else remain in State A.
+- From State B:
+  - If `r[0] == 1`, remain in State B.
+  - Else transition back to State A.
+- From State C:
+  - If `r[1] == 1`, remain in State C.
+  - Else transition back to State A.
+- State D is not explicitly defined in the transitions since priority logic prevents entering State D when other higher-priority requests are present.
+
+Output Logic:
+- `g[0] = 1` when in State B; otherwise, `g[0] = 0`.
+- `g[1] = 1` when in State C; otherwise, `g[1] = 0`.
+- `g[2] = 1` when in State D; otherwise, `g[2] = 0`.
+
+Reset Behavior:
+- On the assertion of `resetn` (active low), the FSM transitions to State A.
+- All `g[i]` outputs are set to 0 upon reset.
+
+Implementation Guidelines:
+- Use separate always blocks for state transition (state table) and state holding (state flip-flops).
+- Use descriptive state encoding as needed for clarity.
+- Ensure that all state transitions are driven by the positive edge of the `clk`.
+- All sequential elements should have explicitly defined initial values.
+
+Edge Cases:
+- If multiple requests are present simultaneously while in State A, the highest priority request (`r[0]`) is granted.
+- State D can only be entered if `r[2] == 1` and `r[0] == 0` and `r[1] == 0`.
+
+Consider these specifications to maintain clarity and correctness in your implementation of the module.
+</ENHANCED_SPEC>

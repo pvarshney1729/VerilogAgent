@@ -1,0 +1,70 @@
+Generated Response:
+
+Certainly! Here's the Verilog code for the `TopModule` based on your specifications:
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [9:0] data,
+    output logic tc
+);
+
+    // Internal 10-bit register for the countdown counter
+    logic [9:0] counter;
+
+    // Sequential logic to update the counter and tc
+    always_ff @(posedge clk) begin
+        if (load) begin
+            // Load the counter with the provided data
+            counter <= data;
+        end else if (counter != 10'b0) begin
+            // Decrement counter if it's not zero
+            counter <= counter - 1;
+        end
+    end
+
+    // Combinational logic to set the tc output
+    always_comb begin
+        // tc is asserted when counter reaches 0
+        tc = (counter == 10'b0);
+    end
+
+endmodule
+[DONE]
+
+This implementation includes:
+- A 10-bit counter that loads a value on the rising edge of the clock when `load` is high.
+- The counter decrements on each clock cycle when `load` is low, unless it's already zero.
+- The `tc` output is asserted when the counter reaches zero, using a combinational always block to evaluate the condition.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [9:0] data,
+    output logic tc
+);
+
+    // Internal 10-bit register for the countdown counter
+    logic [9:0] counter;
+
+    // Sequential logic to update the counter and tc
+    always_ff @(posedge clk) begin
+        if (load) begin
+            // Load the counter with the provided data
+            counter <= data;
+        end else if (counter != 10'b0) begin
+            // Decrement counter if it's not zero
+            counter <= counter - 1;
+        end
+    end
+
+    // Combinational logic to set the tc output
+    always_comb begin
+        // tc is asserted when counter reaches 0
+        tc = (counter == 10'b0);
+    end
+
+endmodule

@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input: `clk` (1 bit) - Clock signal for sequential logic, positive edge triggered.
+- Input: `a` (1 bit) - First operand for XOR operation.
+- Input: `b` (1 bit) - Second operand for XOR operation.
+- Output: `out_assign` (1 bit) - Result of XOR using an assign statement.
+- Output: `out_always_comb` (1 bit) - Result of XOR using a combinational always block.
+- Output: `out_always_ff` (1 bit) - Result of XOR using a sequential always block, delayed by one clock cycle.
+
+Functional Description:
+1. **XOR using `assign` Statement**:
+   - The output `out_assign` is directly assigned the bitwise XOR of inputs `a` and `b` using the assign statement.
+   - This is a combinational logic implementation.
+
+2. **XOR using Combinational `always` Block**:
+   - The output `out_always_comb` is computed within an `always @(*)` block.
+   - This block evaluates whenever there is a change in the inputs `a` or `b`, ensuring combinational logic behavior.
+
+3. **XOR using Sequential `always` Block**:
+   - The output `out_always_ff` is updated within an `always @(posedge clk)` block.
+   - A flip-flop is used, so the XOR result of inputs `a` and `b` is stored in a register and the output is delayed by one clock cycle.
+   - Ensure the initial state of the register holding `out_always_ff` is defined as '0' upon reset.
+
+General Guidelines:
+- The module assumes all sequential logic is triggered on the positive edge of the clock signal `clk`.
+- No reset signal is specified; hence, ensure initial conditions are handled appropriately in simulation and synthesis.
+- Ensure that no race conditions exist between the combinational and sequential blocks.
+- All outputs must be defined for all possible input conditions to avoid latches or undefined behavior.
+</ENHANCED_SPEC>

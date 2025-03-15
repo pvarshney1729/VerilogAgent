@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Definition:
+- Input Ports:
+  - `input clk`: Clock signal for synchronization. All sequential elements are triggered on the positive edge of this signal.
+  - `input x`: 1-bit input signal for the finite state machine.
+
+- Output Ports:
+  - `output z`: 1-bit output signal representing the result of the finite state machine logic.
+
+Signal and Logic Description:
+1. Input `x` is fed into three two-input gates: XOR, AND, and OR.
+   - XOR Gate: The first input is `x`, and the second input is the output of its corresponding D flip-flop.
+   - AND Gate: The first input is `x`, and the second input is the complement of its corresponding D flip-flop's output.
+   - OR Gate: The first input is `x`, and the second input is the complement of its corresponding D flip-flop's output.
+
+2. Outputs of the XOR, AND, and OR gates are connected to the inputs of their respective D flip-flops.
+
+3. Three D flip-flops are used, each associated with one of the gates (XOR, AND, OR). 
+   - All flip-flops are positive edge-triggered by the `clk` signal.
+   - Initial State: All D flip-flops are initialized to '0' on a synchronous reset.
+
+4. The outputs of the D flip-flops are then fed into a three-input NOR gate.
+   - The output `z` is the result of this NOR gate.
+
+Reset Conditions:
+- The D flip-flops are initially reset to '0' before the system begins operation. The reset is synchronous with the clock signal.
+
+Bit Conventions:
+- The ports `clk`, `x`, and `z` are all 1-bit signals. Bit[0] represents the least significant bit.
+
+Behavioral Note:
+- Ensure no race conditions occur, as all flip-flops are triggered on the same clock edge.
+- The output `z` is determined by the NOR condition of the outputs of the three D flip-flops.
+
+Edge Cases:
+- Correct functioning is expected for all valid input combinations of `x`.
+- The system should handle the initial state where all flip-flops are reset to 0.
+
+This module should be implemented with the above specifications to ensure correct functionality.
+</ENHANCED_SPEC>

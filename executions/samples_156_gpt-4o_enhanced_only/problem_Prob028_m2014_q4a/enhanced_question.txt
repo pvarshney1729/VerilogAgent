@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - `input wire d`: 1-bit data input.
+  - `input wire ena`: 1-bit enable signal.
+
+- Output Ports:
+  - `output reg q`: 1-bit data output.
+
+Functional Description:
+The module implements a D latch. The D latch is a level-sensitive latch that stores the input data `d` when the enable signal `ena` is active (logic high). The output `q` should reflect the input `d` when `ena` is high. When `ena` is low, the output `q` retains its previous state.
+
+Signal Conventions and Logic:
+- The input `d` and `ena` are 1-bit signals.
+- The output `q` is a 1-bit registered signal.
+- Bit indexing is not applicable as all signals are single-bit.
+
+Latch Logic:
+- This is a combinational logic block implemented using an `always` block sensitive to changes in `d` or `ena`.
+- If `ena` is high (`ena == 1`), then `q` will be assigned the value of `d`.
+- If `ena` is low (`ena == 0`), `q` retains its previous state.
+
+Edge Cases and Boundaries:
+- The module does not specify behavior for asynchronous reset or set conditions.
+- The initial state of `q` is not explicitly defined and should be considered as unknown until an enable condition occurs.
+
+Note:
+- Ensure there are no race conditions by correctly using the enable signal and managing signal dependencies within the always block.
+</ENHANCED_SPEC>

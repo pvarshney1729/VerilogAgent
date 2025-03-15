@@ -1,0 +1,20 @@
+<ENHANCED_SPEC>
+Implement a Verilog module named `TopModule` with the following interface. Clearly define the input and output ports as specified:
+
+- `input logic [255:0] in`: A 256-bit wide input vector where `in[0]` is the least significant bit (LSB) and `in[255]` is the most significant bit (MSB).
+- `input logic [7:0] sel`: An 8-bit wide input vector used as a selector. `sel` is unsigned, and each bit is indexed such that `sel[0]` is the LSB and `sel[7]` is the MSB.
+- `output logic out`: A 1-bit output representing the selected input bit from the 256-bit `in` vector.
+
+Functional Description:
+- The module implements a 1-bit wide, 256-to-1 multiplexer.
+- The input `sel` determines which bit from the `in` vector is routed to the output `out`.
+- Specifically, when `sel = 0`, `out` should be assigned the value of `in[0]`; when `sel = 1`, `out` should be assigned the value of `in[1]`; and so forth, up to `sel = 255`, where `out` should be assigned the value of `in[255]`.
+
+Operational Details:
+- This module is purely combinational logic; it does not contain any sequential logic elements such as flip-flops or registers.
+- There are no clock or reset signals involved.
+- The selection must be glitch-free, ensuring that `out` only changes in response to stable `sel` and `in` values.
+- Edge cases, such as `sel` values outside the range of 0 to 255, do not need special handling, as `sel` is explicitly defined to be 8 bits wide, limiting its range to [0, 255].
+
+Ensure that the module adheres to these specifications for correct functionality and accurate representation of the intended logic.
+</ENHANCED_SPEC>

@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- All input and output ports are 1-bit wide, representing a single binary value, unless otherwise specified.
+- Bit indexing: bit[0] refers to the least significant bit (LSB).
+
+Inputs:
+- input logic p1a;  // Single-bit input for the first 4-input NAND gate
+- input logic p1b;  // Single-bit input for the first 4-input NAND gate
+- input logic p1c;  // Single-bit input for the first 4-input NAND gate
+- input logic p1d;  // Single-bit input for the first 4-input NAND gate
+- input logic p2a;  // Single-bit input for the second 4-input NAND gate
+- input logic p2b;  // Single-bit input for the second 4-input NAND gate
+- input logic p2c;  // Single-bit input for the second 4-input NAND gate
+- input logic p2d;  // Single-bit input for the second 4-input NAND gate
+
+Outputs:
+- output logic p1y; // Output for the first 4-input NAND gate
+- output logic p2y; // Output for the second 4-input NAND gate
+
+Functional Description:
+- The module is intended to replicate the behavior of the 7420 IC, which contains two independent 4-input NAND gates.
+- Each NAND gate performs a logical NAND operation on its 4 input signals.
+
+Detailed Operation:
+- The first NAND gate receives inputs p1a, p1b, p1c, and p1d. The output p1y is given by:
+  p1y = !(p1a & p1b & p1c & p1d)
+- The second NAND gate receives inputs p2a, p2b, p2c, and p2d. The output p2y is given by:
+  p2y = !(p2a & p2b & p2c & p2d)
+
+- The module processes these inputs and produces outputs in a purely combinational manner, meaning there are no clock dependencies or sequential elements involved.
+
+Edge Cases:
+- Each NAND gate will output a logic high ('1') when at least one of its inputs is logic low ('0').
+- Each NAND gate will output a logic low ('0') only when all its inputs are logic high ('1').
+</ENHANCED_SPEC>

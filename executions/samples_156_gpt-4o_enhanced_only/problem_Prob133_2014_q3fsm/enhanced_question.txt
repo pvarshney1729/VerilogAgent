@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk` : Clock signal. Positive edge-triggered.
+  - `input wire reset` : Active-high synchronous reset.
+  - `input wire s` : State control signal for transitioning from state A to state B.
+  - `input wire w` : Data input signal examined in state B.
+
+- Output Ports:
+  - `output reg z` : Output signal set to 1 based on FSM logic.
+
+Finite State Machine (FSM) Description:
+- States: Two states are defined, `A` (reset state) and `B`.
+- Initial State: The FSM begins in state `A` upon reset.
+
+State Transition Logic:
+- State `A`: 
+  - The FSM remains in state `A` as long as `s = 0`.
+  - Transition from state `A` to state `B` occurs when `s = 1`.
+
+- State `B`: 
+  - In state `B`, the FSM examines the value of `w` for three consecutive clock cycles.
+  - A counter mechanism is used to count the occurrences of `w = 1` during these cycles.
+  - After three cycles, if `w` equals 1 in exactly two of these cycles, then `z` is set to 1 in the following clock cycle. Otherwise, `z` is set to 0.
+  - The FSM continues this three-cycle checking process on `w` indefinitely as long as it remains in state `B`.
+
+Operational Details:
+- All transitions and operations are synchronous with the `clk` signal.
+- `z` is updated immediately following the three-cycle analysis of `w`.
+- Reset Logic: On the assertion of `reset`, the FSM moves back to state `A`, and any registers or counters are reset to a defined initial state, typically zero.
+
+Signal Indexing and Conventions:
+- Bit Indexing: Not applicable as all signals are single-bit.
+- Signal precedence and dependencies are clearly defined in the state transition and output logic.
+
+Edge Cases and Boundary Conditions:
+- The FSM handles all inputs synchronously with clock edges.
+- Proper handling of the reset and transition conditions ensures no race conditions or undefined states occur.
+
+Initial Values:
+- Upon reset, all internal registers and counters are initialized to zero or their respective default values as defined in the implementation.
+</ENHANCED_SPEC>

@@ -1,0 +1,58 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Definition:
+- Input Ports:
+  - `input clk` : Clock signal, triggers on the positive edge.
+  - `input areset` : Asynchronous reset signal, active high, resets the Lemming machine to the initial state (walking left).
+  - `input bump_left` : Indicates a bump from the left side, active high.
+  - `input bump_right` : Indicates a bump from the right side, active high.
+  - `input ground` : Indicates the presence of ground beneath the Lemming, active high.
+  - `input dig` : Command signal to start digging, active high.
+
+- Output Ports:
+  - `output walk_left` : Indicates the Lemming is walking left, active high.
+  - `output walk_right` : Indicates the Lemming is walking right, active high.
+  - `output aaah` : Indicates the Lemming is falling, active high.
+  - `output digging` : Indicates the Lemming is digging, active high.
+
+Signal and State Definitions:
+- The module uses a Moore state machine to model the Lemming's behavior.
+- States:
+  - WALK_LEFT: Lemming is walking left (`walk_left = 1`).
+  - WALK_RIGHT: Lemming is walking right (`walk_right = 1`).
+  - FALLING: Lemming is falling (`aaah = 1`).
+  - DIGGING: Lemming is digging (`digging = 1`).
+
+- State Transition Logic:
+  - Initial State: On `areset`, the state transitions to WALK_LEFT.
+  - Bump Logic: 
+    - If in WALK_LEFT and `bump_left = 1`, transition to WALK_RIGHT.
+    - If in WALK_RIGHT and `bump_right = 1`, transition to WALK_LEFT.
+    - If bumped on both sides, toggle between WALK_LEFT and WALK_RIGHT.
+  - Falling Logic:
+    - If `ground = 0`, transition to FALLING.
+    - While FALLING, the state remains unchanged regardless of bumps or dig commands.
+    - When `ground = 1` again, return to the prior walking direction.
+  - Digging Logic:
+    - If in a walking state and `ground = 1`, and `dig = 1`, transition to DIGGING.
+    - While DIGGING, remain in this state until `ground = 0`, then transition to FALLING.
+    - When `ground = 1` after falling, return to the prior walking direction.
+
+- Precedence of Actions:
+  - FALLING has the highest precedence.
+  - DIGGING has precedence over switching directions.
+  - Direction changes occur if neither falling nor digging conditions are met.
+
+- Edge Case Handling:
+  - Bumps during FALLING or DIGGING have no effect on direction.
+  - `dig` commands during FALLING or when `ground = 0` are ignored.
+
+Clocking and Reset:
+- All state transitions and logic evaluations are triggered on the positive edge of `clk`.
+- `areset` is a positive edge-triggered asynchronous reset to WALK_LEFT.
+
+Bit Indexing and Conventions:
+- All input and output ports are 1-bit wide.
+- The least significant bit (bit[0]) is used for all single-bit signals.
+</ENHANCED_SPEC>

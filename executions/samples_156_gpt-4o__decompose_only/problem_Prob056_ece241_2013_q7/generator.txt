@@ -1,0 +1,55 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module for a JK flip-flop named `TopModule`, following the specified interface and functionality:
+
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic j,
+    input  logic k,
+    output logic Q
+);
+
+    always @(posedge clk) begin
+        case ({j, k})
+            2'b00: Q <= Q;      // No change
+            2'b01: Q <= 1'b0;   // Reset
+            2'b10: Q <= 1'b1;   // Set
+            2'b11: Q <= ~Q;     // Toggle
+        endcase
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Module Declaration**: The module is named `TopModule` with inputs `clk`, `j`, `k`, and output `Q`.
+- **Data Types**: All ports are declared as `logic` to adhere to the coding conventions.
+- **Sequential Logic**: An `always` block is used with `@(posedge clk)` to ensure the JK flip-flop updates on the rising edge of the clock.
+- **Case Statement**: A `case` statement is used to implement the JK flip-flop behavior based on the truth table provided:
+  - `2'b00`: No change in `Q`.
+  - `2'b01`: Reset `Q` to `0`.
+  - `2'b10`: Set `Q` to `1`.
+  - `2'b11`: Toggle `Q`.
+
+This implementation ensures that the JK flip-flop operates correctly according to the specified truth table.
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic j,
+    input  logic k,
+    output logic Q
+);
+
+    always @(posedge clk) begin
+        case ({j, k})
+            2'b00: Q <= Q;      // No change
+            2'b01: Q <= 1'b0;   // Reset
+            2'b10: Q <= 1'b1;   // Set
+            2'b11: Q <= ~Q;     // Toggle
+        endcase
+    end
+
+endmodule

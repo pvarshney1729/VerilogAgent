@@ -1,0 +1,61 @@
+Generated Response:
+
+Certainly! Below is the implementation of the `TopModule` as per your specifications:
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic load,
+    input logic ena,
+    input logic [3:0] data,
+    output logic [3:0] q
+);
+
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 4'b0000;
+        end else begin
+            if (load) begin
+                q <= data;
+            end else if (ena) begin
+                q <= {1'b0, q[3:1]};
+            end
+        end
+    end
+
+endmodule
+[DONE]
+
+Explanation:
+- We use `always_ff` to describe sequential logic, which is sensitive to the positive edge of the clock and the asynchronous reset.
+- When the `areset` signal is high, `q` is immediately reset to `4'b0000`.
+- If `areset` is not asserted and the `clk` edge occurs:
+  - If `load` is asserted, `q` is loaded with the value from `data`.
+  - If `load` is not asserted but `ena` is, a right shift operation occurs, with `q[3]` being set to `0` and the rest of the bits shifting right.
+- The `load` operation has higher priority over the `ena` operation as specified.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic load,
+    input logic ena,
+    input logic [3:0] data,
+    output logic [3:0] q
+);
+
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 4'b0000;
+        end else begin
+            if (load) begin
+                q <= data;
+            end else if (ena) begin
+                q <= {1'b0, q[3:1]};
+            end
+        end
+    end
+
+endmodule

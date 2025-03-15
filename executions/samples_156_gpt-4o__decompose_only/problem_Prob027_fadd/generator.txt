@@ -1,0 +1,41 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module for a full adder named `TopModule`, which adheres to the specified interface and functionality:
+
+[BEGIN]
+module TopModule (
+    input  logic a,
+    input  logic b,
+    input  logic cin,
+    output logic cout,
+    output logic sum
+);
+
+    // Calculate the sum using XOR gates
+    assign sum = a ^ b ^ cin;
+
+    // Calculate the carry-out using AND and OR gates
+    assign cout = (a & b) | (b & cin) | (cin & a);
+
+endmodule
+[DONE]
+
+This module uses combinational logic to compute the sum and carry-out of a full adder. The `assign` statements are used to define the logic for `sum` and `cout`, ensuring that the module operates correctly without the need for an `always` block. The use of `logic` for port declarations is consistent with modern Verilog practices.
+
+Generated Code:
+
+module TopModule (
+    input  logic a,
+    input  logic b,
+    input  logic cin,
+    output logic cout,
+    output logic sum
+);
+
+    // Calculate the sum using XOR gates
+    assign sum = a ^ b ^ cin;
+
+    // Calculate the carry-out using AND and OR gates
+    assign cout = (a & b) | (b & cin) | (cin & a);
+
+endmodule

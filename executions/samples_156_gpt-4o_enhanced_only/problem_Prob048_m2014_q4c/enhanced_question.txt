@@ -1,0 +1,25 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description:
+The TopModule implements a D flip-flop with an active high synchronous reset. The output 'q' is set to 0 when the reset 'r' is asserted during the rising edge of the clock 'clk'.
+
+Interface:
+- input wire clk: Clock signal (1-bit). The state of the flip-flop changes on the rising edge of this clock.
+- input wire d: Data input (1-bit). The data to be captured by the flip-flop at the rising edge of 'clk' if reset 'r' is not asserted.
+- input wire r: Synchronous reset (1-bit). An active high signal that, when asserted, sets the output 'q' to 0 at the next rising edge of 'clk'.
+- output reg q: Output of the flip-flop (1-bit). Holds the value of 'd' unless 'r' is asserted.
+
+Behavior:
+- The flip-flop samples the input 'd' on the rising edge of 'clk'.
+- If 'r' is high during the rising edge of 'clk', the output 'q' is reset to 0.
+- If 'r' is low, the output 'q' will follow the input 'd' on the next rising edge of 'clk'.
+- This is a synchronous reset design, meaning 'r' only affects 'q' at the clock's rising edge.
+
+Initial State:
+- The initial state of output 'q' should be defined by the synthesis tool or reset during simulation, typically starting as 0.
+
+Note:
+- Ensure that 'r' is held high for at least one clock cycle to guarantee a reset of 'q'.
+- There are no asynchronous reset conditions; all operations are synchronous with respect to 'clk'.
+</ENHANCED_SPEC>

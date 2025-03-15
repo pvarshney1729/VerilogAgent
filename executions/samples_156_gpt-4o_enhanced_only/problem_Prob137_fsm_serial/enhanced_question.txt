@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+The module 'TopModule' is designed to interface with a serial communication protocol using the following ports:
+
+- `input logic clk`: Clock signal for synchronizing sequential operations, triggered on the positive edge.
+- `input logic reset`: Active-high synchronous reset signal. When asserted, the system resets to its initial state.
+- `input logic in`: Serial data input stream.
+- `output logic done`: Output signal that indicates successful reception of a complete data byte.
+
+The module implements a finite state machine (FSM) to process incoming serial data according to the following protocol:
+
+1. **Protocol Overview**:
+   - A data transmission consists of one start bit (logic 0), followed by 8 data bits, and concludes with one stop bit (logic 1).
+   - The line defaults to logic 1 when idle.
+   - Data bits are transmitted starting with the least significant bit (LSB).
+
+2. **FSM Operation**:
+   - **Initial State**: The FSM begins in an idle state, continuously monitoring the input stream for a start bit.
+   - **Start Bit Detection**: Transition from the idle state occurs upon detection of a logic 0 (start bit).
+   - **Data Bit Reception**: After detecting the start bit, the FSM sequentially captures the next 8 bits as data bits.
+     - Bit indexing follows: `bit[0]` represents the least significant bit (LSB) of the data, incrementing to `bit[7]` (most significant bit, MSB).
+   - **Stop Bit Verification**: After receiving the 8 data bits, the FSM checks for a logic 1 stop bit.
+   - **Completion**: If the stop bit is correct, the `done` signal is asserted high for one clock cycle, indicating successful byte reception.
+   - **Error Handling**: If the stop bit is incorrect, the FSM enters an error state, remaining there until a logic 1 (idle/stop bit) is detected, after which it resets to the initial state to await the next start bit.
+
+3. **Reset Behavior**:
+   - The FSM resets to the initial idle state on the assertion of the `reset` signal. All internal state and data registers are cleared.
+
+4. **Edge Cases**:
+   - If the `in` signal does not transition to idle (logic 1) after an incorrect stop bit, the FSM remains in the error state until it does.
+
+This specification ensures robust handling of the serial data stream, allowing the FSM to correctly receive and validate data bytes within the constraints of the defined protocol.
+</ENHANCED_SPEC>

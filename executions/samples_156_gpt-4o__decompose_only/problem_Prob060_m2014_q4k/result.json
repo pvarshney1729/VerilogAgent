@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic resetn,\n    input  logic in,\n    output logic out\n);\n\n    // 4-bit shift register\n    logic [3:0] shift_reg;\n\n    // Sequential logic with synchronous active-low reset\n    always @(posedge clk) begin\n        if (!resetn)\n            shift_reg <= 4'b0000; // Reset all flip-flops to 0\n        else\n            shift_reg <= {shift_reg[2:0], in}; // Shift input through the register\n    end\n\n    // Output the last bit of the shift register\n    assign out = shift_reg[3];\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

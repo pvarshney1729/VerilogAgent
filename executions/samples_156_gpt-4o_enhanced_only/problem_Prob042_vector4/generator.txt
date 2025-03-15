@@ -1,0 +1,36 @@
+Generated Response:
+
+Certainly! I'll implement the `TopModule` according to the given specifications. The module will perform sign extension of an 8-bit signed input to a 32-bit signed output by replicating the sign bit 24 times.
+
+Here is the Verilog code for the module:
+
+[BEGIN]
+module TopModule(
+    input logic [7:0] in,
+    output logic [31:0] out
+);
+
+    always @(*) begin
+        out = {{24{in[7]}}, in};
+    end
+
+endmodule
+[DONE]
+
+**Explanation:**
+- The module is named `TopModule` and it has an 8-bit input `in` and a 32-bit output `out`.
+- The sign extension is performed using the replication operator. We replicate the most significant bit `in[7]` 24 times and then concatenate it with the original 8-bit input `in`.
+- The `always @(*)` block ensures that the logic is combinational and updates `out` whenever `in` changes.
+
+Generated Code:
+
+module TopModule(
+    input logic [7:0] in,
+    output logic [31:0] out
+);
+
+    always @(*) begin
+        out = {{24{in[7]}}, in};
+    end
+
+endmodule

@@ -1,0 +1,51 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for `TopModule` that adheres to the given specifications and guidelines:
+
+[BEGIN]
+module TopModule (
+    input [2:0] a,
+    output reg [15:0] q
+);
+
+    always @(*) begin
+        case (a)
+            3'b000: q = 16'h1232;
+            3'b001: q = 16'haee0;
+            3'b010: q = 16'h27d4;
+            3'b011: q = 16'h5a0e;
+            3'b100: q = 16'h2066;
+            3'b101: q = 16'h64ce;
+            3'b110: q = 16'hc526;
+            3'b111: q = 16'h2f19;
+            default: q = 16'h0000; // Default case for safety
+        endcase
+    end
+
+endmodule
+[DONE]
+
+This module uses a combinational `always` block to map the 3-bit input `a` to the corresponding 16-bit output `q` based on the provided simulation waveforms. The `case` statement is used to implement this mapping, and a default case is included to handle any unexpected input values safely.
+
+Generated Code:
+
+module TopModule (
+    input [2:0] a,
+    output reg [15:0] q
+);
+
+    always @(*) begin
+        case (a)
+            3'b000: q = 16'h1232;
+            3'b001: q = 16'haee0;
+            3'b010: q = 16'h27d4;
+            3'b011: q = 16'h5a0e;
+            3'b100: q = 16'h2066;
+            3'b101: q = 16'h64ce;
+            3'b110: q = 16'hc526;
+            3'b111: q = 16'h2f19;
+            default: q = 16'h0000; // Default case for safety
+        endcase
+    end
+
+endmodule

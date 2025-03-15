@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+Port Definitions:
+- `input clock`: Clock signal for synchronization. Active on the rising edge.
+- `input a`: Data input, 1-bit wide.
+- `output reg p`: Output signal `p`, 1-bit wide, changes state based on input `a` and clock.
+- `output reg q`: Output signal `q`, 1-bit wide, changes state based on input `a` and clock.
+
+Signal and State Definitions:
+- Initial states: 
+  - `p` initializes to `0`.
+  - `q` initializes to `0`.
+- The state of `p` and `q` is updated on the rising edge of `clock`.
+
+Behavioral Description:
+1. **Clock Rising Edge**: 
+   - If `a` is `1`, set `p` to `1` and leave `q` unchanged.
+   - If `a` is `0`, set `p` to `0` and leave `q` unchanged.
+   - Note: `p` changes on the rising edge of `clock` based on the current value of `a`.
+
+2. **Clock Falling Edge**:
+   - If `a` is `1`, set `q` to the current state of `p`.
+   - If `a` is `0`, set `q` to `0`.
+
+Timing Considerations:
+- The initial state before any clock edges is `p = x` and `q = x` until the first rising edge of `clock`.
+- The outputs `p` and `q` may take on undefined states (`x`) before the first rising edge of `clock` due to lack of initial clock edge events.
+
+Edge Cases:
+- At time `0ns`, both `p` and `q` are undefined, represented by `x`.
+- The behavior of the circuit is defined for all combinations of `a` and `clock` after the first clock edge.
+
+Reset Condition:
+- No explicit reset is defined. Assume the initial state is based on power-up conditions as described above.
+
+Design Assumptions:
+- The circuit behavior is fully synchronous, and all transitions occur on clock edges.
+- The input `a` is assumed to be stable shortly before the clock edge to avoid race conditions.
+
+Implementation Notes:
+- Ensure that all signals are sampled and updated correctly at the clock edges, respecting the behavior of sequential logic elements.
+</ENHANCED_SPEC>

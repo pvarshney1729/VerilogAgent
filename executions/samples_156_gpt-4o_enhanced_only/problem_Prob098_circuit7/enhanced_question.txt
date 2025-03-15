@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Specification for TopModule:
+
+1. **Module Name**: TopModule
+
+2. **Interface**:
+   - **Inputs**:
+     - `input wire clk`: Clock signal, active on the positive edge.
+     - `input wire a`: Single-bit input signal.
+   - **Outputs**:
+     - `output reg q`: Single-bit output signal.
+
+3. **Signal Conventions**:
+   - Bit indexing is not applicable as all signals are single-bit.
+   - All signals are unsigned.
+
+4. **Sequential Logic**:
+   - This circuit is sequential and operates based on the positive edge of the `clk`.
+   - The output `q` is updated on the rising edge of `clk`.
+
+5. **Operation Description**:
+   - The output `q` is determined by a combination of the current state of input `a` and the previous state of `q`.
+   - At the initial state (`0ns`), the values of `a` and `q` are undefined (`x`).
+
+6. **Reset Behavior**:
+   - The specification does not describe any reset input or behavior. Assume `q` retains its state unless specified by behavior under clock cycles.
+
+7. **Simulation Waveform Analysis**:
+   - From `15ns` onwards, the output `q` is set based on the following rules:
+     - If `a` is `0` during the rising edge of `clk`, `q` remains `1`.
+     - If `a` is `1` during the rising edge of `clk`, `q` transitions to `0`.
+
+8. **Initial Conditions**:
+   - The initial value of `q` is assumed to be `undefined`. The behavior of the module is derived from the transition of `q` as observed in the simulation waveform starting from `15ns`.
+
+9. **Edge Cases**:
+   - Ensure that the behavior when transitioning from `0ns` to `15ns` is consistent with the waveform; assume undefined states (`x`) for `q` initially.
+
+10. **Clock and Timing**:
+    - Ensure that all operations related to `q` are synchronized with the positive edge of the `clk`.
+
+This specification should be followed precisely to ensure the correct implementation of the module's intended functionality.
+</ENHANCED_SPEC>

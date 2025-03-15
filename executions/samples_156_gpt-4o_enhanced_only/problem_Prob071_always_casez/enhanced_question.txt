@@ -1,0 +1,26 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input [7:0] in` : An 8-bit unsigned input vector where `in[0]` is the least significant bit (LSB) and `in[7]` is the most significant bit (MSB).
+- Output Ports:
+  - `output [2:0] pos` : A 3-bit unsigned output representing the position of the first (least significant) '1' bit in the input vector.
+
+Functionality:
+- The module implements a priority encoder for the 8-bit input vector `in`.
+- The output `pos` will indicate the position index of the first '1' from the LSB to the MSB in the input vector `in`.
+- If multiple bits are set to '1', the output `pos` reflects the index of the least significant '1' bit.
+- If no bits in the input vector are '1', the output `pos` should be 3'd0.
+
+Behavioral Example:
+- For an input `in = 8'b10010000`, the output `pos` should be 3'd4, as the least significant bit with a '1' is at index 4.
+- For an input `in = 8'b00000000`, the output `pos` should be 3'd0.
+
+Additional Details:
+- The module contains only combinational logic; there are no clocked or sequential elements.
+- Ensure that the logic properly handles all possible 8-bit input combinations.
+- Priority is given to the LSB during the encoding process, meaning lower indices are prioritized in the output.
+- The design does not require any reset or initialization as it solely relies on combinational logic.
+- The input vector `in` and output `pos` are both treated as unsigned integers for the purposes of indexing and positional representation.
+</ENHANCED_SPEC>

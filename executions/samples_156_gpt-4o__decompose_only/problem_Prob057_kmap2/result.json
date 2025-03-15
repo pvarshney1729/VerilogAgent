@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic a,\n    input  logic b,\n    input  logic c,\n    input  logic d,\n    output logic out\n);\n\n    always @(*) begin\n        // Implementing the logic derived from the Karnaugh map\n        out = (~c & ~d) |  // Covers ab = 00, 01, 10 when cd = 00\n              (~a & ~b & d) |  // Covers ab = 00 when cd = 01\n              (a & b & c) |  // Covers ab = 11 when cd = 11\n              (a & ~b & ~c);  // Covers ab = 10 when cd = 00\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 106,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,37 @@
+Generated Response:
+
+Certainly! Here's the implementation of the `TopModule` based on the specified truth table and boolean logic expression. This module will use combinational logic to determine the output `f`:
+
+[BEGIN]
+module TopModule(
+    input logic x3,
+    input logic x2,
+    input logic x1,
+    output logic f
+);
+
+    always @(*) begin
+        f = (x2 & ~x3) | (x1 & x3) | (x1 & x2);
+    end
+
+endmodule
+[DONE]
+
+In this code:
+- We use an `always @(*)` block to define combinational logic, which automatically infers the sensitivity list.
+- The boolean expression `(x2 & ~x3) | (x1 & x3) | (x1 & x2)` directly maps the input conditions to the output based on the given truth table.
+
+Generated Code:
+
+module TopModule(
+    input logic x3,
+    input logic x2,
+    input logic x1,
+    output logic f
+);
+
+    always @(*) begin
+        f = (x2 & ~x3) | (x1 & x3) | (x1 & x2);
+    end
+
+endmodule

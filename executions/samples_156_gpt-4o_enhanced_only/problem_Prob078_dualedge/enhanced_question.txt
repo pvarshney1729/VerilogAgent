@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Objective: Implement a module that behaves like a dual-edge triggered flip-flop using available FPGA resources.
+
+Port Definitions:
+- `input wire clk`: Clock signal. The module must respond to both rising and falling edges.
+- `input wire d`: Data input, 1-bit.
+- `output reg q`: Data output, 1-bit.
+
+Specifications:
+1. Clock Behavior:
+   - This module should mimic the behavior of a dual-edge triggered flip-flop, updating the output `q` on both rising and falling edges of `clk`.
+   - Due to FPGA limitations, simulate dual-edge behavior using combinational logic and additional registers.
+
+2. Internal Logic:
+   - Use two single-edge triggered flip-flops to capture data on both edges.
+   - For rising edge, capture data into an intermediate register `q_pos`:
+     - `q_pos` is a 1-bit register initialized to 0 at reset.
+   - For falling edge, capture data into another intermediate register `q_neg`:
+     - `q_neg` is a 1-bit register initialized to 0 at reset.
+   - Combine the outputs of `q_pos` and `q_neg` using combinational logic to produce the final output `q`.
+
+3. Reset Behavior:
+   - Implement an asynchronous reset input `reset_n` (active low) to initialize the registers.
+   - On reset assertion, both `q_pos` and `q_neg` should be reset to 0, and consequently, `q` should also be 0.
+
+4. Data Propagation and Edge Handling:
+   - Ensure that any changes in `d` are correctly captured on the subsequent clock edge, whether rising or falling.
+   - The design should avoid race conditions by ensuring proper timing and logic separation between capturing and combining operations.
+   - Clearly document the precedence of operations if multiple signals change at once.
+
+5. Edge Cases:
+   - Confirm the stability of `q` when `clk` remains constant (no edge).
+   - Define behavior when `d` changes at the same time as a clock edge, ensuring deterministic capture.
+
+By following these guidelines, the design will faithfully emulate the desired dual-edge triggered flip-flop functionality while adhering to FPGA constraints.
+</ENHANCED_SPEC>

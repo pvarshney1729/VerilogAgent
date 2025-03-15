@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+Interface:
+- Input: `clk` - Clock signal, 1 bit. All sequential logic is triggered on the positive edge of this signal.
+- Input: `reset` - Synchronous active-high reset signal, 1 bit. This resets the state machine to the initial state `A`.
+- Input: `w` - Control input signal, 1 bit.
+- Output: `z` - Output signal, 1 bit, determined by the current state.
+
+State Encoding:
+- State `A`: 3'b000
+- State `B`: 3'b001
+- State `C`: 3'b010
+- State `D`: 3'b011
+- State `E`: 3'b100
+- State `F`: 3'b101
+
+State Transition Table:
+- From State `A`:
+  - If `w` is 1, transition to State `B`.
+  - If `w` is 0, remain in State `A`.
+- From State `B`:
+  - If `w` is 1, transition to State `C`.
+  - If `w` is 0, transition to State `D`.
+- From State `C`:
+  - If `w` is 1, transition to State `E`.
+  - If `w` is 0, transition to State `D`.
+- From State `D`:
+  - If `w` is 1, transition to State `F`.
+  - If `w` is 0, transition to State `A`.
+- From State `E`:
+  - If `w` is 1, remain in State `E`.
+  - If `w` is 0, transition to State `D`.
+- From State `F`:
+  - If `w` is 1, transition to State `C`.
+  - If `w` is 0, transition to State `D`.
+
+Output Logic:
+- Output `z` is determined by the current state:
+  - In States `A`, `B`, `C`, `D`: `z` = 0
+  - In States `E`, `F`: `z` = 1
+
+Operational Behavior:
+- Upon receiving a positive edge of `clk`, if `reset` is high, the state transitions to `A`.
+- Otherwise, the state transitions according to the state transition table based on the value of `w`.
+
+Implementation Details:
+- Use separate `always` blocks for the state transition logic and the state register update logic.
+- Ensure all state registers are initialized to state `A` when `reset` is asserted.
+- The state machine should handle all possible input conditions and transitions correctly, without entering undefined states.
+</ENHANCED_SPEC>

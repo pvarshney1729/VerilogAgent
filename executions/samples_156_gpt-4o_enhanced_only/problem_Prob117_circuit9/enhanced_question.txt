@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specifications:
+- `input clk`: Clock signal, used for synchronizing sequential logic.
+- `input a`: Single-bit input signal.
+- `output reg [2:0] q`: 3-bit output, where `q[2]` is the most significant bit (MSB) and `q[0]` is the least significant bit (LSB).
+
+Sequential Circuit Description:
+- The module is a sequential logic circuit that operates on the rising edge of the clock signal `clk`.
+- The initial (reset) value of the output `q` is `3'b000` (binary 0).
+
+Clock and Reset Behavior:
+- The circuit operates on a positive edge-triggered clock (`posedge clk`).
+- The module does not specify a reset input, so it is assumed the initial state is set when the module is instantiated.
+
+Functional Behavior:
+- The output `q` maintains its value when the input `a` is high (`a = 1`).
+- When the input `a` transitions to low (`a = 0`), the output `q` increments by 1 on each rising edge of the clock.
+- The output `q` cycles through the values 4, 5, 6, 0, 1, and repeats as shown in the provided waveform.
+
+Edge Case and Input Boundaries:
+- Ensure the counter wraps correctly from 6 back to 0.
+- The output `q` is undefined (`x`) at time 0 ns due to the lack of an explicit reset but should be considered initialized to `3'b000` upon start.
+
+Operational Precedence:
+- The update of `q` is dependent solely on the state of `a` at each rising clock edge.
+- The operation `q <= q + 1` occurs only when `a` is 0, and the increment is applied at the clock's rising edge.
+
+Note: This specification assumes no asynchronous reset and relies on the initial state for operation. If a reset is required, modifications to include a synchronous or asynchronous reset input should be considered.
+</ENHANCED_SPEC>

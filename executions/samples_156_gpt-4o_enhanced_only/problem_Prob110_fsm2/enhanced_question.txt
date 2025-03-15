@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk` : Clock signal for synchronizing state transitions.
+  - `input wire areset` : Active-high asynchronous reset signal.
+  - `input wire j` : Input signal that influences state transitions.
+  - `input wire k` : Input signal that influences state transitions.
+- Output Ports:
+  - `output reg out` : Output signal representing the current state output.
+
+Port and Signal Details:
+- All input and output ports are 1-bit wide.
+- The output `out` is a registered output reflecting the state of the Moore machine.
+
+State Machine Description:
+- This module implements a Moore state machine with two states: `OFF` and `ON`.
+- State `OFF` is represented by the binary state of 0, and state `ON` is represented by the binary state of 1.
+- The output `out` is directly associated with the current state: 
+  - `OFF` state produces `out = 0`
+  - `ON` state produces `out = 1`
+
+State Transition Logic:
+- From state `OFF` (out=0):
+  - If `j = 0`, remain in `OFF`.
+  - If `j = 1`, transition to `ON`.
+- From state `ON` (out=1):
+  - If `k = 0`, remain in `ON`.
+  - If `k = 1`, transition to `OFF`.
+
+Reset Behavior:
+- The reset signal `areset` is an active-high asynchronous reset.
+- When `areset` is asserted high, the state machine transitions immediately to the `OFF` state, regardless of the clock signal.
+- Upon reset, the output `out` is set to 0.
+
+Clock and Timing:
+- State transitions occur on the rising edge of the `clk` signal, except during an active asynchronous reset.
+
+Initial Conditions:
+- The initial state of the state machine is `OFF` with `out = 0` upon power-up or reset.
+
+Signal Dependencies and Precedence:
+- The transitions are determined by the inputs `j` and `k`, evaluated on the rising edge of `clk`.
+- Asynchronous reset `areset` takes precedence over the clock-driven transitions.
+
+Edge Cases:
+- Ensure robustness by defining behavior under all possible input combinations.
+- Maintain defined transition logic even during rapid changes in input signals `j` and `k`.
+</ENHANCED_SPEC>

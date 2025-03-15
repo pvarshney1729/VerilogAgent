@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input  logic [3:0] x,\n    input  logic [3:0] y,\n    output logic [4:0] sum\n);\n\n    logic c1, c2, c3; // Intermediate carry signals\n\n    // Full adder for bit 0\n    always @(*) begin\n        sum[0] = x[0] ^ y[0];\n        c1 = x[0] & y[0];\n    end\n\n    // Full adder for bit 1\n    always @(*) begin\n        sum[1] = x[1] ^ y[1] ^ c1;\n        c2 = (x[1] & y[1]) | (x[1] & c1) | (y[1] & c1);\n    end\n\n    // Full adder for bit 2\n    always @(*) begin\n        sum[2] = x[2] ^ y[2] ^ c2;\n        c3 = (x[2] & y[2]) | (x[2] & c2) | (y[2] & c2);\n    end\n\n    // Full adder for bit 3\n    always @(*) begin\n        sum[3] = x[3] ^ y[3] ^ c3;\n        sum[4] = (x[3] & y[3]) | (x[3] & c3) | (y[3] & c3);\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

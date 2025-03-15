@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Specification: TopModule
+
+Interface:
+- Inputs:
+  - `a`: Input vector, 5 bits wide (bit[4:0] with bit[0] as the least significant bit)
+  - `b`: Input vector, 5 bits wide (bit[4:0] with bit[0] as the least significant bit)
+  - `c`: Input vector, 5 bits wide (bit[4:0] with bit[0] as the least significant bit)
+  - `d`: Input vector, 5 bits wide (bit[4:0] with bit[0] as the least significant bit)
+  - `e`: Input vector, 5 bits wide (bit[4:0] with bit[0] as the least significant bit)
+  - `f`: Input vector, 5 bits wide (bit[4:0] with bit[0] as the least significant bit)
+
+- Outputs:
+  - `w`: Output vector, 8 bits wide (bit[7:0] with bit[0] as the least significant bit)
+  - `x`: Output vector, 8 bits wide (bit[7:0] with bit[0] as the least significant bit)
+  - `y`: Output vector, 8 bits wide (bit[7:0] with bit[0] as the least significant bit)
+  - `z`: Output vector, 8 bits wide (bit[7:0] with bit[0] as the least significant bit)
+
+Functional Description:
+- The module concatenates the six 5-bit input vectors, resulting in a 30-bit intermediate vector.
+- The two least significant bits of the output vectors should be set to '1'.
+- The 32-bit output vector is constructed by appending two '1' bits to the least significant end of the 30-bit concatenated input vector.
+- The 32-bit output vector is then divided into four 8-bit output vectors, named `w`, `x`, `y`, and `z`.
+- The output mapping is as follows:
+  - `w` receives bits[31:24] of the 32-bit vector.
+  - `x` receives bits[23:16] of the 32-bit vector.
+  - `y` receives bits[15:8] of the 32-bit vector.
+  - `z` receives bits[7:0] of the 32-bit vector.
+
+Additional Notes:
+- The concatenation and mapping are purely combinational logic, with no sequential elements involved.
+- No reset or clock signals are necessary as the logic is fully combinational.
+- Ensure the correct bit order is maintained during concatenation and splitting to avoid misalignment of data.
+</ENHANCED_SPEC>

@@ -1,0 +1,56 @@
+Generated Response:
+
+Here is the implementation of the `TopModule` according to the specified requirements:
+
+[BEGIN]
+module TopModule(
+    input logic a,
+    input logic b,
+    input logic sel_b1,
+    input logic sel_b2,
+    output logic out_assign,
+    output logic out_always
+);
+
+    // Continuous assignment using assign statement
+    assign out_assign = (sel_b1 && sel_b2) ? b : a;
+
+    // Procedural logic using always block
+    always @(*) begin
+        if (sel_b1 && sel_b2)
+            out_always = b;
+        else
+            out_always = a;
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Ports Declaration**: All ports are declared with type `logic` as per the coding conventions.
+- **Continuous Assignment**: The `assign` statement is used for `out_assign` to implement the 2-to-1 mux logic directly. If both `sel_b1` and `sel_b2` are high, `b` is selected; otherwise, `a` is selected.
+- **Procedural Logic**: The `always` block with `@(*)` sensitivity is used for combinational logic to compute `out_always`. The same selection logic is applied here using an `if` statement to ensure both outputs function similarly.
+
+Generated Code:
+
+module TopModule(
+    input logic a,
+    input logic b,
+    input logic sel_b1,
+    input logic sel_b2,
+    output logic out_assign,
+    output logic out_always
+);
+
+    // Continuous assignment using assign statement
+    assign out_assign = (sel_b1 && sel_b2) ? b : a;
+
+    // Procedural logic using always block
+    always @(*) begin
+        if (sel_b1 && sel_b2)
+            out_always = b;
+        else
+            out_always = a;
+    end
+
+endmodule

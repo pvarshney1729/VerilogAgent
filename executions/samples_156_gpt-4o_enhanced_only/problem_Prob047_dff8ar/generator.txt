@@ -1,0 +1,48 @@
+Generated Response:
+
+Here's the implementation of the `TopModule` as per your requirements:
+
+[BEGIN]
+module TopModule(
+    input  logic       clk,     // Clock signal
+    input  logic       areset,  // Asynchronous reset, active high
+    input  logic [7:0] d,       // 8-bit data input
+    output logic [7:0] q        // 8-bit data output
+);
+
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 8'b00000000;  // Asynchronously reset output to 0
+        end else begin
+            q <= d;            // Capture the input data 'd' on clock's rising edge
+        end
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Module Declaration**: The module `TopModule` is declared with its ports defined as per the required interface.
+- **Port Types**: All ports are declared using `logic` to adhere to the specified coding conventions.
+- **Sequential Logic**: The `always_ff` block is used to infer flip-flops. It is sensitive to both the positive edge of `clk` and the positive edge of `areset` for an asynchronous reset.
+- **Reset Logic**: Inside the `always_ff` block, the reset condition `if (areset)` ensures that when `areset` is high, the output `q` is reset to all zeros, irrespective of the clock.
+- **Data Capture**: If `areset` is not asserted, the data input `d` is captured and assigned to `q` on the rising edge of `clk`.
+
+Generated Code:
+
+module TopModule(
+    input  logic       clk,     // Clock signal
+    input  logic       areset,  // Asynchronous reset, active high
+    input  logic [7:0] d,       // 8-bit data input
+    output logic [7:0] q        // 8-bit data output
+);
+
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 8'b00000000;  // Asynchronously reset output to 0
+        end else begin
+            q <= d;            // Capture the input data 'd' on clock's rising edge
+        end
+    end
+
+endmodule

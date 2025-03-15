@@ -1,0 +1,47 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for the `TopModule` that includes 8 D flip-flops with an active high synchronous reset. The flip-flops are triggered by the negative edge of the clock, and they reset to the value `0x34`.
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always @(negedge clk) begin
+        if (reset) begin
+            q <= 8'h34;
+        end else begin
+            q <= d;
+        end
+    end
+
+endmodule
+[DONE]
+
+This module adheres to the specified interface and requirements:
+- The `clk` and `reset` are single-bit inputs.
+- The `d` and `q` are 8-bit wide inputs and outputs, respectively.
+- The flip-flops are triggered on the negative edge of `clk`.
+- The synchronous reset sets the output `q` to `0x34` when active.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always @(negedge clk) begin
+        if (reset) begin
+            q <= 8'h34;
+        end else begin
+            q <= d;
+        end
+    end
+
+endmodule

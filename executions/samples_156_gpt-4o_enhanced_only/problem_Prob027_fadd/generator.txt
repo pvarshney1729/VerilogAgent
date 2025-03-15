@@ -1,0 +1,41 @@
+Generated Response:
+
+Certainly! Below is the Verilog code for the `TopModule` that implements a one-bit full adder. This module uses combinational logic to calculate the sum and carry-out based on the three input bits.
+
+[BEGIN]
+module TopModule(
+    input  logic a,
+    input  logic b,
+    input  logic cin,
+    output logic cout,
+    output logic sum
+);
+
+    // Combinational logic for full adder
+    always @(*) begin
+        sum  = a ^ b ^ cin;                // XOR for sum
+        cout = (a & b) | (b & cin) | (cin & a); // AND-OR for carry-out
+    end
+
+endmodule
+[DONE]
+
+This implementation uses an `always @(*)` block to ensure the combinational logic for the full adder is correctly inferred by the synthesis tool. The XOR operation computes the sum, and the OR of ANDs computes the carry-out. The module adheres to the specified interface, using logic data types for all ports.
+
+Generated Code:
+
+module TopModule(
+    input  logic a,
+    input  logic b,
+    input  logic cin,
+    output logic cout,
+    output logic sum
+);
+
+    // Combinational logic for full adder
+    always @(*) begin
+        sum  = a ^ b ^ cin;                // XOR for sum
+        cout = (a & b) | (b & cin) | (cin & a); // AND-OR for carry-out
+    end
+
+endmodule

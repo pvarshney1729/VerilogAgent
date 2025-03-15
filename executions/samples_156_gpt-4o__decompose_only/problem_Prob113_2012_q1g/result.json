@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input [3:0] x,\n    output logic f\n);\n\n    // Implement the logic for f based on the Karnaugh map\n    always @(*) begin\n        f = (~x[3] & ~x[2] & ~x[1] & ~x[0]) |  // 00 00\n            (~x[3] & ~x[2] &  x[1] &  x[0]) |  // 00 10\n            ( x[3] &  x[2] & ~x[1] & ~x[0]) |  // 11 00\n            ( x[3] &  x[2] & ~x[1] &  x[0]) |  // 11 10\n            ( x[3] &  x[2] &  x[1] & ~x[0]) |  // 11 01\n            (~x[3] &  x[2] & ~x[1] & ~x[0]) |  // 10 00\n            (~x[3] &  x[2] & ~x[1] &  x[0]);   // 10 10\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 37,
+        "passfail": "R"
+    }
+}

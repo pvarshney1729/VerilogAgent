@@ -1,0 +1,91 @@
+Generated Response:
+
+Certainly! Below is the implementation of the `TopModule` based on the given specification for Rule 110 with a 512-cell system.
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] next_state;
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            q <= data;
+        end else begin
+            q <= next_state;
+        end
+    end
+
+    always_comb begin
+        integer i;
+        for (i = 0; i < 512; i = i + 1) begin
+            logic left, center, right;
+            center = q[i];
+            left = (i == 511) ? 1'b0 : q[i + 1];
+            right = (i == 0) ? 1'b0 : q[i - 1];
+
+            case ({left, center, right})
+                3'b111: next_state[i] = 1'b0;
+                3'b110: next_state[i] = 1'b1;
+                3'b101: next_state[i] = 1'b1;
+                3'b100: next_state[i] = 1'b0;
+                3'b011: next_state[i] = 1'b1;
+                3'b010: next_state[i] = 1'b1;
+                3'b001: next_state[i] = 1'b1;
+                3'b000: next_state[i] = 1'b0;
+                default: next_state[i] = 1'b0;
+            endcase
+        end
+    end
+
+endmodule
+[DONE]
+
+This code correctly implements the Rule 110 automaton with the specified boundary conditions. The `always_ff` block updates the current state `q` based on the `load` signal, while the `always_comb` block computes the next state based on the automaton rules. The boundary conditions are handled by assuming the left and right boundaries are zero.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] next_state;
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            q <= data;
+        end else begin
+            q <= next_state;
+        end
+    end
+
+    always_comb begin
+        integer i;
+        for (i = 0; i < 512; i = i + 1) begin
+            logic left, center, right;
+            center = q[i];
+            left = (i == 511) ? 1'b0 : q[i + 1];
+            right = (i == 0) ? 1'b0 : q[i - 1];
+
+            case ({left, center, right})
+                3'b111: next_state[i] = 1'b0;
+                3'b110: next_state[i] = 1'b1;
+                3'b101: next_state[i] = 1'b1;
+                3'b100: next_state[i] = 1'b0;
+                3'b011: next_state[i] = 1'b1;
+                3'b010: next_state[i] = 1'b1;
+                3'b001: next_state[i] = 1'b1;
+                3'b000: next_state[i] = 1'b0;
+                default: next_state[i] = 1'b0;
+            endcase
+        end
+    end
+
+endmodule

@@ -1,0 +1,33 @@
+Generated Response:
+
+Based on your requirements, I'll implement the `TopModule` with a single D flip-flop. Since no reset functionality is specified, the module will focus on capturing the input `d` on the rising edge of `clk` and reflecting this on the output `q`.
+
+Here is the Verilog implementation:
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic d,
+    output logic q
+);
+    // Sequential logic to implement a D flip-flop
+    always_ff @(posedge clk) begin
+        q <= d; // On every positive edge of clock, update q with d
+    end
+endmodule
+[DONE]
+
+This module adheres to the specified interface and performs the basic functionality of a D flip-flop. It uses the `always_ff` block, which is a synthesizable construct that ensures the block is executed only on the rising edge of the clock, making it suitable for flip-flop implementation.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic d,
+    output logic q
+);
+    // Sequential logic to implement a D flip-flop
+    always_ff @(posedge clk) begin
+        q <= d; // On every positive edge of clock, update q with d
+    end
+endmodule

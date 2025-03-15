@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    output logic [3:0] q\n);\n\n    // Internal register to hold the count value\n    logic [3:0] count;\n\n    // Sequential logic block triggered on the positive edge of the clock\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            // Synchronous reset: Set count to 0 when reset is high\n            count <= 4'b0000;\n        end else begin\n            // Increment the count by one\n            count <= count + 1;\n        end\n    end\n\n    // Assign the internal count to the output\n    assign q = count;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

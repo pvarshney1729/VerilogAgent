@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input [2:0] a`: A 3-bit unsigned input vector. Bit[0] refers to the least significant bit.
+
+- Output Ports:
+  - `output [15:0] q`: A 16-bit unsigned output vector. Bit[0] refers to the least significant bit.
+
+Circuit Type:
+- The module implements a combinational logic circuit.
+
+Behavior Description:
+- The module outputs a specific 16-bit value on `q` based on the 3-bit input `a` as follows:
+  - When `a` is 3'b000, `q` is 16'h1232.
+  - When `a` is 3'b001, `q` is 16'haee0.
+  - When `a` is 3'b010, `q` is 16'h27d4.
+  - When `a` is 3'b011, `q` is 16'h5a0e.
+  - When `a` is 3'b100, `q` is 16'h2066.
+  - When `a` is 3'b101, `q` is 16'h64ce.
+  - When `a` is 3'b110, `q` is 16'hc526.
+  - When `a` is 3'b111, `q` is 16'h2f19.
+
+- The output `q` has no undefined or indeterminate state for any valid input `a` as the input range covers all possible 3-bit combinations.
+
+Timing:
+- The module is purely combinational and does not depend on clock cycles, resets, or initial states.
+
+Edge Cases:
+- All possible input values (0 to 7) are explicitly defined with corresponding output mappings.
+- There are no race conditions as this is a combinational circuit.
+
+Additional Notes:
+- Ensure that all input and output values are treated as unsigned.
+- The output mapping is direct and does not involve any sequential or state-based logic.
+</ENHANCED_SPEC>

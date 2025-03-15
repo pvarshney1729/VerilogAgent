@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule`. The interface consists of the following ports. All input and output ports are one bit wide:
+
+- `input clk`: Clock signal, used to trigger the positive edge for the flip-flop.
+- `input j`: Input signal for the JK flip-flop.
+- `input k`: Input signal for the JK flip-flop.
+- `output Q`: Output signal representing the current state of the JK flip-flop.
+
+The `TopModule` should implement the behavior of a JK flip-flop, adhering to the following truth table. Note that `Qold` represents the state of the output `Q` before the positive edge of the clock signal (`clk`).
+
+| J | K | Q     |
+|---|---|-------|
+| 0 | 0 | Qold  |
+| 0 | 1 | 0     |
+| 1 | 0 | 1     |
+| 1 | 1 | ~Qold |
+
+**Specifications:**
+
+1. **Clock and Edge Sensitivity**:
+   - The JK flip-flop updates its output `Q` on the positive edge of the `clk` signal.
+
+2. **Reset Behavior**:
+   - This specification does not define a reset input. Therefore, ensure that the initial state of the flip-flop is defined by the environment or testbench.
+
+3. **Sequential Logic**:
+   - The module contains sequential logic elements. The behavior of the output `Q` strictly depends on the inputs `j` and `k` as well as the previous state `Qold`, adhering to the truth table.
+
+4. **Operation Precedence**:
+   - The operation of toggling `Q` when both `j` and `k` are high (`1`) should be implemented as an inversion of the previous state `Qold`.
+
+5. **Initial State**:
+   - Since no initial reset is specified, the initial state of `Q` is undefined and should be set by the driving environment or simulation.
+
+6. **Edge Cases and Boundaries**:
+   - The behavior is fully specified under all combinations of `j` and `k` inputs. There are no additional edge cases beyond the specified truth table.
+
+Ensure that the implementation respects these specifications to achieve the correct functional behavior of the JK flip-flop.
+</ENHANCED_SPEC>

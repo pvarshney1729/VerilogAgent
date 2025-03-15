@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+The module `TopModule` shall be designed with the following interface specifications. All input and output ports are single-bit by default unless explicitly defined otherwise:
+
+- **Inputs:**
+  - `input clk`: Global clock signal, positive-edge triggered.
+  - `input areset`: Asynchronous active-high reset signal.
+  - `input predict_valid`: Indicates a prediction request is valid.
+  - `input [6:0] predict_pc`: 7-bit program counter for prediction, where bit[0] is the least significant bit (LSB).
+  - `input train_valid`: Indicates a training request is valid.
+  - `input train_taken`: Actual outcome of the branch (1 if taken, 0 if not).
+  - `input train_mispredicted`: Indicates if the branch was mispredicted.
+  - `input [6:0] train_history`: 7-bit branch history used during training.
+  - `input [6:0] train_pc`: 7-bit program counter for training, where bit[0] is the LSB.
+
+- **Outputs:**
+  - `output predict_taken`: Predicted branch direction (1 if taken, 0 if not).
+  - `output [6:0] predict_history`: 7-bit branch history register state used for prediction.
+
+**Functional Description:**
+
+The module implements a gshare branch predictor utilizing the following components:
+- A 7-bit global branch history register.
+- A 128-entry table of 2-bit saturating counters, indexed by the XOR of `predict_pc` and the global branch history.
+
+**Prediction Operation:**
+- When `predict_valid` is asserted, the predictor computes the XOR of `predict_pc` and the global branch history to index into the pattern history table (PHT).
+- The predictor outputs the predicted branch direction through `predict_taken` and the current state of the branch history register via `predict_history`.
+- The global branch history register is updated at the next positive clock edge, following a prediction.
+
+**Training Operation:**
+- When `train_valid` is asserted, the predictor updates the PHT entry indexed by the XOR of `train_pc` and the provided `train_history`.
+- If `train_mispredicted` is asserted, the global branch history register should be restored to the state immediately following the mispredicting branch's execution.
+- Training updates the PHT at the next positive clock edge, allowing the prediction request during the same cycle to access the current state of the PHT before training modifications.
+
+**Conflict Resolution:**
+- If a prediction and a training request occur simultaneously for the same PHT entry, the prediction uses the PHT state before training updates.
+- If both prediction and training require modifications to the branch history register, training takes precedence, as the associated prediction will be discarded due to pipeline flushing.
+
+**Reset Behavior:**
+- On asserting `areset`, all registers, including the global branch history, are asynchronously reset to an initial state (typically all zeros or a specific reset value).
+
+**Timing Considerations:**
+- All sequential elements are triggered on the positive edge of `clk`.
+- The timing diagram provided indicates that training updates the PHT in the cycle following the request, ensuring predictions access the PHT state at the time of their request.
+
+This specification ensures the correct and clear implementation of a gshare branch predictor with defined behavior during simultaneous prediction and training operations.
+</ENHANCED_SPEC>

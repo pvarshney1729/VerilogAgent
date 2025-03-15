@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Specification: TopModule
+
+**Port Definitions:**
+- Input: `in` (1-bit, unsigned)
+- Input: `state` (2-bit, unsigned)
+- Output: `next_state` (2-bit, unsigned)
+- Output: `out` (1-bit, unsigned)
+
+**State Encoding:**
+- State A: 2'b00
+- State B: 2'b01
+- State C: 2'b10
+- State D: 2'b11
+
+**Combinational Logic:**
+This module implements a Moore state machine with four states and one input. The logic computes the `next_state` and `out` based on the current `state` and the input `in`. The state transitions and output are governed by the following table:
+
+| Current State | Next State (in = 0) | Next State (in = 1) | Output |
+|---------------|---------------------|---------------------|--------|
+| A (2'b00)     | A (2'b00)           | B (2'b01)           | 0      |
+| B (2'b01)     | C (2'b10)           | B (2'b01)           | 0      |
+| C (2'b10)     | A (2'b00)           | D (2'b11)           | 0      |
+| D (2'b11)     | C (2'b10)           | B (2'b01)           | 1      |
+
+**Implementation Notes:**
+- The logic for `next_state` should be derived from the current `state` and input `in` following the transition table.
+- The output `out` is determined solely by the current `state` and should not depend on `in`.
+- All operations and transitions should be considered purely combinational and must not store state information across clock cycles within this module.
+- Ensure that the design is free from race conditions by clearly defining the precedence of logic operations.
+
+**Edge Case Handling:**
+- Any unspecified behavior for inputs outside the defined states should default to a safe state transition, preferably to state A (2'b00), with `out` as 0.
+- Unused state encodings should not affect the operation of the defined state transitions and outputs.
+</ENHANCED_SPEC>

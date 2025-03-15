@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+The module named `TopModule` should be implemented with the following interface. All input and output ports are one bit wide unless otherwise specified. The module is designed as a countdown timer using a down-counter mechanism. 
+
+Interface:
+- `input clk`: Clock signal for synchronization, active on the positive edge.
+- `input load`: Control signal to load the counter with a new value.
+- `input [9:0] data`: 10-bit input data to specify the countdown value. `data[9]` is the most significant bit and `data[0]` is the least significant bit.
+- `output tc`: Output signal indicating the terminal count has been reached.
+
+Behavior:
+1. **Loading the Counter:**
+   - If `load` is asserted (`load = 1`), the internal 10-bit counter is loaded with the value provided by the `data` input on the next rising edge of `clk`.
+   - The counter can be reloaded at any time, even if it is currently counting down.
+
+2. **Countdown Operation:**
+   - If `load` is deasserted (`load = 0`), the counter decrements by 1 on each rising edge of `clk`.
+   - The counter continues to decrement until it reaches 0.
+
+3. **Terminal Count (tc) Signal:**
+   - The `tc` output is asserted (`tc = 1`) when the internal counter reaches 0.
+   - Once `tc` is asserted, the counter stops decrementing and remains at 0 until it is reloaded with a new value.
+
+4. **Sequential Logic:**
+   - The internal counter and the `tc` signal are updated on the positive edge of `clk`.
+   - The design includes a single D flip-flop to maintain the state of the `tc` output.
+
+5. **Edge Cases:**
+   - If the counter is loaded with 0 (`data = 0`) while `load = 1`, the `tc` signal will immediately be asserted since the countdown is effectively complete.
+
+6. **Reset Behavior:**
+   - The specification does not include an explicit reset signal. The module assumes normal operation upon power-up or initialization without a reset condition.
+
+This specification ensures clarity in the timing and control logic for correct implementation in Verilog.
+</ENHANCED_SPEC>

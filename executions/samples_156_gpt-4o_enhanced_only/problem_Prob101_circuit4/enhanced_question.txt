@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+1. **Port Definitions:**
+   - **Inputs:**
+     - `input wire a;`  // One-bit input
+     - `input wire b;`  // One-bit input
+     - `input wire c;`  // One-bit input
+     - `input wire d;`  // One-bit input
+   - **Outputs:**
+     - `output wire q;` // One-bit output
+
+2. **Circuit Type:**
+   - This module should implement a combinational logic circuit. There are no clock signals or sequential elements involved.
+
+3. **Signal Description and Behavior:**
+   - The output `q` is determined based on the input signals `a`, `b`, `c`, and `d` as per the provided truth table.
+   - The table below summarizes the conditions under which `q` is asserted (logic '1'):
+
+     | a | b | c | d | q |
+     |---|---|---|---|---|
+     | 0 | 0 | 0 | 0 | 0 |
+     | 0 | 0 | 0 | 1 | 0 |
+     | 0 | 0 | 1 | 0 | 1 |
+     | 0 | 0 | 1 | 1 | 1 |
+     | 0 | 1 | 0 | 0 | 1 |
+     | 0 | 1 | 0 | 1 | 1 |
+     | 0 | 1 | 1 | 0 | 1 |
+     | 0 | 1 | 1 | 1 | 1 |
+     | 1 | 0 | 0 | 0 | 0 |
+     | 1 | 0 | 0 | 1 | 0 |
+     | 1 | 0 | 1 | 0 | 1 |
+     | 1 | 0 | 1 | 1 | 1 |
+     | 1 | 1 | 0 | 0 | 1 |
+     | 1 | 1 | 0 | 1 | 1 |
+     | 1 | 1 | 1 | 0 | 1 |
+     | 1 | 1 | 1 | 1 | 1 |
+
+4. **Implementation Details:**
+   - Determine the logic expression for `q` by analyzing the truth table. The output `q` is '1' for the following input combinations where:
+     - `c` is '1', OR
+     - `b` is '1' AND `d` is either '0' or '1'.
+
+5. **Edge Cases:**
+   - All possible combinations of the inputs `a`, `b`, `c`, and `d` are covered by the truth table.
+
+6. **Conventions:**
+   - Bit indexing is not applicable as all signals are single bits.
+   - No assumptions are made about the signedness of the inputs and output as they are one-bit wide.
+
+7. **Notes:**
+   - Ensure that this module remains purely combinational with no latches or flip-flops inadvertently inferred.
+</ENHANCED_SPEC>

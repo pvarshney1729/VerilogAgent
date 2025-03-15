@@ -1,0 +1,7 @@
+{
+    "code": "module ModuleA(\n    input logic x,\n    input logic y,\n    output logic z\n);\n    always @(*) begin\n        z = (x ^ y) & x;\n    end\nendmodule\n\nmodule ModuleB(\n    input logic x,\n    input logic y,\n    output logic z\n);\n    always @(*) begin\n        if (x == 0 && y == 0)\n            z = 1;\n        else if (x == 1 && y == 0)\n            z = 0;\n        else if (x == 0 && y == 1)\n            z = 0;\n        else if (x == 1 && y == 1)\n            z = 1;\n    end\nendmodule\n\nmodule TopModule(\n    input logic x,\n    input logic y,\n    output logic z\n);\n    logic a1_out, a2_out;\n    logic b1_out, b2_out;\n    logic or_out, and_out;\n\n    // Instantiate Module A\n    ModuleA a1 (\n        .x(x),\n        .y(y),\n        .z(a1_out)\n    );\n\n    ModuleA a2 (\n        .x(x),\n        .y(y),\n        .z(a2_out)\n    );\n\n    // Instantiate Module B\n    ModuleB b1 (\n        .x(x),\n        .y(y),\n        .z(b1_out)\n    );\n\n    ModuleB b2 (\n        .x(x),\n        .y(y),\n        .z(b2_out)\n    );\n\n    // OR gate for the first pair of A and B\n    assign or_out = a1_out | b1_out;\n\n    // AND gate for the second pair of A and B\n    assign and_out = a2_out & b2_out;\n\n    // XOR gate for the final output\n    assign z = or_out ^ and_out;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

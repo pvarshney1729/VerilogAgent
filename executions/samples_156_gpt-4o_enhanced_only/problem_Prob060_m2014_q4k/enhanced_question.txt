@@ -1,0 +1,26 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input wire clk: Clock signal, positive edge-triggered.
+- input wire resetn: Active-low synchronous reset. When 'resetn' is low, the shift register resets.
+- input wire in: Single-bit data input for the shift register.
+- output reg out: Single-bit data output, representing the last stage of the shift register.
+
+Behavior:
+- The module implements a 4-bit shift register using D flip-flops.
+- All flip-flops are positive edge-triggered by the 'clk' signal.
+- The synchronous reset is active when 'resetn' is low. When activated, all bits in the shift register are reset to 0.
+- Bit indexing: The shift register consists of four stages, indexed as stage[3] (most significant bit) to stage[0] (least significant bit). Stage[3] is the output bit.
+- Data is shifted in from the 'in' input to stage[0], and shifts towards stage[3] on each positive clock edge.
+- Initial State: On reset, all bits in the shift register are initialized to 0.
+
+Special Conditions:
+- During synchronous reset (when 'resetn' is 0 on a clock edge), all stages of the shift register are set to 0, and 'out' will output 0.
+- Ensure no race conditions occur between clock and reset signals by adhering to synchronous reset behavior.
+- The behavior at the boundaries of input (e.g., consecutive reset activations) should adhere to the described synchronous reset operation, consistently resetting the shift register to 0.
+
+Note:
+- The output 'out' reflects the value of stage[3] and updates with each clock cycle after the reset condition is cleared (resetn = 1).
+- Ensure that no intermediate states or glitches occur on 'out' during reset or normal operation.
+</ENHANCED_SPEC>

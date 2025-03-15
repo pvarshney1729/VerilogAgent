@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic [2:0] y,  // 3-bit input representing the current state\n    input logic w,        // 1-bit input for state transition control\n    output logic Y1       // 1-bit output representing y[1]\n);\n\n    // Next-state logic for y[1]\n    always @(*) begin\n        case (y)\n            3'b000: Y1 = 0; // State A transitions\n            3'b001: Y1 = w; // State B transitions\n            3'b010: Y1 = 1; // State C transitions\n            3'b011: Y1 = 0; // State D transitions\n            3'b100: Y1 = 1; // State E transitions\n            3'b101: Y1 = 1; // State F transitions\n            default: Y1 = 0; // Default case to handle undefined states\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 14,
+        "passfail": "R"
+    }
+}

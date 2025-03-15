@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input [3:0] x`: A 4-bit wide input vector where `x[3]` is the most significant bit (MSB) and `x[0]` is the least significant bit (LSB).
+- Output Ports:
+  - `output f`: A 1-bit output signal.
+
+Functional Description:
+- The module implements a combinational logic function `f` based on the provided Karnaugh map. The function is determined by the bit values of the input vector `x`.
+
+Karnaugh Map Definition:
+- The Karnaugh map is defined using bits `x[3]x[4]` as row selectors and bits `x[1]x[2]` as column selectors.
+- Each cell in the Karnaugh map corresponds to the output `f` for a specific combination of `x[3]x[4]x[1]x[2]`.
+
+Karnaugh Map:
+```
+                x[1]x[2]
+  x[3]x[4]   00  01  11  10
+        00 | d |  0 | d | d |
+        01 | 0 |  d | 1 | 0 |
+        11 | 1 |  1 | d | d |
+        10 | 1 |  1 | 0 | d |
+```
+- Here, "d" indicates don't-care conditions where the output `f` can be either 0 or 1, depending on optimization or convenience.
+
+Operational Details:
+- The logic function `f` is combinational, meaning it updates immediately based on changes in the input `x`.
+- There are no sequential elements (e.g., flip-flops or registers) involved, so no clock or reset signals are necessary.
+- Ensure that the logic for `f` is minimized using the don't-care conditions for optimal synthesis.
+
+Edge Cases and Input Boundaries:
+- Since `x` is a 4-bit input, all combinations from `0000` to `1111` must be considered.
+- Handle the don't-care conditions to optimize the logic circuit, but ensure the specified outputs (0 or 1) are correctly assigned in the Karnaugh map.
+
+No assumptions are made regarding the initial state or transitions, as the logic is purely combinational and driven by inputs.
+</ENHANCED_SPEC>

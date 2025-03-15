@@ -1,0 +1,67 @@
+Generated Response:
+
+Based on the detailed specification and your requirements, here is the implementation of the `TopModule` in Verilog:
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [9:0] q
+);
+
+    // Internal register to hold the counter value
+    logic [9:0] counter;
+
+    // Sequential logic for counter operation
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            counter <= 10'b0; // Reset the counter to 0 when reset is high
+        end else begin
+            if (counter == 10'd999) begin
+                counter <= 10'b0; // Wrap around to 0 after reaching 999
+            end else begin
+                counter <= counter + 1; // Increment the counter
+            end
+        end
+    end
+
+    // Assign the internal counter value to the output
+    assign q = counter;
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Ports and Signals**: The module has one clock input (`clk`), one synchronous reset input (`reset`), and a 10-bit output (`q`). The internal counter is also a 10-bit signal.
+- **Sequential Logic**: The `always_ff` block triggers on the rising edge of the clock. If `reset` is high, the counter is reset to 0. If the counter reaches 999, it wraps around to 0. Otherwise, it increments by 1.
+- **Output Assignment**: The value of the counter is continuously assigned to the output `q`.
+- **Synchronous Reset**: The reset logic is synchronous, ensuring that the counter is reset in sync with the clock signal.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [9:0] q
+);
+
+    // Internal register to hold the counter value
+    logic [9:0] counter;
+
+    // Sequential logic for counter operation
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            counter <= 10'b0; // Reset the counter to 0 when reset is high
+        end else begin
+            if (counter == 10'd999) begin
+                counter <= 10'b0; // Wrap around to 0 after reaching 999
+            end else begin
+                counter <= counter + 1; // Increment the counter
+            end
+        end
+    end
+
+    // Assign the internal counter value to the output
+    assign q = counter;
+
+endmodule

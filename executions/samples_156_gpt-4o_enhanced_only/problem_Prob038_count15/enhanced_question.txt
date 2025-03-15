@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk` : Clock signal, used for triggering sequential logic. All sequential logic is triggered on the positive edge.
+  - `input reset` : Active-high, synchronous reset signal. When high, it resets the counter value to 0 at the next positive clock edge.
+  
+- Output Ports:
+  - `output [3:0] q` : 4-bit output representing the current count, with bit[3] being the most significant bit (MSB) and bit[0] being the least significant bit (LSB).
+
+Functional Description:
+- The module implements a 4-bit binary counter.
+- The counter counts sequentially from 0 to 15 (inclusive), creating a counting period of 16 clock cycles.
+- On each positive edge of the clock (`clk`), if `reset` is not asserted, the counter value increments by 1.
+- If `reset` is asserted (high) on a positive clock edge, the counter is synchronously reset to 0.
+
+Initial Conditions:
+- At power-up or initial start of the module, the counter output `q` should be initialized to 0.
+
+Edge Cases:
+- When the counter reaches its maximum value (15), the next increment results in the counter wrapping around to 0.
+
+Requirements:
+- Ensure that the reset operation has precedence over the counting operation when `reset` is high during a clock edge.
+- The design should be free of race conditions and should handle the synchronous reset and counting operations deterministically.
+</ENHANCED_SPEC>

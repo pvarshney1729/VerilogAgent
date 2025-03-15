@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Consider the following adder-subtractor with a zero flag:
+
+The module is written in Verilog 2001 standard and is designed to perform addition or subtraction on two 8-bit unsigned inputs, `a` and `b`. It outputs the result of the operation and a flag indicating if the result is zero.
+
+Module Name: `TopModule`
+
+Ports:
+- `input wire do_sub`: A 1-bit control signal. When `do_sub` is 0, the module performs addition; when `do_sub` is 1, it performs subtraction.
+- `input wire [7:0] a`: An 8-bit unsigned operand.
+- `input wire [7:0] b`: An 8-bit unsigned operand.
+- `output reg [7:0] out`: An 8-bit register that holds the result of the operation.
+- `output reg result_is_zero`: A 1-bit register that indicates if the result `out` is zero.
+
+Operational Details:
+- The addition and subtraction operations are combinational and are executed based on the value of `do_sub`.
+- The result of addition is computed as `out = a + b` when `do_sub` is 0.
+- The result of subtraction is computed as `out = a - b` when `do_sub` is 1.
+- The zero flag `result_is_zero` is set to 1 if the output `out` is zero after the operation. Otherwise, it is set to 0. This check is performed using a bitwise NOT operation: `if (~|out) result_is_zero = 1'b1; else result_is_zero = 1'b0;`.
+- Ensure that all operations are performed considering the most significant bit (MSB) as bit[7] and the least significant bit (LSB) as bit[0].
+
+Edge Cases:
+- Handle potential overflow and underflow conditions gracefully since the design assumes unsigned arithmetic.
+- Ensure that the `result_is_zero` flag is correctly updated for both addition and subtraction operations.
+
+Reset Conditions:
+- As this is a purely combinational module, there are no defined reset conditions for registers since no sequential logic elements are used.
+
+This specification provides a clear and precise description of the intended behavior of the adder-subtractor module, ensuring correct implementation in Verilog.
+</ENHANCED_SPEC>

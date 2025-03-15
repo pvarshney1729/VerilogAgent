@@ -1,0 +1,51 @@
+Generated Response:
+
+Certainly! Below is the implementation of the `TopModule` as per the specifications provided:
+
+[BEGIN]
+module TopModule(
+    input  logic [2:0] a,
+    output logic [15:0] q
+);
+
+    always @(*) begin
+        case (a)
+            3'b000: q = 16'h1232;
+            3'b001: q = 16'haee0;
+            3'b010: q = 16'h27d4;
+            3'b011: q = 16'h5a0e;
+            3'b100: q = 16'h2066;
+            3'b101: q = 16'h64ce;
+            3'b110: q = 16'hc526;
+            3'b111: q = 16'h2f19;
+            default: q = 16'h0000; // Default case for safety, though not needed
+        endcase
+    end
+
+endmodule
+[DONE]
+
+This implementation uses a combinational `always @(*)` block with a `case` statement to map each 3-bit input `a` to the corresponding 16-bit output `q` as defined in the specification. The `default` case provides a fallback, though it's not strictly necessary given all input values are covered.
+
+Generated Code:
+
+module TopModule(
+    input  logic [2:0] a,
+    output logic [15:0] q
+);
+
+    always @(*) begin
+        case (a)
+            3'b000: q = 16'h1232;
+            3'b001: q = 16'haee0;
+            3'b010: q = 16'h27d4;
+            3'b011: q = 16'h5a0e;
+            3'b100: q = 16'h2066;
+            3'b101: q = 16'h64ce;
+            3'b110: q = 16'hc526;
+            3'b111: q = 16'h2f19;
+            default: q = 16'h0000; // Default case for safety, though not needed
+        endcase
+    end
+
+endmodule

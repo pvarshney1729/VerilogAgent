@@ -1,0 +1,59 @@
+Generated Response:
+
+Here is the Verilog implementation of the `TopModule` as per the given specifications and guidelines:
+
+[BEGIN]
+module TopModule(
+    input logic clk,  // Clock signal
+    input logic w,    // Input from the previous stage
+    input logic R,    // Load value
+    input logic E,    // Enable shift
+    input logic L,    // Load signal
+    output logic Q    // Output of this stage
+);
+
+    always_ff @(posedge clk) begin
+        if (L) begin
+            Q <= R;  // Load mode: load the value R
+        end else if (E) begin
+            Q <= w;  // Shift mode: shift in the value w
+        end
+        // Hold mode implicitly handled: Q retains its value when neither L nor E is asserted
+    end
+
+endmodule
+[DONE]
+
+### Explanation of the Implementation
+1. **Clock Edge Sensitivity**: The `always_ff` block is triggered by the positive edge of the `clk`, which is typical for synchronous logic.
+
+2. **Operational Modes**:
+   - **Load Mode**: If `L` is asserted, the value of `R` is loaded into `Q`.
+   - **Shift Mode**: If `L` is not asserted and `E` is asserted, the value of `w` is shifted into `Q`.
+   - **Hold Mode**: If neither `L` nor `E` is asserted, `Q` naturally holds its previous value as there are no conditions altering it.
+
+3. **Priority Handling**: The load operation (`L`) takes precedence over the shift operation (`E`), as specified, by checking `L` first in the `if`-elseif construct.
+
+This implementation adheres to the specified coding conventions and should function correctly as a single stage in an n-bit shift register.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,  // Clock signal
+    input logic w,    // Input from the previous stage
+    input logic R,    // Load value
+    input logic E,    // Enable shift
+    input logic L,    // Load signal
+    output logic Q    // Output of this stage
+);
+
+    always_ff @(posedge clk) begin
+        if (L) begin
+            Q <= R;  // Load mode: load the value R
+        end else if (E) begin
+            Q <= w;  // Shift mode: shift in the value w
+        end
+        // Hold mode implicitly handled: Q retains its value when neither L nor E is asserted
+    end
+
+endmodule

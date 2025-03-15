@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Specification: TopModule
+
+Interface:
+- input logic clk: Clock signal, positive edge triggered.
+- input logic areset: Asynchronous reset signal, active high.
+- input logic load: Synchronous load signal, active high.
+- input logic ena: Synchronous enable signal, active high.
+- input logic [3:0] data: 4-bit data input, with bit[3] as the most significant bit (MSB) and bit[0] as the least significant bit (LSB).
+- output logic [3:0] q: 4-bit output representing the contents of the shift register, with bit[3] as the MSB and bit[0] as the LSB.
+
+Module Functionality:
+1. Asynchronous Reset (areset):
+   - When 'areset' is asserted (high), the shift register 'q' is immediately reset to 4'b0000, irrespective of the clock.
+
+2. Load Operation (load):
+   - On the positive edge of 'clk', if 'load' is asserted (high), 'q' is loaded with the value of 'data[3:0]'. 
+   - The 'load' signal has priority over the 'ena' signal.
+
+3. Shift Operation (ena):
+   - On the positive edge of 'clk', if 'load' is not asserted (low) and 'ena' is asserted (high), the register shifts right:
+     - q[3] is set to 0.
+     - q[2:0] are shifted to the right by one position.
+     - q[0] is the bit that is shifted out and discarded.
+
+4. Output (q):
+   - The output 'q' reflects the current contents of the shift register after operations dictated by the control signals 'areset', 'load', and 'ena'.
+
+Assumptions:
+- All operations dependent on 'clk' are triggered on its positive edge.
+- The initial state of 'q' upon power-up or reset is 4'b0000.
+- The 'load' operation takes precedence over the 'ena' operation when both are asserted simultaneously.
+</ENHANCED_SPEC>

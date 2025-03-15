@@ -1,0 +1,25 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `a`: 100-bit wide input vector. Signal indexing is from bit[99] (most significant bit) to bit[0] (least significant bit).
+  - `b`: 100-bit wide input vector. Signal indexing is from bit[99] (most significant bit) to bit[0] (least significant bit).
+  - `sel`: 1-bit wide input signal used as the select line for the multiplexer. 
+
+- Output Ports:
+  - `out`: 100-bit wide output vector. Signal indexing is from bit[99] (most significant bit) to bit[0] (least significant bit).
+
+Functional Description:
+- The module implements a 2-to-1 multiplexer with the following behavior:
+  - When `sel` is 0, the output `out` should be directly assigned the value of input `a`.
+  - When `sel` is 1, the output `out` should be directly assigned the value of input `b`.
+
+- The logic is purely combinational without any clock dependencies, meaning there are no sequential elements or registers involved.
+
+- The inputs `a` and `b` are treated as unsigned vectors for the purpose of this operation.
+
+Edge Cases:
+- Ensure proper handling of all 100 bits within the vectors `a` and `b` during multiplexing, with no loss of data or misalignment.
+- The module must consistently reflect changes in inputs `a`, `b`, and `sel` in the output `out` without delay, assuming combinational logic.
+</ENHANCED_SPEC>

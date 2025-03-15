@@ -1,0 +1,51 @@
+Generated Response:
+
+Certainly! Based on the provided waveform data and analysis, the module `TopModule` can be implemented as follows:
+
+[BEGIN]
+module TopModule(
+    input  logic [3:0] a,
+    input  logic [3:0] b,
+    input  logic [3:0] c,
+    input  logic [3:0] d,
+    input  logic [3:0] e,
+    output logic [3:0] q
+);
+
+    always @(*) begin
+        case (c)
+            4'd0: q = b;
+            4'd1: q = e;
+            4'd2: q = a;
+            4'd3: q = d;
+            default: q = 4'b1111;
+        endcase
+    end
+
+endmodule
+[DONE]
+
+This module implements the behavior described in the waveform. It uses a combinational `always` block with a `case` statement to select the output `q` based on the value of the input `c`. For `c` values from 0 to 3, it assigns `b`, `e`, `a`, and `d` respectively, and for any other value, it defaults `q` to `4'b1111`.
+
+Generated Code:
+
+module TopModule(
+    input  logic [3:0] a,
+    input  logic [3:0] b,
+    input  logic [3:0] c,
+    input  logic [3:0] d,
+    input  logic [3:0] e,
+    output logic [3:0] q
+);
+
+    always @(*) begin
+        case (c)
+            4'd0: q = b;
+            4'd1: q = e;
+            4'd2: q = a;
+            4'd3: q = d;
+            default: q = 4'b1111;
+        endcase
+    end
+
+endmodule

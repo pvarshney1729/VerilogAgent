@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+The module named `TopModule` shall have the following interface. All input and output ports are 1-bit wide unless otherwise specified:
+
+- Input Ports:
+  - `clk`: Clock signal, positive edge-triggered.
+  - `reset`: Active high, synchronous reset signal.
+  - `data`: Serial data input for pattern detection and additional bits.
+  - `done_counting`: Indicates the completion of the counting process.
+  - `ack`: User acknowledgment signal after timer completion.
+
+- Output Ports:
+  - `shift_ena`: Enable signal for shifting in additional bits.
+  - `counting`: Indicates the state machine is in the counting phase.
+  - `done`: Notifies the user that the timer has completed.
+
+The module shall implement a finite-state machine (FSM) that performs the following:
+
+1. **Pattern Detection**: The FSM begins in an initial state where it continuously monitors the `data` input for the bit pattern `1101`. This detection is bit-serial, with `bit[0]` referring to the least significant bit.
+
+2. **Shift Enable**: Upon detecting the pattern `1101`, the FSM transitions to a state where it asserts the `shift_ena` output for exactly 4 consecutive clock cycles. During this time, it shifts in 4 additional bits from the `data` input to determine the delay duration (data path processing not included here).
+
+3. **Counting Phase**: After the 4 clock cycles, the FSM asserts the `counting` output, indicating it is in the counting phase. It remains in this state until the `done_counting` input is asserted high, signifying the completion of the counting process.
+
+4. **Notification and Acknowledgment**: Once `done_counting` is high, the FSM asserts the `done` output to notify the user that the timer has completed. It waits in this state until the `ack` input is asserted high, indicating the user has acknowledged the notification.
+
+5. **Reset and Restart**: The FSM returns to the initial state to begin searching for the next occurrence of the pattern `1101` upon receiving an acknowledgment (`ack` high).
+
+- **Reset Behavior**: The synchronous reset (`reset` high) initializes the FSM to the state where it begins searching for the `1101` pattern. All sequential elements are reset to their initial conditions during this operation.
+
+- **Clocking**: All sequential logic within the FSM is triggered on the positive edge of the `clk` signal.
+
+Edge cases and input boundaries should assume that the input `data` stream is continuous and that the FSM correctly detects overlapping patterns, if present.
+
+Note: The data path elements such as counters and comparators are outside the scope of this specification and should be implemented separately.
+</ENHANCED_SPEC>

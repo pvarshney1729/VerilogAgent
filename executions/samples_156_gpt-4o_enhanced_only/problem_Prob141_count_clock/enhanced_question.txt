@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit, clock signal for sequential elements, positive edge-triggered.
+  - `reset`: 1-bit, active high synchronous reset, resets the clock to "12:00 AM".
+  - `ena`: 1-bit, enable signal for incrementing the clock, active high.
+
+- Output Ports:
+  - `pm`: 1-bit, indicates PM when asserted, otherwise AM.
+  - `hh`: 8-bit, two BCD digits representing hours (01-12).
+  - `mm`: 8-bit, two BCD digits representing minutes (00-59).
+  - `ss`: 8-bit, two BCD digits representing seconds (00-59).
+
+Clocking and Logic Behavior:
+- All sequential logic is triggered on the positive edge of `clk`.
+- `reset` takes precedence over `ena` and can reset the clock even when `ena` is not active.
+- On reset (`reset = 1`), initialize `hh` to 8'b00010010 (BCD for "12"), `mm` and `ss` to 8'b00000000 (BCD for "00"), and `pm` to 0 (AM).
+- When `ena` is asserted (high), increment the clock by one second:
+  - Increment `ss` by 1. If it reaches BCD "60" (8'b01100000), reset it to "00" and increment `mm`.
+  - Increment `mm` by 1. If it reaches BCD "60" (8'b01100000), reset it to "00" and increment `hh`.
+  - Increment `hh` by 1. If it reaches BCD "13" (8'b00010011), reset it to "01" and toggle `pm`.
+  
+Edge Cases:
+- Ensure proper handling of BCD increments and overflows for all time components.
+- Transition from "11:59:59 AM" to "12:00:00 PM" should correctly toggle `pm`.
+
+Bit Indexing Conventions:
+- `hh`, `mm`, and `ss` are 8-bit wide, with `bit[0]` as the least significant bit (LSB).
+
+Reset Behavior:
+- Synchronous reset with the highest priority, ensuring the clock resets to a specific state regardless of `ena`.
+
+Operation Precedence:
+- Reset (`reset`) is always prioritized over clock increment (`ena`).
+
+Output Signal Behavior:
+- `pm` is asserted (1) when the clock time is in the PM period, otherwise it remains deasserted (0) for AM.
+</ENHANCED_SPEC>

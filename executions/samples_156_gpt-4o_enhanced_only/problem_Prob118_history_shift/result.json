@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input  logic        clk,\n    input  logic        areset,\n    input  logic        predict_valid,\n    input  logic        predict_taken,\n    input  logic        train_mispredicted,\n    input  logic        train_taken,\n    input  logic [31:0] train_history,\n    output logic [31:0] predict_history\n);\n\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            // Asynchronous reset: reset the history register to zero\n            predict_history <= 32'b0;\n        end\n        else if (train_mispredicted) begin\n            // On misprediction, load the register with train_history concatenated with train_taken\n            predict_history <= {train_history[30:0], train_taken};\n        end\n        else if (predict_valid) begin\n            // On valid prediction, shift in the predict_taken value\n            predict_history <= {predict_history[30:0], predict_taken};\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,136 @@
+Generated Response:
+
+Let's implement the `TopModule` as specified. This module will use a state machine approach to compute the 2's complement of a serially input binary number. We'll define the states necessary for the 2's complement operation: tracking when to invert and add one.
+
+Here is the Verilog code for the module:
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE = 2'b00,   // Initial state
+        INVERT = 2'b01, // State where we start inverting bits
+        ADD_ONE = 2'b10 // State where we add one to the inverted bits
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition on positive edge of clock or asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            IDLE: begin
+                if (x == 1'b1) begin
+                    next_state = INVERT;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            INVERT: begin
+                next_state = ADD_ONE;
+            end
+            ADD_ONE: begin
+                next_state = ADD_ONE; // Stay in ADD_ONE until reset
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+    // Output logic (Moore machine: output based only on current state)
+    always_comb begin
+        case (current_state)
+            IDLE: z = 1'b0;
+            INVERT: z = ~x;
+            ADD_ONE: z = x;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+
+**Explanation:**
+- This module defines a Moore state machine with three states: `IDLE`, `INVERT`, and `ADD_ONE`.
+- The `IDLE` state waits for the first `1` bit to start the 2's complement operation.
+- The `INVERT` state outputs the inverted input bit.
+- The `ADD_ONE` state represents the addition of one (in 2's complement logic) and continues to output the inverted input bit until reset.
+- The asynchronous reset (`areset`) initializes the state machine to the `IDLE` state immediately when asserted.
+
+This code provides a basic framework for implementing a serial 2's complement in a Moore machine fashion. Adjustments might be needed for specific edge cases or further refinements in the state logic based on system requirements.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE = 2'b00,   // Initial state
+        INVERT = 2'b01, // State where we start inverting bits
+        ADD_ONE = 2'b10 // State where we add one to the inverted bits
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition on positive edge of clock or asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            IDLE: begin
+                if (x == 1'b1) begin
+                    next_state = INVERT;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            INVERT: begin
+                next_state = ADD_ONE;
+            end
+            ADD_ONE: begin
+                next_state = ADD_ONE; // Stay in ADD_ONE until reset
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+    // Output logic (Moore machine: output based only on current state)
+    always_comb begin
+        case (current_state)
+            IDLE: z = 1'b0;
+            INVERT: z = ~x;
+            ADD_ONE: z = x;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule

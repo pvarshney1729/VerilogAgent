@@ -1,0 +1,46 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for the `TopModule` that satisfies the given specifications:
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic ar,
+    input logic d,
+    output logic q
+);
+
+    always @(posedge clk or posedge ar) begin
+        if (ar)
+            q <= 1'b0;
+        else
+            q <= d;
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Module Declaration**: The module is named `TopModule` with inputs `clk`, `ar`, `d`, and output `q`.
+- **Port Types**: All ports are declared as `logic` to adhere to the coding conventions.
+- **Always Block**: The always block is sensitive to the positive edge of `clk` and `ar` to implement the positive edge-triggered behavior and asynchronous reset.
+- **Asynchronous Reset**: When `ar` is high, `q` is reset to `0`.
+- **Data Storage**: On the positive edge of `clk`, if `ar` is not asserted, `q` takes the value of `d`.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic ar,
+    input logic d,
+    output logic q
+);
+
+    always @(posedge clk or posedge ar) begin
+        if (ar)
+            q <= 1'b0;
+        else
+            q <= d;
+    end
+
+endmodule

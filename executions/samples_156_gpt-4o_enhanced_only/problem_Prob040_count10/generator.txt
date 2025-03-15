@@ -1,0 +1,68 @@
+Generated Response:
+
+Here is the Verilog code for the `TopModule` implementing a decade counter:
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    // Internal register to hold the current count
+    logic [3:0] count;
+
+    // Sequential logic for decade counter with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            count <= 4'b0000; // Reset count to 0
+        end else if (count == 4'b1001) begin
+            count <= 4'b0000; // Wrap around to 0 after 9
+        end else begin
+            count <= count + 1; // Increment count
+        end
+    end
+
+    // Assign the current count to the output
+    assign q = count;
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Module Declaration**: The module `TopModule` is declared with inputs `clk` and `reset`, and a 4-bit output `q`.
+- **Internal Register**: A 4-bit internal logic register `count` is used to keep track of the current state of the counter.
+- **Always Block**: This block is triggered on the positive edge of the clock (`posedge clk`). 
+  - If `reset` is high, `count` is set to 0.
+  - If `count` reaches 9 (`4'b1001`), it wraps back to 0.
+  - Otherwise, `count` is incremented by 1.
+- **Output Assignment**: The current value of `count` is assigned to the output `q`.
+
+This design should meet the requirements for a decade counter with the specified interface and behavior.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    // Internal register to hold the current count
+    logic [3:0] count;
+
+    // Sequential logic for decade counter with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            count <= 4'b0000; // Reset count to 0
+        end else if (count == 4'b1001) begin
+            count <= 4'b0000; // Wrap around to 0 after 9
+        end else begin
+            count <= count + 1; // Increment count
+        end
+    end
+
+    // Assign the current count to the output
+    assign q = count;
+
+endmodule

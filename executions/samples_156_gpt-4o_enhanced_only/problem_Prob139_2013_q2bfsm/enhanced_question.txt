@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+The module named `TopModule` is a finite state machine (FSM) with the following interface. All input and output ports are one bit wide:
+
+- `input clk`: Clock signal triggering on the positive edge.
+- `input resetn`: Synchronous active-low reset signal. While asserted (`resetn = 0`), the FSM remains in the initial state.
+- `input x`: Input signal from the motor, monitored by the FSM.
+- `input y`: Input signal from the motor, monitored by the FSM.
+- `output f`: Output signal to control the motor, initially 0.
+- `output g`: Output signal to control the motor, initially 0.
+
+**FSM Operation:**
+
+1. **Reset and Initial State:**
+   - Upon power-up or when `resetn` is asserted (`resetn = 0`), the FSM remains in the initial state, called state A. In this state, both outputs `f` and `g` are set to 0.
+   - When `resetn` is de-asserted (`resetn = 1`), the FSM transitions from state A to state B on the next positive clock edge.
+
+2. **State B:**
+   - In state B, the output `f` is set to 1 for exactly one clock cycle upon entering this state.
+   - After one clock cycle, the FSM transitions to state C, regardless of the values of `x` and `y`.
+
+3. **State C:**
+   - The FSM monitors the input `x`. It transitions through an internal sequence of sub-states to detect the specific pattern `1, 0, 1` on consecutive clock cycles.
+   - If the sequence `1, 0, 1` is detected on `x` in three successive clock cycles, the FSM transitions to state D on the next clock edge, setting `g` to 1 for the next cycle.
+
+4. **State D:**
+   - In state D, `g` is set to 1.
+   - The FSM monitors input `y` for up to two clock cycles.
+     - If `y` is observed to be 1 within these two cycles, `g` remains 1 permanently (until reset).
+     - If `y` does not become 1 within these two clock cycles, the FSM transitions to state E on the next clock edge, setting `g` to 0 permanently (until reset).
+
+**Edge Cases and Considerations:**
+- All state transitions and monitoring of inputs occur on the positive edge of the clock.
+- The reset (`resetn`) must be synchronous, affecting state transitions and output values only at the clock edge.
+- The initial state with reset asserted ensures both `f` and `g` are 0 before any pattern detection begins.
+- Ensure proper handling of input `x` and `y` signals to prevent race conditions during state transitions.
+
+**Bit Indexing Conventions:**
+- All single-bit signals are treated with bit[0] referring to the least significant bit, consistent with Verilog conventions.
+
+The FSM is expected to handle all possible valid sequences of `x` and `y` inputs without undefined behavior.
+</ENHANCED_SPEC>

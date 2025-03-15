@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input Ports:
+  - `input [3:0] a`: 4-bit wide input vector.
+  - `input [3:0] b`: 4-bit wide input vector.
+  - `input [3:0] c`: 4-bit wide input vector.
+  - `input [3:0] d`: 4-bit wide input vector.
+  - `input [3:0] e`: 4-bit wide input vector.
+
+- Output Port:
+  - `output [3:0] q`: 4-bit wide output vector.
+
+Bit Indexing Convention:
+- All vectors are indexed from MSB to LSB, with bit[3] as the most significant bit and bit[0] as the least significant bit.
+
+Module Functionality:
+- The module implements a combinational logic circuit. There are no sequential elements or state-holding components.
+- The output `q` is determined based on the value of the input `c` as follows:
+  - If `c == 4'd0`, then `q = b`.
+  - If `c == 4'd1`, then `q = e`.
+  - If `c == 4'd2`, then `q = a`.
+  - If `c == 4'd3`, then `q = d`.
+  - For `c` values from `4'd4` to `4'd15`, `q = 4'b1111` (binary representation of decimal 15).
+
+Operational Precedence:
+- The selection of `q` is solely dependent on the value of input `c`. Inputs `a`, `b`, `d`, and `e` are used based on the matching condition of `c`.
+
+Edge Cases:
+- When `c` is greater than or equal to `4'd4`, the output `q` defaults to `4'b1111`.
+
+Assumptions:
+- All input signals are assumed to be stable during the evaluation of the combinational logic.
+- The input and output delays are not specified and are assumed to be ideal (zero delay) for the purpose of this specification.
+
+This specification is intended to guide the correct implementation of the TopModule in Verilog.
+</ENHANCED_SPEC>

@@ -49,26 +49,35 @@ Your reasoning behind your implementation here. Think step by step.
 </REASONING>
 
 <CODE>
-IMPORTANT: Enclose your code with [BEGIN] and [DONE].
+IMPORTANT: Enclose your code with [BEGIN] and [DONE] tags.
+Do NOT use Markdown code blocks (```) inside the [BEGIN]/[DONE] tags.
+Your code should look like:
+
+[BEGIN]
+module TopModule(
+    input in,
+    output out
+);
+    // Your implementation here
+endmodule
+[DONE]
 </CODE>
 """,
 
 
-'enhance_spec_system': """You are an expert in formal hardware design specification and Verilog implementation. Your task is to analyze user-provided specifications for digital logic circuits and rewrite them by improving clarity, removing ambiguities, and making implicit assumptions explicit.""",
+'enhance_spec_system': """You are an expert in formal hardware design specification and Verilog implementation. Your task is to analyze user-provided specifications for digital logic circuits and rewrite them by improving clarity.""",
 
 'enhance_spec_rules': """You should NOT change the functional intent of the specification but should refine it to ensure correctness in implementation. 
 
-You may edit or add more details to the original specification to ensure correctness in implementation.
-<ENHANCEMENT GUIDELINES>
-- Explicitly define input/output port widths, signedness, and naming conventions.
-- Clearly specify MSB/LSB conventions and bit indexing (e.g., "bit[0] refers to the least significant bit").
-- Clearly distinguish combinational vs. sequential logic and define clock cycle relationships.
-- Explicitly state whether resets are synchronous or asynchronous and the reset state of all registers.
+You MAY/MAY NOT edit or add more details to the original specification to ensure correctness in implementation. You can:
+- Define input/output port widths, signedness, and naming conventions.
+- Specify MSB/LSB conventions and bit indexing (e.g., "bit[0] refers to the least significant bit").
+- Distinguish combinational vs. sequential logic and define clock cycle relationships.
+- State whether resets are synchronous or asynchronous and the reset state of all registers.
 - Ensure all flip-flops, registers, and sequential elements have explicitly defined initial values.
 - Clarify signal dependencies, precedence of operations, and potential race conditions.
 - Where Karnaugh maps, truth tables, FSMs, or bitwise operations are involved, provide both textual and formal mathematical descriptions.
 - Specify behavior at edge cases and input boundaries.
-</ENHANCEMENT GUIDELINES>
 
 Given the following user specification for a Verilog module, rewrite it between <ENHANCED_SPEC> tags.
 
@@ -79,10 +88,11 @@ Original Specification:
 [Provide the rewritten specification here using the enhancementguidelines above. DO NOT WRITE DOWN YOUR VERILOG IMPLEMENTATION FOR THE MODULE.]
 </ENHANCED_SPEC>
 
-DO NOT include any explanations, notes, or text outside the <ENHANCED_SPEC> tags. Return ONLY the enhanced specification.
+Remember that you're task is not to completely change the specification itself but only to improve it for clarity.
+DO NOT include any explanations, notes, or text outside the <ENHANCED_SPEC> tags. Return ONLY the rewritten specification.
 """,
 
-'decomposition_system_prompt': """You are an expert Verilog RTL designer that can break down complicated implementations into modules. You MUST return valid JSON in the exact format requested.""",
+'decomposition_system_prompt': """You are an expert Verilog RTL designer engineer that can break down complicated implementations into subtasks.""",
 
 'decomposition_prompt': """
 <Target Problem>
@@ -90,8 +100,8 @@ DO NOT include any explanations, notes, or text outside the <ENHANCED_SPEC> tags
 </Target Problem>
 
 <Instructions>
-- Let's think step by step.
-- Based on the Problem description, set up an implementation plan. Each subtask should focus on implementing only one signal or logical component at a time.
+-Let's think step by step.
+-Based on the Problem description, set up an implementation plan: each subtask should focus on implementing only one logical component at a time.
 -Extract the corresponding source contexts in the [Target Problem] section of each subtask into the 'source' field.
 -The task id number indicates the sequential orders.
 </Instructions>
@@ -108,12 +118,7 @@ IMPORTANT: Return ONLY a valid JSON object with this EXACT structure:
       "content": "task description 2",
       "source": "source 2"
     }},
-    {{
-      "id": "3",
-      "content": "task description 3",
-      "source": "source 3"
-    }}
-  ]
+    ....
 }}
 
 EXAMPLE:
@@ -139,8 +144,7 @@ For a problem about implementing a counter, your response might be:
 }}
 
 [Rules]
-Make sure the task plans satisfy the following rules! Do not make plans that violate the following rules!!!
-- Make a plan to define the module with its input and output first.
+Make sure the task plans satisfy the following rules:
 - Do not plan the implementation of logic or signal from the input ports.
 - There is a test bench to test the functional correctness. Do not plan generating testbench to test the generated verilog code.
 - Don't make a plan only with clock or control signals. The clock or control signals should be planned with register or wire signal.

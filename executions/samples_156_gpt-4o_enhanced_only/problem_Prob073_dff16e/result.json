@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic resetn,\n    input logic [1:0] byteena,\n    input logic [15:0] d,\n    output logic [15:0] q\n);\n\n    // Synchronous logic for the 16 D flip-flops\n    always_ff @(posedge clk) begin\n        if (!resetn) begin\n            // Active-low reset: initialize all flip-flops to 0\n            q <= 16'b0;\n        end else begin\n            // If reset is not active, use byte-enable signals to control writing\n            if (byteena[1]) begin\n                q[15:8] <= d[15:8];  // Write to upper byte if enabled\n            end\n            if (byteena[0]) begin\n                q[7:0] <= d[7:0];    // Write to lower byte if enabled\n            end\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

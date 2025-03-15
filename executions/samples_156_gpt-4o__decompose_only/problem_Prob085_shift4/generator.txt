@@ -1,0 +1,55 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for the `TopModule` that adheres to the specified requirements and guidelines:
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic load,
+    input logic ena,
+    input logic [3:0] data,
+    output logic [3:0] q
+);
+
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 4'b0000; // Asynchronous reset to zero
+        end else if (load) begin
+            q <= data; // Load data into the shift register
+        end else if (ena) begin
+            q <= {1'b0, q[3:1]}; // Shift right with q[3] set to zero
+        end
+    end
+
+endmodule
+[DONE]
+
+This module implements a 4-bit shift register with the specified behavior:
+- An asynchronous reset (`areset`) that sets the register to zero.
+- A synchronous load (`load`) that loads the register with the input `data`.
+- A synchronous enable (`ena`) that shifts the register to the right, with `q[3]` becoming zero.
+- The load operation has higher priority than the shift operation when both `load` and `ena` are asserted.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic load,
+    input logic ena,
+    input logic [3:0] data,
+    output logic [3:0] q
+);
+
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 4'b0000; // Asynchronous reset to zero
+        end else if (load) begin
+            q <= data; // Load data into the shift register
+        end else if (ena) begin
+            q <= {1'b0, q[3:1]}; // Shift right with q[3] set to zero
+        end
+    end
+
+endmodule

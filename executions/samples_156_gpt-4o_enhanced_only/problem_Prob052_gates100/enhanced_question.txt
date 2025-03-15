@@ -1,0 +1,20 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, is a combinational logic circuit with the following interface specifications. All input and output ports are single-bit signals unless otherwise noted. The input signal is a 100-bit vector, and the module produces three single-bit outputs.
+
+- Input Ports:
+  - `input wire [99:0] in`: A 100-bit input vector where `in[99]` is the most significant bit (MSB) and `in[0]` is the least significant bit (LSB).
+
+- Output Ports:
+  - `output wire out_and`: Represents the result of a logical AND operation across all bits of the input vector `in`.
+  - `output wire out_or`: Represents the result of a logical OR operation across all bits of the input vector `in`.
+  - `output wire out_xor`: Represents the result of a logical XOR operation across all bits of the input vector `in`.
+
+Detailed Operation:
+1. `out_and`: This output is high (`1`) if all bits in the input vector `in[99:0]` are high (`1`). It is low (`0`) if any bit in the vector is low (`0`).
+
+2. `out_or`: This output is high (`1`) if at least one bit in the input vector `in[99:0]` is high (`1`). It is low (`0`) only if all bits in the vector are low (`0`).
+
+3. `out_xor`: This output is high (`1`) if there is an odd number of bits set to high (`1`) in the input vector `in[99:0]`. It is low (`0`) if there is an even number of bits set to high (`1`).
+
+Note: The module is purely combinational and does not involve any sequential elements, such as flip-flops or registers. Therefore, no clock signal or reset functionality is required. All operations are performed based on the current values of the input vector `in`.
+</ENHANCED_SPEC>

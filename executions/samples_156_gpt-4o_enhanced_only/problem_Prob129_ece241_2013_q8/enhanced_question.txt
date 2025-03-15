@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: 
+  - `clk`: Clock signal, positive edge-triggered.
+  - `aresetn`: Asynchronous reset signal, active low. It resets the FSM to its initial state on the negative edge.
+  - `x`: Input signal, 1-bit, representing the data stream to be evaluated.
+
+- Output:
+  - `z`: Output signal, 1-bit, asserted to logic-1 when the sequence "101" is detected.
+
+FSM Description:
+- Type: Mealy finite state machine.
+- Number of States: 3
+  - State 0 (S0): Initial state, also reset state. In this state, the FSM has not yet detected the "101" sequence.
+  - State 1 (S1): Intermediate state, where the FSM has detected the first '1' in the "101" sequence.
+  - State 2 (S2): Intermediate state, where the FSM has detected "10" of "101".
+
+- State Transitions and Output Logic:
+  - From S0:
+    - If `x` == 1, transition to S1. Output `z` = 0.
+    - If `x` == 0, remain in S0. Output `z` = 0.
+  - From S1:
+    - If `x` == 0, transition to S2. Output `z` = 0.
+    - If `x` == 1, remain in S1. Output `z` = 0.
+  - From S2:
+    - If `x` == 1, transition to S1. Output `z` = 1 (sequence "101" detected).
+    - If `x` == 0, transition to S0. Output `z` = 0.
+
+- Overlapping Sequences: The FSM should support overlapping sequence detection. For example, in the input "10101", the first "101" will be detected at the first occurrence, and the FSM should continue to recognize the next "101" without resetting.
+
+Reset Behavior:
+- Asynchronous Reset: The FSM should reset to state S0 on the negative edge of `aresetn`, regardless of the clock.
+
+Initial Conditions:
+- All state registers should be initialized to State S0 upon reset.
+
+Bit Indexing:
+- Input and output signals are 1-bit wide, no indexing is required.
+
+Edge Cases:
+- Ensure z is only asserted when the complete "101" sequence is detected. Partial sequences should not assert z.
+
+Ensure that all sequential elements and flip-flops are properly initialized and describe the behavior under all potential input conditions, respecting the reset conditions.
+</ENHANCED_SPEC>

@@ -1,0 +1,57 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire clk: Clock signal for synchronous operations (1-bit).
+  - input wire x: Control input signal (1-bit).
+  - input wire [2:0] y: Present state input signal (3-bit vector, with y[2] as the most significant bit (MSB) and y[0] as the least significant bit (LSB)).
+
+- Output Ports:
+  - output wire Y0: Output bit from the next state vector, specifically Y[0] (1-bit).
+  - output wire z: Output signal based on the FSM state and transitions (1-bit).
+
+FSM Description:
+- The module implements a finite state machine (FSM) with the following characteristics:
+  - The FSM has a synchronous reset and is triggered on the rising edge of the clock signal.
+  - The present state is represented by a 3-bit vector y[2:0].
+  - The next state, denoted as Y[2:0], is determined based on the current state y[2:0] and input x.
+  
+State Transition Table:
+- Present state y[2:0] transitions to the next state Y[2:0] based on input x:
+  - When y = 3'b000:
+    - If x = 0, next state Y = 3'b000.
+    - If x = 1, next state Y = 3'b001.
+    - Output z = 0.
+  - When y = 3'b001:
+    - If x = 0, next state Y = 3'b001.
+    - If x = 1, next state Y = 3'b100.
+    - Output z = 0.
+  - When y = 3'b010:
+    - If x = 0, next state Y = 3'b010.
+    - If x = 1, next state Y = 3'b001.
+    - Output z = 0.
+  - When y = 3'b011:
+    - If x = 0, next state Y = 3'b001.
+    - If x = 1, next state Y = 3'b010.
+    - Output z = 1.
+  - When y = 3'b100:
+    - If x = 0, next state Y = 3'b011.
+    - If x = 1, next state Y = 3'b100.
+    - Output z = 1.
+
+Outputs:
+- The output Y0 is the least significant bit (LSB) of the next state vector Y[0].
+- The output z is determined by the current state and is independent of input x, as described in the state transition table.
+
+Initial Conditions:
+- All registers and sequential elements should be initialized to a defined state. The initial state should be 3'b000 unless otherwise specified.
+
+Edge Cases and Boundary Conditions:
+- Ensure that all transitions are appropriately defined for each state and input combination.
+- Handle any undefined states transition to a safe state, preferably the initial state.
+
+Clock and Reset:
+- The module operates on the rising edge of the clk signal.
+- Implement a synchronous reset mechanism to initialize the FSM to the defined initial state.
+</ENHANCED_SPEC>

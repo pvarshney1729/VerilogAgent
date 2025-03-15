@@ -1,0 +1,26 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input [2:0] vec`: A 3-bit wide input vector, where `vec[0]` represents the least significant bit (LSB) and `vec[2]` represents the most significant bit (MSB).
+
+- Output Ports:
+  - `output [2:0] outv`: A 3-bit wide output vector that mirrors the input vector `vec`.
+  - `output o2`: A 1-bit output corresponding to `vec[2]`.
+  - `output o1`: A 1-bit output corresponding to `vec[1]`.
+  - `output o0`: A 1-bit output corresponding to `vec[0]`.
+
+Description:
+- This module is purely combinational and does not contain any sequential elements such as registers or flip-flops.
+- The `outv` output vector is directly driven by the input vector `vec`, with each bit corresponding directly to the same bit position in `vec`.
+- The individual output bits `o2`, `o1`, and `o0` are directly connected to the respective bits of the input vector `vec`. Specifically:
+  - `o2` is connected to `vec[2]`.
+  - `o1` is connected to `vec[1]`.
+  - `o0` is connected to `vec[0]`.
+
+Operational Considerations:
+- As a purely combinational module, output changes propagate immediately in response to changes in the input vector `vec`.
+- There are no reset conditions to consider since the module does not contain stateful elements.
+- All outputs must reflect the current value of the input vector `vec` without any delay.
+</ENHANCED_SPEC>

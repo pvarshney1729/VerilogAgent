@@ -1,0 +1,61 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `y`: 6-bit input vector (bit[5] is the most significant bit, bit[0] is the least significant bit)
+  - `w`: 1-bit input
+- Output Ports:
+  - `Y1`: 1-bit output
+  - `Y3`: 1-bit output
+
+State Machine Description:
+- States: A, B, C, D, E, F
+- State encoding (one-hot):
+  - State A: y = 000001
+  - State B: y = 000010
+  - State C: y = 000100
+  - State D: y = 001000
+  - State E: y = 010000
+  - State F: y = 100000
+
+State Transitions:
+- From State A:
+  - Input w = 0: Transition to State B
+  - Input w = 1: Remain in State A
+- From State B:
+  - Input w = 0: Transition to State C
+  - Input w = 1: Transition to State D
+- From State C:
+  - Input w = 0: Transition to State E
+  - Input w = 1: Transition to State D
+- From State D:
+  - Input w = 0: Transition to State F
+  - Input w = 1: Transition to State A
+- From State E:
+  - Input w = 0: Remain in State E
+  - Input w = 1: Transition to State D
+- From State F:
+  - Input w = 0: Transition to State C
+  - Input w = 1: Transition to State D
+
+Reset Behavior:
+- The state machine resets asynchronously to State A (y = 000001).
+
+Output Logic:
+- `Y1` is derived from the current state and indicates the output associated with that state.
+- `Y3` is derived similarly. The specification does not provide explicit logic for these outputs; they depend on the derived logic equations.
+
+Next-State Logic:
+- The next-state signals `Y2` and `Y4` correspond to y[1] and y[3] respectively.
+- Derive logic equations for `Y2` and `Y4` using inspection based on one-hot encoding and state transitions.
+
+Initial Conditions:
+- Upon reset, the state machine initializes to State A with y = 000001.
+
+Edge Cases and Input Boundaries:
+- Ensure proper handling of invalid states by resetting or ignoring transitions from undefined states.
+- The behavior for `Y1` and `Y3` outputs during invalid states should default to a safe state, typically zero.
+
+Note: This specification assumes that all operations are edge-triggered on the rising edge of a clock signal, which is not explicitly mentioned here. Ensure this in the implementation.
+</ENHANCED_SPEC>

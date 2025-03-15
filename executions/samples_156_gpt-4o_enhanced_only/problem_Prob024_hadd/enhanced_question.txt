@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input logic a;` // Single-bit input, represents the first addend.
+  - `input logic b;` // Single-bit input, represents the second addend.
+
+- Output Ports:
+  - `output logic sum;` // Single-bit output, represents the sum of the inputs.
+  - `output logic cout;` // Single-bit output, represents the carry-out of the addition.
+
+Functional Description:
+- The module implements a half adder, which is a combinational logic circuit.
+- The half adder takes two single-bit binary numbers `a` and `b` as inputs and produces two single-bit outputs: `sum` and `cout`.
+- The `sum` output is the result of the bitwise XOR operation between `a` and `b`.
+- The `cout` output is the result of the bitwise AND operation between `a` and `b`.
+
+Bit Indexing and Significance:
+- Both inputs and outputs are single-bit wide, with no bit indexing required.
+- The inputs `a` and `b` are considered as the least significant bits for addition.
+
+Operational Details:
+- The logic operations involved are strictly combinational and there are no sequential elements, thus no clock or reset is required.
+- There are no race conditions as the operations are purely bitwise and independent of any clock cycles.
+
+Edge Cases:
+- The module correctly handles all possible input combinations of `a` and `b`, i.e., (0,0), (0,1), (1,0), and (1,1).
+- The results for these combinations are:
+  - (0,0): sum = 0, cout = 0
+  - (0,1): sum = 1, cout = 0
+  - (1,0): sum = 1, cout = 0
+  - (1,1): sum = 0, cout = 1
+</ENHANCED_SPEC>

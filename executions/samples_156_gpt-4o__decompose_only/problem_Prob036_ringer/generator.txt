@@ -1,0 +1,57 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for the `TopModule` that controls the ringer and motor based on the `ring` and `vibrate_mode` inputs. The logic ensures that only one of the outputs is active at any given time.
+
+[BEGIN]
+module TopModule(
+    input logic ring,
+    input logic vibrate_mode,
+    output logic ringer,
+    output logic motor
+);
+
+    always @(*) begin
+        if (ring) begin
+            if (vibrate_mode) begin
+                ringer = 1'b0;
+                motor = 1'b1;
+            end else begin
+                ringer = 1'b1;
+                motor = 1'b0;
+            end
+        end else begin
+            ringer = 1'b0;
+            motor = 1'b0;
+        end
+    end
+
+endmodule
+[DONE]
+
+This implementation uses an `always @(*)` block to describe the combinational logic. It checks the `ring` and `vibrate_mode` inputs to determine which output should be active, ensuring that only one of `ringer` or `motor` is set to `1` at any time. If `ring` is not active, both outputs are set to `0`.
+
+Generated Code:
+
+module TopModule(
+    input logic ring,
+    input logic vibrate_mode,
+    output logic ringer,
+    output logic motor
+);
+
+    always @(*) begin
+        if (ring) begin
+            if (vibrate_mode) begin
+                ringer = 1'b0;
+                motor = 1'b1;
+            end else begin
+                ringer = 1'b1;
+                motor = 1'b0;
+            end
+        end else begin
+            ringer = 1'b0;
+            motor = 1'b0;
+        end
+    end
+
+endmodule

@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - sel: 3-bit unsigned input vector, where bit[2] is the most significant bit (MSB) and bit[0] is the least significant bit (LSB).
+  - data0: 4-bit unsigned input vector, with bit[3] as the MSB and bit[0] as the LSB.
+  - data1: 4-bit unsigned input vector, with bit[3] as the MSB and bit[0] as the LSB.
+  - data2: 4-bit unsigned input vector, with bit[3] as the MSB and bit[0] as the LSB.
+  - data3: 4-bit unsigned input vector, with bit[3] as the MSB and bit[0] as the LSB.
+  - data4: 4-bit unsigned input vector, with bit[3] as the MSB and bit[0] as the LSB.
+  - data5: 4-bit unsigned input vector, with bit[3] as the MSB and bit[0] as the LSB.
+
+- Outputs:
+  - out: 4-bit unsigned output vector, with bit[3] as the MSB and bit[0] as the LSB.
+
+Functional Description:
+- The module implements a 6-to-1 combinational multiplexer.
+- The multiplexer selects one of the six 4-bit data inputs based on the 3-bit 'sel' input value:
+  - If sel = 3'b000, then out = data0.
+  - If sel = 3'b001, then out = data1.
+  - If sel = 3'b010, then out = data2.
+  - If sel = 3'b011, then out = data3.
+  - If sel = 3'b100, then out = data4.
+  - If sel = 3'b101, then out = data5.
+- For any other value of sel (i.e., when sel is 3'b110 or 3'b111), the output 'out' should be set to 4'b0000, effectively zeroing the output.
+
+Edge Cases:
+- Ensure that the selection logic correctly interprets all 8 possible values of the 3-bit 'sel' input, including the unselected states (sel = 3'b110 and sel = 3'b111).
+- The module assumes that all data inputs are stable and valid during operation, with no additional synchronization or error checking needed for this simple multiplexer design.
+</ENHANCED_SPEC>

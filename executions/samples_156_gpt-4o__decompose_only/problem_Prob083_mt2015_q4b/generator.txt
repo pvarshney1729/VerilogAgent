@@ -1,0 +1,35 @@
+Generated Response:
+
+Based on the waveform provided, we can deduce the logic for the output `z`. The output `z` is `1` when both `x` and `y` are `0` or when both `x` and `y` are `1`. This can be expressed using the logical expression `z = (~x & ~y) | (x & y)`. Let's implement this in a Verilog module:
+
+[BEGIN]
+module TopModule (
+    input  logic x,
+    input  logic y,
+    output logic z
+);
+
+    // Combinational logic to determine the output z
+    always @(*) begin
+        z = (~x & ~y) | (x & y);
+    end
+
+endmodule
+[DONE]
+
+This module uses combinational logic to compute the output `z` based on the inputs `x` and `y`, following the logic derived from the waveform. The use of `always @(*)` ensures that the logic is evaluated whenever there is a change in the inputs.
+
+Generated Code:
+
+module TopModule (
+    input  logic x,
+    input  logic y,
+    output logic z
+);
+
+    // Combinational logic to determine the output z
+    always @(*) begin
+        z = (~x & ~y) | (x & y);
+    end
+
+endmodule

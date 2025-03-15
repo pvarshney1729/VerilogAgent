@@ -1,0 +1,20 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `in`: 8-bit wide input vector. Bit `in[0]` refers to the least significant bit (LSB), and `in[7]` refers to the most significant bit (MSB).
+
+- Output Ports:
+  - `parity`: 1-bit wide output that represents the computed parity bit.
+
+Functional Description:
+The purpose of the TopModule is to compute an even parity bit for an 8-bit input vector `in`. The even parity bit is calculated as the XOR of all 8 bits of the input vector. When the XOR of all bits is 0, the output parity bit should be 0, indicating that the number of 1-bits is even. Conversely, if the XOR result is 1, the output parity bit should be 1, indicating that the number of 1-bits is odd.
+
+Operational Details:
+- The module is purely combinational. No clock or reset signals are involved as there are no sequential elements or stateful behavior.
+- The output `parity` is updated immediately in response to any change in the input vector `in`.
+
+Boundary Conditions:
+- The module does not handle cases beyond the 8-bit input size specified and assumes that the input vector `in` is always a valid 8-bit binary number.
+</ENHANCED_SPEC>

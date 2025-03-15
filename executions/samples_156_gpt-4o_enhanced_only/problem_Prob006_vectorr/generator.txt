@@ -1,0 +1,47 @@
+Generated Response:
+
+Certainly! Below is the implementation of the `TopModule` that reverses the bits of the 8-bit input and provides the result on the 8-bit output. The implementation adheres strictly to the interface and coding conventions you provided.
+
+[BEGIN]
+module TopModule(
+    input logic [7:0] in,    // 8-bit input
+    output logic [7:0] out   // 8-bit output
+);
+
+    always @(*) begin
+        // Reverse the bit ordering of 'in' and assign to 'out'
+        out[7] = in[0];
+        out[6] = in[1];
+        out[5] = in[2];
+        out[4] = in[3];
+        out[3] = in[4];
+        out[2] = in[5];
+        out[1] = in[6];
+        out[0] = in[7];
+    end
+
+endmodule
+[DONE]
+
+This module uses an `always @(*)` block to ensure that any change in the input `in` will immediately propagate to the output `out`, reversing the bit order. This approach ensures combinational logic without the need for a clock or reset.
+
+Generated Code:
+
+module TopModule(
+    input logic [7:0] in,    // 8-bit input
+    output logic [7:0] out   // 8-bit output
+);
+
+    always @(*) begin
+        // Reverse the bit ordering of 'in' and assign to 'out'
+        out[7] = in[0];
+        out[6] = in[1];
+        out[5] = in[2];
+        out[4] = in[3];
+        out[3] = in[4];
+        out[2] = in[5];
+        out[1] = in[6];
+        out[0] = in[7];
+    end
+
+endmodule

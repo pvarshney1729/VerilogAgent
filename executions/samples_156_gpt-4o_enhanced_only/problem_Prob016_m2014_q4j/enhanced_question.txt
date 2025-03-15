@@ -1,0 +1,23 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input [3:0] x`: A 4-bit unsigned input vector, where bit[0] refers to the least significant bit (LSB).
+  - `input [3:0] y`: A 4-bit unsigned input vector, similarly indexed with bit[0] as the LSB.
+- Output Ports:
+  - `output [4:0] sum`: A 5-bit unsigned output vector, capturing the result of the addition. The most significant bit (bit[4]) represents the overflow.
+
+Functional Description:
+- The module implements a 4-bit binary adder using full adders.
+- The addition of `x` and `y` results in a 5-bit `sum`, where sum[3:0] represents the sum of `x` and `y`, and sum[4] represents the carry-out (overflow) from the most significant bit of the addition.
+
+Additional Details:
+- The adder logic is combinational, meaning the output `sum` is continuously driven by the current inputs `x` and `y` without any clock or sequential logic involved.
+- No asynchronous or synchronous reset is required since the logic is purely combinational and stateless.
+- Inputs `x` and `y` are treated as unsigned binary numbers, and the adder should handle all possible input combinations without additional overflow checks beyond the 5-bit sum representation.
+
+Edge Cases:
+- All possible input combinations (from 0000 to 1111 for both `x` and `y`) must be correctly handled, with `sum` accurately reflecting the binary addition.
+- The maximum value of `x` and `y` is 15 (binary 1111), resulting in a maximum `sum` of 30 (binary 11110), where sum[4] is the overflow bit.
+</ENHANCED_SPEC>

@@ -1,0 +1,42 @@
+Generated Response:
+
+Certainly! Below is the Verilog code for the `TopModule` that implements a 4-bit wide, 256-to-1 multiplexer using the given specifications:
+
+[BEGIN]
+module TopModule(
+    input logic [1023:0] in, // 1024-bit input vector
+    input logic [7:0] sel,   // 8-bit selection input
+    output logic [3:0] out   // 4-bit output
+);
+
+    always @(*) begin
+        // Calculate the starting bit position based on the selection input
+        // and select the appropriate 4-bit slice
+        out = in[sel * 4 +: 4];
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Input and Output Declarations**: The inputs and outputs are declared using `logic` to comply with the requirement of not using `wire` or `reg`.
+- **Combinational Logic**: The `always @(*)` block is used to implement combinational logic that selects the appropriate 4-bit slice from the `in` vector.
+- **Bit Selection**: The syntax `in[sel * 4 +: 4]` is used to extract a 4-bit section starting from the bit position `sel * 4`, which effectively implements the 256-to-1 multiplexer functionality.
+
+This implementation satisfies the given specifications and adheres to the Verilog coding conventions stated in the guidelines.
+
+Generated Code:
+
+module TopModule(
+    input logic [1023:0] in, // 1024-bit input vector
+    input logic [7:0] sel,   // 8-bit selection input
+    output logic [3:0] out   // 4-bit output
+);
+
+    always @(*) begin
+        // Calculate the starting bit position based on the selection input
+        // and select the appropriate 4-bit slice
+        out = in[sel * 4 +: 4];
+    end
+
+endmodule

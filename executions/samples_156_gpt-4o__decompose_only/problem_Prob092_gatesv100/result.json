@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input  logic [99:0] in,\n    output logic [99:0] out_both,\n    output logic [99:0] out_any,\n    output logic [99:0] out_different\n);\n\n    // out_both logic\n    assign out_both[99] = 1'b0; // in[99] has no left neighbor\n    genvar i;\n    generate\n        for (i = 0; i < 99; i = i + 1) begin : out_both_logic\n            assign out_both[i] = in[i] & in[i+1];\n        end\n    endgenerate\n\n    // out_any logic\n    assign out_any[0] = 1'b0; // in[0] has no right neighbor\n    generate\n        for (i = 1; i < 100; i = i + 1) begin : out_any_logic\n            assign out_any[i] = in[i] | in[i-1];\n        end\n    endgenerate\n\n    // out_different logic\n    generate\n        for (i = 0; i < 99; i = i + 1) begin : out_different_logic\n            assign out_different[i] = in[i] ^ in[i+1];\n        end\n    endgenerate\n    assign out_different[99] = in[99] ^ in[0]; // wrap-around case\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

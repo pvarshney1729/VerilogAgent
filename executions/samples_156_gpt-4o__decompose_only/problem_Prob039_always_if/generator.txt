@@ -1,0 +1,53 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for `TopModule` that satisfies the given specifications. The module uses both an `assign` statement and a procedural `if` statement to implement a 2-to-1 multiplexer.
+
+[BEGIN]
+module TopModule (
+    input  logic a,
+    input  logic b,
+    input  logic sel_b1,
+    input  logic sel_b2,
+    output logic out_assign,
+    output logic out_always
+);
+
+    // Using assign statement for 2-to-1 mux
+    assign out_assign = (sel_b1 && sel_b2) ? b : a;
+
+    // Using procedural if statement for 2-to-1 mux
+    always @(*) begin
+        if (sel_b1 && sel_b2)
+            out_always = b;
+        else
+            out_always = a;
+    end
+
+endmodule
+[DONE]
+
+This module defines the required inputs and outputs, and implements the 2-to-1 multiplexer logic using both an `assign` statement and an `always` block with a procedural `if` statement. The logic correctly selects between inputs `a` and `b` based on the conditions of `sel_b1` and `sel_b2`.
+
+Generated Code:
+
+module TopModule (
+    input  logic a,
+    input  logic b,
+    input  logic sel_b1,
+    input  logic sel_b2,
+    output logic out_assign,
+    output logic out_always
+);
+
+    // Using assign statement for 2-to-1 mux
+    assign out_assign = (sel_b1 && sel_b2) ? b : a;
+
+    // Using procedural if statement for 2-to-1 mux
+    always @(*) begin
+        if (sel_b1 && sel_b2)
+            out_always = b;
+        else
+            out_always = a;
+    end
+
+endmodule

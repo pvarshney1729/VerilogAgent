@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input  wire clk: Clock signal for the module. It is a single bit.
+- input  wire reset: Active-high synchronous reset signal. It is a single bit that resets the state machine to the OFF state.
+- input  wire j: Input signal that influences state transitions. It is a single bit.
+- input  wire k: Input signal that influences state transitions. It is a single bit.
+- output reg out: Output signal representing the current state output. It is a single bit.
+
+State Machine Specifications:
+- This module implements a Moore state machine with two states: OFF and ON.
+- The state machine transitions are determined by inputs j and k as follows:
+  - OFF (state): 
+    - Output 'out' is 0.
+    - Transition to ON when j = 1.
+    - Remain in OFF when j = 0.
+  - ON (state):
+    - Output 'out' is 1.
+    - Transition to OFF when k = 1.
+    - Remain in ON when k = 0.
+
+Reset Behavior:
+- The reset is a synchronous reset that occurs on the rising edge of 'clk'.
+- When 'reset' is asserted high, the state machine transitions to the OFF state, and 'out' is set to 0.
+
+Clock Cycle and Sequential Logic:
+- State transitions occur on the rising edge of 'clk'.
+- The output 'out' is updated based on the current state at each rising edge of 'clk'.
+
+Initial Conditions:
+- Upon initialization, or when reset is activated, the state machine starts in the OFF state with 'out' = 0.
+
+Bit Indexing and Conventions:
+- All signals are single-bit width.
+- No specific MSB/LSB or bit indexing applies beyond single-bit interpretation.
+
+Edge Cases:
+- The state machine does not handle simultaneous assertions of j and k. The behavior is determined by the current state and the active edge of the clock.
+- Ensure the clock period accommodates the setup and hold times for the synchronous reset signal.
+</ENHANCED_SPEC>

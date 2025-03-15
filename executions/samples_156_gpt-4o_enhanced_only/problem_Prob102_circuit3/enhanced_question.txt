@@ -1,0 +1,52 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specifications:
+- Input Ports:
+  - `input wire a`: Single-bit input signal.
+  - `input wire b`: Single-bit input signal.
+  - `input wire c`: Single-bit input signal.
+  - `input wire d`: Single-bit input signal.
+- Output Ports:
+  - `output wire q`: Single-bit output signal.
+
+Circuit Characteristics:
+- The module implements a combinational logic circuit, meaning that the output `q` is determined solely by the current input values (`a`, `b`, `c`, and `d`) without any memory or feedback.
+
+Bit Indexing:
+- Each input and output signal is a single bit, with the least significant bit (LSB) being bit[0].
+
+Functionality:
+- The truth table below describes the logic for the output `q` based on inputs `a`, `b`, `c`, and `d`:
+
+  | a | b | c | d | q |
+  |---|---|---|---|---|
+  | 0 | 0 | 0 | 0 | 0 |
+  | 0 | 0 | 0 | 1 | 0 |
+  | 0 | 0 | 1 | 0 | 0 |
+  | 0 | 0 | 1 | 1 | 0 |
+  | 0 | 1 | 0 | 0 | 0 |
+  | 0 | 1 | 0 | 1 | 1 |
+  | 0 | 1 | 1 | 0 | 1 |
+  | 0 | 1 | 1 | 1 | 1 |
+  | 1 | 0 | 0 | 0 | 0 |
+  | 1 | 0 | 0 | 1 | 1 |
+  | 1 | 0 | 1 | 0 | 1 |
+  | 1 | 0 | 1 | 1 | 1 |
+  | 1 | 1 | 0 | 0 | 0 |
+  | 1 | 1 | 0 | 1 | 1 |
+  | 1 | 1 | 1 | 0 | 1 |
+  | 1 | 1 | 1 | 1 | 1 |
+
+- The logic can be described as `q = b & d | a & d | a & c`.
+
+Edge Cases:
+- All possible combinations of the input signals `a`, `b`, `c`, and `d` are covered in the truth table above.
+- The output `q` will be stable and valid immediately after any change in input signals, as this is a purely combinational circuit.
+
+Timing:
+- As this is a combinational circuit, no clock or timing constraints are applicable. The output `q` changes instantaneously with changes in the inputs.
+
+Reset Conditions:
+- Not applicable, as this is a combinational logic circuit with no state-holding elements.
+</ENHANCED_SPEC>

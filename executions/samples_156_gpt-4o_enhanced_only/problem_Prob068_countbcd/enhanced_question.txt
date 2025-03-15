@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input wire clk: Clock signal, positive edge-triggered.
+- input wire reset: Synchronous active-high reset signal.
+- output reg [2:0] ena: 3-bit output indicating enable status for tens, hundreds, and thousands digits.
+- output reg [15:0] q: 16-bit output representing a 4-digit BCD counter.
+
+Functional Description:
+- The module implements a 4-digit Binary-Coded Decimal (BCD) counter.
+- The BCD representation assigns 4 bits to each decimal digit:
+  - q[3:0] corresponds to the ones digit.
+  - q[7:4] corresponds to the tens digit.
+  - q[11:8] corresponds to the hundreds digit.
+  - q[15:12] corresponds to the thousands digit.
+
+- The output enable signal 'ena' indicates when an increment should occur for the tens, hundreds, and thousands digits:
+  - ena[0] aligns with the tens digit (q[7:4]).
+  - ena[1] aligns with the hundreds digit (q[11:8]).
+  - ena[2] aligns with the thousands digit (q[15:12]).
+
+Reset Behavior:
+- The synchronous reset initializes all digits in 'q' to 0 when asserted high at the clock's positive edge.
+- The reset also clears the 'ena' signals to zero during the reset condition.
+
+Clock and Timing:
+- All sequential elements, including the BCD counter and enable signals, are triggered by the positive edge of 'clk'.
+- The counter increments with each clock cycle unless reset is asserted.
+
+Edge Case Handling:
+- Each BCD digit wraps from 9 (1001 in binary) back to 0 (0000 in binary) upon increment, triggering the next higher digit's enable signal.
+- The counter operates within the BCD range for each digit (0-9).
+
+Note: Ensure that all logic and state transitions adhere to BCD encoding constraints for accurate counting and enable signal generation.
+</ENHANCED_SPEC>

@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Inputs:
+  - `a`: 16-bit input vector, named as `a[15:0]`, where `a[15]` is the most significant bit (MSB) and `a[0]` is the least significant bit (LSB).
+  - `b`: 16-bit input vector, named as `b[15:0]`.
+  - `c`: 16-bit input vector, named as `c[15:0]`.
+  - `d`: 16-bit input vector, named as `d[15:0]`.
+  - `e`: 16-bit input vector, named as `e[15:0]`.
+  - `f`: 16-bit input vector, named as `f[15:0]`.
+  - `g`: 16-bit input vector, named as `g[15:0]`.
+  - `h`: 16-bit input vector, named as `h[15:0]`.
+  - `i`: 16-bit input vector, named as `i[15:0]`.
+  - `sel`: 4-bit input vector, named as `sel[3:0]`, where `sel[3]` is the MSB and `sel[0]` is the LSB.
+
+- Output:
+  - `out`: 16-bit output vector, named as `out[15:0]`.
+
+Functional Description:
+- The module implements a 16-bit wide, 9-to-1 multiplexer.
+- Selection Logic:
+  - If `sel` is 4'b0000 (decimal 0), output `out` is assigned the value of input `a`.
+  - If `sel` is 4'b0001 (decimal 1), output `out` is assigned the value of input `b`.
+  - If `sel` is 4'b0010 (decimal 2), output `out` is assigned the value of input `c`.
+  - If `sel` is 4'b0011 (decimal 3), output `out` is assigned the value of input `d`.
+  - If `sel` is 4'b0100 (decimal 4), output `out` is assigned the value of input `e`.
+  - If `sel` is 4'b0101 (decimal 5), output `out` is assigned the value of input `f`.
+  - If `sel` is 4'b0110 (decimal 6), output `out` is assigned the value of input `g`.
+  - If `sel` is 4'b0111 (decimal 7), output `out` is assigned the value of input `h`.
+  - If `sel` is 4'b1000 (decimal 8), output `out` is assigned the value of input `i`.
+  - For `sel` values from 4'b1001 to 4'b1111 (decimal 9 to 15), the output `out` should be set to all bits '1', i.e., 16'b1111_1111_1111_1111.
+
+Additional Considerations:
+- This module contains only combinational logic.
+- There are no clock or reset signals involved.
+- Ensure that all transitions between input selections are glitch-free.
+- The module should be synthesized to handle all specified input conditions without any race conditions.
+</ENHANCED_SPEC>

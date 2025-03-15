@@ -1,0 +1,49 @@
+Generated Response:
+
+Certainly! Let's proceed with implementing the `TopModule` as specified. This module will have a synchronous reset that sets the output `q` to zero when the reset `r` is asserted at the rising edge of the clock `clk`.
+
+Here is the Verilog code for the module:
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic d,
+    input logic r,
+    output logic q
+);
+    // D Flip-Flop with synchronous reset
+    always_ff @(posedge clk) begin
+        if (r) begin
+            q <= 1'b0;  // Reset output to 0
+        end else begin
+            q <= d;     // Capture input d
+        end
+    end
+endmodule
+[DONE]
+
+### Explanation
+- **Module Declaration**: The module is named `TopModule` and has inputs `clk`, `d`, `r`, and output `q`, all declared as `logic` as per the coding conventions.
+- **always_ff Block**: This block is used for sequential logic, triggered on the rising edge of the clock `clk`.
+- **Synchronous Reset**: Inside the `always_ff` block, we first check if the reset `r` is asserted. If it is, we set `q` to `0`. Otherwise, we update `q` with the value of `d`.
+- **Output Initialization**: While not explicitly shown in the code, simulators typically initialize `q` to `0` unless specified otherwise.
+
+This code adheres to the guidelines and conventions provided, ensuring both syntactical and functional correctness for a D flip-flop with a synchronous reset.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic d,
+    input logic r,
+    output logic q
+);
+    // D Flip-Flop with synchronous reset
+    always_ff @(posedge clk) begin
+        if (r) begin
+            q <= 1'b0;  // Reset output to 0
+        end else begin
+            q <= d;     // Capture input d
+        end
+    end
+endmodule

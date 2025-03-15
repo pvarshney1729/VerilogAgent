@@ -1,0 +1,39 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for `TopModule` that includes 8 D flip-flops, each triggered by the positive edge of the clock. The module adheres to the specified interface and coding conventions.
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always_ff @(posedge clk) begin
+        q <= d;
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Module Declaration**: The module is named `TopModule` with inputs `clk` and `d` (8 bits), and output `q` (8 bits).
+- **Data Types**: All ports are declared using `logic` as per the coding conventions.
+- **Sequential Logic**: An `always_ff` block is used to describe the behavior of the 8 D flip-flops. The `always_ff` block is triggered on the positive edge of `clk`, and it assigns the value of `d` to `q`.
+- **Initialization**: In simulation, the flip-flops will be initialized to zero by default, as per the guidelines.
+
+This implementation ensures that the module functions correctly by capturing the input `d` on the rising edge of `clk` and outputting it as `q`.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always_ff @(posedge clk) begin
+        q <= d;
+    end
+
+endmodule

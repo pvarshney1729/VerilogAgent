@@ -1,0 +1,50 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for the `TopModule` that satisfies the given specifications:
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic shift_ena,
+    input logic count_ena,
+    input logic data,
+    output logic [3:0] q
+);
+
+    always @(posedge clk) begin
+        if (shift_ena) begin
+            q <= {q[2:0], data}; // Shift left and insert new data at LSB
+        end else if (count_ena) begin
+            q <= q - 1; // Decrement the current value
+        end
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Module Declaration**: The module is named `TopModule` with the specified input and output ports.
+- **Shift Register**: When `shift_ena` is high, the 4-bit register `q` shifts left, and the new data bit is inserted at the least significant bit (LSB).
+- **Down Counter**: When `count_ena` is high, the value in `q` is decremented by 1.
+- **Clock Edge**: All operations are synchronized to the positive edge of the clock (`clk`), ensuring that the shift and count operations occur in a controlled manner.
+- **Port and Signal Declaration**: All ports and internal signals are declared using `logic` as per the coding conventions.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic shift_ena,
+    input logic count_ena,
+    input logic data,
+    output logic [3:0] q
+);
+
+    always @(posedge clk) begin
+        if (shift_ena) begin
+            q <= {q[2:0], data}; // Shift left and insert new data at LSB
+        end else if (count_ena) begin
+            q <= q - 1; // Decrement the current value
+        end
+    end
+
+endmodule

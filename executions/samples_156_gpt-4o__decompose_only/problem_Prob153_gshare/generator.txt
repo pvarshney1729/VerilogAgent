@@ -1,0 +1,150 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementing the gshare branch predictor as specified. This module integrates all the subtasks into a single coherent implementation.
+
+```verilog
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic predict_valid,
+    input logic [6:0] predict_pc,
+    output logic predict_taken,
+    output logic [6:0] predict_history,
+    input logic train_valid,
+    input logic train_taken,
+    input logic train_mispredicted,
+    input logic [6:0] train_history,
+    input logic [6:0] train_pc
+);
+
+    // Global history register
+    logic [6:0] global_history;
+
+    // Pattern history table (PHT) with 128 entries of 2-bit saturating counters
+    logic [1:0] PHT [0:127];
+
+    // Calculate the index for the PHT using XOR of PC and global history
+    logic [6:0] predict_index;
+    logic [6:0] train_index;
+    assign predict_index = predict_pc ^ global_history;
+    assign train_index = train_pc ^ train_history;
+
+    // Predict taken based on the most significant bit of the PHT entry
+    assign predict_taken = PHT[predict_index][1];
+
+    // Output the current global history
+    assign predict_history = global_history;
+
+    // Sequential logic for updating the global history and PHT
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            // Asynchronous reset
+            global_history <= 7'b0;
+            for (int i = 0; i < 128; i++) begin
+                PHT[i] <= 2'b01; // Initialize PHT to weakly not taken
+            end
+        end else begin
+            if (train_valid) begin
+                // Update PHT based on training
+                if (train_taken) begin
+                    if (PHT[train_index] != 2'b11) begin
+                        PHT[train_index] <= PHT[train_index] + 1;
+                    end
+                end else begin
+                    if (PHT[train_index] != 2'b00) begin
+                        PHT[train_index] <= PHT[train_index] - 1;
+                    end
+                end
+
+                // Update global history if mispredicted
+                if (train_mispredicted) begin
+                    global_history <= {train_history[5:0], train_taken};
+                end
+            end else if (predict_valid) begin
+                // Update global history for prediction
+                global_history <= {global_history[5:0], predict_taken};
+            end
+        end
+    end
+
+endmodule
+[DONE]
+```
+
+### Explanation:
+- **Global History Register**: A 7-bit register that keeps track of the global branch history.
+- **Pattern History Table (PHT)**: A 128-entry table where each entry is a 2-bit saturating counter. This table is indexed using the XOR of the PC and the global history.
+- **Prediction Logic**: The prediction is based on the most significant bit of the PHT entry. If it is `1`, the branch is predicted as taken.
+- **Training Logic**: Updates the PHT based on the actual outcome of the branch. If the branch was taken, the counter is incremented (saturating at `11`), and if not taken, it is decremented (saturating at `00`).
+- **Global History Update**: The global history is updated based on the prediction or recovered in case of a misprediction during training.
+
+This module adheres to the specified interface and functionality, ensuring correct operation of the gshare branch predictor.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic predict_valid,
+    input logic [6:0] predict_pc,
+    output logic predict_taken,
+    output logic [6:0] predict_history,
+    input logic train_valid,
+    input logic train_taken,
+    input logic train_mispredicted,
+    input logic [6:0] train_history,
+    input logic [6:0] train_pc
+);
+
+    // Global history register
+    logic [6:0] global_history;
+
+    // Pattern history table (PHT) with 128 entries of 2-bit saturating counters
+    logic [1:0] PHT [0:127];
+
+    // Calculate the index for the PHT using XOR of PC and global history
+    logic [6:0] predict_index;
+    logic [6:0] train_index;
+    assign predict_index = predict_pc ^ global_history;
+    assign train_index = train_pc ^ train_history;
+
+    // Predict taken based on the most significant bit of the PHT entry
+    assign predict_taken = PHT[predict_index][1];
+
+    // Output the current global history
+    assign predict_history = global_history;
+
+    // Sequential logic for updating the global history and PHT
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            // Asynchronous reset
+            global_history <= 7'b0;
+            for (int i = 0; i < 128; i++) begin
+                PHT[i] <= 2'b01; // Initialize PHT to weakly not taken
+            end
+        end else begin
+            if (train_valid) begin
+                // Update PHT based on training
+                if (train_taken) begin
+                    if (PHT[train_index] != 2'b11) begin
+                        PHT[train_index] <= PHT[train_index] + 1;
+                    end
+                end else begin
+                    if (PHT[train_index] != 2'b00) begin
+                        PHT[train_index] <= PHT[train_index] - 1;
+                    end
+                end
+
+                // Update global history if mispredicted
+                if (train_mispredicted) begin
+                    global_history <= {train_history[5:0], train_taken};
+                end
+            end else if (predict_valid) begin
+                // Update global history for prediction
+                global_history <= {global_history[5:0], predict_taken};
+            end
+        end
+    end
+
+endmodule

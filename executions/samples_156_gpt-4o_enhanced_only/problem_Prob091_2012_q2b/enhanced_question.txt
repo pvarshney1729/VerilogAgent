@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- Inputs:
+  - `y`: A 6-bit input vector representing the current state of the finite-state machine using one-hot encoding. Bit index 5 is the most significant bit (MSB), and bit index 0 is the least significant bit (LSB).
+  - `w`: A 1-bit input signal.
+
+- Outputs:
+  - `Y1`: A 1-bit output signal representing the next state condition for flip-flop corresponding to state B (`y[1]`).
+  - `Y3`: A 1-bit output signal representing the next state condition for flip-flop corresponding to state D (`y[3]`).
+
+Finite State Machine (FSM) Description:
+- States are encoded in one-hot format as follows:
+  - A: `y[5:0] = 000001`
+  - B: `y[5:0] = 000010`
+  - C: `y[5:0] = 000100`
+  - D: `y[5:0] = 001000`
+  - E: `y[5:0] = 010000`
+  - F: `y[5:0] = 100000`
+
+- State Transitions:
+  - From State A (`y[0] = 1`):
+    - On `w = 1`: Transition to State B (`y[1]`).
+    - On `w = 0`: Remain in State A.
+  - From State B (`y[1] = 1`):
+    - On `w = 1`: Transition to State C (`y[2]`).
+    - On `w = 0`: Transition to State D (`y[3]`).
+  - From State C (`y[2] = 1`):
+    - On `w = 1`: Transition to State E (`y[4]`).
+    - On `w = 0`: Transition to State D (`y[3]`).
+  - From State D (`y[3] = 1`):
+    - On `w = 1`: Transition to State F (`y[5]`).
+    - On `w = 0`: Transition to State A (`y[0]`).
+  - From State E (`y[4] = 1`):
+    - On `w = 1`: Remain in State E.
+    - On `w = 0`: Transition to State D (`y[3]`).
+  - From State F (`y[5] = 1`):
+    - On `w = 1`: Transition to State C (`y[2]`).
+    - On `w = 0`: Transition to State D (`y[3]`).
+
+Output Logic:
+- `Y1` should be high (`1`) if the next state should be B (`y[1]` is to be set).
+- `Y3` should be high (`1`) if the next state should be D (`y[3]` is to be set).
+
+Implementation Notes:
+- The FSM follows a one-hot encoding scheme, so only one bit in the `y` vector is high at any time.
+- Ensure that transitions and state outputs are evaluated on each clock cycle.
+- No explicit reset behavior is defined in the original specification; consult with the system architect if a reset condition is required.
+</ENHANCED_SPEC>

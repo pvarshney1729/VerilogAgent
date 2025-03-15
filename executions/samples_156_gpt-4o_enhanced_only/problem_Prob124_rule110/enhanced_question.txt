@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Definition:
+- Inputs:
+  - `clk`: 1-bit clock signal. All sequential logic is triggered on the positive edge.
+  - `load`: 1-bit synchronous, active-high signal. When high, the system loads new data.
+  - `data`: 512-bit input vector. Represents initial states of the cellular automaton cells when `load` is asserted.
+
+- Outputs:
+  - `q`: 512-bit output vector. Represents the current states of the cellular automaton cells.
+
+Functional Description:
+- The module implements Rule 110, a one-dimensional cellular automaton. 
+- The automaton consists of 512 cells, with each cell having a state represented by a single bit (either on '1' or off '0').
+- The next state of each cell is determined by itself and its two adjacent neighbors according to the following truth table:
+
+  | Left (i+1) | Center (i) | Right (i-1) | Center's Next State |
+  |------------|------------|-------------|---------------------|
+  | 1          | 1          | 1           | 0                   |
+  | 1          | 1          | 0           | 1                   |
+  | 1          | 0          | 1           | 1                   |
+  | 1          | 0          | 0           | 0                   |
+  | 0          | 1          | 1           | 1                   |
+  | 0          | 1          | 0           | 1                   |
+  | 0          | 0          | 1           | 1                   |
+  | 0          | 0          | 0           | 0                   |
+
+- Boundary Conditions:
+  - The left boundary (virtual q[-1]) and the right boundary (virtual q[512]) are assumed to be always '0'.
+
+Operational Details:
+- On the positive edge of `clk`, if `load` is high, `q` is updated to the value of `data`.
+- If `load` is low, `q` will update based on the Rule 110 logic applied to each cell and its neighbors.
+- Indexing convention: q[0] refers to the least significant cell, and q[511] refers to the most significant cell.
+
+Reset Behavior:
+- This specification assumes there is no explicit reset signal. The `load` signal should be used to initialize or reinitialize the system.
+
+Edge Cases:
+- Ensure correct handling of the boundary cells where the leftmost and rightmost cells have only one neighbor, using virtual boundaries set to '0'.
+</ENHANCED_SPEC>

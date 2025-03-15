@@ -1,0 +1,28 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input  wire        clk       // Clock signal, triggers on the positive edge.
+- input  wire        areset    // Asynchronous reset signal, active high.
+- input  wire [7:0]  d         // 8-bit data input, d[7] is the most significant bit (MSB), d[0] is the least significant bit (LSB).
+- output reg  [7:0]  q         // 8-bit data output, q[7] is the MSB, q[0] is the LSB.
+
+Functional Description:
+- The module contains 8 D flip-flops.
+- Each flip-flop has an active high asynchronous reset.
+- When 'areset' is high, the output 'q' is asynchronously reset to 8'b00000000 (all bits set to 0).
+- On the positive edge of 'clk':
+  - If 'areset' is not asserted, the 8-bit input 'd' is captured, and 'q' is updated accordingly.
+  - If 'areset' is asserted during the clock edge, the reset takes precedence, and 'q' remains reset.
+
+Clock and Reset Behavior:
+- The 'clk' signal triggers sequential logic; all flip-flops update on the rising (positive) edge.
+- The 'areset' signal is asynchronous, meaning it can reset the flip-flops outside of the clock edge.
+
+Initial State:
+- Upon reset (areset high), all bits of 'q' are initialized to 0, and this state is maintained until the next clock edge when 'areset' is low.
+
+Additional Notes:
+- Ensure no race conditions occur by correctly handling asynchronous reset priority over clocked operation.
+- Consider input boundaries and edge cases where the 'areset' signal may toggle while the clock is active.
+</ENHANCED_SPEC>

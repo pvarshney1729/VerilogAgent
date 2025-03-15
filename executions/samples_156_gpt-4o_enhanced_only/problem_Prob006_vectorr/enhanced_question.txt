@@ -1,0 +1,28 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `in`: An 8-bit wide input vector. The bit at index 0, `in[0]`, refers to the least significant bit (LSB), and `in[7]` refers to the most significant bit (MSB).
+
+- Output Ports:
+  - `out`: An 8-bit wide output vector. The bit at index 0, `out[0]`, refers to the least significant bit (LSB), and `out[7]` refers to the most significant bit (MSB).
+
+Functional Description:
+- The module performs a bit-reversal operation on the 8-bit input vector and produces the result on the 8-bit output vector.
+- Specifically, the output `out` should be assigned as follows:
+  - `out[7]` = `in[0]`
+  - `out[6]` = `in[1]`
+  - `out[5]` = `in[2]`
+  - `out[4]` = `in[3]`
+  - `out[3]` = `in[4]`
+  - `out[2]` = `in[5]`
+  - `out[1]` = `in[6]`
+  - `out[0]` = `in[7]`
+
+Additional Details:
+- The logic is purely combinational, meaning there is no clock or reset signal involved.
+- The output should be updated immediately following any change in the input, ensuring that the propagation delay is consistent with combinational logic.
+- No initial values need to be set for the input and output ports as they are driven by external sources or by the module logic itself.
+- Edge cases such as all bits being 0 or all bits being 1 should result in direct bit reversal without any additional handling as the operation is inherently symmetric.
+</ENHANCED_SPEC>

@@ -1,0 +1,25 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock signal, positive edge-triggered.
+- input wire shift_ena: Active-high enable signal for shifting operation.
+- input wire count_ena: Active-high enable signal for counting operation.
+- input wire data: Serial data input for the shift operation.
+- output reg [3:0] q: 4-bit output representing the current state of the shift register/count.
+
+Functional Description:
+- The module functions as a 4-bit shift register with an integrated down counter.
+- Shifting Operation: When `shift_ena` is asserted (logic high), the input `data` is shifted into the most significant bit (MSB) of `q`. The existing bits in the register are shifted towards the least significant bit (LSB). This operation occurs on the positive edge of the `clk`.
+- Counting Operation: When `count_ena` is asserted (logic high), the current value stored in `q` is decremented by 1. This operation also occurs on the positive edge of the `clk`.
+- Mutual Exclusivity: The system design ensures that `shift_ena` and `count_ena` are never asserted simultaneously. Therefore, behavior when both are high is unspecified and can be ignored in implementation.
+
+Initial Conditions and State:
+- The initial state of the register `q` upon power-up or reset should be defined as 4'b0000.
+- The module does not specify a reset input; thus, the initial state is a power-up condition.
+
+Additional Notes:
+- Since the operations are mutually exclusive by design, there is no priority mechanism required between `shift_ena` and `count_ena`.
+- Bit Indexing Convention: Bit [3] of `q` is the MSB, and bit [0] is the LSB.
+- Ensure all sequential logic responds to the positive edge of the `clk` signal.
+</ENHANCED_SPEC>

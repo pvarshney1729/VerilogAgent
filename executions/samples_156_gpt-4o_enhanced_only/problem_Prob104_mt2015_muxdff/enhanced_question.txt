@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Specification for Verilog Module: TopModule
+
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input wire clk`: Clock signal, used for triggering sequential logic operations on the rising edge.
+  - `input wire L`: Load signal, used to control the loading behavior.
+  - `input wire q_in`: A single-bit input to the multiplexer.
+  - `input wire r_in`: A single-bit input to the multiplexer.
+
+- Outputs:
+  - `output wire Q`: A single-bit output representing the final state of the flip-flop.
+
+Description:
+- The `TopModule` is designed to encapsulate a 2:1 multiplexer and a D-type flip-flop.
+- The multiplexer selects between `q_in` and `r_in` based on the `L` signal.
+  - When `L` is high (`1`), the output `Q` should be set to `r_in`.
+  - When `L` is low (`0`), the output `Q` should be set to `q_in`.
+- The selected input is then stored in a D-type flip-flop which captures the input on the rising edge of `clk`.
+- The flip-flop does not have an explicit reset condition in this specification, implying it retains its state across resets unless otherwise handled externally.
+- The operation of `TopModule` is purely sequential, with all state updates occurring on the rising edge of the `clk`.
+
+Notes on Implementation:
+- Ensure that the multiplexer logic is combinational, directly reflecting changes in `L`, `q_in`, and `r_in` to its output prior to clocking.
+- The flip-flop should capture the multiplexer output on each rising edge of `clk`, updating the output `Q` accordingly.
+
+Edge Case Handling:
+- As there is no reset, initial conditions are not defined in this specification. It is assumed the initial state of `Q` is determined externally or by default simulation conditions.
+- The behavior of the flip-flop when `clk` has a non-ideal transition (such as glitches) is not specified here and should be handled by proper clock conditioning in the broader design.
+
+This specification does not include the implementation of the `full_module`, which will instantiate the `TopModule` three times to manage three separate bits of data.
+</ENHANCED_SPEC>

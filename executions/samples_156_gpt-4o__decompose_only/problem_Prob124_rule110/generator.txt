@@ -1,0 +1,81 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for the `TopModule` that adheres to the specified requirements and guidelines:
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] q_next;
+
+    always @(*) begin
+        integer i;
+        for (i = 0; i < 512; i = i + 1) begin
+            case ({(i < 511 ? q[i+1] : 1'b0), q[i], (i > 0 ? q[i-1] : 1'b0)})
+                3'b111: q_next[i] = 1'b0;
+                3'b110: q_next[i] = 1'b1;
+                3'b101: q_next[i] = 1'b1;
+                3'b100: q_next[i] = 1'b0;
+                3'b011: q_next[i] = 1'b1;
+                3'b010: q_next[i] = 1'b1;
+                3'b001: q_next[i] = 1'b1;
+                3'b000: q_next[i] = 1'b0;
+                default: q_next[i] = 1'b0; // Default case for safety
+            endcase
+        end
+    end
+
+    always @(posedge clk) begin
+        if (load) begin
+            q <= data;
+        end else begin
+            q <= q_next;
+        end
+    end
+
+endmodule
+[DONE]
+
+This module implements the Rule 110 cellular automaton for a 512-cell system. It uses a combinational logic block to determine the next state of each cell based on its current state and the states of its neighbors. The sequential logic block updates the state of the system on the positive edge of the clock, either loading new data when the `load` signal is high or advancing the automaton by one time step otherwise. The boundary conditions are handled by assuming the non-existent neighbors are zero.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] q_next;
+
+    always @(*) begin
+        integer i;
+        for (i = 0; i < 512; i = i + 1) begin
+            case ({(i < 511 ? q[i+1] : 1'b0), q[i], (i > 0 ? q[i-1] : 1'b0)})
+                3'b111: q_next[i] = 1'b0;
+                3'b110: q_next[i] = 1'b1;
+                3'b101: q_next[i] = 1'b1;
+                3'b100: q_next[i] = 1'b0;
+                3'b011: q_next[i] = 1'b1;
+                3'b010: q_next[i] = 1'b1;
+                3'b001: q_next[i] = 1'b1;
+                3'b000: q_next[i] = 1'b0;
+                default: q_next[i] = 1'b0; // Default case for safety
+            endcase
+        end
+    end
+
+    always @(posedge clk) begin
+        if (load) begin
+            q <= data;
+        end else begin
+            q <= q_next;
+        end
+    end
+
+endmodule

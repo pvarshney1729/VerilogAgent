@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description:
+The module "TopModule" is a combinational logic circuit. It takes four single-bit inputs and produces a single-bit output. The output is determined by specific combinations of the input values, as illustrated in the truth table below.
+
+Interface:
+- Inputs:
+  - input wire a; // Single-bit input
+  - input wire b; // Single-bit input
+  - input wire c; // Single-bit input
+  - input wire d; // Single-bit input
+
+- Output:
+  - output wire q; // Single-bit output
+
+Input and Output Conventions:
+- All inputs (`a`, `b`, `c`, and `d`) and the output (`q`) are single-bit signals.
+- Bit[0] refers to the least significant bit (LSB).
+
+Logic Specification:
+The circuit is purely combinational, with the output `q` being a direct function of the inputs `a`, `b`, `c`, and `d` according to the following truth table:
+
+|  a  |  b  |  c  |  d  |  q  |
+|----|----|----|----|----|
+|  0  |  0  |  0  |  0  |  1  |
+|  0  |  0  |  0  |  1  |  0  |
+|  0  |  0  |  1  |  0  |  0  |
+|  0  |  0  |  1  |  1  |  1  |
+|  0  |  1  |  0  |  0  |  0  |
+|  0  |  1  |  0  |  1  |  1  |
+|  0  |  1  |  1  |  0  |  1  |
+|  0  |  1  |  1  |  1  |  0  |
+|  1  |  0  |  0  |  0  |  0  |
+|  1  |  0  |  0  |  1  |  1  |
+|  1  |  0  |  1  |  0  |  1  |
+|  1  |  0  |  1  |  1  |  0  |
+|  1  |  1  |  0  |  0  |  1  |
+|  1  |  1  |  0  |  1  |  0  |
+|  1  |  1  |  1  |  0  |  0  |
+|  1  |  1  |  1  |  1  |  1  |
+
+Edge Cases and Implementation Notes:
+- The table specifies all 16 possible combinations of the single-bit inputs.
+- Ensure the logic is implemented to handle any changes at the inputs without requiring a clock signal, as this is strictly a combinational logic circuit.
+- There are no sequential elements, reset conditions, or initial states required for this module.
+- The priority of operations is determined directly by the truth table, and there are no race conditions due to the combinational nature of the circuit.
+</ENHANCED_SPEC>

@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Specification for TopModule:
+
+Module Name: TopModule
+
+1. Port Definitions:
+   - Input Ports:
+     - `input wire x3`: Single-bit input representing the most significant bit.
+     - `input wire x2`: Single-bit input.
+     - `input wire x1`: Single-bit input representing the least significant bit.
+   - Output Ports:
+     - `output wire f`: Single-bit output.
+
+2. Signal Conventions:
+   - All signals are active-high.
+   - Bit Indexing: `x3` is the most significant bit, and `x1` is the least significant bit in terms of input priority.
+
+3. Circuit Description:
+   - The module is a purely combinational logic circuit with no internal state or memory elements.
+   - The output `f` is determined directly from the input combination according to the specified truth table.
+
+4. Truth Table Implementation:
+   - The truth table for the module is as follows:
+
+     | x3 | x2 | x1 | f |
+     |----|----|----|---|
+     |  0 |  0 |  0 | 0 |
+     |  0 |  0 |  1 | 0 |
+     |  0 |  1 |  0 | 1 |
+     |  0 |  1 |  1 | 1 |
+     |  1 |  0 |  0 | 0 |
+     |  1 |  0 |  1 | 1 |
+     |  1 |  1 |  0 | 0 |
+     |  1 |  1 |  1 | 1 |
+
+   - The output `f` can be expressed in boolean logic as:
+     - `f = (x2 & ~x3) | (x1 & x3) | (x1 & x2)`
+
+5. Special Conditions:
+   - There are no asynchronous or synchronous resets involved, as the module is strictly combinational.
+   - The behavior is defined for all possible combinations of the inputs `x3`, `x2`, and `x1`.
+</ENHANCED_SPEC>

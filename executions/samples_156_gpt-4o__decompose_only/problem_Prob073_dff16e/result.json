@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic resetn,\n    input logic [1:0] byteena,\n    input logic [15:0] d,\n    output logic [15:0] q\n);\n\n    // Internal register to hold the state of the flip-flops\n    logic [15:0] q_reg;\n\n    // Sequential logic block triggered on the positive edge of the clock\n    always @(posedge clk) begin\n        if (!resetn) begin\n            // Synchronous active-low reset: set all flip-flops to 0\n            q_reg <= 16'b0;\n        end else begin\n            // Byte-enable logic\n            if (byteena[0]) begin\n                q_reg[7:0] <= d[7:0];  // Update lower byte if byteena[0] is high\n            end\n            if (byteena[1]) begin\n                q_reg[15:8] <= d[15:8]; // Update upper byte if byteena[1] is high\n            end\n        end\n    end\n\n    // Assign the internal register to the output\n    assign q = q_reg;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

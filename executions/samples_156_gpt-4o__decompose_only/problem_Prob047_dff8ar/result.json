@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic areset,\n    input logic [7:0] d,\n    output logic [7:0] q\n);\n\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset) begin\n            q <= 8'b0; // Reset all flip-flops to 0\n        end else begin\n            q <= d; // Capture input d on the rising edge of clk\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

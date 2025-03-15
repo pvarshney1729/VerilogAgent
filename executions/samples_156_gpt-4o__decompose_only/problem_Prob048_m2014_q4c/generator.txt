@@ -1,0 +1,48 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for the `TopModule` that satisfies the given specifications:
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic d,
+    input logic r,
+    output logic q
+);
+
+    always @(posedge clk) begin
+        if (r) 
+            q <= 1'b0;
+        else 
+            q <= d;
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Module Declaration**: The module is named `TopModule` with inputs `clk`, `d`, `r`, and output `q`.
+- **Port Types**: All ports are declared as `logic` to adhere to the coding conventions.
+- **Sequential Logic**: An `always` block is used with `@(posedge clk)` to ensure the logic is triggered on the rising edge of the clock.
+- **Synchronous Reset**: The reset `r` is checked inside the `always` block. If `r` is high, `q` is set to `0`. Otherwise, `q` captures the value of `d`.
+- **Output Initialization**: The output `q` is initialized to zero in simulation by default due to the use of `logic`.
+
+This implementation ensures that the D flip-flop operates with a synchronous reset, as specified.
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic d,
+    input logic r,
+    output logic q
+);
+
+    always @(posedge clk) begin
+        if (r) 
+            q <= 1'b0;
+        else 
+            q <= d;
+    end
+
+endmodule

@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input clk: Clock signal (1 bit). Positive edge-triggered.
+- input load: Synchronous load control signal (1 bit). Active high.
+- input [1:0] ena: Synchronous enable signal to control rotation direction (2 bits).
+- input [99:0] data: Input data for loading into the shift register (100 bits).
+- output reg [99:0] q: Output data representing the current state of the rotator (100 bits).
+
+Functional Description:
+1. The `TopModule` implements a 100-bit rotational shift register with synchronous load and directional control.
+2. The rotation operation is distinct from a typical shift operation by retaining the bit shifted out and reintroducing it at the opposite end.
+
+Operation Details:
+1. Load (Synchronous): 
+   - When `load` is high on the rising edge of `clk`, the register `q` is synchronously loaded with the value from `data[99:0]`.
+   - If `load` is low, the register retains its current value unless modified by the rotation operation.
+
+2. Rotation Enable (`ena`):
+   - The `ena` signal determines whether and in which direction the rotation occurs:
+     - `ena = 2'b01`: Rotate right by 1 bit position. The bit at `q[0]` is rotated to `q[99]`.
+     - `ena = 2'b10`: Rotate left by 1 bit position. The bit at `q[99]` is rotated to `q[0]`.
+     - `ena = 2'b00` or `ena = 2'b11`: No rotation. The contents of `q` remain unchanged.
+
+3. Output (`q`):
+   - `q` reflects the current value of the rotational shift register after the synchronous operations of loading and/or rotating.
+
+Implementation Notes:
+- The system is fully synchronous with respect to the `clk` signal.
+- All operations occur on the rising edge of `clk`.
+- Ensure that `q` is initialized to a known state (e.g., all zeros) on reset if a reset functionality is added.
+- If a reset is required, specify whether it is synchronous or asynchronous and its initial state.
+
+Edge Cases and Boundaries:
+- Confirm behavior for all `ena` states to ensure no unintended rotations.
+- Ensure proper bit wrapping during rotations to avoid data corruption.
+</ENHANCED_SPEC>

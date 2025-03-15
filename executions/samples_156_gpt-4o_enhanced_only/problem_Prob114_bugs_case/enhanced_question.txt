@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire [7:0] code`: An 8-bit unsigned input representing a keyboard scancode. 
+    - Bit Indexing: `code[7]` is the most significant bit (MSB), and `code[0]` is the least significant bit (LSB).
+- Output Ports:
+  - `output reg [3:0] out`: A 4-bit unsigned output that indicates the detected key number (0-9).
+    - Bit Indexing: `out[3]` is the MSB, and `out[0]` is the LSB.
+  - `output reg valid`: A 1-bit output that indicates the recognition status of the input code.
+
+Functionality:
+- The module is combinational in nature and does not require a clock or reset signal.
+- When the `code` input matches any of the following 8-bit hexadecimal values, the `out` and `valid` outputs are set as follows:
+  - `code == 8'h45`: `out = 4'b0000`, `valid = 1'b1` (Key '0')
+  - `code == 8'h16`: `out = 4'b0001`, `valid = 1'b1` (Key '1')
+  - `code == 8'h1e`: `out = 4'b0010`, `valid = 1'b1` (Key '2')
+  - `code == 8'h26`: `out = 4'b0011`, `valid = 1'b1` (Key '3')
+  - `code == 8'h25`: `out = 4'b0100`, `valid = 1'b1` (Key '4')
+  - `code == 8'h2e`: `out = 4'b0101`, `valid = 1'b1` (Key '5')
+  - `code == 8'h36`: `out = 4'b0110`, `valid = 1'b1` (Key '6')
+  - `code == 8'h3d`: `out = 4'b0111`, `valid = 1'b1` (Key '7')
+  - `code == 8'h3e`: `out = 4'b1000`, `valid = 1'b1` (Key '8')
+  - `code == 8'h46`: `out = 4'b1001`, `valid = 1'b1` (Key '9')
+- For any other `code` input not matching the above cases, the outputs are set to:
+  - `out = 4'b0000`
+  - `valid = 1'b0`
+
+Behavioral edge cases:
+- The outputs (`out` and `valid`) are defaulted to the state representing no valid key detected (`out = 4'b0000`, `valid = 1'b0`) when `code` does not match any specified scancode.
+</ENHANCED_SPEC>

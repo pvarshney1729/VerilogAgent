@@ -1,0 +1,50 @@
+Generated Response:
+
+Certainly! Below is the Verilog implementation of the `TopModule` that meets the specifications you provided. It includes 8 D flip-flops with an active high synchronous reset.
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            q <= 8'b0000_0000; // Reset all bits of q to zero
+        end else begin
+            q <= d; // Capture the input data d
+        end
+    end
+
+endmodule
+[DONE]
+
+### Explanation:
+- **Module Declaration**: The module is named `TopModule` with inputs `clk`, `reset`, and `d`, and output `q`.
+- **Port Types**: All ports are declared as `logic` to adhere to SystemVerilog conventions and ensure compatibility with synthesis and simulation tools.
+- **Always Block**: The block is triggered on the positive edge of `clk`, as specified.
+- **Synchronous Reset**: Within the always block, the first condition checks if `reset` is high. If so, `q` is set to zero. Otherwise, `q` captures the value of `d`.
+- **Bit Widths and Initialization**: The `reset` sets `q` to `8'b0000_0000`, which initializes all bits to zero.
+
+This implementation complies with the specified behavior and correctly models the synchronous reset functionality for the flip-flops.
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            q <= 8'b0000_0000; // Reset all bits of q to zero
+        end else begin
+            q <= d; // Capture the input data d
+        end
+    end
+
+endmodule

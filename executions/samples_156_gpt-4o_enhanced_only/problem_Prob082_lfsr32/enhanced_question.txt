@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input: clk (1-bit)
+  - Description: Clock signal for synchronizing sequential logic.
+  - Trigger: Positive edge-triggered.
+  
+- Input: reset (1-bit)
+  - Description: Active-high synchronous reset.
+  - Behavior: When high, resets output q to its initial state.
+  
+- Output: q (32-bit)
+  - Description: 32-bit output representing the current state of the Galois LFSR.
+  - Initial Value: Reset to 32'h1 upon reset assertion.
+
+Operational Details:
+- Function: This module implements a 32-bit Galois Linear Feedback Shift Register (LFSR).
+- Operation:
+  - The LFSR shifts right on each positive edge of the clk.
+  - Taps are located at bit positions 31, 21, 1, and 0 (using zero-based indexing where bit[0] is the LSB).
+  - The next state of a tapped position is determined by XORing its current value with q[0] (the current LSB).
+
+- Reset Behavior:
+  - Type: Synchronous
+  - When the reset signal is asserted (high), the output q is reset to 32'h1 on the next positive clock edge.
+
+- Sequential Logic:
+  - All state changes occur on the rising edge of clk.
+  - The shifting and feedback operations are governed by the specified tap positions.
+
+Edge Cases:
+- On reset, q is always set to 32'h1 regardless of its previous state.
+- Ensure proper handling of the LSB during XOR operation to avoid race conditions.
+
+Implementation Note:
+- Ensure the bit indexing follows the convention where bit[0] is the least significant bit (LSB) and bit[31] is the most significant bit (MSB).
+- The tap positions are applied as follows: XOR the output LSB (q[0]) with bits at positions 31, 21, 1, and 0 to determine their next state.
+</ENHANCED_SPEC>

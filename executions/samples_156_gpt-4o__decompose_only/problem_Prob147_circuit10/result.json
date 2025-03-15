@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n\n    // Sequential logic to update the state on the positive edge of the clock\n    always @(posedge clk) begin\n        if (a == 1'b0 && b == 1'b0) begin\n            state <= state; // Maintain current state\n        end else if (a == 1'b0 && b == 1'b1) begin\n            state <= 1'b0; // Reset state\n        end else if (a == 1'b1 && b == 1'b0) begin\n            state <= 1'b1; // Set state\n        end else if (a == 1'b1 && b == 1'b1) begin\n            state <= ~state; // Toggle state\n        end\n    end\n\n    // Combinational logic to determine the output q\n    always @(*) begin\n        q = state;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 101,
+        "passfail": "R"
+    }
+}

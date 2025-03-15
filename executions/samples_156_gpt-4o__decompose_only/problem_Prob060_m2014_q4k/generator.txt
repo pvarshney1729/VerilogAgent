@@ -1,0 +1,55 @@
+Generated Response:
+
+Certainly! Below is the complete Verilog module implementation for the `TopModule` that satisfies the given specifications. This module implements a 4-bit shift register with a synchronous active-low reset.
+
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic resetn,
+    input  logic in,
+    output logic out
+);
+
+    // 4-bit shift register
+    logic [3:0] shift_reg;
+
+    // Sequential logic with synchronous active-low reset
+    always @(posedge clk) begin
+        if (!resetn)
+            shift_reg <= 4'b0000; // Reset all flip-flops to 0
+        else
+            shift_reg <= {shift_reg[2:0], in}; // Shift input through the register
+    end
+
+    // Output the last bit of the shift register
+    assign out = shift_reg[3];
+
+endmodule
+[DONE]
+
+This implementation follows the guidelines and coding conventions provided, ensuring that the shift register is correctly reset and shifted on the positive edge of the clock. The output `out` is connected to the most significant bit of the shift register, which is the last flip-flop in the chain.
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic resetn,
+    input  logic in,
+    output logic out
+);
+
+    // 4-bit shift register
+    logic [3:0] shift_reg;
+
+    // Sequential logic with synchronous active-low reset
+    always @(posedge clk) begin
+        if (!resetn)
+            shift_reg <= 4'b0000; // Reset all flip-flops to 0
+        else
+            shift_reg <= {shift_reg[2:0], in}; // Shift input through the register
+    end
+
+    // Output the last bit of the shift register
+    assign out = shift_reg[3];
+
+endmodule

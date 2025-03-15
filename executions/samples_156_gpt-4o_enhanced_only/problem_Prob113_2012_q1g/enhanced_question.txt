@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input [3:0] x`: A 4-bit unsigned input vector. Bit indexing follows the convention where `x[0]` is the least significant bit (LSB) and `x[3]` is the most significant bit (MSB).
+- Output Ports:
+  - `output f`: A single-bit output representing the result of the function defined by the Karnaugh map.
+
+Functional Specification:
+- The module computes the output `f` based on the 4-bit input vector `x` using a combinational logic function defined by the following Karnaugh map:
+
+             x[0]x[1]
+  x[2]x[3]  00  01  11  10
+    00     | 1 | 0 | 0 | 1 |
+    01     | 0 | 0 | 0 | 0 |
+    11     | 1 | 1 | 1 | 0 |
+    10     | 1 | 1 | 0 | 1 |
+
+- The Karnaugh map should be interpreted as follows:
+  - Each cell in the map corresponds to a specific combination of `x[3:0]`.
+  - The rows represent the values of `x[2:3]` in binary order, and the columns represent `x[0:1]`.
+  - The value within each cell (either 0 or 1) indicates the output `f` for that specific combination of input values.
+
+Additional Notes:
+- This specification assumes combinational logic, meaning the output `f` is directly computed from the current value of `x` without any clock or reset dependencies.
+- There are no sequential elements or state dependencies within this module.
+- The output `f` is updated instantaneously with any change in the input `x`, reflecting the nature of combinational logic.
+- The behavior for all possible input values of `x` (from 4'b0000 to 4'b1111) is explicitly defined by the Karnaugh map.
+</ENHANCED_SPEC>

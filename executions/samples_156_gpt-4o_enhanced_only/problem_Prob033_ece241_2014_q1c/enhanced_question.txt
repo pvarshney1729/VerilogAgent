@@ -1,0 +1,25 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input: 
+  - a: 8-bit signed input. Bit indexing: a[7] is the most significant bit (MSB), a[0] is the least significant bit (LSB).
+  - b: 8-bit signed input. Bit indexing: b[7] is the MSB, b[0] is the LSB.
+- Output:
+  - s: 8-bit signed output. Bit indexing: s[7] is the MSB, s[0] is the LSB.
+  - overflow: 1-bit output, indicates whether a signed overflow has occurred.
+
+Functional Description:
+- The module performs the addition of two 8-bit 2's complement numbers, a and b.
+- The result of the addition is stored in s[7:0].
+- Overflow detection: The overflow output should be set to '1' if a signed overflow occurs. Signed overflow occurs if:
+  - Both a[7] and b[7] are '0', and s[7] is '1' (positive overflow).
+  - Both a[7] and b[7] are '1', and s[7] is '0' (negative overflow).
+- In all other cases, the overflow output should be '0'.
+
+Additional Notes:
+- The module is entirely combinational and does not include any registers or clock inputs.
+- The behavior of the module is purely based on the current values of inputs a and b.
+- Ensure all calculations respect 2's complement arithmetic rules.
+- No initial values or reset conditions are required as the design does not include any sequential logic elements.
+</ENHANCED_SPEC>

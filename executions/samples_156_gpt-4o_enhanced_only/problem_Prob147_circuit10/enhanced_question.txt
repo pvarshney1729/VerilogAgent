@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Descriptions:
+- input wire clk: Clock signal. The circuit is triggered on the positive edge.
+- input wire a: 1-bit input signal.
+- input wire b: 1-bit input signal.
+- output reg q: 1-bit output signal.
+- output reg state: 1-bit output signal representing the state of the flip-flop.
+
+Circuit Description:
+- This module implements a sequential circuit consisting of combinational logic and one bit of memory, realized through a single flip-flop.
+- The flip-flop's output is directly observable through the 'state' output.
+- All sequential logic is triggered on the positive edge of the clock ('clk').
+
+Initial Conditions:
+- The initial state of the flip-flop (output 'state') is low (0).
+- The initial output q is unspecified until after the first clock edge.
+
+Behavior and Logic Description:
+- The output 'q' and the flip-flop 'state' are updated at each positive clock edge based on the current inputs 'a' and 'b' and the previous state of the flip-flop.
+- The circuit behavior can be extracted from the given waveform data as follows:
+  - If both inputs 'a' and 'b' are high (1), the output 'q' toggles its current state.
+  - If 'a' is high (1) and 'b' is low (0), the output 'q' remains unchanged.
+  - If 'a' is low (0) and 'b' is high (1), the output 'q' is set to the inverse of the current state.
+  - If both inputs 'a' and 'b' are low (0), the output 'q' is set to the current state.
+
+Reset Behavior:
+- No explicit reset signal is defined. The flip-flop initializes to a low state (0) by default at simulation start.
+
+Bit Indexing:
+- The circuit utilizes single-bit signals; therefore, no bit indexing is necessary.
+
+Edge Case Considerations:
+- The input combinations and the corresponding logic have been derived from the waveform data. Ensure inputs 'a' and 'b' do not remain undefined ('x') during simulation to prevent indeterminate states.
+</ENHANCED_SPEC>

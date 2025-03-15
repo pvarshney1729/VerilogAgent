@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out_sop,\n    output logic out_pos\n);\n\n    // Calculate the output using sum-of-products (SOP) form\n    assign out_sop = (~d & ~c & b & ~a) | (~d & c & b & a) | (d & c & b & a);\n\n    // Calculate the output using product-of-sums (POS) form\n    assign out_pos = (d | c | b | a) & \n                     (d | c | b | ~a) & \n                     (d | ~c | ~b | a) & \n                     (d | ~c | b | ~a) & \n                     (d | ~c | b | a) & \n                     (~d | c | ~b | ~a) & \n                     (~d | c | b | ~a) & \n                     (~d | ~c | b | ~a) & \n                     (~d | ~c | b | a);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 54,
+        "passfail": "R"
+    }
+}
