@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input do_sub,\n    input [7:0] a,\n    input [7:0] b,\n    output reg [7:0] out,\n    output reg result_is_zero\n);\n\n    always @(*) begin\n        case (do_sub)\n            1'b0: out = a + b;\n            1'b1: out = a - b;\n        endcase\n\n        // Correctly check if the result is zero\n        if (out == 8'b0)\n            result_is_zero = 1'b1;\n        else\n            result_is_zero = 1'b0;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - reset: 1-bit input (active high synchronous reset)
+  - in: 1-bit input (data stream)
+
+- Output Ports:
+  - disc: 1-bit output (signal to indicate a bit needs to be discarded)
+  - flag: 1-bit output (signal to indicate the beginning/end of a frame)
+  - err: 1-bit output (signal to indicate an error due to 7 or more consecutive 1s)
+
+Functional Description:
+The module implements a synchronous HDLC framing mechanism that decodes a continuous bit stream of data to identify specific bit patterns that signify frame boundaries and error conditions. The following sequences are recognized:
+
+1. **Disc Signal (disc)**: 
+   - Output is asserted when the input sequence 0111110 is detected, indicating that the next bit should be discarded.
+
+2. **Flag Signal (flag)**: 
+   - Output is asserted when the input sequence 01111110 is detected, indicating the start or end of a frame.
+
+3. **Error Signal (err)**: 
+   - Output is asserted when 7 or more consecutive 1s (i.e., 01111111...) are detected, indicating an error condition.
+
+State Machine Behavior:
+- The module shall utilize a Moore-type finite state machine (FSM) to recognize the specified sequences.
+- The FSM shall reset to a state that behaves as if the last input was 0 when the reset signal is asserted.
+- The reset signal is active high and synchronous to the clock.
+- The output signals (disc, flag, err) shall be asserted for one complete clock cycle, beginning on the clock cycle immediately following the detection of the respective condition.
+
+Clocking:
+- All sequential logic is triggered on the positive edge of the clock (clk).
+
+Initial Conditions:
+- Upon reset, all output signals (disc, flag, err) shall be initialized to 0.
+
+Edge Cases:
+- The module should handle input boundaries and ensure that the detection of sequences does not lead to race conditions or undefined behavior.
+
+Bit Indexing:
+- The input data stream is treated as a continuous sequence of bits, with bit[0] representing the least significant bit (LSB).
+</ENHANCED_SPEC>

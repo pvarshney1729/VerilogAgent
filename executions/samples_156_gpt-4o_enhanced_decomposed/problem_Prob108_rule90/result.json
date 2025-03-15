@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic load,\n    input logic [511:0] data,\n    output logic [511:0] q\n);\n\n    logic [511:0] state;\n\n    always_ff @(posedge clk) begin\n        if (load) begin\n            state <= data;\n        end else begin\n            state[0] <= 1'b0 ^ state[1]; // Left boundary\n            state[511] <= state[510] ^ 1'b0; // Right boundary\n            for (int i = 1; i < 511; i++) begin\n                state[i] <= state[i-1] ^ state[i+1];\n            end\n        end\n    end\n\n    assign q = state;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

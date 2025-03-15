@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports (1-bit each):
+  - input wire p1a  // First input for the first NAND gate
+  - input wire p1b  // Second input for the first NAND gate
+  - input wire p1c  // First input for the second NAND gate
+  - input wire p1d  // Second input for the second NAND gate
+  - input wire p2a  // Additional input for future use or expansion
+  - input wire p2b  // Additional input for future use or expansion
+  - input wire p2c  // Additional input for future use or expansion
+  - input wire p2d  // Additional input for future use or expansion
+
+- Output Ports (1-bit each):
+  - output wire p1y  // Output of the first NAND gate
+  - output wire p2y  // Output of the second NAND gate
+
+Functional Description:
+The TopModule shall replicate the functionality of the 7420 integrated circuit, which contains two 4-input NAND gates. The outputs p1y and p2y shall be derived from the following logic:
+
+- p1y = ~(p1a & p1b & p1c & p1d)  // Output of the first NAND gate
+- p2y = ~(p2a & p2b & p2c & p2d)  // Output of the second NAND gate
+
+Behavioral Specifications:
+- The module shall operate combinationally, with outputs reflecting the inputs immediately without any clocking mechanism.
+- There are no synchronous or asynchronous resets defined for this module.
+- The outputs p1y and p2y shall be valid as long as the inputs are stable and within defined logic levels (0 or 1).
+
+Edge Cases:
+- The module shall handle all combinations of input signals (0 and 1) and produce the corresponding NAND outputs.
+- The outputs shall be undefined if any input is in a floating state; thus, all inputs must be driven to a valid logic level.
+
+Note: Ensure that all input signals are connected to valid sources to avoid undefined behavior.
+</ENHANCED_SPEC>

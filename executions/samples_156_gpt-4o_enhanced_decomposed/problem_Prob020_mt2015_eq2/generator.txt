@@ -1,0 +1,36 @@
+Generated Response:
+
+<REASONING>
+To implement the module `TopModule`, we need to compare two 2-bit inputs, `A` and `B`, and produce a 1-bit output `z` that is high (1) if `A` is equal to `B`, and low (0) otherwise. This is a simple combinational logic problem that can be solved using bitwise operations.
+
+1. **Input and Output Declaration**: We have two 2-bit inputs `A` and `B`, and a 1-bit output `z`. According to the guidelines, we should declare all ports as `logic`.
+
+2. **Equality Check**: To check if `A` is equal to `B`, we can use the equality operator (`==`). This operator will return 1 if both inputs are equal and 0 otherwise.
+
+3. **Combinational Logic**: Since this is a purely combinational logic problem, we will use an `assign` statement to directly assign the result of the comparison to `z`.
+
+4. **Code Structure**: The module will be structured with the necessary input and output declarations, followed by the combinational logic using an `assign` statement.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [1:0] A,
+    input logic [1:0] B,
+    output logic z
+);
+    // Combinational logic to compare A and B
+    assign z = (A == B) ? 1'b1 : 1'b0;
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [1:0] A,
+    input logic [1:0] B,
+    output logic z
+);
+    // Combinational logic to compare A and B
+    assign z = (A == B) ? 1'b1 : 1'b0;
+endmodule

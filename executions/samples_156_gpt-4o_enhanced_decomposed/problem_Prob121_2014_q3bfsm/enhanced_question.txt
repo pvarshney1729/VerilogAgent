@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - reset: 1-bit input (synchronous active-high reset)
+  - x: 1-bit input (data signal)
+
+- Output Ports:
+  - z: 1-bit output (output signal)
+
+Finite-State Machine (FSM) Specification:
+- The FSM has a 3-bit state representation, denoted as y[2:0], where:
+  - y[2] is the most significant bit (MSB)
+  - y[0] is the least significant bit (LSB)
+
+State Transition Table:
+- The FSM operates based on the following state transition logic:
+
+| Present State y[2:0] | Next State y[2:0] (x=0) | Next State y[2:0] (x=1) | Output z |
+|-----------------------|--------------------------|--------------------------|----------|
+| 000                   | 000                      | 001                      | 0        |
+| 001                   | 001                      | 100                      | 0        |
+| 010                   | 010                      | 001                      | 0        |
+| 011                   | 001                      | 010                      | 1        |
+| 100                   | 011                      | 100                      | 1        |
+
+Reset Behavior:
+- The reset signal is synchronous and active high. When reset is asserted (reset = 1), the FSM transitions to the initial state y[2:0] = 000 on the next positive edge of clk.
+
+Sequential Logic:
+- All state transitions and output logic are triggered on the positive edge of the clk signal.
+
+Initial State:
+- Upon reset, the state of the FSM is initialized to y[2:0] = 000.
+
+Edge Cases:
+- The FSM should handle all input combinations of x (0 and 1) as specified in the state transition table without undefined behavior.
+
+Signal Dependencies:
+- The output z is determined solely by the current state y[2:0] and the input x, as defined in the state transition table.
+</ENHANCED_SPEC>

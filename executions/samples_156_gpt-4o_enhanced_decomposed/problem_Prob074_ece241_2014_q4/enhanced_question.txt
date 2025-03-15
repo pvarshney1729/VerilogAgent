@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, active on the rising edge)
+  - x: 1-bit input (data signal)
+
+- Output Ports:
+  - z: 1-bit output (result of the NOR gate)
+
+Functional Description:
+The module implements a finite state machine (FSM) with the following behavior:
+
+1. The input signal 'x' is processed through three distinct two-input logic gates: 
+   - XOR Gate
+   - AND Gate
+   - OR Gate
+
+2. Each gate's output is connected to the input of a D flip-flop. The D flip-flops are defined as follows:
+   - DFF1: Input from XOR gate
+   - DFF2: Input from AND gate
+   - DFF3: Input from OR gate
+
+3. The outputs of the D flip-flops (DFF1_out, DFF2_out, DFF3_out) are used as follows:
+   - The second input of the XOR gate is connected to DFF1_out.
+   - The second input of the AND gate is connected to the complemented output of DFF2 (i.e., ~DFF2_out).
+   - The second input of the OR gate is connected to the complemented output of DFF3 (i.e., ~DFF3_out).
+
+4. The outputs of the three D flip-flops are fed into a three-input NOR gate, which produces the output 'z':
+   - z = ~(DFF1_out | DFF2_out | DFF3_out)
+
+5. Reset Conditions:
+   - All D flip-flops are initialized to a reset state of 0 (DFF1_out = 0, DFF2_out = 0, DFF3_out = 0) before the FSM begins operation.
+   - The reset is assumed to be synchronous with respect to the clock signal.
+
+6. Timing:
+   - All sequential logic (D flip-flops) is triggered on the positive edge of the clock (clk).
+
+Edge Cases:
+- The behavior of the FSM should be defined for all possible input combinations of 'x' and the states of the D flip-flops.
+- Ensure that the output 'z' is correctly computed based on the defined logic gates and the states of the D flip-flops.
+
+Signal Dependencies:
+- The output 'z' is dependent on the outputs of the D flip-flops, which in turn depend on the input 'x' and the previous states of the flip-flops.
+
+Precedence of Operations:
+- The logic operations (XOR, AND, OR) must be evaluated before the NOR operation to ensure correct output computation.
+
+Potential Race Conditions:
+- Ensure that there are no race conditions between the clock edge triggering and the evaluation of the logic gates.
+
+</ENHANCED_SPEC>

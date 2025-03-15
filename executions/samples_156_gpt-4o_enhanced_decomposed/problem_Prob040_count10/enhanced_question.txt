@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, active on the rising edge)
+  - reset: 1-bit input (active high synchronous reset signal)
+
+- Output Ports:
+  - q: 4-bit output (represents the current count value of the decade counter, where q[0] is the least significant bit (LSB) and q[3] is the most significant bit (MSB))
+
+Functional Description:
+The TopModule implements a decade counter that counts from 0 to 9, inclusive. The counter increments on the positive edge of the clk signal and resets to 0 when the reset signal is asserted (active high). The counter should have a period of 10 clock cycles, meaning it will output the values 0 through 9 in binary representation on the q output.
+
+Reset Behavior:
+- The reset input is synchronous and active high. When reset is asserted, the counter will immediately reset to 0 (i.e., q = 4'b0000).
+
+Sequential Logic:
+- All sequential logic within the module is triggered on the positive edge of the clk signal.
+
+Initial Conditions:
+- Upon reset, the output q should be initialized to 4'b0000.
+
+Edge Cases:
+- The counter should correctly handle the transition from 9 (4'b1001) back to 0 (4'b0000) on the next clock cycle after reaching the maximum count.
+
+Signal Dependencies:
+- The output q is dependent on the clk and reset signals, with the counter state being updated only on the rising edge of clk when reset is not asserted.
+</ENHANCED_SPEC>

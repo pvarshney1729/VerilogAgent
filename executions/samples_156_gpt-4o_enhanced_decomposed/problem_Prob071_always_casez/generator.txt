@@ -1,0 +1,58 @@
+Generated Response:
+
+<REASONING>
+To implement a priority encoder for an 8-bit input, we need to determine the position of the first '1' bit starting from the least significant bit (LSB) to the most significant bit (MSB). The output should be a 3-bit value representing the position of this bit. If no bits are high, the output should be zero.
+
+1. **Input and Output Declaration**: The input is an 8-bit vector, and the output is a 3-bit vector. We will use `logic` for all port declarations as per the coding conventions.
+
+2. **Priority Encoding Logic**: We will use a combinational `always @(*)` block to implement the priority encoder. This block will check each bit of the input vector starting from the LSB and assign the corresponding position to the output if a '1' is found.
+
+3. **Handling No High Bits**: If no bits are high, the output should be zero. This can be achieved by initializing the output to zero and only changing it if a '1' is found in the input vector.
+
+4. **Combinational Logic**: Since this is purely combinational logic, we will use an `always @(*)` block without specifying a sensitivity list explicitly.
+
+5. **Output Assignment**: The output will be assigned based on the position of the first '1' found in the input vector.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [7:0] in,
+    output logic [2:0] pos
+);
+    always @(*) begin
+        casez (in)
+            8'b???????1: pos = 3'd0;
+            8'b??????10: pos = 3'd1;
+            8'b?????100: pos = 3'd2;
+            8'b????1000: pos = 3'd3;
+            8'b???10000: pos = 3'd4;
+            8'b??100000: pos = 3'd5;
+            8'b?1000000: pos = 3'd6;
+            8'b10000000: pos = 3'd7;
+            default:     pos = 3'd0;
+        endcase
+    end
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [7:0] in,
+    output logic [2:0] pos
+);
+    always @(*) begin
+        casez (in)
+            8'b???????1: pos = 3'd0;
+            8'b??????10: pos = 3'd1;
+            8'b?????100: pos = 3'd2;
+            8'b????1000: pos = 3'd3;
+            8'b???10000: pos = 3'd4;
+            8'b??100000: pos = 3'd5;
+            8'b?1000000: pos = 3'd6;
+            8'b10000000: pos = 3'd7;
+            default:     pos = 3'd0;
+        endcase
+    end
+endmodule

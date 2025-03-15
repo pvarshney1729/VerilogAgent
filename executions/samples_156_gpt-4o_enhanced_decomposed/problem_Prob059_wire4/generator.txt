@@ -1,0 +1,54 @@
+Generated Response:
+
+<REASONING>
+The task is to implement a Verilog module named `TopModule` with specific input and output connections. The module should act as a simple wire connection between inputs and outputs. According to the problem statement, the connections are as follows:
+
+- Input `a` should be connected to output `w`.
+- Input `b` should be connected to outputs `x` and `y`.
+- Input `c` should be connected to output `z`.
+
+Since these are direct connections, we can use continuous assignment statements (`assign`) to connect the inputs to the outputs. There is no need for any combinational or sequential logic, as the module simply passes the input signals to the outputs.
+
+The guidelines and coding conventions provided are not directly applicable here since there is no need for synchronous reset, flip-flops, or any complex logic. We will declare all ports as `logic` as per the conventions, even though `wire` would be more typical for such direct connections.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic a,
+    input logic b,
+    input logic c,
+    output logic w,
+    output logic x,
+    output logic y,
+    output logic z
+);
+
+    // Direct connections using continuous assignment
+    assign w = a;
+    assign x = b;
+    assign y = b;
+    assign z = c;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic a,
+    input logic b,
+    input logic c,
+    output logic w,
+    output logic x,
+    output logic y,
+    output logic z
+);
+
+    // Direct connections using continuous assignment
+    assign w = a;
+    assign x = b;
+    assign y = b;
+    assign z = c;
+
+endmodule

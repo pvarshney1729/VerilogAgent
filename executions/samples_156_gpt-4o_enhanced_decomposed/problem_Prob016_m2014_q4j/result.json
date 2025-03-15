@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic [3:0] x,\n    input logic [3:0] y,\n    output logic [4:0] sum\n);\n    logic [3:0] carry; // Internal carry signals\n\n    // Full adder for bit 0\n    always @(*) begin\n        sum[0] = x[0] ^ y[0] ^ 1'b0; // Initial carry-in is 0\n        carry[0] = (x[0] & y[0]) | (1'b0 & (x[0] ^ y[0]));\n    end\n\n    // Full adder for bit 1\n    always @(*) begin\n        sum[1] = x[1] ^ y[1] ^ carry[0];\n        carry[1] = (x[1] & y[1]) | (carry[0] & (x[1] ^ y[1]));\n    end\n\n    // Full adder for bit 2\n    always @(*) begin\n        sum[2] = x[2] ^ y[2] ^ carry[1];\n        carry[2] = (x[2] & y[2]) | (carry[1] & (x[2] ^ y[2]));\n    end\n\n    // Full adder for bit 3\n    always @(*) begin\n        sum[3] = x[3] ^ y[3] ^ carry[2];\n        carry[3] = (x[3] & y[3]) | (carry[2] & (x[3] ^ y[3]));\n    end\n\n    // Final carry-out is the overflow bit\n    assign sum[4] = carry[3];\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

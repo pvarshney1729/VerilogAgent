@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    output logic [3:0] q\n);\n\n    // Internal register to hold the counter value\n    logic [3:0] count;\n\n    // Sequential logic for the counter\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            count <= 4'b0000; // Reset the counter to 0\n        end else begin\n            count <= count + 4'b0001; // Increment the counter\n        end\n    end\n\n    // Assign the counter value to the output\n    assign q = count;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

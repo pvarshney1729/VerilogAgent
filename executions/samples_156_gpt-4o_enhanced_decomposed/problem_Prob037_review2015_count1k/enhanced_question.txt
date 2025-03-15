@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input representing the clock signal. The clock is assumed to be active on the rising edge.
+  - reset: 1-bit input representing the reset signal. This signal is active high and synchronous.
+
+- Output Ports:
+  - q: 10-bit output representing the counter value. The output is indexed as q[9:0], where q[0] is the least significant bit (LSB) and q[9] is the most significant bit (MSB).
+
+Functionality:
+- The module implements a synchronous counter that counts from 0 to 999 (inclusive).
+- The counter increments on the positive edge of the clk signal.
+- The counter has a period of 1000 clock cycles, meaning it will reset to 0 after reaching 999.
+- Upon receiving a high signal on the reset input, the counter will reset to 0 on the next positive edge of the clk.
+
+Initial Conditions:
+- The counter output q should be initialized to 0 when the reset signal is asserted.
+
+Edge Cases:
+- The counter should handle the transition from 999 back to 0 seamlessly without any glitches.
+- Ensure that the counter does not exceed the value of 999 and wraps around correctly.
+
+Signal Dependencies:
+- The output q is dependent on the clk and reset signals, with the reset taking precedence over the counting operation.
+</ENHANCED_SPEC>

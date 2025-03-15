@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - load: 1-bit input (active high, loads data into the shift register)
+  - ena: 1-bit input (active high, enables shifting operation)
+  - amount: 2-bit input (determines shift direction and amount)
+  - data: 64-bit input (data to be loaded into the shift register)
+  
+- Output Ports:
+  - q: 64-bit output (current contents of the shift register)
+
+Functional Description:
+The TopModule implements a 64-bit arithmetic shift register with synchronous load functionality. The shift register supports both left and right shifts, with the direction and amount of shift determined by the 'amount' input. The right shift operation is defined as an arithmetic right shift.
+
+Signal Definitions:
+1. load: When high, the shift register is loaded with the value from data[63:0] instead of performing a shift operation.
+2. ena: When high, the shift register will perform a shift operation if load is low.
+3. amount: Determines the direction and magnitude of the shift:
+   - 2'b00: Shift left by 1 bit.
+   - 2'b01: Shift left by 8 bits.
+   - 2'b10: Shift right by 1 bit (arithmetic shift).
+   - 2'b11: Shift right by 8 bits (arithmetic shift).
+4. q: Represents the current contents of the shift register.
+
+Operational Details:
+- The shift register operates on the rising edge of the clk signal.
+- The load operation takes precedence over the shift operation; if load is high, the contents of the shift register are replaced with data[63:0] regardless of the state of ena.
+- If both load and ena are low, the shift register retains its current value.
+- The initial state of the shift register (q) is defined to be 64'b0 (zero) upon reset.
+- The module should handle edge cases, such as when the amount input is not within the defined range (2'b00 to 2'b11), by maintaining the current state of the shift register.
+
+Bit Indexing:
+- The least significant bit (LSB) of the shift register is q[0], and the most significant bit (MSB) is q[63].
+</ENHANCED_SPEC>

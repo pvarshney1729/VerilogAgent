@@ -1,0 +1,23 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - in: bit[99:0] (100 bits, where bit[0] is the least significant bit (LSB) and bit[99] is the most significant bit (MSB))
+
+- Output Ports:
+  - out_and: bit (1-bit output representing the result of a 100-input AND operation)
+  - out_or: bit (1-bit output representing the result of a 100-input OR operation)
+  - out_xor: bit (1-bit output representing the result of a 100-input XOR operation)
+
+Functional Description:
+The module implements a combinational logic circuit that processes 100 input bits. The outputs are defined as follows:
+1. out_and: This output is the logical AND of all 100 input bits (in[99:0]). The output will be high (1) only if all input bits are high (1); otherwise, it will be low (0).
+2. out_or: This output is the logical OR of all 100 input bits (in[99:0]). The output will be high (1) if at least one input bit is high (1); otherwise, it will be low (0).
+3. out_xor: This output is the logical XOR of all 100 input bits (in[99:0]). The output will be high (1) if an odd number of input bits are high (1); otherwise, it will be low (0).
+
+Implementation Notes:
+- The module is purely combinational; there are no clock cycles or sequential elements involved.
+- There are no resets or initial values to define, as the outputs are determined solely by the current state of the inputs.
+- Ensure that the logic for each output is implemented without race conditions, considering the precedence of operations as defined by standard logical operations.
+</ENHANCED_SPEC>

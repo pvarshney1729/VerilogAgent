@@ -1,0 +1,37 @@
+Generated Response:
+
+<REASONING>
+The task is to create a Verilog module named `TopModule` that takes a 16-bit input and splits it into two 8-bit outputs. The input is a half-word, and we need to extract the upper and lower bytes. The upper byte consists of bits [15:8] and the lower byte consists of bits [7:0]. This is a straightforward combinational logic task, so we will use continuous assignment statements to directly assign the appropriate bits of the input to the outputs. Since this is purely combinational logic, we do not need to use any always blocks or handle any clock or reset signals.
+</REASONING>
+
+[BEGIN]
+module TopModule(
+    input logic [15:0] in,
+    output logic [7:0] out_hi,
+    output logic [7:0] out_lo
+);
+
+    // Assign the upper byte of 'in' to 'out_hi'
+    assign out_hi = in[15:8];
+
+    // Assign the lower byte of 'in' to 'out_lo'
+    assign out_lo = in[7:0];
+
+endmodule
+[DONE]
+
+Generated Code:
+
+module TopModule(
+    input logic [15:0] in,
+    output logic [7:0] out_hi,
+    output logic [7:0] out_lo
+);
+
+    // Assign the upper byte of 'in' to 'out_hi'
+    assign out_hi = in[15:8];
+
+    // Assign the lower byte of 'in' to 'out_lo'
+    assign out_lo = in[7:0];
+
+endmodule

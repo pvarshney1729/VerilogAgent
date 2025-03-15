@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - d: 1-bit input (bit[0] refers to the least significant bit)
+  - ena: 1-bit input (bit[0] refers to the least significant bit)
+  
+- Output Ports:
+  - q: 1-bit output (bit[0] refers to the least significant bit)
+
+Functional Description:
+The module implements a D latch. The output 'q' should follow the input 'd' when the enable signal 'ena' is high (logic high). When 'ena' is low (logic low), the output 'q' should retain its previous value.
+
+Implementation Details:
+- The D latch should be implemented using an always block that is sensitive to changes in 'ena' and 'd'.
+- The behavior of the latch should be defined as follows:
+  - If ena == 1, then q = d (the output follows the input).
+  - If ena == 0, then q retains its previous value (no change).
+
+Reset Conditions:
+- The module does not specify a reset condition; therefore, the initial state of 'q' should be defined as '0' (logic low) at the start of simulation.
+
+Timing and Edge Cases:
+- The module should handle changes in 'd' and 'ena' asynchronously, meaning that changes in these inputs can occur at any time and should be reflected in the output as per the latch behavior described above.
+
+Signal Dependencies:
+- The output 'q' is dependent on both 'd' and 'ena'. Ensure that the implementation correctly reflects this dependency without introducing race conditions.
+
+End of Specification.
+</ENHANCED_SPEC>

@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input [3:0] a;  // 4-bit input representing variable 'a'
+  - input [3:0] b;  // 4-bit input representing variable 'b'
+  - input [3:0] c;  // 4-bit input representing variable 'c'
+  - input [3:0] d;  // 4-bit input representing variable 'd'
+  - input [3:0] e;  // 4-bit input representing variable 'e'
+  
+- Output Ports:
+  - output [3:0] q; // 4-bit output representing the result 'q'
+
+Functional Description:
+- The module implements a combinational logic circuit. The output 'q' is determined based on the values of inputs 'a', 'b', 'c', 'd', and 'e' as observed from the simulation waveforms provided.
+
+Simulation Waveform Behavior:
+- The following table summarizes the expected behavior of the output 'q' based on the input values at specific time intervals:
+
+| Time (ns) | a   | b   | c | d   | e   | q   |
+|-----------|-----|-----|---|-----|-----|-----|
+| 0         | x   | x   | x | x   | x   | x   |
+| 5         | x   | x   | x | x   | x   | x   |
+| 10        | x   | x   | x | x   | x   | x   |
+| 15        | a   | b   | 0 | d   | e   | b   |
+| 20        | a   | b   | 1 | d   | e   | e   |
+| 25        | a   | b   | 2 | d   | e   | a   |
+| 30        | a   | b   | 3 | d   | e   | d   |
+| 35        | a   | b   | 4 | d   | e   | f   |
+| 40        | a   | b   | 5 | d   | e   | f   |
+| 45        | a   | b   | 6 | d   | e   | f   |
+| 50        | a   | b   | 7 | d   | e   | f   |
+| 55        | a   | b   | 8 | d   | e   | f   |
+| 60        | a   | b   | 9 | d   | e   | f   |
+| 65        | a   | b   | a | d   | e   | f   |
+| 70        | a   | b   | b | d   | e   | f   |
+| 75        | a   | b   | c | d   | e   | f   |
+| 80        | a   | b   | d | d   | e   | f   |
+| 85        | a   | b   | e | d   | e   | f   |
+| 90        | a   | b   | f | d   | e   | f   |
+
+Notes:
+- The output 'q' is dependent on the values of inputs 'a' and 'b' primarily, with the other inputs influencing the output based on specific conditions as observed in the waveform data.
+- Ensure that the implementation correctly reflects the behavior described in the simulation table.
+</ENHANCED_SPEC>

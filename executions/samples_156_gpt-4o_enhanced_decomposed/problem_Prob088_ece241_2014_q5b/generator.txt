@@ -1,0 +1,128 @@
+Generated Response:
+
+<REASONING>
+To implement the Mealy finite-state machine using one-hot encoding, we need to define two states, A and B, each represented by a single bit. The state transitions and output logic are based on the input `x`. The reset is asynchronous and active-high, which means the state should be set to A when `areset` is high, regardless of the clock.
+
+1. **State Encoding**: 
+   - State A is represented by `state_A = 1` and `state_B = 0`.
+   - State B is represented by `state_A = 0` and `state_B = 1`.
+
+2. **State Transition Logic**:
+   - From state A, if `x` is 0, stay in state A; if `x` is 1, transition to state B.
+   - From state B, if `x` is 0, stay in state B; if `x` is 1, stay in state B.
+
+3. **Output Logic**:
+   - In state A, if `x` is 0, `z` is 0; if `x` is 1, `z` is 1.
+   - In state B, if `x` is 0, `z` is 1; if `x` is 1, `z` is 0.
+
+4. **Asynchronous Reset**:
+   - When `areset` is high, the state should be reset to A immediately.
+
+5. **Clock Edge**:
+   - The state transitions occur on the positive edge of the clock.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding using one-hot
+    logic state_A, state_B;
+
+    // State transition and output logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            // Asynchronous reset to state A
+            state_A <= 1'b1;
+            state_B <= 1'b0;
+        end else begin
+            // State transitions
+            case ({state_A, state_B})
+                2'b10: begin // State A
+                    if (x) begin
+                        state_A <= 1'b0;
+                        state_B <= 1'b1;
+                    end
+                end
+                2'b01: begin // State B
+                    // Remain in state B regardless of x
+                    state_A <= 1'b0;
+                    state_B <= 1'b1;
+                end
+                default: begin
+                    // Default to state A in case of invalid state
+                    state_A <= 1'b1;
+                    state_B <= 1'b0;
+                end
+            endcase
+        end
+    end
+
+    // Output logic based on current state and input x
+    always_comb begin
+        case ({state_A, state_B})
+            2'b10: z = x;      // State A: z = x
+            2'b01: z = ~x;     // State B: z = ~x
+            default: z = 1'b0; // Default output
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding using one-hot
+    logic state_A, state_B;
+
+    // State transition and output logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            // Asynchronous reset to state A
+            state_A <= 1'b1;
+            state_B <= 1'b0;
+        end else begin
+            // State transitions
+            case ({state_A, state_B})
+                2'b10: begin // State A
+                    if (x) begin
+                        state_A <= 1'b0;
+                        state_B <= 1'b1;
+                    end
+                end
+                2'b01: begin // State B
+                    // Remain in state B regardless of x
+                    state_A <= 1'b0;
+                    state_B <= 1'b1;
+                end
+                default: begin
+                    // Default to state A in case of invalid state
+                    state_A <= 1'b1;
+                    state_B <= 1'b0;
+                end
+            endcase
+        end
+    end
+
+    // Output logic based on current state and input x
+    always_comb begin
+        case ({state_A, state_B})
+            2'b10: z = x;      // State A: z = x
+            2'b01: z = ~x;     // State B: z = ~x
+            default: z = 1'b0; // Default output
+        endcase
+    end
+
+endmodule

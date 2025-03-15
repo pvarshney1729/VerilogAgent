@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic shift_ena,\n    input logic count_ena,\n    input logic data,\n    output logic [3:0] q\n);\n\n    // Internal register to hold the current state\n    logic [3:0] shift_reg;\n\n    // Sequential logic to update the shift register\n    always_ff @(posedge clk) begin\n        if (shift_ena) begin\n            // Shift in the data bit into the MSB\n            shift_reg <= {data, shift_reg[3:1]};\n        end else if (count_ena) begin\n            // Decrement the current value\n            shift_reg <= shift_reg - 1;\n        end\n        // If both shift_ena and count_ena are high, behavior is unspecified\n    end\n\n    // Assign the internal register to the output\n    assign q = shift_reg;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 1886,
+        "passfail": "R"
+    }
+}

@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - reset: 1-bit input (active high synchronous reset)
+  - s: 1-bit input (state control signal)
+  - w: 1-bit input (data signal for FSM evaluation)
+
+- Output Ports:
+  - z: 1-bit output (result signal)
+
+Functional Description:
+The module implements a finite state machine (FSM) with the following characteristics:
+
+1. **Initial State**: The FSM starts in a reset state, designated as State A, when the reset signal is high. In State A, the FSM will remain in this state as long as the input signal s is low (s = 0).
+
+2. **State Transition**:
+   - When the input signal s transitions to high (s = 1), the FSM transitions from State A to State B.
+   - In State B, the FSM will monitor the input signal w for the next three clock cycles.
+
+3. **Output Logic**:
+   - During the three clock cycles in State B, the FSM counts the number of cycles where w = 1.
+   - If w = 1 in exactly two of these three clock cycles, the output z will be set to high (z = 1) in the subsequent clock cycle.
+   - If the condition is not met (i.e., w = 1 in less than or more than two cycles), the output z will be set to low (z = 0) in the next clock cycle.
+
+4. **State Continuation**: After evaluating w for three clock cycles, the FSM will continue to monitor w for the next set of three clock cycles, repeating the evaluation process.
+
+5. **State Usage**: The input signal s is only utilized in State A. Once the FSM transitions to State B, only the input signal w is considered for state evaluation.
+
+6. **Reset Behavior**: The reset is active high and synchronous, meaning that the FSM will only reset to State A on the rising edge of clk when reset is high.
+
+7. **Sequential Logic**: All state transitions and output assignments are triggered on the positive edge of the clock signal (clk).
+
+8. **Signal Initialization**: Ensure that all registers and flip-flops are initialized to a defined state upon reset.
+
+9. **Edge Cases**: The FSM should handle cases where the input signals may change during the evaluation period without causing race conditions or undefined behavior.
+
+10. **State Minimization**: Use the minimum number of states necessary to implement the required functionality.
+
+</ENHANCED_SPEC>

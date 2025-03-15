@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - reset: 1-bit input (active high synchronous reset)
+  - in: 32-bit input vector (in[31:0], where in[0] is the least significant bit)
+
+- Output Ports:
+  - out: 32-bit output vector (out[31:0], where out[0] is the least significant bit)
+
+Functional Description:
+The TopModule shall monitor each bit of the 32-bit input vector 'in'. The module will detect a transition of any bit from '1' to '0' within a single clock cycle. Upon detecting such a transition, the corresponding bit in the output vector 'out' will be set to '1' and will remain '1' until the reset signal is activated.
+
+Behavioral Specifications:
+- The output 'out' will be updated on the positive edge of the clock signal (clk).
+- The reset signal (reset) is active high and synchronous. When reset is asserted, all bits of the output vector 'out' will be set to '0'.
+- The output will only change to '1' when a '1' to '0' transition is detected in the input vector 'in' during a clock cycle.
+
+Edge Cases:
+- If the input vector 'in' does not change, the output vector 'out' will remain unchanged.
+- If multiple bits in 'in' transition from '1' to '0' in the same clock cycle, the corresponding bits in 'out' will be set to '1' for each detected transition.
+
+Initial Conditions:
+- Upon reset, all bits of the output vector 'out' shall be initialized to '0' (out[31:0] = 32'b0).
+</ENHANCED_SPEC>

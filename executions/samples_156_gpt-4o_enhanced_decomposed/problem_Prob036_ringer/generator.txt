@@ -1,0 +1,65 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to control the outputs `ringer` and `motor` based on the inputs `ring` and `vibrate_mode`. The requirements specify that when `ring` is active (i.e., `ring = 1`), the module should activate either the `ringer` or the `motor`, but not both. If `vibrate_mode` is active (i.e., `vibrate_mode = 1`), the `motor` should be activated. Otherwise, the `ringer` should be activated.
+
+This is a simple combinational logic problem where:
+- If `ring = 1` and `vibrate_mode = 1`, then `motor = 1` and `ringer = 0`.
+- If `ring = 1` and `vibrate_mode = 0`, then `ringer = 1` and `motor = 0`.
+- If `ring = 0`, both `ringer` and `motor` should be `0` regardless of `vibrate_mode`.
+
+The implementation will use an `always @(*)` block to describe the combinational logic, ensuring that the outputs are updated whenever any of the inputs change.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic ring,
+    input logic vibrate_mode,
+    output logic ringer,
+    output logic motor
+);
+
+    always @(*) begin
+        if (ring) begin
+            if (vibrate_mode) begin
+                motor = 1;
+                ringer = 0;
+            end else begin
+                ringer = 1;
+                motor = 0;
+            end
+        end else begin
+            ringer = 0;
+            motor = 0;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic ring,
+    input logic vibrate_mode,
+    output logic ringer,
+    output logic motor
+);
+
+    always @(*) begin
+        if (ring) begin
+            if (vibrate_mode) begin
+                motor = 1;
+                ringer = 0;
+            end else begin
+                ringer = 1;
+                motor = 0;
+            end
+        end else begin
+            ringer = 0;
+            motor = 0;
+        end
+    end
+
+endmodule

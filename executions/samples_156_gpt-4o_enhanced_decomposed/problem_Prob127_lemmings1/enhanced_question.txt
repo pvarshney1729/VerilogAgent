@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - areset: 1-bit input (asynchronous active-high reset)
+  - bump_left: 1-bit input (indicates a bump from the left)
+  - bump_right: 1-bit input (indicates a bump from the right)
+
+- Output Ports:
+  - walk_left: 1-bit output (active high indicates walking left)
+  - walk_right: 1-bit output (active high indicates walking right)
+
+Functional Description:
+The TopModule implements a finite state machine (FSM) to model the behavior of Lemmings in a 2D world. The Lemmings can be in one of two states:
+1. State 0: Walking Left (walk_left = 1, walk_right = 0)
+2. State 1: Walking Right (walk_left = 0, walk_right = 1)
+
+State Transition Conditions:
+- If bump_left is asserted (1), the Lemming will transition to State 1 (walk_right = 1).
+- If bump_right is asserted (1), the Lemming will transition to State 0 (walk_left = 1).
+- If both bump_left and bump_right are asserted simultaneously, the Lemming will switch directions according to the bump conditions.
+
+Reset Behavior:
+- The areset signal is an asynchronous active-high reset. When areset is asserted, the FSM will reset to State 0 (walk_left = 1, walk_right = 0) regardless of the clock state.
+
+Clocking:
+- All sequential logic within the module is triggered on the positive edge of the clk signal.
+
+Initial Conditions:
+- Upon reset (when areset is high), the outputs should be initialized as follows:
+  - walk_left = 1
+  - walk_right = 0
+
+Edge Cases:
+- The module should handle the scenario where both bump_left and bump_right are asserted at the same time, ensuring that the Lemming switches directions according to the bump conditions without any race conditions.
+
+Signal Definitions:
+- walk_left and walk_right are mutually exclusive outputs; only one can be high at any given time.
+- The least significant bit (LSB) is defined as bit[0] for all input and output ports.
+
+State Diagram:
+- The FSM can be represented as follows:
+  - State 0 (Walking Left) transitions to State 1 (Walking Right) on bump_left = 1.
+  - State 1 (Walking Right) transitions to State 0 (Walking Left) on bump_right = 1.
+</ENHANCED_SPEC>

@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports (1-bit each):
+  - input wire p1a
+  - input wire p1b
+  - input wire p1c
+  - input wire p1d
+  - input wire p1e
+  - input wire p1f
+  - input wire p2a
+  - input wire p2b
+  - input wire p2c
+  - input wire p2d
+
+- Output Ports (1-bit each):
+  - output wire p1y
+  - output wire p2y
+
+Functional Description:
+The TopModule implements the functionality of the 7458 chip, which contains four 3-input AND gates and two 2-input OR gates. The module has a total of 10 input signals and 2 output signals.
+
+Output Signal Definitions:
+1. The output signal p1y is defined as the logical OR of two 3-input AND gates:
+   - The first AND gate takes inputs p1a, p1b, and p1c.
+   - The second AND gate takes inputs p1d, p1e, and p1f.
+   - Therefore, p1y = (p1a AND p1b AND p1c) OR (p1d AND p1e AND p1f).
+
+2. The output signal p2y is defined as the logical OR of two 2-input AND gates:
+   - The first AND gate takes inputs p2a and p2b.
+   - The second AND gate takes inputs p2c and p2d.
+   - Therefore, p2y = (p2a AND p2b) OR (p2c AND p2d).
+
+Implementation Notes:
+- You may choose to use continuous assignment statements (assign) to drive the output ports directly, or you may declare four internal wires to represent the outputs of the AND gates, which can then be used to drive the output ports.
+- Ensure that all signal assignments are made in a manner that avoids race conditions and maintains clarity in signal dependencies.
+</ENHANCED_SPEC>

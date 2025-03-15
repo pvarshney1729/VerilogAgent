@@ -1,0 +1,64 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - y: 3-bit input (bit[2:0] where bit[0] is the least significant bit)
+  - w: 1-bit input (bit[0])
+  
+- Output Ports:
+  - Y1: 1-bit output (bit[0])
+
+State Machine Description:
+The module implements a finite state machine (FSM) with the following states and transitions:
+
+States:
+- A (000)
+- B (001)
+- C (010)
+- D (011)
+- E (100)
+- F (101)
+
+State Transitions:
+- From state A (000):
+  - On input w = 0, transition to state B (001)
+  - On input w = 1, remain in state A (000)
+  
+- From state B (001):
+  - On input w = 0, transition to state C (010)
+  - On input w = 1, transition to state D (011)
+  
+- From state C (010):
+  - On input w = 0, transition to state E (100)
+  - On input w = 1, transition to state D (011)
+  
+- From state D (011):
+  - On input w = 0, transition to state F (101)
+  - On input w = 1, transition to state A (000)
+  
+- From state E (100):
+  - On input w = 0, remain in state E (100)
+  - On input w = 1, transition to state D (011)
+  
+- From state F (101):
+  - On input w = 0, transition to state C (010)
+  - On input w = 1, transition to state D (011)
+
+Implementation Details:
+- The FSM will be implemented using three D flip-flops to represent the state.
+- The next-state logic will be implemented for the state represented by y[1].
+- The output Y1 will be directly assigned the value of y[1].
+
+Reset Conditions:
+- The FSM will have an asynchronous active-low reset signal (reset_n) that initializes the state to A (000) when asserted.
+
+Clocking:
+- The FSM will operate on the rising edge of a clock signal (clk).
+
+Initial Conditions:
+- All flip-flops will be initialized to 0 upon reset.
+
+Edge Cases:
+- Ensure that the FSM handles all possible input combinations for w (0 and 1) at each state without undefined behavior.
+</ENHANCED_SPEC>

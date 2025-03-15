@@ -1,0 +1,186 @@
+Generated Response:
+
+<REASONING>
+To implement the Lemming behavior using a Moore state machine, we need to define the states and transitions based on the problem description. The Lemming can be in one of three states:
+
+1. **Walking Left**: The Lemming is walking left. If it bumps into something on the left, it should transition to walking right. If the ground disappears, it should transition to falling.
+
+2. **Walking Right**: The Lemming is walking right. If it bumps into something on the right, it should transition to walking left. If the ground disappears, it should transition to falling.
+
+3. **Falling**: The Lemming is falling. It will remain in this state until the ground reappears, at which point it will resume walking in the direction it was walking before it started falling.
+
+The state transitions are triggered by the clock's positive edge, and the asynchronous reset sets the initial state to walking left. The outputs are determined by the current state:
+
+- `walk_left` is 1 when in the Walking Left state.
+- `walk_right` is 1 when in the Walking Right state.
+- `aaah` is 1 when in the Falling state.
+
+The state transitions are as follows:
+- From Walking Left: 
+  - If `ground` is 0, transition to Falling.
+  - If `bump_left` is 1, transition to Walking Right.
+- From Walking Right:
+  - If `ground` is 0, transition to Falling.
+  - If `bump_right` is 1, transition to Walking Left.
+- From Falling:
+  - If `ground` is 1, transition back to the previous walking state.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic bump_left,
+    input logic bump_right,
+    input logic ground,
+    output logic walk_left,
+    output logic walk_right,
+    output logic aaah
+);
+
+    typedef enum logic [1:0] {
+        LEFT = 2'b00,
+        RIGHT = 2'b01,
+        FALLING_LEFT = 2'b10,
+        FALLING_RIGHT = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= LEFT;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            LEFT: begin
+                if (!ground) begin
+                    next_state = FALLING_LEFT;
+                end else if (bump_left) begin
+                    next_state = RIGHT;
+                end else begin
+                    next_state = LEFT;
+                end
+            end
+            RIGHT: begin
+                if (!ground) begin
+                    next_state = FALLING_RIGHT;
+                end else if (bump_right) begin
+                    next_state = LEFT;
+                end else begin
+                    next_state = RIGHT;
+                end
+            end
+            FALLING_LEFT: begin
+                if (ground) begin
+                    next_state = LEFT;
+                end else begin
+                    next_state = FALLING_LEFT;
+                end
+            end
+            FALLING_RIGHT: begin
+                if (ground) begin
+                    next_state = RIGHT;
+                end else begin
+                    next_state = FALLING_RIGHT;
+                end
+            end
+            default: next_state = LEFT;
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        walk_left = (current_state == LEFT);
+        walk_right = (current_state == RIGHT);
+        aaah = (current_state == FALLING_LEFT) || (current_state == FALLING_RIGHT);
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic bump_left,
+    input logic bump_right,
+    input logic ground,
+    output logic walk_left,
+    output logic walk_right,
+    output logic aaah
+);
+
+    typedef enum logic [1:0] {
+        LEFT = 2'b00,
+        RIGHT = 2'b01,
+        FALLING_LEFT = 2'b10,
+        FALLING_RIGHT = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= LEFT;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            LEFT: begin
+                if (!ground) begin
+                    next_state = FALLING_LEFT;
+                end else if (bump_left) begin
+                    next_state = RIGHT;
+                end else begin
+                    next_state = LEFT;
+                end
+            end
+            RIGHT: begin
+                if (!ground) begin
+                    next_state = FALLING_RIGHT;
+                end else if (bump_right) begin
+                    next_state = LEFT;
+                end else begin
+                    next_state = RIGHT;
+                end
+            end
+            FALLING_LEFT: begin
+                if (ground) begin
+                    next_state = LEFT;
+                end else begin
+                    next_state = FALLING_LEFT;
+                end
+            end
+            FALLING_RIGHT: begin
+                if (ground) begin
+                    next_state = RIGHT;
+                end else begin
+                    next_state = FALLING_RIGHT;
+                end
+            end
+            default: next_state = LEFT;
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        walk_left = (current_state == LEFT);
+        walk_right = (current_state == RIGHT);
+        aaah = (current_state == FALLING_LEFT) || (current_state == FALLING_RIGHT);
+    end
+
+endmodule

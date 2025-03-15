@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge triggered)
+  - resetn: 1-bit input (synchronous, active low reset)
+  - x: 1-bit input (motor control signal)
+  - y: 1-bit input (motor control signal)
+  
+- Output Ports:
+  - f: 1-bit output (motor control signal)
+  - g: 1-bit output (motor control signal)
+
+Functional Description:
+The TopModule implements a finite state machine (FSM) to control a motor based on inputs x and y. The FSM operates as follows:
+
+1. **Reset Behavior**:
+   - When resetn is asserted (active low), the FSM remains in the initial state, referred to as State A.
+   - Upon de-assertion of resetn, the FSM transitions to the next state on the subsequent positive edge of clk.
+
+2. **Output f**:
+   - After the reset signal is de-asserted, the output f is set to 1 for one clock cycle.
+
+3. **Monitoring Input x**:
+   - The FSM monitors the input x for a specific sequence. If x produces the values 1, 0, 1 in three successive clock cycles, the output g is set to 1 on the following clock cycle.
+
+4. **Monitoring Input y**:
+   - While g is maintained at 1, the FSM monitors the input y. 
+   - If y becomes 1 within two clock cycles after g is set to 1, g remains at 1 permanently (until reset).
+   - If y does not become 1 within two clock cycles, g is set to 0 permanently (until reset).
+
+5. **Sequential Logic**:
+   - All sequential logic is triggered on the positive edge of clk.
+   - All registers and flip-flops must have explicitly defined initial values, with the initial state of the FSM being State A.
+
+Edge Cases:
+- The FSM must handle cases where the reset signal is asserted during the monitoring of inputs x and y, ensuring that the outputs f and g are reset appropriately.
+
+Signal Dependencies:
+- The output g depends on the sequence of input x and the timing of input y after g is set to 1.
+
+Precedence of Operations:
+- The FSM must prioritize the reset condition over the monitoring of inputs x and y.
+
+</ENHANCED_SPEC>

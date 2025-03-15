@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic w,\n    input logic R,\n    input logic E,\n    input logic L,\n    output logic Q\n);\n\n    always_ff @(posedge clk) begin\n        if (L) begin\n            Q <= R;  // Load operation\n        end else if (E) begin\n            Q <= w;  // Shift operation\n        end\n        // If neither L nor E is asserted, Q holds its value\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

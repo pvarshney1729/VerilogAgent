@@ -1,0 +1,40 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` that reverses the byte order of a 32-bit input vector, we need to rearrange the bytes of the input. A 32-bit vector consists of 4 bytes, each 8 bits wide. The task is to reverse the order of these bytes. 
+
+Given an input `in` with bytes labeled as follows:
+- Byte 0: `in[7:0]`
+- Byte 1: `in[15:8]`
+- Byte 2: `in[23:16]`
+- Byte 3: `in[31:24]`
+
+The output `out` should have these bytes in reverse order:
+- Byte 0: `in[31:24]`
+- Byte 1: `in[23:16]`
+- Byte 2: `in[15:8]`
+- Byte 3: `in[7:0]`
+
+This operation is purely combinational, so we can use an `assign` statement to directly map the input bytes to the output in the desired order. There is no need for a clock or reset signal since this is a simple data manipulation task.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [31:0] in,
+    output logic [31:0] out
+);
+    // Reverse the byte order of the 32-bit input
+    assign out = {in[7:0], in[15:8], in[23:16], in[31:24]};
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [31:0] in,
+    output logic [31:0] out
+);
+    // Reverse the byte order of the 32-bit input
+    assign out = {in[7:0], in[15:8], in[23:16], in[31:24]};
+endmodule

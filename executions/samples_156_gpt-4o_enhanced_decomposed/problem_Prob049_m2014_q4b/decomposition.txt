@@ -1,0 +1,36 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, ar, d, and output port q.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input clk - input ar - input d - output q",
+        "implementation": "module TopModule (\n    input  clk,\n    input  ar,\n    input  d,\n    output reg q\n);\n\nalways @(posedge clk or posedge ar) begin\n    if (ar)\n        q <= 1'b0;\n    else\n        q <= d;\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the D flip-flop logic that captures the input 'd' on the positive edge of the clock 'clk'.",
+        "source": "The module should implement a D flip flop, positive edge triggered.",
+        "implementation": "always @(posedge clk or posedge ar) begin\n    if (ar)\n        q <= 1'b0;\n    else\n        q <= d;\nend"
+    },
+    {
+        "id": "3",
+        "content": "Implement the asynchronous reset logic that sets the output 'q' to 0 when 'ar' is high, regardless of the clock.",
+        "source": "The module should implement a D flip flop, positive edge triggered, with an asynchronous reset 'ar'.",
+        "implementation": "always @(posedge clk or posedge ar) begin\n    if (ar) begin\n        q <= 1'b0;\n    end else begin\n        q <= d;\n    end\nend"
+    }
+]
+
+Modified Base Query:
+
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  ar
+ - input  d
+ - output q
+
+The module should implement a D flip flop, positive edge triggered, with
+an asynchronous reset "ar".
+

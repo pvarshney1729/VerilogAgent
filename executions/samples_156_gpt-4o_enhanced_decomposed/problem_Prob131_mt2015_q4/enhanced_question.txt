@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module A implements the Boolean function z = (x ^ y) & x, where:
+- Inputs:
+  - x: 1-bit input (unsigned)
+  - y: 1-bit input (unsigned)
+- Output:
+  - z: 1-bit output (unsigned)
+
+Module B can be described by the following simulation waveform:
+
+  Time (ns) | x | y | z
+  -----------|---|---|---
+  0          | 0 | 0 | 1
+  5          | 0 | 0 | 1
+  10         | 0 | 0 | 1
+  15         | 0 | 0 | 1
+  20         | 0 | 0 | 1
+  25         | 1 | 0 | 0
+  30         | 1 | 0 | 0
+  35         | 0 | 1 | 0
+  40         | 0 | 1 | 0
+  45         | 1 | 1 | 1
+  50         | 1 | 1 | 1
+  55         | 0 | 0 | 1
+  60         | 0 | 1 | 0
+  65         | 0 | 1 | 0
+  70         | 1 | 1 | 1
+  75         | 0 | 1 | 0
+  80         | 0 | 1 | 0
+  85         | 0 | 1 | 0
+  90         | 1 | 0 | 0
+
+Top-level module interface:
+- Inputs:
+  - x: 1-bit input (unsigned)
+  - y: 1-bit input (unsigned)
+- Output:
+  - z: 1-bit output (unsigned)
+
+The top-level module is implemented with two instances of Module A and two instances of Module B. The connections are as follows:
+- The first input of all four submodules (A1, A2, B1, B2) is connected to input 'x'.
+- The second input of all four submodules is connected to input 'y'.
+- The output of the first instance of Module A (A1) is connected to a two-input OR gate along with the output of the first instance of Module B (B1).
+- The outputs of the second instances of Module A (A2) and Module B (B2) are connected to a two-input AND gate.
+- The outputs of the OR gate and the AND gate are connected to an XOR gate, whose output is assigned to 'z'.
+
+All registers and flip-flops in the design should have defined initial values, and the design should ensure that there are no race conditions. The behavior at edge cases and input boundaries must be clearly defined.
+</ENHANCED_SPEC>

@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - reset: 1-bit input (active-high synchronous reset)
+  - s: 3-bit input (sensor status, where s[2] is the most significant bit (MSB) and s[0] is the least significant bit (LSB))
+
+- Output Ports:
+  - fr2: 1-bit output (flow rate control for maximum flow)
+  - fr1: 1-bit output (flow rate control for intermediate flow)
+  - fr0: 1-bit output (flow rate control for minimum flow)
+  - dfr: 1-bit output (control for the Supplemental flow valve)
+
+Functional Description:
+The module controls the flow rate of water based on the status of three vertically placed sensors, which are spaced 5 inches apart. The sensors indicate the water level as follows:
+
+- When the water level is above the highest sensor (s[2] asserted):
+  - Output: fr2, fr1, fr0 = 0 (no flow)
+  
+- When the water level is between the highest sensor (s[2]) and the middle sensor (s[1]):
+  - Output: fr0 = 1 (nominal flow), fr1 = 0, fr2 = 0
+  
+- When the water level is between the middle sensor (s[1]) and the lowest sensor (s[0]):
+  - Output: fr0 = 1, fr1 = 1 (intermediate flow), fr2 = 0
+  
+- When the water level is below the lowest sensor (s[0] not asserted):
+  - Output: fr0 = 1, fr1 = 1, fr2 = 1 (maximum flow)
+
+The flow rate is influenced by the previous state of the sensors. If the sensor change indicates that the previous water level was lower than the current level, the Supplemental flow valve (controlled by dfr) should be opened, resulting in an increase in flow rate.
+
+Reset Behavior:
+- The reset signal (reset) is active-high and synchronous. Upon activation, all outputs (fr2, fr1, fr0, dfr) are set to 1, simulating a state where the water level has been low for an extended period (no sensors asserted).
+
+Initial Conditions:
+- All registers and outputs should be initialized to 1 upon reset.
+
+Edge Cases:
+- Ensure that the outputs are stable and defined for all possible combinations of sensor inputs (s[2:0]) and during transitions of the reset signal.
+
+Signal Dependencies:
+- The outputs fr0, fr1, fr2, and dfr depend on the current state of the sensor inputs (s[2:0]) and the previous state of the sensors, which must be tracked within the module.
+</ENHANCED_SPEC>

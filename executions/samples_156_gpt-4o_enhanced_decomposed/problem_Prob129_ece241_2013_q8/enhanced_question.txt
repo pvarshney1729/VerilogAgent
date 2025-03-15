@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - aresetn: 1-bit input (active low asynchronous reset)
+  - x: 1-bit input (input signal for sequence detection)
+
+- Output Ports:
+  - z: 1-bit output (asserted high when the sequence "101" is detected)
+
+Functional Description:
+The module implements a Mealy-type finite state machine (FSM) that recognizes the overlapping sequence "101" on the input signal x. The output signal z is asserted to logic high (1) when the sequence is detected.
+
+State Machine:
+- The FSM shall consist of exactly 3 states.
+- The states must be defined to track the progress of detecting the sequence "101".
+
+Reset Behavior:
+- The aresetn signal is an active low asynchronous reset. When aresetn is low (0), the FSM should reset to its initial state, and the output z should be deasserted (logic low, 0).
+- The initial state of the FSM and the output z must be clearly defined.
+
+Clocking:
+- All sequential logic, including state transitions and output generation, is triggered on the positive edge of the clk signal.
+
+Edge Cases:
+- The FSM should handle cases where the input x changes during the clock cycle, ensuring that the detection of the sequence "101" is accurate and does not produce false positives.
+
+Signal Dependencies:
+- The output z is dependent on the current state of the FSM and the current value of the input x.
+- Ensure that there are no race conditions in the state transitions and output generation.
+
+Please ensure that all flip-flops, registers, and sequential elements have explicitly defined initial values and that the behavior of the FSM is well-documented.
+</ENHANCED_SPEC>

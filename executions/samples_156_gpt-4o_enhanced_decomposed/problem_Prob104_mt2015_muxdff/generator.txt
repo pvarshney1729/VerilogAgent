@@ -1,0 +1,70 @@
+Generated Response:
+
+<REASONING>
+To create the `TopModule` as a submodule for the `full_module`, we need to implement a 2:1 multiplexer and a flip-flop. The `TopModule` will take inputs `clk`, `L`, `q_in`, and `r_in`, and produce an output `Q`. The multiplexer will select between `q_in` and `r_in` based on the control signal `L`. The selected value will then be stored in a flip-flop on the rising edge of `clk`.
+
+1. **Multiplexer Logic**: The multiplexer will choose between `q_in` and `r_in` based on the value of `L`. If `L` is high, `r_in` is selected; otherwise, `q_in` is selected.
+
+2. **Flip-Flop**: The selected value from the multiplexer will be stored in a flip-flop on the rising edge of `clk`.
+
+3. **Output**: The output `Q` will be the value stored in the flip-flop.
+
+The `TopModule` will be instantiated three times in the `full_module`, each handling one bit of the 3-bit wide signal `q`.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input clk,
+    input L,
+    input q_in,
+    input r_in,
+    output logic Q
+);
+
+    logic mux_out;
+
+    // 2:1 Multiplexer
+    always @(*) begin
+        if (L) begin
+            mux_out = r_in;
+        end else begin
+            mux_out = q_in;
+        end
+    end
+
+    // Flip-Flop
+    always @(posedge clk) begin
+        Q <= mux_out;
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input clk,
+    input L,
+    input q_in,
+    input r_in,
+    output logic Q
+);
+
+    logic mux_out;
+
+    // 2:1 Multiplexer
+    always @(*) begin
+        if (L) begin
+            mux_out = r_in;
+        end else begin
+            mux_out = q_in;
+        end
+    end
+
+    // Flip-Flop
+    always @(posedge clk) begin
+        Q <= mux_out;
+    end
+
+endmodule

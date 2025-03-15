@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - resetn: 1-bit input (active-low synchronous reset)
+  - byteena: 2-bit input (byte enable signals)
+    - byteena[1]: controls write access to the upper byte (d[15:8])
+    - byteena[0]: controls write access to the lower byte (d[7:0])
+  - d: 16-bit input (data to be written to the registers)
+
+- Output Ports:
+  - q: 16-bit output (data stored in the registers)
+
+Functional Description:
+The module contains 16 D flip-flops (DFFs) that store the 16-bit data input (d). The byteena signals determine which bytes of the DFFs are updated during each clock cycle. 
+
+Behavior:
+- The DFFs are triggered on the positive edge of the clk signal.
+- The resetn signal is a synchronous, active-low reset. When resetn is low, all DFFs are reset to 0. When resetn is high, the DFFs will operate normally based on the clk and byteena inputs.
+- The output q reflects the current state of the DFFs.
+
+Signal Dependencies:
+- The write operation to the DFFs occurs only when the corresponding byteena signals are high.
+- If byteena[1] is high, d[15:8] is written to the upper byte of the DFFs.
+- If byteena[0] is high, d[7:0] is written to the lower byte of the DFFs.
+
+Edge Cases:
+- If both byteena signals are low, no updates occur to the DFFs during that clock cycle.
+- The resetn signal takes precedence over the data input during the reset condition.
+
+Initial Conditions:
+- All DFFs should be initialized to 0 upon reset.
+</ENHANCED_SPEC>

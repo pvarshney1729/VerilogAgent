@@ -1,0 +1,169 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to design a state machine that controls the flow rate based on the water level indicated by the sensors. The sensors are represented by a 3-bit input `s`, where each bit corresponds to a sensor being asserted or not. The outputs `fr2`, `fr1`, `fr0`, and `dfr` control the flow rate valves.
+
+1. **State Machine Design**: 
+   - We need to track the previous water level to determine if the water level is rising or falling.
+   - The state machine will have states corresponding to the water levels: "Above s[2]", "Between s[2] and s[1]", "Between s[1] and s[0]", and "Below s[0]".
+
+2. **Output Logic**:
+   - Based on the current state and the previous state, determine the outputs `fr2`, `fr1`, `fr0`, and `dfr`.
+   - If the water level is rising, `dfr` should be asserted to open the Supplemental flow valve.
+
+3. **Synchronous Reset**:
+   - The reset should initialize the state machine to a state where all outputs are asserted, simulating a low water level condition.
+
+4. **Implementation Details**:
+   - Use an always block for sequential logic with a synchronous reset.
+   - Use another always block for combinational logic to determine the outputs based on the current state and previous state.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [2:0] s,
+    output logic fr2,
+    output logic fr1,
+    output logic fr0,
+    output logic dfr
+);
+
+    typedef enum logic [1:0] {
+        ABOVE_S2 = 2'b00,
+        BETWEEN_S2_S1 = 2'b01,
+        BETWEEN_S1_S0 = 2'b10,
+        BELOW_S0 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+    logic previous_level_higher;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= BELOW_S0;
+            previous_level_higher <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            previous_level_higher <= (s > {1'b0, current_state});
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (s)
+            3'b111: next_state = ABOVE_S2;
+            3'b011: next_state = BETWEEN_S2_S1;
+            3'b001: next_state = BETWEEN_S1_S0;
+            default: next_state = BELOW_S0;
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        fr2 = 1'b0;
+        fr1 = 1'b0;
+        fr0 = 1'b0;
+        dfr = 1'b0;
+        
+        case (current_state)
+            ABOVE_S2: begin
+                // No flow
+            end
+            BETWEEN_S2_S1: begin
+                fr0 = 1'b1;
+                dfr = previous_level_higher;
+            end
+            BETWEEN_S1_S0: begin
+                fr0 = 1'b1;
+                fr1 = 1'b1;
+                dfr = previous_level_higher;
+            end
+            BELOW_S0: begin
+                fr0 = 1'b1;
+                fr1 = 1'b1;
+                fr2 = 1'b1;
+                dfr = 1'b1;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [2:0] s,
+    output logic fr2,
+    output logic fr1,
+    output logic fr0,
+    output logic dfr
+);
+
+    typedef enum logic [1:0] {
+        ABOVE_S2 = 2'b00,
+        BETWEEN_S2_S1 = 2'b01,
+        BETWEEN_S1_S0 = 2'b10,
+        BELOW_S0 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+    logic previous_level_higher;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= BELOW_S0;
+            previous_level_higher <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            previous_level_higher <= (s > {1'b0, current_state});
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (s)
+            3'b111: next_state = ABOVE_S2;
+            3'b011: next_state = BETWEEN_S2_S1;
+            3'b001: next_state = BETWEEN_S1_S0;
+            default: next_state = BELOW_S0;
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        fr2 = 1'b0;
+        fr1 = 1'b0;
+        fr0 = 1'b0;
+        dfr = 1'b0;
+        
+        case (current_state)
+            ABOVE_S2: begin
+                // No flow
+            end
+            BETWEEN_S2_S1: begin
+                fr0 = 1'b1;
+                dfr = previous_level_higher;
+            end
+            BETWEEN_S1_S0: begin
+                fr0 = 1'b1;
+                fr1 = 1'b1;
+                dfr = previous_level_higher;
+            end
+            BELOW_S0: begin
+                fr0 = 1'b1;
+                fr1 = 1'b1;
+                fr2 = 1'b1;
+                dfr = 1'b1;
+            end
+        endcase
+    end
+
+endmodule

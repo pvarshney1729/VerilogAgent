@@ -1,0 +1,49 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - x: 4-bit vector (bit[3:0]), where:
+    - x[0] is the least significant bit (LSB)
+    - x[3] is the most significant bit (MSB)
+
+- Output Ports:
+  - f: 1-bit output
+
+Functionality:
+The module implements the logic function f as defined by the following Karnaugh map:
+
+             x[0] x[1]
+x[2] x[3]  00  01  11  10
+  00     |  1 |  0 |  0 |  1 |
+  01     |  0 |  0 |  0 |  0 |
+  11     |  1 |  1 |  1 |  0 |
+  10     |  1 |  1 |  0 |  1 |
+
+Truth Table:
+The truth table corresponding to the Karnaugh map is as follows:
+
+| x[3] | x[2] | x[1] | x[0] | f |
+|------|------|------|------|---|
+|  0   |  0   |  0   |  0   | 1 |
+|  0   |  0   |  0   |  1   | 0 |
+|  0   |  0   |  1   |  0   | 0 |
+|  0   |  0   |  1   |  1   | 1 |
+|  0   |  1   |  0   |  0   | 0 |
+|  0   |  1   |  0   |  1   | 0 |
+|  0   |  1   |  1   |  0   | 1 |
+|  0   |  1   |  1   |  1   | 1 |
+|  1   |  0   |  0   |  0   | 1 |
+|  1   |  0   |  0   |  1   | 0 |
+|  1   |  0   |  1   |  0   | 0 |
+|  1   |  0   |  1   |  1   | 0 |
+|  1   |  1   |  0   |  0   | 0 |
+|  1   |  1   |  0   |  1   | 1 |
+|  1   |  1   |  1   |  0   | 1 |
+|  1   |  1   |  1   |  1   | 0 |
+
+Implementation Notes:
+- The output f is a combinational logic output based on the values of the input vector x.
+- Ensure that all signal dependencies are clearly defined, and there are no race conditions in the logic.
+- The module does not require any synchronous or asynchronous resets, as it is purely combinational.
+</ENHANCED_SPEC>

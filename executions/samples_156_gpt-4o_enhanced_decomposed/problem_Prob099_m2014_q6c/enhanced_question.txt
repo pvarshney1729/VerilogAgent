@@ -1,0 +1,54 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - y: 6-bit vector (bit[5:0]), representing the current state in one-hot encoding.
+  - w: 1-bit input (bit[0]), used for state transitions.
+
+- Output Ports:
+  - Y1: 1-bit output (bit[0]), representing the output corresponding to state transitions.
+  - Y3: 1-bit output (bit[0]), representing the output corresponding to state transitions.
+
+State Machine Description:
+The state machine operates with the following one-hot encoded states:
+- State A: y[5:0] = 000001
+- State B: y[5:0] = 000010
+- State C: y[5:0] = 000100
+- State D: y[5:0] = 001000
+- State E: y[5:0] = 010000
+- State F: y[5:0] = 100000
+
+State Transition Table:
+- From State A (y[0] = 1):
+  - If w = 0, transition to State B (y[1] = 1).
+  - If w = 1, remain in State A (y[0] = 1).
+  
+- From State B (y[1] = 1):
+  - If w = 0, transition to State C (y[2] = 1).
+  - If w = 1, transition to State D (y[3] = 1).
+  
+- From State C (y[2] = 1):
+  - If w = 0, transition to State E (y[4] = 1).
+  - If w = 1, transition to State D (y[3] = 1).
+  
+- From State D (y[3] = 1):
+  - If w = 0, transition to State F (y[5] = 1).
+  - If w = 1, transition to State A (y[0] = 1).
+  
+- From State E (y[4] = 1):
+  - If w = 0, remain in State E (y[4] = 1).
+  - If w = 1, transition to State D (y[3] = 1).
+  
+- From State F (y[5] = 1):
+  - If w = 0, transition to State C (y[2] = 1).
+  - If w = 1, transition to State D (y[3] = 1).
+
+Reset Condition:
+- The state machine resets asynchronously to State A (y[5:0] = 000001) upon reset signal.
+
+Next-State Logic:
+- The next-state signals Y2 and Y4 correspond to the outputs derived from the current state and input w. The logic equations for Y2 and Y4 should be derived by inspection based on the state transition table provided, assuming the one-hot encoding.
+
+Note: Ensure that all flip-flops and registers are initialized to their respective states upon reset.
+</ENHANCED_SPEC>

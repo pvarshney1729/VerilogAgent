@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - reset: 1-bit input (active high synchronous reset)
+  - ena: 1-bit input (enable signal for clock increment)
+
+- Output Ports:
+  - pm: 1-bit output (asserted high if the time is PM, low if AM)
+  - hh: 8-bit output (hours in BCD format, range 01-12)
+  - mm: 8-bit output (minutes in BCD format, range 00-59)
+  - ss: 8-bit output (seconds in BCD format, range 00-59)
+
+Functional Description:
+The module implements a 12-hour clock with an AM/PM indicator. The clock is incremented based on the ena signal, which is pulsed once per second. The clk input operates at a frequency significantly higher than once per second.
+
+Reset Behavior:
+- The reset signal is active high and synchronous. When asserted, it resets the clock to "12:00 AM" (hh = 8'b00001100, mm = 8'b00000000, ss = 8'b00000000).
+- The reset signal takes precedence over the enable signal (ena) and can be asserted regardless of the state of ena.
+
+Clocking:
+- All sequential logic within the module is triggered on the positive edge of the clk signal.
+
+Output Specifications:
+- The pm output indicates whether the current time is in the PM period (1) or AM period (0).
+- The hh, mm, and ss outputs represent the current time in Binary-Coded Decimal (BCD) format, with the following ranges:
+  - hh: 01 to 12 (BCD representation)
+  - mm: 00 to 59 (BCD representation)
+  - ss: 00 to 59 (BCD representation)
+
+Edge Cases:
+- Ensure that the hh output rolls over from 12 to 1 after reaching 12 PM or AM.
+- Ensure that the mm and ss outputs roll over from 59 to 00 after reaching 59.
+
+Signal Dependencies:
+- The pm output is derived from the hh output, indicating whether the hour is in the PM range (hh > 6).
+- The counters for hh, mm, and ss must be synchronized to the ena signal, which dictates when the clock increments.
+
+Initial Values:
+- All registers should be initialized to their respective reset values upon reset assertion.
+</ENHANCED_SPEC>

@@ -1,0 +1,58 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` with the specified interface, we need to create a module that includes 8 D flip-flops. Each flip-flop will store one bit of the 8-bit input `d` and output it to the corresponding bit of the 8-bit output `q`. The flip-flops should be triggered by the positive edge of the clock signal `clk`.
+
+1. **Module Declaration**: Define the module `TopModule` with inputs `clk` and `d` (8 bits), and output `q` (8 bits).
+
+2. **Port Declaration**: Use `logic` for all ports as per the coding conventions.
+
+3. **D Flip-Flops**: Implement 8 D flip-flops using an `always_ff` block. This block will be sensitive to the positive edge of `clk`.
+
+4. **Initialization**: Initialize the flip-flops to zero for simulation purposes. This is typically done using an initial block in simulation environments.
+
+5. **Sequential Logic**: Use an `always_ff` block to describe the behavior of the flip-flops. On each positive edge of `clk`, the input `d` is assigned to the output `q`.
+
+6. **Synchronous Reset**: Although not explicitly required in the original question, if a reset was needed, it would be implemented within the `always_ff` block, but since it's not specified, we will not include it.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    // Sequential logic for 8 D flip-flops
+    always_ff @(posedge clk) begin
+        q <= d;
+    end
+
+    // Initial block for simulation purposes
+    initial begin
+        q = 8'b0;
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    // Sequential logic for 8 D flip-flops
+    always_ff @(posedge clk) begin
+        q <= d;
+    end
+
+    // Initial block for simulation purposes
+    initial begin
+        q = 8'b0;
+    end
+
+endmodule

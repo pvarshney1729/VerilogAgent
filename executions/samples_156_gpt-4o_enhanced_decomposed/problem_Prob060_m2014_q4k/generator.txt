@@ -1,0 +1,76 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as a 4-bit shift register with synchronous active-low reset, we need to follow these steps:
+
+1. **Interface Definition**: Define the module with the specified input and output ports. All ports are 1-bit wide.
+
+2. **Internal Registers**: Declare internal registers to hold the state of the shift register. Since it's a 4-bit shift register, we need four 1-bit registers.
+
+3. **Sequential Logic**: Use an `always` block triggered on the positive edge of the clock to implement the shift register behavior. The reset is synchronous, so it will be checked inside the `always` block.
+
+4. **Reset Logic**: Implement the synchronous reset logic. When `resetn` is low, all flip-flops should be set to zero.
+
+5. **Shift Operation**: On each clock cycle, if not in reset, shift the bits to the right and load the new input bit into the leftmost position.
+
+6. **Output Assignment**: The output `out` should be connected to the last flip-flop in the shift register chain.
+
+7. **Coding Conventions**: Use `logic` for all signals, and ensure the reset logic is synchronous by not including `resetn` in the sensitivity list.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic in,
+    output logic out
+);
+
+    // Internal registers for the shift register
+    logic [3:0] shift_reg;
+
+    // Sequential logic for the shift register with synchronous reset
+    always @(posedge clk) begin
+        if (!resetn) begin
+            // Synchronous active-low reset
+            shift_reg <= 4'b0000;
+        end else begin
+            // Shift operation
+            shift_reg <= {shift_reg[2:0], in};
+        end
+    end
+
+    // Output assignment
+    assign out = shift_reg[3];
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic in,
+    output logic out
+);
+
+    // Internal registers for the shift register
+    logic [3:0] shift_reg;
+
+    // Sequential logic for the shift register with synchronous reset
+    always @(posedge clk) begin
+        if (!resetn) begin
+            // Synchronous active-low reset
+            shift_reg <= 4'b0000;
+        end else begin
+            // Shift operation
+            shift_reg <= {shift_reg[2:0], in};
+        end
+    end
+
+    // Output assignment
+    assign out = shift_reg[3];
+
+endmodule

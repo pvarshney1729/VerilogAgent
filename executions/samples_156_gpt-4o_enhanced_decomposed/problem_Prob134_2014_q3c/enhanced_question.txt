@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - x: 1-bit input (control signal)
+  - y: 3-bit input (current state, indexed as y[2] (MSB) to y[0] (LSB))
+
+- Output Ports:
+  - Y0: 1-bit output (the least significant bit of the next state signal Y)
+  - z: 1-bit output (output signal based on the state machine logic)
+
+Functional Description:
+The module implements a finite state machine (FSM) with the following characteristics:
+
+1. State Transition Logic:
+   - The FSM transitions between states based on the current state represented by the input y[2:0] and the control signal x.
+   - The next state Y[2:0] is determined by the following state transition table:
+
+   | Present State (y[2:0]) | Next State (Y[2:0] when x=0) | Next State (Y[2:0] when x=1) | Output (z) |
+   |-------------------------|-------------------------------|-------------------------------|-------------|
+   | 000                     | 000                           | 001                           | 0           |
+   | 001                     | 001                           | 100                           | 0           |
+   | 010                     | 010                           | 001                           | 0           |
+   | 011                     | 001                           | 010                           | 1           |
+   | 100                     | 011                           | 100                           | 1           |
+
+2. Output Logic:
+   - The output Y0 is defined as Y[0], which is the least significant bit of the next state signal Y.
+
+3. Clocking and Reset:
+   - The FSM operates on the rising edge of the clk signal.
+   - The module does not specify a reset condition; therefore, the initial state of the FSM should be defined as 000 (y = 3'b000) upon the first clock cycle.
+
+4. Sequential Logic:
+   - The state transitions and output generation are to be implemented using flip-flops for the state storage and combinational logic for the next state and output logic.
+
+5. Edge Cases:
+   - The module should handle all defined states as per the state transition table without undefined behavior for any input combinations.
+
+6. Signal Dependencies:
+   - Ensure that the next state logic is evaluated based on the current state and input x without race conditions.
+
+7. Bit Indexing:
+   - The bits of the input y and output Y are indexed from 2 (MSB) to 0 (LSB).
+
+</ENHANCED_SPEC>

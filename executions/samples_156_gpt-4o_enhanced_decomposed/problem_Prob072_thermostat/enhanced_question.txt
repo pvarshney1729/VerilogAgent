@@ -1,0 +1,68 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - mode: 1-bit input (mode[0]) 
+    - Description: Operating mode of the thermostat. 
+      - 1: Heating mode
+      - 0: Cooling mode
+  - too_cold: 1-bit input (too_cold[0]) 
+    - Description: Indicates if the temperature is too cold. 
+      - 1: Temperature is too cold
+      - 0: Temperature is acceptable
+  - too_hot: 1-bit input (too_hot[0]) 
+    - Description: Indicates if the temperature is too hot. 
+      - 1: Temperature is too hot
+      - 0: Temperature is acceptable
+  - fan_on: 1-bit input (fan_on[0]) 
+    - Description: User request to turn on the fan. 
+      - 1: Fan should be on
+      - 0: Fan should be off
+
+- Output Ports:
+  - heater: 1-bit output (heater[0]) 
+    - Description: Controls the heater. 
+      - 1: Heater is on
+      - 0: Heater is off
+  - aircon: 1-bit output (aircon[0]) 
+    - Description: Controls the air conditioner. 
+      - 1: Air conditioner is on
+      - 0: Air conditioner is off
+  - fan: 1-bit output (fan[0]) 
+    - Description: Controls the blower fan. 
+      - 1: Fan is on
+      - 0: Fan is off
+
+Functional Description:
+The TopModule implements a heating and cooling thermostat controller that manages the operation of a heater, air conditioner, and blower fan based on the following conditions:
+
+1. **Operating Modes**:
+   - **Heating Mode (mode = 1)**:
+     - If too_cold = 1, then heater = 1 (turn on heater).
+     - If too_cold = 0, then heater = 0 (turn off heater).
+     - aircon = 0 (do not turn on air conditioner).
+     - fan = 1 if heater = 1 or fan_on = 1; otherwise, fan = 0.
+
+   - **Cooling Mode (mode = 0)**:
+     - If too_hot = 1, then aircon = 1 (turn on air conditioner).
+     - If too_hot = 0, then aircon = 0 (turn off air conditioner).
+     - heater = 0 (do not turn on heater).
+     - fan = 1 if aircon = 1 or fan_on = 1; otherwise, fan = 0.
+
+2. **Fan Control**:
+   - The fan will be turned on if either the heater or air conditioner is active, or if the user has requested the fan to be on (fan_on = 1).
+
+3. **Initial States**:
+   - All output signals (heater, aircon, fan) should be initialized to 0 upon reset.
+
+4. **Reset Behavior**:
+   - The module should include a synchronous reset mechanism that sets all output signals to 0 when activated.
+
+5. **Edge Cases**:
+   - Ensure that the outputs do not change unexpectedly when inputs transition between states, particularly when both too_cold and too_hot are asserted simultaneously.
+
+6. **Signal Dependencies**:
+   - The outputs depend on the current state of the inputs, and the precedence of operations should be clearly defined to avoid race conditions.
+
+</ENHANCED_SPEC>

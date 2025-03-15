@@ -1,0 +1,52 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a 4-bit decade counter that counts from 0 to 9. The counter should increment only when the `slowena` signal is high, and it should reset to 0 when the `reset` signal is high. The reset is synchronous, meaning it should be checked within the clock edge-triggered always block. The counter should be implemented using a 4-bit register to hold the current count value. We will use an always block triggered on the positive edge of the clock to handle the synchronous reset and the counting logic. The `slowena` signal will be used to control whether the counter increments or holds its value.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic slowena,
+    output logic [3:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            q <= 4'b0000; // Reset the counter to 0
+        end else if (slowena) begin
+            if (q == 4'b1001) begin
+                q <= 4'b0000; // Wrap around to 0 after reaching 9
+            end else begin
+                q <= q + 1; // Increment the counter
+            end
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic slowena,
+    output logic [3:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            q <= 4'b0000; // Reset the counter to 0
+        end else if (slowena) begin
+            if (q == 4'b1001) begin
+                q <= 4'b0000; // Wrap around to 0 after reaching 9
+            end else begin
+                q <= q + 1; // Increment the counter
+            end
+        end
+    end
+
+endmodule

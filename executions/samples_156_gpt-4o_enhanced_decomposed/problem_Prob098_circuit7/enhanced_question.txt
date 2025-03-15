@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge triggered)
+  - a: 1-bit input (data signal)
+
+- Output Ports:
+  - q: 1-bit output (data signal)
+
+Description:
+This module implements a sequential circuit that operates based on the input signals and the clock. The behavior of the circuit is defined by the following timing diagram, which indicates the relationship between the clock (clk), input (a), and output (q) over time.
+
+Timing Diagram:
+- Time (ns) | clk | a | q
+- 0         | 0   | x | x
+- 5         | 1   | 0 | x
+- 10        | 0   | 0 | x
+- 15        | 1   | 0 | 1
+- 20        | 0   | 0 | 1
+- 25        | 1   | 0 | 1
+- 30        | 0   | 0 | 1
+- 35        | 1   | 1 | 1
+- 40        | 0   | 1 | 1
+- 45        | 1   | 1 | 0
+- 50        | 0   | 1 | 0
+- 55        | 1   | 1 | 0
+- 60        | 0   | 1 | 0
+- 65        | 1   | 1 | 0
+- 70        | 0   | 1 | 0
+- 75        | 1   | 1 | 0
+- 80        | 0   | 1 | 0
+- 85        | 1   | 1 | 0
+- 90        | 0   | 1 | 0
+
+Behavior:
+- The output q is updated on the positive edge of the clock (clk).
+- The initial state of q is undefined (x) until the first clock edge.
+- The output q follows the input a based on the defined timing behavior, with specific transitions occurring at the clock edges.
+
+Reset Behavior:
+- There is no explicit reset signal defined in this specification. The initial state of q is considered to be undefined until the first clock edge.
+
+Note:
+- Ensure that the implementation adheres to the timing diagram provided and accurately reflects the behavior of the circuit as observed in the simulation waveforms.
+</ENHANCED_SPEC>

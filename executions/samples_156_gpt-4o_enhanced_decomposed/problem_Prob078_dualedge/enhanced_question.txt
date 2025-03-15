@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input signal representing the clock. The clock signal is assumed to be active on both the rising and falling edges.
+  - d: 1-bit input signal representing the data input.
+
+- Output Ports:
+  - q: 1-bit output signal representing the output of the flip-flop.
+
+Functional Description:
+The module implements a dual-edge triggered flip-flop behavior. Since dual-edge triggered flip-flops are not natively supported in FPGAs, the design must simulate this functionality using combinational and sequential logic.
+
+Behavioral Specifications:
+- The output 'q' should capture the value of the input 'd' on both the rising edge (posedge) and falling edge (negedge) of the clock signal 'clk'.
+- The output 'q' should maintain its value until the next triggering edge of the clock.
+
+Reset Conditions:
+- There is no explicit reset signal defined in this specification. The initial state of the output 'q' is undefined until the first clock edge occurs.
+
+Edge Case Handling:
+- The module should ensure that the output 'q' does not change during the clock period between edges, maintaining the last captured value until the next edge occurs.
+
+Signal Dependencies:
+- The output 'q' is dependent on the input 'd' and the clock signal 'clk'. The implementation must ensure that there are no race conditions between the clock edges and the data input.
+
+Implementation Note:
+- The design must avoid using an always block with both posedge and negedge in the sensitivity list, as this is not synthesizable in FPGA environments.
+</ENHANCED_SPEC>

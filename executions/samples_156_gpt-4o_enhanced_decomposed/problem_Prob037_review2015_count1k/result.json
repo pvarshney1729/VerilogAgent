@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    output logic [9:0] q\n);\n\n    // Internal 10-bit counter\n    logic [9:0] counter;\n\n    // Sequential logic for counter with synchronous reset\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            counter <= 10'd0; // Reset counter to 0\n        end else if (counter == 10'd999) begin\n            counter <= 10'd0; // Wrap around to 0 after reaching 999\n        end else begin\n            counter <= counter + 10'd1; // Increment counter\n        end\n    end\n\n    // Assign counter value to output\n    assign q = counter;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,67 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a 4-bit shift register with specific control signals. The module will have a clock (`clk`), an asynchronous reset (`areset`), a load signal (`load`), an enable signal (`ena`), and a 4-bit data input (`data`). The output is a 4-bit register (`q`).
+
+1. **Asynchronous Reset**: The `areset` signal will reset the shift register to zero immediately when it is asserted, regardless of the clock.
+
+2. **Load and Enable Logic**: 
+   - If `load` is asserted, the shift register should load the value from `data`.
+   - If `load` is not asserted but `ena` is, the register should perform a right shift. The most significant bit (`q[3]`) should be set to zero, and the least significant bit (`q[0]`) should be discarded.
+   - If both `load` and `ena` are asserted, `load` takes priority, and the register should load the value from `data`.
+
+3. **Sequential Logic**: The operations should be triggered on the positive edge of the clock. The reset is asynchronous, so it will be handled separately from the clock-triggered logic.
+
+4. **Implementation**: We will use an always block to handle the sequential logic, checking the `areset` condition first, followed by the `load` and `ena` conditions.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic load,
+    input logic ena,
+    input logic [3:0] data,
+    output logic [3:0] q
+);
+
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 4'b0000; // Asynchronous reset to zero
+        end else begin
+            if (load) begin
+                q <= data; // Load data into the register
+            end else if (ena) begin
+                q <= {1'b0, q[3:1]}; // Shift right with zero fill
+            end
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic load,
+    input logic ena,
+    input logic [3:0] data,
+    output logic [3:0] q
+);
+
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 4'b0000; // Asynchronous reset to zero
+        end else begin
+            if (load) begin
+                q <= data; // Load data into the register
+            end else if (ena) begin
+                q <= {1'b0, q[3:1]}; // Shift right with zero fill
+            end
+        end
+    end
+
+endmodule

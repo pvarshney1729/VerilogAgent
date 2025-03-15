@@ -1,0 +1,28 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - in: bit[7:0] (8 bits) - Represents an 8-bit signed integer.
+  
+- Output Ports:
+  - out: bit[31:0] (32 bits) - Represents a 32-bit signed integer resulting from the sign extension of the input.
+
+Functionality:
+The module shall perform sign extension on the 8-bit input 'in' to produce a 32-bit output 'out'. The sign extension process involves the following steps:
+1. Identify the sign bit of the input, which is bit[7] (the most significant bit).
+2. Replicate the sign bit (bit[7]) 24 times to the left of the 8-bit input to form a 32-bit output.
+3. The resulting output 'out' shall be constructed as follows:
+   - out = { {24{in[7]}}, in } 
+   Where {24{in[7]}} denotes the concatenation of 24 copies of the sign bit in[7].
+
+Behavior:
+- The output 'out' shall reflect the sign-extended value of 'in' immediately upon any change in the input.
+- The module does not include any clocked or sequential elements; it operates purely as combinational logic.
+
+Edge Cases:
+- The module shall handle all possible values of the 8-bit input 'in', including the maximum (8'b11111111) and minimum (8'b10000000) values, ensuring correct sign extension for both positive and negative integers.
+
+Reset Conditions:
+- No reset conditions are specified for this module as it operates purely combinationally.
+</ENHANCED_SPEC>

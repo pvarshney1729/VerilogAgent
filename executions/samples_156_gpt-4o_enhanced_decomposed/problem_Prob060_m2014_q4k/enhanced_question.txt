@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - resetn: 1-bit input (active-low synchronous reset)
+  - in: 1-bit input (data input for the shift register)
+
+- Output Ports:
+  - out: 1-bit output (data output from the last D flip-flop in the shift register)
+
+Functionality:
+The module implements a 4-stage shift register using four D flip-flops (DFFs). The DFFs are arranged in a series configuration where the output of each DFF is connected to the input of the next DFF. The behavior of the shift register is as follows:
+
+1. On the positive edge of the clk signal:
+   - If resetn is low (active), all DFFs are reset to 0.
+   - If resetn is high (inactive), the data input (in) is shifted into the first DFF, and the outputs of the DFFs are shifted accordingly. The output (out) reflects the value of the last DFF.
+
+Reset Behavior:
+- The reset is synchronous and active-low. When resetn is low, all DFFs are set to 0.
+
+Bit Indexing:
+- The output out corresponds to the output of the fourth DFF (DFF3), which is the most significant bit (MSB) of the shift register.
+
+Initial Values:
+- All DFFs should be initialized to 0 upon reset.
+
+Edge Cases:
+- Ensure that the module handles the transition of resetn correctly, maintaining stable operation during clock cycles when resetn transitions from low to high.
+</ENHANCED_SPEC>

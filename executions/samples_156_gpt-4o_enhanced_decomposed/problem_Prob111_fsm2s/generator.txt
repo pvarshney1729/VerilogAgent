@@ -1,0 +1,133 @@
+Generated Response:
+
+<REASONING>
+To implement the Moore state machine as described, we need to define two states: OFF and ON. The state transitions are based on the inputs `j` and `k`, and the output is determined by the current state. The reset is a synchronous active-high reset that sets the state to OFF.
+
+1. **State Encoding**: We can use a single bit to represent the two states:
+   - OFF: 0
+   - ON: 1
+
+2. **State Transition Logic**:
+   - From OFF (state = 0):
+     - If `j` is 0, stay in OFF.
+     - If `j` is 1, transition to ON.
+   - From ON (state = 1):
+     - If `k` is 0, stay in ON.
+     - If `k` is 1, transition to OFF.
+
+3. **Output Logic**:
+   - The output `out` is 0 when in state OFF and 1 when in state ON.
+
+4. **Synchronous Reset**:
+   - When `reset` is high, the state is set to OFF on the next clock edge.
+
+5. **Implementation**:
+   - Use an always block triggered on the positive edge of the clock to handle state transitions and synchronous reset.
+   - Use a separate always block or continuous assignment for the output logic based on the current state.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic {
+        OFF = 1'b0,
+        ON  = 1'b1
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= OFF;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            OFF: begin
+                if (j) begin
+                    next_state = ON;
+                end else begin
+                    next_state = OFF;
+                end
+            end
+            ON: begin
+                if (k) begin
+                    next_state = OFF;
+                end else begin
+                    next_state = ON;
+                end
+            end
+            default: next_state = OFF; // Default case for safety
+        endcase
+    end
+
+    // Output logic
+    assign out = (current_state == ON);
+
+endmodule
+[DONE]
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic {
+        OFF = 1'b0,
+        ON  = 1'b1
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= OFF;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            OFF: begin
+                if (j) begin
+                    next_state = ON;
+                end else begin
+                    next_state = OFF;
+                end
+            end
+            ON: begin
+                if (k) begin
+                    next_state = OFF;
+                end else begin
+                    next_state = ON;
+                end
+            end
+            default: next_state = OFF; // Default case for safety
+        endcase
+    end
+
+    // Output logic
+    assign out = (current_state == ON);
+
+endmodule

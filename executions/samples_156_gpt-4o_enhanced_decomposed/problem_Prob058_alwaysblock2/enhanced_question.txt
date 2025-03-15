@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - a: 1-bit input (first operand for XOR operation)
+  - b: 1-bit input (second operand for XOR operation)
+
+- Output Ports:
+  - out_assign: 1-bit output (result of XOR operation using assign statement)
+  - out_always_comb: 1-bit output (result of XOR operation using combinational always block)
+  - out_always_ff: 1-bit output (result of XOR operation using clocked always block with flip-flop)
+
+Functional Description:
+The module implements the XOR operation between inputs 'a' and 'b' in three different ways:
+1. **out_assign**: The output is assigned directly using a continuous assignment statement (assign).
+2. **out_always_comb**: The output is generated within a combinational always block, ensuring that it reflects changes in inputs 'a' and 'b' immediately.
+3. **out_always_ff**: The output is generated within a clocked always block, which includes a flip-flop. This output will be updated on the positive edge of the clock signal 'clk', introducing a delay relative to the other two outputs.
+
+Reset Behavior:
+- There is no reset signal specified for this module. The outputs will be driven based on the defined logic without any initial reset state.
+
+Signal Dependencies:
+- The outputs 'out_assign' and 'out_always_comb' are combinational and depend directly on the current values of inputs 'a' and 'b'.
+- The output 'out_always_ff' depends on the clock signal 'clk' and will reflect the value of the XOR operation after a clock cycle.
+
+Edge Cases:
+- The module should handle all possible input combinations for 'a' and 'b' (0 and 1) and produce the corresponding XOR results.
+</ENHANCED_SPEC>

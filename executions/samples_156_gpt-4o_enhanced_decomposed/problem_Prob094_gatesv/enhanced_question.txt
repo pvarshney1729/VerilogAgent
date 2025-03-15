@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - in: bit[3:0] (4 bits, unsigned) 
+    - Description: A 4-bit input vector representing the input signals.
+
+- Output Ports:
+  - out_both: bit[2:0] (3 bits, unsigned)
+    - Description: Each bit indicates whether both the corresponding input bit and its left neighbor are '1'.
+      - out_both[2] = (in[2] AND in[3]) 
+      - out_both[3] is not defined as in[3] has no left neighbor.
+
+  - out_any: bit[2:0] (3 bits, unsigned)
+    - Description: Each bit indicates whether any of the corresponding input bit and its right neighbor are '1'.
+      - out_any[2] = (in[2] OR in[1])
+      - out_any[0] is not defined as in[0] has no right neighbor.
+
+  - out_different: bit[3:0] (4 bits, unsigned)
+    - Description: Each bit indicates whether the corresponding input bit is different from its left neighbor, with wrapping behavior.
+      - out_different[0] = (in[0] XOR in[3])
+      - out_different[1] = (in[1] XOR in[0])
+      - out_different[2] = (in[2] XOR in[1])
+      - out_different[3] = (in[3] XOR in[2])
+
+Behavioral Notes:
+- The output vectors out_both and out_any are 3 bits long because the last bit of each does not have a valid neighbor to evaluate.
+- The out_different output is 4 bits long to account for the wrapping behavior of the input vector.
+- All outputs are combinational and should be updated based on the input vector in a single clock cycle.
+</ENHANCED_SPEC>

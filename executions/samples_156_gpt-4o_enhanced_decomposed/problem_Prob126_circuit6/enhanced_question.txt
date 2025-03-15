@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - a: bit[2:0] (3 bits, unsigned) 
+    - Description: Represents a 3-bit input value ranging from 0 to 7.
+  
+- Output Ports:
+  - q: bit[15:0] (16 bits, unsigned)
+    - Description: Represents a 16-bit output value.
+
+Functional Description:
+- The module implements a combinational logic circuit based on the input signal 'a'. The output 'q' is determined by the values of 'a' as specified in the provided simulation waveforms.
+
+Timing and Behavior:
+- The module should exhibit the following output behavior based on the input 'a' at specified time intervals:
+  
+  | Time (ns) | Input a | Output q  |
+  |-----------|---------|-----------|
+  | 0         | x       | x         |
+  | 5         | x       | x         |
+  | 10        | x       | x         |
+  | 15        | 0       | 1232      |
+  | 20        | 1       | aee0      |
+  | 25        | 2       | 27d4      |
+  | 30        | 3       | 5a0e      |
+  | 35        | 4       | 2066      |
+  | 40        | 5       | 64ce      |
+  | 45        | 6       | c526      |
+  | 50        | 7       | 2f19      |
+  | 55        | 0       | 1232      |
+  | 60        | 1       | aee0      |
+  | 65        | 2       | 27d4      |
+  | 70        | 4       | 2066      |
+  | 75        | 1       | aee0      |
+  | 80        | 1       | aee0      |
+  | 85        | 3       | 5a0e      |
+  | 90        | 5       | 64ce      |
+
+- Note: The output 'q' is represented in hexadecimal format. The behavior of the module should be verified against the provided timing diagram to ensure correct implementation.
+
+Edge Cases:
+- The output 'q' should remain undefined (x) when the input 'a' is not in the range of 0 to 7 or during the initial time intervals (0ns, 5ns, 10ns).
+
+Implementation Considerations:
+- Ensure that the combinational logic correctly maps the input 'a' to the corresponding output 'q' as per the specified timing behavior.
+</ENHANCED_SPEC>

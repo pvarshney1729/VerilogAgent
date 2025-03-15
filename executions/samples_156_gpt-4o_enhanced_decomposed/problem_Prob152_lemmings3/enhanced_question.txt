@@ -1,0 +1,56 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - areset: 1-bit input (asynchronous active-high reset)
+  - bump_left: 1-bit input (indicates bump from the left)
+  - bump_right: 1-bit input (indicates bump from the right)
+  - ground: 1-bit input (indicates presence of ground, 1 = present, 0 = absent)
+  - dig: 1-bit input (indicates request to dig, 1 = dig, 0 = do not dig)
+
+- Output Ports:
+  - walk_left: 1-bit output (indicates walking left, 1 = walking left)
+  - walk_right: 1-bit output (indicates walking right, 1 = walking right)
+  - aaah: 1-bit output (indicates falling, 1 = falling)
+  - digging: 1-bit output (indicates digging, 1 = digging)
+
+Functional Description:
+The module implements a Moore finite state machine (FSM) to model the behavior of Lemmings in a 2D environment. The Lemmings can be in one of two primary states: 
+1. Walking Left (walk_left = 1)
+2. Walking Right (walk_right = 1)
+
+State Transitions:
+- The Lemming will switch its walking direction based on the following conditions:
+  - If bump_left = 1, the Lemming will transition to walking right (walk_right = 1).
+  - If bump_right = 1, the Lemming will transition to walking left (walk_left = 1).
+  - If both bump_left and bump_right are 1 simultaneously, the Lemming will still switch directions.
+
+Falling Behavior:
+- When ground = 0, the Lemming will fall, and the output aaah will be set to 1.
+- When ground = 1, the Lemming will resume walking in the same direction it was walking before falling.
+- Bumping while falling does not affect the walking direction.
+- If bumping occurs in the same clock cycle as ground disappears (ground transitions from 1 to 0), or if ground reappears while the Lemming is still falling, the walking direction remains unchanged.
+
+Digging Behavior:
+- The Lemming can dig when it is on the ground (ground = 1) and not falling (aaah = 0).
+- Digging starts when dig = 1 and continues until ground = 0.
+- Once ground = 0, the Lemming will fall (aaah = 1) and will resume walking in the original direction once ground = 1 again.
+- Bumping while digging has no effect on the walking direction.
+- Requests to dig while falling or when there is no ground are ignored.
+
+Precedence of Actions:
+- The precedence of actions is as follows:
+  1. Falling (ground = 0)
+  2. Digging (dig = 1)
+  3. Switching directions (bump_left or bump_right)
+
+Reset Behavior:
+- The areset signal is a positive edge-triggered asynchronous reset that initializes the Lemming state to walking left (walk_left = 1, walk_right = 0).
+- All sequential logic is triggered on the positive edge of the clk signal.
+
+Signal Definitions:
+- All input and output signals are defined as 1-bit wide.
+- The least significant bit (LSB) is indexed as bit[0].
+</ENHANCED_SPEC>

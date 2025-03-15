@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a;  // 1-bit input
+  - input wire b;  // 1-bit input
+  - input wire c;  // 1-bit input
+  - input wire d;  // 1-bit input
+- Output Ports:
+  - output wire out;  // 1-bit output
+
+Bit Indexing:
+- The input bits are indexed as follows:
+  - a: bit[0] (least significant bit)
+  - b: bit[1]
+  - c: bit[2]
+  - d: bit[3]
+
+Functional Specification:
+The module implements a combinational logic function based on the provided Karnaugh map. The output 'out' is determined by the following truth table derived from the Karnaugh map:
+
+             ab
+  cd   00  01  11  10
+  00 | 0 | 1 | 0 | 1 |
+  01 | 1 | 0 | 1 | 0 |
+  11 | 0 | 1 | 0 | 1 |
+  10 | 1 | 0 | 1 | 0 |
+
+Output Logic:
+- The output 'out' is high (1) for the following input combinations:
+  - (c, d, a, b) = (0, 0, 0, 1)  // cd = 00, ab = 01
+  - (c, d, a, b) = (0, 1, 1, 0)  // cd = 01, ab = 10
+  - (c, d, a, b) = (1, 0, 0, 1)  // cd = 10, ab = 01
+  - (c, d, a, b) = (1, 1, 1, 0)  // cd = 11, ab = 10
+
+Behavior at Edge Cases:
+- The output 'out' must be defined for all possible combinations of inputs (a, b, c, d) which are 0 or 1.
+
+Implementation Notes:
+- Ensure that the logic is implemented as combinational logic without any clock cycles or sequential elements.
+- There are no resets or initial values required for this module as it is purely combinational.
+</ENHANCED_SPEC>

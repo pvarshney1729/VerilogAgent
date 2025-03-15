@@ -1,0 +1,37 @@
+Generated Response:
+
+<REASONING>
+To implement a half adder in Verilog, we need to create a module named `TopModule` with the specified interface. A half adder takes two single-bit inputs and produces a sum and a carry-out. The sum is the result of the XOR operation on the inputs, and the carry-out is the result of the AND operation on the inputs. 
+
+Given the guidelines and coding conventions, we will:
+1. Declare all ports as `logic` to adhere to the coding conventions.
+2. Use continuous assignment statements (`assign`) for combinational logic, as there is no need for an always block in this simple logic.
+3. Ensure that the module strictly follows the provided interface and signal names.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic a,
+    input logic b,
+    output logic sum,
+    output logic cout
+);
+    // Implementing the half adder logic
+    assign sum = a ^ b;  // XOR operation for sum
+    assign cout = a & b; // AND operation for carry-out
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic a,
+    input logic b,
+    output logic sum,
+    output logic cout
+);
+    // Implementing the half adder logic
+    assign sum = a ^ b;  // XOR operation for sum
+    assign cout = a & b; // AND operation for carry-out
+endmodule

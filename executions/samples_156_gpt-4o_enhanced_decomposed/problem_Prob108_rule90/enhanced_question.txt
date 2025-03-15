@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge triggered)
+  - load: 1-bit input (load signal to initialize the state)
+  - data: 512-bit input (initial state of the cellular automaton, data[511:0])
+
+- Output Ports:
+  - q: 512-bit output (current state of the cellular automaton, q[511:0])
+
+Functional Description:
+The module implements Rule 90, a one-dimensional cellular automaton with the following characteristics:
+
+1. The cellular automaton consists of an array of 512 cells, indexed from q[0] to q[511].
+2. Each cell can be in one of two states: on (1) or off (0).
+3. The next state of each cell (q[n] for n = 0 to 511) is determined by the XOR operation of its two immediate neighbors:
+   - Left (q[n-1]) | Center (q[n]) | Right (q[n+1]) | Center's next state (q[n] next)
+   - 1                | 1                | 1                | 0
+   - 1                | 1                | 0                | 1
+   - 1                | 0                | 1                | 0
+   - 1                | 0                | 0                | 1
+   - 0                | 1                | 1                | 1
+   - 0                | 1                | 0                | 0
+   - 0                | 0                | 1                | 1
+   - 0                | 0                | 0                | 0
+
+4. The boundaries of the cellular automaton are defined as:
+   - q[-1] = 0 (off)
+   - q[512] = 0 (off)
+
+Operational Behavior:
+- On the positive edge of the clk signal:
+  - If load is asserted (load = 1), the state of the cellular automaton is initialized with the value from data[511:0].
+  - If load is not asserted (load = 0), the next state of each cell is computed based on the current states of its neighbors according to Rule 90.
+
+Reset Behavior:
+- There is no explicit reset signal defined; however, the initial state can be loaded using the load signal.
+
+Timing:
+- All sequential logic is triggered on the positive edge of the clk signal.
+- The state of the output q is updated every clock cycle based on the current state and the load signal.
+
+Edge Cases:
+- Ensure that the behavior of the module is well-defined for all possible input combinations, particularly when the load signal is toggled during operation.
+</ENHANCED_SPEC>

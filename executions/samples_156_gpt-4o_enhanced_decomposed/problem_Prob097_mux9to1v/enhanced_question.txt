@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - a: bit[15:0] (16 bits, unsigned)
+  - b: bit[15:0] (16 bits, unsigned)
+  - c: bit[15:0] (16 bits, unsigned)
+  - d: bit[15:0] (16 bits, unsigned)
+  - e: bit[15:0] (16 bits, unsigned)
+  - f: bit[15:0] (16 bits, unsigned)
+  - g: bit[15:0] (16 bits, unsigned)
+  - h: bit[15:0] (16 bits, unsigned)
+  - i: bit[15:0] (16 bits, unsigned)
+  - sel: bit[3:0] (4 bits, unsigned)
+  
+- Output Port:
+  - out: bit[15:0] (16 bits, unsigned)
+
+Functionality:
+The module implements a 16-bit wide, 9-to-1 multiplexer. The selection input 'sel' determines which of the input signals (a through i) is routed to the output 'out' as follows:
+- When sel = 0, out = a
+- When sel = 1, out = b
+- When sel = 2, out = c
+- When sel = 3, out = d
+- When sel = 4, out = e
+- When sel = 5, out = f
+- When sel = 6, out = g
+- When sel = 7, out = h
+- When sel = 8, out = i
+- For sel = 9 to 15, out is set to '1111 1111 1111 1111' (all bits are '1').
+
+Implementation Notes:
+- The output 'out' should be updated combinationally based on the value of 'sel'.
+- Ensure that the output is stable and reflects the selected input immediately upon a change in 'sel'.
+- There are no synchronous or asynchronous resets defined for this module.
+- The module does not include any sequential logic elements; all operations are purely combinational.
+</ENHANCED_SPEC>

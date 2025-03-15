@@ -1,0 +1,62 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a 2-to-1 multiplexer that selects between inputs `a` and `b`. The selection is based on the condition that both `sel_b1` and `sel_b2` are true; if so, the output should be `b`, otherwise it should be `a`. We will implement this logic twice: once using an `assign` statement for combinational logic and once using an `always` block with a procedural `if` statement.
+
+1. **Using `assign` statement**: This is a straightforward way to implement combinational logic. We will use a logical AND operation on `sel_b1` and `sel_b2` to determine if `b` should be selected. If both are true, `b` is selected; otherwise, `a` is selected.
+
+2. **Using `always` block**: We will use an `always @(*)` block to describe the same logic using a procedural `if` statement. This block will be sensitive to changes in any of the input signals.
+
+Both methods will produce the same logical result, but they demonstrate different ways to describe combinational logic in Verilog.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic a,
+    input logic b,
+    input logic sel_b1,
+    input logic sel_b2,
+    output logic out_assign,
+    output logic out_always
+);
+
+    // Combinational logic using assign statement
+    assign out_assign = (sel_b1 && sel_b2) ? b : a;
+
+    // Combinational logic using always block
+    always @(*) begin
+        if (sel_b1 && sel_b2) begin
+            out_always = b;
+        end else begin
+            out_always = a;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic a,
+    input logic b,
+    input logic sel_b1,
+    input logic sel_b2,
+    output logic out_assign,
+    output logic out_always
+);
+
+    // Combinational logic using assign statement
+    assign out_assign = (sel_b1 && sel_b2) ? b : a;
+
+    // Combinational logic using always block
+    always @(*) begin
+        if (sel_b1 && sel_b2) begin
+            out_always = b;
+        end else begin
+            out_always = a;
+        end
+    end
+
+endmodule

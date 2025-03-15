@@ -1,0 +1,34 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports d and ena, and output port q.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  d - input  ena - output q",
+        "implementation": "module TopModule (\n    input wire d,\n    input wire ena,\n    output reg q\n);\n\nalways @ (d or ena) begin\n    if (ena) begin\n        q <= d;\n    end\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the always block to describe the behavior of the D latch. Use the ena signal to control when the latch should update its state based on the input d.",
+        "source": "The module should implement a D latch using an always block.",
+        "implementation": "always @(d or ena) begin\n    if (ena) begin\n        q <= d;\n    end\nend"
+    },
+    {
+        "id": "3",
+        "content": "Within the always block, assign the value of d to q when ena is high, otherwise retain the previous value of q.",
+        "source": "The module should implement a D latch using an always block.",
+        "implementation": "always @(*) begin\n    if (ena) begin\n        q = d;\n    end\n    // else retain the previous value of q\nend"
+    }
+]
+
+Modified Base Query:
+
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  d
+ - input  ena
+ - output q
+
+The module should impement a D latch using an always block.
+

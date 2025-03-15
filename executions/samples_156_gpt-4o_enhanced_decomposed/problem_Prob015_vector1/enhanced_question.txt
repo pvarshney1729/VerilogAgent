@@ -1,0 +1,28 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - in: bit[15:0] (16 bits) - Represents a 16-bit half-word input. 
+    - bit[0] refers to the least significant bit (LSB).
+    - bit[15] refers to the most significant bit (MSB).
+
+- Output Ports:
+  - out_hi: bit[7:0] (8 bits) - Represents the upper byte of the input half-word, corresponding to bits [15:8] of 'in'.
+  - out_lo: bit[7:0] (8 bits) - Represents the lower byte of the input half-word, corresponding to bits [7:0] of 'in'.
+
+Functional Description:
+- The module implements a combinational logic circuit that splits the 16-bit input 'in' into two separate 8-bit outputs:
+  - 'out_hi' will output the upper byte (bits [15:8] of 'in').
+  - 'out_lo' will output the lower byte (bits [7:0] of 'in').
+
+Behavioral Specifications:
+- The outputs 'out_hi' and 'out_lo' are updated simultaneously based on the value of 'in' without any clock dependency, ensuring that the outputs reflect the input immediately upon any change in 'in'.
+- There are no edge cases or input boundaries specified that would affect the output behavior, as the operation is straightforward bit slicing.
+
+Reset Conditions:
+- No reset conditions are specified for this combinational module, as it does not contain any state-holding elements.
+
+Signal Dependencies:
+- The outputs 'out_hi' and 'out_lo' are directly dependent on the input 'in' with no additional logic or conditions affecting their values.
+</ENHANCED_SPEC>

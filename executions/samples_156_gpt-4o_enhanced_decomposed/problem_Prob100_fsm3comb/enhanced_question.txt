@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire in; // 1-bit input signal
+  - input wire [1:0] state; // 2-bit input representing the current state
+- Output Ports:
+  - output reg [1:0] next_state; // 2-bit output representing the next state
+  - output reg out; // 1-bit output signal
+
+Description:
+This module implements a Moore state machine with the following characteristics:
+- The state machine has four states, encoded as follows:
+  - State A: 2'b00
+  - State B: 2'b01
+  - State C: 2'b10
+  - State D: 2'b11
+
+State Transition Table:
+The state transitions and output behavior are defined as follows:
+
+| Current State | Input (in) | Next State | Output (out) |
+|---------------|------------|-------------|--------------|
+| A (00)        | 0          | A (00)      | 0            |
+| A (00)        | 1          | B (01)      | 0            |
+| B (01)        | 0          | C (10)      | 0            |
+| B (01)        | 1          | B (01)      | 0            |
+| C (10)        | 0          | A (00)      | 0            |
+| C (10)        | 1          | D (11)      | 0            |
+| D (11)        | 0          | C (10)      | 1            |
+| D (11)        | 1          | B (01)      | 1            |
+
+Implementation Notes:
+- The module should only implement the combinational logic for state transitions and output generation based on the current state and input.
+- The output (out) is determined solely by the current state and does not depend on the input (in) for states A, B, and C.
+- The output (out) is asserted (1) only when the state is D and the input is either 0 or 1.
+
+Reset Behavior:
+- The module does not specify a reset mechanism; therefore, it is assumed that the initial state is undefined until the first valid input is processed.
+
+Signal Definitions:
+- The current state (state) is represented by a 2-bit vector, where bit[0] is the least significant bit (LSB) and bit[1] is the most significant bit (MSB).
+- The next state (next_state) and output (out) are defined as registers to hold their values until the next combinational evaluation.
+
+Edge Cases:
+- Ensure that the state transitions and output logic are correctly implemented for all possible combinations of the current state and input.
+</ENHANCED_SPEC>

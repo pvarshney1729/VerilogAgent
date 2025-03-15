@@ -1,0 +1,49 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, areset, in, and output port out.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  clk,\n    input  areset,\n    input  in,\n    output reg out\n);\n\n    typedef enum reg [1:0] {STATE_A = 2'b00, STATE_B = 2'b01} state_t;\n    state_t state, next_state;\n\n    always @(posedge clk or posedge areset) begin\n        if (areset) begin\n            state <= STATE_B;\n        end else begin\n            state <= next_state;\n        end\n    end\n\n    always @(*) begin\n        case (state)\n            STATE_A: begin\n                out = 1'b0;\n                if (in)\n                    next_state = STATE_A;\n                else\n                    next_state = STATE_B;\n            end\n            STATE_B: begin\n                out = 1'b1;\n                if (in)\n                    next_state = STATE_B;\n                else\n                    next_state = STATE_A;\n            end\n            default: begin\n                next_state = STATE_B;\n                out = 1'b1;\n            end\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define the state encoding for the Moore machine with two states: A and B. State A outputs 0, and state B outputs 1.",
+        "source": "The module should implement a Moore machine with the diagram described below: B (1) --0--> A, B (1) --1--> B, A (0) --0--> B, A (0) --1--> A.",
+        "implementation": "// State encoding\n  localparam STATE_A = 1'b0;\n  localparam STATE_B = 1'b1;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state transition logic based on the input 'in' and current state. Transition from B to A on input 0, stay in B on input 1. Transition from A to B on input 0, stay in A on input 1.",
+        "source": "The module should implement a Moore machine with the diagram described below: B (1) --0--> A, B (1) --1--> B, A (0) --0--> B, A (0) --1--> A.",
+        "implementation": "// State encoding\n  parameter A = 1'b0, B = 1'b1;\n  \n  // State transition logic\n  always @(posedge clk or posedge areset) begin\n    if (areset) begin\n      state <= B; // Asynchronous reset to state B\n    end else begin\n      case (state)\n        B: state <= (in == 1'b0) ? A : B; // Transition from B to A on input 0, stay in B on input 1\n        A: state <= (in == 1'b0) ? B : A; // Transition from A to B on input 0, stay in A on input 1\n      endcase\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the asynchronous reset logic to reset the state to B when areset is high.",
+        "source": "It should asynchronously reset into state B if reset if high.",
+        "implementation": "reg state;\n  localparam A = 1'b0, B = 1'b1;\n\n  always @(posedge clk or posedge areset) begin\n    if (areset)\n      state <= B;\n    else begin\n      // State transition logic would be here\n    end\n  end"
+    }
+]
+
+Modified Base Query:
+
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  areset
+ - input  in
+ - output out
+
+The module should implement a Moore machine with the diagram described
+below:
+
+  B (1) --0--> A
+  B (1) --1--> B
+  A (0) --0--> B
+  A (0) --1--> A
+
+It should asynchronously reset into state B if reset if high.
+

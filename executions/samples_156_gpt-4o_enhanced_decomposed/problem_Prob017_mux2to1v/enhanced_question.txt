@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - a: bit[99:0] (100 bits, unsigned) - First input data
+  - b: bit[99:0] (100 bits, unsigned) - Second input data
+  - sel: bit (1 bit, unsigned) - Select signal for multiplexer
+
+- Output Ports:
+  - out: bit[99:0] (100 bits, unsigned) - Output data from the multiplexer
+
+Functional Description:
+The TopModule implements a 2-to-1 multiplexer. The output 'out' is determined by the value of the select signal 'sel':
+- When sel = 0, out = a
+- When sel = 1, out = b
+
+Signal Definitions:
+- The input signals 'a' and 'b' are 100 bits wide, with bit[0] representing the least significant bit (LSB) and bit[99] representing the most significant bit (MSB).
+- The select signal 'sel' is a single bit that determines which input is routed to the output.
+
+Behavioral Specifications:
+- The module should be combinational logic, with no internal state or clock cycles involved.
+- There are no resets or initial values required for this module, as it is purely combinational.
+
+Edge Cases:
+- The module should handle all possible values of 'sel' (0 or 1) without any undefined behavior.
+- The output 'out' should always reflect the current state of the selected input based on 'sel'.
+
+Implementation Considerations:
+- Ensure that the selection logic is implemented without race conditions, providing stable output for all input combinations.
+</ENHANCED_SPEC>

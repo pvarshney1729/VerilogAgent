@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input signal representing the clock (active on the positive edge).
+  - reset: 1-bit input signal for synchronous active-high reset.
+
+- Output Ports:
+  - ena: 3-bit output signal indicating enable status for the upper three BCD digits (ena[2:0]).
+  - q: 16-bit output signal representing the BCD counter value (q[15:0]).
+
+Counter Specification:
+- The module implements a 4-digit Binary-Coded Decimal (BCD) counter.
+- Each decimal digit is represented using 4 bits:
+  - q[3:0]: Ones digit (0-9)
+  - q[7:4]: Tens digit (0-9)
+  - q[11:8]: Hundreds digit (0-9)
+  - q[15:12]: Thousands digit (0-9)
+
+Enable Signal Logic:
+- The output enable signals (ena[2:0]) indicate when the corresponding upper three digits should be incremented:
+  - ena[0]: Enable signal for the ones digit (q[3:0]).
+  - ena[1]: Enable signal for the tens digit (q[7:4]).
+  - ena[2]: Enable signal for the hundreds digit (q[11:8]).
+
+Reset Behavior:
+- The reset signal is synchronous and active-high.
+- Upon activation of the reset signal, all registers (q[15:0]) should be set to 0.
+
+Sequential Logic:
+- All sequential logic is triggered on the positive edge of the clock (clk).
+- Ensure that the counter increments correctly, adhering to BCD counting rules, and that the enable signals are asserted appropriately based on the current state of the counter.
+
+Edge Cases:
+- The counter should roll over from 9999 (q = 16'b0000000000000000) to 0000 (q = 16'b0000000000000000) when incremented beyond 9999.
+- Ensure that the enable signals are only asserted when the corresponding digit is incremented.
+
+Bit Indexing:
+- The least significant bit (LSB) is q[0] and the most significant bit (MSB) is q[15].
+</ENHANCED_SPEC>

@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - in: bit[1023:0] (1024 bits) - This is a packed vector containing 256 groups of 4 bits each.
+  - sel: bit[7:0] (8 bits) - This selection input determines which 4-bit group to output.
+
+- Output Ports:
+  - out: bit[3:0] (4 bits) - This output represents the selected 4-bit group from the input vector.
+
+Functionality:
+The module implements a 256-to-1 multiplexer that outputs a 4-bit wide signal based on the value of the 8-bit selection input (sel). The mapping of the selection input to the output is as follows:
+- When sel = 0, out = in[3:0]
+- When sel = 1, out = in[7:4]
+- When sel = 2, out = in[11:8]
+- ...
+- When sel = 255, out = in[1023:1020]
+
+Bit Indexing:
+- The least significant bit (LSB) of the input vector 'in' is bit[0], and the most significant bit (MSB) is bit[1023].
+- The output 'out' is indexed such that out[0] is the LSB and out[3] is the MSB.
+
+Behavior:
+- The module should handle all values of sel from 0 to 255. If sel is outside this range, the behavior is undefined and should be documented as such.
+
+Reset and Initialization:
+- There are no reset conditions specified for this module. The output will reflect the selected input based on the value of sel at all times.
+
+Signal Dependencies:
+- The output 'out' is directly dependent on the input 'in' and the selection signal 'sel'. Ensure that the selection logic is implemented correctly to avoid race conditions.
+
+Edge Cases:
+- Ensure that the module is tested for all edge cases, particularly when sel is at its minimum (0) and maximum (255) values.
+</ENHANCED_SPEC>

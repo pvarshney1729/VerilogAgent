@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - areset: 1-bit input (asynchronous reset signal)
+  - predict_valid: 1-bit input (indicates if a prediction is valid)
+  - predict_taken: 1-bit input (indicates the predicted direction of the branch)
+  - train_mispredicted: 1-bit input (indicates if a misprediction has occurred)
+  - train_taken: 1-bit input (indicates the actual direction of the branch)
+  - train_history: 32-bit input (history of branches prior to the mispredicted branch)
+
+- Output Ports:
+  - predict_history: 32-bit output (current state of the branch history register)
+
+Functional Description:
+The module implements a 32-bit global history shift register that maintains the history of branch predictions. The following behaviors are defined:
+
+1. **Branch Prediction Update**:
+   - When `predict_valid` is asserted (i.e., `predict_valid = 1`), the module will shift in the value of `predict_taken` from the least significant bit (LSB) side (i.e., `predict_history[0]` will be updated with `predict_taken`).
+   - The `predict_history` register represents the history of the most recent branches, with `predict_history[0]` being the direction of the youngest branch.
+
+2. **Branch Misprediction Handling**:
+   - If a misprediction occurs (i.e., `train_mispredicted = 1`), the module will load the `predict_history` register with a new value. This new value is formed by concatenating `train_history` (the history before the mispredicted branch) with `train_taken` (the actual result of the branch).
+   - In the event that both a prediction and a misprediction occur simultaneously, the misprediction takes precedence. This is because the pipeline flush will invalidate the current prediction.
+
+3. **Reset Behavior**:
+   - The `areset` signal is an asynchronous reset that, when asserted, will reset the `predict_history` register to zero (i.e., `predict_history = 32'b0`).
+   - The reset is effective immediately upon assertion of `areset`, regardless of the clock state.
+
+4. **Clocking and Sequential Logic**:
+   - All sequential logic within the module is triggered on the positive edge of the `clk` signal.
+
+5. **Signal Definitions**:
+   - The `predict_history` output reflects the current state of the branch history register after processing the inputs.
+
+Edge Cases:
+- Ensure that the module correctly handles cases where `predict_valid` and `train_mispredicted` are asserted simultaneously, prioritizing the misprediction.
+- The module should maintain consistent behavior when inputs are toggled rapidly, ensuring that the state of `predict_history` is stable and predictable.
+
+</ENHANCED_SPEC>

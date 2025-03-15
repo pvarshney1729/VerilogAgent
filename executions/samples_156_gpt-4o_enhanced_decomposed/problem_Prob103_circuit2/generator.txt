@@ -1,0 +1,58 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to determine the logic function for the output `q` based on the given truth table. The truth table provides the output `q` for all combinations of the inputs `a`, `b`, `c`, and `d`.
+
+Let's analyze the truth table:
+
+- For `a = 0`:
+  - `b = 0`, `c = 0`, `d = 0` -> `q = 1`
+  - `b = 0`, `c = 0`, `d = 1` -> `q = 0`
+  - `b = 0`, `c = 1`, `d = 0` -> `q = 0`
+  - `b = 0`, `c = 1`, `d = 1` -> `q = 1`
+  - `b = 1`, `c = 0`, `d = 0` -> `q = 0`
+  - `b = 1`, `c = 0`, `d = 1` -> `q = 1`
+  - `b = 1`, `c = 1`, `d = 0` -> `q = 1`
+  - `b = 1`, `c = 1`, `d = 1` -> `q = 0`
+
+- For `a = 1`:
+  - `b = 0`, `c = 0`, `d = 0` -> `q = 0`
+  - `b = 0`, `c = 0`, `d = 1` -> `q = 1`
+  - `b = 0`, `c = 1`, `d = 0` -> `q = 1`
+  - `b = 0`, `c = 1`, `d = 1` -> `q = 0`
+  - `b = 1`, `c = 0`, `d = 0` -> `q = 1`
+  - `b = 1`, `c = 0`, `d = 1` -> `q = 0`
+  - `b = 1`, `c = 1`, `d = 0` -> `q = 0`
+  - `b = 1`, `c = 1`, `d = 1` -> `q = 1`
+
+From this analysis, we can derive the logic expression for `q` using a Karnaugh map or by inspection. The expression for `q` is:
+
+\[ q = (a \oplus b) \oplus (c \oplus d) \]
+
+This expression can be implemented using XOR gates in Verilog.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic a,
+    input logic b,
+    input logic c,
+    input logic d,
+    output logic q
+);
+    assign q = (a ^ b) ^ (c ^ d);
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic a,
+    input logic b,
+    input logic c,
+    input logic d,
+    output logic q
+);
+    assign q = (a ^ b) ^ (c ^ d);
+endmodule

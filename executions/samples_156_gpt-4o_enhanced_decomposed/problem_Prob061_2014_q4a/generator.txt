@@ -1,0 +1,63 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a module that acts as a single stage in an n-bit shift register. The module should handle loading a value, shifting, and maintaining the current state based on the control signals provided.
+
+1. **Inputs and Outputs**: The module has five inputs (`clk`, `w`, `R`, `E`, `L`) and one output (`Q`). All are 1-bit signals.
+
+2. **Functionality**:
+   - **Load Operation**: When `L` is asserted, the module should load the value of `R` into the output `Q`.
+   - **Shift Operation**: When `E` is asserted and `L` is not, the module should shift the value from the previous stage (`w`) into `Q`.
+   - **Hold Operation**: If neither `L` nor `E` is asserted, the module should hold the current value of `Q`.
+
+3. **Clock Edge**: The operations are triggered on the positive edge of the clock (`clk`).
+
+4. **Synchronous Logic**: The logic is synchronous, meaning all operations are controlled by the clock signal.
+
+5. **Implementation**: Use an `always_ff` block to describe the sequential logic, which is triggered on the positive edge of the clock. The logic inside the block will check the control signals `L` and `E` to determine the next state of `Q`.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic w,
+    input logic R,
+    input logic E,
+    input logic L,
+    output logic Q
+);
+
+    always_ff @(posedge clk) begin
+        if (L) begin
+            Q <= R;  // Load operation
+        end else if (E) begin
+            Q <= w;  // Shift operation
+        end
+        // If neither L nor E is asserted, Q holds its value
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic w,
+    input logic R,
+    input logic E,
+    input logic L,
+    output logic Q
+);
+
+    always_ff @(posedge clk) begin
+        if (L) begin
+            Q <= R;  // Load operation
+        end else if (E) begin
+            Q <= w;  // Shift operation
+        end
+        // If neither L nor E is asserted, Q holds its value
+    end
+
+endmodule

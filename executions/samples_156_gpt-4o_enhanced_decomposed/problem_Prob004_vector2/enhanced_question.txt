@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - Name: in
+  - Width: 32 bits
+  - Description: A 32-bit input vector representing data to be processed.
+  - Bit Indexing: bit[0] refers to the least significant bit (LSB) and bit[31] refers to the most significant bit (MSB).
+
+- Output Port:
+  - Name: out
+  - Width: 32 bits
+  - Description: A 32-bit output vector that will contain the byte-reversed version of the input vector.
+  - Bit Indexing: bit[0] refers to the least significant bit (LSB) and bit[31] refers to the most significant bit (MSB).
+
+Functional Description:
+- The module shall reverse the byte order of the 32-bit input vector 'in'. This means that the output 'out' will have the following relationship with 'in':
+  - out[7:0] = in[31:24]
+  - out[15:8] = in[23:16]
+  - out[23:16] = in[15:8]
+  - out[31:24] = in[7:0]
+
+Behavioral Specifications:
+- The operation is combinational, meaning that the output 'out' is determined solely by the current value of the input 'in' without any clock cycles or sequential elements involved.
+- There are no resets or initial values required for this module as it does not contain any state-holding elements.
+
+Edge Cases:
+- The module should handle all possible values of the input vector 'in', including all zeros, all ones, and mixed values, ensuring that the byte-reversal operation is consistently applied across all input scenarios.
+</ENHANCED_SPEC>

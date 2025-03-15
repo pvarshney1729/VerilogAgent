@@ -1,0 +1,46 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to handle a 3-bit input vector and produce a 3-bit output vector that mirrors the input. Additionally, we need to split the input vector into three separate 1-bit outputs. The output `o0` should correspond to the least significant bit (LSB) of the input vector, `o1` to the middle bit, and `o2` to the most significant bit (MSB). Since the task involves simple combinational logic, we will use continuous assignment statements to directly connect the input bits to the respective outputs. This approach ensures that the outputs are updated immediately when the input changes, without the need for an always block.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [2:0] vec,  // 3-bit input vector
+    output logic [2:0] outv, // 3-bit output vector
+    output logic o2,         // 1-bit output for MSB
+    output logic o1,         // 1-bit output for middle bit
+    output logic o0          // 1-bit output for LSB
+);
+
+    // Assign the input vector directly to the output vector
+    assign outv = vec;
+
+    // Split the input vector into individual bits for separate outputs
+    assign o2 = vec[2];
+    assign o1 = vec[1];
+    assign o0 = vec[0];
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [2:0] vec,  // 3-bit input vector
+    output logic [2:0] outv, // 3-bit output vector
+    output logic o2,         // 1-bit output for MSB
+    output logic o1,         // 1-bit output for middle bit
+    output logic o0          // 1-bit output for LSB
+);
+
+    // Assign the input vector directly to the output vector
+    assign outv = vec;
+
+    // Split the input vector into individual bits for separate outputs
+    assign o2 = vec[2];
+    assign o1 = vec[1];
+    assign o0 = vec[0];
+
+endmodule

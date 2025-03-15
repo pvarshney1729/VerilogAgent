@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic a,\n    output logic [2:0] q\n);\n\n    always_ff @(posedge clk) begin\n        if (a) begin\n            q <= 3'b100; // Set q to 4 when a is 1\n        end else begin\n            q <= q + 1;  // Increment q when a is 0\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 192,
+        "passfail": "R"
+    }
+}

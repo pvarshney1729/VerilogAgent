@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - resetn: 1-bit input (active-low synchronous reset)
+  - r: 3-bit input (request signals from three devices, where r[0] is the most significant bit and r[2] is the least significant bit)
+
+- Output Ports:
+  - g: 3-bit output (grant signals to the three devices, where g[0] corresponds to device 0, g[1] to device 1, and g[2] to device 2)
+
+State Diagram Description:
+The module implements a finite state machine (FSM) with the following states and transitions:
+
+States:
+- A: Initial state, no device has access to the resource.
+- B: Device 0 has access to the resource (g[0] = 1).
+- C: Device 1 has access to the resource (g[1] = 1).
+- D: Device 2 has access to the resource (g[2] = 1).
+
+State Transitions:
+- From state A:
+  - If r[0] = 1, transition to state B.
+  - If r[0] = 0 and r[1] = 1, transition to state C.
+  - If r[0] = 0, r[1] = 0, and r[2] = 1, transition to state D.
+  - Remain in state A if r[0] = 0, r[1] = 0, and r[2] = 0.
+
+- From state B:
+  - If r[0] = 1, remain in state B.
+  - If r[0] = 0, transition back to state A.
+
+- From state C:
+  - If r[1] = 1, remain in state C.
+  - If r[1] = 0, transition back to state A.
+
+- From state D:
+  - If r[2] = 1, remain in state D.
+  - If r[2] = 0, transition back to state A.
+
+Reset Behavior:
+- The resetn signal is an active-low synchronous reset. When resetn is low, the FSM transitions to state A.
+
+Grant Signal Behavior:
+- The output signals g[i] (for i = 0, 1, 2) indicate which device has been granted access to the resource. The grant signal for a device is set to 1 when that device is in the corresponding state (B for g[0], C for g[1], D for g[2]).
+
+Implementation Guidelines:
+- Use separate always blocks for the state transition logic and the state flip-flops.
+- Define state codes for A, B, C, and D as needed.
+- Ensure all sequential logic is triggered on the positive edge of the clk signal.
+- Initialize all state registers to the reset state (state A) upon reset.
+- Clearly define the behavior of the FSM at edge cases, such as simultaneous requests from multiple devices.
+</ENHANCED_SPEC>

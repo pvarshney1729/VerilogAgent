@@ -1,0 +1,138 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to decode the 8-bit `code` input to determine if it matches any of the specified keyboard scancodes for the keys 0 through 9. If a match is found, we set the 4-bit `out` to the corresponding key value and set the `valid` output to 1. If no match is found, both `out` and `valid` should be set to 0.
+
+The scancodes and their corresponding outputs are:
+- 8'h45 -> 4'b0000 (0)
+- 8'h16 -> 4'b0001 (1)
+- 8'h1e -> 4'b0010 (2)
+- 8'h26 -> 4'b0011 (3)
+- 8'h25 -> 4'b0100 (4)
+- 8'h2e -> 4'b0101 (5)
+- 8'h36 -> 4'b0110 (6)
+- 8'h3d -> 4'b0111 (7)
+- 8'h3e -> 4'b1000 (8)
+- 8'h46 -> 4'b1001 (9)
+
+We will use a combinational `always @(*)` block to check the input `code` against these values and set the outputs accordingly. This approach ensures that the outputs are updated immediately when the input changes.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [7:0] code,
+    output logic [3:0] out,
+    output logic valid
+);
+
+    always @(*) begin
+        case (code)
+            8'h45: begin
+                out = 4'b0000;
+                valid = 1'b1;
+            end
+            8'h16: begin
+                out = 4'b0001;
+                valid = 1'b1;
+            end
+            8'h1e: begin
+                out = 4'b0010;
+                valid = 1'b1;
+            end
+            8'h26: begin
+                out = 4'b0011;
+                valid = 1'b1;
+            end
+            8'h25: begin
+                out = 4'b0100;
+                valid = 1'b1;
+            end
+            8'h2e: begin
+                out = 4'b0101;
+                valid = 1'b1;
+            end
+            8'h36: begin
+                out = 4'b0110;
+                valid = 1'b1;
+            end
+            8'h3d: begin
+                out = 4'b0111;
+                valid = 1'b1;
+            end
+            8'h3e: begin
+                out = 4'b1000;
+                valid = 1'b1;
+            end
+            8'h46: begin
+                out = 4'b1001;
+                valid = 1'b1;
+            end
+            default: begin
+                out = 4'b0000;
+                valid = 1'b0;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [7:0] code,
+    output logic [3:0] out,
+    output logic valid
+);
+
+    always @(*) begin
+        case (code)
+            8'h45: begin
+                out = 4'b0000;
+                valid = 1'b1;
+            end
+            8'h16: begin
+                out = 4'b0001;
+                valid = 1'b1;
+            end
+            8'h1e: begin
+                out = 4'b0010;
+                valid = 1'b1;
+            end
+            8'h26: begin
+                out = 4'b0011;
+                valid = 1'b1;
+            end
+            8'h25: begin
+                out = 4'b0100;
+                valid = 1'b1;
+            end
+            8'h2e: begin
+                out = 4'b0101;
+                valid = 1'b1;
+            end
+            8'h36: begin
+                out = 4'b0110;
+                valid = 1'b1;
+            end
+            8'h3d: begin
+                out = 4'b0111;
+                valid = 1'b1;
+            end
+            8'h3e: begin
+                out = 4'b1000;
+                valid = 1'b1;
+            end
+            8'h46: begin
+                out = 4'b1001;
+                valid = 1'b1;
+            end
+            default: begin
+                out = 4'b0000;
+                valid = 1'b0;
+            end
+        endcase
+    end
+
+endmodule

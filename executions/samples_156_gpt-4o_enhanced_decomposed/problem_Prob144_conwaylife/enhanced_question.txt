@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - load: 1-bit input (active high synchronous load signal)
+  - data: 256-bit input (initial state of the grid)
+
+- Output Ports:
+  - q: 256-bit output (current state of the grid)
+
+Grid Representation:
+- The module implements a "game" played on a two-dimensional toroidal grid of cells, where each cell can be either 1 (alive) or 0 (dead).
+- The grid is represented as a 256-bit vector, where:
+  - q[15:0] corresponds to row 0,
+  - q[31:16] corresponds to row 1,
+  - ...
+  - q[255:240] corresponds to row 15.
+- Each cell's state is determined by the number of alive neighbors it has, according to the following rules:
+  1. If a cell has 0 or 1 alive neighbors, it becomes 0 (dead).
+  2. If a cell has exactly 2 alive neighbors, its state remains unchanged.
+  3. If a cell has exactly 3 alive neighbors, it becomes 1 (alive).
+  4. If a cell has 4 or more alive neighbors, it becomes 0 (dead).
+
+Neighbor Calculation:
+- The grid is treated as infinite, but for this implementation, a 16x16 toroidal grid is used. 
+- Each cell at position (i, j) has neighbors that wrap around the edges of the grid. For example, the corner cell (0,0) has the following 8 neighbors:
+  - (15,1), (15,0), (15,15), (0,1), (0,15), (1,1), (1,0), and (1,15).
+
+Operational Behavior:
+- The game state advances by one timestep on each positive edge of the clock.
+- The load signal allows for the initial state of the grid to be loaded into the output q at the next clock edge when load is high.
+- The output q reflects the current state of the game, updated every clock cycle.
+
+Reset and Initialization:
+- The module does not specify an asynchronous or synchronous reset. If a reset is required, it should be defined in the implementation.
+- The initial state of the output q should be defined based on the load signal and the data input when load is asserted.
+
+Sequential Logic:
+- All sequential logic is triggered on the positive edge of the clk signal.
+- Ensure that all flip-flops and registers have explicitly defined initial values as per the loading mechanism.
+
+Edge Cases:
+- The behavior of the module at the edges of the grid should be carefully handled to ensure correct neighbor calculations.
+- Ensure that the module can handle all possible input states for the data vector, including all cells being alive or dead.
+
+</ENHANCED_SPEC>

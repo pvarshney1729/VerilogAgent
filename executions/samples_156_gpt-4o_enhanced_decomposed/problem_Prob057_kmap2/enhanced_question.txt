@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a;  // 1-bit input
+  - input wire b;  // 1-bit input
+  - input wire c;  // 1-bit input
+  - input wire d;  // 1-bit input
+- Output Ports:
+  - output wire out;  // 1-bit output
+
+Port Widths:
+- All input and output ports are defined as 1-bit wide.
+
+Karnaugh Map Description:
+The module implements a combinational logic circuit based on the following Karnaugh map, which represents the output 'out' as a function of inputs 'a', 'b', 'c', and 'd'. The variables are indexed as follows:
+- 'a' and 'b' represent the rows (with 'a' as the most significant bit).
+- 'c' and 'd' represent the columns (with 'c' as the most significant bit).
+
+Karnaugh Map:
+              ab
+   cd   00  01  11  10
+   00 | 1 | 1 | 0 | 1 |
+   01 | 1 | 0 | 0 | 1 |
+   11 | 0 | 1 | 1 | 1 |
+   10 | 1 | 1 | 0 | 0 |
+
+Output Logic:
+The output 'out' is defined by the following minterms based on the Karnaugh map:
+- out = (a'b'c'd') + (a'b'c) + (a'bc'd) + (a'bc) + (ab'c) + (abc'd) + (abc)
+
+Behavior at Edge Cases:
+- The output 'out' should be evaluated for all combinations of inputs 'a', 'b', 'c', and 'd' (i.e., 0 or 1) to ensure correct functionality across the entire input space.
+
+Reset Conditions:
+- There are no reset conditions specified for this module, as it is purely combinational logic.
+
+Signal Dependencies:
+- The output 'out' is directly dependent on the values of inputs 'a', 'b', 'c', and 'd' without any sequential elements or clock cycles involved.
+
+Ensure that the implementation adheres to the specified logic and accurately reflects the behavior described in the Karnaugh map.
+</ENHANCED_SPEC>

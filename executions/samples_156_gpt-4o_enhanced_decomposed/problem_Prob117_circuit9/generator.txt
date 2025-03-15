@@ -1,0 +1,66 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to analyze the given waveform data to understand the behavior of the sequential circuit. The waveform shows the output `q` as a 3-bit value that changes based on the input `a` and the clock `clk`.
+
+1. **Initial State**: At time 0ns, `q` is undefined (`x`), which is typical before the first clock edge in a simulation.
+
+2. **Behavior Analysis**:
+   - From 5ns to 40ns, when `a` is `1`, `q` remains `4` regardless of the clock edges.
+   - At 45ns, `a` changes to `0`, and `q` remains `4` until the next clock edge.
+   - At 55ns, `q` increments to `5` on the rising edge of the clock.
+   - At 65ns, `q` increments to `6`.
+   - At 75ns, `q` wraps around to `0`.
+   - At 85ns, `q` increments to `1`.
+
+3. **Logic Deduction**:
+   - When `a` is `1`, `q` is held constant at `4`.
+   - When `a` is `0`, `q` increments by `1` on each rising edge of the clock, wrapping around after reaching `7` (since `q` is 3 bits).
+
+4. **Implementation Plan**:
+   - Use a 3-bit register for `q`.
+   - On each rising edge of the clock, check the value of `a`.
+   - If `a` is `1`, set `q` to `4`.
+   - If `a` is `0`, increment `q` by `1`.
+
+5. **Coding Conventions**:
+   - Use `logic` for all signals.
+   - Use an `always_ff` block for sequential logic.
+   - Initialize `q` to `0` for simulation purposes.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic a,
+    output logic [2:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (a) begin
+            q <= 3'b100; // Set q to 4 when a is 1
+        end else begin
+            q <= q + 1;  // Increment q when a is 0
+        end
+    end
+
+endmodule
+[DONE]
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic a,
+    output logic [2:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (a) begin
+            q <= 3'b100; // Set q to 4 when a is 1
+        end else begin
+            q <= q + 1;  // Increment q when a is 0
+        end
+    end
+
+endmodule

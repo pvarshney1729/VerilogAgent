@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - Name: in
+  - Width: 100 bits
+  - Description: A 100-bit wide input signal. The least significant bit (LSB) is bit[0] and the most significant bit (MSB) is bit[99].
+
+- Output Port:
+  - Name: out
+  - Width: 100 bits
+  - Description: A 100-bit wide output signal that will hold the reversed bit ordering of the input signal. The LSB is bit[0] and the MSB is bit[99].
+
+Functional Description:
+- The module shall reverse the bit ordering of the input signal 'in' and assign the result to the output signal 'out'. Specifically, the output 'out' shall be defined as:
+  - out[0] = in[99]
+  - out[1] = in[98]
+  - ...
+  - out[99] = in[0]
+
+Behavioral Specifications:
+- The operation is combinational, meaning that the output 'out' is immediately updated based on the current value of the input 'in' without any clock cycles or delays.
+- There are no resets or initial values required for this module, as it does not contain any state-holding elements.
+
+Edge Cases:
+- The module should handle all 100-bit input values, including all possible combinations of 0s and 1s, ensuring that the output correctly reflects the reversed order for any valid input.
+
+Signal Dependencies:
+- The output 'out' is directly dependent on the input 'in'. Any change in 'in' will result in an immediate change in 'out' due to the combinational nature of the logic.
+</ENHANCED_SPEC>

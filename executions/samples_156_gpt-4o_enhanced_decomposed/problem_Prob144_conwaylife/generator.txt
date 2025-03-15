@@ -1,0 +1,132 @@
+Generated Response:
+
+<REASONING>
+To implement the "Game of Life" on a 16x16 toroidal grid, we need to consider the rules for updating each cell based on its neighbors. The grid wraps around, meaning the edges are connected to form a toroid. The module will have a 256-bit input `data` to load the initial state and a 256-bit output `q` to represent the current state of the grid. The `load` signal will be used to load the initial state into `q` on the next clock edge. The `clk` signal will be used to update the grid state every clock cycle.
+
+1. **Input/Output Declaration**: We declare the inputs and outputs as specified. The grid is represented as a 256-bit vector, with each 16-bit segment representing a row.
+
+2. **Grid Representation**: We need to convert the 256-bit vector into a 16x16 array for easier manipulation. This will allow us to access each cell and its neighbors conveniently.
+
+3. **Neighbor Calculation**: For each cell, we calculate the number of alive neighbors. This involves checking the 8 surrounding cells, considering the toroidal wrapping.
+
+4. **State Update Logic**: Based on the number of neighbors, we update the state of each cell according to the rules provided.
+
+5. **Sequential Logic**: The state of the grid is updated on the positive edge of the clock. If `load` is high, the grid is initialized with the `data` input.
+
+6. **Output Assignment**: The updated grid state is assigned to the output `q`.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [255:0] data,
+    output logic [255:0] q
+);
+
+    logic [15:0][15:0] grid, next_grid;
+    integer i, j, ni, nj, neighbors;
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            // Load initial state into grid
+            for (i = 0; i < 16; i = i + 1) begin
+                grid[i] <= data[i*16 +: 16];
+            end
+        end else begin
+            // Update grid state
+            for (i = 0; i < 16; i = i + 1) begin
+                for (j = 0; j < 16; j = j + 1) begin
+                    // Count alive neighbors
+                    neighbors = 0;
+                    for (ni = -1; ni <= 1; ni = ni + 1) begin
+                        for (nj = -1; nj <= 1; nj = nj + 1) begin
+                            if (!(ni == 0 && nj == 0)) begin
+                                neighbors = neighbors + grid[(i + ni + 16) % 16][(j + nj + 16) % 16];
+                            end
+                        end
+                    end
+
+                    // Apply rules
+                    if (neighbors == 3 || (neighbors == 2 && grid[i][j] == 1)) begin
+                        next_grid[i][j] = 1;
+                    end else begin
+                        next_grid[i][j] = 0;
+                    end
+                end
+            end
+
+            // Update grid with next state
+            for (i = 0; i < 16; i = i + 1) begin
+                grid[i] <= next_grid[i];
+            end
+        end
+    end
+
+    // Assign output
+    always_comb begin
+        for (i = 0; i < 16; i = i + 1) begin
+            q[i*16 +: 16] = grid[i];
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [255:0] data,
+    output logic [255:0] q
+);
+
+    logic [15:0][15:0] grid, next_grid;
+    integer i, j, ni, nj, neighbors;
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            // Load initial state into grid
+            for (i = 0; i < 16; i = i + 1) begin
+                grid[i] <= data[i*16 +: 16];
+            end
+        end else begin
+            // Update grid state
+            for (i = 0; i < 16; i = i + 1) begin
+                for (j = 0; j < 16; j = j + 1) begin
+                    // Count alive neighbors
+                    neighbors = 0;
+                    for (ni = -1; ni <= 1; ni = ni + 1) begin
+                        for (nj = -1; nj <= 1; nj = nj + 1) begin
+                            if (!(ni == 0 && nj == 0)) begin
+                                neighbors = neighbors + grid[(i + ni + 16) % 16][(j + nj + 16) % 16];
+                            end
+                        end
+                    end
+
+                    // Apply rules
+                    if (neighbors == 3 || (neighbors == 2 && grid[i][j] == 1)) begin
+                        next_grid[i][j] = 1;
+                    end else begin
+                        next_grid[i][j] = 0;
+                    end
+                end
+            end
+
+            // Update grid with next state
+            for (i = 0; i < 16; i = i + 1) begin
+                grid[i] <= next_grid[i];
+            end
+        end
+    end
+
+    // Assign output
+    always_comb begin
+        for (i = 0; i < 16; i = i + 1) begin
+            q[i*16 +: 16] = grid[i];
+        end
+    end
+
+endmodule

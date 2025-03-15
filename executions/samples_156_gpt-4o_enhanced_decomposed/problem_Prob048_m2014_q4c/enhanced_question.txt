@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - d: 1-bit input (data input)
+  - r: 1-bit input (active high synchronous reset signal)
+  
+- Output Ports:
+  - q: 1-bit output (data output)
+
+Functional Description:
+The TopModule implements a D flip-flop with the following characteristics:
+- The flip-flop captures the value of the data input (d) on the rising edge of the clock (clk).
+- The output (q) is updated to the value of d unless the reset (r) signal is asserted.
+- When the reset signal (r) is high, the output (q) is set to 0, regardless of the clock or data input.
+
+Reset Behavior:
+- The reset (r) is active high and synchronous, meaning that the output (q) will only be reset to 0 on the rising edge of the clock when r is high.
+
+Initial Conditions:
+- Upon power-up or reset, the output (q) should be initialized to 0.
+
+Signal Definitions:
+- clk: Clock signal, used to synchronize the operation of the flip-flop.
+- d: Data input signal, which is sampled on the rising edge of clk.
+- r: Reset signal, which takes precedence over the clock and data input.
+- q: Output signal representing the stored value of the flip-flop.
+
+Edge Cases:
+- If both r and d are asserted during the same clock cycle, the output (q) will be reset to 0 due to the priority of the reset signal.
+
+Bit Indexing:
+- All signals are treated as single-bit values, where bit[0] refers to the least significant bit (LSB).
+</ENHANCED_SPEC>

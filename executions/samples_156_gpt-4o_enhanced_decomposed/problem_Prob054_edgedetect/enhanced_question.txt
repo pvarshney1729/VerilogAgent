@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input signal (clock)
+  - in: 8-bit input vector (in[7:0]), where in[0] refers to the least significant bit (LSB) and in[7] refers to the most significant bit (MSB).
+
+- Output Ports:
+  - pedge: 8-bit output vector (pedge[7:0]), where pedge[0] corresponds to the detection of a positive edge on in[0] and pedge[7] corresponds to in[7].
+
+Functional Description:
+The TopModule shall detect positive edges in the 8-bit input vector 'in'. A positive edge is defined as a transition from 0 to 1 in any bit position of the input vector between consecutive clock cycles. The output vector 'pedge' will be updated to reflect these transitions.
+
+Behavior:
+- For each bit in the input vector 'in', the corresponding bit in the output vector 'pedge' will be set to 1 in the clock cycle immediately following a detected transition from 0 to 1. If no transition occurs for a specific bit, the corresponding bit in 'pedge' will remain 0.
+
+Sequential Logic:
+- The module will utilize a rising edge-triggered flip-flop for the output 'pedge'. The output will be updated on the rising edge of the 'clk' signal.
+
+Reset Behavior:
+- The module does not specify a reset condition. Therefore, the initial state of 'pedge' is undefined until the first clock cycle.
+
+Edge Cases:
+- If 'in' remains constant (either all 0s or all 1s) across clock cycles, 'pedge' will reflect this by remaining unchanged.
+- If multiple bits transition from 0 to 1 simultaneously, all corresponding bits in 'pedge' will be set to 1 in the next clock cycle.
+
+Signal Dependencies:
+- The output 'pedge' is dependent on the previous state of 'in' from the last clock cycle. Ensure that the implementation correctly captures the state of 'in' at the previous clock cycle to detect transitions accurately.
+
+</ENHANCED_SPEC>

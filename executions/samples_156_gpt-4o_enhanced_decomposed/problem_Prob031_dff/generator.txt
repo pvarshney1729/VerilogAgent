@@ -1,0 +1,34 @@
+Generated Response:
+
+<REASONING>
+To implement a D flip-flop in Verilog, we need to create a module that captures the value of the input `d` on the rising edge of the clock `clk` and outputs it as `q`. The module interface specifies three ports: `clk`, `d`, and `q`, all of which are one-bit signals. Since the task does not mention a reset signal, we will implement a simple D flip-flop without reset functionality. The flip-flop will be triggered on the positive edge of the clock, as specified. We will use an `always` block to describe the sequential behavior of the flip-flop.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic d,
+    output logic q
+);
+
+    always_ff @(posedge clk) begin
+        q <= d;
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic d,
+    output logic q
+);
+
+    always_ff @(posedge clk) begin
+        q <= d;
+    end
+
+endmodule

@@ -1,0 +1,7 @@
+{
+    "code": "module A(\n    input logic x,\n    input logic y,\n    output logic z\n);\n    always @(*) begin\n        z = (x ^ y) & x;\n    end\nendmodule\n\nmodule B(\n    input logic x,\n    input logic y,\n    output logic z\n);\n    always @(*) begin\n        z = ~(x ^ y);\n    end\nendmodule\n\nmodule TopModule(\n    input logic x,\n    input logic y,\n    output logic z\n);\n    logic a1_out, a2_out, b1_out, b2_out;\n    logic or_out, and_out;\n\n    // Instantiate first A and B submodules\n    A a1 (\n        .x(x),\n        .y(y),\n        .z(a1_out)\n    );\n\n    B b1 (\n        .x(x),\n        .y(y),\n        .z(b1_out)\n    );\n\n    // Instantiate second A and B submodules\n    A a2 (\n        .x(x),\n        .y(y),\n        .z(a2_out)\n    );\n\n    B b2 (\n        .x(x),\n        .y(y),\n        .z(b2_out)\n    );\n\n    // OR gate for first pair of submodules\n    always @(*) begin\n        or_out = a1_out | b1_out;\n    end\n\n    // AND gate for second pair of submodules\n    always @(*) begin\n        and_out = a2_out & b2_out;\n    end\n\n    // XOR gate for final output\n    always @(*) begin\n        z = or_out ^ and_out;\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

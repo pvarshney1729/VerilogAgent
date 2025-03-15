@@ -1,0 +1,105 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to analyze the given simulation waveforms to understand the behavior of the outputs `p` and `q` based on the inputs `clock` and `a`.
+
+1. **Initial State**: At time 0ns, both `p` and `q` are undefined (`x`). This suggests that the initial state of the flip-flops is unknown, but we will initialize them to zero in our implementation.
+
+2. **Clock Behavior**: The outputs change on the rising edge of the clock, indicating a synchronous design.
+
+3. **Output `p` Behavior**:
+   - `p` is set to `1` when `a` is `1` on the rising edge of the clock.
+   - `p` is reset to `0` on the next rising edge of the clock if `a` is `0`.
+
+4. **Output `q` Behavior**:
+   - `q` is set to `1` when `p` transitions from `0` to `1`.
+   - `q` remains `1` until `p` transitions from `1` to `0`.
+
+5. **State Transition**:
+   - We need a state to track when `p` transitions from `0` to `1` to set `q`.
+
+Based on this analysis, we will use two flip-flops to store the states of `p` and `q`. The logic for updating these states will be implemented in a sequential always block triggered by the rising edge of the clock.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clock,
+    input logic a,
+    output logic p,
+    output logic q
+);
+
+    // Internal state registers
+    logic p_next, q_next;
+
+    // Sequential logic for state update
+    always_ff @(posedge clock) begin
+        p <= p_next;
+        q <= q_next;
+    end
+
+    // Combinational logic for next state
+    always_comb begin
+        // Default assignments
+        p_next = p;
+        q_next = q;
+
+        // Logic for p
+        if (a) begin
+            p_next = 1;
+        end else begin
+            p_next = 0;
+        end
+
+        // Logic for q
+        if (p == 0 && p_next == 1) begin
+            q_next = 1;
+        end else if (p == 1 && p_next == 0) begin
+            q_next = 0;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clock,
+    input logic a,
+    output logic p,
+    output logic q
+);
+
+    // Internal state registers
+    logic p_next, q_next;
+
+    // Sequential logic for state update
+    always_ff @(posedge clock) begin
+        p <= p_next;
+        q <= q_next;
+    end
+
+    // Combinational logic for next state
+    always_comb begin
+        // Default assignments
+        p_next = p;
+        q_next = q;
+
+        // Logic for p
+        if (a) begin
+            p_next = 1;
+        end else begin
+            p_next = 0;
+        end
+
+        // Logic for q
+        if (p == 0 && p_next == 1) begin
+            q_next = 1;
+        end else if (p == 1 && p_next == 0) begin
+            q_next = 0;
+        end
+    end
+
+endmodule

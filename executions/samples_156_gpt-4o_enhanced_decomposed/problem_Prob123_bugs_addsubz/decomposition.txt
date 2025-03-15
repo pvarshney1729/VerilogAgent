@@ -1,0 +1,50 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module with inputs do_sub, a[7:0], b[7:0], and outputs out[7:0], result_is_zero.",
+        "source": "module TopModule (\n    input do_sub,\n    input [7:0] a,\n    input [7:0] b,\n    output reg [7:0] out,\n    output reg result_is_zero\n);",
+        "implementation": "always @(*) begin\n      case (do_sub)\n        0: out = a + b;\n        1: out = a - b;\n      endcase\n\n      result_is_zero = (out == 8'b0);\n  end"
+    },
+    {
+        "id": "2",
+        "content": "Implement the logic to perform addition or subtraction based on the do_sub signal and assign the result to out.",
+        "source": "always @(*) begin\n    case (do_sub)\n      0: out = a+b;\n      1: out = a-b;\n    endcase",
+        "implementation": "always @(*) begin\n    case (do_sub)\n        0: out = a + b;\n        1: out = a - b;\n        default: out = 8'b0; // Handle default case to avoid latches\n    endcase\n\n    result_is_zero = (out == 8'b0); // Correctly assign result_is_zero\nend"
+    },
+    {
+        "id": "3",
+        "content": "Implement the logic to correctly set the result_is_zero flag when the output is zero.",
+        "source": "if (~out)\n    result_is_zero = 1;",
+        "implementation": "if (out == 8'b0)\n              result_is_zero = 1;\n          else\n              result_is_zero = 0;"
+    }
+]
+
+Modified Base Query:
+
+
+Consider the following adder-subtractor with a zero flag:
+
+  synthesis verilog_input_version verilog_2001
+  module TopModule (
+      input do_sub,
+      input [7:0] a,
+      input [7:0] b,
+      output reg [7:0] out,
+      output reg result_is_zero
+  );
+
+      always @(*) begin
+          case (do_sub)
+            0: out = a+b;
+            1: out = a-b;
+          endcase
+
+          if (~out)
+              result_is_zero = 1;
+      end
+
+  endmodule
+
+Unfortunately, this module has a bug. Implement a new version of this
+module that fixes the bug.
+

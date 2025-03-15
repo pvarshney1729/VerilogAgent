@@ -1,0 +1,68 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a down-counter that can be loaded with a 10-bit value and decrements on each clock cycle. The counter should stop decrementing once it reaches zero and should only be reloaded when the `load` signal is asserted. The output `tc` should indicate when the counter has reached zero.
+
+1. **Inputs and Outputs**: We have a clock `clk`, a load signal `load`, a 10-bit input `data`, and a 1-bit output `tc`.
+
+2. **Counter Logic**: 
+   - When `load` is high, the counter should be loaded with the value from `data`.
+   - When `load` is low, the counter should decrement by 1 if it is not already zero.
+   - If the counter reaches zero, it should remain at zero until reloaded.
+
+3. **Output Logic**: 
+   - The `tc` output should be high when the counter is zero.
+
+4. **Sequential Logic**: 
+   - The counter operation should be synchronized with the positive edge of the clock.
+
+5. **Single D Flip-Flop**: 
+   - The problem statement mentions using a single D flip-flop, which implies that the counter should be implemented using a single register.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [9:0] data,
+    output logic tc
+);
+
+    logic [9:0] counter;
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            counter <= data;
+        end else if (counter != 10'b0) begin
+            counter <= counter - 1;
+        end
+    end
+
+    assign tc = (counter == 10'b0);
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [9:0] data,
+    output logic tc
+);
+
+    logic [9:0] counter;
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            counter <= data;
+        end else if (counter != 10'b0) begin
+            counter <= counter - 1;
+        end
+    end
+
+    assign tc = (counter == 10'b0);
+
+endmodule

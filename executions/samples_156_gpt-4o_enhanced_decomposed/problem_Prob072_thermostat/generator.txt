@@ -1,0 +1,75 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to design a combinational logic circuit that controls the heater, air conditioner, and fan based on the input signals `mode`, `too_cold`, `too_hot`, and `fan_on`. The module operates in two modes: heating (mode = 1) and cooling (mode = 0).
+
+1. **Heater Control**: 
+   - The heater should be turned on when the system is in heating mode (`mode = 1`) and it is too cold (`too_cold = 1`).
+   - The heater should be off in cooling mode (`mode = 0`).
+
+2. **Air Conditioner Control**:
+   - The air conditioner should be turned on when the system is in cooling mode (`mode = 0`) and it is too hot (`too_hot = 1`).
+   - The air conditioner should be off in heating mode (`mode = 1`).
+
+3. **Fan Control**:
+   - The fan should be turned on if either the heater or air conditioner is on.
+   - Additionally, the fan should be turned on if the user requests it (`fan_on = 1`), regardless of the heater or air conditioner status.
+
+The logic for each output can be derived as follows:
+- `heater = mode & too_cold`
+- `aircon = ~mode & too_hot`
+- `fan = heater | aircon | fan_on`
+
+We will use an `always @(*)` block to implement the combinational logic for these outputs.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic mode,
+    input logic too_cold,
+    input logic too_hot,
+    input logic fan_on,
+    output logic heater,
+    output logic aircon,
+    output logic fan
+);
+
+    always @(*) begin
+        // Heater control logic
+        heater = mode & too_cold;
+        
+        // Air conditioner control logic
+        aircon = ~mode & too_hot;
+        
+        // Fan control logic
+        fan = heater | aircon | fan_on;
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic mode,
+    input logic too_cold,
+    input logic too_hot,
+    input logic fan_on,
+    output logic heater,
+    output logic aircon,
+    output logic fan
+);
+
+    always @(*) begin
+        // Heater control logic
+        heater = mode & too_cold;
+        
+        // Air conditioner control logic
+        aircon = ~mode & too_hot;
+        
+        // Fan control logic
+        fan = heater | aircon | fan_on;
+    end
+
+endmodule

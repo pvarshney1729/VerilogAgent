@@ -1,0 +1,48 @@
+Generated Response:
+
+<REASONING>
+To implement a D latch using an always block, we need to ensure that the output `q` follows the input `d` when the enable signal `ena` is high. A D latch is a level-sensitive device, meaning it is sensitive to the level of the enable signal rather than the edge of a clock signal. 
+
+1. **Module Declaration**: We will declare a module named `TopModule` with the specified input and output ports: `d`, `ena`, and `q`.
+
+2. **Port Declaration**: All ports will be declared as `logic` as per the coding conventions.
+
+3. **Always Block**: We will use an `always @(*)` block to describe the behavior of the D latch. This block will be sensitive to changes in `d` and `ena`.
+
+4. **Latch Behavior**: Inside the always block, we will check if `ena` is high. If it is, we will assign the value of `d` to `q`. If `ena` is low, `q` retains its previous value.
+
+5. **Initialization**: Although initialization is typically not synthesizable for hardware, it is often used in simulation to ensure known starting conditions. However, since the guidelines do not specify initialization, we will focus on the latch behavior.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic d,
+    input logic ena,
+    output logic q
+);
+
+    always @(*) begin
+        if (ena) begin
+            q = d;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic d,
+    input logic ena,
+    output logic q
+);
+
+    always @(*) begin
+        if (ena) begin
+            q = d;
+        end
+    end
+
+endmodule

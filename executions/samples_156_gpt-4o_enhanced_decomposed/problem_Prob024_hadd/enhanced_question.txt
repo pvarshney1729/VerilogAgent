@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input logic a;  // 1-bit input representing the first operand
+  - input logic b;  // 1-bit input representing the second operand
+
+- Output Ports:
+  - output logic sum;  // 1-bit output representing the sum of inputs a and b
+  - output logic cout;  // 1-bit output representing the carry-out from the addition
+
+Functional Description:
+The TopModule implements a half adder, which is a combinational logic circuit that takes two single-bit binary inputs (a and b) and produces two outputs: 
+1. sum: the result of the addition of inputs a and b.
+2. cout: the carry-out, which indicates whether there is a carry from the addition of a and b.
+
+Behavior:
+- The sum output is defined as: sum = a XOR b
+- The carry-out output is defined as: cout = a AND b
+
+Signal Characteristics:
+- All input and output ports are defined as 1-bit wide logic signals.
+- The least significant bit (LSB) is indexed as bit[0].
+
+Edge Cases:
+- The module should handle all possible combinations of input values (00, 01, 10, 11) and produce the corresponding outputs as specified.
+
+Reset Conditions:
+- No reset conditions are applicable as this is a purely combinational module with no state retention.
+</ENHANCED_SPEC>

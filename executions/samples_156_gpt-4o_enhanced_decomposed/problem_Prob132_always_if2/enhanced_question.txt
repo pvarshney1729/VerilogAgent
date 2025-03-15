@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Consider the following adder-subtractor with a zero flag:
+
+  module TopModule (
+      input      cpu_overheated,           // Input signal indicating if the CPU is overheating
+      output reg shut_off_computer,        // Output signal to shut off the computer
+      input      arrived,                   // Input signal indicating if the destination has been reached
+      input      gas_tank_empty,           // Input signal indicating if the gas tank is empty
+      output reg keep_driving               // Output signal to indicate whether to keep driving
+  );
+
+      // Combinational logic to determine if the computer should be shut off
+      always @(*) begin
+          shut_off_computer = 1'b0;          // Default state
+          if (cpu_overheated) begin
+             shut_off_computer = 1'b1;      // Set to 1 if CPU is overheating
+          end
+      end
+
+      // Combinational logic to determine if driving should continue
+      always @(*) begin
+          keep_driving = 1'b0;               // Default state
+          if (~arrived) begin
+             keep_driving = ~gas_tank_empty; // Continue driving if not arrived and gas tank is not empty
+          end
+      end
+
+  endmodule
+</ENHANCED_SPEC>

@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - reset: 1-bit input (active-high synchronous reset)
+  - in: 1-bit input (serial data input)
+  
+- Output Ports:
+  - done: 1-bit output (indicates successful reception of a byte)
+
+Functional Description:
+The TopModule implements a finite state machine (FSM) designed to receive a byte of data transmitted in a serial format. The serial protocol consists of:
+- 1 start bit (logic level 0)
+- 8 data bits (LSB first)
+- 1 stop bit (logic level 1)
+
+The FSM must perform the following operations:
+1. Detect the start bit (0).
+2. Wait for and capture all 8 data bits.
+3. Verify the presence of the stop bit (1) following the data bits.
+
+Behavioral Requirements:
+- The FSM must remain in a waiting state if the expected stop bit does not appear after receiving the data bits. It should only attempt to receive the next byte once a valid stop bit is detected.
+- The module must handle the idle state of the line, which is at logic level 1 when no data is being transmitted.
+
+Reset Behavior:
+- The reset signal is active-high and synchronous. Upon activation, all internal registers and state variables should be initialized to their default states, ensuring the FSM starts in a known state.
+
+Timing and Edge Sensitivity:
+- All sequential logic within the module is triggered on the positive edge of the clk signal.
+
+Signal Definitions:
+- The least significant bit (LSB) of the data byte is transmitted first, and the most significant bit (MSB) is transmitted last.
+
+Edge Cases:
+- The FSM should be robust against noise and ensure that it only transitions states based on valid start and stop bit detections.
+</ENHANCED_SPEC>

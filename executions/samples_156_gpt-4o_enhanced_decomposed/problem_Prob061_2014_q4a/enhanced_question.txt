@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - w: 1-bit input (data input from the previous stage of the shift register)
+  - R: 1-bit input (data input to be loaded into the register)
+  - E: 1-bit input (enable signal for shifting operation)
+  - L: 1-bit input (load signal, active high)
+
+- Output Ports:
+  - Q: 1-bit output (current value of the register)
+
+Functional Description:
+The TopModule serves as a single stage in a larger n-bit shift register circuit. The behavior of the module is defined as follows:
+
+1. On the positive edge of the clk signal:
+   - If the load signal (L) is asserted (high), the output Q will be loaded with the value of R.
+   - If the load signal (L) is not asserted (low) and the enable signal (E) is asserted (high), the output Q will be shifted to the right, taking the value of w as the new input.
+   - If neither the load signal (L) nor the enable signal (E) is asserted, the output Q retains its previous value.
+
+Reset Behavior:
+- The module does not specify a reset signal; therefore, the initial state of Q is undefined. It is recommended to define an initial state for Q to ensure predictable behavior upon power-up or reset conditions.
+
+Signal Dependencies:
+- The output Q is dependent on the values of R, w, E, and L at the positive edge of clk.
+- Ensure that the precedence of operations is clear: loading takes priority over shifting when L is asserted.
+
+Edge Cases:
+- If both L and E are asserted simultaneously, the module will load R into Q, and the shifting operation will not occur.
+- If clk transitions while L is low and E is low, Q will maintain its previous state.
+
+Bit Indexing:
+- The output Q is defined as bit[0], where bit[0] refers to the least significant bit (LSB).
+</ENHANCED_SPEC>

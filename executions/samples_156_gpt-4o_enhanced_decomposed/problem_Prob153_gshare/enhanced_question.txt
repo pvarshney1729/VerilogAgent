@@ -1,0 +1,49 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - areset: 1-bit input (asynchronous active-high reset)
+  - predict_valid: 1-bit input (indicates if a prediction request is valid)
+  - predict_pc: 7-bit input (program counter for prediction)
+  - train_valid: 1-bit input (indicates if a training request is valid)
+  - train_taken: 1-bit input (actual outcome of the branch: taken or not taken)
+  - train_mispredicted: 1-bit input (indicates if the branch was mispredicted)
+  - train_history: 7-bit input (global history register value for training)
+  - train_pc: 7-bit input (program counter for training)
+
+- Output Ports:
+  - predict_taken: 1-bit output (predicted branch direction)
+  - predict_history: 7-bit output (global history register value used for prediction)
+
+Functional Description:
+The TopModule implements a gshare branch predictor with the following characteristics:
+- The module utilizes a 7-bit program counter (PC) and a 7-bit global history register (GHR).
+- The PC and GHR are hashed using a bitwise XOR operation to generate a 7-bit index.
+- This index accesses a Pattern History Table (PHT) consisting of 128 entries, each containing a 2-bit saturating counter.
+
+Operational Behavior:
+1. Prediction Interface:
+   - When predict_valid is asserted (1), the module outputs the predicted branch direction (predict_taken) and the current state of the global history register (predict_history) based on the provided predict_pc.
+   - The global history register is updated on the next positive edge of clk with the predicted branch outcome.
+
+2. Training Interface:
+   - When train_valid is asserted (1), the module updates the PHT based on the provided train_pc, train_history, train_taken, and train_mispredicted signals.
+   - If train_mispredicted is asserted (1), the global history register is restored to the state it held immediately after the mispredicted branch completed execution.
+
+3. Precedence and Timing:
+   - If both a training and a prediction request occur in the same clock cycle, the training operation takes precedence, as the prediction will be discarded.
+   - If a training request modifies the PHT entry, the prediction will read the PHT state prior to the training modification, as the PHT is updated only on the next positive edge of clk.
+
+Reset Behavior:
+- The areset signal is asynchronous and active-high. Upon assertion, all registers, including the global history register and PHT entries, are reset to their initial states.
+
+Sequential Logic:
+- All sequential elements, including flip-flops and registers, are triggered on the positive edge of clk.
+
+Edge Cases:
+- The module should handle cases where both training and prediction requests are valid simultaneously, ensuring that the training operation takes precedence and that the prediction reflects the state of the PHT prior to the training modification.
+
+Note: Ensure that all registers and counters have explicitly defined initial values upon reset.
+</ENHANCED_SPEC>

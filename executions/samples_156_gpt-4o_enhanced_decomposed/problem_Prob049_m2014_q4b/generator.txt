@@ -1,0 +1,50 @@
+Generated Response:
+
+<REASONING>
+To implement a D flip-flop with an asynchronous reset, we need to create a module that captures the input `d` on the rising edge of the clock `clk` and outputs it as `q`. The asynchronous reset `ar` will immediately reset the output `q` to 0 whenever it is asserted, regardless of the clock state. 
+
+1. **Module Declaration**: We will declare a module named `TopModule` with the specified input and output ports.
+2. **Port Declaration**: All ports will be declared as `logic` to adhere to the coding conventions.
+3. **Sequential Logic**: We will use an `always_ff` block to describe the behavior of the D flip-flop. This block will be sensitive to the positive edge of the clock and the asynchronous reset.
+4. **Asynchronous Reset**: Inside the `always_ff` block, we will first check if the asynchronous reset `ar` is asserted. If it is, we will set `q` to 0. Otherwise, on the rising edge of the clock, we will assign the value of `d` to `q`.
+5. **Initialization**: Although not explicitly required, initializing `q` to 0 in simulation is a good practice to ensure predictable behavior.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic ar,
+    input logic d,
+    output logic q
+);
+
+    always_ff @(posedge clk or posedge ar) begin
+        if (ar) begin
+            q <= 1'b0; // Asynchronous reset
+        end else begin
+            q <= d; // Capture input on rising edge of clk
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic ar,
+    input logic d,
+    output logic q
+);
+
+    always_ff @(posedge clk or posedge ar) begin
+        if (ar) begin
+            q <= 1'b0; // Asynchronous reset
+        end else begin
+            q <= d; // Capture input on rising edge of clk
+        end
+    end
+
+endmodule

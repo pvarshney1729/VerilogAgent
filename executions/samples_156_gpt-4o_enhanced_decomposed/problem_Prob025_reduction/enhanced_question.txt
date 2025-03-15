@@ -1,0 +1,23 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input [7:0] in;  // 8-bit input data, where bit[0] is the least significant bit (LSB) and bit[7] is the most significant bit (MSB).
+  
+- Output Ports:
+  - output parity;    // 1-bit output representing the even parity of the input data.
+
+Functional Description:
+The TopModule computes an even parity bit for the provided 8-bit input data. The parity bit is determined by performing a bitwise XOR operation on all 8 bits of the input. The output parity will be '1' if the number of '1' bits in the input is odd, and '0' if the number of '1' bits is even.
+
+Behavior:
+- The module should continuously compute the parity bit based on the current value of the input data.
+- The parity output should be updated immediately whenever the input changes, ensuring combinational logic behavior.
+
+Edge Cases:
+- The module should handle all possible input combinations (from 8'b00000000 to 8'b11111111) and produce the corresponding parity output.
+
+Reset Conditions:
+- No reset conditions are specified for this module, as it is purely combinational logic without any state retention.
+</ENHANCED_SPEC>

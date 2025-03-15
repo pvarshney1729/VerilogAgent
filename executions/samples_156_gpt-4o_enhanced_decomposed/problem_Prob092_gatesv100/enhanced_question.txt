@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - in: bit[99:0] (100 bits) - A 100-bit input vector.
+
+- Output Ports:
+  - out_both: bit[99:0] (100 bits) - Indicates if both the corresponding input bit and its left neighbor are '1'.
+  - out_any: bit[99:0] (100 bits) - Indicates if either the corresponding input bit or its right neighbor is '1'.
+  - out_different: bit[99:0] (100 bits) - Indicates if the corresponding input bit is different from its left neighbor.
+
+Functional Description:
+1. out_both:
+   - For each bit index i (0 ≤ i ≤ 99):
+     - out_both[i] = (in[i] AND in[i+1]) if i < 99
+     - out_both[99] = 0 (since in[99] has no left neighbor)
+
+2. out_any:
+   - For each bit index i (0 ≤ i ≤ 99):
+     - out_any[i] = (in[i] OR in[i-1]) if i > 0
+     - out_any[0] = 0 (since in[0] has no right neighbor)
+
+3. out_different:
+   - For each bit index i (0 ≤ i ≤ 99):
+     - out_different[i] = (in[i] XOR in[i+1]) if i < 99
+     - out_different[99] = (in[99] XOR in[0]) (wrapping around behavior)
+
+Reset Behavior:
+- The module does not specify a reset condition. If a reset is required, please define the reset behavior and initial states for all output ports.
+
+Clocking:
+- The module is combinational and does not require clocking.
+
+Edge Cases:
+- Ensure that the outputs are correctly set to zero for out_both[99] and out_any[0] as specified.
+
+Signal Dependencies:
+- The outputs depend on the values of the input vector in and its neighboring bits as described above.
+</ENHANCED_SPEC>

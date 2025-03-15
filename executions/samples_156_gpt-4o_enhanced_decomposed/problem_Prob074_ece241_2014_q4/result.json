@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic x,\n    output logic z\n);\n\n    // Internal signals for flip-flop outputs\n    logic q_xor, q_and, q_or;\n\n    // XOR, AND, OR gate operations\n    logic d_xor, d_and, d_or;\n    assign d_xor = x ^ q_xor;\n    assign d_and = x & ~q_and;\n    assign d_or  = x | ~q_or;\n\n    // D flip-flops with positive edge clock triggering\n    always_ff @(posedge clk) begin\n        q_xor <= d_xor;\n        q_and <= d_and;\n        q_or  <= d_or;\n    end\n\n    // Three-input NOR gate\n    assign z = ~(q_xor | q_and | q_or);\n\n    // Initial block for simulation to reset flip-flops to zero\n    initial begin\n        q_xor = 1'b0;\n        q_and = 1'b0;\n        q_or  = 1'b0;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

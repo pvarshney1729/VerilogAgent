@@ -1,0 +1,37 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input port 'in' (8 bits) and output port 'pos' (3 bits).",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input in (8 bits) - output pos (3 bits)",
+        "implementation": "module TopModule (\n    input  [7:0] in,\n    output reg [2:0] pos\n);\n\nalways @(*) begin\n    casez (in)\n        8'b???????1: pos = 3'd0;\n        8'b??????10: pos = 3'd1;\n        8'b?????100: pos = 3'd2;\n        8'b????1000: pos = 3'd3;\n        8'b???10000: pos = 3'd4;\n        8'b??100000: pos = 3'd5;\n        8'b?1000000: pos = 3'd6;\n        8'b10000000: pos = 3'd7;\n        default:     pos = 3'd0;\n    endcase\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the priority encoder logic to determine the position of the first (least significant) bit that is high in the input vector 'in'.",
+        "source": "The module should implement a priority encoder for an 8-bit input. Given an 8-bit vector, the output should report the first (least significant) bit in the vector that is 1.",
+        "implementation": "always @(*) begin\n    casez (in)\n        8'b???????1: pos = 3'd0;\n        8'b??????10: pos = 3'd1;\n        8'b?????100: pos = 3'd2;\n        8'b????1000: pos = 3'd3;\n        8'b???10000: pos = 3'd4;\n        8'b??100000: pos = 3'd5;\n        8'b?1000000: pos = 3'd6;\n        8'b10000000: pos = 3'd7;\n        default:     pos = 3'd0;\n    endcase\nend"
+    },
+    {
+        "id": "3",
+        "content": "Set the output 'pos' to zero if the input vector 'in' has no bits that are high.",
+        "source": "Report zero if the input vector has no bits that are high.",
+        "implementation": "assign pos = (in == 8'b00000000) ? 3'b000 : pos;"
+    }
+]
+
+Modified Base Query:
+
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in  (8 bits)
+ - output pos (3 bits)
+
+The module should implement a priority encoder for an 8-bit input. Given
+an 8-bit vector, the output should report the first (least significant)
+bit in the vector that is 1. Report zero if the input vector has no bits
+that are high. For example, the input 8'b10010000 should output 3'd4,
+because bit[4] is first bit that is high.
+

@@ -1,0 +1,56 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` with the specified interface and behavior, we need to create a module that includes 8 D flip-flops. Each flip-flop will store one bit of the 8-bit input `d` and output it to the 8-bit output `q`. The flip-flops should be triggered on the negative edge of the clock (`clk`) and have an active high synchronous reset. When reset is active, the flip-flops should be set to the value `0x34` (which is `8'b00110100` in binary).
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **Sequential Logic**: Use an `always_ff` block to describe the behavior of the D flip-flops. The block is sensitive to the negative edge of `clk`.
+
+3. **Synchronous Reset**: Inside the `always_ff` block, check if `reset` is high. If it is, set the output `q` to `8'b00110100`. Otherwise, assign the input `d` to `q`.
+
+4. **Initialization**: Although initialization is not typically synthesized, it is useful for simulation. Initialize `q` to zero at the start of the simulation.
+
+5. **Coding Conventions**: Follow the guidelines and conventions provided, such as using `logic` for signal declarations and ensuring the reset is synchronous.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    // Sequential logic with synchronous reset
+    always_ff @(negedge clk) begin
+        if (reset) begin
+            q <= 8'b00110100; // Reset to 0x34
+        end else begin
+            q <= d; // Capture input d
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    // Sequential logic with synchronous reset
+    always_ff @(negedge clk) begin
+        if (reset) begin
+            q <= 8'b00110100; // Reset to 0x34
+        end else begin
+            q <= d; // Capture input d
+        end
+    end
+
+endmodule

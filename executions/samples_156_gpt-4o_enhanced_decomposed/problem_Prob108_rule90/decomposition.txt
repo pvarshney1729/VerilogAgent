@@ -1,0 +1,60 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the TopModule with inputs clk, load, data[511:0] and output q[511:0].",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  clk, - input  load, - input  data (512 bits) - output q    (512 bits)",
+        "implementation": "module TopModule (\n    input clk,\n    input load,\n    input [511:0] data,\n    output reg [511:0] q\n);\n\nalways @(posedge clk) begin\n    if (load) begin\n        q <= data;\n    end else begin\n        q[0] <= q[1]; // q[-1] is assumed to be 0\n        q[511] <= q[510]; // q[512] is assumed to be 0\n        for (integer i = 1; i < 511; i = i + 1) begin\n            q[i] <= q[i-1] ^ q[i+1];\n        end\n    end\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the logic to load data into q[511:0] when load is high.",
+        "source": "The load input indicates the state of the system should be loaded with data[511:0].",
+        "implementation": "always @(posedge clk) begin\n    if (load) begin\n        q <= data;\n    end\nend"
+    },
+    {
+        "id": "3",
+        "content": "Implement the Rule 90 logic to update each cell in q[511:0] based on the XOR of its two neighbors, considering the boundaries q[-1] and q[512] as zero.",
+        "source": "The module should implement Rule 90, a one-dimensional cellular automaton with interesting properties. At each time step, the next state of each cell is the XOR of the cell's two current neighbours. Assume the boundaries (q[-1] and q[512]) are both zero (off).",
+        "implementation": "reg [511:0] q_reg, q_next;\n\nalways @(posedge clk) begin\n    if (load) begin\n        q_reg <= data;\n    end else begin\n        q_next[0] <= q_reg[1]; // q[-1] is 0\n        q_next[511] <= q_reg[510]; // q[512] is 0\n        for (int i = 1; i < 511; i = i + 1) begin\n            q_next[i] <= q_reg[i-1] ^ q_reg[i+1];\n        end\n        q_reg <= q_next;\n    end\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement the sequential logic to update q[511:0] on the positive edge of the clock.",
+        "source": "Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "reg [511:0] q;\n\nalways @(posedge clk) begin\n    if (load) begin\n        q <= data;\n    end else begin\n        q[0] <= q[1]; // q[-1] is assumed to be 0, so q[0] = 0 XOR q[1]\n        q[511] <= q[510]; // q[512] is assumed to be 0, so q[511] = q[510] XOR 0\n        for (integer i = 1; i < 511; i = i + 1) begin\n            q[i] <= q[i-1] ^ q[i+1];\n        end\n    end\nend"
+    }
+]
+
+Modified Base Query:
+
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk,
+ - input  load,
+ - input  data (512 bits)
+ - output q    (512 bits)
+
+The module should implement Rule 90, a one-dimensional cellular automaton
+with interesting properties. The rules are simple. There is a
+one-dimensional array of cells (on or off). At each time step, the next
+state of each cell is the XOR of the cell's two current neighbours:
+
+  Left | Center | Right | Center's next state
+  1    | 1      | 1     | 0
+  1    | 1      | 0     | 1
+  1    | 0      | 1     | 0
+  1    | 0      | 0     | 1
+  0    | 1      | 1     | 1
+  0    | 1      | 0     | 0
+  0    | 0      | 1     | 1
+  0    | 0      | 0     | 0
+
+In this circuit, create a 512-cell system (q[511:0]), and advance by one
+time step each clock cycle. The load input indicates the state of the
+system should be loaded with data[511:0]. Assume the boundaries (q[-1]
+and q[512]) are both zero (off). Assume all sequential logic is triggered
+on the positive edge of the clock.
+

@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - areset: 1-bit input (asynchronous active-high reset)
+  - bump_left: 1-bit input (indicates bump from the left)
+  - bump_right: 1-bit input (indicates bump from the right)
+  - ground: 1-bit input (indicates presence of ground; 0 = no ground, 1 = ground present)
+
+- Output Ports:
+  - walk_left: 1-bit output (active high indicates Lemming is walking left)
+  - walk_right: 1-bit output (active high indicates Lemming is walking right)
+  - aaah: 1-bit output (active high indicates Lemming is falling and saying "aaah")
+
+Functional Description:
+The module implements a Moore finite state machine (FSM) to model the behavior of Lemmings in a 2D environment. The Lemming can be in one of two states:
+1. Walking Left (walk_left = 1, walk_right = 0)
+2. Walking Right (walk_left = 0, walk_right = 1)
+
+State Transitions:
+- The Lemming will switch its walking direction based on the following conditions:
+  - If bump_left is asserted (1), the Lemming will transition to walking right (walk_left = 0, walk_right = 1).
+  - If bump_right is asserted (1), the Lemming will transition to walking left (walk_left = 1, walk_right = 0).
+  - If both bump_left and bump_right are asserted simultaneously, the Lemming will still switch directions according to the bump conditions.
+
+Falling Behavior:
+- When ground = 0, the Lemming will fall and assert aaah (aaah = 1).
+- When ground = 1, the Lemming will resume walking in the same direction it was walking before falling.
+- Bumps (bump_left or bump_right) while falling do not affect the walking direction.
+- If a bump occurs in the same clock cycle as ground transitions to 0 (but before falling), or if ground transitions to 1 while the Lemming is still falling, the walking direction remains unchanged.
+
+Reset Behavior:
+- The areset signal is a positive edge-triggered asynchronous reset that initializes the Lemming's state to walking left (walk_left = 1, walk_right = 0) upon assertion.
+
+Clocking:
+- All sequential logic is triggered on the positive edge of the clk signal.
+
+Initial Conditions:
+- All output signals (walk_left, walk_right, aaah) should be defined upon reset and during state transitions to ensure correct operation.
+
+Edge Cases:
+- Ensure that the module handles simultaneous bumps and ground transitions correctly without introducing race conditions or undefined behavior.
+</ENHANCED_SPEC>

@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - load: 1-bit input (active high load signal)
+  - data: 512-bit input (initial state of the cellular automaton, data[511:0])
+
+- Output Ports:
+  - q: 512-bit output (current state of the cellular automaton, q[511:0])
+
+Functional Description:
+The TopModule implements Rule 110, a one-dimensional cellular automaton. The state of the cellular automaton consists of an array of 512 cells, where each cell can be either on (1) or off (0). The next state of each cell is determined by its current state and the states of its two immediate neighbors, as defined by the following transition table:
+
+| Left[i+1] | Center[i] | Right[i-1] | Center's Next State |
+|-----------|-----------|-------------|----------------------|
+|     1     |     1     |      1      |          0           |
+|     1     |     1     |      0      |          1           |
+|     1     |     0     |      1      |          1           |
+|     1     |     0     |      0      |          0           |
+|     0     |     1     |      1      |          1           |
+|     0     |     1     |      0      |          1           |
+|     0     |     0     |      1      |          1           |
+|     0     |     0     |      0      |          0           |
+
+Operation:
+- The module advances the state of the cellular automaton by one time step on the positive edge of the clock (clk).
+- When the load signal is asserted (active high), the current state of the cellular automaton (q[511:0]) is loaded with the initial data provided in data[511:0].
+- The boundaries of the cellular automaton are treated as zero (off), meaning that q[-1] and q[512] are considered to be 0.
+
+Sequential Logic:
+- All sequential elements, including flip-flops and registers, are triggered on the positive edge of the clock.
+- The initial state of the output q[511:0] should be defined as 0 when the module is reset or initialized.
+
+Reset Behavior:
+- The module does not specify an asynchronous reset; therefore, it is assumed that the initial state is set only during the load operation.
+
+Edge Cases:
+- Ensure that the module correctly handles the boundaries by treating q[-1] and q[512] as 0 during state transitions.
+
+Signal Dependencies:
+- The next state of each cell (q[i]) depends on the current states of q[i-1], q[i], and q[i+1]. Ensure that the implementation respects this dependency to avoid race conditions.
+</ENHANCED_SPEC>

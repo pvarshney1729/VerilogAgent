@@ -1,0 +1,88 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` with a two-bit saturating counter, we need to follow these steps:
+
+1. **Port Declaration**: Define the input and output ports as specified. The inputs are `clk`, `areset`, `train_valid`, and `train_taken`, and the output is a 2-bit `state`.
+
+2. **Counter Logic**: The counter should increment when both `train_valid` and `train_taken` are high, and decrement when `train_valid` is high and `train_taken` is low. The counter should saturate at 3 (maximum) and 0 (minimum).
+
+3. **Asynchronous Reset**: Implement an asynchronous reset that sets the counter to `2'b01` when `areset` is high. This reset should be triggered on the positive edge of `areset`.
+
+4. **Sequential Logic**: Use an always block triggered on the positive edge of `clk` to update the counter based on the conditions specified.
+
+5. **Output Assignment**: Assign the current value of the counter to the output `state`.
+
+6. **Coding Conventions**: Use `logic` for all signals, and ensure numeric constants are properly sized.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic train_valid,
+    input logic train_taken,
+    output logic [1:0] state
+);
+
+    // Internal register to hold the counter value
+    logic [1:0] counter;
+
+    // Asynchronous reset and counter update logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            counter <= 2'b01; // Reset to weakly not-taken
+        end else if (train_valid) begin
+            if (train_taken) begin
+                if (counter < 2'b11) begin
+                    counter <= counter + 1; // Increment counter
+                end
+            end else begin
+                if (counter > 2'b00) begin
+                    counter <= counter - 1; // Decrement counter
+                end
+            end
+        end
+    end
+
+    // Assign the counter value to the output state
+    assign state = counter;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic train_valid,
+    input logic train_taken,
+    output logic [1:0] state
+);
+
+    // Internal register to hold the counter value
+    logic [1:0] counter;
+
+    // Asynchronous reset and counter update logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            counter <= 2'b01; // Reset to weakly not-taken
+        end else if (train_valid) begin
+            if (train_taken) begin
+                if (counter < 2'b11) begin
+                    counter <= counter + 1; // Increment counter
+                end
+            end else begin
+                if (counter > 2'b00) begin
+                    counter <= counter - 1; // Decrement counter
+                end
+            end
+        end
+    end
+
+    // Assign the counter value to the output state
+    assign state = counter;
+
+endmodule

@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a: 1-bit input representing the first variable.
+  - input wire b: 1-bit input representing the second variable.
+  - input wire c: 1-bit input representing the third variable.
+  - input wire d: 1-bit input representing the fourth variable (don't-care condition).
+  
+- Output Ports:
+  - output wire out: 1-bit output representing the result of the logic function.
+
+Functional Description:
+The module implements a combinational logic function based on the provided Karnaugh map. The output 'out' is determined by the values of inputs 'a', 'b', 'c', and 'd' as follows:
+
+Karnaugh Map:
+              ab
+   cd   01  00  10  11
+   00 | d | 0 | 1 | 1 |
+   01 | 0 | 0 | d | d |
+   11 | 0 | 1 | 1 | 1 |
+   10 | 0 | 1 | 1 | 1 |
+
+Where:
+- 'd' indicates a don't-care condition, allowing for flexibility in output assignment.
+- The output 'out' should be defined for all combinations of inputs, with the following mappings:
+  - For cd = 00: out = 0 (if d = 0), out = 1 (if d = 1)
+  - For cd = 01: out = 0
+  - For cd = 10: out = 1
+  - For cd = 11: out = 1
+
+Implementation Notes:
+- Ensure that the output 'out' is defined for all possible combinations of inputs.
+- The module should not have any sequential logic; it is purely combinational.
+- There are no resets or clock cycles involved in this module.
+- The implementation should handle all edge cases and input boundaries as specified in the Karnaugh map.
+</ENHANCED_SPEC>

@@ -1,0 +1,22 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - in: bit[7:0] (8 bits) - Represents an 8-bit vector where each bit is indexed from bit[0] (least significant bit) to bit[7] (most significant bit).
+  
+- Output Ports:
+  - pos: bit[2:0] (3 bits) - Represents the index of the first bit set to '1' in the input vector. If no bits are set, the output should be 3'b000.
+
+Functional Description:
+The TopModule implements a priority encoder for the 8-bit input vector 'in'. The output 'pos' should indicate the index of the least significant bit that is high (1). If the input vector contains no bits that are high, the output 'pos' should be set to 3'b000.
+
+Behavioral Examples:
+- For an input of in = 8'b10010000, the output pos should be 3'd4, as bit[4] is the first bit that is high.
+- For an input of in = 8'b00000000, the output pos should be 3'b000, indicating no bits are high.
+
+Implementation Notes:
+- The module should be designed as combinational logic, with no internal state or clock dependencies.
+- Ensure that the output 'pos' is valid for all possible input combinations, including edge cases where the input is all zeros.
+- The output should be determined in a single combinational logic evaluation without race conditions.
+</ENHANCED_SPEC>

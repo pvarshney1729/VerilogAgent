@@ -1,0 +1,39 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input port 'in' (4 bits) and output port 'pos' (2 bits).",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input in (4 bits) - output pos (2 bits)",
+        "implementation": "module TopModule(\n    input [3:0] in,\n    output reg [1:0] pos\n);\n\nalways @(*) begin\n    casez (in)\n        4'b1???: pos = 2'd3;\n        4'b01??: pos = 2'd2;\n        4'b001?: pos = 2'd1;\n        4'b0001: pos = 2'd0;\n        default: pos = 2'd0;\n    endcase\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the priority encoder logic to check each bit of the input 'in' from the highest bit to the lowest bit and assign the position of the first high bit to the output 'pos'.",
+        "source": "The module should implement a priority encoder. A priority encoder is a combinational circuit that, when given an input bit vector, outputs the position of the first 1 bit in the vector.",
+        "implementation": "always @(*) begin\n    casez (in)\n        4'b1???: pos = 2'b11;\n        4'b01??: pos = 2'b10;\n        4'b001?: pos = 2'b01;\n        4'b0001: pos = 2'b00;\n        default: pos = 2'b00;\n    endcase\nend"
+    },
+    {
+        "id": "3",
+        "content": "Handle the case where none of the input bits are high by ensuring the output 'pos' is zero in this scenario.",
+        "source": "For this problem, if none of the input bits are high (i.e., input is zero), output zero.",
+        "implementation": "assign pos = (in == 4'b0000) ? 2'b00 : pos_logic;"
+    }
+]
+
+Modified Base Query:
+
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in  (4 bits)
+ - output pos (2 bits)
+
+The module should implement a priority encoder. A priority encoder is a
+combinational circuit that, when given an input bit vector, outputs the
+position of the first 1 bit in the vector. For example, a 8-bit priority
+encoder given the input 8'b10010000 would output 3'd4, because bit[4] is
+first bit that is high. Build a 4-bit priority encoder. For this problem,
+if none of the input bits are high (i.e., input is zero), output zero.
+Note that a 4-bit number has 16 possible combinations.
+

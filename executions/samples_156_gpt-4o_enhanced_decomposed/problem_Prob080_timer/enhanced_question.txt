@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - load: 1-bit input (load signal, active high)
+  - data: 10-bit input (data to load into the counter, bit[0] is the least significant bit)
+  
+- Output Ports:
+  - tc: 1-bit output (terminal count signal, active high when the counter reaches zero)
+
+Functionality:
+The TopModule implements a countdown timer using a down-counter. The timer counts down from a specified number of clock cycles, indicated by the 10-bit input data, and asserts the terminal count signal (tc) when the countdown reaches zero.
+
+Operational Description:
+1. On the positive edge of clk:
+   - If load = 1:
+     - Load the internal counter with the value from the 10-bit data input. This operation is asynchronous and can occur at any time, including during an active countdown.
+   - If load = 0:
+     - Decrement the internal counter by 1.
+     - The output signal tc will be asserted (set to 1) when the internal counter reaches zero. Once the counter reaches zero, it will remain at zero (stop counting) until a new value is loaded via the load signal.
+
+Counter Behavior:
+- The internal counter is initialized to zero upon reset (reset state).
+- The counter will not count below zero; it will remain at zero once it reaches that state until a new value is loaded.
+
+Sequential Logic:
+- The module contains a single D flip-flop to hold the current count value.
+- All sequential logic is triggered on the positive edge of the clk signal.
+
+Edge Cases:
+- Ensure that the counter can be loaded with any value from 0 to 1023 (the range of a 10-bit number).
+- The tc output should only be asserted when the counter transitions from 1 to 0.
+
+Reset Behavior:
+- The module does not specify a reset input; therefore, the initial state of the counter is assumed to be zero.
+</ENHANCED_SPEC>

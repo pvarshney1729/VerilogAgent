@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - x: bit[3:0] (4 bits, unsigned)
+    - x[0]: Least Significant Bit (LSB)
+    - x[3]: Most Significant Bit (MSB)
+
+- Output Ports:
+  - f: bit (1 bit, unsigned)
+
+Functionality:
+The module implements the logic function f as defined by the following Karnaugh map. The variable 'd' represents don't-care conditions, allowing for flexibility in output assignment.
+
+Karnaugh Map:
+                x[1] x[2]
+      x[3] x[4]   00   01   11   10
+        00       |  d  |  0  |  d  |  d  |
+        01       |  0  |  d  |  1  |  0  |
+        11       |  1  |  1  |  d  |  d  |
+        10       |  1  |  1  |  0  |  d  |
+
+Behavior:
+- The output f should be determined based on the values of input x[3:0] according to the Karnaugh map.
+- For all combinations of x that correspond to 'd', the output f can be assigned either 0 or 1 based on implementation convenience.
+
+Edge Cases:
+- Ensure that the output f is defined for all possible input combinations of x[3:0].
+- The module should handle all input boundaries without producing undefined behavior.
+
+Reset and Initialization:
+- The module does not specify any reset conditions. If sequential elements are added in the future, define synchronous or asynchronous reset behavior and initial states for all registers.
+
+Signal Dependencies:
+- Ensure that the output f is combinationally dependent on the input x[3:0] without any race conditions.
+
+Note: This specification is intended to clarify the functional intent and implementation details of the TopModule without altering its original purpose.
+</ENHANCED_SPEC>

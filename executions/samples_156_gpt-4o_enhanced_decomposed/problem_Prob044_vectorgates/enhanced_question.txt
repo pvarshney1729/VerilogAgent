@@ -1,0 +1,28 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input [2:0] a: 3-bit input vector 'a', where bit[0] is the least significant bit (LSB).
+  - input [2:0] b: 3-bit input vector 'b', where bit[0] is the least significant bit (LSB).
+  
+- Output Ports:
+  - output [2:0] out_or_bitwise: 3-bit output representing the bitwise OR of inputs 'a' and 'b'.
+  - output out_or_logical: 1-bit output representing the logical OR of inputs 'a' and 'b'.
+  - output [5:0] out_not: 6-bit output where:
+    - bits [5:3] contain the inverse (NOT) of input 'b'.
+    - bits [2:0] contain the inverse (NOT) of input 'a'.
+
+Functional Description:
+- The module computes the following:
+  1. out_or_bitwise = a | b (bitwise OR operation).
+  2. out_or_logical = (a[2] | a[1] | a[0]) | (b[2] | b[1] | b[0]) (logical OR operation).
+  3. out_not[5:3] = ~b (inverse of input 'b').
+  4. out_not[2:0] = ~a (inverse of input 'a').
+
+Implementation Notes:
+- Ensure that all operations are combinational.
+- There are no synchronous or asynchronous resets required for this module.
+- All outputs should be valid as soon as the inputs are stable.
+- The module should handle all possible input combinations without race conditions.
+</ENHANCED_SPEC>

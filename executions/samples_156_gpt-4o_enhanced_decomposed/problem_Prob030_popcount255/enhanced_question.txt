@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - Name: in
+  - Width: 255 bits
+  - Description: A 255-bit wide input vector where each bit represents a binary value (0 or 1). The least significant bit (LSB) is bit[0] and the most significant bit (MSB) is bit[254].
+
+- Output Port:
+  - Name: out
+  - Width: 8 bits
+  - Description: An 8-bit wide output representing the population count of '1's in the input vector. The LSB is bit[0] and the MSB is bit[7].
+
+Functional Description:
+- The module implements a combinational logic circuit that calculates the population count of the input vector 'in'. The output 'out' will represent the total number of bits set to '1' in the input vector.
+
+Behavioral Specifications:
+- The output 'out' will be updated immediately based on the input 'in' without any clock cycle dependencies, as this is a purely combinational logic operation.
+- The output 'out' will be in the range of 0 to 255, corresponding to the possible number of '1's in the 255-bit input vector.
+
+Edge Cases:
+- If the input vector 'in' is all zeros (i.e., in = 255'b0), then the output 'out' should be 8'b00000000.
+- If the input vector 'in' is all ones (i.e., in = 255'b111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111), then the output 'out' should be 8'b11111111.
+
+Initial Conditions:
+- There are no registers or flip-flops in this module, as it is purely combinational logic. Therefore, no initial values are required.
+
+Signal Dependencies:
+- The output 'out' is directly dependent on the input 'in'. Any change in 'in' will result in an immediate recalculation of 'out'.
+</ENHANCED_SPEC>

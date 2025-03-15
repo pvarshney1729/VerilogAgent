@@ -1,0 +1,72 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire d;                // 1-bit input signal
+  - input wire done_counting;    // 1-bit input signal
+  - input wire ack;              // 1-bit input signal
+  - input wire [9:0] state;      // 10-bit input signal representing the current state (MSB: state[9], LSB: state[0])
+
+- Output Ports:
+  - output wire B3_next;         // 1-bit output signal, asserts when next state is B3
+  - output wire S_next;          // 1-bit output signal, asserts when next state is S
+  - output wire S1_next;         // 1-bit output signal, asserts when next state is S1
+  - output wire Count_next;      // 1-bit output signal, asserts when next state is Count
+  - output wire Wait_next;       // 1-bit output signal, asserts when next state is Wait
+  - output wire done;            // 1-bit output signal, indicates completion
+  - output wire counting;         // 1-bit output signal, indicates counting state
+  - output wire shift_ena;       // 1-bit output signal, enables shifting
+
+State Machine Description:
+The module implements a Moore state machine with three inputs (d, done_counting, ack) and three outputs (shift_ena, counting, done). The outputs are assumed to be 0 unless otherwise specified in the state transition table below.
+
+State Transition Table:
+- States are represented using one-hot encoding:
+  - S     = 10'b0000000001
+  - S1    = 10'b0000000010
+  - S11   = 10'b0000000100
+  - S110  = 10'b0000001000
+  - B0    = 10'b0000010000
+  - B1    = 10'b0000100000
+  - B2    = 10'b0001000000
+  - B3    = 10'b0010000000
+  - Count  = 10'b0100000000
+  - Wait   = 10'b1000000000
+
+State Transition Logic:
+- Current State: S
+  - d = 0 -> Next State: S
+  - d = 1 -> Next State: S1
+- Current State: S1
+  - d = 0 -> Next State: S
+  - d = 1 -> Next State: S11
+- Current State: S11
+  - d = 0 -> Next State: S110
+  - d = 1 -> Next State: S11
+- Current State: S110
+  - d = 0 -> Next State: S
+  - d = 1 -> Next State: B0
+- Current State: B0
+  - (always go to next cycle) -> Next State: B1
+- Current State: B1
+  - (always go to next cycle) -> Next State: B2
+- Current State: B2
+  - (always go to next cycle) -> Next State: B3
+- Current State: B3
+  - (always go to next cycle) -> Next State: Count
+- Current State: Count
+  - counting = 1, done_counting = 0 -> Next State: Count
+  - counting = 1, done_counting = 1 -> Next State: Wait
+- Current State: Wait
+  - done = 1, ack = 0 -> Next State: Wait
+  - done = 1, ack = 1 -> Next State: S
+
+Reset Condition:
+- At reset, the state machine initializes to state "S".
+
+Output Logic:
+- The output signals (B3_next, S_next, S1_next, Count_next, Wait_next, done, counting, shift_ena) are derived from the current state and the next state logic.
+
+Note: Ensure that all flip-flops and registers have explicitly defined initial values and that the reset is synchronous. The behavior at edge cases and input boundaries should be handled appropriately.
+</ENHANCED_SPEC>

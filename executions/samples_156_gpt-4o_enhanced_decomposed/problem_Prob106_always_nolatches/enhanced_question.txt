@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input:
+  - scancode: bit[15:0] (16 bits, unsigned) - This input represents the scancode received from a PS/2 keyboard.
+
+- Output:
+  - left: bit (1 bit, unsigned) - Asserts high (1) when the left arrow key is pressed.
+  - down: bit (1 bit, unsigned) - Asserts high (1) when the down arrow key is pressed.
+  - right: bit (1 bit, unsigned) - Asserts high (1) when the right arrow key is pressed.
+  - up: bit (1 bit, unsigned) - Asserts high (1) when the up arrow key is pressed.
+
+Functional Description:
+The module processes the 16-bit scancode input to determine if one of the arrow keys (left, down, right, up) has been pressed. The mapping of scancodes to arrow keys is as follows:
+
+- When scancode[15:0] is 16'hE06B, assert left = 1.
+- When scancode[15:0] is 16'hE072, assert down = 1.
+- When scancode[15:0] is 16'hE074, assert right = 1.
+- When scancode[15:0] is 16'hE075, assert up = 1.
+- For any other value of scancode[15:0], all outputs (left, down, right, up) should be asserted low (0).
+
+Implementation Details:
+- The outputs (left, down, right, up) should be combinational logic derived from the input scancode.
+- Ensure that only one output can be high at any given time, corresponding to the pressed arrow key.
+- If multiple scancodes are received in quick succession, the module should consistently reflect the most recent valid scancode.
+
+Edge Cases:
+- If the scancode input is not one of the specified values, all output signals must be low (0).
+- The module should handle any invalid or unexpected scancode inputs gracefully without causing erroneous output states.
+
+Reset Conditions:
+- There is no explicit reset condition defined in this specification; the outputs should default to low (0) when no valid scancode is detected.
+</ENHANCED_SPEC>

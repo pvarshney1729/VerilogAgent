@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out_sop,\n    output logic out_pos\n);\n\n    // Sum-of-Products (SOP) form\n    always @(*) begin\n        out_sop = (~a & ~b & c & ~d) | (~a & b & c & d) | (a & b & c & d);\n    end\n\n    // Product-of-Sums (POS) form\n    always @(*) begin\n        out_pos = (a | ~b | ~c | d) & (~a | b | ~c | d) & (~a | ~b | c | d);\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 66,
+        "passfail": "R"
+    }
+}

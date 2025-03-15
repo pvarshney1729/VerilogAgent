@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input logic in1;  // 1-bit input signal
+  - input logic in2;  // 1-bit input signal
+  - input logic in3;  // 1-bit input signal
+- Output Ports:
+  - output logic out;  // 1-bit output signal
+
+Functional Description:
+The module implements a combinational logic circuit consisting of the following components:
+1. A two-input XNOR gate that takes 'in1' and 'in2' as inputs. The output of this gate will be referred to as 'xnor_out'.
+2. A two-input XOR gate that takes 'xnor_out' and 'in3' as inputs. The output of this gate is assigned to the output port 'out'.
+
+Signal Definitions:
+- 'xnor_out' is an intermediate signal that represents the output of the XNOR operation between 'in1' and 'in2'.
+
+Behavioral Description:
+- The output 'out' is computed as follows:
+  out = (in1 XNOR in2) XOR in3
+
+Edge Cases:
+- The module does not have any specific edge cases or input boundaries to handle, as all inputs are single-bit signals.
+
+Reset Conditions:
+- There are no reset conditions specified for this module, as it is purely combinational logic without any sequential elements.
+
+Timing:
+- The module operates under combinational logic principles, with no clock cycles or sequential dependencies involved.
+</ENHANCED_SPEC>

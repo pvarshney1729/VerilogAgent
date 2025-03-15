@@ -1,0 +1,34 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module with inputs: sel, a[7:0], b[7:0] and output: out[7:0].",
+        "source": "module TopModule (\n      input        sel,\n      input  [7:0] a,\n      input  [7:0] b,\n      output       out\n  );",
+        "implementation": "module TopModule (\n    input        sel,\n    input  [7:0] a,\n    input  [7:0] b,\n    output [7:0] out\n);\n\n    assign out = sel ? b : a;\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the correct 8-bit 2-to-1 mux logic using the select signal 'sel' to choose between inputs 'a' and 'b'.",
+        "source": "assign out = (~sel & a) | (sel & b);",
+        "implementation": "assign out = sel ? b : a;"
+    }
+]
+
+Modified Base Query:
+
+
+Consider the following implementation of an 8-bit 2-to-1 mux:
+
+  module TopModule (
+      input        sel,
+      input  [7:0] a,
+      input  [7:0] b,
+      output       out
+  );
+
+      assign out = (~sel & a) | (sel & b);
+
+  endmodule
+
+Unfortunately, this module has a bug. Implement a new version of this
+module that fixes the bug.
+

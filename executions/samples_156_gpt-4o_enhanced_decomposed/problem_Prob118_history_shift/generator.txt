@@ -1,0 +1,74 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a 32-bit shift register that updates based on branch prediction and misprediction signals. The module should handle the following scenarios:
+
+1. **Asynchronous Reset**: When `areset` is asserted, the history register should be reset to zero. This is an asynchronous operation, so it should be handled separately from the clocked operations.
+
+2. **Branch Prediction**: When `predict_valid` is high, the `predict_taken` bit should be shifted into the LSB of the history register. This operation is synchronous with the clock.
+
+3. **Branch Misprediction**: If `train_mispredicted` is high, the history register should be loaded with `train_history` concatenated with `train_taken`. This operation takes precedence over the branch prediction, as it corrects the history due to a pipeline flush.
+
+4. **Priority Handling**: If both `predict_valid` and `train_mispredicted` are high, the misprediction handling should take precedence.
+
+5. **Output**: The `predict_history` should always reflect the current state of the history register.
+
+The implementation will use a sequential always block triggered by the positive edge of the clock to handle the synchronous operations, and an asynchronous block for the reset.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic predict_valid,
+    input logic predict_taken,
+    input logic train_mispredicted,
+    input logic train_taken,
+    input logic [31:0] train_history,
+    output logic [31:0] predict_history
+);
+
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            // Asynchronous reset: clear the history register
+            predict_history <= 32'b0;
+        end else if (train_mispredicted) begin
+            // Load the history with train_history concatenated with train_taken
+            predict_history <= {train_history[30:0], train_taken};
+        end else if (predict_valid) begin
+            // Shift in predict_taken into the LSB
+            predict_history <= {predict_history[30:0], predict_taken};
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic predict_valid,
+    input logic predict_taken,
+    input logic train_mispredicted,
+    input logic train_taken,
+    input logic [31:0] train_history,
+    output logic [31:0] predict_history
+);
+
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            // Asynchronous reset: clear the history register
+            predict_history <= 32'b0;
+        end else if (train_mispredicted) begin
+            // Load the history with train_history concatenated with train_taken
+            predict_history <= {train_history[30:0], train_taken};
+        end else if (predict_valid) begin
+            // Shift in predict_taken into the LSB
+            predict_history <= {predict_history[30:0], predict_taken};
+        end
+    end
+
+endmodule

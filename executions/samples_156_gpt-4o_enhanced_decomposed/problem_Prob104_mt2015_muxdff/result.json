@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input clk,\n    input L,\n    input q_in,\n    input r_in,\n    output logic Q\n);\n\n    logic mux_out;\n\n    // 2:1 Multiplexer\n    always @(*) begin\n        if (L) begin\n            mux_out = r_in;\n        end else begin\n            mux_out = q_in;\n        end\n    end\n\n    // Flip-Flop\n    always @(posedge clk) begin\n        Q <= mux_out;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 1,
+        "passfail": "R"
+    }
+}

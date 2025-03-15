@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, active on the rising edge)
+  - reset: 1-bit input (active high, synchronous reset)
+  - data: 1-bit input (input bit stream)
+
+- Output Ports:
+  - start_shifting: 1-bit output (indicates the detection of the sequence 1101)
+
+Functional Description:
+The TopModule implements a finite-state machine (FSM) that searches for the specific bit sequence "1101" within the incoming data stream. 
+
+Behavior:
+- Upon detecting the sequence "1101", the output signal start_shifting shall be set to high (1) and remain high indefinitely until the reset signal is activated.
+- The reset signal is synchronous and, when asserted (high), will reset the FSM to its initial state, setting start_shifting to low (0).
+
+State Initialization:
+- All sequential elements, including flip-flops and registers, must be initialized to a defined state upon reset. The initial state of the FSM should be defined clearly in the implementation.
+
+Clocking:
+- The FSM transitions and output updates occur on the positive edge of the clk signal.
+
+Edge Cases:
+- The module should handle cases where the input data stream is shorter than the sequence length (4 bits) gracefully, ensuring that start_shifting remains low (0) until sufficient data is available.
+
+Signal Dependencies:
+- The output start_shifting is directly dependent on the internal state of the FSM, which is influenced by the incoming data and the clk signal.
+
+Precedence of Operations:
+- The FSM state transitions occur before the output signal is updated on each clock cycle.
+
+Race Conditions:
+- Care must be taken to avoid race conditions by ensuring that all state transitions and output assignments are synchronized with the clk signal.
+
+Bit Indexing:
+- The input data stream is treated as a series of bits, with bit[0] representing the least significant bit (LSB) and bit[3] representing the most significant bit (MSB) of the sequence "1101".
+</ENHANCED_SPEC>

@@ -1,0 +1,62 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a 16-bit register using D flip-flops. The register will be divided into two 8-bit sections, each controlled by a bit in the `byteena` signal. The `resetn` signal is a synchronous, active-low reset, meaning that when `resetn` is low, the register should be reset to zero on the next clock edge. The `clk` signal is used to trigger the flip-flops on its positive edge.
+
+1. **Port Declaration**: We will declare all ports as `logic` as per the coding conventions.
+2. **Synchronous Reset**: Implement the reset logic inside the always block, checking if `resetn` is low.
+3. **Byte Enable Logic**: Use the `byteena` signal to control which bytes of the register are updated with the input `d`.
+4. **D Flip-Flops**: Use an always block triggered by the positive edge of `clk` to implement the D flip-flops.
+5. **Initialization**: Initialize the register to zero for simulation purposes.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic [1:0] byteena,
+    input logic [15:0] d,
+    output logic [15:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (!resetn) begin
+            q <= 16'b0; // Synchronous reset to zero
+        end else begin
+            if (byteena[1]) begin
+                q[15:8] <= d[15:8]; // Update upper byte
+            end
+            if (byteena[0]) begin
+                q[7:0] <= d[7:0]; // Update lower byte
+            end
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic [1:0] byteena,
+    input logic [15:0] d,
+    output logic [15:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (!resetn) begin
+            q <= 16'b0; // Synchronous reset to zero
+        end else begin
+            if (byteena[1]) begin
+                q[15:8] <= d[15:8]; // Update upper byte
+            end
+            if (byteena[0]) begin
+                q[7:0] <= d[7:0]; // Update lower byte
+            end
+        end
+    end
+
+endmodule

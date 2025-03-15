@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a;  // 1-bit input
+  - input wire b;  // 1-bit input
+  - input wire c;  // 1-bit input
+  - input wire d;  // 1-bit input
+- Output Ports:
+  - output wire out;   // 1-bit output
+  - output wire out_n; // 1-bit inverted output
+
+Functional Description:
+The TopModule implements a combinational logic circuit consisting of two layers of gates. 
+
+Layer 1:
+- Two AND gates are utilized:
+  - AND Gate 1: Takes inputs from 'a' and 'b'. 
+  - AND Gate 2: Takes inputs from 'c' and 'd'.
+
+Layer 2:
+- An OR gate combines the outputs of the two AND gates. The output of this OR gate is assigned to the output port 'out'.
+
+Inversion:
+- The output 'out_n' is the logical NOT of 'out', effectively providing the inverted output.
+
+Signal Connections:
+- Intermediate wires (to be named as per design choice) will connect the outputs of the AND gates to the input of the OR gate. 
+- Ensure that each wire is driven by exactly one source (the output of a gate) and can feed multiple inputs.
+
+Reset and Initialization:
+- There are no reset conditions specified for this module, as it is purely combinational logic.
+
+Edge Cases:
+- The module should handle all combinations of the input signals 'a', 'b', 'c', and 'd', producing the correct outputs based on standard logical operations.
+
+Note: Ensure that the implementation adheres to the specified input and output widths, and that all signal dependencies are clearly defined.
+</ENHANCED_SPEC>

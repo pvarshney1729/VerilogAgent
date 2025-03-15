@@ -1,0 +1,96 @@
+Generated Response:
+
+<REASONING>
+To implement a 4-bit adder using full adders, we need to add two 4-bit numbers, `x` and `y`, and produce a 5-bit output `sum` that includes the overflow bit. Each full adder takes two input bits and a carry-in bit, and it produces a sum bit and a carry-out bit. We will chain four full adders together, where the carry-out of one adder becomes the carry-in of the next.
+
+1. **Define the Module Interface**: The module `TopModule` will have two 4-bit inputs `x` and `y`, and a 5-bit output `sum`.
+
+2. **Full Adder Logic**: Each full adder will compute:
+   - `sum_bit = x_bit ^ y_bit ^ carry_in`
+   - `carry_out = (x_bit & y_bit) | (carry_in & (x_bit ^ y_bit))`
+
+3. **Chaining Full Adders**: 
+   - The first full adder will have a carry-in of 0.
+   - The carry-out of each full adder will be the carry-in for the next full adder.
+   - The final carry-out will be the overflow bit.
+
+4. **Output Construction**: The `sum` output will be constructed by concatenating the final carry-out (overflow) with the sum bits from each full adder.
+
+5. **Coding Conventions**: Use `logic` for all signals, and use `always @(*)` for combinational logic.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [3:0] x,
+    input logic [3:0] y,
+    output logic [4:0] sum
+);
+    logic [3:0] carry; // Internal carry signals
+
+    // Full adder for bit 0
+    always @(*) begin
+        sum[0] = x[0] ^ y[0] ^ 1'b0; // Initial carry-in is 0
+        carry[0] = (x[0] & y[0]) | (1'b0 & (x[0] ^ y[0]));
+    end
+
+    // Full adder for bit 1
+    always @(*) begin
+        sum[1] = x[1] ^ y[1] ^ carry[0];
+        carry[1] = (x[1] & y[1]) | (carry[0] & (x[1] ^ y[1]));
+    end
+
+    // Full adder for bit 2
+    always @(*) begin
+        sum[2] = x[2] ^ y[2] ^ carry[1];
+        carry[2] = (x[2] & y[2]) | (carry[1] & (x[2] ^ y[2]));
+    end
+
+    // Full adder for bit 3
+    always @(*) begin
+        sum[3] = x[3] ^ y[3] ^ carry[2];
+        carry[3] = (x[3] & y[3]) | (carry[2] & (x[3] ^ y[3]));
+    end
+
+    // Final carry-out is the overflow bit
+    assign sum[4] = carry[3];
+
+endmodule
+[DONE]
+
+Generated Code:
+
+module TopModule(
+    input logic [3:0] x,
+    input logic [3:0] y,
+    output logic [4:0] sum
+);
+    logic [3:0] carry; // Internal carry signals
+
+    // Full adder for bit 0
+    always @(*) begin
+        sum[0] = x[0] ^ y[0] ^ 1'b0; // Initial carry-in is 0
+        carry[0] = (x[0] & y[0]) | (1'b0 & (x[0] ^ y[0]));
+    end
+
+    // Full adder for bit 1
+    always @(*) begin
+        sum[1] = x[1] ^ y[1] ^ carry[0];
+        carry[1] = (x[1] & y[1]) | (carry[0] & (x[1] ^ y[1]));
+    end
+
+    // Full adder for bit 2
+    always @(*) begin
+        sum[2] = x[2] ^ y[2] ^ carry[1];
+        carry[2] = (x[2] & y[2]) | (carry[1] & (x[2] ^ y[2]));
+    end
+
+    // Full adder for bit 3
+    always @(*) begin
+        sum[3] = x[3] ^ y[3] ^ carry[2];
+        carry[3] = (x[3] & y[3]) | (carry[2] & (x[3] ^ y[3]));
+    end
+
+    // Final carry-out is the overflow bit
+    assign sum[4] = carry[3];
+
+endmodule

@@ -1,0 +1,145 @@
+Generated Response:
+
+<REASONING>
+To implement the specified Moore state machine, we need to define two states, A and B. The state machine transitions between these states based on the input signal `in`. The output `out` is determined solely by the current state, not the input.
+
+1. **State Encoding**: We can use a single bit to represent the two states:
+   - State B: 1'b0
+   - State A: 1'b1
+
+2. **State Transitions**:
+   - From state B (out=1):
+     - If `in` is 0, transition to state A.
+     - If `in` is 1, remain in state B.
+   - From state A (out=0):
+     - If `in` is 0, transition to state B.
+     - If `in` is 1, remain in state A.
+
+3. **Output Logic**:
+   - In state B, `out` is 1.
+   - In state A, `out` is 0.
+
+4. **Synchronous Reset**: The reset is active-high and synchronous, meaning the state should be set to B when `reset` is high on the rising edge of `clk`.
+
+5. **Implementation**: We'll use an always block sensitive to the rising edge of `clk` to handle state transitions and synchronous reset. Another always block will be used to determine the output based on the current state.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        STATE_B = 1'b0,
+        STATE_A = 1'b1
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B; // Reset to state B
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            STATE_B: begin
+                if (in == 1'b0) begin
+                    next_state = STATE_A;
+                end else begin
+                    next_state = STATE_B;
+                end
+            end
+            STATE_A: begin
+                if (in == 1'b0) begin
+                    next_state = STATE_B;
+                end else begin
+                    next_state = STATE_A;
+                end
+            end
+            default: begin
+                next_state = STATE_B; // Default to state B
+            end
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (current_state)
+            STATE_B: out = 1'b1;
+            STATE_A: out = 1'b0;
+            default: out = 1'b1; // Default output for safety
+        endcase
+    end
+
+endmodule
+[DONE]
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        STATE_B = 1'b0,
+        STATE_A = 1'b1
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B; // Reset to state B
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            STATE_B: begin
+                if (in == 1'b0) begin
+                    next_state = STATE_A;
+                end else begin
+                    next_state = STATE_B;
+                end
+            end
+            STATE_A: begin
+                if (in == 1'b0) begin
+                    next_state = STATE_B;
+                end else begin
+                    next_state = STATE_A;
+                end
+            end
+            default: begin
+                next_state = STATE_B; // Default to state B
+            end
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (current_state)
+            STATE_B: out = 1'b1;
+            STATE_A: out = 1'b0;
+            default: out = 1'b1; // Default output for safety
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - ar: 1-bit input (asynchronous reset signal, active high)
+  - d: 1-bit input (data input)
+
+- Output Ports:
+  - q: 1-bit output (data output)
+
+Functional Description:
+The TopModule implements a D flip-flop with the following characteristics:
+- The flip-flop is positive edge-triggered, meaning that the output 'q' will be updated on the rising edge of the 'clk' signal.
+- The 'ar' input provides an asynchronous reset functionality. When 'ar' is high, the output 'q' will be immediately reset to '0', regardless of the clock signal or the data input 'd'.
+- The output 'q' will take the value of the input 'd' on the rising edge of 'clk' when 'ar' is low.
+
+Initial Conditions:
+- The output 'q' should be initialized to '0' when the module is reset by the 'ar' signal.
+
+Signal Definitions:
+- 'clk' is the clock signal used for synchronization.
+- 'ar' is the asynchronous reset signal, which takes precedence over the clock.
+- 'd' is the data input that is sampled on the rising edge of 'clk' when 'ar' is not asserted.
+
+Edge Cases:
+- If 'ar' is asserted (high) during any clock cycle, 'q' will be reset to '0' immediately, regardless of the state of 'd' or the clock.
+- If 'ar' is deasserted (low) and a rising edge of 'clk' occurs, 'q' will be updated to the value of 'd'.
+
+Bit Indexing:
+- All signals are 1-bit wide, with bit[0] referring to the least significant bit (LSB).
+</ENHANCED_SPEC>

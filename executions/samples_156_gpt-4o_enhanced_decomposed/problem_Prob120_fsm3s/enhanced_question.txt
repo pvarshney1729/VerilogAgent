@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, active on the rising edge)
+  - reset: 1-bit input (synchronous active high reset signal)
+  - in: 1-bit input (input signal for state transitions)
+
+- Output Ports:
+  - out: 1-bit output (output signal based on the current state)
+
+State Machine Description:
+The module implements a Moore state machine with the following characteristics:
+- States: The state machine has four states: A, B, C, and D.
+- State Transition Table:
+  
+  | Current State | Input (in=0) | Next State (in=0) | Next State (in=1) | Output |
+  |---------------|---------------|--------------------|--------------------|--------|
+  | A             | 0             | A                  | B                  | 0      |
+  | B             | 0             | C                  | B                  | 0      |
+  | C             | 0             | A                  | D                  | 0      |
+  | D             | 0             | C                  | B                  | 1      |
+
+Reset Behavior:
+- The state machine resets to state A when the reset signal is asserted (active high).
+- All flip-flops and registers should be initialized to their respective states upon reset.
+
+Clocking:
+- All sequential logic is triggered on the positive edge of the clk signal.
+
+Signal Definitions:
+- The output signal 'out' reflects the current state of the state machine, specifically outputting '1' only when in state D, and '0' in all other states.
+
+Edge Cases:
+- Ensure that the state machine behaves correctly for all possible input combinations, particularly during transitions between states and when the reset signal is asserted.
+
+</ENHANCED_SPEC>

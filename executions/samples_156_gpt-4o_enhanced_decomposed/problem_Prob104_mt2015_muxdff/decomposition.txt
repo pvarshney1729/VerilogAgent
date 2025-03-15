@@ -1,0 +1,58 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the TopModule with input ports clk, L, q_in, r_in, and output port Q.",
+        "source": "Create the submodule called 'TopModule' with the specified interface.",
+        "implementation": "module TopModule (\n    input clk,\n    input L,\n    input q_in,\n    input r_in,\n    output reg Q\n);\n\n    always @(posedge clk) begin\n        if (L) begin\n            Q <= r_in;\n        end else begin\n            Q <= q_in;\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement a 2:1 multiplexer inside TopModule to select between q_in and r_in based on the control signal L.",
+        "source": "flipflop and 2:1 multiplexer are in a submodule 'TopModule'.",
+        "implementation": "module TopModule (\n    input clk,\n    input L,\n    input q_in,\n    input r_in,\n    output reg Q\n);\n\n    always @(posedge clk) begin\n        if (L) begin\n            Q <= r_in;\n        end else begin\n            Q <= q_in;\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "3",
+        "content": "Implement a flip-flop inside TopModule to store the output of the multiplexer and drive the output Q on the rising edge of clk.",
+        "source": "flipflop and 2:1 multiplexer are in a submodule 'TopModule'.",
+        "implementation": "module TopModule (\n    input clk,\n    input L,\n    input q_in,\n    input r_in,\n    output reg Q\n);\n\n    wire mux_out;\n\n    // 2:1 Multiplexer\n    assign mux_out = L ? r_in : q_in;\n\n    // Flip-flop to store the output of the multiplexer\n    always @(posedge clk) begin\n        Q <= mux_out;\n    end\n\nendmodule"
+    }
+]
+
+Modified Base Query:
+
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  L
+ - input  q_in
+ - input  r_in
+ - output Q
+
+Consider this Verilog module "full_module":
+
+  module full_module (
+      input [2:0] r,
+      input L,
+      input clk,
+      output reg [2:0] q);
+
+    always @(posedge clk) begin
+      if (L) begin
+        q <= r;
+      end else begin
+        q <= {q[1] ^ q[2], q[0], q[2]};
+      end
+    end
+
+  endmodule
+
+Note that q[2:0] is three bits wide, representing three flip-flops that can be
+loaded from r when L is asserted. You want to factor full_module into a hierarchical
+design, flipflop and 2:1 multiplexer are in a submodule "TopModule", and that submodule
+will be instantiated three times in full_module code. Create the submodule called "TopModule".
+You do not have to provide the revised full_module.
+

@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - a: bit [0] (1-bit input, unsigned)
+  - b: bit [0] (1-bit input, unsigned)
+
+- Output Ports:
+  - out: bit [0] (1-bit output, unsigned)
+
+Functional Description:
+The TopModule implements a 2-input NOR gate. The output 'out' is high (1) only when both inputs 'a' and 'b' are low (0). The truth table for the NOR operation is as follows:
+
+| a | b | out |
+|---|---|-----|
+| 0 | 0 |  1  |
+| 0 | 1 |  0  |
+| 1 | 0 |  0  |
+| 1 | 1 |  0  |
+
+Signal Dependencies:
+- The output 'out' is combinationally dependent on the inputs 'a' and 'b'.
+
+Edge Cases:
+- The module should handle all possible input combinations of 'a' and 'b' without any undefined behavior.
+
+Reset Conditions:
+- No reset conditions are specified for this module as it is purely combinational logic.
+
+Initial Values:
+- The output 'out' does not require an initial value specification as it is determined solely by the current values of inputs 'a' and 'b'.
+
+Implementation Notes:
+- Ensure that the implementation adheres to the specified behavior of the NOR gate without introducing any race conditions or unintended delays.
+</ENHANCED_SPEC>

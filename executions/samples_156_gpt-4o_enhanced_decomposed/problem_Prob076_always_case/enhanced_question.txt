@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - sel: bit[2:0] (3 bits) - Selection input for the multiplexer. 
+  - data0: bit[3:0] (4 bits) - First data input.
+  - data1: bit[3:0] (4 bits) - Second data input.
+  - data2: bit[3:0] (4 bits) - Third data input.
+  - data3: bit[3:0] (4 bits) - Fourth data input.
+  - data4: bit[3:0] (4 bits) - Fifth data input.
+  - data5: bit[3:0] (4 bits) - Sixth data input.
+
+- Output Port:
+  - out: bit[3:0] (4 bits) - Output of the selected data input.
+
+Functional Description:
+The module implements a 6-to-1 multiplexer. The selection input 'sel' determines which of the six 4-bit data inputs (data0 to data5) is routed to the output 'out'. 
+
+Behavior:
+- When sel is in the range of 3'b000 (0) to 3'b101 (5), the output 'out' will be equal to the corresponding data input (data0 to data5).
+- If sel is outside the range of 0 to 5 (i.e., 3'b110 or 3'b111), the output 'out' will be set to 4'b0000 (0).
+
+Signal Characteristics:
+- All input and output ports are defined as unsigned.
+- The least significant bit (LSB) is bit[0] and the most significant bit (MSB) is bit[3] for all 4-bit signals.
+
+Edge Cases:
+- Ensure that the output 'out' is explicitly set to 4'b0000 when 'sel' is not within the valid range.
+
+Reset Conditions:
+- No reset conditions are specified for this module.
+</ENHANCED_SPEC>

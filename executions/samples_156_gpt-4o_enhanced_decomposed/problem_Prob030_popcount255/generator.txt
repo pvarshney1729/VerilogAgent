@@ -1,0 +1,50 @@
+Generated Response:
+
+<REASONING>
+To implement a population count circuit for a 255-bit input vector, we need to count the number of '1's in the input vector and output this count as an 8-bit number. The maximum number of '1's in a 255-bit vector is 255, which can be represented with 8 bits (since 2^8 = 256).
+
+The implementation will involve iterating over each bit of the input vector, checking if it is '1', and incrementing a counter accordingly. This can be efficiently done using a combinational logic block. We will use an `always @(*)` block to ensure that the logic is combinational and updates whenever the input changes.
+
+The module will have a single 255-bit input and an 8-bit output. We will declare all ports and internal signals as `logic` to adhere to the coding conventions. The output will be the result of the population count.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [254:0] in,  // 255-bit input
+    output logic [7:0] out   // 8-bit output
+);
+
+    // Combinational logic to count the number of '1's in the input vector
+    always @(*) begin
+        integer i;
+        out = 8'd0;  // Initialize the output to zero
+        for (i = 0; i < 255; i = i + 1) begin
+            if (in[i] == 1'b1) begin
+                out = out + 1'b1;  // Increment the count for each '1'
+            end
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [254:0] in,  // 255-bit input
+    output logic [7:0] out   // 8-bit output
+);
+
+    // Combinational logic to count the number of '1's in the input vector
+    always @(*) begin
+        integer i;
+        out = 8'd0;  // Initialize the output to zero
+        for (i = 0; i < 255; i = i + 1) begin
+            if (in[i] == 1'b1) begin
+                out = out + 1'b1;  // Increment the count for each '1'
+            end
+        end
+    end
+
+endmodule

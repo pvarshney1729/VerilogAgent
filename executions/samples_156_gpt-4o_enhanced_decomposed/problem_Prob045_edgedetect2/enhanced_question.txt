@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - in: bit[7:0] (8-bit input vector, where bit[0] is the least significant bit)
+
+- Output Ports:
+  - anyedge: bit[7:0] (8-bit output vector, where bit[0] is the least significant bit)
+
+Functional Description:
+The TopModule detects transitions (edges) in the 8-bit input vector 'in' from one clock cycle to the next. For each bit in the input vector, the corresponding bit in the output vector 'anyedge' will be set to 1 in the clock cycle immediately following a detected transition. A transition is defined as a change from 0 to 1 or from 1 to 0.
+
+Behavior:
+- The output 'anyedge' will be updated on the positive edge of the clock signal 'clk'.
+- The output bit 'anyedge[i]' (where i = 0 to 7) will be set to 1 if a transition is detected in the input bit 'in[i]' during the previous clock cycle. Otherwise, it will be set to 0.
+- The initial state of all output bits in 'anyedge' should be defined as 0 upon reset.
+
+Reset Behavior:
+- The module does not specify a reset signal; therefore, it is assumed that the output 'anyedge' will be initialized to 0 at the start of operation.
+
+Edge Case Handling:
+- If 'in' remains constant (no transitions) between clock cycles, 'anyedge' should remain unchanged.
+- The module should handle simultaneous transitions across multiple bits in 'in' correctly, setting the corresponding bits in 'anyedge' accordingly.
+
+Signal Dependencies:
+- The output 'anyedge' is dependent on the previous state of 'in' and the current clock cycle.
+- Ensure that there are no race conditions by strictly adhering to the positive edge-triggered nature of the clock.
+
+Timing:
+- All sequential logic is triggered on the positive edge of the clock signal 'clk'.
+</ENHANCED_SPEC>

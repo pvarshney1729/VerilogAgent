@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input logic a;      // 1-bit input representing the first operand
+  - input logic b;      // 1-bit input representing the second operand
+  - input logic cin;    // 1-bit input representing the carry-in
+
+- Output Ports:
+  - output logic cout;  // 1-bit output representing the carry-out
+  - output logic sum;   // 1-bit output representing the sum of the inputs
+
+Functional Description:
+The TopModule implements a full adder circuit. The full adder takes three 1-bit inputs (a, b, and cin) and produces two 1-bit outputs: sum and cout. The sum output represents the least significant bit of the addition, while the cout output represents the carry-out resulting from the addition.
+
+Behavior:
+- The sum output is computed as: sum = a XOR b XOR cin
+- The carry-out output is computed as: cout = (a AND b) OR (cin AND (a XOR b))
+
+Edge Cases:
+- The module should handle all possible combinations of the input bits (0 or 1) for a, b, and cin, ensuring correct outputs for all 8 possible input combinations.
+
+Reset Conditions:
+- No reset conditions are specified for this combinational logic module, as it does not contain any state-holding elements.
+
+Timing:
+- The module operates combinationally, with outputs reflecting changes in inputs immediately (within the same clock cycle).
+
+Note: Ensure that all input and output signals are treated as unsigned logic values.
+</ENHANCED_SPEC>

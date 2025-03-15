@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - in: 1-bit input (serial data input)
+  - reset: 1-bit input (active-high synchronous reset)
+  
+- Output Ports:
+  - out_byte: 8-bit output (data byte received, valid when done is high)
+  - done: 1-bit output (indicates that a complete byte has been received)
+
+Functional Description:
+The TopModule implements a finite state machine (FSM) to process a serial communication protocol that transmits data bytes with a specific format. The expected format consists of:
+- 1 start bit (logic 0)
+- 8 data bits (LSB first)
+- 1 stop bit (logic 1)
+
+The FSM will operate as follows:
+1. The FSM will continuously monitor the input stream for the start bit (0).
+2. Upon detecting the start bit, the FSM will transition to a state where it will receive the subsequent 8 data bits.
+3. The FSM will then verify the presence of the stop bit (1) after the data bits.
+4. If the stop bit is correctly received, the FSM will assert the `done` signal high, indicating that `out_byte` contains valid data.
+5. If the stop bit is not received when expected, the FSM will remain in the current state until a stop bit is detected, at which point it will prepare to receive the next byte.
+
+Reset Behavior:
+- The module includes an active-high synchronous reset. When the reset signal is asserted, all internal registers and state variables will be initialized to their default states:
+  - The FSM will reset to the idle state.
+  - The `out_byte` will be set to 8'b00000000.
+  - The `done` signal will be deasserted (logic 0).
+
+Timing and Edge Cases:
+- All sequential logic is triggered on the positive edge of the `clk`.
+- The `out_byte` output will only be valid when the `done` signal is high. In all other cases, the value of `out_byte` is considered don't-care.
+- The module must handle cases where the input stream may contain noise or invalid sequences, ensuring that it only transitions to the valid states as defined.
+
+Bit Indexing:
+- The `out_byte` output is indexed as follows: `out_byte[0]` refers to the least significant bit (LSB) and `out_byte[7]` refers to the most significant bit (MSB).
+
+Signal Dependencies:
+- The FSM must ensure that the detection of the start bit, data bits, and stop bit occurs in the correct sequence to avoid race conditions and ensure reliable operation.
+
+</ENHANCED_SPEC>

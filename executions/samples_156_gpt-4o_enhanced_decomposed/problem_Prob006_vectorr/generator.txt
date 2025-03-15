@@ -1,0 +1,26 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` that reverses the bit order of an 8-bit input, we need to map each bit of the input to the corresponding reversed position in the output. This is a purely combinational logic task, so we will use an `assign` statement to directly map the input bits to the output bits in reverse order. Since the task does not involve any sequential logic or reset signals, we do not need to implement any flip-flops or clock-related logic. We will adhere to the coding conventions by declaring the ports as `logic` and using an `assign` statement for the combinational logic.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [7:0] in,
+    output logic [7:0] out
+);
+    // Reverse the bit order of the input and assign to output
+    assign out = {in[0], in[1], in[2], in[3], in[4], in[5], in[6], in[7]};
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [7:0] in,
+    output logic [7:0] out
+);
+    // Reverse the bit order of the input and assign to output
+    assign out = {in[0], in[1], in[2], in[3], in[4], in[5], in[6], in[7]};
+endmodule

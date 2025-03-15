@@ -1,0 +1,33 @@
+Generated Response:
+
+<REASONING>
+To implement the module `TopModule` with the specified interface, we need to create a Verilog module that takes two 1-bit inputs, `x` and `y`, and produces a 1-bit output `z`. The boolean function to be implemented is `z = (x ^ y) & x`. This function uses the XOR operation between `x` and `y`, and then performs an AND operation with `x`.
+
+Given the guidelines and coding conventions:
+1. We will declare all ports as `logic` since this is the preferred style over `wire` or `reg`.
+2. Since the function is purely combinational, we will use an `assign` statement to directly compute the output `z`.
+3. There is no need for a clock or reset signal as the function is combinational and does not involve any sequential logic or state elements.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic x,
+    input logic y,
+    output logic z
+);
+    // Implement the boolean function z = (x ^ y) & x
+    assign z = (x ^ y) & x;
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic x,
+    input logic y,
+    output logic z
+);
+    // Implement the boolean function z = (x ^ y) & x
+    assign z = (x ^ y) & x;
+endmodule

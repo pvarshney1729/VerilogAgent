@@ -1,0 +1,218 @@
+Generated Response:
+
+<REASONING>
+To implement the Lemming's behavior as a finite state machine (FSM), we need to define the states and transitions based on the problem description. The states are:
+
+1. WALK_LEFT: The Lemming is walking left.
+2. WALK_RIGHT: The Lemming is walking right.
+3. FALL_LEFT: The Lemming is falling and was last walking left.
+4. FALL_RIGHT: The Lemming is falling and was last walking right.
+5. DIG_LEFT: The Lemming is digging and was last walking left.
+6. DIG_RIGHT: The Lemming is digging and was last walking right.
+
+The transitions between these states are determined by the inputs: `bump_left`, `bump_right`, `ground`, and `dig`. The priority of actions is:
+1. Falling (when `ground` is 0).
+2. Digging (when `dig` is 1 and `ground` is 1).
+3. Switching directions (when bumped).
+
+The `areset` input is an asynchronous reset that initializes the state to WALK_LEFT.
+
+The outputs are determined by the current state:
+- `walk_left` is 1 when in WALK_LEFT.
+- `walk_right` is 1 when in WALK_RIGHT.
+- `aaah` is 1 when in FALL_LEFT or FALL_RIGHT.
+- `digging` is 1 when in DIG_LEFT or DIG_RIGHT.
+
+The FSM will be implemented using a case statement inside an always block triggered by the positive edge of the clock. The asynchronous reset will be handled separately to ensure the state is set to WALK_LEFT when `areset` is asserted.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic bump_left,
+    input logic bump_right,
+    input logic ground,
+    input logic dig,
+    output logic walk_left,
+    output logic walk_right,
+    output logic aaah,
+    output logic digging
+);
+
+    typedef enum logic [2:0] {
+        WALK_LEFT  = 3'b000,
+        WALK_RIGHT = 3'b001,
+        FALL_LEFT  = 3'b010,
+        FALL_RIGHT = 3'b011,
+        DIG_LEFT   = 3'b100,
+        DIG_RIGHT  = 3'b101
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            WALK_LEFT: begin
+                if (!ground)
+                    next_state = FALL_LEFT;
+                else if (dig)
+                    next_state = DIG_LEFT;
+                else if (bump_left || bump_right)
+                    next_state = WALK_RIGHT;
+                else
+                    next_state = WALK_LEFT;
+            end
+            WALK_RIGHT: begin
+                if (!ground)
+                    next_state = FALL_RIGHT;
+                else if (dig)
+                    next_state = DIG_RIGHT;
+                else if (bump_left || bump_right)
+                    next_state = WALK_LEFT;
+                else
+                    next_state = WALK_RIGHT;
+            end
+            FALL_LEFT: begin
+                if (ground)
+                    next_state = WALK_LEFT;
+                else
+                    next_state = FALL_LEFT;
+            end
+            FALL_RIGHT: begin
+                if (ground)
+                    next_state = WALK_RIGHT;
+                else
+                    next_state = FALL_RIGHT;
+            end
+            DIG_LEFT: begin
+                if (!ground)
+                    next_state = FALL_LEFT;
+                else
+                    next_state = DIG_LEFT;
+            end
+            DIG_RIGHT: begin
+                if (!ground)
+                    next_state = FALL_RIGHT;
+                else
+                    next_state = DIG_RIGHT;
+            end
+            default: next_state = WALK_LEFT;
+        endcase
+    end
+
+    // State update logic
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            current_state <= WALK_LEFT;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        walk_left = (current_state == WALK_LEFT);
+        walk_right = (current_state == WALK_RIGHT);
+        aaah = (current_state == FALL_LEFT) || (current_state == FALL_RIGHT);
+        digging = (current_state == DIG_LEFT) || (current_state == DIG_RIGHT);
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic bump_left,
+    input logic bump_right,
+    input logic ground,
+    input logic dig,
+    output logic walk_left,
+    output logic walk_right,
+    output logic aaah,
+    output logic digging
+);
+
+    typedef enum logic [2:0] {
+        WALK_LEFT  = 3'b000,
+        WALK_RIGHT = 3'b001,
+        FALL_LEFT  = 3'b010,
+        FALL_RIGHT = 3'b011,
+        DIG_LEFT   = 3'b100,
+        DIG_RIGHT  = 3'b101
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            WALK_LEFT: begin
+                if (!ground)
+                    next_state = FALL_LEFT;
+                else if (dig)
+                    next_state = DIG_LEFT;
+                else if (bump_left || bump_right)
+                    next_state = WALK_RIGHT;
+                else
+                    next_state = WALK_LEFT;
+            end
+            WALK_RIGHT: begin
+                if (!ground)
+                    next_state = FALL_RIGHT;
+                else if (dig)
+                    next_state = DIG_RIGHT;
+                else if (bump_left || bump_right)
+                    next_state = WALK_LEFT;
+                else
+                    next_state = WALK_RIGHT;
+            end
+            FALL_LEFT: begin
+                if (ground)
+                    next_state = WALK_LEFT;
+                else
+                    next_state = FALL_LEFT;
+            end
+            FALL_RIGHT: begin
+                if (ground)
+                    next_state = WALK_RIGHT;
+                else
+                    next_state = FALL_RIGHT;
+            end
+            DIG_LEFT: begin
+                if (!ground)
+                    next_state = FALL_LEFT;
+                else
+                    next_state = DIG_LEFT;
+            end
+            DIG_RIGHT: begin
+                if (!ground)
+                    next_state = FALL_RIGHT;
+                else
+                    next_state = DIG_RIGHT;
+            end
+            default: next_state = WALK_LEFT;
+        endcase
+    end
+
+    // State update logic
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            current_state <= WALK_LEFT;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        walk_left = (current_state == WALK_LEFT);
+        walk_right = (current_state == WALK_RIGHT);
+        aaah = (current_state == FALL_LEFT) || (current_state == FALL_RIGHT);
+        digging = (current_state == DIG_LEFT) || (current_state == DIG_RIGHT);
+    end
+
+endmodule

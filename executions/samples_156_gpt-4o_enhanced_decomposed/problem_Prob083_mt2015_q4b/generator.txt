@@ -1,0 +1,40 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` based on the given waveform, we need to determine the logic for output `z` based on inputs `x` and `y`. By analyzing the waveform, we can derive the following conditions:
+
+1. When both `x` and `y` are `0`, `z` is `1`.
+2. When `x` is `1` and `y` is `0`, `z` is `0`.
+3. When `x` is `0` and `y` is `1`, `z` is `0`.
+4. When both `x` and `y` are `1`, `z` is `1`.
+
+From these conditions, we can derive the logic expression for `z`:
+- `z = (~x & ~y) | (x & y)`
+
+This expression can be implemented using combinational logic in Verilog. We will use an `always @(*)` block to describe this combinational logic, ensuring that the output `z` is updated whenever there is a change in inputs `x` or `y`.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic x,
+    input logic y,
+    output logic z
+);
+    always @(*) begin
+        z = (~x & ~y) | (x & y);
+    end
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic x,
+    input logic y,
+    output logic z
+);
+    always @(*) begin
+        z = (~x & ~y) | (x & y);
+    end
+endmodule

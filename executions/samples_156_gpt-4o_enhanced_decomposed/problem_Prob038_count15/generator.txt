@@ -1,0 +1,68 @@
+Generated Response:
+
+<REASONING>
+To implement the 4-bit binary counter with the specified interface, we need to follow these steps:
+
+1. **Interface Definition**: Define the module `TopModule` with the specified input and output ports. The inputs are `clk` and `reset`, both 1-bit, and the output `q` is 4-bits wide.
+
+2. **Counter Logic**: The counter should increment on every positive edge of the clock. It should count from 0 to 15, which requires a 4-bit register to hold the current count value.
+
+3. **Synchronous Reset**: The reset is active high and synchronous, meaning it should reset the counter to 0 on the next clock edge when `reset` is high.
+
+4. **Sequential Logic**: Use an `always` block triggered by the positive edge of the clock to implement the counter. Inside this block, check the `reset` signal first. If `reset` is high, set the counter to 0. Otherwise, increment the counter.
+
+5. **Output Assignment**: The current value of the counter should be assigned to the output `q`.
+
+6. **Coding Conventions**: Use `logic` for all signals, and ensure numeric constants are properly sized.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    // Internal register to hold the counter value
+    logic [3:0] count;
+
+    // Sequential logic for the counter
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            count <= 4'b0000; // Reset the counter to 0
+        end else begin
+            count <= count + 4'b0001; // Increment the counter
+        end
+    end
+
+    // Assign the counter value to the output
+    assign q = count;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    // Internal register to hold the counter value
+    logic [3:0] count;
+
+    // Sequential logic for the counter
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            count <= 4'b0000; // Reset the counter to 0
+        end else begin
+            count <= count + 4'b0001; // Increment the counter
+        end
+    end
+
+    // Assign the counter value to the output
+    assign q = count;
+
+endmodule

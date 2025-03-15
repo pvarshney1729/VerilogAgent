@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - y: 6-bit one-hot encoded state input (y[5:0])
+    - y[0] corresponds to state A
+    - y[1] corresponds to state B
+    - y[2] corresponds to state C
+    - y[3] corresponds to state D
+    - y[4] corresponds to state E
+    - y[5] corresponds to state F
+- Input Port:
+  - w: 1-bit control input
+- Output Ports:
+  - Y1: 1-bit output signal, derived from state flip-flop y[1]
+  - Y3: 1-bit output signal, derived from state flip-flop y[3]
+
+Finite-State Machine (FSM) Description:
+States and Transitions:
+- State A (y[0] = 1):
+  - Transition to State B (y[1] = 1) on input w = 1
+  - Remain in State A on input w = 0
+- State B (y[1] = 1):
+  - Transition to State C (y[2] = 1) on input w = 1
+  - Transition to State D (y[3] = 1) on input w = 0
+- State C (y[2] = 1):
+  - Transition to State E (y[4] = 1) on input w = 1
+  - Transition to State D (y[3] = 1) on input w = 0
+- State D (y[3] = 1):
+  - Transition to State F (y[5] = 1) on input w = 1
+  - Transition to State A (y[0] = 1) on input w = 0
+- State E (y[4] = 1):
+  - Remain in State E on input w = 1
+  - Transition to State D (y[3] = 1) on input w = 0
+- State F (y[5] = 1):
+  - Transition to State C (y[2] = 1) on input w = 1
+  - Transition to State D (y[3] = 1) on input w = 0
+
+Implementation Requirements:
+- The output signal Y1 should be connected to the input of the state flip-flop corresponding to state B (y[1]).
+- The output signal Y3 should be connected to the input of the state flip-flop corresponding to state D (y[3]).
+- Ensure that all flip-flops have defined initial values and specify whether resets are synchronous or asynchronous.
+- Clearly define the behavior of the FSM at edge cases and input boundaries.
+- Ensure that the implementation adheres to the one-hot encoding scheme as specified.
+</ENHANCED_SPEC>

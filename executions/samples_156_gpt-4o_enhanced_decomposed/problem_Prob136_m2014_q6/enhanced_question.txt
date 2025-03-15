@@ -1,0 +1,62 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - reset: 1-bit input (active high, asynchronous reset)
+  - w: 1-bit input (data input)
+
+- Output Ports:
+  - z: 1-bit output (state output)
+
+State Machine Description:
+The module implements a finite state machine (FSM) with the following states and transitions:
+
+States:
+- A (State 0)
+- B (State 1)
+- C (State 2)
+- D (State 3)
+- E (State 4)
+- F (State 5)
+
+State Transition Table:
+- From State A (0):
+  - On input w = 0: Transition to State B (1)
+  - On input w = 1: Remain in State A (0)
+
+- From State B (1):
+  - On input w = 0: Transition to State C (2)
+  - On input w = 1: Transition to State D (3)
+
+- From State C (2):
+  - On input w = 0: Transition to State E (4)
+  - On input w = 1: Transition to State D (3)
+
+- From State D (3):
+  - On input w = 0: Transition to State F (5)
+  - On input w = 1: Transition to State A (0)
+
+- From State E (4):
+  - On input w = 0: Remain in State E (4)
+  - On input w = 1: Transition to State D (3)
+
+- From State F (5):
+  - On input w = 0: Transition to State C (2)
+  - On input w = 1: Transition to State D (3)
+
+Reset Behavior:
+- The reset signal (reset) is asynchronous and active high. When asserted, the FSM should transition to State A (0) regardless of the current state or input.
+
+Initial State:
+- Upon reset, the FSM will initialize to State A (0).
+
+Clocking:
+- All state transitions occur on the positive edge of the clk signal.
+
+Output Specification:
+- The output z should reflect the current state of the FSM, where:
+  - z = 1 when in State E (4)
+  - z = 0 for all other states (A, B, C, D, F)
+</ENHANCED_SPEC>

@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input logic a;  // 1-bit input
+  - input logic b;  // 1-bit input
+  - input logic c;  // 1-bit input
+  - input logic d;  // 1-bit input
+- Output Ports:
+  - output logic out_sop;  // 1-bit output for sum-of-products
+  - output logic out_pos;   // 1-bit output for product-of-sums
+
+Functional Description:
+The TopModule implements a combinational logic circuit that processes four 1-bit inputs (a, b, c, d) to generate two outputs: out_sop and out_pos. The outputs are defined based on specific input combinations corresponding to decimal values.
+
+Input Conditions:
+- The output out_sop should be high (logic-1) when the input combination corresponds to the decimal values 2 (0010), 7 (0111), or 15 (1111).
+- The output out_sop should be low (logic-0) when the input combination corresponds to the decimal values 0 (0000), 1 (0001), 4 (0100), 5 (0101), 6 (0110), 9 (1001), 10 (1010), 13 (1101), or 14 (1110).
+- The input combinations for the decimal values 3 (0011), 8 (1000), 11 (1011), and 12 (1100) will not occur in this system.
+
+Output Definitions:
+- The output out_sop must be expressed in minimum sum-of-products (SOP) form.
+- The output out_pos must be expressed in minimum product-of-sums (POS) form.
+
+Bit Indexing:
+- The inputs are indexed as follows: 
+  - a = bit[0] (LSB)
+  - b = bit[1]
+  - c = bit[2]
+  - d = bit[3] (MSB)
+
+Implementation Notes:
+- Ensure that all logic operations are clearly defined to avoid race conditions.
+- The module should be implemented as purely combinational logic with no sequential elements or clock dependencies.
+</ENHANCED_SPEC>

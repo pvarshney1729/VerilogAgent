@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic d,\n    output logic q\n);\n\n    logic q_pos, q_neg;\n\n    // Rising edge flip-flop\n    always_ff @(posedge clk) begin\n        q_pos <= d;\n    end\n\n    // Falling edge flip-flop\n    always_ff @(negedge clk) begin\n        q_neg <= d;\n    end\n\n    // Multiplexer to select between q_pos and q_neg\n    always_comb begin\n        if (clk) begin\n            q = q_neg;\n        end else begin\n            q = q_pos;\n        end\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 93,
+        "passfail": "R"
+    }
+}

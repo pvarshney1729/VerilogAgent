@@ -1,0 +1,78 @@
+Generated Response:
+
+<REASONING>
+To implement a dual-edge triggered flip-flop using standard FPGA resources, we can use two single-edge triggered flip-flops. One flip-flop will capture the data on the rising edge of the clock, and the other will capture the data on the falling edge. We will then use a multiplexer to select between the outputs of these two flip-flops based on the clock signal. This way, we can mimic the behavior of a dual-edge triggered flip-flop.
+
+1. **Clock Division**: Use the clock signal to control which flip-flop's output is selected. This can be done by using the clock signal itself as the select line for a multiplexer.
+
+2. **Rising Edge Flip-Flop**: Capture the input data on the rising edge of the clock.
+
+3. **Falling Edge Flip-Flop**: Capture the input data on the falling edge of the clock.
+
+4. **Multiplexer**: Use the clock signal to select between the outputs of the two flip-flops. When the clock is high, select the output of the falling edge flip-flop, and when the clock is low, select the output of the rising edge flip-flop.
+
+5. **Output**: The output of the multiplexer will be the output of the dual-edge triggered flip-flop.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic d,
+    output logic q
+);
+
+    logic q_pos, q_neg;
+
+    // Rising edge flip-flop
+    always_ff @(posedge clk) begin
+        q_pos <= d;
+    end
+
+    // Falling edge flip-flop
+    always_ff @(negedge clk) begin
+        q_neg <= d;
+    end
+
+    // Multiplexer to select between q_pos and q_neg
+    always_comb begin
+        if (clk) begin
+            q = q_neg;
+        end else begin
+            q = q_pos;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic d,
+    output logic q
+);
+
+    logic q_pos, q_neg;
+
+    // Rising edge flip-flop
+    always_ff @(posedge clk) begin
+        q_pos <= d;
+    end
+
+    // Falling edge flip-flop
+    always_ff @(negedge clk) begin
+        q_neg <= d;
+    end
+
+    // Multiplexer to select between q_pos and q_neg
+    always_comb begin
+        if (clk) begin
+            q = q_neg;
+        end else begin
+            q = q_pos;
+        end
+    end
+
+endmodule

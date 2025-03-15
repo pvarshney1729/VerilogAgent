@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire c;  // 1-bit input
+  - input wire d;  // 1-bit input
+
+- Output Ports:
+  - output wire [3:0] mux_in;  // 4-bit output
+
+Functional Description:
+The module implements a combinational logic circuit based on the provided Karnaugh map. The outputs of the module, mux_in[3:0], are determined by the values of the inputs c and d, which serve as the control signals for a 4-to-1 multiplexer. The selection inputs for the multiplexer are defined as follows:
+- a = c
+- b = d
+
+Karnaugh Map:
+The following Karnaugh map defines the output values for the mux_in signals based on the combinations of inputs a and b:
+
+      ab
+  cd  00  01  11  10
+  00 | 0 | 0 | 0 | 1 |
+  01 | 1 | 0 | 0 | 0 |
+  11 | 1 | 0 | 1 | 1 |
+  10 | 1 | 0 | 0 | 1 |
+
+Output Connections:
+- mux_in[0] corresponds to ab = 00
+- mux_in[1] corresponds to ab = 01
+- mux_in[2] corresponds to ab = 11
+- mux_in[3] corresponds to ab = 10
+
+Implementation Constraints:
+- The design must utilize one 4-to-1 multiplexer and the minimum number of 2-to-1 multiplexers necessary to achieve the desired output without using any additional logic gates.
+- The implementation must ensure that the outputs are correctly assigned based on the specified Karnaugh map.
+
+Notes:
+- Ensure that all signal assignments are made in a combinational logic context.
+- The module does not include any sequential logic elements or reset conditions, as it is purely combinational.
+</ENHANCED_SPEC>

@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - Name: in
+  - Width: 8 bits
+  - Description: This port accepts an 8-bit input signal. The least significant bit (LSB) is referred to as in[0] and the most significant bit (MSB) is referred to as in[7].
+
+- Output Port:
+  - Name: out
+  - Width: 8 bits
+  - Description: This port outputs an 8-bit signal, where the LSB is out[0] and the MSB is out[7].
+
+Functional Description:
+- The module shall reverse the bit ordering of the input signal 'in' and assign the reversed result to the output signal 'out'. Specifically, the output shall be defined as follows:
+  - out[0] = in[7]
+  - out[1] = in[6]
+  - out[2] = in[5]
+  - out[3] = in[4]
+  - out[4] = in[3]
+  - out[5] = in[2]
+  - out[6] = in[1]
+  - out[7] = in[0]
+
+Behavioral Characteristics:
+- The operation is combinational, meaning the output 'out' is immediately updated based on the current value of the input 'in' without any clock cycle dependencies.
+- There are no asynchronous or synchronous resets defined for this module.
+- The module does not have any initial values for the output; it will reflect the reversed input immediately upon receiving a valid input.
+
+Edge Cases:
+- The module should handle all possible 8-bit input values, including the cases where the input is all zeros (in = 8'b00000000) or all ones (in = 8'b11111111), ensuring that the output reflects the correct reversed bit order in these scenarios.
+</ENHANCED_SPEC>

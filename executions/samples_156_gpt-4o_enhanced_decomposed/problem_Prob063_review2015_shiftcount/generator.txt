@@ -1,0 +1,68 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a 4-bit shift register that can also function as a down counter. The module will have two main operations controlled by `shift_ena` and `count_ena` signals. When `shift_ena` is high, the module should shift in the `data` bit into the most significant bit (MSB) of the register. When `count_ena` is high, the module should decrement the current value in the register. Since the behavior when both `shift_ena` and `count_ena` are high is unspecified, we can choose any behavior for this case.
+
+The module will be clocked, and all operations will occur on the positive edge of the clock. We will use a 4-bit register to store the current state of the shift register/counter. The implementation will use an always block triggered by the positive edge of the clock to update the register based on the control signals.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic shift_ena,
+    input logic count_ena,
+    input logic data,
+    output logic [3:0] q
+);
+
+    // Internal register to hold the current state
+    logic [3:0] shift_reg;
+
+    // Sequential logic to update the shift register
+    always_ff @(posedge clk) begin
+        if (shift_ena) begin
+            // Shift in the data bit into the MSB
+            shift_reg <= {data, shift_reg[3:1]};
+        end else if (count_ena) begin
+            // Decrement the current value
+            shift_reg <= shift_reg - 1;
+        end
+        // If both shift_ena and count_ena are high, behavior is unspecified
+    end
+
+    // Assign the internal register to the output
+    assign q = shift_reg;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic shift_ena,
+    input logic count_ena,
+    input logic data,
+    output logic [3:0] q
+);
+
+    // Internal register to hold the current state
+    logic [3:0] shift_reg;
+
+    // Sequential logic to update the shift register
+    always_ff @(posedge clk) begin
+        if (shift_ena) begin
+            // Shift in the data bit into the MSB
+            shift_reg <= {data, shift_reg[3:1]};
+        end else if (count_ena) begin
+            // Decrement the current value
+            shift_reg <= shift_reg - 1;
+        end
+        // If both shift_ena and count_ena are high, behavior is unspecified
+    end
+
+    // Assign the internal register to the output
+    assign q = shift_reg;
+
+endmodule

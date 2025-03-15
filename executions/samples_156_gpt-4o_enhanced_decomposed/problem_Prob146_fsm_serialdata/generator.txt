@@ -1,0 +1,171 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to design a finite state machine (FSM) that can correctly identify and process a serial data stream consisting of a start bit, 8 data bits, and a stop bit. The FSM will have the following states:
+
+1. **IDLE**: The FSM waits for a start bit (logic 0) to begin receiving a byte.
+2. **RECEIVE**: The FSM receives the 8 data bits, one bit per clock cycle.
+3. **STOP**: The FSM checks for the stop bit (logic 1) after receiving the data bits.
+4. **DONE**: The FSM asserts the `done` signal and outputs the received byte.
+
+The FSM transitions between these states based on the input bit and the current state. The `reset` signal is used to initialize the FSM to the IDLE state. The `out_byte` is updated during the RECEIVE state, and the `done` signal is asserted in the DONE state.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic in,
+    input logic reset,
+    output logic [7:0] out_byte,
+    output logic done
+);
+
+    typedef enum logic [1:0] {
+        IDLE    = 2'b00,
+        RECEIVE = 2'b01,
+        STOP    = 2'b10,
+        DONE    = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [2:0] bit_count;
+    logic [7:0] data_byte;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 3'b000;
+            data_byte <= 8'b00000000;
+            out_byte <= 8'b00000000;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == RECEIVE) begin
+                data_byte <= {in, data_byte[7:1]};
+                bit_count <= bit_count + 1;
+            end
+            if (current_state == DONE) begin
+                out_byte <= data_byte;
+                done <= 1'b1;
+            end else begin
+                done <= 1'b0;
+            end
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) begin
+                    next_state = RECEIVE;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            RECEIVE: begin
+                if (bit_count == 3'b111) begin
+                    next_state = STOP;
+                end else begin
+                    next_state = RECEIVE;
+                end
+            end
+            STOP: begin
+                if (in == 1'b1) begin
+                    next_state = DONE;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            DONE: begin
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic in,
+    input logic reset,
+    output logic [7:0] out_byte,
+    output logic done
+);
+
+    typedef enum logic [1:0] {
+        IDLE    = 2'b00,
+        RECEIVE = 2'b01,
+        STOP    = 2'b10,
+        DONE    = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [2:0] bit_count;
+    logic [7:0] data_byte;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 3'b000;
+            data_byte <= 8'b00000000;
+            out_byte <= 8'b00000000;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == RECEIVE) begin
+                data_byte <= {in, data_byte[7:1]};
+                bit_count <= bit_count + 1;
+            end
+            if (current_state == DONE) begin
+                out_byte <= data_byte;
+                done <= 1'b1;
+            end else begin
+                done <= 1'b0;
+            end
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) begin
+                    next_state = RECEIVE;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            RECEIVE: begin
+                if (bit_count == 3'b111) begin
+                    next_state = STOP;
+                end else begin
+                    next_state = RECEIVE;
+                end
+            end
+            STOP: begin
+                if (in == 1'b1) begin
+                    next_state = DONE;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            DONE: begin
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule

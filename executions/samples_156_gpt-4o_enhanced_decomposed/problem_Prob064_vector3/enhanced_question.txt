@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input [4:0] a;  // 5 bits, representing the first input vector
+  - input [4:0] b;  // 5 bits, representing the second input vector
+  - input [4:0] c;  // 5 bits, representing the third input vector
+  - input [4:0] d;  // 5 bits, representing the fourth input vector
+  - input [4:0] e;  // 5 bits, representing the fifth input vector
+  - input [4:0] f;  // 5 bits, representing the sixth input vector
+
+- Output Ports:
+  - output [7:0] w;  // 8 bits, first output vector
+  - output [7:0] x;  // 8 bits, second output vector
+  - output [7:0] y;  // 8 bits, third output vector
+  - output [7:0] z;  // 8 bits, fourth output vector
+
+Functionality:
+- The module shall concatenate the six 5-bit input vectors (a, b, c, d, e, f) into a single 30-bit vector.
+- The output vectors (w, x, y, z) shall be derived from this concatenated input vector.
+- The final output shall consist of the concatenated input vectors followed by two additional bits set to '1' (i.e., the two '1' bits shall occupy the least significant bit positions of the output).
+
+Output Composition:
+- The total output width is 32 bits, which includes the 30 bits from the concatenated input vectors and 2 bits set to '1'.
+- The output assignment shall ensure that the two '1' bits are positioned at the LSB (Least Significant Bit) positions of the output.
+
+Note: Ensure that all input and output signals are treated as unsigned values. The module should be designed to handle all specified input combinations without any race conditions or undefined behavior.
+</ENHANCED_SPEC>

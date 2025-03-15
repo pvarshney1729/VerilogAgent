@@ -1,0 +1,66 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a 100-bit rotator with synchronous load and enable controls. The module will have a clock input (`clk`), a load signal (`load`), a 2-bit enable signal (`ena`), a 100-bit data input (`data`), and a 100-bit output (`q`). The behavior of the module is as follows:
+
+1. **Load Operation**: When `load` is high, the module should load the `data` input into the output `q` on the rising edge of the clock.
+
+2. **Rotation Operation**: When `load` is low, the module should rotate the bits in `q` based on the `ena` signal:
+   - `ena` = 2'b01: Rotate right by one bit.
+   - `ena` = 2'b10: Rotate left by one bit.
+   - `ena` = 2'b00 or 2'b11: No rotation.
+
+3. **Synchronous Operation**: All operations are synchronous with the clock, meaning they occur on the rising edge of `clk`.
+
+4. **Initialization**: Although not explicitly required, initializing the register to zero in simulation is a good practice.
+
+The implementation will use an always block triggered by the rising edge of `clk` to handle the synchronous operations. The logic inside the always block will check the `load` signal first, and if it is not asserted, it will check the `ena` signal to determine the rotation direction.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [1:0] ena,
+    input logic [99:0] data,
+    output logic [99:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            q <= data; // Load data into q
+        end else begin
+            case (ena)
+                2'b01: q <= {q[0], q[99:1]}; // Rotate right
+                2'b10: q <= {q[98:0], q[99]}; // Rotate left
+                default: q <= q; // No rotation
+            endcase
+        end
+    end
+
+endmodule
+[DONE]
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [1:0] ena,
+    input logic [99:0] data,
+    output logic [99:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            q <= data; // Load data into q
+        end else begin
+            case (ena)
+                2'b01: q <= {q[0], q[99:1]}; // Rotate right
+                2'b10: q <= {q[98:0], q[99]}; // Rotate left
+                default: q <= q; // No rotation
+            endcase
+        end
+    end
+
+endmodule

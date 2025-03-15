@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input signal (clock), active on the rising edge.
+  - d: 8-bit input signal (data), where bit[0] refers to the least significant bit (LSB) and bit[7] refers to the most significant bit (MSB).
+
+- Output Ports:
+  - q: 8-bit output signal (data), where bit[0] refers to the least significant bit (LSB) and bit[7] refers to the most significant bit (MSB).
+
+Functional Description:
+- The module shall instantiate 8 D flip-flops (DFFs), each corresponding to one bit of the input data signal 'd'.
+- Each DFF shall be triggered on the positive edge of the clock signal 'clk'.
+- The output 'q' shall reflect the state of the DFFs after the clock edge, such that:
+  - q[0] = d[0] (after the clock edge)
+  - q[1] = d[1] (after the clock edge)
+  - q[2] = d[2] (after the clock edge)
+  - q[3] = d[3] (after the clock edge)
+  - q[4] = d[4] (after the clock edge)
+  - q[5] = d[5] (after the clock edge)
+  - q[6] = d[6] (after the clock edge)
+  - q[7] = d[7] (after the clock edge)
+
+Reset Behavior:
+- The module does not specify a reset mechanism. If a reset is required, it should be defined in future specifications.
+
+Initial Conditions:
+- The initial state of the output 'q' is undefined until the first clock edge occurs.
+
+Edge Cases:
+- The module should handle the scenario where 'd' is not stable at the clock edge, but the behavior in such cases is not defined in this specification.
+
+Timing:
+- The timing relationship between the input 'd' and output 'q' is determined by the positive edge of the clock signal 'clk'.
+</ENHANCED_SPEC>

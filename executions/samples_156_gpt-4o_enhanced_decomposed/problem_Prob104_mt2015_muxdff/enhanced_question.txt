@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+The module named `TopModule` shall be implemented with the following interface. All input and output ports are one bit unless otherwise specified.
+
+- **Input Ports:**
+  - `input clk`: Clock signal (active on the rising edge).
+  - `input L`: Load signal (active high).
+  - `input q_in`: Input data for the flip-flop.
+  - `input r_in`: Input data for the multiplexer.
+
+- **Output Ports:**
+  - `output reg Q`: Output of the flip-flop.
+
+**Functional Description:**
+The `TopModule` will consist of a flip-flop and a 2:1 multiplexer. The flip-flop will store the value of `Q`, which can be loaded from `r_in` when `L` is asserted. If `L` is not asserted, the flip-flop will retain its previous value.
+
+**Signal Definitions:**
+- The output `Q` is a 1-bit register that will hold the state of the flip-flop.
+- The input `q_in` will be used as the data input for the flip-flop when `L` is asserted.
+
+**Clocking and Reset Behavior:**
+- The module will operate on the positive edge of the `clk` signal.
+- There is no asynchronous reset specified; therefore, the initial state of `Q` should be defined explicitly (e.g., `Q` should be initialized to `0`).
+
+**Sequential Logic:**
+- The flip-flop will be implemented using a non-blocking assignment (`<=`) to ensure proper sequential behavior.
+
+**Edge Cases:**
+- When `L` is asserted, the value of `Q` will be updated to `r_in` on the next rising edge of `clk`.
+- If `L` is not asserted, `Q` will retain its previous value.
+
+**Instantiation:**
+- The `TopModule` will be instantiated three times in the `full_module`, each instance corresponding to one of the three bits of the `q` output.
+
+**Bit Indexing:**
+- The output `Q` will be indexed as `Q[0]` for the least significant bit (LSB) and `Q[2]` for the most significant bit (MSB) if expanded to a multi-bit output in the full module.
+
+**Naming Conventions:**
+- All signals should follow a consistent naming convention for clarity and maintainability.
+</ENHANCED_SPEC>

@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+The following specification describes an 8-bit 2-to-1 multiplexer (MUX) module. The module selects one of two 8-bit input signals based on a single-bit select signal.
+
+Module Name: TopModule
+
+Inputs:
+- sel: A 1-bit select signal (input) that determines which of the two 8-bit inputs is routed to the output. 
+  - When sel = 0, the output will be driven by input 'a'.
+  - When sel = 1, the output will be driven by input 'b'.
+  
+- a: An 8-bit input signal (input) representing the first data source. 
+  - Bit[0] refers to the least significant bit (LSB) and bit[7] refers to the most significant bit (MSB).
+
+- b: An 8-bit input signal (input) representing the second data source. 
+  - Bit[0] refers to the least significant bit (LSB) and bit[7] refers to the most significant bit (MSB).
+
+Output:
+- out: A 1-bit output signal (output) that reflects the selected input based on the value of 'sel'.
+
+Behavior:
+- The output 'out' is defined as follows:
+  - out = a when sel = 0
+  - out = b when sel = 1
+
+Implementation Details:
+- The output 'out' should be driven combinationally based on the values of 'sel', 'a', and 'b'.
+- Ensure that the logic correctly implements the MUX functionality without any race conditions or glitches during transitions of the select signal.
+- The output should be stable and reflect the selected input immediately upon changes to 'sel'.
+
+Edge Cases:
+- The module should handle all possible values of 'a' and 'b', including all combinations of 0s and 1s.
+- The module should not have any undefined states; all outputs must be deterministically defined based on the inputs.
+
+Reset Behavior:
+- There is no reset signal defined for this module; the output is purely combinational based on the inputs.
+
+Note: Ensure that the implementation is verified against the functional intent described above.
+</ENHANCED_SPEC>

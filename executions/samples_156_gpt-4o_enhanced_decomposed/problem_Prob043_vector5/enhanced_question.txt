@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a;  // 1-bit input signal
+  - input wire b;  // 1-bit input signal
+  - input wire c;  // 1-bit input signal
+  - input wire d;  // 1-bit input signal
+  - input wire e;  // 1-bit input signal
+
+- Output Port:
+  - output wire [24:0] out;  // 25-bit output vector
+
+Functionality:
+The TopModule computes pairwise comparisons of the five 1-bit input signals (a, b, c, d, e) and produces a 25-bit output vector (out). Each bit in the output vector corresponds to the result of a comparison between two input signals. The output bit is set to '1' if the two compared bits are equal, and '0' otherwise.
+
+Output Bit Mapping:
+- out[24] = (a == a) ? 1 : 0;  // Comparison of a with itself
+- out[23] = (a == b) ? 1 : 0;  // Comparison of a with b
+- out[22] = (a == c) ? 1 : 0;  // Comparison of a with c
+- out[21] = (a == d) ? 1 : 0;  // Comparison of a with d
+- out[20] = (a == e) ? 1 : 0;  // Comparison of a with e
+- out[19] = (b == a) ? 1 : 0;  // Comparison of b with a
+- out[18] = (b == b) ? 1 : 0;  // Comparison of b with itself
+- out[17] = (b == c) ? 1 : 0;  // Comparison of b with c
+- out[16] = (b == d) ? 1 : 0;  // Comparison of b with d
+- out[15] = (b == e) ? 1 : 0;  // Comparison of b with e
+- out[14] = (c == a) ? 1 : 0;  // Comparison of c with a
+- out[13] = (c == b) ? 1 : 0;  // Comparison of c with b
+- out[12] = (c == c) ? 1 : 0;  // Comparison of c with itself
+- out[11] = (c == d) ? 1 : 0;  // Comparison of c with d
+- out[10] = (c == e) ? 1 : 0;  // Comparison of c with e
+- out[ 9] = (d == a) ? 1 : 0;  // Comparison of d with a
+- out[ 8] = (d == b) ? 1 : 0;  // Comparison of d with b
+- out[ 7] = (d == c) ? 1 : 0;  // Comparison of d with c
+- out[ 6] = (d == d) ? 1 : 0;  // Comparison of d with itself
+- out[ 5] = (d == e) ? 1 : 0;  // Comparison of d with e
+- out[ 4] = (e == a) ? 1 : 0;  // Comparison of e with a
+- out[ 3] = (e == b) ? 1 : 0;  // Comparison of e with b
+- out[ 2] = (e == c) ? 1 : 0;  // Comparison of e with c
+- out[ 1] = (e == d) ? 1 : 0;  // Comparison of e with d
+- out[ 0] = (e == e) ? 1 : 0;  // Comparison of e with itself
+
+Note: The output bits are indexed from 24 (most significant bit) to 0 (least significant bit).
+</ENHANCED_SPEC>

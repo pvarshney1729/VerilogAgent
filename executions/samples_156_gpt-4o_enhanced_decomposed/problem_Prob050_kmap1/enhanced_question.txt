@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a;  // 1-bit input representing variable 'a'
+  - input wire b;  // 1-bit input representing variable 'b'
+  - input wire c;  // 1-bit input representing variable 'c'
+  
+- Output Ports:
+  - output wire out;  // 1-bit output representing the result of the logic function
+
+Functional Description:
+The module implements a combinational logic circuit based on the provided Karnaugh map. The output 'out' is determined by the following conditions based on the values of inputs 'a', 'b', and 'c':
+
+Karnaugh Map:
+          a
+   bc   0   1
+   00 | 0 | 1 |
+   01 | 1 | 1 |
+   11 | 1 | 1 |
+   10 | 1 | 1 |
+
+Truth Table Representation:
+| b | c | a | out |
+|---|---|---|-----|
+| 0 | 0 | 0 | 0   |
+| 0 | 0 | 1 | 1   |
+| 0 | 1 | 0 | 1   |
+| 0 | 1 | 1 | 1   |
+| 1 | 1 | 0 | 1   |
+| 1 | 1 | 1 | 1   |
+| 1 | 0 | 0 | 1   |
+| 1 | 0 | 1 | 1   |
+
+Notes:
+- The output 'out' is a direct result of the combinational logic derived from the Karnaugh map.
+- Ensure that all input signals are treated as unsigned 1-bit values.
+- The module does not include any sequential logic or state retention; therefore, no clock or reset signals are required.
+</ENHANCED_SPEC>

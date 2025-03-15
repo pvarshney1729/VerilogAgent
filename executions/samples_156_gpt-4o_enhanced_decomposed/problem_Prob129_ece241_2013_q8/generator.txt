@@ -1,0 +1,120 @@
+Generated Response:
+
+<REASONING>
+To implement a Mealy-type FSM that recognizes the sequence "101" on the input signal `x`, we need to define three states. Let's name them as follows:
+- `S0`: Initial state, waiting for the first '1'.
+- `S1`: State after detecting the first '1'.
+- `S2`: State after detecting '10'.
+
+The FSM transitions are as follows:
+- From `S0` to `S1` on input `x = 1`.
+- From `S1` to `S2` on input `x = 0`.
+- From `S2` to `S0` on input `x = 1` (and output `z = 1` because the sequence "101" is detected).
+
+The FSM should also handle overlapping sequences, meaning after detecting "101", it should be ready to detect another sequence starting from the last '1'.
+
+The reset is asynchronous and active low, meaning the FSM should reset to `S0` on the negative edge of `aresetn`.
+
+The output `z` is asserted to logic-1 when the sequence "101" is detected, which occurs during the transition from `S2` to `S0`.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic aresetn,
+    input logic x,
+    output logic z
+);
+
+    typedef enum logic [1:0] {
+        S0 = 2'b00,
+        S1 = 2'b01,
+        S2 = 2'b10
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or negedge aresetn) begin
+        if (!aresetn)
+            current_state <= S0;
+        else
+            current_state <= next_state;
+    end
+
+    // Next state logic
+    always_comb begin
+        next_state = current_state; // Default to hold state
+        z = 1'b0; // Default output
+
+        case (current_state)
+            S0: begin
+                if (x)
+                    next_state = S1;
+            end
+            S1: begin
+                if (!x)
+                    next_state = S2;
+            end
+            S2: begin
+                if (x) begin
+                    next_state = S1;
+                    z = 1'b1; // Sequence "101" detected
+                end
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic aresetn,
+    input logic x,
+    output logic z
+);
+
+    typedef enum logic [1:0] {
+        S0 = 2'b00,
+        S1 = 2'b01,
+        S2 = 2'b10
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or negedge aresetn) begin
+        if (!aresetn)
+            current_state <= S0;
+        else
+            current_state <= next_state;
+    end
+
+    // Next state logic
+    always_comb begin
+        next_state = current_state; // Default to hold state
+        z = 1'b0; // Default output
+
+        case (current_state)
+            S0: begin
+                if (x)
+                    next_state = S1;
+            end
+            S1: begin
+                if (!x)
+                    next_state = S2;
+            end
+            S2: begin
+                if (x) begin
+                    next_state = S1;
+                    z = 1'b1; // Sequence "101" detected
+                end
+            end
+        endcase
+    end
+
+endmodule

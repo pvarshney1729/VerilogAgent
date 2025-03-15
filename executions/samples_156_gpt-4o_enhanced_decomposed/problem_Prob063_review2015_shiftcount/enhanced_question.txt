@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - shift_ena: 1-bit input (shift enable signal)
+  - count_ena: 1-bit input (count enable signal)
+  - data: 1-bit input (data to be shifted into the register)
+
+- Output Ports:
+  - q: 4-bit output (current value of the shift register, bit[3] is the most significant bit (MSB), bit[0] is the least significant bit (LSB))
+
+Functional Description:
+The TopModule implements a 4-bit shift register that also functions as a down counter. The behavior of the module is defined as follows:
+
+1. **Shift Operation**:
+   - When shift_ena is asserted (1), the module shifts the current contents of the shift register to the left (MSB first) and inserts the value of the data input into bit[0] (LSB).
+   - If shift_ena is deasserted (0), the shift operation does not occur.
+
+2. **Count Operation**:
+   - When count_ena is asserted (1), the value currently stored in the shift register (q) is decremented by 1.
+   - If count_ena is deasserted (0), the count operation does not occur.
+
+3. **Control Signal Priority**:
+   - The module does not define a priority between shift_ena and count_ena when both are asserted (1). The behavior in this case is unspecified and can be treated as a don't-care condition.
+
+4. **Clocking**:
+   - All sequential logic within the module is triggered on the positive edge of the clk signal.
+
+5. **Reset Behavior**:
+   - The module does not specify a reset mechanism. It is assumed that the initial state of the shift register (q) is undefined until the first clock cycle.
+
+6. **Edge Cases**:
+   - The module should handle the case where the shift register reaches its minimum value (0000) during the count operation. The behavior in this case should be defined to prevent underflow (e.g., it should remain at 0000).
+
+7. **Initial Values**:
+   - The initial value of the shift register (q) is not defined in this specification. It is recommended to initialize q to a known state (e.g., 0000) upon reset or at the start of operation.
+
+8. **Signal Dependencies**:
+   - The output q is dependent on the clk, shift_ena, and count_ena signals. The output should reflect the state of the shift register after the positive edge of clk, based on the control signals.
+
+</ENHANCED_SPEC>

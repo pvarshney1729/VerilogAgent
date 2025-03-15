@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - areset: 1-bit input (asynchronous reset signal)
+  - in: 1-bit input (data input)
+  
+- Output Ports:
+  - out: 1-bit output (data output)
+
+State Machine Description:
+The module implements a Moore state machine with two states: A and B. The state transitions are defined as follows:
+
+States:
+- State A (represented by 1'b0)
+- State B (represented by 1'b1)
+
+State Transition Diagram:
+- From State B (1) with input 0, transition to State A (0).
+- From State B (1) with input 1, remain in State B (1).
+- From State A (0) with input 0, transition to State B (1).
+- From State A (0) with input 1, remain in State A (0).
+
+Reset Behavior:
+- The module shall have an asynchronous reset. When the areset signal is high (1), the state machine shall reset to State B (1) immediately, regardless of the clock signal.
+
+Additional Specifications:
+- The output 'out' shall reflect the current state of the state machine, where 'out' is high (1) when in State B and low (0) when in State A.
+- The clock signal (clk) is used for state transitions on the rising edge.
+- All flip-flops and registers must be initialized to a defined state upon reset.
+
+Edge Cases:
+- Ensure that the state machine handles transitions correctly for all combinations of input signals, particularly when transitioning from State A to State B and vice versa.
+</ENHANCED_SPEC>

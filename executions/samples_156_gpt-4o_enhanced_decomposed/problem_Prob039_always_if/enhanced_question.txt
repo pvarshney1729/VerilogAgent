@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a;           // 1-bit input signal 'a'
+  - input wire b;           // 1-bit input signal 'b'
+  - input wire sel_b1;      // 1-bit selection signal 'sel_b1'
+  - input wire sel_b2;      // 1-bit selection signal 'sel_b2'
+
+- Output Ports:
+  - output wire out_assign; // 1-bit output signal for the assign statement
+  - output reg out_always;  // 1-bit output signal for the procedural if statement
+
+Functional Description:
+The module implements a 2-to-1 multiplexer (mux) that selects between the input signals 'a' and 'b' based on the values of the selection signals 'sel_b1' and 'sel_b2'. 
+
+Selection Logic:
+- The output 'out_assign' should be assigned the value of 'b' if both 'sel_b1' and 'sel_b2' are true (i.e., both are logic high). Otherwise, 'out_assign' should take the value of 'a'.
+- The output 'out_always' should be determined using a procedural if statement with the same selection criteria as 'out_assign'.
+
+Implementation Details:
+- The output 'out_always' should be defined as a reg type to accommodate procedural assignment.
+- Ensure that both outputs are updated correctly based on the selection signals without introducing race conditions.
+
+Edge Cases:
+- The behavior of the module should be clearly defined for all possible combinations of the input signals 'sel_b1' and 'sel_b2', including when both are low, one is high, or both are high.
+
+Reset Conditions:
+- No reset conditions are specified in this module. Ensure that the outputs are initialized appropriately based on the selection logic.
+</ENHANCED_SPEC>

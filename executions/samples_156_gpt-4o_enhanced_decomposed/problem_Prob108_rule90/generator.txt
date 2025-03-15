@@ -1,0 +1,72 @@
+Generated Response:
+
+<REASONING>
+To implement the TopModule, we need to create a 512-bit wide cellular automaton that follows Rule 90. The module will have a clock input, a load signal, a 512-bit data input, and a 512-bit output q. The cellular automaton updates its state on each positive clock edge, and the next state of each cell is determined by the XOR of its two neighbors. The boundaries are assumed to be zero, which means the left neighbor of the first cell and the right neighbor of the last cell are both zero.
+
+1. **Module Interface**: Define the module with the specified inputs and outputs. Use `logic` for all signals as per the coding conventions.
+
+2. **State Register**: Use a 512-bit register to hold the current state of the cellular automaton. This register will be updated on each clock cycle.
+
+3. **Load Logic**: When the `load` signal is high, the state register should be loaded with the input `data`. This is a synchronous operation, so it will occur on the positive edge of the clock.
+
+4. **Rule 90 Logic**: For each cell, calculate the next state using the XOR of its left and right neighbors. Handle the boundary conditions by assuming the neighbors outside the array are zero.
+
+5. **Sequential Logic**: Use an always block triggered on the positive edge of the clock to update the state register. Implement the load functionality and the Rule 90 update logic within this block.
+
+6. **Output Assignment**: The output `q` should always reflect the current state of the cellular automaton.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] state;
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            state <= data;
+        end else begin
+            state[0] <= 1'b0 ^ state[1]; // Left boundary
+            state[511] <= state[510] ^ 1'b0; // Right boundary
+            for (int i = 1; i < 511; i++) begin
+                state[i] <= state[i-1] ^ state[i+1];
+            end
+        end
+    end
+
+    assign q = state;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] state;
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            state <= data;
+        end else begin
+            state[0] <= 1'b0 ^ state[1]; // Left boundary
+            state[511] <= state[510] ^ 1'b0; // Right boundary
+            for (int i = 1; i < 511; i++) begin
+                state[i] <= state[i-1] ^ state[i+1];
+            end
+        end
+    end
+
+    assign q = state;
+
+endmodule

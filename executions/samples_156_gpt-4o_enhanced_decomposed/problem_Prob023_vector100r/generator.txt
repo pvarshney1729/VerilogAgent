@@ -1,0 +1,36 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to reverse the bit order of a 100-bit input vector and output the result. This is a purely combinational operation, so we will use an `always @(*)` block to describe the logic. The input and output ports are declared as `logic` types, following the coding conventions. The module will take a 100-bit input vector and produce a 100-bit output vector where the bits are in reverse order. This can be achieved by assigning each bit of the output to the corresponding bit from the end of the input vector.
+
+Since the task is purely combinational, there is no need for a clock or reset signal. The guidelines and conventions provided are more relevant for sequential logic, which is not required in this case.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [99:0] in,
+    output logic [99:0] out
+);
+    always @(*) begin
+        integer i;
+        for (i = 0; i < 100; i = i + 1) begin
+            out[i] = in[99 - i];
+        end
+    end
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [99:0] in,
+    output logic [99:0] out
+);
+    always @(*) begin
+        integer i;
+        for (i = 0; i < 100; i = i + 1) begin
+            out[i] = in[99 - i];
+        end
+    end
+endmodule

@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - in: bit[2:0] (3 bits) - Represents a 3-bit input vector where bit[0] is the least significant bit (LSB) and bit[2] is the most significant bit (MSB).
+  
+- Output Ports:
+  - out: bit[1:0] (2 bits) - Represents a 2-bit output vector that provides the population count of '1's in the input vector.
+
+Functional Description:
+The TopModule implements a combinational logic circuit that calculates the population count of the input vector 'in'. The output 'out' will represent the number of '1's present in the input vector, with the following mapping:
+- out[0]: Least significant bit of the population count.
+- out[1]: Most significant bit of the population count.
+
+Behavior:
+- The output 'out' will be updated immediately based on the current value of the input 'in' without any clock cycles or sequential logic involved.
+- The population count will range from 0 to 3, corresponding to the possible number of '1's in a 3-bit input.
+
+Edge Cases:
+- If 'in' is 3'b000, then 'out' should be 2'b00.
+- If 'in' is 3'b001, then 'out' should be 2'b00.
+- If 'in' is 3'b010, then 'out' should be 2'b00.
+- If 'in' is 3'b011, then 'out' should be 2'b01.
+- If 'in' is 3'b100, then 'out' should be 2'b00.
+- If 'in' is 3'b101, then 'out' should be 2'b01.
+- If 'in' is 3'b110, then 'out' should be 2'b10.
+- If 'in' is 3'b111, then 'out' should be 2'b11.
+
+Reset Conditions:
+- There are no reset conditions specified for this module as it is purely combinational logic.
+</ENHANCED_SPEC>

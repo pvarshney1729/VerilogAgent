@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic [1023:0] in,\n    input logic [7:0] sel,\n    output logic [3:0] out\n);\n\n    always @(*) begin\n        // Calculate the starting bit position for the selected 4-bit group\n        integer start_bit;\n        start_bit = sel * 4;\n        \n        // Assign the selected 4-bit group to the output\n        out = in[start_bit +: 4];\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

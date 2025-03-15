@@ -1,0 +1,160 @@
+Generated Response:
+
+<REASONING>
+To implement the FSM as described, we need to define the states and transitions based on the given state diagram. The FSM has four states: A, B, C, and D. The transitions between these states depend on the input signals `r[2:0]`. The priority is given to `r[0]`, then `r[1]`, and finally `r[2]`.
+
+1. **State Encoding**: We will use a 2-bit encoding for the states:
+   - A = 2'b00
+   - B = 2'b01
+   - C = 2'b10
+   - D = 2'b11
+
+2. **State Transitions**:
+   - From state A:
+     - If `r[0] == 1`, transition to state B.
+     - If `r[0] == 0` and `r[1] == 1`, transition to state C.
+     - If `r[0] == 0`, `r[1] == 0`, and `r[2] == 1`, transition to state D.
+     - Otherwise, stay in state A.
+   - From state B:
+     - If `r[0] == 1`, stay in state B.
+     - If `r[0] == 0`, transition to state A.
+   - From state C:
+     - If `r[1] == 1`, stay in state C.
+     - If `r[1] == 0`, transition to state A.
+   - From state D:
+     - Always transition back to state A (since D is not explicitly mentioned in the transitions).
+
+3. **Output Logic**:
+   - In state B, `g[0] = 1`.
+   - In state C, `g[1] = 1`.
+   - In all other states, `g = 3'b000`.
+
+4. **Synchronous Reset**: The FSM should reset to state A when `resetn` is low.
+
+5. **Implementation**: We will use separate always blocks for state transitions and state updates. The output logic will be handled using a continuous assignment.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic [2:0] r,
+    output logic [2:0] g
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        A = 2'b00,
+        B = 2'b01,
+        C = 2'b10,
+        D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            A: begin
+                if (r[0]) next_state = B;
+                else if (r[1]) next_state = C;
+                else if (r[2]) next_state = D;
+                else next_state = A;
+            end
+            B: begin
+                if (r[0]) next_state = B;
+                else next_state = A;
+            end
+            C: begin
+                if (r[1]) next_state = C;
+                else next_state = A;
+            end
+            D: begin
+                next_state = A;
+            end
+            default: next_state = A;
+        endcase
+    end
+
+    // State update logic
+    always @(posedge clk) begin
+        if (!resetn)
+            current_state <= A;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            B: g = 3'b001;
+            C: g = 3'b010;
+            default: g = 3'b000;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic [2:0] r,
+    output logic [2:0] g
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        A = 2'b00,
+        B = 2'b01,
+        C = 2'b10,
+        D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            A: begin
+                if (r[0]) next_state = B;
+                else if (r[1]) next_state = C;
+                else if (r[2]) next_state = D;
+                else next_state = A;
+            end
+            B: begin
+                if (r[0]) next_state = B;
+                else next_state = A;
+            end
+            C: begin
+                if (r[1]) next_state = C;
+                else next_state = A;
+            end
+            D: begin
+                next_state = A;
+            end
+            default: next_state = A;
+        endcase
+    end
+
+    // State update logic
+    always @(posedge clk) begin
+        if (!resetn)
+            current_state <= A;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            B: g = 3'b001;
+            C: g = 3'b010;
+            default: g = 3'b000;
+        endcase
+    end
+
+endmodule

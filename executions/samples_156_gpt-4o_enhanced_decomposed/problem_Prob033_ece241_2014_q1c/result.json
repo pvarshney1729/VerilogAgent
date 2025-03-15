@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic [7:0] a,\n    input logic [7:0] b,\n    output logic [7:0] s,\n    output logic overflow\n);\n    logic [8:0] sum; // 9-bit to capture carry out\n\n    always @(*) begin\n        sum = a + b; // Perform addition\n        s = sum[7:0]; // Assign lower 8 bits to output\n        // Overflow detection: check if carry into MSB is different from carry out\n        overflow = (a[7] == b[7]) && (s[7] != a[7]);\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

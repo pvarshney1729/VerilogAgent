@@ -1,0 +1,70 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a 10-bit counter that counts from 0 to 999. The counter should increment on each positive edge of the clock and reset to 0 when the reset signal is high. The reset is synchronous, meaning it should only take effect on the clock edge. The counter value should be output through a 10-bit output port `q`.
+
+1. **Port Declaration**: We will declare the ports as `logic` types as per the coding conventions. The input ports are `clk` and `reset`, and the output port is `q` which is 10 bits wide.
+
+2. **Counter Logic**: We will use an always block triggered by the positive edge of the clock to implement the counter. Inside this block, we will check the reset signal. If reset is high, the counter will be set to 0. Otherwise, the counter will increment by 1. When the counter reaches 999, it should wrap around to 0.
+
+3. **Output Assignment**: The current value of the counter will be assigned to the output `q`.
+
+4. **Initialization**: In simulation, we will initialize the counter to 0 to ensure predictable behavior.
+
+5. **Synchronous Reset**: The reset logic will be included inside the always block, and it will not be part of the sensitivity list, adhering to the synchronous reset convention.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [9:0] q
+);
+
+    // Internal 10-bit counter
+    logic [9:0] counter;
+
+    // Sequential logic for counter with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            counter <= 10'd0; // Reset counter to 0
+        end else if (counter == 10'd999) begin
+            counter <= 10'd0; // Wrap around to 0 after reaching 999
+        end else begin
+            counter <= counter + 10'd1; // Increment counter
+        end
+    end
+
+    // Assign counter value to output
+    assign q = counter;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [9:0] q
+);
+
+    // Internal 10-bit counter
+    logic [9:0] counter;
+
+    // Sequential logic for counter with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            counter <= 10'd0; // Reset counter to 0
+        end else if (counter == 10'd999) begin
+            counter <= 10'd0; // Wrap around to 0 after reaching 999
+        end else begin
+            counter <= counter + 10'd1; // Increment counter
+        end
+    end
+
+    // Assign counter value to output
+    assign q = counter;
+
+endmodule

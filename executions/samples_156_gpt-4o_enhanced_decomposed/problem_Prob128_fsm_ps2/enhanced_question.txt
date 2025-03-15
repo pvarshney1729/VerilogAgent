@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - reset: 1-bit input (active high synchronous reset)
+  - in: 8-bit input (data byte stream)
+  
+- Output Ports:
+  - done: 1-bit output (indicates the successful receipt of a complete message)
+
+Description:
+The TopModule implements a finite state machine (FSM) that processes a continuous byte stream received from a PS/2 mouse protocol. Each message consists of three bytes, and the FSM is responsible for identifying the boundaries of these messages.
+
+Message Boundary Detection:
+- The FSM will continuously monitor the input byte stream. A message is identified when the first byte of a three-byte message is detected, which is indicated by the condition in[3] = 1.
+- The FSM will discard any bytes until it encounters a byte where in[3] = 1, which will be treated as the first byte of a new message.
+- The FSM will signal the output done = 1 in the clock cycle immediately following the successful receipt of the third byte of each message.
+
+Reset Behavior:
+- The reset signal is active high and synchronous. When reset is asserted (reset = 1), all internal registers and state variables will be initialized to their default states.
+
+Sequential Logic:
+- All sequential logic within the module is triggered on the positive edge of the clk signal.
+
+Initial Conditions:
+- All flip-flops and registers must have explicitly defined initial values upon reset.
+
+Edge Cases:
+- The FSM should handle cases where no valid messages are received by continuously monitoring the input stream without generating false done signals.
+
+Bit Indexing:
+- The input port 'in' is indexed such that in[0] refers to the least significant bit (LSB) and in[7] refers to the most significant bit (MSB).
+</ENHANCED_SPEC>

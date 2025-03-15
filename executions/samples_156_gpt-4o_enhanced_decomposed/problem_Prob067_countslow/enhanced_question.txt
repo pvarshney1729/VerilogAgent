@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - reset: 1-bit input (active high synchronous reset)
+  - slowena: 1-bit input (enable signal for counter increment)
+  
+- Output Ports:
+  - q: 4-bit output (counter value, representing the count from 0 to 9)
+
+Functional Description:
+The TopModule implements a decade counter that counts from 0 to 9, inclusive, with a counting period of 10 clock cycles. The counter increments its value only when the slowena input is high. 
+
+Reset Behavior:
+- The reset input is active high and synchronous. When reset is asserted (reset = 1), the counter (q) is reset to 4'b0000 (0).
+- The counter will remain in the reset state until the reset signal is deasserted (reset = 0).
+
+Counting Behavior:
+- The counter increments its value on the positive edge of the clk signal, but only if the slowena input is high (slowena = 1).
+- If the counter reaches the value of 9 (4'b1001), it will reset to 0 (4'b0000) on the next increment.
+
+Signal Definitions:
+- The output q is a 4-bit vector where q[0] is the least significant bit (LSB) and q[3] is the most significant bit (MSB).
+- The counter should handle all edge cases, including the transition from 9 to 0.
+
+Sequential Logic:
+- All sequential logic is triggered on the positive edge of the clk signal.
+- Ensure that there are no race conditions in the implementation, particularly concerning the reset and slowena signals.
+
+Initial Conditions:
+- Upon initialization, the counter (q) should be set to 4'b0000.
+
+Edge Cases:
+- The module should be tested for behavior when reset is asserted during counting and when slowena transitions between high and low states.
+</ENHANCED_SPEC>

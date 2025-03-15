@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - wire ring: 1-bit input signal indicating an incoming call (ring[0] refers to the least significant bit).
+  - wire vibrate_mode: 1-bit input signal indicating whether the phone is in vibrate mode (vibrate_mode[0] refers to the least significant bit).
+  
+- Output Ports:
+  - reg ringer: 1-bit output signal controlling the ringer (ringer[0] refers to the least significant bit).
+  - reg motor: 1-bit output signal controlling the vibration motor (motor[0] refers to the least significant bit).
+
+Functional Description:
+The TopModule implements a control circuit for a cellphone's ringer and vibration motor based on the following logic:
+1. When an incoming call is detected (ring = 1):
+   - If the phone is in vibrate mode (vibrate_mode = 1), the output motor should be activated (motor = 1) and the ringer should be deactivated (ringer = 0).
+   - If the phone is not in vibrate mode (vibrate_mode = 0), the output ringer should be activated (ringer = 1) and the motor should be deactivated (motor = 0).
+2. If there is no incoming call (ring = 0), both outputs should be deactivated (ringer = 0, motor = 0).
+
+Reset Conditions:
+- The outputs (ringer and motor) should be initialized to 0 (deactivated) upon reset.
+- The reset should be asynchronous, meaning that the outputs will immediately reflect the reset state regardless of the clock signal.
+
+Signal Dependencies:
+- The outputs ringer and motor are mutually exclusive; only one can be active at any given time when an incoming call is detected.
+- Ensure that the logic correctly handles the transition between states without race conditions.
+
+Edge Cases:
+- If both inputs (ring and vibrate_mode) are low (0), both outputs should remain low (0).
+- If the inputs change while the phone is ringing, the outputs should update immediately according to the defined logic.
+</ENHANCED_SPEC>

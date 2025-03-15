@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - areset: 1-bit input (asynchronous active-high reset)
+  - in: 1-bit input (data input signal)
+  
+- Output Ports:
+  - out: 1-bit output (data output signal)
+
+Functional Description:
+The module implements a Moore state machine with the following characteristics:
+- The state machine has four states: A, B, C, and D.
+- The state transitions and output behavior are defined by the following state transition table:
+
+| Current State | Input (in=0) | Next State (in=1) | Output |
+|---------------|---------------|--------------------|--------|
+| A             | A             | B                  | 0      |
+| B             | C             | B                  | 0      |
+| C             | A             | D                  | 0      |
+| D             | C             | B                  | 1      |
+
+State Transition Details:
+- The state machine transitions occur on the positive edge of the clk signal.
+- The areset signal is asynchronous and, when asserted (high), resets the state machine to state A regardless of the clk signal.
+
+Reset Behavior:
+- Upon assertion of areset, the state machine will immediately transition to state A, and the output out will be set to 0.
+
+Sequential Logic:
+- All state transitions and output assignments are to be implemented using flip-flops that are triggered on the positive edge of the clk signal.
+- The initial state of the state machine is undefined until the first assertion of areset.
+
+Signal Definitions:
+- The output out is determined solely by the current state of the state machine, following the Moore model.
+
+Edge Cases:
+- Ensure that the state machine behaves correctly during transitions, particularly when the input signal in changes state at the clock edge.
+
+Note: Ensure that all flip-flops and registers are initialized appropriately to avoid undefined behavior.
+</ENHANCED_SPEC>

@@ -1,0 +1,40 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` that computes an even parity bit for an 8-bit input, we need to follow these steps:
+
+1. **Interface Definition**: Define the module with an 8-bit input `in` and a 1-bit output `parity`.
+
+2. **Parity Calculation**: The parity bit for even parity is calculated as the XOR of all the bits in the input. In Verilog, this can be done using the reduction XOR operator `^`.
+
+3. **Combinational Logic**: Since the parity calculation is purely combinational, we will use an `assign` statement to directly compute the parity bit from the input.
+
+4. **Coding Conventions**: Use `logic` for port declarations as per the guidelines. Since this is a simple combinational logic, we do not need any always block or sensitivity list.
+
+5. **No Synchronous Reset**: The problem does not specify a need for a reset or clock, so we will not include any sequential logic or reset handling.
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [7:0] in,  // 8-bit input
+    output logic parity    // 1-bit output for parity
+);
+
+    // Compute even parity using reduction XOR
+    assign parity = ^in;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [7:0] in,  // 8-bit input
+    output logic parity    // 1-bit output for parity
+);
+
+    // Compute even parity using reduction XOR
+    assign parity = ^in;
+
+endmodule

@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - reset: 1-bit input (active high synchronous reset)
+  - data: 1-bit input (serial data input)
+  - ack: 1-bit input (acknowledge signal from user)
+
+- Output Ports:
+  - count: 4-bit output (current remaining time in timer, bit[0] is the least significant bit)
+  - counting: 1-bit output (asserted when the timer is actively counting)
+  - done: 1-bit output (asserted when the timer has completed its countdown)
+
+Functional Description:
+The TopModule implements a timer with the following behavior:
+
+1. **Start Condition**: The timer is initiated when the specific input pattern '1101' (binary) is detected on the data input. The detection of this pattern signifies the start of the timer.
+
+2. **Duration Input**: Upon detecting the '1101' pattern, the module will shift in the next 4 bits of data (delay[3:0]), where the most significant bit (MSB) is received first. These 4 bits represent the duration of the timer delay.
+
+3. **Counting Mechanism**: The timer counts for exactly (delay[3:0] + 1) * 1000 clock cycles. For example:
+   - If delay = 0, the timer counts for 1000 cycles.
+   - If delay = 5, the timer counts for 6000 cycles.
+   During the countdown, the count output will reflect the remaining time, decrementing every 1000 cycles until it reaches 0.
+
+4. **State Machine Behavior**: After reading the '1101' pattern and the delay value, the module will cease to monitor the data input until the counting process is complete. The counting output will be asserted during the countdown.
+
+5. **Output Conditions**: When the timer is not counting, the count output (count[3:0]) can be in any state (don't-care condition). The done output will be asserted to indicate that the timer has timed out. The module will then wait for the ack input to be high (1) before resetting to search for the next occurrence of the '1101' pattern.
+
+6. **Reset Behavior**: The module resets to a state where it begins searching for the input sequence '1101'. The reset signal is active high and synchronous, ensuring that all sequential logic is triggered on the positive edge of the clock.
+
+Edge Cases and Considerations:
+- Ensure that the module handles cases where the input data may not contain the '1101' pattern.
+- The module should be designed to avoid race conditions during the detection of the input pattern and the shifting of the delay bits.
+- The output count should be initialized to a known state upon reset.
+
+</ENHANCED_SPEC>

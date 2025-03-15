@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - A: 2-bit vector (A[1:0]), where A[0] is the least significant bit (LSB) and A[1] is the most significant bit (MSB).
+  - B: 2-bit vector (B[1:0]), where B[0] is the least significant bit (LSB) and B[1] is the most significant bit (MSB).
+  
+- Output Ports:
+  - z: 1-bit output signal.
+
+Functional Description:
+The TopModule implements a combinational logic circuit that compares the two 2-bit input vectors A and B. The output z is defined as follows:
+- z = 1 if A equals B (i.e., A[1:0] == B[1:0])
+- z = 0 if A does not equal B (i.e., A[1:0] != B[1:0])
+
+Behavioral Specifications:
+- The comparison of A and B should be performed in a single clock cycle.
+- There are no synchronous or asynchronous resets defined for this module.
+- The output z should be stable and reflect the comparison result immediately after the inputs A and B are stable.
+
+Edge Cases:
+- The module should handle all possible combinations of the 2-bit inputs A and B, which range from 00 to 11 in binary.
+
+Signal Dependencies:
+- The output z is directly dependent on the values of inputs A and B. There are no additional signals or conditions affecting the output.
+</ENHANCED_SPEC>

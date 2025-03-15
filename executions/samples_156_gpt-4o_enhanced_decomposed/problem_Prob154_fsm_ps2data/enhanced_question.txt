@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, active on the rising edge)
+  - reset: 1-bit input (active high synchronous reset)
+  - in: 8-bit input (input byte stream)
+
+- Output Ports:
+  - out_bytes: 24-bit output (contains the received message bytes)
+    - out_bytes[23:16]: First byte of the message
+    - out_bytes[15:8]: Second byte of the message
+    - out_bytes[7:0]: Third byte of the message
+  - done: 1-bit output (indicates the successful receipt of a complete message)
+
+Functional Description:
+The module implements a finite state machine (FSM) that processes an incoming byte stream to identify message boundaries. The FSM operates as follows:
+1. Discard incoming bytes until the condition in[3] = 1 is met, indicating the start of a message.
+2. Upon detecting the first byte of a message, the FSM will continue to receive the next two bytes.
+3. The FSM asserts the done signal in the clock cycle immediately following the successful receipt of the third byte of the message.
+
+Reset Behavior:
+- The reset signal is active high and synchronous. When reset is asserted (reset = 1), all internal registers and state variables should be initialized to a defined state:
+  - out_bytes should be set to 24'b0 (zero).
+  - done should be set to 0 (inactive).
+
+Output Validity:
+- The out_bytes output must be valid and reflect the received message whenever the done signal is asserted. At all other times, the output can be considered don't-care.
+
+Clocking:
+- All sequential logic within the module is triggered on the positive edge of the clk signal.
+
+Edge Case Handling:
+- The FSM should handle cases where no valid message is received by maintaining the out_bytes output as zero and keeping the done signal deasserted until a valid message is detected.
+
+Example Waveform:
+- The example waveform provided illustrates the timing relationship between the clk, reset, in, done, and out_bytes signals during operation. The timing of these signals should be consistent with the described behavior of the FSM.
+
+Note: Ensure that all signal dependencies and potential race conditions are carefully managed to maintain correct operation of the FSM.
+</ENHANCED_SPEC>

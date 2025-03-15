@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - areset: 1-bit input (asynchronous reset signal, active high)
+  - train_valid: 1-bit input (indicates if training is valid)
+  - train_taken: 1-bit input (indicates if training was taken)
+
+- Output Ports:
+  - state: 2-bit output (represents the current value of the saturating counter, where state[1] is the most significant bit (MSB) and state[0] is the least significant bit (LSB))
+
+Functional Description:
+The module implements a two-bit saturating counter with the following behavior:
+- The counter increments by 1 (up to a maximum value of 3) when both train_valid = 1 and train_taken = 1.
+- The counter decrements by 1 (down to a minimum value of 0) when train_valid = 1 and train_taken = 0.
+- When train_valid = 0, the counter retains its current value and does not change.
+- The counter is reset asynchronously to the value of 2'b01 (weakly not-taken) on the positive edge of the areset signal.
+
+Sequential Logic:
+- All sequential logic, including the counter updates, is triggered on the positive edge of the clk signal.
+- The counter should have an explicitly defined initial value of 2'b01 upon reset.
+
+Edge Cases:
+- Ensure that the counter does not exceed the maximum value of 3 or fall below the minimum value of 0 during increments and decrements.
+- The behavior of the counter should be clearly defined for all combinations of train_valid and train_taken inputs, especially during transitions.
+
+Reset Behavior:
+- The areset signal is asynchronous and active high, meaning that when areset is asserted, the counter will immediately reset to 2'b01, regardless of the clk signal state.
+</ENHANCED_SPEC>

@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire a;  // 1-bit input signal
+  - input wire b;  // 1-bit input signal
+  - input wire sel; // 1-bit select signal
+
+- Output Ports:
+  - output wire out; // 1-bit output signal
+
+Functionality:
+The TopModule implements a 2-to-1 multiplexer with the following behavior:
+- When sel = 1'b0 (select signal is low), the output out will be assigned the value of input a.
+- When sel = 1'b1 (select signal is high), the output out will be assigned the value of input b.
+
+Signal Definitions:
+- All input and output ports are defined as 1-bit wide.
+- The least significant bit (LSB) is indexed as bit[0].
+
+Behavioral Description:
+- The output out is combinationally dependent on the inputs a, b, and sel.
+- There are no sequential elements or clock cycles involved in this module.
+- The module does not require any reset conditions as it is purely combinational logic.
+
+Edge Cases:
+- The module should handle all possible input combinations for a, b, and sel without any undefined behavior.
+</ENHANCED_SPEC>

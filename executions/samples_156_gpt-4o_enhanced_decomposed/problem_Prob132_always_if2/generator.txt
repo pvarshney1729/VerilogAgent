@@ -1,0 +1,62 @@
+Generated Response:
+
+<REASONING>
+The original module has a bug because it does not handle the case where the conditions for `shut_off_computer` and `keep_driving` are not met. In such cases, the outputs should be explicitly set to a default value (e.g., 0) to avoid latches. This can be achieved by ensuring that all possible conditions are covered in the combinational logic, or by initializing the outputs to a default value at the beginning of the always block.
+
+Additionally, the original code uses `reg` for outputs, which is acceptable in Verilog, but the guidelines suggest using `logic` for all signals. We will adhere to this convention.
+
+We will also ensure that the outputs are set to a default value at the beginning of each always block to prevent unintended latches.
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic cpu_overheated,
+    output logic shut_off_computer,
+    input logic arrived,
+    input logic gas_tank_empty,
+    output logic keep_driving
+);
+
+    always @(*) begin
+        // Default value to prevent latches
+        shut_off_computer = 0;
+        if (cpu_overheated)
+            shut_off_computer = 1;
+    end
+
+    always @(*) begin
+        // Default value to prevent latches
+        keep_driving = 0;
+        if (~arrived)
+            keep_driving = ~gas_tank_empty;
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic cpu_overheated,
+    output logic shut_off_computer,
+    input logic arrived,
+    input logic gas_tank_empty,
+    output logic keep_driving
+);
+
+    always @(*) begin
+        // Default value to prevent latches
+        shut_off_computer = 0;
+        if (cpu_overheated)
+            shut_off_computer = 1;
+    end
+
+    always @(*) begin
+        // Default value to prevent latches
+        keep_driving = 0;
+        if (~arrived)
+            keep_driving = ~gas_tank_empty;
+    end
+
+endmodule

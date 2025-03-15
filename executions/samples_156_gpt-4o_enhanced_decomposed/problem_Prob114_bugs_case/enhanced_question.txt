@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - code: bit[7:0] (8 bits) - Represents the 8-bit keyboard scancode input.
+  
+- Output Ports:
+  - out: bit[3:0] (4 bits) - Represents the detected key value (0 to 9).
+  - valid: bit (1 bit) - Indicates whether a valid key (0-9) has been detected.
+
+Functional Description:
+The TopModule shall recognize specific 8-bit keyboard scancodes corresponding to the numeric keys 0 through 9. The following mappings are defined:
+
+- If code = 8'h45, out = 4'b0000 (0), valid = 1
+- If code = 8'h16, out = 4'b0001 (1), valid = 1
+- If code = 8'h1e, out = 4'b0010 (2), valid = 1
+- If code = 8'h26, out = 4'b0011 (3), valid = 1
+- If code = 8'h25, out = 4'b0100 (4), valid = 1
+- If code = 8'h2e, out = 4'b0101 (5), valid = 1
+- If code = 8'h36, out = 4'b0110 (6), valid = 1
+- If code = 8'h3d, out = 4'b0111 (7), valid = 1
+- If code = 8'h3e, out = 4'b1000 (8), valid = 1
+- If code = 8'h46, out = 4'b1001 (9), valid = 1
+
+In all other cases (when code does not match any of the specified values), the outputs shall be set as follows:
+- out = 4'b0000 (0)
+- valid = 0
+
+Behavioral Notes:
+- The output valid signal shall be set to 1 only when a valid key is detected; otherwise, it shall be 0.
+- The output out shall reflect the corresponding key value or be reset to 0 when no valid key is detected.
+- The module does not include any synchronous or asynchronous reset functionality; the outputs are determined solely by the input code.
+- The module is combinational in nature, with no internal state or clock dependencies.
+</ENHANCED_SPEC>

@@ -1,0 +1,28 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - reset: 1-bit input (active high synchronous reset)
+
+- Output Ports:
+  - q: 4-bit output (binary counter value, where q[0] is the least significant bit and q[3] is the most significant bit)
+
+Functional Description:
+The TopModule implements a 4-bit binary counter that counts from 0 to 15 (inclusive) with a wrap-around period of 16. The counter increments on the positive edge of the clk signal.
+
+Behavioral Specifications:
+- The counter is incremented on the rising edge of clk.
+- The reset input (reset) is active high and synchronous. When reset is asserted (high), the counter (q) is set to 4'b0000 (0).
+- The counter should maintain its value between clock cycles unless reset is activated.
+
+Initial Conditions:
+- Upon power-up or when reset is asserted, the output q should initialize to 4'b0000.
+
+Edge Cases:
+- The counter should correctly wrap around from 15 (4'b1111) back to 0 (4'b0000) on the next increment after reaching its maximum value.
+
+Signal Dependencies:
+- The output q is dependent on the clk and reset signals, with the counter logic being executed only on the positive edge of clk.
+</ENHANCED_SPEC>

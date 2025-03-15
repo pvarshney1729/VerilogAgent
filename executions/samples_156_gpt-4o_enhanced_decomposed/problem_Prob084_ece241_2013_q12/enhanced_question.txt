@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal, positive edge-triggered)
+  - enable: 1-bit input (synchronous active high control signal for shifting)
+  - S: 1-bit input (data input for the shift register)
+  - A: 1-bit input (first select input for the multiplexer)
+  - B: 1-bit input (second select input for the multiplexer)
+  - C: 1-bit input (third select input for the multiplexer)
+
+- Output Ports:
+  - Z: 1-bit output (result of the selected memory location)
+
+Description:
+The module implements an 8x1 memory using an 8-bit shift register composed of 8 D-type flip-flops. The outputs of the flip-flops are labeled as Q[0] through Q[7], where Q[0] is the least significant bit (LSB) and Q[7] is the most significant bit (MSB). The shift register is designed to shift in data from the input S, with the MSB being shifted in first.
+
+Behavior:
+- The shift register operates on the positive edge of the clk signal. When the enable signal is high (1), the shift register will shift the current value of S into Q[0], and the existing values in Q[0] to Q[6] will shift to Q[1] to Q[7], respectively.
+- The output Z is determined by the values of inputs A, B, and C, which serve as select lines for a multiplexer that chooses one of the eight flip-flop outputs:
+  - When ABC = 000, Z = Q[0]
+  - When ABC = 001, Z = Q[1]
+  - When ABC = 010, Z = Q[2]
+  - When ABC = 011, Z = Q[3]
+  - When ABC = 100, Z = Q[4]
+  - When ABC = 101, Z = Q[5]
+  - When ABC = 110, Z = Q[6]
+  - When ABC = 111, Z = Q[7]
+
+Reset Behavior:
+- The module does not specify a reset mechanism. If a reset is required, it should be defined as either synchronous or asynchronous, along with the reset state of all registers.
+
+Initial Conditions:
+- All flip-flops (Q[0] to Q[7]) should be initialized to a defined state (e.g., 0) upon reset or power-up.
+
+Implementation Constraints:
+- The design must consist solely of the 8-bit shift register and multiplexers, with no additional logic elements.
+</ENHANCED_SPEC>

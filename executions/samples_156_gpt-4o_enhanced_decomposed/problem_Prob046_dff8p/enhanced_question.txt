@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input signal representing the clock (active on the negative edge).
+  - reset: 1-bit input signal for synchronous reset (active high).
+  - d: 8-bit input data signal (bit[0] refers to the least significant bit).
+
+- Output Ports:
+  - q: 8-bit output data signal (bit[0] refers to the least significant bit).
+
+Functional Description:
+- The module shall instantiate 8 D flip-flops (DFFs) that are triggered on the negative edge of the clk signal.
+- Each DFF shall have an active high synchronous reset input (reset).
+- Upon activation of the reset signal, all DFFs shall be set to the value 0x34 (binary: 0011 0100).
+- When the reset signal is not active, the DFFs shall capture the value present on the d input at the negative edge of clk.
+
+Reset Behavior:
+- The reset is synchronous, meaning that the reset state of the DFFs will only take effect in relation to the clk signal.
+
+Initial Values:
+- All DFFs shall be initialized to 0x34 when the reset signal is asserted.
+
+Edge Cases:
+- Ensure that the DFFs do not change state during the reset condition, and only transition to the value of d on the negative edge of clk when reset is not asserted.
+</ENHANCED_SPEC>

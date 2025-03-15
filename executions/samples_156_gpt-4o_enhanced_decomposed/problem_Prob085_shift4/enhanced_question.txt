@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input (clock signal)
+  - areset: 1-bit input (asynchronous reset signal, active high)
+  - load: 1-bit input (load signal, active high)
+  - ena: 1-bit input (enable signal for shifting, active high)
+  - data: 4-bit input (data to be loaded into the shift register, data[3:0])
+  
+- Output Ports:
+  - q: 4-bit output (current contents of the shift register, q[3:0])
+
+Functional Description:
+The module implements a 4-bit right shift register with the following behavior:
+
+1. Asynchronous Reset (areset):
+   - When areset is asserted (high), the shift register (q) is reset to zero (q = 4'b0000) regardless of the clock state.
+
+2. Load Operation (load):
+   - When load is asserted (high) and the clock is triggered, the contents of the data input (data[3:0]) are loaded into the shift register (q = data[3:0]). This operation takes precedence over the shift operation.
+
+3. Shift Operation (ena):
+   - When ena is asserted (high) and the clock is triggered, the shift register performs a right shift. The most significant bit (q[3]) is set to zero, and the least significant bit (q[0]) is shifted out and lost. The remaining bits are shifted right (e.g., q[2] becomes q[3], q[1] becomes q[2], and q[0] becomes q[1]).
+
+4. Output (q):
+   - The output q reflects the current state of the shift register after the load or shift operation, depending on the asserted signals. If both load and ena are asserted simultaneously, the load operation takes precedence.
+
+Timing and Control:
+- All sequential logic is triggered on the positive edge of the clk signal.
+- The reset (areset) is asynchronous and takes effect immediately when asserted.
+- The load and shift operations are synchronous and occur on the positive edge of the clk signal.
+
+Bit Indexing:
+- The bit indexing for the data and output q follows the convention where data[3] is the most significant bit (MSB) and data[0] is the least significant bit (LSB). Similarly, q[3] is the MSB and q[0] is the LSB.
+
+Initial Conditions:
+- Upon reset (areset), the initial state of the shift register q is defined as q = 4'b0000.
+
+Edge Cases:
+- If areset is asserted while load or ena is also asserted, the shift register will reset to zero immediately, overriding any load or shift operation.
+</ENHANCED_SPEC>
