@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire [31:0] in`: A 32-bit input vector. Bit indexing follows the convention where `bit[0]` is the least significant bit (LSB).
+
+- Output Ports:
+  - `output reg [31:0] out`: A 32-bit output vector. Bit indexing follows the convention where `bit[0]` is the least significant bit (LSB).
+
+Functional Specification:
+- The module reverses the byte order of the 32-bit input vector `in` and assigns the result to the output vector `out`.
+- Byte order reversal involves swapping each 8-bit byte in the 32-bit vector. 
+  - This means the byte at bit positions [31:24] is swapped with [7:0], [23:16] is swapped with [15:8], and vice versa.
+
+- The operation is purely combinational, so there are no clock or reset signals involved.
+
+- Example:
+  - If `in` is `32'h12345678`, then `out` should be `32'h78563412`.
+
+Edge Cases:
+- The operation handles all possible 32-bit values for `in` and does not depend on any specific patterns or conditions in the input data.
+- There are no undefined or illegal input conditions.
+
+Note:
+- All operations are bitwise and independent of signedness, as the data is considered an unsigned bit vector.
+</ENHANCED_SPEC>

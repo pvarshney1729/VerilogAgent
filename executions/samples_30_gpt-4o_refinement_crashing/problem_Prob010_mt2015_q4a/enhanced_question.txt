@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: 
+  - x (1 bit, unsigned)
+  - y (1 bit, unsigned)
+- Output:
+  - z (1 bit, unsigned)
+
+Functional Specification:
+- The module computes the boolean function for the output `z` as follows:
+  - `z = (x XOR y) AND x`
+- The operation is combinational, meaning `z` is directly driven by the current values of `x` and `y` without any clocked elements.
+
+Bit Indexing and Conventions:
+- Inputs and output are single-bit signals, and thus, no bit indexing is required.
+
+Timing and Edge Cases:
+- As this is a purely combinational circuit, there is no concern for clock cycles, reset states, or initial values.
+- The output `z` is immediately updated based on changes in `x` or `y`.
+
+Considerations:
+- Ensure proper handling of any changes in the inputs `x` and `y` to avoid unintended glitches.
+- There are no race conditions or timing dependencies since the logic is combinational.
+
+</ENHANCED_SPEC>

@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input Ports:
+  - `input wire in1`: Single-bit input signal.
+  - `input wire in2`: Single-bit input signal.
+  - `input wire in3`: Single-bit input signal.
+
+- Output Ports:
+  - `output wire out`: Single-bit output signal.
+
+Circuit Description:
+- The module implements a combinational logic circuit.
+- A two-input XNOR gate is used, with its inputs connected to `in1` and `in2`.
+- The output of the XNOR gate drives the first input of a two-input XOR gate.
+- The second input of the XOR gate is connected to `in3`.
+- The output of the XOR gate is connected to the `out` port.
+
+Signal and Logic Details:
+- The XNOR operation produces a logic high (1) if both inputs (`in1` and `in2`) are the same; otherwise, it outputs a logic low (0).
+- The XOR operation produces a logic high (1) if its two inputs are different; otherwise, it outputs a logic low (0).
+- The logic level of `out` is directly determined by the result of the XOR operation between the XNOR gate's output and `in3`.
+
+Assumptions:
+- All inputs are treated as unsigned and are evaluated on a combinational basis.
+- There are no clocked elements or sequential logic involved in this module.
+- The module does not utilize any reset functionality, as it is purely combinational.
+
+Boundary and Edge Cases:
+- The behavior of the circuit is defined for all possible combinations of the `in1`, `in2`, and `in3` inputs.
+- No invalid input conditions exist due to the single-bit nature of each input.
+
+Note: Bit indexing and MSB/LSB conventions are not applicable to single-bit signals.
+</ENHANCED_SPEC>

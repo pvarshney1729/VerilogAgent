@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and has the following interface. Each port is a single-bit signal unless otherwise specified:
+
+- Input: `in1` (1 bit, unsigned)
+- Input: `in2` (1 bit, unsigned)
+- Output: `out` (1 bit, unsigned)
+
+Description of the circuit behavior:
+
+1. The module implements combinational logic with no sequential or state elements involved.
+2. The input `in2` is inverted before being fed into an AND gate. This is equivalent to applying a NOT operation on `in2` before the AND operation.
+3. The inputs to the AND gate are:
+   - `in1` (directly)
+   - NOT `in2` (where NOT represents the logical negation of `in2`)
+
+4. The output `out` is the result of the AND operation between `in1` and NOT `in2`.
+
+5. The logical operation can be expressed as:
+   - `out = in1 AND (NOT in2)`
+
+6. This module is purely combinational with zero propagation delay assumed for the logic gate operations.
+
+There are no clock, reset, or sequential elements involved, thus no need to specify their behavior.
+
+Edge Cases:
+- Since all inputs are binary (1 bit), the edge cases naturally include all possible combinations of `in1` and `in2`, which are handled by the described logic.
+</ENHANCED_SPEC>

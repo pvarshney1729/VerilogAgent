@@ -333,43 +333,49 @@ class SimpleVerifier:
         """
 
         
-        generation_prompt = f"""Your are a Verilog RTL tester that only writes code using correct Verilog syntax. 
-                                The specification with which the design code was generated: {base_query}
-                                The design code to verify is: {base_response}
-                                Your task is to generate test stimuli, for the previously generated design code, 
-                                that will be used to verify the correctness of the design. The test stimuli should be generated 
-                                as a json object with the following format specified below. You could either apply a single stimuli,
-                                if it is a combinational design, or a sequence of stimuli for a sequential design and fill the 
-                                output at each stage. Don't include the clock signal in the stimuli, provide the cycle latency 
-                                after which the output should be sampled, after the inputs have been applied, for example, latency is 
-                                0 for a combinational design, 1 for a single cycle latency sequential design and so on.
-                                Please make the stimuli as exhaustive as possible to cover all possible edge cases. The input and output stimuli
-                                should include all the input and output ports except the clock and reset signals. 
-                                """ + """
-                                Ex: 
-                                --------------------------------
-                                {
-                                    "stimuli": [
-                                        {
-                                            "input": {
-                                                [{"signal_name_1": "signal_value_1"},
-                                                ....
-                                                {"signal_name_n": "signal_value_n"}]
-                                            },
-                                            "output": {
-                                                [{"signal_name_1": "signal_value_1"},
-                                                ....
-                                                {"signal_name_n": "signal_value_n"}]
-                                            },
-                                            "cycle_latency": expected_cycle_latency
-                                        }
-                                    ]
-                                }
-                                --------------------------------
-                                """
+        generation_prompt = f"""
+        Your task is to generate test stimuli that will be used to verify its correctness for this design code: 
+        <DESIGN_CODE>
+        {base_response}
+        </DESIGN_CODE>
+
+        The specification problem for which the design code was generated is: 
+        <SPECIFICATION>
+        {base_query}
+        </SPECIFICATION
+
+        <STIMULI GENERATION GUIDELINES>
+        - The test stimuli should be generated as a json object. 
+        - You could either apply a single stimuli, if it is a combinational design, or a sequence of stimuli for a sequential design and fill the output at each stage. 
+        - Don't include the clock signal in the stimuli, provide the cycle latency after which the output should be sampled, after the inputs have been applied, for example, latency is 
+        0 for a combinational design, 1 for a single cycle latency sequential design and so on.
+        - Please make the stimuli concise BUT it should cover all possible edge cases. The input and output stimuli should include all the input and output ports except the clock and reset signals. 
+        </STIMULI GENERATION GUIDELINES>
+        """ + """
+        Ex: 
+        --------------------------------
+        {
+            "stimuli": [
+                {
+                    "input": {
+                        [{"signal_name_1": "signal_value_1"},
+                        ....
+                        {"signal_name_n": "signal_value_n"}]
+                    },
+                    "output": {
+                        [{"signal_name_1": "signal_value_1"},
+                        ....
+                        {"signal_name_n": "signal_value_n"}]
+                    },
+                    "cycle_latency": expected_cycle_latency
+                }
+            ]
+        }
+        --------------------------------
+        """
         
         messages = [
-            {"role": "system", "content": "You are a Verilog RTL tester that can reason verilog specification and generate test stimuli."},
+            {"role": "system", "content": "You are an expert Verilog RTL tester that can reason verilog specification and generate correct testing stimuli."},
             {"role": "user", "content": generation_prompt}
         ]
 
@@ -439,7 +445,9 @@ class SimpleVerifier:
             model=model,
             messages=messages,
             functions=[stimuli_dict],
-            function_call={"name": "stimuli"})
+            function_call={"name": "stimuli"},
+            temperature=0.2,
+            top_p=0.1)
 
         # Extract the response from the API
         function_call = response.choices[0].message.function_call
@@ -797,7 +805,7 @@ class VerilogModel:
         return response
 
 
-    def iterative_refinement(self, base_query: str, max_iterations: int = 5, model: str = "gpt-4o-mini") -> Dict[str, Any]:
+    def iterative_refinement(self, base_query: str, max_iterations: int = 5, model: str = "gpt-4o-mini", messages: List[Dict] = None) -> Dict[str, Any]:
         """Implement iterative refinement for Verilog code generation.
         
         Args:
@@ -808,34 +816,38 @@ class VerilogModel:
             Dict containing the final code, test results, and iteration history
         """
 
-        
-        # Generate initial code using the existing generator
-        initial_response, initial_code = self.generator.generate(
-            base_query,
-            include_rules=True,
-            include_examples=False
-        )
+
+        base_response = self.generator.generate_with_messages(messages, model=model, temperature=0.2, top_p=0.1)
+
+        base_code = self.generator._extract_code(base_response, base_query)
+
+        messages.extend([
+            {"role": "assistant", "content": f"{base_code}"}
+        ])
+
+
+        with open(self.problem_dir / "messages.txt", 'w') as f:
+            f.write(json.dumps(messages, indent=4))
+
         
         # Initialize the simple verifier
         simple_verifier = SimpleVerifier()
         
         # Keep track of iterations and improvements
         iterations = 0
-        best_code = initial_code
-        all_iterations = [{
-            "iteration": iterations,
-            "code": best_code,
-            "issues": []
-        }]
-        
+        best_code = base_code
+        best_response = base_response
 
-        # Get stimulus for the initial code
         initial_stimulus = simple_verifier.generate_stimulus(base_query, best_code, model=model)
         initial_stimulus = initial_stimulus.get("stimuli", [])
 
+
+        import copy
+        refinement_messages = copy.deepcopy(messages)
+
         # Iterative refinement loop
         while iterations < max_iterations:
-            # Verify current code
+
             verification_results = simple_verifier.verify(best_code, initial_stimulus)
 
             # If no issues found, we're done
@@ -844,7 +856,6 @@ class VerilogModel:
                 break
             
             # Record issues for this iteration
-            all_iterations[-1]["issues"] = verification_results["issues"]
             print(f"Iteration {iterations}: Found {len(verification_results['issues'])} issues")
             
             # Include testbench results if available
@@ -858,95 +869,86 @@ class VerilogModel:
                 The testbench {'PASSED' if tb_results.get('passed', False) else 'FAILED'}.
                 """
             
-            # Create refinement prompt with detailed feedback
-            refinement_prompt = f"""
-            I need you to refine the following Verilog/SystemVerilog code to fix these issues:
+            verification_feedback = f"""
+            The Verilog/SystemVerilog code you generated has the following issues:
 
-            ISSUES:
+            <ISSUES>
             {chr(10).join(verification_results["issues"])}
+            </ISSUES>
 
-            COMPILER OUTPUT:
-            {verification_results["compile_output"]}
+            This is the compiler output using your latest code:
+            """
+
+            if len(verification_results["compile_output"]) > 0:
+                verification_feedback += f"""
+                <COMPILER_OUTPUT>
+                {verification_results["compile_output"]}
+                </COMPILER_OUTPUT>
+            """  
+            else :
+                verification_feedback += f"""
+            <COMPILER_OUTPUT>
+            Compilation ran successfully.
+            </COMPILER_OUTPUT>
+            """
+
+            verification_feedback += f"""This is the synthetic testbench output using your latest code:
+            <TESTBENCH_OUTPUT>
             {testbench_info}
-            CURRENT CODE:
-            {best_code}
+            </TESTBENCH_OUTPUT>
 
-            ORIGINAL SPECIFICATION:
+            Recall that the original specification was:
+            <ORIGINAL_SPEC>
             {base_query}
+            </ORIGINAL_SPEC>
 
-            Please provide an improved version of the code that addresses these issues. 
-            Follow these Verilog coding guidelines:
-            1. Use 'logic' type instead of 'wire' or 'reg'
-            2. Use always @(*) for combinational logic
-            3. Numeric constants must have size (e.g., 1'b0 not 0)
-            4. Always blocks must read at least one signal
-            5. For reset, use synchronous reset (sampled with clock)
-
-            Return the improved code within [BEGIN] and [DONE] tags without any explanations and ```verilog tags.
+            Please provide an improved version of the code that addresses these issues and correctly implements the specification!
+            {prompts['prompt_rules']} 
             """
             
             if DEBUG_PRINTS: 
                 print("Iterative refinement using model:", self.iter_ref_model)
 
-            # Generate refined code using the appropriate model
-            refined_text = self.generator.generate_with_system_prompt(
-                prompt=refinement_prompt,
-                system_prompt="You are a Verilog expert that helps refine and fix issues in RTL code. You focus only on the issues presented and don't make unnecessary changes.",
-                model=self.iter_ref_model,
-                temperature=self.iter_ref_temp
-            )
+            messages.extend([
+                {"role": "user", "content": verification_feedback}
+            ])
+
+            refined_text = self.generator.generate_with_messages(
+                refinement_messages, model=model, 
+                temperature=0.2, 
+                top_p=0.1)
             
-            # Extract code from response using the extract_between_tags function
-            refined_code = extract_between_tags(refined_text, "BEGIN")
-            if refined_code == refined_text:  # If tags not found, use the whole text
-                refined_code = refined_text
+            refined_code = self.generator._extract_code(refined_text, base_query)
+
+            messages.extend([
+                {"role": "assistant", "content": f"{refined_text}"}
+            ])
+
+            refinement_messages[-1] = {"role": "assistant", "content": f"{refined_code}"}
+
+            with open(self.problem_dir / "messages.txt", 'w') as f:
+                f.write(json.dumps(messages, indent=4))
             
             # Update best code
             best_code = refined_code
+            best_response = refined_text
             
             # Increment iteration counter
             iterations += 1
             
-            # Record this iteration
-            all_iterations.append({
-                "iteration": iterations,
-                "code": refined_code,
-                "issues": []  # Will be filled in next iteration if needed
-            })
-            
             print(f"Completed iteration {iterations}")
-        
-        # Final verification
-        final_verification = simple_verifier.verify(best_code, initial_stimulus)
-        
-        # Update the final iteration with verification results
-        if all_iterations:
-            all_iterations[-1]["issues"] = final_verification["issues"]
-        
-        # Include testbench results in the final output
-        testbench_data = {}
-        if final_verification.get("testbench_results") and final_verification["testbench_results"].get("success"):
-            tb_results = final_verification["testbench_results"]
-            testbench_data = {
-                "passed": tb_results.get("passed", False),
-                "output": tb_results.get("output", ""),
-                "testbench": tb_results.get("testbench", "")
-            }
-        
-        # Now run the official verifier on our best code
-        verifier = Verifier(problem_name=self.problem_name)
-        test_results = verifier.functional_verify(best_code, self.problem_name)
-        
-        return {
-            "code": best_code,
-            "test_results": test_results.to_dict(),
-            "iterations": all_iterations,
-            "refinement_count": iterations,
-            "remaining_issues": final_verification["issues"] if final_verification["has_issues"] else [],
-            "testbench_results": testbench_data
-        }
 
-    def run_pipeline(self, base_query: str, enhance_spec: bool = True, decompose: bool = True, iterative_refinement: bool = True, max_iterations: int = 2, model: str = "gpt-4o-mini") -> Dict:
+
+        testbench_data = verification_results.get("testbench_results", {})
+
+        return {
+            "best_response": best_response,
+            "best_code": best_code,
+            "testbench_data": testbench_data
+        }    
+        
+
+    def run_pipeline(self, base_query: str, enhance_spec: bool = True, decompose: bool = True, iterative_refinement: bool = True, max_iterations: int = 3, model: str = "gpt-4o-mini") -> Dict:
         """
         INPUT:
             base_query: str - Base query to generate testbench
@@ -962,6 +964,9 @@ class VerilogModel:
                     {"role": "system", "content": 'You are a Verilog RTL designer that only writes code using correct Verilog syntax.'},
                     {"role": "user", "content": base_query},
             ]
+
+            base_response = ""
+            base_code = ""
 
             if enhance_spec:
 
@@ -1018,24 +1023,25 @@ class VerilogModel:
                 with open(self.problem_dir / "decomposition.txt", 'w') as f:
                     f.write("Decomposition Result:")
                     f.write(json.dumps(decomposition_result, indent=4))
-                    f.write("\n\nModified Base Query:")
-                    f.write(f"\n\n{base_query}")
 
                 base_response = self.generator.generate_with_messages(messages, model=model, temperature=0.2, top_p=0.1)
 
                 base_code = self.generator._extract_code(base_response, base_query)
 
-                
-            # Store the original specification for reference
             
             if iterative_refinement:
-                #ADD CODE HERE FOR ITERATIVE REFINEMENT
+                
                 print(f"Using iterative refinement with max {max_iterations} iterations")
-                result = self.iterative_refinement(base_query, max_iterations, model=model)
-                return result
+                result = self.iterative_refinement(base_query, max_iterations, model=model, messages=messages)
+                
+                base_response = result["best_response"]
+                base_code = result["best_code"]
         
-            else:
-                # Refinement approach
+
+            if base_code == "":
+
+                print("INSIDE BASE CODE EMPTY")
+
                 base_response, base_code = self.generator.generate(
                     base_query,
                     include_rules=True,
@@ -1050,7 +1056,7 @@ class VerilogModel:
             
             # Generate testbench and verify
             verifier = Verifier(problem_name=self.problem_name, problem_dir=self.problem_dir)
-            test_results = verifier.functional_verify(base_response, self.problem_name)
+            test_results = verifier.functional_verify(base_code, self.problem_name)
             
             return {
                 "code": base_code,

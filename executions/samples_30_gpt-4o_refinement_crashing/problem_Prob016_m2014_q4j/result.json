@@ -1,0 +1,7 @@
+{
+    "code": "module FullAdder(\n    input  logic a,\n    input  logic b,\n    input  logic cin,\n    output logic sum,\n    output logic cout\n);\n    assign {cout, sum} = a + b + cin;\nendmodule\n\nmodule TopModule(\n    input  logic [3:0] x,\n    input  logic [3:0] y,\n    output logic [4:0] sum\n);\n    logic c0, c1, c2, c3;\n\n    // Instantiate full adders\n    FullAdder fa0 (.a(x[0]), .b(y[0]), .cin(1'b0), .sum(sum[0]), .cout(c0));\n    FullAdder fa1 (.a(x[1]), .b(y[1]), .cin(c0), .sum(sum[1]), .cout(c1));\n    FullAdder fa2 (.a(x[2]), .b(y[2]), .cin(c1), .sum(sum[2]), .cout(c2));\n    FullAdder fa3 (.a(x[3]), .b(y[3]), .cin(c2), .sum(sum[3]), .cout(c3));\n\n    // Assign the final carry-out as the overflow bit\n    assign sum[4] = c3;\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

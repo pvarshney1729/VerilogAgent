@@ -1,0 +1,38 @@
+Generated Response:
+
+<REASONING>
+The task is to implement a Verilog module named `TopModule` that computes an even parity bit for an 8-bit input. The parity bit is the XOR of all bits in the input, ensuring that the total number of 1s in the 9-bit sequence (including the parity bit) is even.
+
+1. **Module Declaration**: The module is named `TopModule` with an 8-bit input `in` and a 1-bit output `parity`.
+2. **Port Declaration**: The input `in` is declared as an 8-bit wide vector, and the output `parity` is a single bit.
+3. **Parity Calculation**: The parity bit is calculated using a reduction XOR operation (`^in`), which XORs all bits of the vector `in`. This is a concise way to compute the parity bit.
+4. **Assign Statement**: The result of the XOR operation is assigned to the output `parity` using an `assign` statement, which is suitable for combinational logic.
+
+The implementation adheres to the coding conventions by using `logic` for port declarations and using an `assign` statement for combinational logic. The reduction XOR operator efficiently computes the parity without needing an `always` block.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [7:0] in,
+    output logic parity
+);
+
+    // Compute even parity using reduction XOR
+    assign parity = ^in;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [7:0] in,
+    output logic parity
+);
+
+    // Compute even parity using reduction XOR
+    assign parity = ^in;
+
+endmodule

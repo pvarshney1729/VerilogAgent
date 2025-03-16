@@ -1,0 +1,22 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input [99:0] a`: A 100-bit wide input vector, where `a[0]` is the least significant bit (LSB) and `a[99]` is the most significant bit (MSB).
+  - `input [99:0] b`: A 100-bit wide input vector, where `b[0]` is the LSB and `b[99]` is the MSB.
+  - `input sel`: A 1-bit input signal used to select between inputs `a` and `b`.
+
+- Outputs:
+  - `output [99:0] out`: A 100-bit wide output vector, where `out[0]` is the LSB and `out[99]` is the MSB.
+
+Functional Description:
+- The module implements a 2-to-1 multiplexer:
+  - If `sel` is `0`, the output `out` should be assigned the value of input vector `a`.
+  - If `sel` is `1`, the output `out` should be assigned the value of input vector `b`.
+
+Additional Notes:
+- This is a purely combinational logic circuit; no clock or reset signals are required.
+- There are no sequential elements; hence, no initial values or reset states are applicable.
+- Ensure that the implementation handles all input combinations correctly, maintaining the integrity of the 100-bit input vectors.
+</ENHANCED_SPEC>

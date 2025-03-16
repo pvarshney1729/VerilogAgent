@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - input wire a        // Single-bit input representing the first operand.
+  - input wire b        // Single-bit input representing the second operand.
+  - input wire cin      // Single-bit carry-in input.
+
+- Outputs:
+  - output wire cout    // Single-bit output representing the carry-out.
+  - output wire sum     // Single-bit output representing the sum result.
+
+Functional Description:
+The module implements a full adder circuit, which performs the addition of three single-bit inputs: 'a', 'b', and 'cin' (carry-in). The result of this addition is a two-bit value, where 'sum' represents the least significant bit (LSB) and 'cout' represents the most significant bit (MSB), which is the carry-out.
+
+Behavior:
+- The full adder computes the sum as follows:
+  - sum = (a XOR b XOR cin)
+  - cout = ((a AND b) OR (b AND cin) OR (a AND cin))
+
+Signal Definition and Conventions:
+- Bit Indexing: All inputs and outputs are single-bit signals.
+- The 'sum' output is derived from the XOR operation of inputs 'a', 'b', and 'cin'.
+- The 'cout' output is derived from the OR-ing of the AND operations of input pairs: (a, b), (b, cin), and (a, cin).
+
+Edge Cases and Input Boundaries:
+- All possible combinations of inputs 'a', 'b', and 'cin' (000 to 111) must be handled correctly by the module to produce the expected 'sum' and 'cout' values.
+- No additional edge cases exist for single-bit inputs.
+
+Clock and Reset:
+- This module contains only combinational logic and does not require clock or reset signals.
+
+Additional Notes:
+- Ensure that the logic is implemented using basic combinational gates to reflect the true operation of a full adder.
+</ENHANCED_SPEC>

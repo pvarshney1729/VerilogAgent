@@ -1,0 +1,28 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- Input Ports:
+  - `in`: A vector input port of width 8 bits. It follows the convention where `in[0]` is the least significant bit (LSB) and `in[7]` is the most significant bit (MSB).
+  
+- Output Ports:
+  - `out`: A vector output port of width 8 bits. It follows the convention where `out[0]` is the least significant bit (LSB) and `out[7]` is the most significant bit (MSB).
+
+Functional Description:
+- The module performs a bit reversal operation on the 8-bit input vector `in`.
+- The LSB of `in` (i.e., `in[0]`) becomes the MSB of `out` (i.e., `out[7]`), and the MSB of `in` (i.e., `in[7]`) becomes the LSB of `out` (i.e., `out[0]`).
+- The specific mapping is as follows:
+  - `out[7] = in[0]`
+  - `out[6] = in[1]`
+  - `out[5] = in[2]`
+  - `out[4] = in[3]`
+  - `out[3] = in[4]`
+  - `out[2] = in[5]`
+  - `out[1] = in[6]`
+  - `out[0] = in[7]`
+
+Additional Considerations:
+- This is a purely combinational logic module, with no clock or reset signals involved.
+- The module assumes that the input bits are valid and stable for the duration required for the combinational logic to propagate.
+- The output is updated instantaneously with any change in the input, reflecting the reversed bit order immediately.
+</ENHANCED_SPEC>

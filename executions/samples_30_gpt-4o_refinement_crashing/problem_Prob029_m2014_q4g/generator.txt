@@ -1,0 +1,55 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the given specification and guidelines. The module has three single-bit inputs: `in1`, `in2`, and `in3`, and a single-bit output `out`. The circuit is purely combinational, so no clock or reset signals are involved.
+
+1. **XNOR Gate**: The first operation is a two-input XNOR gate. The inputs to this gate are `in1` and `in2`. The XNOR operation is performed using the bitwise XOR operator (`^`) followed by a bitwise NOT (`~`) to achieve the XNOR functionality. The result is stored in an internal signal `xnor_out`.
+
+2. **XOR Gate**: The output of the XNOR gate (`xnor_out`) is then used as one of the inputs to a two-input XOR gate. The second input to this XOR gate is `in3`. The XOR operation is performed using the bitwise XOR operator (`^`), and the result is assigned to the output `out`.
+
+3. **Signal Declaration**: All ports and internal signals are declared as `logic` as per the coding conventions, which is a more modern and flexible data type in SystemVerilog, compatible with Verilog.
+
+4. **Combinational Logic**: The use of `assign` statements ensures that the logic is purely combinational, adhering to the guidelines provided.
+
+The implementation strictly follows the interface and signal names as specified, ensuring correctness and clarity.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input  logic in1,
+    input  logic in2,
+    input  logic in3,
+    output logic out
+);
+
+    logic xnor_out;
+
+    // Two-input XNOR gate
+    assign xnor_out = ~(in1 ^ in2);
+
+    // Two-input XOR gate
+    assign out = xnor_out ^ in3;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input  logic in1,
+    input  logic in2,
+    input  logic in3,
+    output logic out
+);
+
+    logic xnor_out;
+
+    // Two-input XNOR gate
+    assign xnor_out = ~(in1 ^ in2);
+
+    // Two-input XOR gate
+    assign out = xnor_out ^ in3;
+
+endmodule

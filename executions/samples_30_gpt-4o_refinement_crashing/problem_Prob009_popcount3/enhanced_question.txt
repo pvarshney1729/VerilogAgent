@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input [2:0] in`: A 3-bit unsigned vector where `in[2]` is the most significant bit (MSB) and `in[0]` is the least significant bit (LSB).
+  
+- Output Ports:
+  - `output [1:0] out`: A 2-bit unsigned vector representing the population count of '1's in the input vector.
+
+Functional Description:
+- The module implements a population count circuit, which calculates the number of '1' bits in the input vector `in`.
+- The output `out` represents the count as a 2-bit binary number, ranging from 0 to 3.
+
+Design Considerations:
+- The logic is combinational, meaning the output `out` is directly dependent on the input `in` and updates without the need for any clock signal.
+- Ensure that the implementation does not introduce any timing or race condition issues, as the module does not involve clocked elements.
+
+Edge Case Handling:
+- Since the input is a 3-bit vector, all possible input combinations (from `000` to `111`) must be handled, with `out` accurately reflecting the number of '1's in each case.
+
+Reset and Initialization:
+- This module does not include any sequential elements or state, hence reset conditions and initial values are not applicable.
+
+Note on Bit Indexing:
+- Bit indexing follows a zero-based convention, with `in[0]` being the LSB and `in[2]` being the MSB for the input vector.
+</ENHANCED_SPEC>

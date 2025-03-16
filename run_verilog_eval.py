@@ -197,7 +197,7 @@ def parse_args():
                        help='Top-p value (default: 0.1)')
     parser.add_argument('--enhance_spec', type=bool, default=False,
                        help='Enhance the Spec (default: False)')
-    parser.add_argument('--iterative_refinement', type=bool, default=False,
+    parser.add_argument('--iterative_refinement', type=bool, default=True,
                        help='Iterative Refinement (default: False)')
     parser.add_argument('--decompose', type=bool, default=False,
                        help='Decompose the problem into subtasks (default: False)')

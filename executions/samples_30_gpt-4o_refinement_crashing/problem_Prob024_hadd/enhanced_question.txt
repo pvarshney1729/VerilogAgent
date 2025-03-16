@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description:
+The TopModule implements a half adder. A half adder is a combinational circuit that takes two single-bit binary numbers as input and produces a sum bit and a carry-out bit as output.
+
+Interface Specification:
+- Inputs:
+  - `input wire a`: Single-bit input. Represents the first bit to be added.
+  - `input wire b`: Single-bit input. Represents the second bit to be added.
+
+- Outputs:
+  - `output wire sum`: Single-bit output. Represents the least significant bit (LSB) of the addition result.
+  - `output wire cout`: Single-bit output. Represents the carry-out bit of the addition.
+
+Logical Functionality:
+- The half adder produces the sum and carry-out based on the following logical expressions:
+  - `sum = a XOR b`: The sum output is the result of the XOR operation between inputs `a` and `b`.
+  - `cout = a AND b`: The carry-out output is the result of the AND operation between inputs `a` and `b`.
+
+Bit Indexing:
+- Since all signals are single-bit, bit indexing is not applicable. However, if extended in the future, consider `bit[0]` as the least significant bit.
+
+Combinational Logic:
+- This module is purely combinational and has no clock or reset signals. All outputs are determined solely by the current input values without any memory or state retention.
+
+Edge Cases:
+- The module's behavior is fully defined for all possible combinations of the single-bit inputs `a` and `b` (i.e., 00, 01, 10, 11).
+
+Note: The half adder does not account for any carry-in bit, differentiating it from a full adder.
+</ENHANCED_SPEC>

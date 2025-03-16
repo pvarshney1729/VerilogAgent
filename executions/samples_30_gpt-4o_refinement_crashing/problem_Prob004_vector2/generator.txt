@@ -1,0 +1,31 @@
+Generated Response:
+
+<REASONING>
+The task is to reverse the byte order of a 32-bit input vector and output the result. The module is purely combinational, so we use an `assign` statement to directly map the reversed byte order to the output. The input and output ports are declared as `logic` to adhere to the coding conventions provided. The byte reversal is achieved by reordering the 8-bit segments of the input vector. This is done by concatenating the bytes in reverse order: the least significant byte of the input becomes the most significant byte of the output, and so on.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [31:0] in,
+    output logic [31:0] out
+);
+
+    // Reverse the byte order of the input vector
+    assign out = {in[7:0], in[15:8], in[23:16], in[31:24]};
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [31:0] in,
+    output logic [31:0] out
+);
+
+    // Reverse the byte order of the input vector
+    assign out = {in[7:0], in[15:8], in[23:16], in[31:24]};
+
+endmodule

@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port: in
+  - Width: 1024 bits
+  - Description: This input vector contains all the 256 4-bit data entries. Bit indexing follows the convention where bit[0] is the least significant bit.
+  
+- Input Port: sel
+  - Width: 8 bits
+  - Description: This selects which 4-bit segment from the 'in' vector is routed to the output. The most significant bit is bit[7], and the least significant bit is bit[0].
+
+- Output Port: out
+  - Width: 4 bits
+  - Description: This output provides the selected 4-bit data based on the 'sel' input.
+
+Functionality:
+- The module functions as a combinational 4-bit wide, 256-to-1 multiplexer.
+- Selection Logic: 
+  - The 'sel' input defines which 4 bits from the 'in' vector are routed to the 'out' port.
+  - If sel = 0, the bits from in[3:0] are selected.
+  - If sel = 1, the bits from in[7:4] are selected.
+  - This continues such that if sel = n, the bits from in[(4*n)+3:(4*n)] are selected.
+  
+- The 'sel' value should be within the range of 0 to 255. Values outside this range are considered invalid and can result in undefined behavior for 'out'.
+
+- No sequential elements or clock dependencies exist in this module, ensuring purely combinational behavior.
+
+- Edge Cases: 
+  - Ensure that sel values strictly adhere to the 0-255 range for predictable behavior.
+  - The module does not handle input vector 'in' changes; it assumes inputs are stable during each evaluation.
+
+- Initial Values: 
+  - No initial values are required as this is a combinational circuit without sequential elements.
+
+- Reset Conditions: 
+  - Not applicable, as the module does not utilize flip-flops or other sequential logic elements.
+</ENHANCED_SPEC>

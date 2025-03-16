@@ -1,0 +1,23 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `in`: 16-bit wide input bus. This bus is unsigned and follows big-endian bit indexing, where `in[15]` is the most significant bit (MSB) and `in[0]` is the least significant bit (LSB).
+
+- Output Ports:
+  - `out_hi`: 8-bit wide output bus that represents the upper byte of the input. This bus is unsigned and follows big-endian bit indexing, where `out_hi[7]` is the MSB and `out_hi[0]` is the LSB.
+  - `out_lo`: 8-bit wide output bus that represents the lower byte of the input. This bus is unsigned and follows big-endian bit indexing, where `out_lo[7]` is the MSB and `out_lo[0]` is the LSB.
+
+Functional Description:
+- The module implements a purely combinational circuit.
+- The input signal `in` is split into two separate 8-bit segments:
+  - `out_hi` is assigned the upper byte of `in`, specifically `in[15:8]`.
+  - `out_lo` is assigned the lower byte of `in`, specifically `in[7:0]`.
+- There are no sequential elements or state-holding components in the design; hence, no clock or reset signals are required.
+- Ensure that the outputs `out_hi` and `out_lo` change instantaneously in response to any changes in the input `in`.
+
+Edge Cases:
+- The module should operate correctly for all possible 16-bit input values, ranging from `0x0000` to `0xFFFF`.
+- Any changes in the `in` value must immediately reflect in the outputs `out_hi` and `out_lo`.
+</ENHANCED_SPEC>

@@ -1,0 +1,41 @@
+Generated Response:
+
+<REASONING>
+The task is to implement a half adder in Verilog, which takes two single-bit inputs and produces a sum and a carry-out. The half adder logic is straightforward: the sum is the result of the XOR operation on the inputs, and the carry-out is the result of the AND operation on the inputs. 
+
+The guidelines and coding conventions provided suggest using `logic` instead of `wire` or `reg`, and using continuous assignment statements for combinational logic. Since the half adder is purely combinational, we will use `assign` statements for both the sum and carry-out outputs. There is no need for a clock or reset signal in this design, as it is purely combinational logic.
+
+The module will strictly adhere to the specified interface, using the exact port names provided: `a`, `b`, `sum`, and `cout`.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic a,
+    input logic b,
+    output logic sum,
+    output logic cout
+);
+
+    // Combinational logic for half adder
+    assign sum = a ^ b;  // XOR operation for sum
+    assign cout = a & b; // AND operation for carry-out
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic a,
+    input logic b,
+    output logic sum,
+    output logic cout
+);
+
+    // Combinational logic for half adder
+    assign sum = a ^ b;  // XOR operation for sum
+    assign cout = a & b; // AND operation for carry-out
+
+endmodule

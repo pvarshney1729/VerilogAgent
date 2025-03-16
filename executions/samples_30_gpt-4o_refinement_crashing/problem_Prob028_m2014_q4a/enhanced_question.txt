@@ -1,0 +1,24 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule`, which should serve as a D latch with a specified interface. The following are the input and output ports, defined with precision for clarity and correctness in implementation:
+
+- `input wire d`: This is the data input to the latch. It is a single-bit signal.
+- `input wire ena`: This is the enable input signal for the latch. It is a single-bit signal.
+- `output reg q`: This is the output of the latch. It is a single-bit signal.
+
+Functional Requirements:
+
+1. The D latch is a level-sensitive latch that stores the value present at the `d` input when the `ena` (enable) signal is high (`1`).
+2. When `ena` is high, the output `q` should follow the input `d`.
+3. When `ena` is low (`0`), the output `q` should retain its last value regardless of changes in `d`.
+4. The latch should be implemented using an `always` block sensitive to changes in the `d` and `ena` signals.
+
+Additional clarifications:
+
+- The `always` block should be triggered on any change of the `d` or `ena` signals, i.e., the sensitivity list should include `d` and `ena`.
+- There is no need for an explicit reset signal, as the D latch is not intended to be reset in this design.
+- The module should not introduce any race conditions; ensure that the latch behavior is correctly defined for all combinations of `d` and `ena` transitions.
+- If not explicitly initialized, consider the power-up state of `q` as unknown, unless specified otherwise by the broader system context.
+- Signal `q` should be declared as `reg` type, since it is updated within an `always` block.
+
+This specification ensures that the D latch is implemented correctly and behaves as expected under all conditions.
+</ENHANCED_SPEC>

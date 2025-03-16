@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+1. Interface Definition:
+   - Input Ports:
+     - `input wire [1:0] A`: A 2-bit wide input, where `A[1]` is the most significant bit (MSB) and `A[0]` is the least significant bit (LSB).
+     - `input wire [1:0] B`: A 2-bit wide input, where `B[1]` is the MSB and `B[0]` is the LSB.
+   - Output Ports:
+     - `output wire z`: A 1-bit output.
+
+2. Functional Description:
+   - The output `z` shall be set to logic high ('1') if and only if the binary value represented by input `A` is equal to the binary value represented by input `B`.
+   - Otherwise, the output `z` shall be set to logic low ('0').
+
+3. Operational Details:
+   - This module is purely combinational, meaning there are no clock signals or sequential logic elements involved.
+   - The comparison between `A` and `B` should be executed using bitwise equality checking.
+
+4. Edge Cases:
+   - If all bits are logic low (A = 2'b00 and B = 2'b00), `z` should output '1' since A equals B.
+   - If all bits in `A` and `B` are logic high (A = 2'b11 and B = 2'b11), `z` should also output '1'.
+
+5. Initial Conditions:
+   - As this is a combinational logic circuit, no initial conditions or reset conditions are required for the output `z`.
+
+6. Additional Considerations:
+   - Ensure no race conditions exist as this is a purely combinational implementation without feedback paths.
+   - All operations should consider the entire width of the inputs `A` and `B` for equality checking.
+</ENHANCED_SPEC>

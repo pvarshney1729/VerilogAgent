@@ -1,0 +1,42 @@
+Generated Response:
+
+<REASONING>
+The task requires implementing a combinational logic module named `TopModule` that compares two 2-bit inputs, `A` and `B`, and outputs a 1-bit signal `z`. The output `z` should be high (1) if the inputs `A` and `B` are equal, otherwise, it should be low (0).
+
+Given the guidelines and coding conventions:
+1. We will use `logic` for all port declarations.
+2. Since this is a purely combinational logic circuit, we will use an `assign` statement for the equality check.
+3. The equality check `(A == B)` will be used to determine if the two inputs are the same.
+4. There is no need for a clock or reset signal as this is a combinational logic module.
+5. We will adhere strictly to the specified interface and signal names.
+
+The implementation will be straightforward, using an `assign` statement to directly compare the inputs and drive the output.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [1:0] A,
+    input logic [1:0] B,
+    output logic z
+);
+
+    // Combinational logic to compare A and B
+    assign z = (A == B) ? 1'b1 : 1'b0;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [1:0] A,
+    input logic [1:0] B,
+    output logic z
+);
+
+    // Combinational logic to compare A and B
+    assign z = (A == B) ? 1'b1 : 1'b0;
+
+endmodule

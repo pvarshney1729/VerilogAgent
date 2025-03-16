@@ -1,0 +1,51 @@
+Generated Response:
+
+<REASONING>
+To implement the D latch as specified, we need to create a module named `TopModule` with the given interface. The D latch should store the value of the input `d` when the enable signal `ena` is high. The output `q` should follow the input `d` when `ena` is high, and retain its value when `ena` is low. 
+
+1. **Module Declaration**: We declare the module `TopModule` with inputs `d` and `ena`, and output `q`. All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **Always Block**: We use an `always @(*)` block to describe the combinational logic of the D latch. This block is sensitive to any changes in the inputs `d` and `ena`.
+
+3. **Latch Logic**: Inside the `always` block, we check if `ena` is high. If it is, we assign the value of `d` to `q`. If `ena` is low, `q` retains its previous value, which is the natural behavior of a latch.
+
+4. **No Synchronous Reset**: The specification does not mention a reset signal, so we do not implement any reset logic.
+
+5. **Coding Conventions**: We follow the guidelines by using `logic` for signal declarations and using `always @(*)` for combinational logic without explicitly specifying the sensitivity list.
+
+This implementation ensures that the D latch behaves correctly according to the specification and adheres to the provided coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic d,
+    input logic ena,
+    output logic q
+);
+
+    always @(*) begin
+        if (ena) begin
+            q = d;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic d,
+    input logic ena,
+    output logic q
+);
+
+    always @(*) begin
+        if (ena) begin
+            q = d;
+        end
+    end
+
+endmodule

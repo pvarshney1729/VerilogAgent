@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+1. Interface Definition:
+   - Inputs:
+     - `input [3:0] x`: A 4-bit input vector where `x[3]` is the most significant bit (MSB) and `x[0]` is the least significant bit (LSB).
+     - `input [3:0] y`: A 4-bit input vector where `y[3]` is the most significant bit (MSB) and `y[0]` is the least significant bit (LSB).
+   - Outputs:
+     - `output [4:0] sum`: A 5-bit output vector where `sum[4]` is the overflow bit (carry-out from the most significant full adder) and `sum[3:0]` represents the sum of the inputs.
+
+2. Functional Description:
+   - The module implements a 4-bit binary adder using full adders. Each full adder computes the sum and carry-out for each bit position.
+   - The least significant bit of the output `sum[0]` is the result of adding `x[0]`, `y[0]`, and the initial carry-in (assumed to be 0).
+   - The carry-out from each bit position is propagated to the next higher bit position as the carry-in for that position.
+   - The most significant bit of `sum` (`sum[4]`) captures the final carry-out, representing the overflow bit.
+
+3. Logic Implementation:
+   - The addition is purely combinational logic, with no sequential elements involved.
+   - Each bit of the sum is derived from the corresponding bits of `x` and `y` and the carry from the previous bit position.
+
+4. Edge Cases:
+   - If both `x` and `y` are at their maximum values (4'b1111), the result should correctly reflect the overflow with `sum` being 5'b11110.
+
+5. Miscellaneous:
+   - Ensure no race conditions exist as the design is purely combinational.
+   - The module does not involve any clock signals, resets, or sequential elements; thus, no initial values for registers are needed.
+</ENHANCED_SPEC>

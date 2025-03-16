@@ -1,0 +1,20 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `in`: A 100-bit wide input vector representing data to be reversed. The bit width is explicitly defined as 100 bits. The least significant bit (LSB) is referenced as `in[0]`, and the most significant bit (MSB) is referenced as `in[99]`.
+
+- Output Ports:
+  - `out`: A 100-bit wide output vector where the reversed order of the input data will be stored. The bit width is explicitly defined as 100 bits. The least significant bit (LSB) is referenced as `out[0]`, and the most significant bit (MSB) is referenced as `out[99]`.
+
+Functional Description:
+- The module is purely combinational and does not involve any sequential logic, clocking, or storage elements.
+- The functional intent of the module is to reverse the order of bits in the `in` input vector and assign the reversed sequence to the `out` output vector. Specifically, `out[i]` should be equal to `in[99-i]` for all i in the range 0 to 99.
+- There are no resets, initializations, or clock dependencies, as the operation is combinational.
+- Race conditions are not applicable in this context since the module does not involve any sequential logic.
+
+Edge Cases:
+- As all inputs and outputs are fixed at a width of 100 bits, there are no edge cases related to input size that need to be handled.
+- The module should correctly handle all possible values of the 100-bit input vector.
+</ENHANCED_SPEC>
