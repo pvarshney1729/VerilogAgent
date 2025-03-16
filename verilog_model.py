@@ -349,7 +349,7 @@ class SimpleVerifier:
         - You could either apply a single stimuli, if it is a combinational design, or a sequence of stimuli for a sequential design and fill the output at each stage. 
         - Don't include the clock signal in the stimuli, provide the cycle latency after which the output should be sampled, after the inputs have been applied, for example, latency is 
         0 for a combinational design, 1 for a single cycle latency sequential design and so on.
-        - Please make the stimuli concise BUT it should cover all possible edge cases. The input and output stimuli should include all the input and output ports except the clock and reset signals. 
+        - The number of stimuli should NOT exceed 10 BUT should try to cover as many possible edge cases as possible. The input and output stimuli should include all the input and output ports except the clock and reset signals. 
         </STIMULI GENERATION GUIDELINES>
         """ + """
         Ex: 
@@ -447,7 +447,8 @@ class SimpleVerifier:
             functions=[stimuli_dict],
             function_call={"name": "stimuli"},
             temperature=0.2,
-            top_p=0.1)
+            top_p=0.1
+        )
 
         # Extract the response from the API
         function_call = response.choices[0].message.function_call
@@ -816,10 +817,19 @@ class VerilogModel:
             Dict containing the final code, test results, and iteration history
         """
 
+        if len(messages) == 2:
+            
+            full_prompt = self.generator._construct_prompt(base_query, include_rules=True, include_examples=False)
+
+            messages = [
+                    {"role": "system", "content": 'You are an expert Verilog RTL Engineer that only writes code using correct Verilog syntax.'},
+                    {"role": "user", "content": full_prompt},
+            ]
 
         base_response = self.generator.generate_with_messages(messages, model=model, temperature=0.2, top_p=0.1)
 
         base_code = self.generator._extract_code(base_response, base_query)
+
 
         messages.extend([
             {"role": "assistant", "content": f"{base_code}"}
@@ -839,8 +849,11 @@ class VerilogModel:
         best_response = base_response
 
         initial_stimulus = simple_verifier.generate_stimulus(base_query, best_code, model=model)
-        initial_stimulus = initial_stimulus.get("stimuli", [])
 
+        # print("initial stimulus:")
+        # print(json.dumps(initial_stimulus, indent=4))
+
+        initial_stimulus = initial_stimulus.get("stimuli", [])
 
         import copy
         refinement_messages = copy.deepcopy(messages)
