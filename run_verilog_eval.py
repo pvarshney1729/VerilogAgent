@@ -83,11 +83,12 @@ def run_problem(problem_path, config, exec_folder,  enhance_spec, decompose, ite
             iter_ref_model=config['model'],
             generation_temp=config['temperature'],
             problem_name=problem_name,
-            examples=config['examples']
+            examples=config['examples'],
+            problem_dir=problem_dir
         )
                 
         # Generate and verify code using VerilogModel
-        result = model.run_pipeline(base_query, enhance_spec=enhance_spec, decompose=decompose, iterative_refinement=iterative_refinement, model=config['model'], problem_dir=problem_dir)
+        result = model.run_pipeline(base_query, enhance_spec=enhance_spec, decompose=decompose, iterative_refinement=iterative_refinement, model=config['model'])
 
         # Save the generated code
         with open(problem_dir / "initial_solution.sv", 'w') as f:
@@ -192,7 +193,7 @@ def parse_args():
                        help='Number of examples (0-4, default: 2)')
     parser.add_argument('--temperature', type=float, default=0.2,  # Changed from 0.85
                        help='Temperature (default: 0.2)')
-    parser.add_argument('--top-p', type=float, default=0.9,  # Changed from 0.95
+    parser.add_argument('--top-p', type=float, default=0.1,  # Changed from 0.95
                        help='Top-p value (default: 0.1)')
     parser.add_argument('--enhance_spec', type=bool, default=False,
                        help='Enhance the Spec (default: False)')

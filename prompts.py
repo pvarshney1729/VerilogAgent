@@ -21,10 +21,9 @@ You are a Verilog RTL designer that only writes code using correct Verilog synta
 The following plan/guidelines might be useful for generating the correct Verilog code:
 <Guidelines>
 - Ensure synchronous reset is implemented as specified.
-- Initialize all flip-flops to zero in simulation.
+- Initialize all flip-flops and inputs to zero in simulation, unless provided the specified initial values in the question.s
 - Adhere strictly to the provided interface and signal names.
 - Generate results in the specified cycle timing.
-- Infer logic correctly, especially when using Karnaugh maps.
 - Handle bitwise operations and signal broadcasting correctly.
 </Guidelines>
 
@@ -62,6 +61,8 @@ module TopModule(
 endmodule
 [DONE]
 </CODE>
+
+PLEASE USE XML TAGS provided to enclose your response!
 """,
 
 

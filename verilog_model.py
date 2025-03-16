@@ -4,6 +4,7 @@ from utils import generate_openai, generate_anthropic, generate_together
 from typing import Dict, List 
 import subprocess
 import re
+import shutil
 
 from prompts import prompts
 
@@ -84,9 +85,10 @@ class ResultRecord:
         }
 
 class Verifier:
-    def __init__(self, problem_name: str):
+    def __init__(self, problem_name: str, problem_dir: str):
         ground_truth_path = "dataset_spec-to-rtl"
         self.ground_truth_path = os.path.join(os.getcwd(), ground_truth_path)
+        self.problem_dir = problem_dir
 
     def functional_verify(self, solution: str, ground_truth: str)->ResultRecord:
         """
@@ -111,6 +113,8 @@ class Verifier:
         # The ground truth reference path
         ground_truth_ref_path = os.path.join(self.ground_truth_path, ground_truth + "_ref.sv")
 
+        shutil.copy(ground_truth_ref_path, self.problem_dir / "reference_solution.sv")
+
         # Write the solution to a temporary file
         solution_path = os.path.join(os.getcwd(), "temp_top.sv")
 
@@ -130,6 +134,9 @@ class Verifier:
             f.write(solution)
  
         compile_log_path = os.path.join(os.getcwd(), "compile_log.txt") 
+
+        shutil.copy(compile_log_path, self.problem_dir / "compile_log.txt")
+
         if os.path.exists(compile_log_path):
             os.remove(compile_log_path)
 
@@ -743,7 +750,8 @@ class VerilogModel:
         generation_temp: float = 0.7,
         iter_ref_temp: float = 0.7, 
         problem_name: str = None,
-        examples: int = 0
+        examples: int = 0,
+        problem_dir: str = None
     ):
         """
         INPUT:
@@ -763,7 +771,7 @@ class VerilogModel:
             examples=examples
         )
         self.problem_name = problem_name
-
+        self.problem_dir = problem_dir
     def generate(self, prompt: str, model: str = "gpt-4o-mini") -> List[Dict]:
         """
         INPUT:
@@ -938,7 +946,7 @@ class VerilogModel:
             "testbench_results": testbench_data
         }
 
-    def run_pipeline(self, base_query: str, enhance_spec: bool = True, decompose: bool = True, iterative_refinement: bool = True, max_iterations: int = 2, model: str = "gpt-4o-mini", problem_dir: str = None) -> Dict:
+    def run_pipeline(self, base_query: str, enhance_spec: bool = True, decompose: bool = True, iterative_refinement: bool = True, max_iterations: int = 2, model: str = "gpt-4o-mini") -> Dict:
         """
         INPUT:
             base_query: str - Base query to generate testbench
@@ -948,11 +956,14 @@ class VerilogModel:
         """
         try:
 
-            # print("Original specification:", flush=True)
-            # print(base_query, flush=True)
-            # print("\n\n", flush=True)
+            full_prompt = self.generator._construct_prompt(base_query, include_rules=True, include_examples=False)
+
+            messages = [
+                    {"role": "system", "content": 'You are a Verilog RTL designer that only writes code using correct Verilog syntax.'},
+                    {"role": "user", "content": base_query},
+            ]
+
             if enhance_spec:
-                # Enhance the specification using the prompts
 
                 enhance_model = 'gpt-4o'
                 if DEBUG_PRINTS: 
@@ -963,45 +974,24 @@ class VerilogModel:
                     system_prompt=prompts['enhance_spec_system'],
                     model=enhance_model,
                 )
-                # base_query += f"""Here is the enhanced specification which might be useful to you:
-                # {extract_between_tags(enhanced_query, "ENHANCED_SPEC")}
-                # """
-
-                with open(problem_dir / "enhanced_question.txt", 'w') as f:
+                
+                with open(self.problem_dir / "enhanced_question.txt", 'w') as f:
                     f.write(enhanced_query)
 
-                full_prompt = self.generator._construct_prompt(base_query, include_rules=True, include_examples=False)
-        
-                messages = [
-                    {"role": "system", "content": 'You are a Verilog RTL designer that only writes code using correct Verilog syntax.'},
-                    {"role": "user", "content": full_prompt},
-                    {"role": "assistant", "content": f"""To implement your requested module, I have rewritten the specification to be more clear and concise. Here is the enhanced specification:
+                messages.extend([
+                   {"role": "assistant", "content": f"""To implement your requested module, I have rewritten the specification to be more clear and concise. Here is the enhanced specification:
                     {extract_between_tags(enhanced_query, "ENHANCED_SPEC")}
                     """},
-                    {"role": "user", "content": "Okay, now please implement the module, ensuring syntactical and functional correctness."},
-                ]
+                    {"role": "user", "content": f"Now using ALL the research you have done so far, please implement the Verilog module for the original specification:\n{full_prompt}"},
+                ])
 
-                with open(problem_dir / "messages.txt", 'w') as f:
+                with open(self.problem_dir / "messages.txt", 'w') as f:
                     f.write(json.dumps(messages, indent=4))
                 
-                response = self.generator.generate_with_messages(messages, model=model)
+                base_response = self.generator.generate_with_messages(messages, model=model)
 
-                extracted_code = self.generator._extract_code(response, base_query)
+                base_code = self.generator._extract_code(base_response, base_query)
 
-                with open(problem_dir / "generator.txt", 'w') as f:
-                    f.write("Generated Response:")
-                    f.write(f"\n\n{response}")
-                    f.write("\n\nGenerated Code:")
-                    f.write(f"\n\n{extracted_code}")
-                
-                # Generate testbench and verify
-                verifier = Verifier(problem_name=self.problem_name)
-                test_results = verifier.functional_verify(extracted_code, self.problem_name)
-                
-                return {
-                    "code": extracted_code,
-                    "test_results": test_results.to_dict()
-                }
                 
             if decompose:
                 print("Decomposing the problem into subtasks...")
@@ -1011,61 +1001,31 @@ class VerilogModel:
                     f"SUBTASK {impl['id']}: {impl['content']}\nIMPLEMENTATION:\n{impl['implementation']}"
                     for impl in decomposition_result
                 ])
-                
-                # base_query += f"""
-                # <Specification Decomposed>
-                # Further, I have broken down this specification into subtasks and tried an approach for each one separately.
-                # THESE MIGHT BE INCORRECT BUT IF YOU WANT, but you can use these as hints to create a complete, integrated Verilog module for the original specification:
-                # {implementation_hints}
-                # </Specification Decomposed>
-                # """
 
-                full_prompt = self.generator._construct_prompt(base_query, include_rules=True, include_examples=False)
+                if enhance_spec:
+                    messages[-1] = {"role": "user", "content": "Can you now decompose the specification into independent submodules, which might be useful in generating the final code?"}
         
-                messages = [
-                    {"role": "system", "content": 'You are a Verilog RTL designer that only writes code using correct Verilog syntax.'},
-                    {"role": "user", "content": full_prompt},
+                messages.extend([
                     {"role": "assistant", "content": f"""To implement your requested module, I have decomposed it into the following subtasks and come up with an approach for each:
                     {implementation_hints}
                     """},
-                    {"role": "user", "content": "Okay, now please implement the module, ensuring syntactical and functional correctness. You can use your subtasks as hints to create a single, complete, and coherent Verilog module that satisfies the original specification."},
-                ]
+                    {"role": "user", "content": f"Now using ALL the research you have done so far, please implement the Verilog module for the original specification:\n{full_prompt}"},
+                ])
 
-                with open(problem_dir / "messages.txt", 'w') as f:
+                with open(self.problem_dir / "messages.txt", 'w') as f:
                     f.write(json.dumps(messages, indent=4))
 
-                with open(problem_dir / "decomposition.txt", 'w') as f:
+                with open(self.problem_dir / "decomposition.txt", 'w') as f:
                     f.write("Decomposition Result:")
                     f.write(json.dumps(decomposition_result, indent=4))
                     f.write("\n\nModified Base Query:")
                     f.write(f"\n\n{base_query}")
 
-                response = self.generator.generate_with_messages(messages, model=model, temperature=0.2, top_p=0.1)
+                base_response = self.generator.generate_with_messages(messages, model=model, temperature=0.2, top_p=0.1)
 
-                extracted_code = self.generator._extract_code(response, base_query)
+                base_code = self.generator._extract_code(base_response, base_query)
 
-                with open(problem_dir / "generator.txt", 'w') as f:
-                    f.write("Generated Response:")
-                    f.write(f"\n\n{response}")
-                    f.write("\n\nGenerated Code:")
-                    f.write(f"\n\n{extracted_code}")
                 
-                # Generate testbench and verify
-                verifier = Verifier(problem_name=self.problem_name)
-                test_results = verifier.functional_verify(extracted_code, self.problem_name)
-                
-                return {
-                    "code": extracted_code,
-                    "test_results": test_results.to_dict()
-                }
-        
-
-                # print("Specification after decomposition:", flush=True)
-                # print(base_query, flush=True)
-                # print("\n\n", flush=True)
-                # print("--------------------------------", flush=True)
-                # print("\n\n", flush=True)
-
             # Store the original specification for reference
             
             if iterative_refinement:
@@ -1082,20 +1042,20 @@ class VerilogModel:
                     include_examples=False
                 )  # Get just the code, ignore stats
 
-                with open(problem_dir / "generator.txt", 'w') as f:
-                    f.write("Generated Response:")
-                    f.write(f"\n\n{base_response}")
-                    f.write("\n\nGenerated Code:")
-                    f.write(f"\n\n{base_code}")
-                
-                # Generate testbench and verify
-                verifier = Verifier(problem_name=self.problem_name)
-                test_results = verifier.functional_verify(base_response, self.problem_name)
-                
-                return {
-                    "code": base_code,
-                    "test_results": test_results.to_dict()
-                }
+            with open(self.problem_dir / "generator.txt", 'w') as f:
+                f.write("Generated Response:")
+                f.write(f"\n\n{base_response}")
+                f.write("\n\nGenerated Code:")
+                f.write(f"\n\n{base_code}")
+            
+            # Generate testbench and verify
+            verifier = Verifier(problem_name=self.problem_name, problem_dir=self.problem_dir)
+            test_results = verifier.functional_verify(base_response, self.problem_name)
+            
+            return {
+                "code": base_code,
+                "test_results": test_results.to_dict()
+            }
                 
         except Exception as e:
             print(f"Error in run_pipeline: {str(e)}")
