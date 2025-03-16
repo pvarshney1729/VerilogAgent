@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input [15:0] a`: 16-bit input vector.
+  - `input [15:0] b`: 16-bit input vector.
+  - `input [15:0] c`: 16-bit input vector.
+  - `input [15:0] d`: 16-bit input vector.
+  - `input [15:0] e`: 16-bit input vector.
+  - `input [15:0] f`: 16-bit input vector.
+  - `input [15:0] g`: 16-bit input vector.
+  - `input [15:0] h`: 16-bit input vector.
+  - `input [15:0] i`: 16-bit input vector.
+  - `input [3:0] sel`: 4-bit input vector for selection.
+
+- Outputs:
+  - `output [15:0] out`: 16-bit output vector.
+
+Functional Specification:
+- The module implements a 16-bit wide, 9-to-1 multiplexer.
+- The `sel` input determines which input vector (a to i) is routed to the output `out`.
+  - If `sel` is 0, the output `out` is assigned the value of input `a`.
+  - If `sel` is 1, the output `out` is assigned the value of input `b`.
+  - If `sel` is 2, the output `out` is assigned the value of input `c`.
+  - If `sel` is 3, the output `out` is assigned the value of input `d`.
+  - If `sel` is 4, the output `out` is assigned the value of input `e`.
+  - If `sel` is 5, the output `out` is assigned the value of input `f`.
+  - If `sel` is 6, the output `out` is assigned the value of input `g`.
+  - If `sel` is 7, the output `out` is assigned the value of input `h`.
+  - If `sel` is 8, the output `out` is assigned the value of input `i`.
+  - For `sel` values of 9 through 15, the output `out` is set to all bits '1' (i.e., `out = 16'b1111_1111_1111_1111`).
+
+Additional Notes:
+- The multiplexer behavior is combinational logic, with no clock dependencies.
+- Ensure that the module handles all possible values of the `sel` input, with defined behavior for unused cases.
+- Bit indexing follows the convention where `bit[0]` is the least significant bit (LSB) and `bit[15]` is the most significant bit (MSB).
+</ENHANCED_SPEC>

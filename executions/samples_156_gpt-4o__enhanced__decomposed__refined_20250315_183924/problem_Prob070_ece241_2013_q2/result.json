@@ -1,0 +1,16 @@
+{
+    "code": "module TopModule (\n    input [3:0] in,\n    output logic out_sop,\n    output logic out_pos\n);\n\n    // Assign individual bits from the input vector\n    logic a, b, c, d;\n    assign a = in[3];\n    assign b = in[2];\n    assign c = in[1];\n    assign d = in[0];\n\n    // Minimum Sum-of-Products (SOP) expression for out_sop\n    assign out_sop = (~a & ~b & c & ~d) | (~a & b & c & d) | (a & b & c & d);\n\n    // Minimum Product-of-Sums (POS) expression for out_pos\n    assign out_pos = (a | b | c | ~d) & (a | ~b | ~c | d) & (~a | ~b | ~c | ~d);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "C"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input [3:0] in,\n    output logic out_sop,\n    output logic out_pos\n);\n\n    // Assign individual bits from the input vector\n    logic a, b, c, d;\n    assign a = in[3];\n    assign b = in[2];\n    assign c = in[1];\n    assign d = in[0];\n\n    // Minimum Sum-of-Products (SOP) expression for out_sop\n    assign out_sop = (~a & ~b & c & ~d) | (~a & b & c & d) | (a & b & c & d);\n\n    // Minimum Product-of-Sums (POS) expression for out_pos\n    assign out_pos = (a | b | c | ~d) & (a | ~b | ~c | d) & (~a | ~b | ~c | ~d);\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}

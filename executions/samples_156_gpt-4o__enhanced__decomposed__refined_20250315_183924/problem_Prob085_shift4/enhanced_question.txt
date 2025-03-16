@@ -1,0 +1,103 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  areset
+ - input  load
+ - input  ena
+ - input  data (4 bits)
+ - output q (4 bits)
+
+The module should implement a 4-bit shift register (right shift), with
+asynchronous positive edge triggered areset, synchronous active high
+signals load, and enable.
+
+  (1) areset: Resets shift register to zero.
+
+  (2) load: Loads shift register with data[3:0] instead of shifting.
+
+  (3) ena: Shift right (q[3] becomes zero, q[0] is shifted out and
+       disappears).
+
+  (4) q: The contents of the shift register. If both the load and ena
+       inputs are asserted (1), the load input has higher priority.
+
+Assume all sequential logic is triggered on the positive edge of the
+clock.
+
+Here is the enhanced specification which might be useful to you:
+                **Analysis of Ambiguities and Issues:**
+
+1. **Signal Interface Clarity:**
+   - The specifications for the input and output ports are clear regarding size, but not regarding signedness. Typically, such signals are unsigned, but this should be explicitly stated.
+
+2. **Bit Indexing and Order:**
+   - The description doesn't specify which bit is the MSB and which is the LSB in the data and q signals. It should be explicit that `data[3]` and `q[3]` are the most significant bits.
+
+3. **Timing Behavior:**
+   - While the specification mentions an asynchronous reset and synchronous load and enable signals, it does not explicitly define behavior during clock edges or conflicts between `load` and `ena`.
+
+4. **Reset Behavior:**
+   - The behavior of the reset is described, but its asynchronous nature should be clarified along with its effect at any time during operation.
+
+5. **Initial State:**
+   - The initial state of the shift register upon power-up is not explicitly defined, although reset behavior is specified.
+
+6. **Signal Dependencies and Precedence:**
+   - The precedence of operations when both `load` and `ena` are asserted is clear, but it could benefit from a more formal description to avoid ambiguity in implementation.
+
+7. **Boundary Conditions:**
+   - The specification lacks a description of behavior when other signals change while an operation (like shifting or loading) is in progress.
+
+**<ENHANCED_SPEC>**
+
+**Module Name:** `TopModule`
+
+**Interface:**
+- **Inputs:**
+  - `input wire clk`: Clock signal, positive edge-triggered.
+  - `input wire areset`: Asynchronous reset, active high.
+  - `input wire load`: Synchronous load control, active high.
+  - `input wire ena`: Synchronous enable control for shifting, active high.
+  - `input wire [3:0] data`: 4-bit parallel data input, unsigned.
+  
+- **Outputs:**
+  - `output reg [3:0] q`: 4-bit shift register output, unsigned.
+
+**Bit Ordering:**
+- `data[3]` and `q[3]` represent the most significant bits. 
+- `data[0]` and `q[0]` represent the least significant bits.
+
+**Behavioral Description:**
+1. **Reset (`areset`):**
+   - The `areset` is asynchronous and active high. When asserted, it immediately resets the shift register `q` to `4'b0000` regardless of other signals.
+
+2. **Load (`load`):**
+   - When `load` is asserted (`1`) on the positive edge of `clk`, the entire shift register `q` is synchronously loaded with the `data[3:0]` input. This operation has priority over shifting if both `load` and `ena` are asserted.
+
+3. **Enable (`ena`):**
+   - When `ena` is asserted (`1`) and `load` is not asserted on the positive edge of `clk`, the shift register performs a right shift. `q[3]` is filled with `0`, and `q[0]` is shifted out and discarded.
+
+4. **Shift Register Contents (`q`):**
+   - The current state of the shift register is output on `q[3:0]`. Priority is given to `load` over `ena` during conflict.
+
+**Timing and Control Logic:**
+- All operations (except `areset`) are synchronized with the positive edge of `clk`.
+- No operation (including shift or load) occurs on the negative edge of `clk`.
+
+**Initial State:**
+- Following a reset or power-up, the shift register `q` should be initialized to `4'b0000`.
+
+**Boundary Conditions and Edge Cases:**
+- Changes to `ena` or `load` should occur at least one clock cycle before they are intended to take effect, due to synchronous nature.
+- If `areset` is de-asserted, the next clock edge determines if `load` or `ena` takes effect based on their states.
+
+**Implementation Notes:**
+- Ensure low power consumption by minimizing toggles and glitches.
+- Consider metastability implications for asynchronous reset and use proper synchronization techniques if interfacing with other clock domains.
+- The design should be verified with a testbench that includes all possible combinations of input signal changes, especially focusing on simultaneous assertions of `load` and `ena`.
+
+**<ENHANCED_SPEC>**
+                

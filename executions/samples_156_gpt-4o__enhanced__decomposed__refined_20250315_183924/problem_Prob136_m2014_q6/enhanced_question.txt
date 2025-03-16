@@ -1,0 +1,87 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - input  w
+ - output z
+
+The module should implement the state machine shown below:
+
+  A (0) --0--> B
+  A (0) --1--> A
+  B (0) --0--> C
+  B (0) --1--> D
+  C (0) --0--> E
+  C (0) --1--> D
+  D (0) --0--> F
+  D (0) --1--> A
+  E (1) --0--> E
+  E (1) --1--> D
+  F (1) --0--> C
+  F (1) --1--> D
+
+Assume all sequential logic is triggered on the positive edge of the
+clock.
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+```
+Module Specification: TopModule
+
+1. Interface:
+   - Input Ports:
+     - `clk`: 1-bit clock signal, positive-edge triggered.
+     - `reset`: 1-bit reset signal, asynchronous, active high.
+     - `w`: 1-bit input signal.
+   - Output Ports:
+     - `z`: 1-bit output signal, reflects state output.
+
+2. State Machine Description:
+   - States are encoded as follows:
+     - A: 3'b000
+     - B: 3'b001
+     - C: 3'b010
+     - D: 3'b011
+     - E: 3'b100
+     - F: 3'b101
+   - Initial State:
+     - On reset, the state machine initializes to state A.
+   - State Transitions:
+     - A (z=0) -- `w=0` --> B
+     - A (z=0) -- `w=1` --> A
+     - B (z=0) -- `w=0` --> C
+     - B (z=0) -- `w=1` --> D
+     - C (z=0) -- `w=0` --> E
+     - C (z=0) -- `w=1` --> D
+     - D (z=0) -- `w=0` --> F
+     - D (z=0) -- `w=1` --> A
+     - E (z=1) -- `w=0` --> E
+     - E (z=1) -- `w=1` --> D
+     - F (z=1) -- `w=0` --> C
+     - F (z=1) -- `w=1` --> D
+
+3. Timing and Clocking:
+   - The state machine transitions occur on the positive edge of `clk`.
+   - The `reset` signal is asynchronous and active high, resetting the state machine to state A.
+
+4. Output Signal `z`:
+   - The output `z` is determined by the current state:
+     - `z = 0` in states A, B, C, D.
+     - `z = 1` in states E, F.
+
+5. Implementation Notes:
+   - Ensure that the state machine handles all possible states, including invalid states, by transitioning to a safe state (e.g., default to state A).
+   - The module should be robust against glitches or noise on the `w` input by debouncing or filtering as appropriate.
+   - Consider potential race conditions and ensure proper synchronization of `reset` with the clock.
+
+6. Boundary Conditions:
+   - Any unspecified or invalid state should default to state A on detection, ensuring the state machine remains stable.
+
+```
+
+**
+                

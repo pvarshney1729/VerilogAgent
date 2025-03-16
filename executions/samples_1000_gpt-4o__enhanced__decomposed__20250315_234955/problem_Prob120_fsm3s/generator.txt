@@ -1,0 +1,115 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as specified, we need to create a Moore state machine with four states: A, B, C, and D. The state transitions and outputs are defined by the given state transition table. The module will use a synchronous active high reset to initialize the state machine to state A. The state transitions will be triggered on the positive edge of the clock. The output is determined solely by the current state, characteristic of a Moore machine.
+
+1. **State Encoding**: We'll use a 2-bit encoding for the four states.
+2. **State Register**: A register will hold the current state, updated on each clock cycle.
+3. **Next State Logic**: This combinational logic determines the next state based on the current state and input `in`.
+4. **Output Logic**: The output is determined by the current state and is updated synchronously with the clock.
+5. **Synchronous Reset**: The reset logic will ensure that the state machine returns to state A when the reset signal is high on the clock's positive edge.
+
+Following the coding conventions, we'll use `logic` for all signals, and the combinational logic will be implemented using `always @(*)`. The sequential logic will be implemented using `always @(posedge clk)`.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_A;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: next_state = (in) ? STATE_B : STATE_A;
+            STATE_B: next_state = (in) ? STATE_B : STATE_C;
+            STATE_C: next_state = (in) ? STATE_D : STATE_A;
+            STATE_D: next_state = (in) ? STATE_B : STATE_C;
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_A, STATE_B, STATE_C: out = 1'b0;
+            STATE_D: out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_A;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: next_state = (in) ? STATE_B : STATE_A;
+            STATE_B: next_state = (in) ? STATE_B : STATE_C;
+            STATE_C: next_state = (in) ? STATE_D : STATE_A;
+            STATE_D: next_state = (in) ? STATE_B : STATE_C;
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_A, STATE_B, STATE_C: out = 1'b0;
+            STATE_D: out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule

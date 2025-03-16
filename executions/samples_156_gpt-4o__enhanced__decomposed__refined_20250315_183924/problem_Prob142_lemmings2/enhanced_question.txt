@@ -1,0 +1,93 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  areset
+ - input  bump_left
+ - input  bump_right
+ - input  ground
+ - output walk_left
+ - output walk_right
+ - output aaah
+
+The game Lemmings involves critters with fairly simple brains. So simple
+that we are going to model it using a finite state machine. In the
+Lemmings' 2D world, Lemmings can be in one of two states: walking left
+(walk_left is 1) or walking right (walk_right is 1). It will switch
+directions if it hits an obstacle. In particular, if a Lemming is bumped
+on the left (by receiving a 1 on bump_left), it will walk right. If it's
+bumped on the right (by receiving a 1 on bump_right), it will walk left.
+If it's bumped on both sides at the same time, it will still switch
+directions.
+
+In addition to walking left and right and changing direction when bumped,
+when ground=0, the Lemming will fall and say "aaah!". When the ground
+reappears (ground=1), the Lemming will resume walking in the same
+direction as before the fall. Being bumped while falling does not affect
+the walking direction, and being bumped in the same cycle as ground
+disappears (but not yet falling), or when the ground reappears while
+still falling, also does not affect the walking direction.
+
+Implement a Moore state machine that models this behaviour. areset is
+positive edge triggered asynchronous reseting the Lemming machine to walk
+left. Assume all sequential logic is triggered on the positive edge of
+the clock.
+
+Here is the enhanced specification which might be useful to you:
+                ### Module Interface
+
+```verilog
+module TopModule (
+    input wire clk,          // Clock signal, triggers on the positive edge
+    input wire areset,       // Asynchronous reset, active high
+    input wire bump_left,    // Bump signal from the left
+    input wire bump_right,   // Bump signal from the right
+    input wire ground,       // Ground status, 1 when ground is present, 0 when falling
+    output reg walk_left,    // Outputs 1 when Lemming is walking left
+    output reg walk_right,   // Outputs 1 when Lemming is walking right
+    output reg aaah          // Outputs 1 when Lemming is falling
+);
+```
+
+### Behavioral Description
+
+- **State Definitions**:
+  - **Walking Left**: `walk_left = 1`, `walk_right = 0`
+  - **Walking Right**: `walk_left = 0`, `walk_right = 1`
+  - **Falling**: `aaah = 1` when `ground = 0`
+
+- **State Transitions**:
+  - **Reset Behavior**: On `areset = 1`, the Lemming is set to "Walking Left" immediately, regardless of the clock.
+  - **Walking State Transitions**:
+    - If `ground = 1` and `bump_left = 1` (and/or `bump_right = 1`), switch the walking direction.
+    - If `bump_left = 1` and `bump_right = 1`, the Lemming will switch direction based on the current state.
+  - **Falling Transitions**:
+    - If `ground = 0`, the Lemming enters the "Falling" state (`aaah = 1`).
+    - When ground reappears (`ground = 1`), the Lemming resumes walking in the direction it was walking before falling.
+
+- **Priority**:
+  - The `areset` has the highest priority and is asynchronous.
+  - Falling (`ground = 0`) takes precedence over bumps when determining `aaah`.
+  - When `ground = 0`, bump signals are ignored until `ground = 1`.
+
+### Timing and Implementation Notes
+
+- **Clock and Edge Sensitivity**: All state transitions, except for the asynchronous reset, occur on the positive edge of the `clk`.
+- **Asynchronous Reset**: The `areset` signal, when high, immediately sets the state to "Walking Left" without waiting for the clock edge.
+- **Initial State**: After any reset, the Lemming should be initialized to walking left, `walk_left = 1`, `walk_right = 0`, `aaah = 0`.
+
+### State Transition Table
+
+| Current State | bump_left | bump_right | ground | Next State     | aaah |
+|---------------|-----------|------------|--------|----------------|------|
+| Walking Left  | 0         | 0          | 1      | Walking Left   | 0    |
+| Walking Left  | 1         | X          | 1      | Walking Right  | 0    |
+| Walking Right | 0         | 0          | 1      | Walking Right  | 0    |
+| Walking Right | X         | 1          | 1      | Walking Left   | 0    |
+| Any           | X         | X          | 0      | Falling        | 1    |
+| Falling       | X         | X          | 1      | Resume Previous| 0    |
+
+`X` denotes a don't-care condition.
+                

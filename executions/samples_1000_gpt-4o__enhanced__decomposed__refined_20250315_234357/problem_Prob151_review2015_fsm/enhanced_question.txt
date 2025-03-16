@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+Port Definitions:
+- Input Ports:
+  - `input logic clk`: Clock signal, positive edge-triggered.
+  - `input logic reset`: Active-high synchronous reset signal.
+  - `input logic data`: Serial data input.
+  - `input logic done_counting`: Signal indicating counters have finished counting.
+  - `input logic ack`: Acknowledgement signal from the user.
+
+- Output Ports:
+  - `output logic shift_ena`: Enable signal for shifting data, asserted for 4 clock cycles.
+  - `output logic counting`: Indicates the state machine is in the counting phase.
+  - `output logic done`: Notifies the user that the timer has completed.
+
+Functional Description:
+1. **Pattern Detection**: The state machine starts in an idle state where it continuously monitors the `data` input for the binary pattern `1101`. Bit[0] refers to the least significant bit.
+   
+2. **Shift Enable**: Upon detection of the `1101` pattern, the state machine asserts the `shift_ena` output for precisely 4 consecutive clock cycles. During this period, additional 4 bits are shifted in to determine the delay duration (handled outside this FSM).
+
+3. **Counting Phase**: After the 4-cycle shift, the state machine asserts `counting` to indicate it is waiting for the external counters to finish. It remains in this state until `done_counting` is asserted high.
+
+4. **Completion Notification**: Once `done_counting` is high, the state machine transitions to assert the `done` output, notifying the user that the timer has completed. The state machine then waits for `ack` to be asserted high.
+
+5. **Reset and Restart**: Upon receiving `ack`, or if `reset` is high, the state machine returns to its initial state where it monitors for the `1101` pattern again.
+
+State Machine Characteristics:
+- Synchronous Reset: The `reset` input is synchronous and active high. When asserted, it initializes the state machine to the pattern detection state.
+- Clock: All state transitions and sequential logic are triggered on the positive edge of `clk`.
+- Initial State: On reset, the state machine initializes to the state where it searches for the `1101` pattern.
+- Edge Cases: The state machine is robust against erroneous patterns and resets appropriately when `reset` is asserted.
+
+Note: This specification details only the control logic (FSM) for the timer. The datapath components such as counters and comparators are external to this FSM and are not described here.
+</ENHANCED_SPEC>

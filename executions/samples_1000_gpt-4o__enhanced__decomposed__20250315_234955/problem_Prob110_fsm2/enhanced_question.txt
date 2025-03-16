@@ -1,0 +1,24 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and has the following interface. Each input and output port is a single bit unless otherwise specified:
+
+- `input clk`: The clock signal, used for synchronizing state transitions.
+- `input areset`: An asynchronous active-high reset signal that, when asserted, resets the state machine to the initial state `OFF`.
+- `input j`: Input signal used for state transitions from `OFF` to `ON`.
+- `input k`: Input signal used for state transitions from `ON` to `OFF`.
+- `output reg out`: The output signal representing the current state output. It is a registered output to ensure it holds state information correctly.
+
+The module implements a Moore state machine with two states, named `OFF` and `ON`, and operates based on the following state transition diagram:
+- State `OFF`: The output `out` is `0`.
+  - Transition to `OFF` remains when `j=0`.
+  - Transition to `ON` occurs when `j=1`.
+- State `ON`: The output `out` is `1`.
+  - Transition to `ON` remains when `k=0`.
+  - Transition to `OFF` occurs when `k=1`.
+
+The reset signal `areset` is an asynchronous reset that takes precedence over all other operations and transitions. When `areset` is asserted (`areset=1`), the state machine immediately transitions to the `OFF` state regardless of the clock or other input signals.
+
+The state machine transitions occur on the rising edge of the `clk` signal, except when the asynchronous reset is active. Ensure that the reset state of all registers is explicitly defined as follows:
+- On `areset`, set the state to `OFF` and `out` to `0`.
+
+Bit indexing conventions do not apply since all signals are single-bit. The state transitions are evaluated based on the inputs `j` and `k` as described, ensuring no race conditions occur due to the asynchronous nature of the reset signal.
+</ENHANCED_SPEC>

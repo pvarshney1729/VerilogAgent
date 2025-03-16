@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit, clock signal for sequential logic, positive edge-triggered.
+  - reset: 1-bit, active-high, synchronous reset signal.
+  - in: 1-bit, serial data input stream.
+- Output Ports:
+  - done: 1-bit, indicates successful reception of a byte, active high.
+
+Specifications:
+1. Serial Communication Protocol:
+   - The protocol utilizes a start bit (0), followed by 8 data bits, and concludes with a stop bit (1).
+   - The line remains at logic level 1 when idle.
+   - Data transmission is least significant bit (LSB) first.
+
+2. Finite State Machine (FSM) Requirements:
+   - The FSM should detect a start bit (0) to begin byte reception.
+   - After detecting the start bit, the FSM must collect the subsequent 8 data bits.
+   - After collecting 8 data bits, the FSM should check for the presence of a stop bit (1).
+   - If a stop bit is not detected where expected, the FSM should remain in a wait state until a valid stop bit is encountered before attempting to receive the next byte.
+
+3. Reset Behavior:
+   - The active-high synchronous reset should initialize all state registers to their default values.
+   - On reset assertion, the FSM should return to its idle state, ready to detect the next start bit.
+
+4. Clock and Timing:
+   - All sequential logic, including flip-flops and state transitions, should occur on the positive edge of the clk signal.
+
+5. Signal Conventions:
+   - In all descriptions, bit[0] refers to the least significant bit of any multi-bit signal.
+   - Ensure all state transitions and data capture operations are free of race conditions and correctly synchronized with the edge of the clk signal.
+
+6. Edge Cases and Input Boundaries:
+   - The FSM should handle continuous high and low input streams and correctly reset to the idle state upon reception of a valid stop bit after an erroneous sequence.
+   - Ensure that any unexpected or erroneous input sequences do not result in undefined states or signals.
+
+7. Initial Values:
+   - Define initial states and values for all registers and flip-flops on reset assertion.
+
+The design must comply with these specifications to ensure reliable operation within the defined serial communication protocol.
+</ENHANCED_SPEC>

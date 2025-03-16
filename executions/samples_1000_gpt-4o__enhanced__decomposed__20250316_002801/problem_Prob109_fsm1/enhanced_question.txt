@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock input. Positive edge-triggered.
+  - `areset`: 1-bit asynchronous reset input. Active high.
+  - `in`: 1-bit input signal.
+
+- Output Ports:
+  - `out`: 1-bit output signal.
+
+Functional Description:
+The module implements a Moore state machine with two states, A and B. The states are encoded as follows:
+- State A: Output `out` is 0.
+- State B: Output `out` is 1.
+
+State Transition Rules:
+- From State B:
+  - On input `in = 0`, transition to State A.
+  - On input `in = 1`, remain in State B.
+- From State A:
+  - On input `in = 0`, transition to State B.
+  - On input `in = 1`, remain in State A.
+
+Reset Behavior:
+- The state machine asynchronously resets to State B when `areset` is high.
+
+Additional Details:
+- State transitions occur on the rising edge of `clk`.
+- No explicit initial state assignment is required as the asynchronous reset ensures the initial state is State B.
+- Ensure that the reset logic is prioritized over state transitions to prevent race conditions during reset.
+</ENHANCED_SPEC>

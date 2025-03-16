@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+Port Definitions:
+- `input clk`: Clock signal for synchronization, positive edge-triggered.
+- `input resetn`: Active-low synchronous reset signal. When asserted (resetn = 0), the FSM transitions to the initial state, A.
+- `input [2:0] r`: Request signals from three devices, where `r[0]` is the most significant bit (MSB) and `r[2]` is the least significant bit (LSB). Each bit represents a request from a device.
+- `output [2:0] g`: Grant signals corresponding to the three devices, with `g[0]` as the MSB and `g[2]` as the LSB. Each bit represents a grant to a device.
+
+State Definitions:
+- State A: Initial and default state where no grants are given.
+- State B: Grants to device 0 (`g[0] = 1`).
+- State C: Grants to device 1 (`g[1] = 1`).
+- State D: Grants to device 2 (`g[2] = 1`).
+
+State Encodings (Binary representation, assign as needed):
+- State A: 2'b00
+- State B: 2'b01
+- State C: 2'b10
+- State D: 2'b11
+
+FSM Description:
+- The FSM remains in State A if no requests are detected (`r[0] = 0`, `r[1] = 0`, `r[2] = 0`).
+- Transition from State A to State B if `r[0] = 1`, indicating device 0 requests access.
+- Transition from State A to State C if `r[0] = 0` and `r[1] = 1`, indicating device 1 requests access, given no higher priority request.
+- Transition from State A to State D if `r[0] = 0`, `r[1] = 0`, and `r[2] = 1`, indicating device 2 requests access, given no higher priority requests.
+- In State B, remain in B if `r[0] = 1`; otherwise, transition back to State A.
+- In State C, remain in C if `r[1] = 1`; otherwise, transition back to State A.
+- In State D, remain in D if `r[2] = 1`; otherwise, transition back to State A.
+
+Priority System:
+- Device 0 has the highest priority, followed by device 1, and device 2 has the lowest priority. This priority dictates state transitions from State A.
+
+Reset Behavior:
+- On reset (resetn = 0), transition to State A, and all grant signals `g[0]`, `g[1]`, and `g[2]` are deasserted (set to 0).
+
+Implementation Guidelines:
+- Use separate always blocks for the state transition logic and state register updates.
+- State transitions should occur on the positive edge of the clock.
+- Outputs `g[i]` can be defined using continuous assignment or within an always block, ensuring they reflect the current state.
+- Ensure that all state registers have explicitly defined initial values for simulation accuracy.
+
+Edge Cases:
+- If multiple requests are made simultaneously, the FSM grants priority based on the order: device 0 > device 1 > device 2.
+</ENHANCED_SPEC>

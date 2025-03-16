@@ -1,0 +1,39 @@
+{
+    "code": "```\n[BEGIN]\nmodule TopModule (\n    input  logic [15:0] in,\n    output logic [7:0] out_hi,\n    output logic [7:0] out_lo\n);\n\n    always @(*) begin\n        out_lo = in[7:0];  // Lower byte\n        out_hi = in[15:8]; // Upper byte\n    end\n\nendmodule\n[DONE]\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input  logic [15:0] in,\n    output logic [7:0] out_hi,\n    output logic [7:0] out_lo\n);\n\n    always @(*) begin\n        out_lo = in[7:0];\n        out_hi = in[15:8];\n    end\n\nendmodule",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+                "Testbench error: Compilation failed: /var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvigpy6_i_tb.sv:63: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvigpy6_i_tb.sv:63: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvigpy6_i_tb.sv:69: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvigpy6_i_tb.sv:69: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvigpy6_i_tb.sv:75: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvigpy6_i_tb.sv:75: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvigpy6_i_tb.sv:81: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvigpy6_i_tb.sv:81: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvigpy6_i_tb.sv:87: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvigpy6_i_tb.sv:87: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvigpy6_i_tb.sv:93: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvigpy6_i_tb.sv:93: error: Malformed statement\n"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "[BEGIN]\nmodule TopModule (\n    input  logic [15:0] in,\n    output logic [7:0] out_hi,\n    output logic [7:0] out_lo\n);\n\n    always @(*) begin\n        out_lo = in[7:0];\n        out_hi = in[15:8];\n    end\n\nendmodule\n[DONE]",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+                "Testbench error: Compilation failed: /var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvjx1eme8_tb.sv:63: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvjx1eme8_tb.sv:63: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvjx1eme8_tb.sv:69: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvjx1eme8_tb.sv:69: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvjx1eme8_tb.sv:75: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvjx1eme8_tb.sv:75: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvjx1eme8_tb.sv:81: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvjx1eme8_tb.sv:81: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvjx1eme8_tb.sv:87: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvjx1eme8_tb.sv:87: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvjx1eme8_tb.sv:93: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmpvjx1eme8_tb.sv:93: error: Malformed statement\n"
+            ]
+        },
+        {
+            "iteration": 2,
+            "code": "```\n[BEGIN]\nmodule TopModule (\n    input  logic [15:0] in,\n    output logic [7:0] out_hi,\n    output logic [7:0] out_lo\n);\n\n    always @(*) begin\n        out_lo = in[7:0];  // Lower byte\n        out_hi = in[15:8]; // Upper byte\n    end\n\nendmodule\n[DONE]\n```",
+            "issues": [
+                "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+                "Testbench error: Compilation failed: /var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:63: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:63: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:69: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:69: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:75: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:75: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:81: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:81: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:87: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:87: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:93: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:93: error: Malformed statement\n"
+            ]
+        }
+    ],
+    "refinement_count": 2,
+    "remaining_issues": [
+        "Numeric constants should have explicit size (e.g., 1'b0 not 0)",
+        "Testbench error: Compilation failed: /var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:63: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:63: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:69: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:69: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:75: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:75: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:81: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:81: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:87: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:87: error: Malformed statement\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:93: syntax error\n/var/folders/wr/ktkn8xk55l3ffdnlsjqsyqgw0000gn/T/tmp9ytxju4e_tb.sv:93: error: Malformed statement\n"
+    ],
+    "testbench_results": {}
+}

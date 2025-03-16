@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: Clock signal, positive edge-triggered.
+  - `input wire reset`: Active high, synchronous reset signal.
+
+- Output Ports:
+  - `output reg shift_ena`: One-bit signal to enable the shift register.
+
+Functional Description:
+This module is part of a finite state machine (FSM) designed to control a shift register. The goal is to assert the `shift_ena` signal for exactly four consecutive clock cycles when a specific bit pattern is detected. Upon receiving a reset signal, the FSM will initiate a sequence where `shift_ena` is asserted for four clock cycles, after which it will remain deasserted (0) indefinitely until another reset occurs.
+
+Clock and Reset Behavior:
+- All sequential logic within the module is triggered on the rising (positive) edge of the `clk` signal.
+- The `reset` signal is synchronous and active high. Upon asserting `reset`, the FSM will immediately enter the state where `shift_ena` is asserted for the next four clock cycles.
+
+Initial Conditions:
+- On reset, the `shift_ena` output is asserted (1) for four consecutive clock cycles.
+- After these four cycles, `shift_ena` is deasserted (0) and remains so until another reset signal is detected.
+
+Signal Definitions and Conventions:
+- Bit Indexing: All single-bit signals are considered to have their least significant bit (LSB) at bit index 0.
+- All operations and transitions are defined to prevent race conditions by ensuring that `shift_ena` changes state only on the positive edge of the clock.
+
+Edge Cases:
+- If the reset occurs during the sequence of asserting `shift_ena` for four cycles, the FSM will restart the sequence from the beginning, ensuring `shift_ena` is asserted again for four full clock cycles.
+
+Note: Specific bit pattern detection logic is not described in this specification and should be implemented as part of the FSM's internal logic.
+</ENHANCED_SPEC>

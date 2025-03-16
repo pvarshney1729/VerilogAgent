@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock input. All sequential logic is triggered on the positive edge of this clock signal.
+  - `load`: 1-bit load signal. When asserted (`load = 1`), it loads the internal counter with the given 10-bit value.
+  - `data`: 10-bit input representing the initial count value for the timer. The most significant bit (MSB) is `data[9]`, and the least significant bit (LSB) is `data[0]`.
+
+- Output Ports:
+  - `tc`: 1-bit terminal count output. Asserted (`tc = 1`) when the internal counter reaches zero.
+
+Functional Description:
+1. The module implements a countdown timer using a 10-bit down-counter. The timer counts down from a specified number of clock cycles and asserts a terminal count signal `tc` when the count reaches zero.
+
+2. Operation Details:
+   - On each positive edge of the `clk`:
+     - If `load` is asserted (`load = 1`), the internal down-counter is loaded with the 10-bit value from `data`. This load operation can occur at any time, even if the counter is in the middle of counting down.
+     - If `load` is deasserted (`load = 0`), the internal counter decrements by 1, provided it is not already at zero. Once the counter reaches zero, it remains at zero until it is loaded again.
+
+3. Terminal Count Behavior:
+   - The output signal `tc` is asserted (`tc = 1`) when the internal counter reaches zero.
+   - Once the counter reaches zero, `tc` remains asserted until the counter is reloaded with a new value via the `load` signal.
+
+4. Sequential Logic:
+   - The module utilizes a single D flip-flop for the terminal count output `tc`, ensuring that all state changes are synchronized to the positive edge of `clk`.
+
+5. Initial Conditions:
+   - At the start (or upon reset if a reset mechanism is added), initialize the internal counter to zero. The `tc` output should be initialized to zero (`tc = 0`).
+
+6. Edge Cases:
+   - If the `data` input is zero and `load` is asserted, the counter is immediately set to zero, and `tc` is asserted on the next clock cycle.
+   - Ensure that the counter does not roll over when reaching zero; it should halt decrementing and maintain the zero state.
+
+Note: The specification assumes that there is no explicit reset signal unless otherwise stated. If a reset is required, it should be defined as either synchronous or asynchronous and specify the reset behavior of all internal states.
+</ENHANCED_SPEC>

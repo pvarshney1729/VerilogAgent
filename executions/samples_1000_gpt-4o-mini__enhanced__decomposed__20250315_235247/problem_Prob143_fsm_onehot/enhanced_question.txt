@@ -1,0 +1,67 @@
+<ENHANCED_SPEC>
+Module Specification for TopModule:
+
+1. **Module Name:** TopModule
+
+2. **Interface:**
+   - **Inputs:**
+     - `input wire in;` 
+       - A single-bit wire that represents the input signal for the state machine.
+     - `input wire [9:0] state;`
+       - A 10-bit vector where each bit represents the current active state in a one-hot encoding scheme. Bits are indexed from the least significant bit (LSB) `state[0]` to the most significant bit (MSB) `state[9]`.
+   - **Outputs:**
+     - `output reg [9:0] next_state;`
+       - A 10-bit vector representing the next state in a one-hot encoding scheme. Like `state`, bits are indexed from `next_state[0]` (LSB) to `next_state[9]` (MSB).
+     - `output reg out1;`
+       - A single-bit output that may be set to 1 based on the current state and input.
+     - `output reg out2;`
+       - A single-bit output that may be set to 1 based on the current state and input.
+
+3. **State Machine Description:**
+   - The state machine utilizes one-hot encoding, where each state `S0` through `S9` corresponds to bits `state[0]` through `state[9]`, respectively.
+   - **State Transitions and Outputs:**
+     - `S0` produces outputs `(out1, out2) = (0, 0)`. Transition:
+       - `in == 0`: Remain in `S0`.
+       - `in == 1`: Transition to `S1`.
+     - `S1` produces outputs `(0, 0)`. Transition:
+       - `in == 0`: Transition to `S0`.
+       - `in == 1`: Transition to `S2`.
+     - `S2` produces outputs `(0, 0)`. Transition:
+       - `in == 0`: Transition to `S0`.
+       - `in == 1`: Transition to `S3`.
+     - `S3` produces outputs `(0, 0)`. Transition:
+       - `in == 0`: Transition to `S0`.
+       - `in == 1`: Transition to `S4`.
+     - `S4` produces outputs `(0, 0)`. Transition:
+       - `in == 0`: Transition to `S0`.
+       - `in == 1`: Transition to `S5`.
+     - `S5` produces outputs `(0, 0)`. Transition:
+       - `in == 0`: Transition to `S8`.
+       - `in == 1`: Transition to `S6`.
+     - `S6` produces outputs `(0, 0)`. Transition:
+       - `in == 0`: Transition to `S9`.
+       - `in == 1`: Transition to `S7`.
+     - `S7` produces outputs `(0, 1)`. Transition:
+       - `in == 0`: Transition to `S0`.
+       - `in == 1`: Remain in `S7`.
+     - `S8` produces outputs `(1, 0)`. Transition:
+       - `in == 0`: Transition to `S0`.
+       - `in == 1`: Transition to `S1`.
+     - `S9` produces outputs `(1, 1)`. Transition:
+       - `in == 0`: Transition to `S0`.
+       - `in == 1`: Transition to `S1`.
+
+4. **Operational Notes:**
+   - The module is expected to handle potential combinations of active states due to one-hot encoding, where more than one bit in `state[9:0]` may be high simultaneously.
+   - State transitions and output logic should be implemented as combinational logic based on the current `state` and `in` inputs.
+   - The initial state is not defined within the module; it assumes the state is managed externally.
+
+5. **Implementation Requirements:**
+   - The module does not implement state storage (flip-flops or registers) for the current state; it only calculates the combinational logic for the next state and outputs.
+   - Ensure that all possible input combinations are accounted for to avoid unspecified behavior.
+
+6. **Edge Cases:**
+   - If multiple states are active in `state[9:0]`, the module should prioritize transitions and outputs based on the state with the highest index (e.g., if both `state[4]` and `state[2]` are high, prioritize the behavior of `S4`).
+
+This specification aims to provide clear guidance for implementing the described state machine in Verilog.
+</ENHANCED_SPEC>

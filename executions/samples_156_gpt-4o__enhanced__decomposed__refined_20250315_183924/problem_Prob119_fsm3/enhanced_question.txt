@@ -1,0 +1,64 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  areset
+ - input  in
+ - output out
+
+The module should implement a Moore state machine with the following
+state transition table with one input, one output, and four states.
+Implement this state machine. Include a positive edge triggered
+asynchronous reset that resets the FSM to state A. Assume all sequential
+logic is triggered on the positive edge of the clock.
+
+  state | next state in=0, next state in=1 | output
+  A     | A, B                             | 0
+  B     | C, B                             | 0
+  C     | A, D                             | 0
+  D     | C, B                             | 1
+
+Here is the enhanced specification which might be useful to you:
+                ### Enhanced Specification for TopModule
+
+#### Interface Definition
+- **Inputs**:
+  - `input wire clk`: Clock signal, positive edge-triggered.
+  - `input wire areset`: Asynchronous reset signal, active high.
+  - `input wire in`: Data input signal, 1-bit.
+
+- **Outputs**:
+  - `output reg out`: Data output signal, 1-bit.
+
+#### State Machine Definition
+- **States**: Four states are defined with the following binary encoding:
+  - State A: `2'b00`
+  - State B: `2'b01`
+  - State C: `2'b10`
+  - State D: `2'b11`
+
+- **State Transition Table**:
+  - | Current State | Next State (in=0) | Next State (in=1) | Output |
+    |---------------|-------------------|-------------------|--------|
+    | A             | A                 | B                 | 0      |
+    | B             | C                 | B                 | 0      |
+    | C             | A                 | D                 | 0      |
+    | D             | C                 | B                 | 1      |
+
+#### Behavior
+- **Initial State**: The FSM initializes to state A (`2'b00`) upon reset.
+- **Reset Behavior**: The `areset` is asynchronous and active high, resetting the FSM to state A regardless of the clock.
+- **Timing**: State transitions and output logic are evaluated on the positive edge of the `clk`.
+
+#### Implementation Notes
+- The asynchronous reset (`areset`) is level-sensitive. When `areset` is high, the FSM transitions immediately to state A.
+- Ensure all sequential elements are initialized to known states, specifically state A, upon reset.
+- The output `out` is determined solely by the current state, as per the Moore machine design principles.
+
+#### Edge Case Handling
+- During the assertion of the `areset`, all other signals are ignored until the reset is deasserted.
+
+This enhanced specification ensures that all aspects of the design are clearly defined, reducing the risk of misinterpretation during implementation.
+                

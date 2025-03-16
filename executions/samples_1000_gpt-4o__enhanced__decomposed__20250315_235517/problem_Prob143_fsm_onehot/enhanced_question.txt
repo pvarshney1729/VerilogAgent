@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+**Interface Specifications:**
+- `input wire in`: Single-bit input signal.
+- `input wire [9:0] state`: 10-bit input vector, one-hot encoded, representing the current state. Each bit corresponds to a state (e.g., `state[0]` for S0, `state[9]` for S9).
+- `output reg [9:0] next_state`: 10-bit output vector, one-hot encoded, representing the next state after a transition. Each bit corresponds to the next state (e.g., `next_state[0]` for S0, `next_state[9]` for S9).
+- `output reg out1`: Single-bit output signal.
+- `output reg out2`: Single-bit output signal.
+
+**State Machine Description:**
+- The state machine operates using one-hot encoding.
+- States S0 through S9 are represented by `state[0]` through `state[9]`.
+- The state transitions are dependent on the input signal `in` as follows:
+  - S0: `in == 0` stays in S0, `in == 1` transitions to S1.
+  - S1: `in == 0` transitions to S0, `in == 1` transitions to S2.
+  - S2: `in == 0` transitions to S0, `in == 1` transitions to S3.
+  - S3: `in == 0` transitions to S0, `in == 1` transitions to S4.
+  - S4: `in == 0` transitions to S0, `in == 1` transitions to S5.
+  - S5: `in == 0` transitions to S8, `in == 1` transitions to S6.
+  - S6: `in == 0` transitions to S9, `in == 1` transitions to S7.
+  - S7: `in == 0` transitions to S0, `in == 1` stays in S7.
+  - S8: `in == 0` transitions to S0, `in == 1` transitions to S1.
+  - S9: `in == 0` transitions to S0, `in == 1` transitions to S1.
+
+**Output Logic:**
+- Default output values are `out1 = 0` and `out2 = 0` unless specified otherwise.
+- The outputs are set based on the current state:
+  - S7: `out2 = 1`.
+  - S8: `out1 = 1`.
+  - S9: `out1 = 1`, `out2 = 1`.
+
+**General Operation:**
+- The module is combinational and does not include state-holding elements (flip-flops or registers) for states.
+- The next state and outputs should be determined based on the current state and input `in`.
+- Ensure that only one bit in `next_state` is high at any time, corresponding to the transition logic.
+- Handle potential simultaneous high bits in `state[9:0]` by prioritizing transitions for each active state independently, and ensure correctness in encoding.
+
+**Edge Case Handling:**
+- If multiple states are active simultaneously due to input `state[9:0]`, prioritize state transitions independently for each active state and set `next_state` accordingly.
+- Ensure no race conditions exist by clearly defining the precedence of operations in the state transition logic.
+</ENHANCED_SPEC>

@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` with the following interface. Input and output ports are defined as follows:
+
+- `input clk`: Clock signal, used to synchronize all sequential logic, active on the rising edge.
+- `input load`: Control signal to load the initial state into the system.
+- `input [511:0] data`: 512-bit wide input representing the initial state of the cellular automaton.
+- `output reg [511:0] q`: 512-bit wide output representing the current state of the cellular automaton.
+
+Functional Description:
+1. The module implements Rule 90, a one-dimensional cellular automaton where the next state of each cell is determined by the XOR of its two current neighbors.
+2. The state of the system is represented by a 512-cell array `q[511:0]`.
+3. The transition rules based on neighboring cells are as follows:
+   - If the left neighbor and right neighbor are both 1, the next state is 0.
+   - If one neighbor is 1 and the other is 0, the next state is 1.
+   - If both neighbors are 0, the next state is 0.
+4. The boundaries are assumed to be zero (off), meaning `q[-1]` and `q[512]` are both 0.
+
+Operational Details:
+- The system advances by one time step on each rising edge of the `clk`.
+- When the `load` signal is high, the state of the system is initialized with `data[511:0]` on the next clock cycle.
+- All sequential elements, i.e., the state of the cells, are updated synchronously with the clock.
+- The initial state of `q` is unspecified and must be loaded using the `load` signal.
+
+Reset and Initialization:
+- No explicit reset signal is provided. The initial state must be loaded using the `load` signal.
+- The initial state of `q` is defined by the `data` input when `load` is asserted.
+
+Edge Case Handling:
+- For the leftmost and rightmost cells, assume out-of-bound neighbors are zero: `q[-1] = 0` and `q[512] = 0`.
+- The behavior at the boundaries should be carefully considered to maintain the correct operation of Rule 90.
+
+This specification ensures that the implementation follows the intended logic and operational flow for Rule 90 with clear definitions for input/output behaviors and boundary conditions.
+</ENHANCED_SPEC>

@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+The module, named TopModule, is to be implemented as a Moore state machine with a one-hot state encoding scheme. The following interface is specified:
+
+- `input logic in;`      // Single-bit input signal
+- `input logic [3:0] state;` // 4-bit input representing the current state using one-hot encoding
+- `output logic [3:0] next_state;` // 4-bit output representing the next state using one-hot encoding
+- `output logic out;`    // Single-bit output signal
+
+**State Encoding:**
+
+- State A is encoded as 4'b0001.
+- State B is encoded as 4'b0010.
+- State C is encoded as 4'b0100.
+- State D is encoded as 4'b1000.
+
+**State Transition Table:**
+
+- Current State A:
+  - If `in` = 0, `next_state` = A.
+  - If `in` = 1, `next_state` = B.
+  - Output `out` = 0.
+
+- Current State B:
+  - If `in` = 0, `next_state` = C.
+  - If `in` = 1, `next_state` = B.
+  - Output `out` = 0.
+
+- Current State C:
+  - If `in` = 0, `next_state` = A.
+  - If `in` = 1, `next_state` = D.
+  - Output `out` = 0.
+
+- Current State D:
+  - If `in` = 0, `next_state` = C.
+  - If `in` = 1, `next_state` = B.
+  - Output `out` = 1.
+
+**Logic Implementation Guidelines:**
+
+1. **State Transition Logic:** Derive the combinational logic equations for transitioning between states based on the `in` input signal and the current state using the specified one-hot encoding.
+
+2. **Output Logic:** The output is derived solely from the current state, adhering to the Moore machine model. The output is determined by the current state irrespective of the input `in`.
+
+3. **Indexing and Convention:** Bit index 0 refers to the least significant bit (LSB) of the state and next_state vectors.
+
+4. **Initial State:** The initial state is not specified in this design and should be managed externally or through a reset mechanism if required in the broader system context.
+
+5. **Combinational Logic:** Ensure that the combinational logic for state transitions and outputs is free of race conditions and properly handles all possible state and input combinations.
+
+This specification ensures the implementation of a Moore state machine with clearly defined state transitions and outputs based on one-hot encoding.
+</ENHANCED_SPEC>

@@ -1,0 +1,57 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in  (8 bits)
+ - output out (8 bits)
+
+The module should reverse the bit ordering of the input port and write
+the result to the output port.
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+```
+Module Specification: TopModule
+
+1. Interface:
+   - Inputs:
+     - `input_data`: An 8-bit wide input signal. The signal is unsigned.
+   - Outputs:
+     - `output_data`: An 8-bit wide output signal, unsigned.
+
+2. Port Widths and Indexing:
+   - The port `input_data` is defined as `input [7:0] input_data` with `input_data[0]` as the least significant bit (LSB) and `input_data[7]` as the most significant bit (MSB).
+   - The port `output_data` is defined as `output [7:0] output_data` with `output_data[0]` as the LSB and `output_data[7]` as the MSB.
+
+3. Behavior:
+   - The module performs a bit reversal operation on `input_data`. Specifically, `output_data[i] = input_data[7-i]` for each bit `i` in the range [0, 7].
+   - This operation is combinational, meaning there are no clock or reset signals involved.
+
+4. Timing:
+   - The operation is purely combinational with no clock dependency. The output is generated as soon as the input is stable.
+
+5. Implementation Notes:
+   - The module does not require any reset signal due to its combinational nature.
+   - Initial states are not applicable as there are no sequential elements.
+
+6. Example:
+   - If `input_data` is `8'b11001010`, then `output_data` will be `8'b01010011`.
+
+7. Boundary Conditions:
+   - All possible 8-bit input values are valid. The module simply reverses the bit order.
+
+Verilog Module Template:
+```
+module TopModule (
+    input [7:0] input_data,
+    output [7:0] output_data
+);
+    assign output_data = {input_data[0], input_data[1], input_data[2], input_data[3], 
+                          input_data[4], input_data[5], input_data[6], input_data[7]};
+endmodule
+```
+
+**
+                

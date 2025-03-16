@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit, clock signal, triggers on the positive edge.
+  - reset: 1-bit, synchronous active-high reset.
+  - in: 1-bit, input signal for state transitions.
+- Output Ports:
+  - out: 1-bit, output signal based on current state.
+
+State Machine Description:
+- The module implements a Moore state machine with four states: A, B, C, and D.
+- State Encoding: 
+  - State A: 2'b00
+  - State B: 2'b01
+  - State C: 2'b10
+  - State D: 2'b11
+
+State Transition Table:
+- Current State | Next State when in=0 | Next State when in=1 | Output
+  - A           | A                    | B                    | 0
+  - B           | C                    | B                    | 0
+  - C           | A                    | D                    | 0
+  - D           | C                    | B                    | 1
+
+Reset Behavior:
+- On the assertion of the reset signal, the state machine synchronously resets to State A.
+- The reset is active high and synchronous with the clock.
+
+Clock and Edge Sensitivity:
+- All state transitions and sequential operations occur on the positive edge of the clock signal.
+
+Output Behavior:
+- The output signal 'out' is determined solely by the current state, independent of the input signal 'in'.
+
+Initial Conditions:
+- At power-up or reset, the FSM initializes to State A, and the output 'out' is set to 0.
+
+Boundary Conditions:
+- The FSM handles all possible input conditions, and transitions occur as defined by the state transition table.
+- Any undefined behavior in state transitions defaults to maintaining the current state.
+
+MSB/LSB Conventions:
+- Bit[0] refers to the least significant bit (LSB).
+- Bit[1] refers to the most significant bit (MSB) when describing the state encoding.
+</ENHANCED_SPEC>

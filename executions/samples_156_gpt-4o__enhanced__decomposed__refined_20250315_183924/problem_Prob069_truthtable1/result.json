@@ -1,0 +1,23 @@
+{
+    "code": "[BEGIN]\nmodule TopModule(\n    input logic x3,\n    input logic x2,\n    input logic x1,\n    output logic f\n);\n\nalways @(*) begin\n    case ({x3, x2, x1})\n        3'b000: f = 1'b0;\n        3'b001: f = 1'b0;\n        3'b010: f = 1'b1;\n        3'b011: f = 1'b1;\n        3'b100: f = 1'b0;\n        3'b101: f = 1'b1;\n        3'b110: f = 1'b0;\n        3'b111: f = 1'b1;\n        default: f = 1'b0;\n    endcase\nend\n\nendmodule\n[DONE]",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule(\n    input wire x3,\n    input wire x2,\n    input wire x1,\n    output wire f\n);\n\nassign f = (x2 & ~x1) | (x3 & x1);\n\nendmodule",
+            "issues": [
+                "Runtime issue detected"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "[BEGIN]\nmodule TopModule(\n    input logic x3,\n    input logic x2,\n    input logic x1,\n    output logic f\n);\n\nalways @(*) begin\n    case ({x3, x2, x1})\n        3'b000: f = 1'b0;\n        3'b001: f = 1'b0;\n        3'b010: f = 1'b1;\n        3'b011: f = 1'b1;\n        3'b100: f = 1'b0;\n        3'b101: f = 1'b1;\n        3'b110: f = 1'b0;\n        3'b111: f = 1'b1;\n        default: f = 1'b0;\n    endcase\nend\n\nendmodule\n[DONE]",
+            "issues": []
+        }
+    ],
+    "refinement_count": 1,
+    "remaining_issues": []
+}

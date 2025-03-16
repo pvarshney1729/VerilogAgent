@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic [15:0] a,\n    input logic [15:0] b,\n    input logic [15:0] c,\n    input logic [15:0] d,\n    input logic [15:0] e,\n    input logic [15:0] f,\n    input logic [15:0] g,\n    input logic [15:0] h,\n    input logic [15:0] i,\n    input logic [3:0] sel,\n    output logic [15:0] out\n);\n\n    always @(*) begin\n        case (sel)\n            4'b0000: out = a;\n            4'b0001: out = b;\n            4'b0010: out = c;\n            4'b0011: out = d;\n            4'b0100: out = e;\n            4'b0101: out = f;\n            4'b0110: out = g;\n            4'b0111: out = h;\n            4'b1000: out = i;\n            default: out = 16'b1111111111111111; // Set to '1' for unused cases\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

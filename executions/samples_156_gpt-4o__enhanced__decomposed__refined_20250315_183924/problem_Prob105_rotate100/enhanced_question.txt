@@ -1,0 +1,97 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  load
+ - input  ena  (  2 bits)
+ - input  data (100 bits)
+ - output q    (100 bits)
+
+The module should implement a 100-bit left/right rotator, with
+synchronous load and left/right enable. A rotator shifts-in the
+shifted-out bit from the other end of the register, unlike a shifter that
+discards the shifted-out bit and shifts in a zero. If enabled, a rotator
+rotates the bits around and does not modify/discard them.
+
+  (1) load: Loads shift register with data[99:0] instead of rotating.
+      Synchronous active high.
+
+  (2) ena[1:0]: Synchronous. Chooses whether and which direction to
+      rotate:
+      (a) 2'b01 rotates right by one bit,
+      (b) 2'b10 rotates left by one bit,
+      (c) 2'b00 and 2'b11 do not rotate.
+
+  (3) q: The contents of the rotator.
+
+Here is the enhanced specification which might be useful to you:
+                **Analysis of Ambiguities and Issues:**
+
+1. **Signal Interfaces:**
+   - The specification does not specify the signedness of the data and q signals, which could affect some synthesis tools or applications.
+   - The input ports clk and load are defined as one bit, but it is good practice to explicitly state this for all ports.
+
+2. **Bit-Ordering:**
+   - The specification uses the notation `data[99:0]`, which implies a bit-ordering convention, but this should be explicitly specified as MSB (Most Significant Bit) to LSB (Least Significant Bit).
+
+3. **Timing Behavior:**
+   - The specification mentions synchronous behavior for the load signal but does not explicitly clarify the edge of the clock (rising or falling) on which actions occur.
+   - The synchronous nature of the ena signal needs further clarification regarding clock edge sensitivity.
+
+4. **Reset Behavior:**
+   - There is no mention of a reset behavior for the module, which is crucial for initializing the state of the system.
+
+5. **Initial States:**
+   - Initial values for the shift register (if any) are not specified when the system powers up.
+
+6. **Dependencies and Operation Precedence:**
+   - The precedence of the load vs. ena signals is implied but not explicitly stated. It should be clear that load takes precedence over any rotation.
+
+7. **Boundary Conditions:**
+   - The behavior of the system under invalid inputs (e.g., both ena bits set) should be explicitly defined, even if it results in no rotation.
+
+**<ENHANCED_SPEC>**
+
+**Module Name:**
+- `TopModule`
+
+**Interface:**
+```verilog
+module TopModule (
+    input wire clk,         // Clock signal
+    input wire load,        // Synchronous active high load signal
+    input wire [1:0] ena,   // 2-bit synchronous enable for rotation
+    input wire [99:0] data, // 100-bit input data, MSB: data[99], LSB: data[0]
+    output reg [99:0] q     // 100-bit output, MSB: q[99], LSB: q[0]
+);
+```
+
+**Behavior:**
+1. **Synchronous Load:**
+   - When `load` is high on the rising edge of `clk`, the contents of `q` are loaded with `data[99:0]`.
+   
+2. **Synchronous Rotation:**
+   - If `load` is low, `ena[1:0]` determines the rotation direction on the rising edge of `clk`:
+     - `2'b01`: Rotate right by one bit. `q[0]` takes the value of `q[99]`.
+     - `2'b10`: Rotate left by one bit. `q[99]` takes the value of `q[0]`.
+     - `2'b00` or `2'b11`: No rotation occurs.
+   - `load` has priority over `ena`; if `load` is high, rotation will not occur regardless of `ena` value.
+
+**Timing Behavior:**
+- All operations are triggered on the rising edge of the `clk`.
+
+**Reset Behavior:**
+- The module does not have an explicit reset signal. Upon power-up, the initial state of `q` is undefined unless specified.
+
+**Implementation Notes:**
+- Ensure all synthesis tools properly interpret `q` and `data` as unsigned values.
+- Consider adding a reset signal if initialization is required for specific applications.
+- If desired, define initial conditions for q in case of power-up without a reset signal.
+
+**Boundary Conditions:**
+- Invalid states for `ena`, such as `2'b00` or `2'b11`, result in no rotation.
+
+**<ENHANCED_SPEC>**
+                

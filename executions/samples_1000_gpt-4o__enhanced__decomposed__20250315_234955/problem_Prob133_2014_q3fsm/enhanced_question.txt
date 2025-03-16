@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk` : Clock signal, 1-bit, triggering all sequential logic on the positive edge.
+  - `input wire reset` : Reset signal, 1-bit, active high, synchronous. It initializes the FSM to the reset state A.
+  - `input wire s` : Control signal, 1-bit, used to transition from state A to state B.
+  - `input wire w` : Data signal, 1-bit, examined during state B.
+
+- Output Ports:
+  - `output reg z` : Output signal, 1-bit, set based on the conditions of state B.
+
+Finite State Machine (FSM) Description:
+1. Initial State: 
+   - The FSM begins in the reset state A on reset assertion.
+   - In state A, the FSM remains unless `s = 1`, which triggers a transition to state B on the next positive clock edge.
+
+2. State Transitions:
+   - State A:
+     - The FSM remains in state A as long as `s = 0`.
+     - Transition to state B occurs when `s = 1` is detected on the rising edge of `clk`.
+
+   - State B:
+     - Upon entering state B, the FSM monitors the `w` input over three consecutive clock cycles.
+     - A counter tracks the number of cycles where `w = 1`.
+     - After three cycles, if `w` has been `1` for exactly two of these cycles, `z` is set to `1` for the next clock cycle.
+     - Otherwise, `z` is set to `0`.
+     - The FSM continues to cycle through state B, repeating the three-cycle monitoring of `w`.
+
+3. Reset Behavior:
+   - On the assertion of `reset`, the FSM returns to state A, `z` is reset to `0`, and all internal counters are cleared.
+   - The reset is synchronous: the state transition and output `z` update occur on the next rising edge of `clk` following reset assertion.
+
+4. Signal Conventions:
+   - All bit indices follow the convention where `bit[0]` refers to the least significant bit (LSB).
+   - The FSM uses as few states as possible, focusing on the described functionality.
+
+5. Edge Cases:
+   - Ensure that `w` is correctly counted only during the specified three-clock cycle windows in state B.
+   - Handle potential race conditions by ensuring all state transitions and output updates are synchronized with `clk`.
+
+This specification ensures that the FSM operates correctly under the defined conditions and provides a clear guide for implementation.
+</ENHANCED_SPEC>

@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock signal. Positive edge-triggered.
+- input wire reset: Active high, synchronous reset signal.
+- output reg shift_ena: 1-bit output signal to enable the shift register.
+
+Functional Description:
+- The module functions as part of a finite state machine (FSM) that controls a shift register.
+- Upon detection of a specific bit pattern (details of pattern detection are not provided in the original specification and thus are assumed to occur outside this module), the FSM enables the shift register for exactly 4 consecutive clock cycles by asserting shift_ena.
+- When the reset signal is asserted high, the FSM should reset its state and then assert the shift_ena signal for exactly 4 clock cycles. After these 4 cycles, shift_ena should remain low indefinitely until another reset occurs.
+
+Reset Behavior:
+- Reset is synchronous with the clock, meaning it requires a clock edge to take effect.
+- Upon reset activation (reset signal is high), the shift_ena output must be asserted (set to 1) for 4 clock cycles starting from the next positive edge of the clock after the reset is detected.
+- After the 4 clock cycles of high shift_ena, it should be set to 0 and remain low until the reset is asserted again.
+
+Clock and Signal Behavior:
+- All sequential logic within the FSM is triggered by the positive edge of the clk signal.
+- It is assumed that the module operates using a single clock domain as defined by the clk input.
+- Ensure that any internal state registers are properly initialized on reset to guarantee the correct initial assertion of shift_ena.
+
+Edge Cases:
+- If the reset is asserted during the 4-cycle period when shift_ena is already active due to pattern detection, the module should prioritize the reset behavior and start a new 4-cycle period of shift_ena assertion.
+- The system should handle continuous reset assertions gracefully by restarting the 4-cycle count each time reset is detected.
+
+Note: This specification assumes that detection of the specific bit pattern mentioned occurs outside the TopModule, and this module simply handles enabling the shift register in response to reset and external control signals.
+</ENHANCED_SPEC>

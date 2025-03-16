@@ -1,0 +1,44 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, in, reset, and output ports out_byte (8 bits), done.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input clk,\n    input in,\n    input reset,\n    output reg [7:0] out_byte,\n    output reg done\n);\n\n    // State encoding\n    typedef enum reg [2:0] {\n        IDLE = 3'b000,\n        START = 3'b001,\n        DATA = 3'b010,\n        STOP = 3'b011\n    } state_t;\n\n    state_t current_state, next_state;\n    reg [2:0] bit_count;\n    reg [7:0] data_reg;\n\n    // State transition and output logic\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            current_state <= IDLE;\n            out_byte <= 8'b0;\n            done <= 1'b0;\n            bit_count <= 3'b0;\n            data_reg <= 8'b0;\n        end else begin\n            current_state <= next_state;\n            case (current_state)\n                IDLE: begin\n                    done <= 1'b0;\n                    if (in == 1'b0) begin // Detect start bit\n                        next_state <= START;\n                    end else begin\n                        next_state <= IDLE;\n                    end\n                end\n                START: begin\n                    if (in == 1'b0) begin // Confirm start bit\n                        next_state <= DATA;\n                        bit_count <= 3'b0;\n                    end else begin\n                        next_state <= IDLE;\n                    end\n                end\n                DATA: begin\n                    data_reg[bit_count] <= in;\n                    if (bit_count == 3'b111) begin\n                        next_state <= STOP;\n                    end else begin\n                        bit_count <= bit_count + 1;\n                        next_state <= DATA;\n                    end\n                end\n                STOP: begin\n                    if (in == 1'b1) begin // Detect stop bit\n                        out_byte <= data_reg;\n                        done <= 1'b1;\n                        next_state <= IDLE;\n                    end else begin\n                        next_state <= IDLE;\n                    end\n                end\n                default: next_state <= IDLE;\n            endcase\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare the state register and state encoding using localparam for the FSM states: IDLE, START, DATA, STOP.",
+        "source": "Design a finite state machine that will identify when bytes have been correctly received when given a stream of bits.",
+        "implementation": "// State register declaration\n  reg [1:0] state, next_state;\n\n  // State encoding using localparam\n  localparam IDLE  = 2'b00,\n             START = 2'b01,\n             DATA  = 2'b10,\n             STOP  = 2'b11;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic to reset to IDLE state.",
+        "source": "Include a active-high synchronous reset.",
+        "implementation": "// State encoding\n  localparam IDLE = 2'b00;\n  localparam START = 2'b01;\n  localparam DATA = 2'b10;\n  localparam STOP = 2'b11;\n\n  // State register\n  reg [1:0] state, next_state;\n\n  // Synchronous reset logic\n  always @(posedge clk) begin\n    if (reset) begin\n      state <= IDLE;\n    end else begin\n      state <= next_state;\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic to transition between states based on input 'in'.",
+        "source": "It needs to identify the start bit, wait for all 8 data bits, then verify that the stop bit was correct.",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  typedef enum logic [2:0] {\n    IDLE = 3'b000,\n    START = 3'b001,\n    DATA = 3'b010,\n    STOP = 3'b011,\n    DONE = 3'b100\n  } state_t;\n\n  state_t current_state, next_state;\n  logic [2:0] bit_count;\n\n  // Next state logic\n  always_comb begin\n    case (current_state)\n      IDLE: begin\n        if (in == 1'b0) // Detect start bit\n          next_state = START;\n        else\n          next_state = IDLE;\n      end\n      START: begin\n        next_state = DATA;\n      end\n      DATA: begin\n        if (bit_count == 3'd7) // All 8 data bits received\n          next_state = STOP;\n        else\n          next_state = DATA;\n      end\n      STOP: begin\n        if (in == 1'b1) // Detect stop bit\n          next_state = DONE;\n        else\n          next_state = IDLE; // Error, wait for next start bit\n      end\n      DONE: begin\n        next_state = IDLE; // Return to IDLE after done\n      end\n      default: begin\n        next_state = IDLE;\n      end\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic to set 'out_byte' and 'done' based on the current state.",
+        "source": "The module will also output the correctly-received data byte. `out_byte` needs to be valid when `done` is 1, and is don't-care otherwise.",
+        "implementation": "reg [7:0] out_byte_reg;\nreg done_reg;\n\nalways @(*) begin\n    case (current_state)\n        DATA_RECEIVED: begin\n            out_byte_reg = data_byte; // Assuming data_byte holds the received 8-bit data\n            done_reg = 1'b1;\n        end\n        default: begin\n            out_byte_reg = 8'bx; // Don't-care state\n            done_reg = 1'b0;\n        end\n    endcase\nend\n\nassign out_byte = out_byte_reg;\nassign done = done_reg;"
+    },
+    {
+        "id": "6",
+        "content": "Implement logic to shift in the 8 data bits into a temporary register when in DATA state.",
+        "source": "Note that the serial protocol sends the least significant bit first.",
+        "implementation": "reg [7:0] temp_reg;\nreg [2:0] bit_count;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        temp_reg <= 8'b0;\n        bit_count <= 3'b0;\n    end else if (state == DATA) begin\n        temp_reg <= {in, temp_reg[7:1]}; // Shift in the LSB first\n        bit_count <= bit_count + 1;\n    end\nend"
+    },
+    {
+        "id": "7",
+        "content": "Implement logic to verify the stop bit and assert 'done' when a byte is correctly received.",
+        "source": "If the stop bit does not appear when expected, the FSM must wait until it finds a stop bit before attempting to receive the next byte. It should assert done each time it finds a stop bit.",
+        "implementation": "reg [3:0] bit_count;\nreg [7:0] shift_reg;\nreg fsm_done;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        bit_count <= 4'd0;\n        shift_reg <= 8'd0;\n        fsm_done <= 1'b0;\n    end else begin\n        if (bit_count == 4'd9) begin\n            if (in == 1'b1) begin // Check for stop bit\n                fsm_done <= 1'b1;\n                out_byte <= shift_reg;\n            end else begin\n                fsm_done <= 1'b0;\n            end\n            bit_count <= 4'd0; // Reset for next byte\n        end else begin\n            fsm_done <= 1'b0;\n            if (bit_count > 4'd0) begin\n                shift_reg <= {in, shift_reg[7:1]}; // Shift in data bits\n            end\n            bit_count <= bit_count + 1'b1;\n        end\n    end\nend\n\nassign done = fsm_done;"
+    }
+]

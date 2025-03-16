@@ -1,0 +1,84 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  in
+ - input  reset
+ - output out_byte (8 bits)
+ - output done
+
+In many (older) serial communications protocols, each data byte is sent
+along with a start bit and a stop bit, to help the receiver delimit bytes
+from the stream of bits. One common scheme is to use one start bit (0), 8
+data bits, and 1 stop bit (1). The line is also at logic 1 when nothing
+is being transmitted (idle). Design a finite state machine that will
+identify when bytes have been correctly received when given a stream of
+bits. It needs to identify the start bit, wait for all 8 data bits, then
+verify that the stop bit was correct. The module will also output the
+correctly-received data byte. `out_byte` needs to be valid when `done` is
+1, and is don't-care otherwise. If the stop bit does not appear when
+expected, the FSM must wait until it finds a stop bit before attempting
+to receive the next byte. Include a active-high synchronous reset. Note
+that the serial protocol sends the least significant bit first. It should
+assert done each time it finds a stop bit. Assume all sequential logic is
+triggered on the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+**Module: TopModule**
+
+**Interface:**
+- **Inputs:**
+  - `input wire clk;` // Clock signal, positive edge-triggered
+  - `input wire in;` // Serial data input, LSB first
+  - `input wire reset;` // Active-high synchronous reset signal
+
+- **Outputs:**
+  - `output reg [7:0] out_byte;` // 8-bit output for received byte data, unsigned
+  - `output reg done;` // Indicates valid data in `out_byte`, active high
+
+**Behavior:**
+- The module implements a Finite State Machine (FSM) to detect byte frames in a serial bit stream. The expected format is:
+  - **Start Bit:** `0`
+  - **Data Bits:** 8 bits, LSB first
+  - **Stop Bit:** `1`
+
+- The FSM operates through the following states:
+  1. **Idle:** Waits for a start bit (`0`) indicating the beginning of a new byte.
+  2. **Receive Data:** Collects 8 data bits following the start bit.
+  3. **Verify Stop:** Checks for the presence of a stop bit (`1`).
+  4. **Done:** Asserts `done` and outputs the received byte in `out_byte`.
+
+- If a stop bit is not detected when expected, the FSM returns to the idle state and waits for the next start bit.
+
+**Timing:**
+- All sequential logic updates on the positive edge of `clk`.
+- The `reset` input resets the FSM to the idle state and clears `out_byte` and `done`.
+
+**Reset Behavior:**
+- On `reset` (active-high):
+  - FSM transitions to the Idle state.
+  - `out_byte` is cleared to `8'b00000000`.
+  - `done` is set to `0`.
+
+**Initial States:**
+- On power-up, or after a reset, the FSM is in the Idle state with:
+  - `out_byte = 8'b00000000;`
+  - `done = 0;`
+
+**Dependencies and Logical Descriptions:**
+- The FSM transitions are driven by the `clk` and `in` signals, adhering to the positive edge-triggered clock domain.
+- A comprehensive state transition table or diagram should be developed to define all state transitions and conditions.
+
+**Boundary Conditions:**
+- If the line is continuously idle or frames contain errors, the FSM will remain in the Idle state until valid start-stop conditions are met.
+
+**Implementation Notes:**
+- Ensure robust error handling for invalid sequences and missing start/stop bits, potentially integrating timeouts if needed.
+- Document any assumptions regarding the input bit stream rate relative to the clock frequency used.
+
+**
+                

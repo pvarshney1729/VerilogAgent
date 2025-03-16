@@ -1,0 +1,88 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  resetn
+ - input  x
+ - input  y
+ - output f
+ - output g
+
+Consider a finite state machine that is used to control some type of
+motor. The FSM has inputs x and y, which come from the motor, and
+produces outputs f and g, which control the motor. There is also a clock
+input called clk and a reset input (synchronous, active low) called
+resetn. The FSM has to work as follows. As long as the reset input is
+asserted, the FSM stays in a beginning state, called state A. When the
+reset signal is de-asserted, then after the next clock edge the FSM has
+to set the output f to 1 for one clock cycle. Then, the FSM has to
+monitor the x input. When x has produced the values 1, 0, 1 in three
+successive clock cycles, then g should be set to 1 on the following clock
+cycle. While maintaining g = 1 the FSM has to monitor the y input. If y
+has the value 1 within at most two clock cycles, then the FSM should
+maintain g = 1 permanently (that is, until reset). But if y does not
+become 1 within two clock cycles, then the FSM should set g = 0
+permanently (until reset). Assume all sequential logic is triggered on
+the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                **TopModule Interface:**
+
+```verilog
+module TopModule (
+    input wire clk,       // Clock input, positive edge triggered.
+    input wire resetn,    // Synchronous active-low reset.
+    input wire x,         // Input from motor.
+    input wire y,         // Input from motor.
+    output reg f,         // Control output for motor.
+    output reg g          // Control output for motor.
+);
+```
+
+**Behavioral Description:**
+
+1. **Reset Behavior:**
+   - The FSM starts in state A when the module is reset (resetn is low).
+   - On the first positive clock edge after resetn becomes high, the FSM transitions out of state A.
+
+2. **State Transitions:**
+   - **State A (Reset State):** 
+     - Outputs: `f = 0`, `g = 0`.
+     - Transition: On resetn de-asserted (high), move to State B on the next positive clock edge.
+
+   - **State B (Initial Active State):**
+     - Outputs: `f = 1` for one clock cycle, then `f = 0`.
+     - Transition: Wait for the pattern `x = 1, 0, 1` across successive clock cycles to move to State C.
+
+   - **State C (Pattern Detected):**
+     - Outputs: `g = 1`.
+     - Transition: Monitor `y` for two clock cycles.
+       - If `y = 1` within two cycles, transition to State D.
+       - If `y != 1` after two cycles, transition to State E.
+
+   - **State D (Hold State):**
+     - Outputs: `g = 1` permanently until reset.
+     - Transition: Remain in this state unless reset.
+
+   - **State E (Error State):**
+     - Outputs: `g = 0` permanently until reset.
+     - Transition: Remain in this state unless reset.
+
+3. **Sequential Logic:**
+   - The FSM transitions occur on the positive edge of `clk`.
+
+4. **Output Behavior:**
+   - `f` is asserted for one clock cycle immediately after reset de-assertion and then remains `0`.
+   - `g` is set based on the sequence of inputs `x` and `y` as described.
+
+5. **Edge Cases:**
+   - If `x` does not achieve the sequence `1, 0, 1`, the FSM stays in State B until the sequence is detected.
+
+**Implementation Notes:**
+
+- Ensure all state transitions and outputs are updated on the positive clock edge.
+- The reset (resetn) should be checked synchronously, and all registers should be initialized accordingly.
+- The FSM states can be encoded as binary or one-hot, based on synthesis preferences.
+                

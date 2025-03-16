@@ -1,0 +1,114 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - input  data
+ - input  done_counting
+ - input  ack
+ - output shift_ena
+ - output counting
+ - output done
+
+The module should implement a timer that:
+
+  (1) is started when a particular pattern (1101) is detected,
+  (2) shifts in 4 more bits to determine the duration to delay,
+  (3) waits for the counters to finish counting, and
+  (4) notifies the user and waits for the user to acknowledge the timer.
+
+In this problem, implement just the finite-state machine that controls
+the timer. The data path (counters and some comparators) are not included
+here.
+
+The serial data is available on the data input pin. When the pattern 1101
+is received, the state machine must then assert output shift_ena for
+exactly 4 clock cycles. After that, the state machine asserts its
+counting output to indicate it is waiting for the counters, and waits
+until input done_counting is high.At that point, the state machine must
+assert done to notify the user the timer has timed out, and waits until
+input ack is 1 before being reset to look for the next occurrence of the
+start sequence (1101). The state machine should have a active high
+synchronous reset, setting the state to where it begins searching for the
+input sequence 1101. Assume all sequential logic is triggered on the
+positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                **Analysis of Ambiguities and Issues:**
+
+1. **Port Width and Signedness Ambiguity**: The specification states all ports are one bit unless specified, but does not clarify signedness, which could affect interpretation in some contexts.
+
+2. **Timing Behavior**: The distinction between when signals should be activated is only implicitly defined; it needs explicit timing sequence clarification.
+
+3. **Reset Behavior**: The reset is described as synchronous but lacks details about its behavior during active and inactive phases.
+
+4. **Initial States**: There is no explicit mention of the initial states of internal registers or the FSM states.
+
+5. **Bit-Ordering and Indexing**: The specification does not specify how bits are shifted or indexed (e.g., MSB vs. LSB).
+
+6. **State Machine Details**: The specification lacks explicit details about FSM state transitions and conditions.
+
+7. **Boundary Conditions**: There is no clarity on the behavior of the system if the expected sequence is interrupted or incorrect bits are received.
+
+8. **Interface Naming Consistency**: Input and output port naming could be more descriptive to clarify their roles in the FSM.
+
+**<ENHANCED_SPEC>**
+
+**Module Interface:**
+
+- **Module Name:** `TopModule`
+
+- **Inputs:**
+  - `input wire clk`: Clock signal, positive-edge triggered.
+  - `input wire reset`: Active high synchronous reset.
+  - `input wire data`: Serial data input for detecting patterns.
+  - `input wire done_counting`: Signal indicating the timer has counted down.
+  - `input wire ack`: Acknowledgment signal from the user.
+
+- **Outputs:**
+  - `output reg shift_ena`: Enables shifting of bits for duration determination.
+  - `output reg counting`: Indicates the FSM is in the counting state.
+  - `output reg done`: Signals the user when the timer has expired.
+
+**Behavioral Specification:**
+
+1. **FSM Operation:**
+   - **Initial State:** On reset, initialize the FSM to the `IDLE` state, where it awaits the detection of the sequence `1101` on the `data` input.
+   - **Pattern Detection:** Transition from `IDLE` to `SHIFT` state upon detecting `1101`. This detection should be bit-accurate and sequential.
+   - **Shift Operation:** In the `SHIFT` state, assert `shift_ena` for exactly 4 clock cycles to determine the delay duration.
+   - **Counting State:** Transition to `COUNTING` state after shifting, asserting `counting` until `done_counting` is high.
+   - **Completion Notification:** Once `done_counting` is high, transition to `DONE` state, asserting `done`.
+   - **Acknowledgment and Reset:** Wait in `DONE` state until `ack` is high, then transition back to `IDLE` to detect the next sequence.
+
+2. **State Transitions:**
+   - Define states as `IDLE`, `SHIFT`, `COUNTING`, and `DONE`.
+   - Ensure clear transitions based on input conditions and clock edges.
+
+**Timing and Synchronization:**
+
+- All operations and state transitions are synchronized with the rising edge of `clk`.
+- The reset will set the FSM to the `IDLE` state on the next clock cycle after `reset` is asserted.
+
+**Initial States and Reset Behavior:**
+
+- On reset, ensure all output signals (`shift_ena`, `counting`, `done`) are de-asserted (set to 0).
+- FSM transitions are only evaluated on positive clock edges when reset is inactive.
+
+**Bit Ordering and Indexing:**
+
+- Define bit ordering explicitly: Assume `bit[0]` is the least significant bit and `bit[3]` the most significant when checking the pattern `1101`.
+
+**Boundary Conditions:**
+
+- If the sequence is not detected correctly, remain in the `IDLE` state awaiting the correct sequence.
+- If an unexpected signal is received, ensure robust handling to prevent erroneous state transitions.
+
+**Implementation Notes:**
+
+- Consider using a shift register to detect `1101` efficiently.
+- Ensure the FSM implementation is robust against noise or incorrect data patterns by validating each state transition condition.
+
+**<ENHANCED_SPEC>**
+                

@@ -106,52 +106,83 @@ DO NOT include any explanations, notes, or text outside the <ENHANCED_SPEC> tags
 -Extract the corresponding source contexts in the [Target Problem] section of each subtask into the 'source' field.
 -The task id number indicates the sequential orders.
 </Instructions>
+
 IMPORTANT: Return ONLY a valid JSON object with this EXACT structure:
 {{
-  "subtasks": [
-    {{
-      "id": "1",
-      "content": "task description 1",
-      "source": "source 1"
-    }},
-    {{
-      "id": "2",
-      "content": "task description 2",
-      "source": "source 2"
-    }},
-    ....
+ "subtasks": [
+{{
+ "id": "1",
+ "content": "task description 1",
+ "source": "source 1"
+}},
+{{
+ "id": "2",
+ "content": "task description 2",
+ "source": "source 2"
+}},
+ ....
 }}
 
 EXAMPLE:
 For a problem about implementing a counter, your response might be:
 {{
-  "subtasks": [
-    {{
-      "id": "1",
-      "content": "Define the module with input clock, reset, and enable signals, and output count[3:0]",
-      "source": "Design a 4-bit counter with clock, reset, and enable inputs"
-    }},
-    {{
-      "id": "2",
-      "content": "Implement the synchronous reset logic for the counter",
-      "source": "The counter should reset to 0 when reset is high"
-    }},
-    {{
-      "id": "3",
-      "content": "Implement the counter increment logic when enable is high",
-      "source": "The counter should increment by 1 on each clock cycle when enable is high"
-    }}
-  ]
+ "subtasks": [
+{{
+ "id": "1",
+ "content": "Define the module with input clock, reset, and enable signals, and output count[3:0]",
+ "source": "Design a 4-bit counter with clock, reset, and enable inputs"
+}},
+{{
+ "id": "2",
+ "content": "Implement the synchronous reset logic for the counter",
+ "source": "The counter should reset to 0 when reset is high"
+}},
+{{
+ "id": "3",
+ "content": "Implement the counter increment logic when enable is high",
+ "source": "The counter should increment by 1 on each clock cycle when enable is high"
+}}
+ ]
 }}
 
 [Rules]
 Make sure the task plans satisfy the following rules:
-- Do not plan the implementation of logic or signal from the input ports.
-- There is a test bench to test the functional correctness. Do not plan generating testbench to test the generated verilog code.
-- Don't make a plan only with clock or control signals. The clock or control signals should be planned with register or wire signal.
-- Don't make a plan on implementing the signal or next state logics which are not related to the module outputs.
-- For module related to Finite State Machine (FSM), try to determine the number of states first and then make the plan to implement FSM.
-- For module related to Finite State Machine or Moore State Machine, if the state or current_state is an input port signal of the module, You must Do Not implement the state flip-flops for state transition in TopModule.
+
+1. FSM Implementation Rules:
+   - Define state encoding using localparam or parameter, not typedef enum, unless SystemVerilog is explicitly specified
+   - For Moore machines, implement output logic ONLY based on current state
+   - For Mealy machines, implement output logic based on both current state AND inputs
+   - Always separate FSM into exactly three distinct components:
+     a) State register with reset logic
+     b) Next state combinational logic
+     c) Output combinational logic
+   - For state transitions, use simple 2-bit registers (reg [1:0]) rather than custom types
+   - Use binary encoding for states (A=2'b00, B=2'b01, etc.) unless one-hot is specified
+   - Implement output using direct assignment (assign) when output depends on simple state equality
+
+2. Asynchronous vs Synchronous Reset:
+   - For asynchronous reset, use: always @(posedge clk or posedge reset)
+   - For synchronous reset, use: always @(posedge clk)
+   - Never include reset in sensitivity list for synchronous reset
+
+3. Signal Declaration Rules:
+   - Use 'logic' type ONLY if SystemVerilog is specified, otherwise use 'reg' and 'wire'
+   - Always use 'reg' for signals assigned in always blocks
+   - Always use 'wire' for signals assigned with assign statements
+
+4. Coding Style Rules:
+   - Use always @(*) for combinational logic, not always_comb unless SystemVerilog is specified
+   - Never use 0'b0 - all sized numeric constants must be at least 1 bit (1'b0)
+   - Always include default case in case statements
+   - Use consistent naming across all subtasks (do not change signal names between subtasks)
+   - Provide complete, compilable code segments, not theoretical descriptions
+
+5. Other Important Rules:
+   - Do not plan the implementation of logic or signal from the input ports
+   - Do not generate testbench code
+   - Don't make a plan only with clock or control signals
+   - Don't implement signals not related to module outputs
+   - If state/current_state is an input port, do NOT implement state flip-flops
 
 DO NOT include any explanations, notes, or text outside the JSON structure. Return ONLY the JSON object.
 """,

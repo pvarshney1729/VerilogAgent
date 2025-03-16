@@ -1,0 +1,74 @@
+
+Consider the following adder-subtractor with a zero flag:
+
+  module TopModule (
+      input      cpu_overheated,
+      output reg shut_off_computer,
+      input      arrived,
+      input      gas_tank_empty,
+      output reg keep_driving
+  );
+
+      always @(*) begin
+          if (cpu_overheated)
+             shut_off_computer = 1;
+      end
+
+      always @(*) begin
+          if (~arrived)
+             keep_driving = ~gas_tank_empty;
+      end
+
+  endmodule
+
+Unfortunately, this module has a bug. Implement a new version of this
+module that fixes the bug.
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+```verilog
+module TopModule (
+    input wire  cpu_overheated,      // Input signal indicating CPU overheating
+    input wire  arrived,             // Input signal indicating arrival status
+    input wire  gas_tank_empty,      // Input signal indicating if the gas tank is empty
+    output reg  shut_off_computer,   // Output to shut off the computer
+    output reg  keep_driving         // Output to keep driving
+);
+
+    // Initial state for outputs
+    initial begin
+        shut_off_computer = 0;
+        keep_driving = 0;
+    end
+
+    // Combinational logic for shut_off_computer
+    always @(*) begin
+        if (cpu_overheated)
+            shut_off_computer = 1; // Shut off computer if CPU is overheated
+        else
+            shut_off_computer = 0; // Otherwise, do not shut off
+    end
+
+    // Combinational logic for keep_driving
+    always @(*) begin
+        if (~arrived) begin
+            keep_driving = ~gas_tank_empty; // Keep driving if not arrived and the gas tank is not empty
+        end else begin
+            keep_driving = 0; // Stop driving if arrived
+        end
+    end
+
+endmodule
+```
+
+**Notes:**
+
+- **Signal Initialization:** The initial block sets the initial state of the registers to ensure they start in a known state.
+- **Complete Logic Specification:** Both `shut_off_computer` and `keep_driving` have complete logic specified to prevent latches.
+- **Combinational Logic:** The module uses combinational logic, as inferred by the use of `always @(*)`.
+- **Naming Convention:** Consistent use of underscores in signal names for clarity.
+- **Edge Case Handling:** Behavior is specified for all combinations of `arrived` and `gas_tank_empty` inputs.
+
+**
+                

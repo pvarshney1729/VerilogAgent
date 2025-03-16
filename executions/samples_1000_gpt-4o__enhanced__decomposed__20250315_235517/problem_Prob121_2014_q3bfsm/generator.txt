@@ -1,0 +1,136 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as specified, we will create a finite-state machine (FSM) with a synchronous reset. The FSM will have five states, represented by a 3-bit vector. The state transitions and output logic will be implemented according to the provided state table. The module will use a synchronous reset to set the FSM to state `000` when the reset signal is high. The state transitions will be triggered on the positive edge of the clock, and the output `z` will be determined by the current state.
+
+The implementation will follow these steps:
+1. Define the module with the specified interface.
+2. Declare the state and next state variables as logic.
+3. Implement the synchronous reset and state transition logic in a sequential always block triggered by the positive edge of the clock.
+4. Implement the next state and output logic in a combinational always block using a case statement.
+5. Ensure all coding conventions and guidelines are followed, such as using `logic` for signal declarations and using `always @(*)` for combinational logic.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        STATE_000 = 3'b000,
+        STATE_001 = 3'b001,
+        STATE_010 = 3'b010,
+        STATE_011 = 3'b011,
+        STATE_100 = 3'b100
+    } state_t;
+
+    state_t state, next_state;
+
+    // State transition logic with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= STATE_000;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always @(*) begin
+        case (state)
+            STATE_000: begin
+                next_state = (x == 1'b0) ? STATE_000 : STATE_001;
+                z = 1'b0;
+            end
+            STATE_001: begin
+                next_state = (x == 1'b0) ? STATE_001 : STATE_100;
+                z = 1'b0;
+            end
+            STATE_010: begin
+                next_state = (x == 1'b0) ? STATE_010 : STATE_001;
+                z = 1'b0;
+            end
+            STATE_011: begin
+                next_state = (x == 1'b0) ? STATE_001 : STATE_010;
+                z = 1'b1;
+            end
+            STATE_100: begin
+                next_state = (x == 1'b0) ? STATE_011 : STATE_100;
+                z = 1'b1;
+            end
+            default: begin
+                next_state = STATE_000;
+                z = 1'b0;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        STATE_000 = 3'b000,
+        STATE_001 = 3'b001,
+        STATE_010 = 3'b010,
+        STATE_011 = 3'b011,
+        STATE_100 = 3'b100
+    } state_t;
+
+    state_t state, next_state;
+
+    // State transition logic with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= STATE_000;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always @(*) begin
+        case (state)
+            STATE_000: begin
+                next_state = (x == 1'b0) ? STATE_000 : STATE_001;
+                z = 1'b0;
+            end
+            STATE_001: begin
+                next_state = (x == 1'b0) ? STATE_001 : STATE_100;
+                z = 1'b0;
+            end
+            STATE_010: begin
+                next_state = (x == 1'b0) ? STATE_010 : STATE_001;
+                z = 1'b0;
+            end
+            STATE_011: begin
+                next_state = (x == 1'b0) ? STATE_001 : STATE_010;
+                z = 1'b1;
+            end
+            STATE_100: begin
+                next_state = (x == 1'b0) ? STATE_011 : STATE_100;
+                z = 1'b1;
+            end
+            default: begin
+                next_state = STATE_000;
+                z = 1'b0;
+            end
+        endcase
+    end
+
+endmodule

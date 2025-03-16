@@ -1,0 +1,35 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in  (32 bits)
+ - output out (32 bits)
+
+The module should reverse the byte order of a 32-bit vector.
+
+Here is the enhanced specification which might be useful to you:
+                ### Module: TopModule
+
+#### Interface
+- **Inputs:**
+  - `input [31:0] in`: A 32-bit input vector. Bit[31] refers to the most significant bit (MSB), and bit[0] refers to the least significant bit (LSB).
+
+- **Outputs:**
+  - `output [31:0] out`: A 32-bit output vector with reversed byte order of the input vector. Bit[31] refers to the most significant bit (MSB), and bit[0] refers to the least significant bit (LSB).
+
+#### Behavior
+- **Functionality**: The module should reverse the byte order of the 32-bit input vector `in`. 
+  - Byte reversal implies that the original byte order [in[31:24], in[23:16], in[15:8], in[7:0]] will be transformed to [in[7:0], in[15:8], in[23:16], in[31:24]].
+
+#### Timing Behavior
+- **Combinational Logic**: This module implements purely combinational logic. The transformation occurs immediately based on the current input value, and no clock or timing constraints are necessary.
+
+#### Miscellaneous
+- **Reset and Initial States**: Not applicable for this combinational module, as there are no internal states or registers.
+- **Bit-ordering Convention**: All bit indexing follows the convention where bit[31] is the MSB and bit[0] is the LSB.
+
+#### Implementation Notes
+- The module will not require any flip-flops or latches, as it performs a simple transformation using combinational logic gates or wires.
+- Ensure that synthesis tools are used to optimize the wiring for minimal delay and resource usage.
+                

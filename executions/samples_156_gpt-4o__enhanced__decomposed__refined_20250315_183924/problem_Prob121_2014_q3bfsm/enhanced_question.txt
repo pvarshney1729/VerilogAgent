@@ -1,0 +1,98 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - input  x
+ - output z
+
+The module should implement a finite-state machine with the
+state-assigned table shown below. Reset should synchronous active high
+reset the FSM to state 000. Assume all sequential logic is triggered on
+the positive edge of the clock.
+
+  Present state y[2:0] | Next state y[2:0] x=0, Next state y[2:0] x=1 | Output z
+  000 | 000, 001 | 0
+  001 | 001, 100 | 0
+  010 | 010, 001 | 0
+  011 | 001, 010 | 1
+  100 | 011, 100 | 1
+
+Here is the enhanced specification which might be useful to you:
+                **Interface:**
+```verilog
+module TopModule (
+    input wire clk,          // Clock signal, positive edge-triggered
+    input wire reset,        // Synchronous active-high reset
+    input wire x,            // Input signal x, 1 bit
+    output reg z             // Output signal z, 1 bit
+);
+```
+
+**Behavior and Timing:**
+
+1. **State Definitions:**
+   - The FSM consists of 5 states: `000`, `001`, `010`, `011`, `100`.
+   - States are represented by `y[2:0]`, where `y[2]` is the MSB and `y[0]` is the LSB.
+
+2. **State Transition Table:**
+   - Present state `y[2:0]` | Next state `y[2:0]` for `x=0`, Next state `y[2:0]` for `x=1` | Output `z`
+   - `000` | `000`, `001` | `z = 0`
+   - `001` | `001`, `100` | `z = 0`
+   - `010` | `010`, `001` | `z = 0`
+   - `011` | `001`, `010` | `z = 1`
+   - `100` | `011`, `100` | `z = 1`
+
+3. **Reset Behavior:**
+   - On `reset` high, the FSM is reset to state `000` and `z` is set to `0`.
+
+4. **Clock and Timing:**
+   - All state transitions and output updates occur on the positive edge of the `clk`.
+
+5. **Output Logic:**
+   - The output `z` is determined by the current state as defined in the state transition table.
+
+**Implementation Notes:**
+
+- **Initial States:** Ensure the initial state of the FSM is `000` and `z` is `0` upon module instantiation.
+- **Error Handling:** Define behavior for potential illegal states (e.g., states not listed in the table). The module should be designed to handle such states gracefully, potentially resetting to a safe state.
+
+**Verilog Implementation:**
+```verilog
+always @(posedge clk) begin
+    if (reset) begin
+        y <= 3'b000; // Reset state
+        z <= 1'b0;   // Reset output
+    end else begin
+        case (y)
+            3'b000: begin
+                y <= (x == 1'b0) ? 3'b000 : 3'b001;
+                z <= 1'b0;
+            end
+            3'b001: begin
+                y <= (x == 1'b0) ? 3'b001 : 3'b100;
+                z <= 1'b0;
+            end
+            3'b010: begin
+                y <= (x == 1'b0) ? 3'b010 : 3'b001;
+                z <= 1'b0;
+            end
+            3'b011: begin
+                y <= (x == 1'b0) ? 3'b001 : 3'b010;
+                z <= 1'b1;
+            end
+            3'b100: begin
+                y <= (x == 1'b0) ? 3'b011 : 3'b100;
+                z <= 1'b1;
+            end
+            default: begin
+                y <= 3'b000; // Default safe state
+                z <= 1'b0;
+            end
+        endcase
+    end
+end
+```
+                

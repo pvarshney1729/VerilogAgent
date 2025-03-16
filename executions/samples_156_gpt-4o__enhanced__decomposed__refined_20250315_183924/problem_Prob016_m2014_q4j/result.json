@@ -1,0 +1,16 @@
+{
+    "code": "module TopModule (\n    input  wire [3:0] x,    // 4-bit input vector x\n    input  wire [3:0] y,    // 4-bit input vector y\n    output wire [4:0] sum   // 5-bit output vector sum\n);\n    wire c1, c2, c3; // Intermediate carry wires\n\n    // Full adder for bit 0\n    assign {c1, sum[0]} = x[0] + y[0];\n\n    // Full adder for bit 1\n    assign {c2, sum[1]} = x[1] + y[1] + c1;\n\n    // Full adder for bit 2\n    assign {c3, sum[2]} = x[2] + y[2] + c2;\n\n    // Full adder for bit 3\n    assign {sum[4], sum[3]} = x[3] + y[3] + c3;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input  wire [3:0] x,    // 4-bit input vector x\n    input  wire [3:0] y,    // 4-bit input vector y\n    output wire [4:0] sum   // 5-bit output vector sum\n);\n    wire c1, c2, c3; // Intermediate carry wires\n\n    // Full adder for bit 0\n    assign {c1, sum[0]} = x[0] + y[0];\n\n    // Full adder for bit 1\n    assign {c2, sum[1]} = x[1] + y[1] + c1;\n\n    // Full adder for bit 2\n    assign {c3, sum[2]} = x[2] + y[2] + c2;\n\n    // Full adder for bit 3\n    assign {sum[4], sum[3]} = x[3] + y[3] + c3;\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}

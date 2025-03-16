@@ -1,0 +1,67 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a
+ - input  b
+ - input  c
+ - input  d
+ - output out
+
+The module should implement the circuit described by the Karnaugh map
+below.
+
+              ab
+   cd   00  01  11  10
+   00 | 1 | 1 | 0 | 1 |
+   01 | 1 | 0 | 0 | 1 |
+   11 | 0 | 1 | 1 | 1 |
+   10 | 1 | 1 | 0 | 0 |
+
+Here is the enhanced specification which might be useful to you:
+                Module Specification for `TopModule`:
+
+**Interface:**
+- The module `TopModule` has the following ports:
+  - `input wire a;`  // 1-bit wide, unsigned
+  - `input wire b;`  // 1-bit wide, unsigned
+  - `input wire c;`  // 1-bit wide, unsigned
+  - `input wire d;`  // 1-bit wide, unsigned
+  - `output wire out;`  // 1-bit wide, unsigned
+
+**Behavior:**
+- The module implements a combinational logic circuit.
+- The output `out` is determined by the 4-bit input vector `{c, d, a, b}` using the following Karnaugh map interpretation:
+
+```
+              ab
+   cd   00  01  11  10
+   00 | 1 | 1 | 0 | 1 |
+   01 | 1 | 0 | 0 | 1 |
+   11 | 0 | 1 | 1 | 1 |
+   10 | 1 | 1 | 0 | 0 |
+```
+
+- The Karnaugh map is interpreted as follows:
+  - For `cd = 00`, `out = 1` when `ab = 00, 01, 10`
+  - For `cd = 01`, `out = 1` when `ab = 00, 10`
+  - For `cd = 11`, `out = 1` when `ab = 01, 11, 10`
+  - For `cd = 10`, `out = 1` when `ab = 00, 01`
+
+**Timing:**
+- The module operates using combinational logic, with no clock or reset signal required.
+
+**Implementation Notes:**
+- The output logic can be derived directly from the Karnaugh map using Boolean expressions, which can be minimized using standard techniques to optimize for gate count and propagation delay.
+
+**Boundary Conditions:**
+- All possible combinations of inputs `a`, `b`, `c`, and `d` are accounted for in the Karnaugh map.
+
+**Example Implementation:**
+The following Boolean expression for `out` satisfies the Karnaugh map:
+```
+out = (!c & !d & (!a | b)) | (!c & d & !a) | (c & d & (b | !a)) | (c & !d & !b & !a)
+```
+where `!` denotes logical NOT, `&` denotes logical AND, and `|` denotes logical OR.
+                

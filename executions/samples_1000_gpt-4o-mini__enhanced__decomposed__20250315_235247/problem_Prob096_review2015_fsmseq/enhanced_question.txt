@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Ports:
+- `input wire clk` : Clock input, used to synchronize all sequential elements. Triggered on the positive edge.
+- `input wire reset` : Active-high synchronous reset. When high, it resets the module to its initial state.
+- `input wire data` : Input data stream, one bit per clock cycle.
+- `output reg start_shifting` : Output signal that becomes high when the sequence 1101 is detected and remains high until reset.
+
+Functional Description:
+The TopModule implements a finite-state machine (FSM) that monitors an incoming bit stream (`data`) for the occurrence of the bit sequence `1101`. 
+
+FSM States:
+- Define states using a binary encoding, for example, `S0`, `S1`, `S2`, `S3`, and `FOUND`.
+  - `S0`: Initial state, waiting for the first `1`.
+  - `S1`: First `1` detected, waiting for the next `1`.
+  - `S2`: Second `1` detected, waiting for `0`.
+  - `S3`: Detected `110`, waiting for the final `1`.
+  - `FOUND`: Sequence `1101` detected.
+
+State Transitions:
+- On reset = 1: Transition to `S0`.
+- On positive clock edge when reset = 0:
+  - `S0` -> `S1` if `data` = 1; remain `S0` if `data` = 0.
+  - `S1` -> `S2` if `data` = 1; back to `S0` if `data` = 0.
+  - `S2` -> `S3` if `data` = 0; remain `S2` if `data` = 1.
+  - `S3` -> `FOUND` if `data` = 1; back to `S0` if `data` = 0.
+  - `FOUND`: Remain in `FOUND` until reset = 1.
+
+Output Logic:
+- `start_shifting` is set to `1` when the FSM reaches the `FOUND` state.
+- `start_shifting` remains `1` until reset is activated.
+
+Reset Behavior:
+- The reset is synchronous, meaning the FSM transitions to the initial state `S0` on the next rising edge of the clock when `reset` is high.
+- Upon reset, `start_shifting` is set to `0`.
+
+Edge Cases:
+- If `reset` is asserted, the FSM should immediately move to the initial state on the next clock cycle, regardless of the current state.
+- Overlapping sequences are detected. For example, the stream `1101101` will trigger `start_shifting` after detecting the first occurrence of `1101`.
+
+Initial Conditions:
+- At startup, the FSM should be in the `S0` state and `start_shifting` should be `0` until the sequence is detected.
+</ENHANCED_SPEC>

@@ -1,0 +1,196 @@
+Generated Response:
+
+<REASONING>
+To implement the finite-state machine (FSM) for the specified timer, we need to follow these steps:
+
+1. **State Encoding**: Define states for the FSM. We need states for detecting the pattern 1101, shifting in 4 bits, waiting for counting to complete, and waiting for acknowledgment.
+
+2. **State Transition Logic**: Implement the logic to transition between states based on the input signals and current state.
+
+3. **Output Logic**: Determine the outputs (`shift_ena`, `counting`, `done`) based on the current state.
+
+4. **Synchronous Reset**: Implement a synchronous reset to initialize the FSM to the state where it starts looking for the pattern 1101.
+
+5. **Sequential Logic**: Use a clocked always block to update the state based on the current state and inputs.
+
+6. **Combinational Logic**: Use combinational logic to determine the next state and outputs.
+
+The FSM will have the following states:
+- `IDLE`: Waiting for the pattern 1101.
+- `PATTERN_DETECTED`: Pattern 1101 detected, start shifting.
+- `SHIFTING`: Shift in 4 bits to determine the delay.
+- `COUNTING`: Wait for `done_counting` to be high.
+- `DONE`: Notify the user and wait for `ack`.
+
+The FSM transitions through these states based on the input signals and asserts the appropriate outputs.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic data,
+    input logic done_counting,
+    input logic ack,
+    output logic shift_ena,
+    output logic counting,
+    output logic done
+);
+
+    typedef enum logic [2:0] {
+        IDLE = 3'b000,
+        PATTERN_DETECTED = 3'b001,
+        SHIFTING = 3'b010,
+        COUNTING = 3'b011,
+        DONE = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [3:0] pattern_shift_reg;
+    logic [2:0] shift_count;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            pattern_shift_reg <= 4'b0000;
+            shift_count <= 3'b000;
+        end else begin
+            current_state <= next_state;
+            if (current_state == IDLE || current_state == PATTERN_DETECTED) begin
+                pattern_shift_reg <= {pattern_shift_reg[2:0], data};
+            end
+            if (current_state == SHIFTING) begin
+                shift_count <= shift_count + 1;
+            end else begin
+                shift_count <= 3'b000;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        next_state = current_state;
+        shift_ena = 1'b0;
+        counting = 1'b0;
+        done = 1'b0;
+
+        case (current_state)
+            IDLE: begin
+                if (pattern_shift_reg == 4'b1101) begin
+                    next_state = PATTERN_DETECTED;
+                end
+            end
+            PATTERN_DETECTED: begin
+                next_state = SHIFTING;
+                shift_ena = 1'b1;
+            end
+            SHIFTING: begin
+                shift_ena = 1'b1;
+                if (shift_count == 3'b011) begin
+                    next_state = COUNTING;
+                end
+            end
+            COUNTING: begin
+                counting = 1'b1;
+                if (done_counting) begin
+                    next_state = DONE;
+                end
+            end
+            DONE: begin
+                done = 1'b1;
+                if (ack) begin
+                    next_state = IDLE;
+                end
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic data,
+    input logic done_counting,
+    input logic ack,
+    output logic shift_ena,
+    output logic counting,
+    output logic done
+);
+
+    typedef enum logic [2:0] {
+        IDLE = 3'b000,
+        PATTERN_DETECTED = 3'b001,
+        SHIFTING = 3'b010,
+        COUNTING = 3'b011,
+        DONE = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [3:0] pattern_shift_reg;
+    logic [2:0] shift_count;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            pattern_shift_reg <= 4'b0000;
+            shift_count <= 3'b000;
+        end else begin
+            current_state <= next_state;
+            if (current_state == IDLE || current_state == PATTERN_DETECTED) begin
+                pattern_shift_reg <= {pattern_shift_reg[2:0], data};
+            end
+            if (current_state == SHIFTING) begin
+                shift_count <= shift_count + 1;
+            end else begin
+                shift_count <= 3'b000;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        next_state = current_state;
+        shift_ena = 1'b0;
+        counting = 1'b0;
+        done = 1'b0;
+
+        case (current_state)
+            IDLE: begin
+                if (pattern_shift_reg == 4'b1101) begin
+                    next_state = PATTERN_DETECTED;
+                end
+            end
+            PATTERN_DETECTED: begin
+                next_state = SHIFTING;
+                shift_ena = 1'b1;
+            end
+            SHIFTING: begin
+                shift_ena = 1'b1;
+                if (shift_count == 3'b011) begin
+                    next_state = COUNTING;
+                end
+            end
+            COUNTING: begin
+                counting = 1'b1;
+                if (done_counting) begin
+                    next_state = DONE;
+                end
+            end
+            DONE: begin
+                done = 1'b1;
+                if (ack) begin
+                    next_state = IDLE;
+                end
+            end
+        endcase
+    end
+
+endmodule

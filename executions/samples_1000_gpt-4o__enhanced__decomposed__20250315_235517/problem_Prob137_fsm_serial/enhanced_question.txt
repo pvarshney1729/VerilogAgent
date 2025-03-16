@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input clock signal. All sequential logic triggers on the positive edge of this clock signal.
+  - reset: 1-bit active-high synchronous reset. This reset will initialize all state registers to their default values on the next positive clock edge.
+  - in: 1-bit input signal representing the serial data stream.
+
+- Output Ports:
+  - done: 1-bit output signal. This signal is asserted high when a byte has been correctly received.
+
+Functional Description:
+The module implements a finite state machine (FSM) to decode a serial communication protocol consisting of one start bit (logic 0), 8 data bits (transmitted least significant bit first), and one stop bit (logic 1). The line remains at logic 1 during idle periods.
+
+FSM Operation:
+- The FSM identifies the start bit, sequentially processes 8 data bits, and verifies the presence of a stop bit.
+- If the FSM detects an incorrect stop bit, it will wait until a new stop bit is detected before attempting to receive the next byte.
+
+Signal Conventions and Behavior:
+- Bit Indexing: bit[0] refers to the least significant bit.
+- Edge Cases: If the start bit is not detected (i.e., the line remains at logic 1), the FSM remains idle without processing any data.
+- Upon detection of the correct stop bit following the 8 data bits, the 'done' signal is asserted high for one clock cycle.
+
+Initial State:
+- On assertion of the synchronous reset during a positive clock edge, all FSM state registers are initialized to their default idle state with 'done' set to logic 0.
+
+Edge Conditions:
+- If 'reset' is asserted, the FSM will return to its idle state and 'done' will be deasserted regardless of the current state.
+- All operations are synchronized with the positive edge of 'clk'.
+
+Behavior Summary:
+- Idle: Waits for the start bit.
+- Start Bit Detected: Transitions to data processing state.
+- Data Bits Processing: Sequentially reads and stores 8 bits.
+- Stop Bit Verification: Checks for the correct stop bit and asserts 'done' if valid.
+- Error Handling: Waits for a valid stop bit if an error is detected, then resets to idle to start a new byte reception cycle.
+</ENHANCED_SPEC>

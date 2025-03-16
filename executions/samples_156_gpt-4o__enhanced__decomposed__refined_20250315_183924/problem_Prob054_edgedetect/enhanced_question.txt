@@ -1,0 +1,48 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  in    (8 bits)
+ - output pedge (8 bits)
+
+The module should examine each bit in an 8-bit vector and detect when the
+input signal changes from 0 in one clock cycle to 1 the next (similar to
+positive edge detection). The output bit should be set the cycle after a
+0 to 1 transition occurs.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: `TopModule`
+
+**Interface**:
+- **Inputs**:
+  - `input logic clk`: Clock signal for the module operations.
+  - `input logic [7:0] in`: 8-bit input vector, where `in[0]` is the least significant bit (LSB) and `in[7]` is the most significant bit (MSB).
+  
+- **Outputs**:
+  - `output logic [7:0] pedge`: 8-bit output vector indicating detected positive edge transitions.
+
+**Behavior**:
+- **Edge Detection**: The module shall detect a rising edge (0 to 1 transition) on each bit of the input vector `in`. If a transition is detected on `in[i]` from 0 to 1, then `pedge[i]` shall be set to 1 in the following clock cycle; otherwise, it shall be set to 0.
+  
+**Timing and Sequential Logic**:
+- The edge detection is synchronous with the rising edge of the `clk` input.
+- The module shall use a register to store the previous state of `in` to compare against the current state for edge detection.
+  
+**Reset Behavior**:
+- **Reset Signal**: An asynchronous active-low reset signal, `input logic rst_n`, shall initialize the internal state of the module. When `rst_n` is low, the `pedge` outputs should reset to 0, and internal registers should be cleared.
+
+**Initial States**:
+- On reset (`rst_n` low), all `pedge` output bits shall be initialized to 0.
+
+**Operation Dependencies**:
+- The module assumes independent edge detection for each bit in the vector `in`. Multiple simultaneous transitions on different bits are handled independently.
+
+**Boundary Conditions**:
+- If `in` remains constant, `pedge` shall output 0 for all bits.
+- Consecutive 0 to 1 transitions on the same bit will result in `pedge` being high for one clock cycle per transition.
+
+**Implementation Notes**:
+- The design should minimize propagation delay and ensure that the `pedge` output reflects changes in `in` with a one-clock-cycle delay.
+                

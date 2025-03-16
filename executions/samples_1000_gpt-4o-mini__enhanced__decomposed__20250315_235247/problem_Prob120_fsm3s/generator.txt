@@ -1,0 +1,81 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the specifications of a Moore state machine with four states (A, B, C, D) and one input signal (`in`). The output is determined solely by the current state. The module includes a synchronous active high reset that initializes the FSM to state A. 
+
+The state transitions are defined in the state transition table provided. The output is set to 1 only in state D, while it is 0 in all other states. The implementation uses a single always block for state transitions and another for output logic, adhering to the coding conventions specified.
+
+The module is designed to ensure that all signals are declared as logic types, and the sensitivity list for the sequential logic does not include the reset signal, as it is a synchronous reset. The code is structured to ensure clarity and maintainability.
+</REASONING>
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+    typedef enum logic [1:0] {A, B, C, D} state_t;
+    state_t current_state, next_state;
+
+    // Synchronous reset and state update
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= A; // Reset to state A
+        end else begin
+            current_state <= next_state; // Update to next state
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            A: next_state = (in == 1'b0) ? A : B;
+            B: next_state = (in == 1'b0) ? C : B;
+            C: next_state = (in == 1'b0) ? A : D;
+            D: next_state = (in == 1'b0) ? C : B;
+            default: next_state = A; // Default case for safety
+        endcase
+    end
+
+    // Output logic
+    assign out = (current_state == D) ? 1'b1 : 1'b0;
+
+endmodule
+[DONE]
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+    typedef enum logic [1:0] {A, B, C, D} state_t;
+    state_t current_state, next_state;
+
+    // Synchronous reset and state update
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= A; // Reset to state A
+        end else begin
+            current_state <= next_state; // Update to next state
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            A: next_state = (in == 1'b0) ? A : B;
+            B: next_state = (in == 1'b0) ? C : B;
+            C: next_state = (in == 1'b0) ? A : D;
+            D: next_state = (in == 1'b0) ? C : B;
+            default: next_state = A; // Default case for safety
+        endcase
+    end
+
+    // Output logic
+    assign out = (current_state == D) ? 1'b1 : 1'b0;
+
+endmodule

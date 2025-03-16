@@ -1,0 +1,64 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - input logic d; // 1 bit, data input
+  - input logic done_counting; // 1 bit, indicates counting completion
+  - input logic ack; // 1 bit, acknowledge signal
+  - input logic [9:0] state; // 10-bit one-hot encoded state input
+- Outputs:
+  - output logic B3_next; // 1 bit, asserts when the next state is B3
+  - output logic S_next; // 1 bit, asserts when the next state is S
+  - output logic S1_next; // 1 bit, asserts when the next state is S1
+  - output logic Count_next; // 1 bit, asserts when the next state is Count
+  - output logic Wait_next; // 1 bit, asserts when the next state is Wait
+  - output logic done; // 1 bit, output signal
+  - output logic counting; // 1 bit, output signal
+  - output logic shift_ena; // 1 bit, output signal
+
+State Encoding and Transition:
+- States are encoded using one-hot encoding:
+  - S: 10'b0000000001
+  - S1: 10'b0000000010
+  - S11: 10'b0000000100
+  - S110: 10'b0000001000
+  - B0: 10'b0000010000
+  - B1: 10'b0000100000
+  - B2: 10'b0001000000
+  - B3: 10'b0010000000
+  - Count: 10'b0100000000
+  - Wait: 10'b1000000000
+
+- Initial State: The state machine starts in state "S" upon reset.
+
+State Transition Logic:
+- S: Transition to S on d=0; transition to S1 on d=1.
+- S1: Transition to S on d=0; transition to S11 on d=1.
+- S11: Transition to S110 on d=0; remain in S11 on d=1.
+- S110: Transition to S on d=0; transition to B0 on d=1.
+- B0: Always transition to B1 in the next cycle.
+- B1: Always transition to B2 in the next cycle.
+- B2: Always transition to B3 in the next cycle.
+- B3: Always transition to Count in the next cycle.
+- Count: Remain in Count if done_counting=0; transition to Wait if done_counting=1.
+- Wait: Remain in Wait if ack=0; transition to S if ack=1.
+
+Output Logic:
+- B3_next: Asserted when the next state is B3.
+- S_next: Asserted when the next state is S.
+- S1_next: Asserted when the next state is S1.
+- Count_next: Asserted when the next state is Count.
+- Wait_next: Asserted when the next state is Wait.
+- done: Asserted when the current state is Wait.
+- counting: Asserted when the current state is Count.
+- shift_ena: Asserted when the current state is one of B0, B1, B2, or B3.
+
+Reset Behavior:
+- Asynchronous reset to the initial state "S" is assumed.
+- All outputs default to 0 unless explicitly asserted as per state transition and output logic.
+
+Edge Cases:
+- Ensure that only valid one-hot states are present on state input.
+- If an invalid state is detected, behavior is undefined.
+</ENHANCED_SPEC>

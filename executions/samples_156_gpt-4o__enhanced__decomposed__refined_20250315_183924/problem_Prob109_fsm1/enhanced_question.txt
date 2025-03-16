@@ -1,0 +1,71 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  areset
+ - input  in
+ - output out
+
+The module should implement a Moore machine with the diagram described
+below:
+
+  B (1) --0--> A
+  B (1) --1--> B
+  A (0) --0--> B
+  A (0) --1--> A
+
+It should asynchronously reset into state B if reset if high.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Interface:**
+
+- Module Name: `TopModule`
+- Ports:
+  - `input wire clk`: Clock signal. Used for synchronizing the state transitions.
+  - `input wire areset`: Asynchronous reset signal. Active-high to reset the state machine to its initial state.
+  - `input wire in`: Input signal to influence state transitions.
+  - `output reg out`: Output signal. Outputs the value corresponding to the current state.
+
+**Bit-Ordering and Indexing:**
+
+- All ports are single-bit wide (`1` bit).
+- Bit-ordering is not applicable as ports are single-bit.
+
+**State Machine Description:**
+
+- Type: Moore Machine
+- States:
+  - `STATE_A`: Outputs `0`
+  - `STATE_B`: Outputs `1`
+  
+- State Transitions:
+  - From `STATE_B`:
+    - On `in == 0`: Transition to `STATE_A`
+    - On `in == 1`: Remain in `STATE_B`
+  - From `STATE_A`:
+    - On `in == 0`: Transition to `STATE_B`
+    - On `in == 1`: Remain in `STATE_A`
+
+**Reset Behavior:**
+
+- The reset (`areset`) is asynchronous.
+- When `areset` is high, the state machine immediately transitions to `STATE_B`.
+- The output `out` is set to `1` when in `STATE_B`, hence after reset, `out` will be `1`.
+
+**Timing Behavior:**
+
+- State transitions occur on the rising edge of `clk` when `areset` is low.
+- The output `out` reflects the state output value based on the current state.
+
+**Initial States and Outputs:**
+
+- On reset (`areset` high), the initial state is `STATE_B`.
+- The initial output upon reset is `1`.
+
+**Implementation Notes:**
+
+- Ensure the asynchronous reset (`areset`) is prioritized over clocked state transitions.
+- Use non-blocking assignments (`<=`) in the procedural block to update states and outputs to maintain proper sequential logic behavior.
+                

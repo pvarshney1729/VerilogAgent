@@ -1,0 +1,38 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, in and output port done.",
+        "source": "Implement a module named TopModule with the following interface.",
+        "implementation": "module TopModule (\n    input clk,\n    input reset,\n    input in,\n    output reg done\n);\n    typedef enum reg [2:0] {\n        IDLE,\n        START,\n        DATA,\n        STOP\n    } state_t;\n\n    state_t current_state, next_state;\n    reg [2:0] bit_count;\n\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            current_state <= IDLE;\n            done <= 0;\n            bit_count <= 0;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    always @(*) begin\n        case (current_state)\n            IDLE: begin\n                done = 0;\n                if (in == 0) // Start bit detected\n                    next_state = START;\n                else\n                    next_state = IDLE;\n            end\n            START: begin\n                next_state = DATA;\n                bit_count = 0;\n            end\n            DATA: begin\n                if (bit_count < 7)\n                    next_state = DATA;\n                else\n                    next_state = STOP;\n            end\n            STOP: begin\n                if (in == 1) // Stop bit detected\n                    done = 1;\n                next_state = IDLE;\n            end\n            default: next_state = IDLE;\n        endcase\n    end\n\n    always @(posedge clk) begin\n        if (current_state == DATA)\n            bit_count <= bit_count + 1;\n    end\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define the states for the FSM: IDLE, START_BIT, DATA_BITS, STOP_BIT, and ERROR.",
+        "source": "Implement a finite state machine that will identify when bytes have been correctly received.",
+        "implementation": "typedef enum logic [2:0] {\n    IDLE       = 3'b000,\n    START_BIT  = 3'b001,\n    DATA_BITS  = 3'b010,\n    STOP_BIT   = 3'b011,\n    ERROR      = 3'b100\n} state_t;\n\nstate_t current_state, next_state;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register to hold the current state of the FSM.",
+        "source": "The FSM must wait until it finds a stop bit before attempting to receive the next byte.",
+        "implementation": "reg [2:0] state; // State register to hold the current state of the FSM\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        state <= 3'b000; // Reset state\n    end else begin\n        // State transition logic will be implemented here\n    end\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement the logic to transition between states based on the input signals and current state.",
+        "source": "Identify when bytes have been correctly received when given a stream of bits.",
+        "implementation": "typedef enum logic [2:0] {\n    IDLE,       // Waiting for start bit\n    START_BIT,  // Detected start bit\n    DATA_BITS,  // Receiving data bits\n    STOP_BIT    // Waiting for stop bit\n} state_t;\n\nstate_t current_state, next_state;\nlogic [3:0] bit_count; // To count the number of received data bits\n\nalways_ff @(posedge clk or posedge reset) begin\n    if (reset) begin\n        current_state <= IDLE;\n        bit_count <= 0;\n    end else begin\n        current_state <= next_state;\n    end\nend\n\nalways_comb begin\n    next_state = current_state;\n    done = 0; // Default done signal\n\n    case (current_state)\n        IDLE: begin\n            if (in == 0) begin // Start bit detected\n                next_state = START_BIT;\n            end\n        end\n        \n        START_BIT: begin\n            next_state = DATA_BITS; // Move to data bits after start bit\n            bit_count = 0; // Reset bit count\n        end\n        \n        DATA_BITS: begin\n            if (bit_count < 8) begin\n                if (in == 1 || in == 0) begin // Receive data bits\n                    bit_count = bit_count + 1;\n                end\n            end else begin\n                next_state = STOP_BIT; // Move to stop bit after 8 data bits\n            end\n        end\n        \n        STOP_BIT: begin\n            if (in == 1) begin // Stop bit detected\n                done = 1; // Byte received successfully\n                next_state = IDLE; // Go back to idle state\n            end else begin\n                // Stay in STOP_BIT state until stop bit is detected\n            end\n        end\n    endcase\nend"
+    },
+    {
+        "id": "5",
+        "content": "Implement the done output signal logic to indicate when a byte has been successfully received.",
+        "source": "The FSM must wait until it finds a stop bit before attempting to receive the next byte.",
+        "implementation": "reg [3:0] state;\nreg done_reg;\n\nlocalparam IDLE = 0, START_BIT = 1, DATA_BITS = 2, STOP_BIT = 3;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        state <= IDLE;\n        done_reg <= 0;\n    end else begin\n        case (state)\n            IDLE: begin\n                if (in == 0) begin // Start bit detected\n                    state <= START_BIT;\n                    done_reg <= 0;\n                end\n            end\n            START_BIT: begin\n                state <= DATA_BITS; // Move to data bits after start bit\n            end\n            DATA_BITS: begin\n                // Logic to receive 8 data bits would go here\n                // Assuming we have a counter to track received bits\n                // After receiving 8 bits, we transition to STOP_BIT\n                if (/* condition to check if 8 bits received */) begin\n                    state <= STOP_BIT;\n                end\n            end\n            STOP_BIT: begin\n                if (in == 1) begin // Stop bit detected\n                    done_reg <= 1; // Byte received successfully\n                    state <= IDLE; // Go back to idle state\n                end else begin\n                    // Stay in STOP_BIT state until stop bit is detected\n                end\n            end\n        endcase\n    end\nend\n\nassign done = done_reg;"
+    },
+    {
+        "id": "6",
+        "content": "Implement the synchronous reset logic to reset the FSM to the IDLE state when reset is high.",
+        "source": "Include an active-high synchronous reset.",
+        "implementation": "always @(posedge clk) begin\n    if (reset) begin\n        state <= IDLE; // Reset to IDLE state\n    end\n    // Other state transitions and logic here\nend"
+    }
+]

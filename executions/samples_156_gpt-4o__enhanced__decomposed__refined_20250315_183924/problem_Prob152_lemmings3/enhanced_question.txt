@@ -1,0 +1,104 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  areset
+ - input  bump_left
+ - input  bump_right
+ - input  ground
+ - input  dig
+ - output walk_left
+ - output walk_right
+ - output aaah
+ - output digging
+
+The game Lemmings involves critters with fairly simple brains. So simple
+that we are going to model it using a finite state machine. In the
+Lemmings' 2D world, Lemmings can be in one of two states: walking left
+(walk_left is 1) or walking right (walk_right is 1). It will switch
+directions if it hits an obstacle. In particular, if a Lemming is bumped
+on the left (by receiving a 1 on bump_left), it will walk right. If it's
+bumped on the right (by receiving a 1 on bump_right), it will walk left.
+If it's bumped on both sides at the same time, it will still switch
+directions.
+
+In addition to walking left and right and changing direction when bumped,
+when ground=0, the Lemming will fall and say "aaah!". When the ground
+reappears (ground=1), the Lemming will resume walking in the same
+direction as before the fall. Being bumped while falling does not affect
+the walking direction, and being bumped in the same cycle as ground
+disappears (but not yet falling), or when the ground reappears while
+still falling, also does not affect the walking direction.
+
+In addition to walking and falling, Lemmings can sometimes be told to do
+useful things, like dig (it starts digging when dig=1). A Lemming can dig
+if it is currently walking on ground (ground=1 and not falling), and will
+continue digging until it reaches the other side (ground=0). At that
+point, since there is no ground, it will fall (aaah!), then continue
+walking in its original direction once it hits ground again. As with
+falling, being bumped while digging has no effect, and being told to dig
+when falling or when there is no ground is ignored. (In other words, a
+walking Lemming can fall, dig, or switch directions. If more than one of
+these conditions are satisfied, fall has higher precedence than dig,
+which has higher precedence than switching directions.)
+
+Implement a Moore state machine that models this behaviour. areset is
+positive edge triggered asynchronous reseting the Lemming machine to walk
+left. Assume all sequential logic is triggered on the positive edge of
+the clock.
+
+
+Here is the enhanced specification which might be useful to you:
+                #### Module Interface
+
+```verilog
+module TopModule (
+    input wire clk,          // Clock signal, positive edge-triggered
+    input wire areset,       // Asynchronous reset, active high
+    input wire bump_left,    // Bump left input signal
+    input wire bump_right,   // Bump right input signal
+    input wire ground,       // Ground detection signal, 1 when on ground
+    input wire dig,          // Dig command input signal
+    output reg walk_left,    // Output signal indicating walking left
+    output reg walk_right,   // Output signal indicating walking right
+    output reg aaah,         // Output signal indicating falling
+    output reg digging       // Output signal indicating digging
+);
+```
+
+#### Behavioral Description
+
+1. **State Definitions**:
+   - **Walking Left**: `walk_left = 1`, `walk_right = 0`, `aaah = 0`, `digging = 0`
+   - **Walking Right**: `walk_left = 0`, `walk_right = 1`, `aaah = 0`, `digging = 0`
+   - **Falling**: `aaah = 1`, `walk_left = 0`, `walk_right = 0`, `digging = 0`
+   - **Digging**: `digging = 1`, `walk_left = 0`, `walk_right = 0`, `aaah = 0`
+
+2. **Reset Behavior**:
+   - On the positive edge of `areset`, the state machine resets to "Walking Left" regardless of other inputs.
+
+3. **State Transition Logic**:
+   - **Priority Order**: Falling > Digging > Direction Switching
+   - **Falling**: If `ground = 0`, transition to Falling state.
+   - **Digging**: If `ground = 1`, `dig = 1`, and not falling, transition to Digging.
+   - **Direction Switching**:
+     - If `bump_left = 1` or both `bump_left = 1` and `bump_right = 1`, switch to Walking Right.
+     - If `bump_right = 1`, switch to Walking Left.
+
+4. **Edge Case Handling**:
+   - When `bump_left` and `bump_right` are both 1, switch direction regardless of the current walking direction.
+   - When `ground` goes from 0 to 1, resume the last walking direction before falling.
+
+#### Timing and Clock Domain
+
+- **Clocking**: All state transitions occur on the positive edge of `clk`.
+- **Reset Timing**: `areset` is asynchronous but state transitions occur on the next clock edge after `areset` is deasserted.
+
+#### Implementation Notes
+
+- Ensure `walk_left`, `walk_right`, `aaah`, and `digging` are mutually exclusive states.
+- Initialize all outputs to 0 on startup, except when reset is asserted.
+- Use a state register to track current states and handle transitions accordingly.
+                

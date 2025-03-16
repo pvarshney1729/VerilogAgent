@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+The module named `TopModule` is to be implemented with the following interface. All input and output ports are one bit unless otherwise specified:
+
+- Input `clk` (clock signal, positive edge-triggered)
+- Input `resetn` (active-low synchronous reset)
+- Input `r` (3-bit vector, where bit[0] is the least significant bit, representing request signals _r[0]_, _r[1]_, and _r[2]_ from three devices)
+- Output `g` (3-bit vector, where bit[0] is the least significant bit, representing grant signals _g[0]_, _g[1]_, and _g[2]_ for three devices)
+
+The module implements an FSM as described by the following state transitions:
+
+1. **State A** (Initial and default state):
+   - Transition to **State B** if `r[0] = 1`.
+   - Transition to **State C** if `r[0] = 0` and `r[1] = 1`.
+   - Transition to **State D** if `r[0] = 0`, `r[1] = 0`, and `r[2] = 1`.
+   - Remain in **State A** if `r[0] = 0`, `r[1] = 0`, and `r[2] = 0`.
+
+2. **State B**:
+   - Output `g[0] = 1`.
+   - Remain in **State B** if `r[0] = 1`.
+   - Transition to **State A** if `r[0] = 0`.
+
+3. **State C**:
+   - Output `g[1] = 1`.
+   - Remain in **State C** if `r[1] = 1`.
+   - Transition to **State A** if `r[1] = 0`.
+
+4. **State D**:
+   - Output `g[2] = 1`.
+   - Remain in **State D** if `r[2] = 1`.
+   - Transition to **State A** if `r[2] = 0`.
+
+Reset behavior:
+- The reset signal `resetn` is active-low and synchronous. On assertion (resetn = 0), the module transitions to **State A**.
+
+Priority:
+- Device 0 has the highest priority, followed by device 1, and device 2 has the lowest priority. This is reflected in the state transition logic.
+
+Implementation details:
+- Use separate always blocks for the state transition logic (state table) and state memory (state flip-flops).
+- Use either continuous assignment statements or an always block to describe the assignment of the output vector `g`.
+- Assume all sequential logic is triggered on the positive edge of the clock `clk`.
+
+Initial values:
+- All flip-flops and registers default to a known state upon reset, specifically transitioning to **State A**.
+
+Edge Cases:
+- When multiple requests occur simultaneously, the FSM prioritizes transitions based on the priority order: device 0 > device 1 > device 2.
+</ENHANCED_SPEC>

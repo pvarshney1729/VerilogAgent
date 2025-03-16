@@ -1,0 +1,103 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in
+ - input  state (10 bits)
+ - output next_state (10 bits)
+ - output out1
+ - output out2
+
+Given the follow state machine with 1 input and 2 outputs (the outputs
+are given as "(out1, out2)"):
+
+  S0 (0, 0) --0--> S0
+  S0 (0, 0) --1--> S1
+  S1 (0, 0) --0--> S0
+  S1 (0, 0) --1--> S2
+  S2 (0, 0) --0--> S0
+  S2 (0, 0) --1--> S3
+  S3 (0, 0) --0--> S0
+  S3 (0, 0) --1--> S4
+  S4 (0, 0) --0--> S0
+  S4 (0, 0) --1--> S5
+  S5 (0, 0) --0--> S8
+  S5 (0, 0) --1--> S6
+  S6 (0, 0) --0--> S9
+  S6 (0, 0) --1--> S7
+  S7 (0, 1) --0--> S0
+  S7 (0, 1) --1--> S7
+  S8 (1, 0) --0--> S0
+  S8 (1, 0) --1--> S1
+  S9 (1, 1) --0--> S0
+  S9 (1, 1) --1--> S1
+
+Suppose this state machine uses one-hot encoding, where state[0] through
+state[9] correspond to the states S0 though S9, respectively. The outputs
+are zero unless otherwise specified. The next_state[0] through next_state[9] 
+correspond to the transition to next states S0 though S9. For example, The 
+next_state[1] is set to 1 when the next state is S1 , otherwise, it is set to 0.
+
+Here, the input state[9:0] can be a combinational of multiple states, and 
+the TopModule is expected to response.
+For example: 
+When the state[9:0] = 10'b0000010100, state[4] == 1, and state[2] == 1, the 
+states includes S4, and S2 states.
+
+The module should implement the state transition logic and output logic
+portions of the state machine (but not the state flip-flops). You are
+given the current state in state[9:0] and must implement next_state[9:0] 
+and the two outputs.
+
+Here is the enhanced specification which might be useful to you:
+                ### MODULE: TopModule
+
+#### Interface
+
+- **Inputs:**
+  - `input wire in`: A 1-bit input signal.
+  - `input wire [9:0] state`: A 10-bit one-hot encoded state vector where bit[0] corresponds to S0 and bit[9] to S9.
+
+- **Outputs:**
+  - `output wire [9:0] next_state`: A 10-bit vector indicating the next state, one-hot encoded.
+  - `output wire out1`: A 1-bit output signal.
+  - `output wire out2`: A 1-bit output signal.
+
+#### Behavior
+
+1. **State Transitions:**
+   - The state machine transitions are based on the `in` input and the current `state`.
+   - State transitions for each state Si (i = 0 to 9):
+     - Defined explicitly with two possible transitions: `in = 0` and `in = 1`.
+   - For `in = 0` or `in = 1`, determine `next_state` based on the provided transition table.
+
+2. **Output Logic:**
+   - `out1` and `out2` are set based on the current state outputs, as specified:
+     - S7: `out1 = 0`, `out2 = 1`
+     - S8: `out1 = 1`, `out2 = 0`
+     - S9: `out1 = 1`, `out2 = 1`
+   - All other states: `out1 = 0`, `out2 = 0`.
+
+3. **Combinational Nature:**
+   - The logic for `next_state` and outputs is purely combinational, with no internal state storage.
+
+#### Timing Behavior
+
+- This module is designed as combinational logic without a clock signal. Transitions happen instantaneously based on input changes.
+
+#### Reset and Initial Conditions
+
+- The module does not implement state flip-flops or reset logic, as it only computes `next_state` and outputs based on the current `state`.
+
+#### Assumptions and Constraints
+
+- It is assumed that `state` is valid and only one-hot encoded.
+- If multiple bits in `state` are set (invalid one-hot encoding), the behavior is undefined.
+- The module is expected to handle valid one-hot encoded states only.
+
+#### Notes
+
+- Bit[0] is the least significant bit (LSB) used to represent S0, and Bit[9] is for S9.
+- The state transitions and output logic must be implemented as per the state transition table provided.
+                

@@ -1,0 +1,72 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk,
+ - input  load,
+ - input  data (512 bits)
+ - output q    (512 bits)
+
+The module should implement Rule 90, a one-dimensional cellular automaton
+with interesting properties. The rules are simple. There is a
+one-dimensional array of cells (on or off). At each time step, the next
+state of each cell is the XOR of the cell's two current neighbours:
+
+  Left | Center | Right | Center's next state
+  1    | 1      | 1     | 0
+  1    | 1      | 0     | 1
+  1    | 0      | 1     | 0
+  1    | 0      | 0     | 1
+  0    | 1      | 1     | 1
+  0    | 1      | 0     | 0
+  0    | 0      | 1     | 1
+  0    | 0      | 0     | 0
+
+In this circuit, create a 512-cell system (q[511:0]), and advance by one
+time step each clock cycle. The load input indicates the state of the
+system should be loaded with data[511:0]. Assume the boundaries (q[-1]
+and q[512]) are both zero (off). Assume all sequential logic is triggered
+on the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: `TopModule`
+
+**Signal Interface**:
+- **Inputs**:
+  - `input wire clk`: Clock signal (1 bit).
+  - `input wire load`: Load signal (1 bit), synchronous with the clock.
+  - `input wire [511:0] data`: Data input bus (512 bits, unsigned).
+
+- **Outputs**:
+  - `output reg [511:0] q`: State output bus (512 bits, unsigned).
+
+**Bit Indexing and Ordering**:
+- The `data` and `q` buses are indexed from 0 to 511, where `q[0]` is the least significant bit (LSB) and `q[511]` is the most significant bit (MSB).
+
+**Behavior Specification**:
+- **Loading Behavior**: On the positive edge of `clk`, if `load` is high, the `data` input is loaded into `q`.
+- **Rule 90 Cellular Automaton**: On each positive edge of `clk`, if `load` is low, apply Rule 90:
+  - For each cell `i` (0 ≤ i < 512), the next state `q[i]` is determined by: `q[i]` = `q[i-1] XOR q[i+1]`
+  - Boundary cells use zero (`0`) as the outside neighbor:
+    - `q[-1]` and `q[512]` are considered `0`.
+    - `q[0]` = `0 XOR q[1]`
+    - `q[511]` = `q[510] XOR 0`
+
+**Timing and Sequential Logic**:
+- All state changes occur on the positive edge of the `clk`.
+- The `load` signal is sampled on the rising edge of `clk` to determine whether the system loads new data or advances the state.
+
+**Reset Behavior**:
+- The specification does not include a reset signal. If a reset is desired, it should be defined as either synchronous or asynchronous and specify the reset state (generally `q` should reset to zero).
+
+**Initial State**:
+- If no load occurs at startup, the initial state of `q` is implementation-specific unless otherwise specified. It is recommended to initialize `q` to zero.
+
+**Boundary Conditions**:
+- The effective neighbors for the boundary cells (`q[0]` and `q[511]`) are zero (off).
+
+**Implementation Notes**:
+- Ensure all operations and state updates are modeled in a single always block triggered by the positive edge of `clk`.
+- Consider adding a reset signal if desired for initialization, with a synchronous reset to zero for all cells in `q`.
+                

@@ -1,0 +1,118 @@
+Generated Response:
+
+<REASONING>
+To implement the requested module, we need to create a finite-state machine (FSM) that detects the sequence "1101" in an input bit stream. The FSM will have the following states:
+1. IDLE: Initial state, waiting for the first '1'.
+2. S1: Detected the first '1'.
+3. S11: Detected '11'.
+4. S110: Detected '110'.
+5. S1101: Detected '1101', sequence complete.
+
+The FSM will transition between these states based on the input 'data'. Once the sequence "1101" is detected, the output 'start_shifting' will be set to 1 and remain high until a reset occurs. The reset is synchronous, meaning it will only affect the FSM state and outputs on the next positive clock edge when high.
+
+The implementation will use an always block for the state transitions and another for the output logic. The reset logic will be included in the state transition always block to ensure the FSM resets correctly. The output 'start_shifting' will be driven by a register that is set when the FSM reaches the S1101 state.
+
+We will adhere to the coding conventions by using logic for all signals, using always @(*) for combinational logic, and ensuring all numeric constants are properly sized.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input  logic clk,
+    input  logic reset,
+    input  logic data,
+    output logic start_shifting
+);
+
+    typedef enum logic [2:0] {
+        IDLE   = 3'b000,
+        S1     = 3'b001,
+        S11    = 3'b010,
+        S110   = 3'b011,
+        S1101  = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic start_shifting_reg;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            start_shifting_reg <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == S1101) begin
+                start_shifting_reg <= 1'b1;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            IDLE:   next_state = (data) ? S1 : IDLE;
+            S1:     next_state = (data) ? S11 : IDLE;
+            S11:    next_state = (data) ? S11 : S110;
+            S110:   next_state = (data) ? S1101 : IDLE;
+            S1101:  next_state = S1101; // Remain in this state once sequence is detected
+            default: next_state = IDLE;
+        endcase
+    end
+
+    // Output logic
+    assign start_shifting = start_shifting_reg;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input  logic clk,
+    input  logic reset,
+    input  logic data,
+    output logic start_shifting
+);
+
+    typedef enum logic [2:0] {
+        IDLE   = 3'b000,
+        S1     = 3'b001,
+        S11    = 3'b010,
+        S110   = 3'b011,
+        S1101  = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic start_shifting_reg;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            start_shifting_reg <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == S1101) begin
+                start_shifting_reg <= 1'b1;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            IDLE:   next_state = (data) ? S1 : IDLE;
+            S1:     next_state = (data) ? S11 : IDLE;
+            S11:    next_state = (data) ? S11 : S110;
+            S110:   next_state = (data) ? S1101 : IDLE;
+            S1101:  next_state = S1101; // Remain in this state once sequence is detected
+            default: next_state = IDLE;
+        endcase
+    end
+
+    // Output logic
+    assign start_shifting = start_shifting_reg;
+
+endmodule

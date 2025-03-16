@@ -1,0 +1,57 @@
+Generated Response:
+
+<REASONING>
+To implement the 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with inputs `clk` and `reset`, and a 5-bit output `q`.
+
+2. **Synchronous Reset**: Implement a synchronous reset that sets the LFSR to the initial state `5'b00001` when `reset` is high. This ensures the LFSR does not enter the all-zero state.
+
+3. **LFSR Logic**: On each positive edge of the clock, the LFSR shifts its bits to the right. The new bit for `q[4]` is calculated using the XOR of the current `q[4]` and `q[2]` with the least significant bit `q[0]`. This implements the feedback logic for the Galois LFSR.
+
+4. **Sequential Logic**: Use an `always_ff` block triggered by the positive edge of `clk` to ensure all operations are synchronous with the clock.
+
+5. **Coding Conventions**: Use `logic` for all signals, adhere to the specified interface, and ensure all numeric constants are properly sized.
+
+By following these steps, the implementation meets the requirements for a maximal-length LFSR with the specified tap positions and synchronous reset behavior.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            q <= 5'b00001; // Synchronous reset to initial state
+        end else begin
+            // Galois LFSR logic with taps at positions 5 and 3
+            q <= {q[3:0], q[4] ^ q[2]};
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            q <= 5'b00001; // Synchronous reset to initial state
+        end else begin
+            // Galois LFSR logic with taps at positions 5 and 3
+            q <= {q[3:0], q[4] ^ q[2]};
+        end
+    end
+
+endmodule

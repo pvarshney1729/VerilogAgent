@@ -1,0 +1,117 @@
+Generated Response:
+
+<REASONING>
+To implement the Moore state machine as specified, we need to define a module named `TopModule` with the given interface. The module will have a synchronous reset, meaning the reset signal is sampled with respect to the clock. The state machine has four states (A, B, C, D), and the transitions depend on the input `in`. The output `out` is determined solely by the current state, as per the Moore FSM characteristics.
+
+1. **State Encoding**: We'll use a 2-bit logic type to represent the four states. This allows us to efficiently encode the states and manage transitions.
+
+2. **State Register**: We'll implement a state register to hold the current state, which will be updated on the positive edge of the clock. The reset logic will ensure that the FSM resets to state A when the reset signal is high.
+
+3. **Next State Logic**: We'll use a combinational always block to determine the next state based on the current state and input `in`.
+
+4. **Output Logic**: The output will be determined by the current state using a simple case statement.
+
+5. **Coding Conventions**: We'll adhere to the conventions by using `logic` for all signals, using `always @(*)` for combinational logic, and ensuring all numeric constants have a size greater than zero.
+
+By following these steps, we can ensure that the module behaves as specified and adheres to the provided guidelines and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State register logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_A; // Reset to state A
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: next_state = (in) ? STATE_B : STATE_A;
+            STATE_B: next_state = (in) ? STATE_B : STATE_C;
+            STATE_C: next_state = (in) ? STATE_D : STATE_A;
+            STATE_D: next_state = (in) ? STATE_B : STATE_C;
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_D: out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State register logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_A; // Reset to state A
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: next_state = (in) ? STATE_B : STATE_A;
+            STATE_B: next_state = (in) ? STATE_B : STATE_C;
+            STATE_C: next_state = (in) ? STATE_D : STATE_A;
+            STATE_D: next_state = (in) ? STATE_B : STATE_C;
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_D: out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule

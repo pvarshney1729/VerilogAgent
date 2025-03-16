@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, positive edge-triggered.
+  - `input reset`: Active-high synchronous reset signal.
+  - `input in`: Serial input bit stream.
+
+- Output Ports:
+  - `output done`: Active-high signal indicating successful byte reception.
+
+Specification Details:
+
+1. Data Transmission Protocol:
+   - The protocol includes one start bit (logic 0), 8 data bits, and one stop bit (logic 1).
+   - The line remains at logic 1 during idle periods.
+
+2. Finite State Machine (FSM) Requirements:
+   - The FSM must identify and process the start bit, followed by the reception of 8 data bits in sequence, and conclude with a verification of the stop bit.
+   - Data bits are received least significant bit (LSB) first.
+
+3. FSM Operation:
+   - Upon detecting the start bit (logic 0), the FSM transitions through states to read the 8 data bits.
+   - After reading the data bits, the FSM checks for a stop bit (logic 1).
+   - If the stop bit is absent at the expected time, the FSM must enter a state to wait for a stop bit before attempting to identify a new start bit.
+
+4. Clock and Reset:
+   - All state transitions and data operations are synchronized to the positive edge of the `clk` signal.
+   - The `reset` signal, when asserted high, synchronously resets the FSM to its initial idle state. This ensures no partial data is processed post-reset.
+
+5. Initial State:
+   - When reset is de-asserted, the FSM begins in the idle state, ready to detect the start bit.
+
+6. Edge Cases:
+   - Ensure robust handling of noise or unexpected bit patterns by requiring a valid stop bit before processing a new byte.
+   - If corruption is detected (e.g., missing stop bit), the FSM should revert to idle state and await the next start bit.
+
+7. Signal Conventions:
+   - Bit indexing follows: `bit[0]` refers to the least significant bit of the data byte.
+
+This specification ensures clarity in the design and implementation of the FSM for the given serial communication protocol.
+</ENHANCED_SPEC>

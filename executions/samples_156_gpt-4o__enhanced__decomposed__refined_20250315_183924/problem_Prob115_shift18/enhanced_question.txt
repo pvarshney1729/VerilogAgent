@@ -1,0 +1,80 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  load
+ - input  ena
+ - input  amount (2 bits)
+ - input  data (64 bits)
+ - output q (64 bits)
+
+The module should implement a 64-bit arithmetic shift register, with
+synchronous load. The shifter can shift both left and right, and by 1 or
+8 bit positions, selected by "amount." Assume the right shit is an
+arithmetic right shift.
+
+Signals are defined as below:
+
+  (1) load: Loads shift register with data[63:0] instead of shifting.
+       Active high.
+  (2) ena: Chooses whether to shift. Active high.
+  (3) amount: Chooses which direction and how much to shift.
+      (a) 2'b00: shift left by 1 bit.
+      (b) 2'b01: shift left by 8 bits.
+      (c) 2'b10: shift right by 1 bit.
+      (d) 2'b11: shift right by 8 bits.
+  (4) q: The contents of the shifter.
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+**Module Interface:**
+
+```verilog
+module TopModule (
+    input wire clk,                  // Clock signal, active on rising edge
+    input wire load,                 // Load signal, active high
+    input wire ena,                  // Enable signal, active high
+    input wire [1:0] amount,         // 2-bit control signal for shift direction and magnitude
+    input wire [63:0] data,          // 64-bit input data
+    output reg [63:0] q              // 64-bit output register
+);
+```
+
+**Signal Details:**
+- **Signedness:** The `data` input and `q` output are treated as unsigned. If signedness is required, this should be explicitly stated.
+- **Bit Indexing:** `data[63]` and `q[63]` are the most significant bits (MSB), `data[0]` and `q[0]` are the least significant bits (LSB).
+
+**Behavior Description:**
+
+1. **Load Operation:**
+   - When `load` is high on the rising edge of `clk`, the contents of `data` are loaded into the shift register `q`.
+
+2. **Shift Operation:**
+   - If `ena` is high and `load` is low on the rising edge of `clk`, the shift register `q` performs a shift operation determined by `amount`:
+     - `amount == 2'b00`: Shift left by 1 bit. `q[63]` is filled with zero.
+     - `amount == 2'b01`: Shift left by 8 bits. `q[63:56]` are filled with zeros.
+     - `amount == 2'b10`: Arithmetic shift right by 1 bit. The sign bit (`q[63]`) is replicated.
+     - `amount == 2'b11`: Arithmetic shift right by 8 bits. The sign bit (`q[63]`) is replicated in the top 8 bits.
+
+3. **Priority:**
+   - If both `load` and `ena` are high, `load` takes precedence over shifting.
+
+**Timing Behavior:**
+- The module operates on the rising edge of the `clk`.
+
+**Reset and Initial Conditions:**
+- **Reset:** Add a synchronous reset if required, e.g., `input wire rst`. During reset, `q` is set to 0.
+- **Initial State:** Without a reset, the initial state of `q` is unspecified and should be considered indeterminate.
+
+**Implementation Notes:**
+- The implementation should ensure glitch-free operation on the `q` output.
+- Consider adding testbenches to verify behavior under all possible conditions, especially around edge cases.
+
+**Boundary Conditions:**
+- The behavior on continuous high `load` or `ena` signals should be tested to ensure stability and expected operation.
+
+**
+                

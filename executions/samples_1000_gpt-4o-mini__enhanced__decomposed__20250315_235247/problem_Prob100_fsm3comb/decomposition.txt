@@ -1,0 +1,20 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports in (1 bit) and state (2 bits), and output ports next_state (2 bits) and out (1 bit).",
+        "source": "input in, input state (2 bits), output next_state (2 bits), output out",
+        "implementation": "module TopModule (\n    input wire in,\n    input wire [1:0] state,\n    output reg [1:0] next_state,\n    output reg out\n);\n\nalways @(*) begin\n    case (state)\n        2'b00: begin // State A\n            next_state = (in == 0) ? 2'b00 : 2'b01; // A, B\n            out = 1'b0;\n        end\n        2'b01: begin // State B\n            next_state = (in == 0) ? 2'b10 : 2'b01; // C, B\n            out = 1'b0;\n        end\n        2'b10: begin // State C\n            next_state = (in == 0) ? 2'b00 : 2'b11; // A, D\n            out = 1'b0;\n        end\n        2'b11: begin // State D\n            next_state = (in == 0) ? 2'b10 : 2'b01; // C, B\n            out = 1'b1;\n        end\n        default: begin\n            next_state = 2'b00; // Default to state A\n            out = 1'b0;\n        end\n    endcase\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the combinational logic to determine next_state based on the current state and input in according to the state transition table.",
+        "source": "State | Next state in=0, Next state in=1 | Output\n  A     | A, B                             | 0\n  B     | C, B                             | 0\n  C     | A, D                             | 0\n  D     | C, B                             | 1",
+        "implementation": "always @(*) begin\n    case (state)\n        2'b00: begin // State A\n            next_state = (in == 0) ? 2'b00 : 2'b01; // A or B\n            out = 1'b0;\n        end\n        2'b01: begin // State B\n            next_state = (in == 0) ? 2'b10 : 2'b01; // C or B\n            out = 1'b0;\n        end\n        2'b10: begin // State C\n            next_state = (in == 0) ? 2'b00 : 2'b11; // A or D\n            out = 1'b0;\n        end\n        2'b11: begin // State D\n            next_state = (in == 0) ? 2'b10 : 2'b01; // C or B\n            out = 1'b1;\n        end\n        default: begin\n            next_state = 2'b00; // Default to state A\n            out = 1'b0;\n        end\n    endcase\nend"
+    },
+    {
+        "id": "3",
+        "content": "Implement the output logic to determine out based on the current state according to the state transition table.",
+        "source": "State | Next state in=0, Next state in=1 | Output\n  A     | A, B                             | 0\n  B     | C, B                             | 0\n  C     | A, D                             | 0\n  D     | C, B                             | 1",
+        "implementation": "always @(*) begin\n    case (state)\n        2'b00: begin // State A\n            next_state = (in) ? 2'b01 : 2'b00; // Next state B if in=1, else stay in A\n            out = 1'b0;\n        end\n        2'b01: begin // State B\n            next_state = (in) ? 2'b01 : 2'b10; // Next state B if in=1, else go to C\n            out = 1'b0;\n        end\n        2'b10: begin // State C\n            next_state = (in) ? 2'b11 : 2'b00; // Next state D if in=1, else go to A\n            out = 1'b0;\n        end\n        2'b11: begin // State D\n            next_state = (in) ? 2'b01 : 2'b10; // Next state B if in=1, else go to C\n            out = 1'b1;\n        end\n        default: begin\n            next_state = 2'b00; // Default to state A\n            out = 1'b0;\n        end\n    endcase\nend"
+    }
+]

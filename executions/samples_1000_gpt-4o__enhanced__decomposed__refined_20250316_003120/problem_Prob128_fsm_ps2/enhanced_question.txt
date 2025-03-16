@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal, 1 bit, positive edge-triggered
+  - `reset`: Synchronous reset, active high, 1 bit
+  - `in`: Input data byte, 8 bits wide, where `in[0]` is the least significant bit
+
+- Output Ports:
+  - `done`: Message receipt indicator, 1 bit, asserted high for one clock cycle after each complete message is received
+
+Functional Description:
+- The module implements a finite state machine (FSM) to identify and process messages in a continuous byte stream adhering to the PS/2 mouse protocol, where each message consists of three bytes.
+- The FSM will:
+  1. Discard bytes until finding a byte where `in[3]` equals 1, identifying the start of a new message.
+  2. Count this byte as the first byte of a three-byte message.
+  3. Continue receiving the next two bytes.
+  4. Assert the `done` signal high for one clock cycle immediately following the successful receipt of the third byte.
+
+FSM Behavior:
+- Initial State: The FSM begins in an idle state, waiting for a byte with `in[3] = 1`.
+- State Transition:
+  - From the idle state, transition to a "Receiving" state upon detecting `in[3] = 1`.
+  - In the "Receiving" state, count the subsequent bytes until three bytes are received.
+  - Transition back to the idle state after asserting `done` for one cycle.
+
+Clock and Reset:
+- The module's sequential logic is triggered on the positive edge of the `clk`.
+- The `reset` signal is synchronous and resets the FSM to its initial state when high.
+- All internal registers and state variables should initialize to a known state upon reset, ensuring deterministic behavior.
+
+Edge Cases:
+- The FSM should handle streams with no valid starting byte (`in[3] = 1`) by remaining in the idle state.
+- If a reset occurs during message processing, the FSM should return to the initial state immediately on the next clock cycle.
+
+Signal Dependencies:
+- The `done` signal depends on the internal state of the FSM and is only asserted once the third byte of a message is successfully processed.
+- Ensure no race conditions by clearly separating state transitions and output assertions in the FSM design.
+</ENHANCED_SPEC>

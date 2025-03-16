@@ -1,0 +1,65 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - input  d (8 bits)
+ - output q (8 bits)
+
+The module should include 8 D flip-flops with active high synchronous
+reset setting the output to zero. All DFFs should be triggered by the
+positive edge of clk.
+
+Here is the enhanced specification which might be useful to you:
+                ### Module Interface
+
+```verilog
+module TopModule (
+    input wire clk,            // Clock signal, active on positive edge
+    input wire reset,          // Active high synchronous reset
+    input wire [7:0] d,        // 8-bit input data bus (unsigned)
+    output reg [7:0] q         // 8-bit output data bus (unsigned)
+);
+```
+
+### Behavioral Specification
+
+- **D Flip-Flops:**
+  - The module contains 8 D flip-flops.
+  - Each flip-flop corresponds to a bit in the 8-bit registers `d` (input) and `q` (output).
+
+- **Reset Behavior:**
+  - The reset is synchronous and active high.
+  - Upon activation of the reset signal, all flip-flops will set their outputs (`q`) to 0 at the next positive edge of the clock.
+  - Ensure that reset takes precedence over data (`d`) loading.
+
+- **Initial State:**
+  - At power-up, before any clock or reset signals, the initial state of `q` is undefined until the first reset is asserted.
+
+### Timing and Clocking
+
+- **Clock Signal:**
+  - The module is sensitive to the rising edge of the `clk` signal.
+  - Data (`d`) is captured and stored into `q` on the rising edge of `clk` unless the reset is active.
+
+### Implementation Notes
+
+- **Bit-Ordering:**
+  - Bit[0] is considered the least significant bit (LSB) and Bit[7] is the most significant bit (MSB) for both `d` and `q`.
+
+- **Signal Precedence:**
+  - The reset operation has higher precedence over the data capture operation. This means that if `reset` is high during the positive edge of the clock, `q` will be reset to 0 regardless of the value of `d`.
+
+- **Boundary Conditions:**
+  - Ensure the module behaves consistently across all possible input combinations and reset scenarios.
+
+### Example Usage
+
+- To use this module, connect the `clk` and `reset` signals from your system clock and reset logic, and drive `d` with the data you wish to store. Monitor `q` to observe the stored data post-clock edge.
+
+```verilog
+endmodule
+```
+                

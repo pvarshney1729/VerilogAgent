@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input: `x` (1-bit, unsigned)
+- Input: `y` (1-bit, unsigned)
+- Output: `z` (1-bit, unsigned)
+
+Timing and Behavioral Specification:
+- The output `z` is determined by the current values of inputs `x` and `y` according to the waveform pattern described below.
+- The module operates on combinational logic; there are no clock or sequential elements involved.
+
+Truth Table (derived from simulation waveform):
+| x | y | z |
+|---|---|---|
+| 0 | 0 | 1 |
+| 1 | 0 | 0 |
+| 0 | 1 | 0 |
+| 1 | 1 | 1 |
+
+Operation Description:
+- When both `x` and `y` are 0, the output `z` is 1.
+- When `x` is 1 and `y` is 0, the output `z` is 0.
+- When `x` is 0 and `y` is 1, the output `z` is 0.
+- When both `x` and `y` are 1, the output `z` is 1.
+
+Additional Notes:
+- Bit indexing convention: bit[0] refers to the least significant bit.
+- Ensure that the combinational logic implements the above truth table accurately.
+- All operations should consider potential race conditions, though none are expected in this simple combinational logic.
+- The design should handle all possible input combinations and ensure deterministic output.
+</ENHANCED_SPEC>

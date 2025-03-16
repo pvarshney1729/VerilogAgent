@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic x,\n    output logic z\n);\n    typedef enum logic [2:0] {\n        S000 = 3'b000,\n        S001 = 3'b001,\n        S010 = 3'b010,\n        S011 = 3'b011,\n        S100 = 3'b100\n    } state_t;\n\n    state_t current_state, next_state;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= S000; // Synchronous reset to state 000\n        end else begin\n            current_state <= next_state; // Update current state\n        end\n    end\n\n    always @(*) begin\n        case (current_state)\n            S000: next_state = (x == 1'b0) ? S000 : S001;\n            S001: next_state = (x == 1'b0) ? S001 : S100;\n            S010: next_state = (x == 1'b0) ? S010 : S001;\n            S011: next_state = (x == 1'b0) ? S001 : S010;\n            S100: next_state = (x == 1'b0) ? S011 : S100;\n            default: next_state = S000; // Default case\n        endcase\n    end\n\n    assign z = (current_state == S011) || (current_state == S100);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "e"
+    }
+}

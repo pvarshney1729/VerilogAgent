@@ -1,0 +1,58 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+**Port Definitions:**
+- Input Ports:
+  - `input wire d` : Single-bit input signal.
+  - `input wire done_counting` : Single-bit input signal.
+  - `input wire ack` : Single-bit input signal.
+  - `input wire [9:0] state` : 10-bit input representing the current state using one-hot encoding.
+
+- Output Ports:
+  - `output wire B3_next` : Single-bit output, asserted when the next state is B3.
+  - `output wire S_next` : Single-bit output, asserted when the next state is S.
+  - `output wire S1_next` : Single-bit output, asserted when the next state is S1.
+  - `output wire Count_next` : Single-bit output, asserted when the next state is Count.
+  - `output wire Wait_next` : Single-bit output, asserted when the next state is Wait.
+  - `output wire done` : Single-bit output, indicates completion of a cycle.
+  - `output wire counting` : Single-bit output, indicates counting is in progress.
+  - `output wire shift_ena` : Single-bit output, enables shift operation in states B0, B1, B2, and B3.
+
+**State Machine Description:**
+- This is a Moore state machine with three inputs (`d`, `done_counting`, `ack`) and three main outputs (`shift_ena`, `counting`, `done`).
+- The state machine uses one-hot encoding for state representation:
+  - `S` = 10'b0000000001
+  - `S1` = 10'b0000000010
+  - `S11` = 10'b0000000100
+  - `S110` = 10'b0000001000
+  - `B0` = 10'b0000010000
+  - `B1` = 10'b0000100000
+  - `B2` = 10'b0001000000
+  - `B3` = 10'b0010000000
+  - `Count` = 10'b0100000000
+  - `Wait` = 10'b1000000000
+
+**State Transitions and Output Logic:**
+- Initial State: On reset (assumed synchronous), the state machine starts in state `S`.
+- State Transitions:
+  - `S` transitions to `S` if `d=0`, to `S1` if `d=1`.
+  - `S1` transitions to `S` if `d=0`, to `S11` if `d=1`.
+  - `S11` transitions to `S110` if `d=0`, remains in `S11` if `d=1`.
+  - `S110` transitions to `S` if `d=0`, to `B0` if `d=1`.
+  - `B0` transitions to `B1`, `B1` transitions to `B2`, `B2` transitions to `B3`, and `B3` transitions to `Count` sequentially.
+  - `Count` remains in `Count` if `done_counting=0`, transitions to `Wait` if `done_counting=1`.
+  - `Wait` remains in `Wait` if `ack=0`, transitions to `S` if `ack=1`.
+
+- Output Logic:
+  - `shift_ena` is asserted (1) in states `B0`, `B1`, `B2`, and `B3`.
+  - `counting` is asserted (1) in state `Count`.
+  - `done` is asserted (1) in state `Wait`.
+
+**Signal Logic Equations:**
+- Derive next state and output logic equations based on the above transitions and one-hot encoding.
+- Ensure no race conditions by carefully managing the state transitions, especially between sequential states like `B0` to `B1`.
+
+**Additional Notes:**
+- All flip-flops and registers are assumed to initialize to their respective states upon a synchronous reset.
+- Bit indexing follows the convention where `bit[0]` refers to the least significant bit (LSB).
+</ENHANCED_SPEC>

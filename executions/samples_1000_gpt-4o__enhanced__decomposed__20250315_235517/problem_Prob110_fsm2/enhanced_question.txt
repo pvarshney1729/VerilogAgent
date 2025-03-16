@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `clk`: Clock signal, 1-bit. This signal is used as the primary clock for state transitions in the sequential logic.
+  - `areset`: Asynchronous reset signal, 1-bit. Active high. This signal resets the state machine to the initial state (OFF) regardless of the clock.
+  - `j`: Input signal, 1-bit. Used to determine state transitions from the OFF state.
+  - `k`: Input signal, 1-bit. Used to determine state transitions from the ON state.
+- Outputs:
+  - `out`: Output signal, 1-bit. Represents the current state output of the state machine.
+
+Conventions:
+- Bit indexing is not applicable as all inputs and outputs are single-bit signals.
+
+State Machine Description:
+- Type: Moore state machine with two states: OFF and ON.
+- Initial State: OFF
+- States:
+  - OFF: State output `out` is 0.
+    - Transition to ON when `j` is 1.
+    - Remain in OFF when `j` is 0.
+  - ON: State output `out` is 1.
+    - Transition to OFF when `k` is 1.
+    - Remain in ON when `k` is 0.
+
+Reset Behavior:
+- The reset is an active-high asynchronous reset, meaning the state machine will transition to the initial state (OFF) immediately when `areset` is asserted, regardless of the clock signal.
+
+Clock and Timing:
+- State transitions occur on the rising edge of the `clk` signal.
+- The state machine is sensitive to `j` and `k` inputs only at the rising edge of `clk`, except when `areset` is asserted.
+
+Initial Values:
+- Upon power-up and when `areset` is asserted, the state machine initializes to the OFF state with `out` set to 0.
+
+Edge Cases:
+- If `areset` is deasserted while `clk` is low, the state transition will not occur until the next rising edge of `clk`.
+- Simultaneous assertion of `areset` and rising edge of `clk` will prioritize the reset condition, setting the state to OFF.
+
+Note:
+- Ensure there are no race conditions by synchronizing all state transitions to the clock edge.
+- State transitions are determined solely by the current state and input conditions as described above.
+</ENHANCED_SPEC>

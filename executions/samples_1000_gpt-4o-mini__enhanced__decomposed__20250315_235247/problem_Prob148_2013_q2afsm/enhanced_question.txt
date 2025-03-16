@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Input/Output Ports:
+- input clk: Clock signal, positive edge-triggered.
+- input resetn: Active-low synchronous reset signal.
+- input [2:0] r: Request signals from three devices, where r[0] is the highest priority and r[2] is the lowest priority. bit[0] is the least significant bit.
+- output [2:0] g: Grant signals for the three devices. g[0] corresponds to r[0], g[1] to r[1], and g[2] to r[2].
+
+FSM Description:
+- Initial State: Upon reset (resetn = 0), the FSM synchronously initializes to state A.
+- State A: 
+  - Transition to state B if r[0] = 1, regardless of r[1] or r[2].
+  - Transition to state C if r[0] = 0 and r[1] = 1, regardless of r[2].
+  - Transition to state D if r[0] = 0, r[1] = 0, and r[2] = 1.
+  - Remain in state A if r[0] = 0, r[1] = 0, and r[2] = 0.
+- State B: 
+  - Remain in state B if r[0] = 1. g[0] is set to 1.
+  - Transition to state A if r[0] = 0.
+- State C:
+  - Remain in state C if r[1] = 1. g[1] is set to 1.
+  - Transition to state A if r[1] = 0.
+
+Priority System:
+- Priority order: r[0] > r[1] > r[2].
+- Device 0 (r[0]) has the highest priority, followed by device 1 (r[1]), and device 2 (r[2]) has the lowest priority.
+
+Implementation Guidelines:
+- Use separate always blocks for updating the state (state flip-flops) and for defining the next state logic (state table).
+- State transitions and outputs should be described in a way that prevents race conditions.
+- The grant signals (g) should be updated either through continuous assignment or an always block, depending on implementation preference.
+- Assign unique state codes for each state, ensuring clarity in implementation.
+
+Edge Cases:
+- Ensure the FSM behaves correctly when multiple requests are present simultaneously by adhering to the priority order.
+- Verify that all state transitions and output conditions are met, particularly during reset and when transitioning between states.
+
+Assumptions:
+- All sequential logic is triggered on the positive edge of the clock.
+- The reset signal is synchronous, and all registers and flip-flops should be initialized to their correct values upon reset.
+</ENHANCED_SPEC>

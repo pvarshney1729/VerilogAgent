@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, in and output port out.",
+        "source": "Implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input clk,\n    input reset,\n    input in,\n    output reg out\n);\n    typedef enum logic [1:0] {B, A} state_t;\n    state_t current_state, next_state;\n\n    always_ff @(posedge clk or posedge reset) begin\n        if (reset) \n            current_state <= B;\n        else \n            current_state <= next_state;\n    end\n\n    always_comb begin\n        case (current_state)\n            B: begin\n                out = 1;\n                if (in) \n                    next_state = B;\n                else \n                    next_state = A;\n            end\n            A: begin\n                out = 0;\n                if (in) \n                    next_state = A;\n                else \n                    next_state = B;\n            end\n        endcase\n    end\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare a register to hold the current state of the FSM, which can be either state A or state B.",
+        "source": "Implement the following Moore state machine with two states, one input, and one output.",
+        "implementation": "reg current_state; // 0 for state A, 1 for state B"
+    },
+    {
+        "id": "3",
+        "content": "Implement the synchronous reset logic to set the state to B when reset is high.",
+        "source": "The reset state is B and reset is active-high synchronous.",
+        "implementation": "always @(posedge clk) begin\n    if (reset) begin\n        state <= B; // Set state to B on synchronous reset\n    end\n    // State transition logic goes here\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement the state transition logic based on the current state and input signal in.",
+        "source": "B (out=1) --in=0--> A, B (out=1) --in=1--> B, A (out=0) --in=0--> B, A (out=0) --in=1--> A.",
+        "implementation": "reg state, next_state;\n  \n  localparam A = 1'b0, B = 1'b1;\n\n  always @(posedge clk or posedge reset) begin\n    if (reset) begin\n      state <= B;\n    end else begin\n      state <= next_state;\n    end\n  end\n\n  always @(*) begin\n    case (state)\n      B: begin\n        if (in) begin\n          next_state = B;\n        end else begin\n          next_state = A;\n        end\n      end\n      A: begin\n        if (in) begin\n          next_state = A;\n        end else begin\n          next_state = B;\n        end\n      end\n      default: next_state = B; // Default case to handle unexpected states\n    endcase\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output logic based on the current state of the FSM.",
+        "source": "B (out=1), A (out=0)",
+        "implementation": "always @(posedge clk or posedge reset) begin\n    if (reset) begin\n        out <= 1'b1; // State B\n    end else begin\n        case (current_state)\n            B: out <= 1'b1; // State B\n            A: out <= 1'b0; // State A\n            default: out <= 1'b0; // Default case\n        endcase\n    end\nend"
+    }
+]

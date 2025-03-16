@@ -1,0 +1,175 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows a finite state machine (FSM) approach to handle the serial communication protocol described. The FSM consists of five states: IDLE, START, DATA, STOP, and ERROR. Here's a step-by-step breakdown of the implementation:
+
+1. **State Encoding**: The states are encoded using a 3-bit logic vector. This allows for up to 8 different states, though only 5 are used in this design.
+
+2. **State Transition Logic**: The `always_ff` block is used to update the current state and bit count on the positive edge of the clock. The synchronous reset is implemented by checking the `reset` signal within this block, ensuring that the FSM returns to the IDLE state and the bit count is reset to zero when `reset` is high.
+
+3. **Next State Logic**: The `always_comb` block determines the next state based on the current state and input conditions. The `done` signal is also set within this block, indicating when a byte has been correctly received.
+
+   - **IDLE**: The FSM waits for a start bit (logic 0) to transition to the START state.
+   - **START**: The FSM transitions to the DATA state to begin receiving the data bits.
+   - **DATA**: The FSM counts the received data bits. Once 8 bits are received, it transitions to the STOP state.
+   - **STOP**: The FSM checks for a stop bit (logic 1). If correct, it transitions back to IDLE and sets `done` high. If incorrect, it transitions to the ERROR state.
+   - **ERROR**: The FSM waits for the line to return to idle (logic 1) before transitioning back to IDLE.
+
+4. **Bit Count**: A 4-bit counter is used to track the number of data bits received. This counter is incremented during the DATA state and reset in other states.
+
+5. **Output Logic**: The `done` signal is set high when a byte is correctly received, specifically during the transition from STOP to IDLE with a correct stop bit.
+
+This design ensures that the FSM correctly identifies and processes the start bit, 8 data bits, and stop bit, handling errors by transitioning to an ERROR state when necessary.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        IDLE        = 3'b000,
+        START       = 3'b001,
+        DATA        = 3'b010,
+        STOP        = 3'b011,
+        ERROR       = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [3:0] bit_count;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 4'd0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == DATA) begin
+                bit_count <= bit_count + 1;
+            end else begin
+                bit_count <= 4'd0;
+            end
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        next_state = current_state;
+        done = 1'b0;
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) begin
+                    next_state = START;
+                end
+            end
+            START: begin
+                next_state = DATA;
+            end
+            DATA: begin
+                if (bit_count == 4'd8) begin
+                    next_state = STOP;
+                end
+            end
+            STOP: begin
+                if (in == 1'b1) begin
+                    next_state = IDLE;
+                    done = 1'b1;
+                end else begin
+                    next_state = ERROR;
+                end
+            end
+            ERROR: begin
+                if (in == 1'b1) begin
+                    next_state = IDLE;
+                end
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        IDLE        = 3'b000,
+        START       = 3'b001,
+        DATA        = 3'b010,
+        STOP        = 3'b011,
+        ERROR       = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [3:0] bit_count;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 4'd0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == DATA) begin
+                bit_count <= bit_count + 1;
+            end else begin
+                bit_count <= 4'd0;
+            end
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        next_state = current_state;
+        done = 1'b0;
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) begin
+                    next_state = START;
+                end
+            end
+            START: begin
+                next_state = DATA;
+            end
+            DATA: begin
+                if (bit_count == 4'd8) begin
+                    next_state = STOP;
+                end
+            end
+            STOP: begin
+                if (in == 1'b1) begin
+                    next_state = IDLE;
+                    done = 1'b1;
+                end else begin
+                    next_state = ERROR;
+                end
+            end
+            ERROR: begin
+                if (in == 1'b1) begin
+                    next_state = IDLE;
+                end
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule

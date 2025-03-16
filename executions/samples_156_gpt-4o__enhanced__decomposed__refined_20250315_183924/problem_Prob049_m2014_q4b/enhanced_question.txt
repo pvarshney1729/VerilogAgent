@@ -1,0 +1,63 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  ar
+ - input  d
+ - output q
+
+The module should implement a D flip flop, positive edge triggered, with
+an asynchronous reset "ar".
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: TopModule
+
+**Port Interface**:
+- `input wire clk`: Clock signal, positive edge-triggered.
+- `input wire async_reset`: Asynchronous reset signal, active high.
+- `input wire d`: Data input.
+- `output reg q`: Data output.
+
+**Behavior Description**:
+- The module implements a positive edge-triggered D flip-flop with an asynchronous reset.
+- On the positive edge of `clk`, if `async_reset` is not active, the value of `d` is latched to `q`.
+- If `async_reset` is active at any time, `q` is asynchronously reset to '0', regardless of the clock.
+
+**Timing Behavior**:
+- The flip-flop samples the `d` input on the rising edge of `clk`.
+- The output `q` changes state on the rising edge of `clk`, conditioned by the absence of an active `async_reset`.
+
+**Reset Behavior**:
+- `async_reset` is active high and initializes `q` to '0'.
+- The reset is asynchronous, meaning it takes priority over the clock and can reset `q` independently of `clk`.
+
+**Initial State**:
+- Upon power-up or reset, the initial state of `q` shall be '0'.
+
+**Implementation Notes**:
+- Ensure that the asynchronous reset logic is implemented carefully to avoid metastability issues.
+- The module should be tested for correct behavior under varying conditions of `clk` and `async_reset` to ensure reliability.
+
+**Verilog Code Skeleton**:
+```verilog
+module TopModule(
+    input wire clk,
+    input wire async_reset,
+    input wire d,
+    output reg q
+);
+
+// Asynchronous reset, positive edge-triggered D flip-flop
+always @(posedge clk or posedge async_reset) begin
+    if (async_reset) begin
+        q <= 1'b0;
+    end else begin
+        q <= d;
+    end
+end
+
+endmodule
+```
+                

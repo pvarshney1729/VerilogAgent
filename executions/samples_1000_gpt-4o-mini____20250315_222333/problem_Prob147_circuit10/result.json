@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n    logic ff;\n\n    always @(posedge clk) begin\n        if (a && !b) begin\n            ff <= 1'b1;\n        end else if (!a && b) begin\n            ff <= 1'b0;\n        end\n    end\n\n    assign state = ff;\n    assign q = (ff && !b) ? 1'b0 : ff;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 99,
+        "passfail": "R"
+    }
+}

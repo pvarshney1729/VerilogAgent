@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+The module named `TopModule` should have the following interface, with all input and output ports being 1-bit wide unless otherwise specified:
+
+- `input  clk`: Clock input signal for triggering sequential logic operations.
+- `input  reset`: Active-high synchronous reset signal which sets the FSM to the initial state A upon the next clock edge.
+- `input  in`: 1-bit input signal for state transitions.
+- `output out`: 1-bit output signal driven by the current state.
+
+The module will implement a Moore state machine characterized by four distinct states: A, B, C, and D. The state transitions and output behavior are defined by the following table:
+
+| Current State | Next State (in=0) | Next State (in=1) | Output |
+|---------------|-------------------|-------------------|--------|
+| A             | A                 | B                 | 0      |
+| B             | C                 | B                 | 0      |
+| C             | A                 | D                 | 0      |
+| D             | C                 | B                 | 1      |
+
+- The state machine must initialize to state A when the `reset` signal is asserted and release on the next positive edge of `clk`.
+- All state transitions occur on the rising edge of `clk`.
+- The outputs are only dependent on the current state, characteristic of a Moore machine.
+- The reset is synchronous, meaning that the FSM will transition to state A only after the rising edge of `clk` when `reset` is high.
+- Each state is encoded using the smallest bit width necessary to represent four states (2 bits), with the following encoding:
+  - State A: 2'b00
+  - State B: 2'b01
+  - State C: 2'b10
+  - State D: 2'b11
+
+Edge cases and considerations:
+- Ensure that all transitions and outputs are explicitly defined for each state and input condition.
+- The FSM should handle any undefined states by transitioning to state A upon reset.
+- Bit indexing convention: bit[0] is the least significant bit (LSB).
+
+The implementation should ensure that all sequential elements, such as flip-flops, have explicitly defined initial values when reset is asserted.
+</ENHANCED_SPEC>

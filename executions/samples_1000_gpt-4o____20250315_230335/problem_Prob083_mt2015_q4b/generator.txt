@@ -1,0 +1,91 @@
+Generated Response:
+
+<Question>
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  x
+ - input  y
+ - output z
+
+The module can be described by the following simulation waveform:
+
+  time  x  y  z
+  0ns   0  0  1
+  5ns   0  0  1
+  10ns  0  0  1
+  15ns  0  0  1
+  20ns  0  0  1
+  25ns  1  0  0
+  30ns  1  0  0
+  35ns  0  1  0
+  40ns  0  1  0
+  45ns  1  1  1
+  50ns  1  1  1
+  55ns  0  0  1
+  60ns  0  1  0
+  65ns  0  1  0
+  70ns  1  1  1
+  75ns  0  1  0
+  80ns  0  1  0
+  85ns  0  1  0
+  90ns  1  0  0
+</Question>
+
+<Guidelines>
+- Ensure synchronous reset is implemented as specified.
+- Initialize all flip-flops and inputs to zero in simulation, unless provided the specified initial values in the question.s
+- Adhere strictly to the provided interface and signal names.
+- Generate results in the specified cycle timing.
+- Handle bitwise operations and signal broadcasting correctly.
+</Guidelines>
+
+<Coding Conventions>
+ - Declare all ports and signals as logic; do not to use wire or reg.
+ - For combinational logic with an always block do not explicitly specify
+   the sensitivity list; instead use always @(*).
+ - All sized numeric constants must have a size greater than zero
+   (e.g, 0'b0 is not a valid expression).
+ - An always block must read at least one signal otherwise it will never
+   be executed; use an assign statement instead of an always block in
+   situations where there is no need to read any signals.
+ - if the module uses a synchronous reset signal, this means the reset
+   signal is sampled with respect to the clock. When implementing a
+   synchronous reset signal, do not include posedge reset in the
+   sensitivity list of any sequential always block.
+</Coding Conventions>
+
+<REASONING>
+The waveform provided describes the behavior of the output `z` based on the inputs `x` and `y`. From the waveform, we can deduce the following logic:
+- When both `x` and `y` are 0, `z` is 1.
+- When `x` is 1 and `y` is 0, `z` is 0.
+- When `x` is 0 and `y` is 1, `z` is 0.
+- When both `x` and `y` are 1, `z` is 1.
+
+This behavior can be implemented using a simple combinational logic expression. Specifically, `z` is 1 when either both `x` and `y` are 0, or both are 1. This can be expressed as `z = ~(x ^ y)`, which is the XNOR operation. This logic will be implemented using an assign statement as it is purely combinational.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic x,
+    input logic y,
+    output logic z
+);
+    // Implementing the logic based on the waveform
+    assign z = ~(x ^ y);
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic x,
+    input logic y,
+    output logic z
+);
+    // Implementing the logic based on the waveform
+    assign z = ~(x ^ y);
+endmodule

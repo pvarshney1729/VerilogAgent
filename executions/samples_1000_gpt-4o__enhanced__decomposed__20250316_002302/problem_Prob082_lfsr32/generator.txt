@@ -1,0 +1,55 @@
+Generated Response:
+
+<REASONING>
+To implement the 32-bit Galois LFSR as specified, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. The input ports are `clk` and `reset`, and the output port is `q`, which is 32 bits wide.
+
+2. **Signal Declaration**: Use `logic` for declaring the output `q` to adhere to the coding conventions.
+
+3. **Synchronous Reset**: Implement a synchronous reset that sets the output `q` to `32'h1` when the `reset` signal is high. This reset should be sampled on the positive edge of the clock.
+
+4. **LFSR Logic**: Implement the Galois LFSR logic. The LFSR should shift right, and the new value of `q[31]` should be the XOR of the current `q[0]` with the taps at positions 31, 21, 1, and 0.
+
+5. **Sequential Logic**: Use an `always_ff` block to describe the sequential logic that updates the LFSR state on the positive edge of the clock.
+
+By following these steps, we ensure that the module meets the specification and adheres to the provided guidelines and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            q <= 32'h1;
+        end else begin
+            q <= {q[30:0], q[31] ^ q[21] ^ q[1] ^ q[0]};
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            q <= 32'h1;
+        end else begin
+            q <= {q[30:0], q[31] ^ q[21] ^ q[1] ^ q[0]};
+        end
+    end
+
+endmodule

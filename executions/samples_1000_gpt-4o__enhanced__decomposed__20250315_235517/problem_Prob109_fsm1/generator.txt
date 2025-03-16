@@ -1,0 +1,129 @@
+Generated Response:
+
+<REASONING>
+To implement the Moore state machine as specified, we need to define two states, A and B, with specific transitions based on the input signal 'in'. The machine should asynchronously reset to state B when 'areset' is high. The output 'out' is determined solely by the current state: it is 0 in state A and 1 in state B.
+
+1. **State Encoding**: We will use a single bit to represent the states, where 0 represents state A and 1 represents state B.
+2. **Asynchronous Reset**: The state machine should transition to state B when 'areset' is high, regardless of the clock.
+3. **State Transition Logic**: 
+   - From state B, if 'in' is 0, transition to state A; if 'in' is 1, remain in state B.
+   - From state A, if 'in' is 0, transition to state B; if 'in' is 1, remain in state A.
+4. **Output Logic**: The output 'out' is 0 in state A and 1 in state B.
+5. **Coding Conventions**: Use `logic` for all signals, and `always @(*)` for combinational logic. The sequential block should only include `posedge clk` and `areset` for asynchronous reset.
+
+The implementation will follow these steps to ensure the correct behavior of the state machine.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        STATE_A = 1'b0,
+        STATE_B = 1'b1
+    } state_t;
+
+    // State register
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (in)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_B: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_B; // Default to state B
+        endcase
+    end
+
+    // Sequential logic with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            current_state <= STATE_B;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic for Moore machine
+    always @(*) begin
+        case (current_state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b0; // Default case to handle any unexpected state
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        STATE_A = 1'b0,
+        STATE_B = 1'b1
+    } state_t;
+
+    // State register
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (in)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_B: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_B; // Default to state B
+        endcase
+    end
+
+    // Sequential logic with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            current_state <= STATE_B;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic for Moore machine
+    always @(*) begin
+        case (current_state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b0; // Default case to handle any unexpected state
+        endcase
+    end
+
+endmodule

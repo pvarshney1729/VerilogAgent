@@ -1,0 +1,141 @@
+Generated Response:
+
+Here's the Verilog code for the `TopModule` implementing the specified finite-state machine:
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    input  wire x,
+    output reg  z
+);
+
+    // State encoding
+    reg [2:0] state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (state)
+            3'b000: begin
+                if (x == 1'b0)
+                    next_state = 3'b000;
+                else
+                    next_state = 3'b001;
+                z = 1'b0;
+            end
+            3'b001: begin
+                if (x == 1'b0)
+                    next_state = 3'b001;
+                else
+                    next_state = 3'b100;
+                z = 1'b0;
+            end
+            3'b010: begin
+                if (x == 1'b0)
+                    next_state = 3'b010;
+                else
+                    next_state = 3'b001;
+                z = 1'b0;
+            end
+            3'b011: begin
+                if (x == 1'b0)
+                    next_state = 3'b001;
+                else
+                    next_state = 3'b010;
+                z = 1'b1;
+            end
+            3'b100: begin
+                if (x == 1'b0)
+                    next_state = 3'b011;
+                else
+                    next_state = 3'b100;
+                z = 1'b1;
+            end
+            default: begin
+                next_state = 3'b000;
+                z = 1'b0;
+            end
+        endcase
+    end
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset)
+            state <= 3'b000;
+        else
+            state <= next_state;
+    end
+
+endmodule
+```
+
+This module defines a finite-state machine with the specified state transitions and output logic. The state transitions are determined by the input `x`, and the output `z` is set according to the current state. The state register is updated on the positive edge of the clock, and the reset is synchronous and active high, setting the state to `000`.
+
+Generated Code:
+
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    input  wire x,
+    output reg  z
+);
+
+    // State encoding
+    reg [2:0] state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (state)
+            3'b000: begin
+                if (x == 1'b0)
+                    next_state = 3'b000;
+                else
+                    next_state = 3'b001;
+                z = 1'b0;
+            end
+            3'b001: begin
+                if (x == 1'b0)
+                    next_state = 3'b001;
+                else
+                    next_state = 3'b100;
+                z = 1'b0;
+            end
+            3'b010: begin
+                if (x == 1'b0)
+                    next_state = 3'b010;
+                else
+                    next_state = 3'b001;
+                z = 1'b0;
+            end
+            3'b011: begin
+                if (x == 1'b0)
+                    next_state = 3'b001;
+                else
+                    next_state = 3'b010;
+                z = 1'b1;
+            end
+            3'b100: begin
+                if (x == 1'b0)
+                    next_state = 3'b011;
+                else
+                    next_state = 3'b100;
+                z = 1'b1;
+            end
+            default: begin
+                next_state = 3'b000;
+                z = 1'b0;
+            end
+        endcase
+    end
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset)
+            state <= 3'b000;
+        else
+            state <= next_state;
+    end
+
+endmodule
+
+// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly

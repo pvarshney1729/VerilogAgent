@@ -1,0 +1,28 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and has the following interface specifications:
+
+- **Input Ports:**
+  - `clk`: 1-bit input, representing the clock signal. The module's sequential logic should be triggered on the positive edge of this clock signal.
+  - `reset`: 1-bit input, representing the synchronous reset signal. This reset is active high.
+
+- **Output Ports:**
+  - `q`: 32-bit output, representing the current state of the LFSR. Each bit of `q` is indexed from 0 to 31, with `q[0]` being the least significant bit (LSB) and `q[31]` being the most significant bit (MSB).
+
+**Functional Description:**
+
+The module implements a 32-bit Galois Linear Feedback Shift Register (LFSR). The operation of the LFSR is defined as follows:
+
+- **Shift Register Behavior:** On each positive edge of the clock, if the reset signal is not asserted, the LFSR shifts all bits to the right by one position.
+- **Tap Connections and Feedback Calculation:** The taps are at bit positions 32, 22, 2, and 1, translating to indices `q[31]`, `q[21]`, `q[1]`, and `q[0]` respectively. The feedback value used to calculate the next state of the LSB `q[0]` is the XOR of the current LSB `q[0]` with the bits from the tap positions.
+
+**Reset Behavior:**
+
+- **Synchronous Reset:** When the reset signal is asserted (logic high), on the next positive clock edge, the output `q` is reset to a value of `32'h1`, meaning only `q[0]` is set to logic high and all other bits are set to logic low.
+
+**Edge Cases and Initial State:**
+
+- Upon module initialization or reset, the LFSR should be in a known state with `q` initialized to `32'h1`.
+- Ensure the LFSR does not enter a repeating cycle prematurely or enter an all-zero state, which is not desired in LFSR operation.
+
+The output `q` reflects the current state of the LFSR and changes according to the described feedback and shift mechanism on each positive clock edge, provided the reset is not active.
+</ENHANCED_SPEC>

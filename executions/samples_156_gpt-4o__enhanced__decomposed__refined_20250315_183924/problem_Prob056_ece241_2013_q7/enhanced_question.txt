@@ -1,0 +1,85 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  j
+ - input  k
+ - output Q
+
+The module should implement a JK flip-flop with the following truth
+table. Note: Qold is the output of the flip-flop before the positive
+clock edge.
+
+  J | K | Q
+  0 | 0 | Qold
+  0 | 1 | 0
+  1 | 0 | 1
+  1 | 1 | ~Qold
+
+Here is the enhanced specification which might be useful to you:
+                **Analysis of Ambiguities and Issues:**
+
+1. **Signal Interfaces:**
+   - The specification states that ports are one bit unless specified, but it doesn't explicitly confirm the one-bit width for each port, leading to potential misunderstandings.
+
+2. **Clock and Edge Detection:**
+   - The specification mentions "before the positive clock edge" but does not specify the behavior on the positive edge, which is crucial for a JK flip-flop.
+
+3. **Reset Behavior:**
+   - There is no mention of a reset signal, its type (synchronous or asynchronous), or the initial state of the JK flip-flop upon reset.
+
+4. **Bit-ordering and Indexing:**
+   - Although not directly an issue here due to single-bit signals, explicit confirmation of bit-ordering conventions can be beneficial for consistency.
+
+5. **Timing Behavior:**
+   - The timing relationship and the sequential nature of the JK flip-flop are not fully described, such as which clock edge triggers state changes.
+
+6. **Initial State:**
+   - The initial state of Q is not specified, which could lead to uncertain behavior during the first clock cycle.
+
+7. **Boundary Conditions:**
+   - There is no explicit mention of how the module behaves when inputs change simultaneously with the clock edge.
+
+**<ENHANCED_SPEC>**
+
+**Module Name:** TopModule
+
+**Interface:**
+- **Inputs:**
+  - `input wire clk;` // Clock signal, active on the rising edge.
+  - `input wire j;`   // J input for the JK flip-flop.
+  - `input wire k;`   // K input for the JK flip-flop.
+
+- **Outputs:**
+  - `output reg Q;`   // Output of the JK flip-flop.
+
+**Behavior:**
+- The module implements a JK flip-flop with the following truth table:
+  - **J = 0, K = 0:** Q remains unchanged (Q = Qold).
+  - **J = 0, K = 1:** Q is set to 0.
+  - **J = 1, K = 0:** Q is set to 1.
+  - **J = 1, K = 1:** Q toggles its current state (Q = ~Qold).
+
+**Timing:**
+- The JK flip-flop updates its state on the rising edge of the `clk` signal.
+- The output `Q` should reflect the new state immediately following the positive clock edge.
+
+**Reset Behavior:**
+- Add a reset signal:
+  - `input wire reset;` // Asynchronous reset signal, active high.
+- When `reset` is high, `Q` is reset to 0 irrespective of `clk`, `j`, and `k` values.
+
+**Initial State:**
+- On reset, the initial state of `Q` is defined as 0.
+
+**Implementation Notes:**
+- Ensure the flip-flop is edge-triggered, with transitions occurring only on the rising edge of `clk`.
+- If `reset` is high, the flip-flop's output `Q` is immediately set to 0 and remains 0 regardless of other inputs until `reset` is low.
+
+**Boundary Conditions:**
+- The behavior when `j` and `k` change simultaneously with the clock edge is defined by the truth table and should conform to standard JK flip-flop operation.
+
+**<ENHANCED_SPEC>**
+                

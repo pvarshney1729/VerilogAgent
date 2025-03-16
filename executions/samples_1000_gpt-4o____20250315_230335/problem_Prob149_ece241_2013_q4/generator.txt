@@ -1,0 +1,158 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to design a state machine that controls the flow rate based on the water level indicated by the sensors. The sensors provide a 3-bit input `s`, where each bit represents the state of a sensor. The outputs `fr2`, `fr1`, `fr0`, and `dfr` control the flow rate valves.
+
+1. **State Representation**: The water level is represented by the sensors:
+   - Above `s[2]`: All sensors are asserted (`s[2:0] = 3'b111`).
+   - Between `s[2]` and `s[1]`: Only `s[0]` and `s[1]` are asserted (`s[2:0] = 3'b011`).
+   - Between `s[1]` and `s[0]`: Only `s[0]` is asserted (`s[2:0] = 3'b001`).
+   - Below `s[0]`: No sensors are asserted (`s[2:0] = 3'b000`).
+
+2. **Flow Rate Control**:
+   - Above `s[2]`: No flow (`fr2`, `fr1`, `fr0`, `dfr` are deasserted).
+   - Between `s[2]` and `s[1]`: Nominal flow (`fr0` asserted).
+   - Between `s[1]` and `s[0]`: Increased nominal flow (`fr0`, `fr1` asserted).
+   - Below `s[0]`: Maximum flow (`fr0`, `fr1`, `fr2` asserted).
+
+3. **Supplemental Flow Valve (`dfr`)**: This is asserted if the previous water level was lower than the current level, indicating an increase in water level.
+
+4. **Synchronous Reset**: On reset, the system should behave as if the water level is below `s[0]`, asserting all outputs.
+
+5. **Implementation**: Use a sequential always block for state updates and a combinational always block for output logic. The state machine will track the previous water level to determine if `dfr` should be asserted.
+
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [2:0] s,
+    output logic fr2,
+    output logic fr1,
+    output logic fr0,
+    output logic dfr
+);
+
+    // State to track the previous sensor state
+    logic [2:0] prev_s;
+
+    // Sequential logic to update the state
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            // On reset, assume the water level is below s[0]
+            prev_s <= 3'b000;
+        end else begin
+            prev_s <= s;
+        end
+    end
+
+    // Combinational logic to determine the outputs
+    always_comb begin
+        // Default all outputs to zero
+        fr2 = 1'b0;
+        fr1 = 1'b0;
+        fr0 = 1'b0;
+        dfr = 1'b0;
+
+        case (s)
+            3'b111: begin
+                // Above s[2], no flow
+            end
+            3'b011: begin
+                // Between s[2] and s[1], nominal flow
+                fr0 = 1'b1;
+                if (prev_s < s) begin
+                    dfr = 1'b1;
+                end
+            end
+            3'b001: begin
+                // Between s[1] and s[0], increased nominal flow
+                fr0 = 1'b1;
+                fr1 = 1'b1;
+                if (prev_s < s) begin
+                    dfr = 1'b1;
+                end
+            end
+            3'b000: begin
+                // Below s[0], maximum flow
+                fr0 = 1'b1;
+                fr1 = 1'b1;
+                fr2 = 1'b1;
+                if (prev_s < s) begin
+                    dfr = 1'b1;
+                end
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [2:0] s,
+    output logic fr2,
+    output logic fr1,
+    output logic fr0,
+    output logic dfr
+);
+
+    // State to track the previous sensor state
+    logic [2:0] prev_s;
+
+    // Sequential logic to update the state
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            // On reset, assume the water level is below s[0]
+            prev_s <= 3'b000;
+        end else begin
+            prev_s <= s;
+        end
+    end
+
+    // Combinational logic to determine the outputs
+    always_comb begin
+        // Default all outputs to zero
+        fr2 = 1'b0;
+        fr1 = 1'b0;
+        fr0 = 1'b0;
+        dfr = 1'b0;
+
+        case (s)
+            3'b111: begin
+                // Above s[2], no flow
+            end
+            3'b011: begin
+                // Between s[2] and s[1], nominal flow
+                fr0 = 1'b1;
+                if (prev_s < s) begin
+                    dfr = 1'b1;
+                end
+            end
+            3'b001: begin
+                // Between s[1] and s[0], increased nominal flow
+                fr0 = 1'b1;
+                fr1 = 1'b1;
+                if (prev_s < s) begin
+                    dfr = 1'b1;
+                end
+            end
+            3'b000: begin
+                // Below s[0], maximum flow
+                fr0 = 1'b1;
+                fr1 = 1'b1;
+                fr2 = 1'b1;
+                if (prev_s < s) begin
+                    dfr = 1'b1;
+                end
+            end
+        endcase
+    end
+
+endmodule

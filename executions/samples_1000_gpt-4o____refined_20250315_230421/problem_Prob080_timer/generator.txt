@@ -1,0 +1,67 @@
+Generated Response:
+
+```verilog
+module TopModule (
+    input clk,
+    input load,
+    input [9:0] data,
+    output reg tc
+);
+
+    reg [9:0] counter;
+
+    always @(posedge clk) begin
+        if (load) begin
+            // Load the counter with the 10-bit data
+            counter <= data;
+        end else if (counter != 10'b0) begin
+            // Decrement the counter if it's not zero
+            counter <= counter - 1;
+        end
+    end
+
+    always @(posedge clk) begin
+        // Update the terminal count output
+        if (counter == 10'b0) begin
+            tc <= 1'b1;
+        end else begin
+            tc <= 1'b0;
+        end
+    end
+
+endmodule
+```
+
+Generated Code:
+
+module TopModule (
+    input clk,
+    input load,
+    input [9:0] data,
+    output reg tc
+);
+
+    reg [9:0] counter;
+
+    always @(posedge clk) begin
+        if (load) begin
+            // Load the counter with the 10-bit data
+            counter <= data;
+        end else if (counter != 10'b0) begin
+            // Decrement the counter if it's not zero
+            counter <= counter - 1;
+        end
+    end
+
+    always @(posedge clk) begin
+        // Update the terminal count output
+        if (counter == 10'b0) begin
+            tc <= 1'b1;
+        end else begin
+            tc <= 1'b0;
+        end
+    end
+
+endmodule
+
+// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly

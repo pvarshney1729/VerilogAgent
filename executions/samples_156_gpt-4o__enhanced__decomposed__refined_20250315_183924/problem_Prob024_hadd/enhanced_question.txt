@@ -1,0 +1,49 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a
+ - input  b
+ - output sum
+ - output cout
+
+The module should implement a half adder. A half adder adds two bits
+(with no carry-in) and produces a sum and carry-out.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: TopModule
+
+**Signal Interfaces**:
+- `input wire a` : 1-bit input, unsigned
+- `input wire b` : 1-bit input, unsigned
+- `output wire sum` : 1-bit output, unsigned
+- `output wire cout` : 1-bit output, unsigned
+
+**Behavior**:
+- The module implements a combinational logic half adder.
+- **Boolean Expressions**:
+  - `sum = a XOR b`
+  - `cout = a AND b`
+
+**Timing Behavior**:
+- This is a purely combinational circuit with no clock dependency. Outputs `sum` and `cout` update immediately based on current inputs `a` and `b`.
+
+**Logical Description**:
+- **Truth Table**:
+  ```
+  | a | b | sum | cout |
+  |---|---|-----|------|
+  | 0 | 0 |  0  |  0   |
+  | 0 | 1 |  1  |  0   |
+  | 1 | 0 |  1  |  0   |
+  | 1 | 1 |  0  |  1   |
+  ```
+
+**Implementation Notes**:
+- Ensure that the design is optimized for minimal gate usage, as per typical half adder implementations.
+- Verify the design against the truth table to ensure correctness.
+
+**Boundary Conditions**:
+- The module is designed to handle all possible combinations of the inputs `a` and `b`, as shown in the truth table.
+                

@@ -1,0 +1,58 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire in`: Single-bit input representing the state machine's input condition.
+  - `input wire [9:0] state`: 10-bit input vector representing the current state using one-hot encoding. Bit `state[0]` corresponds to state S0, and `state[9]` corresponds to state S9.
+
+- Output Ports:
+  - `output wire [9:0] next_state`: 10-bit output vector representing the next state using one-hot encoding. Bit `next_state[0]` is set when transitioning to state S0, and bit `next_state[9]` is set when transitioning to state S9.
+  - `output wire out1`: Single-bit output associated with specific states as defined by the state machine.
+  - `output wire out2`: Single-bit output associated with specific states as defined by the state machine.
+
+State Machine Description:
+- The state machine uses one-hot encoding for state representation.
+- The state transitions are determined by the input `in` and the current `state`.
+- The state machine and outputs are defined as follows:
+  - From S0: 
+    - `in = 0`: Remain in S0, outputs (0, 0)
+    - `in = 1`: Transition to S1, outputs (0, 0)
+  - From S1: 
+    - `in = 0`: Transition to S0, outputs (0, 0)
+    - `in = 1`: Transition to S2, outputs (0, 0)
+  - From S2: 
+    - `in = 0`: Transition to S0, outputs (0, 0)
+    - `in = 1`: Transition to S3, outputs (0, 0)
+  - From S3: 
+    - `in = 0`: Transition to S0, outputs (0, 0)
+    - `in = 1`: Transition to S4, outputs (0, 0)
+  - From S4: 
+    - `in = 0`: Transition to S0, outputs (0, 0)
+    - `in = 1`: Transition to S5, outputs (0, 0)
+  - From S5: 
+    - `in = 0`: Transition to S8, outputs (0, 0)
+    - `in = 1`: Transition to S6, outputs (0, 0)
+  - From S6: 
+    - `in = 0`: Transition to S9, outputs (0, 0)
+    - `in = 1`: Transition to S7, outputs (0, 0)
+  - From S7: 
+    - `in = 0`: Transition to S0, outputs (0, 1)
+    - `in = 1`: Remain in S7, outputs (0, 1)
+  - From S8: 
+    - `in = 0`: Transition to S0, outputs (1, 0)
+    - `in = 1`: Transition to S1, outputs (1, 0)
+  - From S9: 
+    - `in = 0`: Transition to S0, outputs (1, 1)
+    - `in = 1`: Transition to S1, outputs (1, 1)
+
+- The state machine assumes that multiple bits in `state` can be set simultaneously, representing multiple active states. The module should handle transitions for each active state independently.
+
+- The outputs `out1` and `out2` are set according to the active state's output configuration.
+
+- The module is expected to implement state transition logic and output logic based on the current `state` and `in` input, but storage elements (flip-flops) for states are not part of this module.
+
+- Since this is a purely combinational module, no clock or reset inputs are required.
+
+- Ensure no race conditions occur by resolving state transitions and output logic deterministically based on current inputs.
+</ENHANCED_SPEC>

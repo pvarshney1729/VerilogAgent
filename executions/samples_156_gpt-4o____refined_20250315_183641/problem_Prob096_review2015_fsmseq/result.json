@@ -1,0 +1,16 @@
+{
+    "code": "module TopModule (\n    input  logic clk,\n    input  logic reset,\n    input  logic data,\n    output logic start_shifting\n);\n\n    typedef enum logic [2:0] {\n        IDLE  = 3'b000,\n        S1    = 3'b001,\n        S11   = 3'b010,\n        S110  = 3'b011,\n        S1101 = 3'b100\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            IDLE: \n                if (data) \n                    next_state = S1;\n                else \n                    next_state = IDLE;\n            S1: \n                if (data) \n                    next_state = S11;\n                else \n                    next_state = IDLE;\n            S11: \n                if (~data) \n                    next_state = S110;\n                else \n                    next_state = S11;\n            S110: \n                if (data) \n                    next_state = S1101;\n                else \n                    next_state = IDLE;\n            S1101: \n                next_state = S1101;\n            default: \n                next_state = IDLE;\n        endcase\n    end\n\n    // State register logic\n    always @(posedge clk) begin\n        if (reset) \n            current_state <= IDLE;\n        else \n            current_state <= next_state;\n    end\n\n    // Output logic\n    always @(*) begin\n        start_shifting = (current_state == S1101);\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input  logic clk,\n    input  logic reset,\n    input  logic data,\n    output logic start_shifting\n);\n\n    typedef enum logic [2:0] {\n        IDLE  = 3'b000,\n        S1    = 3'b001,\n        S11   = 3'b010,\n        S110  = 3'b011,\n        S1101 = 3'b100\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(*) begin\n        case (current_state)\n            IDLE: \n                if (data) \n                    next_state = S1;\n                else \n                    next_state = IDLE;\n            S1: \n                if (data) \n                    next_state = S11;\n                else \n                    next_state = IDLE;\n            S11: \n                if (~data) \n                    next_state = S110;\n                else \n                    next_state = S11;\n            S110: \n                if (data) \n                    next_state = S1101;\n                else \n                    next_state = IDLE;\n            S1101: \n                next_state = S1101;\n            default: \n                next_state = IDLE;\n        endcase\n    end\n\n    // State register logic\n    always @(posedge clk) begin\n        if (reset) \n            current_state <= IDLE;\n        else \n            current_state <= next_state;\n    end\n\n    // Output logic\n    always @(*) begin\n        start_shifting = (current_state == S1101);\n    end\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}

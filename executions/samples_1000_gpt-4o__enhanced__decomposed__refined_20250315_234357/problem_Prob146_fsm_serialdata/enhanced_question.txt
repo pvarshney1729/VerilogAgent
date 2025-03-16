@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal, 1 bit, positive edge-triggered.
+  - `in`: Serial data input, 1 bit.
+  - `reset`: Active-high synchronous reset, 1 bit.
+
+- Output Ports:
+  - `out_byte`: Data byte output, 8 bits.
+  - `done`: Completion indicator, 1 bit.
+
+Functional Description:
+The module implements a finite state machine (FSM) to process a serial data stream conforming to a protocol with the following structure:
+- Each transmission starts with a start bit ('0'), followed by 8 data bits, and ends with a stop bit ('1').
+- The line is idle at logic '1' when no data is transmitted.
+
+Behavior:
+1. The FSM identifies the start of a new byte by detecting a '0' on the `in` line.
+2. After detecting the start bit, the FSM sequentially captures the next 8 data bits, least significant bit first.
+3. The FSM expects a '1' as the stop bit immediately following the 8 data bits.
+4. Upon successful detection of the stop bit, the FSM:
+   - Asserts the `done` signal to indicate a complete byte has been received.
+   - Outputs the captured byte on `out_byte`. The `out_byte` is valid only when `done` is '1'; otherwise, it is considered a don't-care value.
+5. If the stop bit is not detected correctly, the FSM waits for the next valid stop bit before restarting the byte reception process.
+
+Reset Behavior:
+- The `reset` input, when asserted high, synchronously resets the FSM to its initial idle state. All internal registers and outputs are reset to their default states. `out_byte` is undefined, and `done` is '0' during reset.
+
+Concurrency:
+- All sequential logic operations are triggered on the positive edge of the `clk`.
+
+Edge Cases:
+- The FSM only processes data when the start bit is correctly identified. Any deviation in the expected bit pattern will result in the FSM waiting for the next valid start bit.
+- The `out_byte` and `done` signals are updated only upon the successful detection of a complete byte with a valid stop bit.
+
+Bit Indexing:
+- `out_byte[0]` refers to the least significant bit (LSB) of the data byte.
+
+The design ensures robustness against incomplete byte sequences by strictly adhering to the serial protocol structure.
+</ENHANCED_SPEC>

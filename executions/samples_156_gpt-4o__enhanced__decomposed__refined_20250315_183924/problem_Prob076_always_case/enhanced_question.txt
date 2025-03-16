@@ -1,0 +1,63 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  sel   (3 bits)
+ - input  data0 (4 bits)
+ - input  data1 (4 bits)
+ - input  data2 (4 bits)
+ - input  data3 (4 bits)
+ - input  data4 (4 bits)
+ - input  data5 (4 bits)
+ - output out   (4 bits)
+);
+
+The module should implement a 6-to-1 multiplexer. When sel is between 0
+and 5, choose the corresponding data input. Otherwise, output 0. The data
+inputs and outputs are all 4 bits wide.
+
+Here is the enhanced specification which might be useful to you:
+                ### Enhanced Specification for TopModule
+
+#### Module Interface
+- **Module Name**: `TopModule`
+- **Port Definitions**:
+  - `input [2:0] sel`: 3-bit input used for selecting one of the 6 inputs.
+  - `input [3:0] data0`: 4-bit data input.
+  - `input [3:0] data1`: 4-bit data input.
+  - `input [3:0] data2`: 4-bit data input.
+  - `input [3:0] data3`: 4-bit data input.
+  - `input [3:0] data4`: 4-bit data input.
+  - `input [3:0] data5`: 4-bit data input.
+  - `output reg [3:0] out`: 4-bit output.
+
+#### Behavior
+- **Multiplexer Logic**: 
+  - The module implements a 6-to-1 multiplexer. 
+  - When `sel` is in the range 0 to 5, the corresponding `data` input is routed to the `out` port. 
+  - If `sel` is 0, `out` equals `data0`.
+  - If `sel` is 1, `out` equals `data1`.
+  - If `sel` is 2, `out` equals `data2`.
+  - If `sel` is 3, `out` equals `data3`.
+  - If `sel` is 4, `out` equals `data4`.
+  - If `sel` is 5, `out` equals `data5`.
+  - For `sel` values 6 or 7, `out` is set to `4'b0000`.
+
+#### Timing and Signal Evaluation
+- **Combinational Logic**: 
+  - This module does not contain any internal state and is purely combinational.
+  - Changes in `sel` or any `data` input result in immediate updates to `out` without any clock cycle delay.
+
+#### Bit-ordering
+- **MSB/LSB Convention**: 
+  - The least significant bit (LSB) is indexed as bit[0], and the most significant bit (MSB) is indexed as bit[3].
+
+#### Implementation Notes
+- **Reset and Initial States**: 
+  - As this is a combinational logic circuit, no reset behavior is required. The initial state of `out` is not applicable as the output is directly dependent on the inputs.
+
+#### Boundary Conditions
+- **Handling Undefined Sel Values**: 
+  - For any `sel` value not explicitly defined (6 or 7), `out` will default to `4'b0000`, ensuring consistent behavior and preventing unintended logic states.
+                

@@ -1,0 +1,51 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in (100 bits)
+ - output out_and
+ - output out_or
+ - output out_xor
+
+The module should implement a combinational circuit with 100 inputs,
+in[99:0]. There are 3 outputs:
+
+  (1) out_and : output of a 100-input AND gate
+  (2) out_or  : output of a 100-input OR  gate
+  (3) out_xor : output of a 100-input XOR gate
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: `TopModule`
+
+**Interface Specifications**:
+- **Inputs**:
+  - `input [99:0] in;`  
+    - Description: A 100-bit wide input vector. Bit 99 is the most significant bit (MSB), and bit 0 is the least significant bit (LSB).
+- **Outputs**:
+  - `output out_and;`  
+    - Description: Single-bit output representing the logical AND of all 100 input bits.
+  - `output out_or;`  
+    - Description: Single-bit output representing the logical OR of all 100 input bits.
+  - `output out_xor;`  
+    - Description: Single-bit output representing the logical XOR of all 100 input bits.
+
+**Behavioral Specifications**:
+- The module implements a purely combinational logic circuit.
+- **Logical Operations**:
+  1. `out_and` is high (1) if and only if all bits of `in[99:0]` are high (1).
+  2. `out_or` is high (1) if at least one bit of `in[99:0]` is high (1).
+  3. `out_xor` is high (1) if there is an odd number of bits set to high (1) in `in[99:0]`.
+
+**Timing Specifications**:
+- The module is purely combinational; thus, there are no clock or reset signals required.
+- Propagation delay should be minimized but is dependent on synthesis and implementation.
+
+**Implementation Notes**:
+- Ensure the minimization of gate levels to optimize for speed.
+- Consider synthesizer-specific optimizations for handling wide XOR operations.
+
+**Boundary Conditions**:
+- If `in[99:0]` is all zeros, `out_and` is 0, `out_or` is 0, and `out_xor` is 0.
+- If `in[99:0]` is all ones, `out_and` is 1, `out_or` is 1, and `out_xor` is 0.
+                

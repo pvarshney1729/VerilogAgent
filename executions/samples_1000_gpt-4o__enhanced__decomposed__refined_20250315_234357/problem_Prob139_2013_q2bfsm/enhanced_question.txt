@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Ports:
+- input  logic clk                // Clock signal (positive edge-triggered)
+- input  logic resetn             // Synchronous active-low reset signal
+- input  logic x                  // Input signal from motor
+- input  logic y                  // Input signal from motor
+- output logic f                  // Output signal controlling the motor
+- output logic g                  // Output signal controlling the motor
+
+Finite State Machine (FSM) Description:
+1. The FSM operates using a synchronous, active-low reset signal (`resetn`). The FSM remains in the initial state, "State A," as long as `resetn` is asserted (low).
+2. Upon de-assertion of `resetn` (resetn becomes high), the FSM transitions from State A on the next positive edge of `clk` and sets the output `f` to 1 for one clock cycle.
+3. The FSM then continuously monitors the input `x` for the sequence "1, 0, 1" over three successive clock cycles:
+   - If `x` produces the sequence "1, 0, 1" on three successive positive clock edges, the output `g` is set to 1 on the following clock cycle.
+4. When `g` is set to 1, the FSM monitors the input `y` for two consecutive clock cycles:
+   - If `y` is 1 within these two clock cycles, `g` remains 1 permanently (until reset).
+   - If `y` does not become 1 within these two clock cycles, `g` is set to 0 permanently (until reset).
+
+Clock and Reset Behavior:
+- All state transitions and outputs changes are synchronized to the positive edge of `clk`.
+- `resetn` must be asserted (held low) to reset the FSM to State A and initialize all outputs to their default states.
+- Upon reset de-assertion (resetn goes high), the FSM begins its functional behavior as specified.
+
+Initial Conditions:
+- Upon reset (resetn = 0), the FSM initializes to State A.
+- Outputs `f` and `g` are initialized to 0 upon reset.
+
+Bit Indexing:
+- All signals are single bit, with `bit[0]` being the least significant bit.
+
+Edge Cases:
+- The FSM should correctly handle cases where `x` does not produce "1, 0, 1" in sequence or if `y` is not 1 in the specified monitoring period.
+- The behavior specified assumes no glitches on the input signals `x` and `y` and that transitions occur strictly on clock edges.
+</ENHANCED_SPEC>

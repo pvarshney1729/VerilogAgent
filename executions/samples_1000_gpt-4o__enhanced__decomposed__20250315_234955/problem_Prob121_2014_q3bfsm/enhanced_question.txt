@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Interface:
+- input wire clk; // Clock signal, triggering events on the positive edge.
+- input wire reset; // Synchronous active-high reset signal.
+- input wire x; // Input signal affecting state transitions.
+- output reg z; // Output signal determined by the current state.
+
+State Encoding:
+- Present State Register: y[2:0] (3-bit wide, unsigned)
+  - y[2] is the most significant bit (MSB).
+  - y[0] is the least significant bit (LSB).
+
+Reset Behavior:
+- Synchronous with the clock.
+- On reset (reset == 1), the state is initialized to y = 3'b000.
+
+Clock Behavior:
+- All sequential logic transitions occur on the positive edge of the 'clk' signal.
+
+Finite State Machine (FSM):
+- State Transitions and Output Logic:
+  1. Present State: 000
+     - Next State if x = 0: 000
+     - Next State if x = 1: 001
+     - Output z: 0
+
+  2. Present State: 001
+     - Next State if x = 0: 001
+     - Next State if x = 1: 100
+     - Output z: 0
+
+  3. Present State: 010
+     - Next State if x = 0: 010
+     - Next State if x = 1: 001
+     - Output z: 0
+
+  4. Present State: 011
+     - Next State if x = 0: 001
+     - Next State if x = 1: 010
+     - Output z: 1
+
+  5. Present State: 100
+     - Next State if x = 0: 011
+     - Next State if x = 1: 100
+     - Output z: 1
+
+General Notes:
+- Ensure state transitions and output logic are implemented combinatorially based on the present state and input 'x'.
+- There are no undefined states or behavior for the specified state transitions and input combinations.
+- Edge cases involving reset and clock signal transitions must be handled to prevent race conditions.
+</ENHANCED_SPEC>

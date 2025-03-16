@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Specifications:
+- `input clk`: Clock signal, positive edge-triggered.
+- `input reset`: Active-high, synchronous reset.
+- `input [7:0] in`: 8-bit data input, where `in[0]` is the least significant bit (LSB) and `in[7]` is the most significant bit (MSB).
+- `output done`: Single-bit output signal, asserted high for one clock cycle immediately after the third byte of a message is received.
+
+Functional Description:
+The module implements a finite state machine (FSM) to detect the start and end of PS/2 mouse protocol messages in a continuous byte stream. Each message consists of exactly three bytes. The FSM operates according to the following rules and conditions:
+
+1. **Message Detection**:
+   - Continuously monitor the input byte stream.
+   - The start of a message is identified by a byte where `in[3] = 1`.
+   - Once a start byte is detected, the FSM assumes it is the first byte of a message.
+
+2. **Byte Counting**:
+   - After detecting a start byte (`in[3] = 1`), count the subsequent bytes to complete the message.
+   - The FSM transitions through states corresponding to receiving the first, second, and third bytes of the message.
+
+3. **Done Signal**:
+   - The `done` output is asserted high for one clock cycle immediately after the third byte of a message is successfully received.
+
+4. **Reset Behavior**:
+   - On receiving a synchronous active-high reset, the FSM returns to its initial state, discarding any partially received message data.
+
+5. **Clock and Timing**:
+   - All sequential logic transitions occur on the positive edge of the clock.
+   - Ensure the FSM handles edge cases, such as resets occurring mid-message, by resetting the byte count and FSM state.
+
+FSM State Details:
+- **Initial State**: Await detection of a start byte (`in[3] = 1`).
+- **State 1**: Start byte detected; awaiting second byte.
+- **State 2**: Second byte received; awaiting third byte.
+- **Final State**: Third byte received; assert `done` high for one clock cycle and transition back to the initial state.
+
+Edge Case Handling:
+- If a reset is asserted during message reception, discard the current message and return to the initial state.
+- If an unexpected byte (without `in[3] = 1`) is received in the initial state, continue monitoring for a start byte.
+
+The FSM should be designed to avoid race conditions and ensure reliable message boundary detection within the constraints of the PS/2 mouse protocol.
+</ENHANCED_SPEC>

@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input, used as the clock signal. Positive edge-triggered.
+  - areset: 1-bit input, used as an asynchronous reset. Active high.
+  - in: 1-bit input, used for state transitions.
+- Output Ports:
+  - out: 1-bit output, determined by the current state of the state machine.
+
+State Machine Details:
+- Type: Moore state machine.
+- States: Four states labeled as A, B, C, and D.
+- Initial State: State A upon reset.
+- Reset Behavior: Asynchronous reset using 'areset' input. When 'areset' is high, the state machine transitions immediately to state A regardless of the clock.
+- Clock Behavior: All state transitions occur on the rising edge of 'clk' unless 'areset' is active.
+
+State Transition Table:
+- State A:
+  - Next state if in=0: Remain in State A
+  - Next state if in=1: Transition to State B
+  - Output: 0
+- State B:
+  - Next state if in=0: Transition to State C
+  - Next state if in=1: Remain in State B
+  - Output: 0
+- State C:
+  - Next state if in=0: Transition to State A
+  - Next state if in=1: Transition to State D
+  - Output: 0
+- State D:
+  - Next state if in=0: Transition to State C
+  - Next state if in=1: Transition to State B
+  - Output: 1
+
+Additional Specifications:
+- Bit Indexing: Not applicable as all ports are 1-bit.
+- Signal Precedence: The 'areset' signal has precedence over the 'clk' signal for resetting the state machine.
+- Edge Cases: Ensure correct state transitions and outputs for all possible combinations of 'in' and 'areset' signals.
+</ENHANCED_SPEC>

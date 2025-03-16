@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, in, and output port out.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  wire clk,\n    input  wire reset,\n    input  wire in,\n    output reg  out\n);\n\n    // State encoding\n    typedef enum reg [1:0] {\n        STATE_A = 2'b00,\n        STATE_B = 2'b01,\n        STATE_C = 2'b10,\n        STATE_D = 2'b11\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            current_state <= STATE_A;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            STATE_A: next_state = (in) ? STATE_B : STATE_A;\n            STATE_B: next_state = (in) ? STATE_B : STATE_C;\n            STATE_C: next_state = (in) ? STATE_D : STATE_A;\n            STATE_D: next_state = (in) ? STATE_B : STATE_C;\n            default: next_state = STATE_A;\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        case (current_state)\n            STATE_D: out = 1'b1;\n            default: out = 1'b0;\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare the state register to hold the current state and the next state. Use reg [1:0] for state encoding.",
+        "source": "Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "reg [1:0] current_state, next_state;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous active high reset logic to reset the FSM to state A (2'b00).",
+        "source": "Include a synchronous active high reset that resets the FSM to state A.",
+        "implementation": "reg [1:0] state;\n  \n  always @(posedge clk) begin\n    if (reset) begin\n      state <= 2'b00; // Reset to state A\n    end else begin\n      // State transition logic will be implemented here\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic based on the current state and input 'in'. Use a case statement to define state transitions according to the state transition table.",
+        "source": "The module should implement a Moore state machine with the following state transition table with one input, one output, and four states.",
+        "implementation": "// State encoding\n  localparam STATE_A = 2'b00;\n  localparam STATE_B = 2'b01;\n  localparam STATE_C = 2'b10;\n  localparam STATE_D = 2'b11;\n\n  reg [1:0] current_state, next_state;\n\n  // Next state logic\n  always @(*) begin\n    case (current_state)\n      STATE_A: begin\n        if (in)\n          next_state = STATE_B;\n        else\n          next_state = STATE_A;\n      end\n      STATE_B: begin\n        if (in)\n          next_state = STATE_B;\n        else\n          next_state = STATE_C;\n      end\n      STATE_C: begin\n        if (in)\n          next_state = STATE_D;\n        else\n          next_state = STATE_A;\n      end\n      STATE_D: begin\n        if (in)\n          next_state = STATE_B;\n        else\n          next_state = STATE_C;\n      end\n      default: next_state = STATE_A; // Default case for safety\n    endcase\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic based on the current state. Use assign statements to set the output 'out' according to the state transition table.",
+        "source": "For Moore machines, implement output logic ONLY based on current state.",
+        "implementation": "```verilog\n[BEGIN]\n  // Output combinational logic based on the current state\n  reg out_reg;\n  \n  always @(*) begin\n    case (current_state)\n      2'b00: out_reg = 1'b0; // State A\n      2'b01: out_reg = 1'b0; // State B\n      2'b10: out_reg = 1'b0; // State C\n      2'b11: out_reg = 1'b1; // State D\n      default: out_reg = 1'b0;\n    endcase\n  end\n\n  assign out = out_reg;\n[END]\n```"
+    }
+]

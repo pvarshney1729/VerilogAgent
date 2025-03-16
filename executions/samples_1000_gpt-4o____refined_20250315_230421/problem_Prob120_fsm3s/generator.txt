@@ -1,0 +1,143 @@
+Generated Response:
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    input  wire in,
+    output reg  out
+);
+
+    // State encoding
+    typedef enum reg [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    // State registers
+    reg [1:0] current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_B: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_C;
+            end
+            STATE_C: begin
+                if (in)
+                    next_state = STATE_D;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_D: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_C;
+            end
+            default: next_state = STATE_A; // Default state
+        endcase
+    end
+
+    // State update logic
+    always @(posedge clk or posedge reset) begin
+        if (reset)
+            current_state <= STATE_A;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_D: out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule
+```
+
+This Verilog module implements a Moore state machine with four states (A, B, C, D) and transitions based on the input `in`. The output `out` is determined solely by the current state, with `out` being `1` only in state D. The state machine resets to state A on a high `reset` signal.
+
+Generated Code:
+
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    input  wire in,
+    output reg  out
+);
+
+    // State encoding
+    typedef enum reg [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    // State registers
+    reg [1:0] current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_B: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_C;
+            end
+            STATE_C: begin
+                if (in)
+                    next_state = STATE_D;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_D: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_C;
+            end
+            default: next_state = STATE_A; // Default state
+        endcase
+    end
+
+    // State update logic
+    always @(posedge clk or posedge reset) begin
+        if (reset)
+            current_state <= STATE_A;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_D: out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule
+
+// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly

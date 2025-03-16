@@ -1,0 +1,66 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a (5 bits)
+ - input  b (5 bits)
+ - input  c (5 bits)
+ - input  d (5 bits)
+ - input  e (5 bits)
+ - input  f (5 bits)
+ - output w (8 bits)
+ - output x (8 bits)
+ - output y (8 bits)
+ - output z (8 bits)
+
+The module should concatenate the input vectors together then split them
+up into several output vectors. There are six 5-bit input vectors: a, b,
+c, d, e, and f, for a total of 30 bits of input. There are four 8-bit
+output vectors: w, x, y, and z, for 32 bits of output. The output should
+be a concatenation of the input vectors followed by two 1 bits (the two 1
+bits should be in the LSB positions).
+
+Here is the enhanced specification which might be useful to you:
+                ### Enhanced Specification for `TopModule`
+
+#### Interface
+
+- **Module Name**: `TopModule`
+- **Input Ports**:
+  - `input [4:0] a` - 5-bit input vector
+  - `input [4:0] b` - 5-bit input vector
+  - `input [4:0] c` - 5-bit input vector
+  - `input [4:0] d` - 5-bit input vector
+  - `input [4:0] e` - 5-bit input vector
+  - `input [4:0] f` - 5-bit input vector
+- **Output Ports**:
+  - `output [7:0] w` - 8-bit output vector
+  - `output [7:0] x` - 8-bit output vector
+  - `output [7:0] y` - 8-bit output vector
+  - `output [7:0] z` - 8-bit output vector
+
+#### Behavior
+
+- **Concatenation Order**: The inputs `a`, `b`, `c`, `d`, `e`, and `f` are concatenated in the order listed, resulting in a 30-bit vector. The two additional '1' bits are appended as the least significant bits to form a 32-bit vector.
+  
+- **Output Assignment**:
+  - `w` is assigned the most significant 8 bits of the 32-bit vector.
+  - `x` is assigned the next 8 bits following `w`.
+  - `y` is assigned the next 8 bits following `x`.
+  - `z` is assigned the least significant 8 bits, which include the two '1' bits added last.
+
+#### Timing
+
+- **Logic Type**: The operation is purely combinational. There are no sequential elements, latches, or flip-flops involved.
+
+#### Implementation Notes
+
+- **Bit Indexing**: All vectors follow the convention where `bit[0]` is the least significant bit (LSB) and `bit[4]` or `bit[7]` is the most significant bit (MSB), depending on the vector size.
+  
+- **Reset and Initial States**: No reset behavior or initial states are required for this purely combinational logic module.
+
+- **Boundary Conditions**: As the input vectors are purely deterministic and finite, no special boundary condition handling is needed.
+
+The implementation should ensure the above behavior is achieved using standard Verilog practices.
+                

@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+The module, named TopModule, shall have the following interface and behavior specifications. All input and output ports are one bit unless otherwise specified.
+
+Port Definitions:
+- `input clk`: Clock signal for synchronizing the sequential logic. Triggering occurs on the positive edge.
+- `input reset`: Active-high synchronous reset signal. When high, all state registers are reset to their initial state on the next clock edge.
+- `input data`: Input bit stream to be monitored for the sequence.
+- `output reg start_shifting`: Output signal indicating detection of the sequence. This signal is set to 1 upon sequence detection and remains 1 until reset.
+
+Behavioral Specification:
+1. The module implements a finite-state machine (FSM) to detect the sequence "1101" in the `data` input stream.
+2. The FSM is designed with states to track the occurrence of each bit in the sequence "1101". The states are defined as follows:
+   - State 0: Initial state, waiting for the first '1'.
+   - State 1: First '1' detected.
+   - State 2: Sequence "11" detected.
+   - State 3: Sequence "110" detected.
+   - State 4: Sequence "1101" detected.
+
+3. Transition from one state to another is based on the current state and the `data` input:
+   - State 0 to State 1 on input '1'.
+   - State 1 to State 2 on input '1'.
+   - State 2 to State 3 on input '0'.
+   - State 3 to State 4 on input '1'.
+
+4. When the FSM reaches State 4, `start_shifting` is set to 1 and remains at 1 irrespective of further inputs, until a reset occurs.
+
+5. Upon receiving a synchronous reset (`reset` = 1), the FSM transitions back to State 0 on the next positive clock edge, and `start_shifting` is reset to 0.
+
+6. The reset state for all state registers is the initial state (State 0).
+
+7. `start_shifting` is initialized to 0 at reset.
+
+Edge Cases and Input Boundaries:
+- If the input stream starts or continues with bits not forming the sequence "1101", the FSM will remain in or revert to a previous state as per the sequence detection logic.
+- The FSM is robust to handle any arbitrary length of input stream, continuously scanning for the sequence.
+
+Sequence Detection Example:
+- Input Stream: ...1011101...
+  - Transition: State 0 -> State 1 -> State 2 -> State 3 -> State 4
+  - Output: `start_shifting` is set to 1 at the completion of the sequence "1101".
+</ENHANCED_SPEC>

@@ -1,0 +1,38 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, areset, in and output port out.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input clk,\n    input areset,\n    input in,\n    output reg out\n);\n    typedef enum reg [1:0] {A, B, C, D} state_t;\n    state_t current_state, next_state;\n\n    always @(posedge clk or posedge areset) begin\n        if (areset) begin\n            current_state <= A;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    always @(*) begin\n        case (current_state)\n            A: begin\n                next_state = (in) ? B : A;\n                out = 0;\n            end\n            B: begin\n                next_state = (in) ? B : C;\n                out = 0;\n            end\n            C: begin\n                next_state = (in) ? D : A;\n                out = 0;\n            end\n            D: begin\n                next_state = (in) ? B : C;\n                out = 1;\n            end\n            default: begin\n                next_state = A;\n                out = 0;\n            end\n        endcase\n    end\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare a register to hold the current state of the FSM.",
+        "source": "Implement a Moore state machine with the following state transition table with one input, one output, and four states.",
+        "implementation": "reg [1:0] current_state; // 2-bit register to hold the current state of the FSM"
+    },
+    {
+        "id": "3",
+        "content": "Define the state encoding for the four states A, B, C, and D.",
+        "source": "state | next state in=0, next state in=1 | output A | A, B | 0 B | C, B | 0 C | A, D | 0 D | C, B | 1",
+        "implementation": "typedef enum logic [1:0] {\n    A = 2'b00,\n    B = 2'b01,\n    C = 2'b10,\n    D = 2'b11\n} state_t;\n\nstate_t current_state, next_state;"
+    },
+    {
+        "id": "4",
+        "content": "Implement the asynchronous reset logic to reset the FSM to state A.",
+        "source": "Include a positive edge triggered asynchronous reset that resets the FSM to state A.",
+        "implementation": "reg [1:0] state, next_state;\n\nlocalparam A = 2'b00, B = 2'b01, C = 2'b10, D = 2'b11;\n\nalways @(posedge clk or posedge areset) begin\n    if (areset) begin\n        state <= A;\n    end else begin\n        state <= next_state;\n    end\nend"
+    },
+    {
+        "id": "5",
+        "content": "Implement the state transition logic based on the current state and input signal in.",
+        "source": "state | next state in=0, next state in=1 | output A | A, B | 0 B | C, B | 0 C | A, D | 0 D | C, B | 1",
+        "implementation": "reg [1:0] state, next_state;\n\nlocalparam A = 2'b00, B = 2'b01, C = 2'b10, D = 2'b11;\n\nalways @(posedge clk or posedge areset) begin\n    if (areset) begin\n        state <= A;\n    end else begin\n        state <= next_state;\n    end\nend\n\nalways @(*) begin\n    case (state)\n        A: next_state = (in == 0) ? A : B;\n        B: next_state = (in == 0) ? C : B;\n        C: next_state = (in == 0) ? A : D;\n        D: next_state = (in == 0) ? C : B;\n        default: next_state = A; // Default case to handle unexpected states\n    endcase\nend"
+    },
+    {
+        "id": "6",
+        "content": "Implement the output logic based on the current state of the FSM.",
+        "source": "state | next state in=0, next state in=1 | output A | A, B | 0 B | C, B | 0 C | A, D | 0 D | C, B | 1",
+        "implementation": "always @(posedge clk or posedge areset) begin\n    if (areset) begin\n        out <= 1'b0; // Reset to state A output\n    end else begin\n        case (current_state)\n            A: out <= 1'b0;\n            B: out <= 1'b0;\n            C: out <= 1'b0;\n            D: out <= 1'b1;\n            default: out <= 1'b0; // Default case\n        endcase\n    end\nend"
+    }
+]

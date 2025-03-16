@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit, Clock signal, positive edge-triggered.
+  - reset: 1-bit, Synchronous active high reset.
+  - in: 1-bit input signal.
+- Output Ports:
+  - out: 1-bit output signal.
+
+State Machine Specification:
+- Type: Moore state machine.
+- Number of States: 4 (States are labeled A, B, C, D).
+- State Encoding: Binary representation for states is assumed; specific encoding (e.g., 2'b00, 2'b01, 2'b10, 2'b11) should be defined in the implementation.
+- Initial State: State A upon reset.
+- Reset Behavior: Synchronous active high reset that sets the FSM to state A.
+
+Clocking:
+- All sequential logic is triggered on the positive edge of the clock signal (clk).
+
+State Transition Table:
+- Current State: A
+  - Next State on in=0: A
+  - Next State on in=1: B
+  - Output: 0
+- Current State: B
+  - Next State on in=0: C
+  - Next State on in=1: B
+  - Output: 0
+- Current State: C
+  - Next State on in=0: A
+  - Next State on in=1: D
+  - Output: 0
+- Current State: D
+  - Next State on in=0: C
+  - Next State on in=1: B
+  - Output: 1
+
+Signal Conventions:
+- Bit Indexing: bit[0] refers to the least significant bit (LSB).
+
+Behavioral Notes:
+- Ensure there are no race conditions by maintaining a clear separation between combinational logic (state transition logic) and sequential logic (state register updates).
+- All state transitions and output determinations are based on the current state and the value of the input signal 'in' at the rising edge of the clock.
+- The output 'out' is determined solely by the current state, not by the input 'in', in accordance with the Moore machine model.
+
+Edge Cases:
+- At reset (reset=1), the FSM transitions to state A regardless of the current state or input signal.
+- The output 'out' should default to 0 upon entering State A and update only at the clock edge following state transitions as specified.
+</ENHANCED_SPEC>

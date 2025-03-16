@@ -1,0 +1,93 @@
+Generated Response:
+
+<REASONING>
+To implement the Moore state machine as specified, we need to define two states, A and B, with specific transitions based on the input `in`. The machine should asynchronously reset to state B when `areset` is high. The output `out` is determined solely by the current state: it is `1` in state B and `0` in state A.
+
+1. **State Encoding**: We will use a 1-bit signal to represent the states, where `0` represents state A and `1` represents state B.
+
+2. **Asynchronous Reset**: The reset logic will ensure that the state transitions to B whenever `areset` is high, regardless of the clock.
+
+3. **State Transition Logic**: We will use a combinational always block to determine the next state based on the current state and input `in`.
+
+4. **Output Logic**: The output is directly tied to the state, so it will be set to `1` if the current state is B and `0` if the current state is A.
+
+5. **Coding Conventions**: We will use `logic` for all signals, and the always block for the state transition will use `always @(*)` to infer the sensitivity list automatically.
+
+6. **Sequential Logic**: The state register will be updated on the rising edge of `clk`, with the asynchronous reset taking precedence.
+
+By following these steps, we ensure that the module adheres to the specified behavior and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic {STATE_A = 1'b0, STATE_B = 1'b1} state_t;
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: next_state = (in == 1'b0) ? STATE_B : STATE_A;
+            STATE_B: next_state = (in == 1'b0) ? STATE_A : STATE_B;
+            default: next_state = STATE_B; // Default to state B
+        endcase
+    end
+
+    // State register with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= STATE_B;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic
+    assign out = (current_state == STATE_B) ? 1'b1 : 1'b0;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic {STATE_A = 1'b0, STATE_B = 1'b1} state_t;
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: next_state = (in == 1'b0) ? STATE_B : STATE_A;
+            STATE_B: next_state = (in == 1'b0) ? STATE_A : STATE_B;
+            default: next_state = STATE_B; // Default to state B
+        endcase
+    end
+
+    // State register with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= STATE_B;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic
+    assign out = (current_state == STATE_B) ? 1'b1 : 1'b0;
+
+endmodule

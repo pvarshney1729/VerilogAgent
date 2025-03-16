@@ -1,0 +1,65 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - output q (4 bits)
+
+The module should implement a decade counter that counts 1 through 10,
+inclusive. Assume all sequential logic is triggered on the positive edge
+of the clock. The reset input is active high synchronous, and should
+reset the counter to 1.
+
+Here is the enhanced specification which might be useful to you:
+                **Interface:**
+- **Module Name:** `TopModule`
+- **Inputs:**
+  - `input wire clk`: The clock signal, used to trigger all sequential logic on its positive edge.
+  - `input wire reset`: Active high, synchronous reset signal. Resets the counter to its initial state.
+- **Outputs:**
+  - `output reg [3:0] q`: A 4-bit unsigned output representing the current count value in binary.
+
+**Bit-Ordering and Indexing:**
+- The output `q` uses a binary representation where `q[3]` is the most significant bit (MSB) and `q[0]` is the least significant bit (LSB).
+
+**Behavior:**
+- **Counting Sequence:** The module implements a decade counter. The counter starts counting from 1 to 10, inclusive. After reaching 10, it wraps around to 1 on the next clock cycle.
+- **Reset Behavior:** On the positive edge of the `clk` when `reset` is high, the counter is set to 1. The output `q` immediately reflects this reset condition by representing the binary value for 1 (`4'b0001`).
+
+**Timing:**
+- **Clock Edge:** All changes to the counter and the output `q` occur on the positive edge of `clk`.
+- **Synchronous Reset:** The reset operation occurs on the positive edge of the clock when `reset` is high.
+
+**Initial State:**
+- Upon module initialization or reset, the counter is set to 1, and `q` is set to `4'b0001`.
+
+**Edge Cases and Boundary Conditions:**
+- When `q` reaches `4'b1010` (representing 10 in binary), the next positive clock edge without `reset` being high will set `q` back to `4'b0001`.
+
+**Implementation Notes:**
+- Use a 4-bit register to hold the count value.
+- Ensure that the counter only counts while `reset` is low; otherwise, it resets to the initial state.
+
+**Example:**
+```
+module TopModule(
+    input wire clk,
+    input wire reset,
+    output reg [3:0] q
+);
+
+  always @(posedge clk) begin
+    if (reset) begin
+      q <= 4'b0001; // Reset the counter to 1
+    end else if (q == 4'b1010) begin
+      q <= 4'b0001; // Wrap around from 10 to 1
+    end else begin
+      q <= q + 1; // Increment the counter
+    end
+  end
+
+endmodule
+```
+                

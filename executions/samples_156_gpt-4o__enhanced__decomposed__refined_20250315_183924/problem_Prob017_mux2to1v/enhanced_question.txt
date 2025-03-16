@@ -1,0 +1,49 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a   (100 bits)
+ - input  b   (100 bits)
+ - input  sel
+ - output out (100 bits)
+
+The module should implement a 2-1 multiplexer. When sel=0, choose a. When
+sel=1, choose b.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: `TopModule`
+
+**Interface Definition**:
+- **Inputs**:
+  - `input [99:0] a`: A 100-bit wide bus, unsigned. Bit index 0 represents the least significant bit (LSB).
+  - `input [99:0] b`: A 100-bit wide bus, unsigned. Bit index 0 represents the least significant bit (LSB).
+  - `input sel`: A 1-bit control signal. Unsigned. This signal selects the data path for the output.
+  
+- **Outputs**:
+  - `output [99:0] out`: A 100-bit wide bus, unsigned. Bit index 0 represents the least significant bit (LSB).
+
+**Behavior**:
+- **Functional Description**: The module implements a 2-to-1 multiplexer. The output `out` is determined by the `sel` input as follows:
+  - If `sel` is `0`, `out` is assigned the value of `a`.
+  - If `sel` is `1`, `out` is assigned the value of `b`.
+
+- **Formal Logic Description**:
+  - `out = (sel == 0) ? a : b;`
+
+**Timing**:
+- **Combinational Logic**: The module operates as a purely combinational circuit without any clock dependencies. Changes in inputs `a`, `b`, or `sel` immediately reflect in the output `out`.
+
+**Reset Behavior**:
+- **Not Applicable**: As this is a combinational logic module, no reset behavior is applicable or required.
+
+**Initial States**:
+- **Not Applicable**: Since this module is purely combinational, initial states are not defined or necessary.
+
+**Boundary Conditions**:
+- The module's behavior is well-defined for all possible binary values of `sel` (0 or 1). No additional conditions or edge cases are present beyond the specified behavior.
+
+**Implementation Notes**:
+- Ensure synthesis tools optimize the logic for minimum delay, as the design is purely combinational.
+- Carefully consider the propagation delay through the multiplexer when integrating this module into larger designs to ensure timing closure.
+                

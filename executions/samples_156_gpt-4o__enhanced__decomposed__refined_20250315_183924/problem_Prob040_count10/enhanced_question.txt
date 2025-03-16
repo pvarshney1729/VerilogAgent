@@ -1,0 +1,62 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - output q (4 bits)
+
+The module should implement a decade counter that counts from 0 through
+9, inclusive, with a period of 10. Assume all sequential logic is
+triggered on the positive edge of the clock. The reset input is active
+high synchronous, and should reset the counter to 0.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: `TopModule`
+
+**Interface Specification**:
+- **Inputs**:
+  - `input logic clk`: Clock signal. Assumed to be a single-bit logic input.
+  - `input logic reset`: Active high, synchronous reset signal. Resets the counter to 0 when high.
+  
+- **Outputs**:
+  - `output logic [3:0] q`: 4-bit output representing the current count value. `q[3]` is the MSB and `q[0]` is the LSB.
+  
+**Behavior Specification**:
+- The module implements a decade counter which cycles through values 0 to 9.
+- **Counting Operation**:
+  - On each positive edge of `clk`, if `reset` is not asserted, the counter increments by 1.
+  - If the counter value is 9 on a clock edge, the next increment sets the counter to 0.
+  
+**Reset Behavior**:
+- **Synchronous Reset**:
+  - The reset is active high. When `reset` is high on a positive clock edge, regardless of the current count, the counter is set to 0.
+  - The counter retains the value 0 as long as `reset` remains high.
+  
+**Initial State**:
+- Upon initial power-up, if `reset` is not asserted, the counter starts from an undefined state. It is recommended to assert `reset` after power-up to initialize the counter to 0.
+
+**Timing and Clocking**:
+- The module's operations are synchronous with the positive edge of `clk`.
+- Glitches on `clk` are assumed to be handled externally, ensuring a clean clock signal.
+
+**Boundary Conditions**:
+- The counter transitions from 9 to 0 are designed to occur seamlessly on the clock edge following the count of 9.
+
+**Implementation Notes**:
+- Use a 4-bit register to store the count value.
+- Implement logic to handle incrementing and resetting the counter.
+- Consider power-up conditions in the testbench to ensure proper initialization via `reset`.
+
+**Example Verilog Declaration**:
+```verilog
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    output logic [3:0] q
+);
+    // Implementation goes here
+endmodule
+```
+                

@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: Clock signal, positive edge-triggered.
+  - resetn: Synchronous active-low reset signal.
+  - x: 1-bit input signal from the motor.
+  - y: 1-bit input signal from the motor.
+- Output Ports:
+  - f: 1-bit output signal to control the motor.
+  - g: 1-bit output signal to control the motor.
+
+FSM Description:
+- The FSM operates based on the positive edge of the clock (clk).
+- The reset (resetn) is synchronous and active low, initializing the FSM to State A when asserted.
+
+States and Transitions:
+1. **State A** (Initial State): 
+   - On resetn being asserted (active low), the FSM remains in State A.
+   - When resetn is de-asserted (goes to high), on the next clock edge, the FSM transitions to State B and sets output `f` to 1 for one clock cycle.
+
+2. **State B** (Monitor x Sequence):
+   - FSM waits for the sequence of inputs from x: 1, 0, 1 over three successive clock cycles.
+   - Upon detecting this sequence, the FSM transitions to State C and sets `g` to 1 on the following clock cycle.
+
+3. **State C** (Monitor y for Confirmation):
+   - FSM monitors the input y for up to two clock cycles.
+   - If y becomes 1 within these two clock cycles, `g` remains 1 permanently (until reset).
+   - If y is not 1 within these two clock cycles, `g` is set to 0 permanently (until reset).
+
+Output Behavior:
+- `f` is set to 1 for one clock cycle immediately after the transition from State A to State B.
+- `g` is initially set to 1 upon transitioning to State C after detecting the x sequence.
+- The final value of `g` depends on the input y as monitored in State C.
+
+Edge Cases:
+- The reset signal must be active low (resetn = 0) to reset the FSM.
+- The sequence detection for x (1, 0, 1) is strict and must occur in exact order over three successive clock cycles.
+- The detection window for y is strictly two clock cycles in State C.
+
+Initial Conditions:
+- Upon reset assertion (resetn = 0), the FSM initializes to State A with outputs `f` = 0 and `g` = 0.
+- All sequential logic is initialized to a known state on reset.
+</ENHANCED_SPEC>

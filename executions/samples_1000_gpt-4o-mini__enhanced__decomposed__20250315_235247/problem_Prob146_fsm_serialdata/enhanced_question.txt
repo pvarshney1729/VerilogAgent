@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input  wire clk: Clock signal for triggering all sequential logic, positive edge-triggered.
+- input  wire in: Serial input bit stream.
+- input  wire reset: Active-high synchronous reset signal.
+- output reg [7:0] out_byte: 8-bit output representing the received data byte. Valid only when `done` is asserted.
+- output reg done: Single-bit output indicating the successful receipt of a complete byte, including a valid start and stop bit.
+
+Functionality:
+The module implements a finite state machine (FSM) to decode a serial communication protocol consisting of:
+- 1 start bit ('0')
+- 8 data bits (with bit[0] as the least significant bit)
+- 1 stop bit ('1')
+
+Operational Details:
+1. The FSM begins in an IDLE state, where it waits for the start bit ('0'). The line is considered idle when at logic '1'.
+2. Upon detecting a start bit, the FSM transitions to a DATA state where it sequentially samples the next 8 bits on consecutive clock cycles as data bits.
+3. After successfully capturing 8 data bits, the FSM enters a STOP state to check for the stop bit ('1').
+4. If the stop bit is detected correctly, the FSM sets `out_byte` to the sampled 8-bit data and asserts `done` for one clock cycle.
+5. If the stop bit is not detected, the FSM remains in the STOP state until a stop bit is found. Once found, it will assert `done` and prepare to receive the next byte.
+6. The FSM resets to the IDLE state upon receiving a synchronous reset signal, clearing all registers and internal states. `out_byte` is a don't-care value when `done` is not asserted.
+
+Edge Cases and Boundaries:
+- If a reset is asserted, the FSM immediately transitions to the IDLE state on the next positive clock edge, with `out_byte` and `done` set to 0.
+- The FSM will not respond to erroneous sequences of start or stop bits but will wait until a valid start bit is detected.
+- `done` is asserted only for one clock cycle immediately after a successfully received byte including a valid stop bit.
+
+Assumptions:
+- All sequential logic within the FSM is triggered by the positive edge of the clock signal.
+- The incoming bit stream is always synchronized with the clock signal.
+- The serial protocol transmits the least significant bit first.
+</ENHANCED_SPEC>

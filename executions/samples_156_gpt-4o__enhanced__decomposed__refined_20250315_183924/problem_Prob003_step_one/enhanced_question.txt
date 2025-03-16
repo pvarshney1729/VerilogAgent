@@ -1,0 +1,42 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - output one
+
+The module should always drive 1 (or logic high).
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name:**
+- `TopModule`
+
+**Port Interface:**
+- `output logic high_output`: A single-bit output port that is always driven to a logic high. The name `high_output` is chosen for clarity to indicate its constant logic level.
+
+**Module Behavior:**
+- The module is purely combinational. It continuously drives the `high_output` to logic high (`1'b1`).
+
+**Timing Behavior:**
+- This module does not involve any timing or clock signals as it is purely combinational.
+
+**Reset Behavior:**
+- Not applicable, as the module does not incorporate any sequential elements or state that necessitates a reset condition.
+
+**Initial State:**
+- Not applicable, as there are no sequential elements in the design.
+
+**Implementation Notes:**
+- In Verilog, the output `high_output` will be assigned a constant value of `1'b1` using an `assign` statement.
+
+**Verilog Implementation:**
+```verilog
+module TopModule (
+    output logic high_output
+);
+    // Continuous assignment of a constant logic high to the output
+    assign high_output = 1'b1;
+
+endmodule
+```
+                

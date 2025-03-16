@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, in, and output port out.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  clk,\n    input  reset,\n    input  in,\n    output reg out\n);\n\n    // State encoding\n    typedef enum reg [1:0] {\n        STATE_A = 2'b00,\n        STATE_B = 2'b01\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= STATE_B;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state and output logic\n    always @(*) begin\n        case (current_state)\n            STATE_B: begin\n                out = 1'b1;\n                if (in == 1'b0) begin\n                    next_state = STATE_A;\n                end else begin\n                    next_state = STATE_B;\n                end\n            end\n            STATE_A: begin\n                out = 1'b0;\n                if (in == 1'b0) begin\n                    next_state = STATE_B;\n                end else begin\n                    next_state = STATE_A;\n                end\n            end\n            default: begin\n                next_state = STATE_B;\n                out = 1'b1;\n            end\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare state registers and parameters for state encoding. Use reg [1:0] for state and next_state. Define localparam for states A and B with binary encoding (A=2'b00, B=2'b01).",
+        "source": "Always separate FSM into exactly three distinct components: a) State register with reset logic. Use binary encoding for states (A=2'b00, B=2'b01, etc.) unless one-hot is specified.",
+        "implementation": "// State encoding\n  localparam A = 2'b00;\n  localparam B = 2'b01;\n\n  // State registers\n  reg [1:0] state, next_state;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic. Use always @(posedge clk) and set state to B (2'b01) when reset is high.",
+        "source": "The reset state is B and reset is active-high synchronous. For synchronous reset, use: always @(posedge clk).",
+        "implementation": "reg [1:0] state;\n  parameter B = 2'b01;\n  \n  always @(posedge clk) begin\n    if (reset) begin\n      state <= B;\n    end else begin\n      // State transition logic will be implemented here\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic using always @(*) block. Define state transitions based on the current state and input 'in'.",
+        "source": "B (out=1) --in=0--> A, B (out=1) --in=1--> B, A (out=0) --in=0--> B, A (out=0) --in=1--> A",
+        "implementation": "// State encoding\n  typedef enum logic [1:0] {\n    STATE_A = 2'b00,\n    STATE_B = 2'b01\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // Next state logic\n  always @(*) begin\n    case (current_state)\n      STATE_B: begin\n        if (in == 1'b0)\n          next_state = STATE_A;\n        else\n          next_state = STATE_B;\n      end\n      STATE_A: begin\n        if (in == 1'b0)\n          next_state = STATE_B;\n        else\n          next_state = STATE_A;\n      end\n      default: next_state = STATE_B; // Default to reset state\n    endcase\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic using assign statement. Set output 'out' based on the current state: out=1 for state B and out=0 for state A.",
+        "source": "For Moore machines, implement output logic ONLY based on current state. B (out=1), A (out=0)",
+        "implementation": "// State encoding\n  localparam STATE_A = 1'b0;\n  localparam STATE_B = 1'b1;\n  \n  // State register\n  reg current_state;\n  \n  // Output logic based on current state\n  assign out = (current_state == STATE_B) ? 1'b1 : 1'b0;"
+    }
+]

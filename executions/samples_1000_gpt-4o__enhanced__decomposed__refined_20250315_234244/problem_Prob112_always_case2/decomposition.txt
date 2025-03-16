@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with a 4-bit input port 'in' and a 2-bit output port 'pos'.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input in (4 bits) - output pos (2 bits)",
+        "implementation": "module TopModule (\n    input  [3:0] in,\n    output reg [1:0] pos\n);\n\nalways @(*) begin\n    casez (in)\n        4'b1???: pos = 2'd3;\n        4'b01??: pos = 2'd2;\n        4'b001?: pos = 2'd1;\n        4'b0001: pos = 2'd0;\n        default: pos = 2'd0;\n    endcase\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the priority encoder logic to output the position of the first high bit in the input vector. If 'in[3]' is high, set 'pos' to 2'b11.",
+        "source": "The module should implement a priority encoder. A priority encoder is a combinational circuit that, when given an input bit vector, outputs the position of the first 1 bit in the vector.",
+        "implementation": "always @(*) begin\n    casez (in)\n        4'b1???: pos = 2'b11;\n        4'b01??: pos = 2'b10;\n        4'b001?: pos = 2'b01;\n        4'b0001: pos = 2'b00;\n        default: pos = 2'b00;\n    endcase\nend"
+    },
+    {
+        "id": "3",
+        "content": "Continue the priority encoder logic: If 'in[2]' is high and 'in[3]' is not high, set 'pos' to 2'b10.",
+        "source": "The module should implement a priority encoder. A priority encoder is a combinational circuit that, when given an input bit vector, outputs the position of the first 1 bit in the vector.",
+        "implementation": "if (in[2] && !in[3]) begin\n    pos = 2'b10;\nend"
+    },
+    {
+        "id": "4",
+        "content": "Continue the priority encoder logic: If 'in[1]' is high and neither 'in[3]' nor 'in[2]' are high, set 'pos' to 2'b01.",
+        "source": "The module should implement a priority encoder. A priority encoder is a combinational circuit that, when given an input bit vector, outputs the position of the first 1 bit in the vector.",
+        "implementation": "else if (in[1] && ~in[3] && ~in[2]) begin\n    pos = 2'b01;\nend"
+    },
+    {
+        "id": "5",
+        "content": "Complete the priority encoder logic: If 'in[0]' is high and none of the higher bits are high, set 'pos' to 2'b00. If none of the input bits are high, output zero.",
+        "source": "For this problem, if none of the input bits are high (i.e., input is zero), output zero.",
+        "implementation": "always @(*) begin\n    case (in)\n        4'b0001: pos = 2'b00;\n        4'b0010: pos = 2'b01;\n        4'b0100: pos = 2'b10;\n        4'b1000: pos = 2'b11;\n        default: pos = 2'b00; // Output zero if none of the input bits are high\n    endcase\nend"
+    }
+]

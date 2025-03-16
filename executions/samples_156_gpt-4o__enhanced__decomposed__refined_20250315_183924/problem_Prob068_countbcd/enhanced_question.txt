@@ -1,0 +1,110 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - output ena (3 bits)
+ - output q   (16 bits)
+
+The module should implement a 4-digit BCD (binary-coded decimal) counter.
+Each decimal digit is encoded using 4 bits: q[3:0] is the ones digit,
+q[7:4] is the tens digit, etc. For digits [3:1], also output an enable
+signal indicating when each of the upper three digits should be
+incremented. Include a synchronous active-high reset. Assume all
+sequential logic is triggered on the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+**Module Interface:**
+
+```verilog
+module TopModule(
+    input wire clk,          // Clock signal, positive edge-triggered
+    input wire reset,        // Synchronous active-high reset
+    output reg [2:0] ena,    // Enable signals for tens, hundreds, and thousands digits
+    output reg [15:0] q      // 4-digit BCD counter output: q[3:0] - ones, q[7:4] - tens, q[11:8] - hundreds, q[15:12] - thousands
+);
+```
+
+**Behavioral Specification:**
+
+- **Counter Description:**
+  - The module implements a 4-digit BCD counter.
+  - Each decimal digit is encoded using 4 bits:
+    - `q[3:0]` represents the ones digit.
+    - `q[7:4]` represents the tens digit.
+    - `q[11:8]` represents the hundreds digit.
+    - `q[15:12]` represents the thousands digit.
+
+- **Enable Signal (`ena`):**
+  - `ena[0]`: Active high when the tens digit should increment.
+  - `ena[1]`: Active high when the hundreds digit should increment.
+  - `ena[2]`: Active high when the thousands digit should increment.
+
+- **BCD Incrementation:**
+  - The counter increments the ones digit on each positive clock edge.
+  - The tens digit increments when the ones digit rolls over from 9 to 0.
+  - The hundreds digit increments when the tens digit rolls over from 9 to 0.
+  - The thousands digit increments when the hundreds digit rolls over from 9 to 0.
+
+- **Reset Behavior:**
+  - On a synchronous active-high reset, all BCD digits (`q`) are set to zero.
+
+- **Boundary Condition:**
+  - Upon reaching the maximum BCD value of 9999, the counter rolls over to 0000 on the next increment.
+
+**Timing and Implementation Notes:**
+
+- **Clock and Reset:**
+  - The module operates on the positive edge of the `clk` signal.
+  - The reset is synchronous with the clock and active-high.
+
+- **Initialization:**
+  - `q` is initialized to 0 upon reset.
+  - The `ena` signals are derived from detecting the roll-over conditions of the respective lower-order BCD digits.
+
+**Example Implementation Outline:**
+
+```verilog
+always @(posedge clk) begin
+    if (reset) begin
+        q <= 16'b0;
+        ena <= 3'b0;
+    end else begin
+        if (q[3:0] == 4'd9) begin
+            q[3:0] <= 4'd0;
+            if (q[7:4] == 4'd9) begin
+                q[7:4] <= 4'd0;
+                ena[0] <= 1'b1;
+                if (q[11:8] == 4'd9) begin
+                    q[11:8] <= 4'd0;
+                    ena[1] <= 1'b1;
+                    if (q[15:12] == 4'd9) begin
+                        q[15:12] <= 4'd0;
+                        ena[2] <= 1'b1;
+                    end else begin
+                        q[15:12] <= q[15:12] + 4'd1;
+                        ena[2] <= 1'b0;
+                    end
+                end else begin
+                    q[11:8] <= q[11:8] + 4'd1;
+                    ena[1] <= 1'b0;
+                end
+            end else begin
+                q[7:4] <= q[7:4] + 4'd1;
+                ena[0] <= 1'b0;
+            end
+        end else begin
+            q[3:0] <= q[3:0] + 4'd1;
+            ena <= 3'b0;
+        end
+    end
+end
+```
+**Note:** This example does not include all possible optimizations or error checks for invalid BCD states, which should be considered in a complete design.
+
+**
+                

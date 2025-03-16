@@ -1,0 +1,167 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we will design a finite state machine (FSM) that processes a serial data stream with a start bit, 8 data bits, and a stop bit. The FSM will have the following states: IDLE, START, DATA, STOP, and ERROR. The IDLE state waits for a start bit (logic 0). Upon detecting a start bit, the FSM transitions to the START state, then to the DATA state where it counts 8 data bits. After receiving 8 data bits, it transitions to the STOP state to verify the stop bit (logic 1). If the stop bit is correct, the FSM asserts the `done` signal and returns to IDLE. If the stop bit is incorrect, it transitions to the ERROR state and waits for a valid stop bit before returning to IDLE. The FSM uses a synchronous reset to initialize the state to IDLE. The design follows the provided coding conventions and guidelines.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic done
+);
+
+    typedef enum logic [2:0] {
+        IDLE  = 3'b000,
+        START = 3'b001,
+        DATA  = 3'b010,
+        STOP  = 3'b011,
+        ERROR = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [3:0] bit_counter;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_counter <= 4'd0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == DATA) begin
+                bit_counter <= bit_counter + 1;
+            end else begin
+                bit_counter <= 4'd0;
+            end
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        next_state = current_state; // Default to hold state
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) // Detect start bit
+                    next_state = START;
+            end
+            START: begin
+                next_state = DATA;
+            end
+            DATA: begin
+                if (bit_counter == 4'd8) // After 8 data bits
+                    next_state = STOP;
+            end
+            STOP: begin
+                if (in == 1'b1) // Verify stop bit
+                    next_state = IDLE;
+                else
+                    next_state = ERROR; // Error if stop bit is not correct
+            end
+            ERROR: begin
+                if (in == 1'b1) // Wait for line to return to idle
+                    next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+    // Output logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            done <= 1'b0;
+        end else begin
+            if (current_state == STOP && in == 1'b1)
+                done <= 1'b1;
+            else
+                done <= 1'b0;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic done
+);
+
+    typedef enum logic [2:0] {
+        IDLE  = 3'b000,
+        START = 3'b001,
+        DATA  = 3'b010,
+        STOP  = 3'b011,
+        ERROR = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [3:0] bit_counter;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_counter <= 4'd0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == DATA) begin
+                bit_counter <= bit_counter + 1;
+            end else begin
+                bit_counter <= 4'd0;
+            end
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        next_state = current_state; // Default to hold state
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) // Detect start bit
+                    next_state = START;
+            end
+            START: begin
+                next_state = DATA;
+            end
+            DATA: begin
+                if (bit_counter == 4'd8) // After 8 data bits
+                    next_state = STOP;
+            end
+            STOP: begin
+                if (in == 1'b1) // Verify stop bit
+                    next_state = IDLE;
+                else
+                    next_state = ERROR; // Error if stop bit is not correct
+            end
+            ERROR: begin
+                if (in == 1'b1) // Wait for line to return to idle
+                    next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+    // Output logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            done <= 1'b0;
+        end else begin
+            if (current_state == STOP && in == 1'b1)
+                done <= 1'b1;
+            else
+                done <= 1'b0;
+        end
+    end
+
+endmodule

@@ -1,0 +1,65 @@
+Generated Response:
+
+<REASONING>
+To implement the 32-bit Galois LFSR with the specified taps and synchronous reset, we will follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. The output `q` is a 32-bit signal.
+
+2. **Signal Declaration**: Use `logic` to declare the 32-bit register `q` that will hold the state of the LFSR.
+
+3. **Synchronous Reset**: Implement a synchronous reset that initializes `q` to `32'h1` when the reset signal is high on the positive edge of the clock.
+
+4. **LFSR Logic**: Implement the LFSR logic using an always block triggered on the positive edge of the clock. The feedback for the LFSR is calculated using XOR gates at the specified tap positions (32, 22, 2, and 1). The feedback is XORed with the LSB `q[0]` to determine the next state of the LFSR.
+
+5. **Bitwise Operations**: Use bitwise operations to shift the register and apply the feedback.
+
+6. **Coding Conventions**: Follow the specified coding conventions, such as using `logic` for signal declarations and not explicitly specifying sensitivity lists for combinational logic.
+
+By following these steps, we ensure that the module adheres to the given specifications and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    logic [31:0] q_reg;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            q_reg <= 32'h1;
+        end else begin
+            q_reg <= {q_reg[30:0], q_reg[31] ^ q_reg[21] ^ q_reg[1] ^ q_reg[0]};
+        end
+    end
+
+    assign q = q_reg;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    logic [31:0] q_reg;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            q_reg <= 32'h1;
+        end else begin
+            q_reg <= {q_reg[30:0], q_reg[31] ^ q_reg[21] ^ q_reg[1] ^ q_reg[0]};
+        end
+    end
+
+    assign q = q_reg;
+
+endmodule

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    input logic j,\n    input logic k,\n    output logic out\n);\n    typedef enum logic [1:0] {OFF, ON} state_t;\n    state_t current_state, next_state;\n\n    // State transition logic\n    always_ff @(posedge clk) begin\n        if (reset)\n            current_state <= OFF;\n        else\n            current_state <= next_state;\n    end\n\n    // Next state logic\n    always_comb begin\n        case (current_state)\n            OFF: begin\n                out = 1'b0;\n                if (j)\n                    next_state = ON;\n                else\n                    next_state = OFF;\n            end\n            ON: begin\n                out = 1'b1;\n                if (k)\n                    next_state = OFF;\n                else\n                    next_state = ON;\n            end\n        endcase\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit clock signal. The module operates on the positive edge.
+  - reset: 1-bit active-high synchronous reset signal.
+  - in: 1-bit serial data input.
+- Output Ports:
+  - disc: 1-bit output. Asserted for one clock cycle to indicate a bit should be discarded.
+  - flag: 1-bit output. Asserted for one clock cycle to indicate a frame boundary (start or end of a frame).
+  - err: 1-bit output. Asserted for one clock cycle to indicate an error due to 7 or more consecutive 1s.
+
+Behavioral Description:
+- The module implements a Moore-type finite state machine (FSM) to process a continuous serial bit stream.
+- The FSM should recognize the following sequences:
+  1. Sequence "0111110": After detecting this sequence, assert the 'disc' output signal for one clock cycle immediately following the detection.
+  2. Sequence "01111110": After detecting this sequence, assert the 'flag' output signal for one clock cycle immediately following the detection.
+  3. Sequence "01111111...": After detecting seven or more consecutive '1's, assert the 'err' output signal for one clock cycle immediately following the detection.
+
+State and Reset Conditions:
+- The FSM should initialize to a state equivalent to having just processed an input '0' after reset.
+- The reset is active-high and synchronous with the clock, meaning that the reset state is entered on the next positive clock edge when the reset signal is high.
+
+Inputs and Outputs:
+- Each output (disc, flag, err) is asserted for exactly one clock cycle following the recognition of its respective sequence.
+- The module should correctly handle edge cases where sequences overlap and ensure no race conditions occur by prioritizing sequences in the order given above (disc, flag, err).
+
+Additional Considerations:
+- Bit indexing: The least significant bit (LSB) is bit[0].
+- The FSM should handle transitions efficiently and prevent incorrect sequence recognition due to incomplete or overlapping sequences.
+
+Note: Ensure all state transitions and outputs are defined according to the detected sequence and handle potential overlaps logically.
+</ENHANCED_SPEC>

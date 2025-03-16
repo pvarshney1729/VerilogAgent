@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, and in[7:0], and output port done.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  clk - input  reset - input  in (8 bits) - output done",
+        "implementation": "module TopModule (\n    input clk,\n    input reset,\n    input [7:0] in,\n    output reg done\n);\n\n    // State encoding\n    typedef enum reg [1:0] {\n        IDLE = 2'b00,\n        BYTE1 = 2'b01,\n        BYTE2 = 2'b10,\n        BYTE3 = 2'b11\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= IDLE;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            IDLE: begin\n                if (in[3] == 1'b1)\n                    next_state = BYTE1;\n                else\n                    next_state = IDLE;\n            end\n            BYTE1: next_state = BYTE2;\n            BYTE2: next_state = BYTE3;\n            BYTE3: next_state = IDLE;\n            default: next_state = IDLE;\n        endcase\n    end\n\n    // Output logic\n    always @(posedge clk) begin\n        if (reset) begin\n            done <= 1'b0;\n        end else begin\n            if (current_state == BYTE3)\n                done <= 1'b1;\n            else\n                done <= 1'b0;\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define the states for the FSM: IDLE, BYTE1, BYTE2, BYTE3.",
+        "source": "The module should implement a finite state machine that will search for message boundaries when given an input byte stream.",
+        "implementation": "// State encoding for the FSM\n  typedef enum logic [1:0] {\n    IDLE  = 2'b00,\n    BYTE1 = 2'b01,\n    BYTE2 = 2'b10,\n    BYTE3 = 2'b11\n  } state_t;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state transition logic for the FSM. Transition from IDLE to BYTE1 when in[3] is 1, from BYTE1 to BYTE2, BYTE2 to BYTE3, and BYTE3 back to IDLE on each clock cycle.",
+        "source": "The algorithm we'll use is to discard bytes until we see one with in[3]=1. We then assume that this is byte 1 of a message, and signal the receipt of a message once all 3 bytes have been received (done).",
+        "implementation": "// State encoding\n  typedef enum logic [1:0] {\n    IDLE  = 2'b00,\n    BYTE1 = 2'b01,\n    BYTE2 = 2'b10,\n    BYTE3 = 2'b11\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // State transition logic\n  always_ff @(posedge clk) begin\n    if (reset) begin\n      current_state <= IDLE;\n    end else begin\n      current_state <= next_state;\n    end\n  end\n\n  always_comb begin\n    case (current_state)\n      IDLE: begin\n        if (in[3] == 1'b1) begin\n          next_state = BYTE1;\n        end else begin\n          next_state = IDLE;\n        end\n      end\n      BYTE1: begin\n        next_state = BYTE2;\n      end\n      BYTE2: begin\n        next_state = BYTE3;\n      end\n      BYTE3: begin\n        next_state = IDLE;\n      end\n      default: begin\n        next_state = IDLE;\n      end\n    endcase\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the output logic for the done signal. Set done to 1 in the cycle immediately after the FSM transitions from BYTE3 to IDLE.",
+        "source": "The FSM should signal done in the cycle immediately after the third byte of each message was successfully received.",
+        "implementation": "```verilog\n[BEGIN]\nreg [1:0] state, next_state;\nreg done_reg;\n\nlocalparam IDLE  = 2'b00,\n           BYTE1 = 2'b01,\n           BYTE2 = 2'b10,\n           BYTE3 = 2'b11;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        state <= IDLE;\n        done_reg <= 1'b0;\n    end else begin\n        state <= next_state;\n        if (state == BYTE3 && next_state == IDLE) begin\n            done_reg <= 1'b1;\n        end else begin\n            done_reg <= 1'b0;\n        end\n    end\nend\n\nassign done = done_reg;\n[END]\n```"
+    },
+    {
+        "id": "5",
+        "content": "Implement the synchronous reset logic for the FSM. Ensure that the FSM returns to the IDLE state when reset is high.",
+        "source": "Reset should be active high synchronous. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "// State encoding\n  localparam IDLE = 2'b00;\n  \n  // State register\n  reg [1:0] state;\n  \n  // Synchronous reset logic\n  always @(posedge clk) begin\n    if (reset) begin\n      state <= IDLE;\n    end else begin\n      // Other state transitions would be handled here\n    end\n  end"
+    }
+]

@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit, clock signal. All sequential logic is triggered on the positive edge of this clock.
+  - `reset`: 1-bit, active high synchronous reset. Upon assertion, all state registers should reset to their initial values at the next positive clock edge.
+  - `in`: 8-bit data input, where `in[7]` is the most significant bit and `in[0]` is the least significant bit.
+
+- Output Ports:
+  - `done`: 1-bit, signals the successful receipt of a complete 3-byte message. This signal is asserted for one clock cycle immediately after receiving the third byte of a message.
+
+Functional Description:
+- The module implements a finite state machine (FSM) to parse a continuous stream of 8-bit bytes, identifying message boundaries as defined by the PS/2 mouse protocol.
+- A valid message consists of three consecutive bytes, with the first byte identified by `in[3] == 1`. The subsequent two bytes belonging to the same message can have any value for `in[3]`.
+- The FSM should transition through the following states:
+  1. **IDLE**: The FSM waits for a byte with `in[3] == 1`. All bytes are discarded until such a byte is detected.
+  2. **BYTE_1_DETECTED**: Upon detecting `in[3] == 1`, the FSM assumes this is the first byte of a 3-byte message.
+  3. **BYTE_2_RECEIVED**: The FSM transitions to this state after receiving the second byte.
+  4. **BYTE_3_RECEIVED**: The FSM transitions to this state after receiving the third byte and asserts the `done` signal in the next clock cycle to indicate the completion of a message.
+
+- The `done` signal is asserted high for one clock cycle immediately after the third byte of each message is received.
+
+Reset Behavior:
+- When `reset` is high, the FSM should return to the IDLE state and all internal state registers should be reset to their initial values. This reset operation is synchronous and takes effect at the next positive clock edge.
+
+Edge Cases:
+- If a reset is asserted in the middle of parsing a message, the FSM should reset to the IDLE state on the next clock cycle.
+- The module does not manage overlapping messages, i.e., it assumes that the input stream can always be correctly segmented into non-overlapping 3-byte messages after the initial detection of a start byte.
+
+Note:
+- Ensure no race conditions occur between the reception of bytes and state transitions, particularly when detecting the start byte (`in[3] == 1`).
+- The specification assumes an ideal environment where bytes are fed into the module in a synchronized manner with respect to the clock signal.
+</ENHANCED_SPEC>

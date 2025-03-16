@@ -1,0 +1,54 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in1
+ - input  in2
+ - output out
+
+The module should implement a 2-input NOR gate.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: TopModule
+
+**Interface Specification**:
+- **Inputs**:
+  - `input wire in1`: A single-bit input signal.
+  - `input wire in2`: A single-bit input signal.
+- **Outputs**:
+  - `output wire out`: A single-bit output signal representing the result of the NOR operation on `in1` and `in2`.
+
+**Behavioral Specification**:
+- **Combinational Logic**: This module implements a 2-input NOR gate. The output `out` is high (1) if and only if both `in1` and `in2` are low (0).
+  
+  - **Logical Expression**: 
+    \[
+    \text{out} = \overline{\text{in1} + \text{in2}}
+    \]
+  - **Truth Table**:
+    - If `in1` = 0 and `in2` = 0, then `out` = 1.
+    - If `in1` = 0 and `in2` = 1, then `out` = 0.
+    - If `in1` = 1 and `in2` = 0, then `out` = 0.
+    - If `in1` = 1 and `in2` = 1, then `out` = 0.
+
+**Timing and Implementation Notes**:
+- This module is purely combinational with no internal state. Therefore, it does not require a clock or reset signal.
+
+**Bit-Ordering and Indexing**:
+- As all signals are single-bit, bit-ordering and indexing are not applicable.
+
+**Assumptions and Dependencies**:
+- The inputs `in1` and `in2` are assumed to be stable during the evaluation of the combinational logic.
+
+**Verilog Implementation**:
+```verilog
+module TopModule (
+    input wire in1,
+    input wire in2,
+    output wire out
+);
+    assign out = ~(in1 | in2);
+endmodule
+```
+                

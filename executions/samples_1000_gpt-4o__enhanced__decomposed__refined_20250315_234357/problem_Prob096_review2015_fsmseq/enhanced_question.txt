@@ -1,0 +1,26 @@
+<ENHANCED_SPEC>
+The module "TopModule" should be implemented with the following interface and functionality. All ports are single-bit unless otherwise noted.
+
+**Port Definitions:**
+- `input wire clk`: Clock signal for synchronizing sequential logic.
+- `input wire reset`: Synchronous reset signal, active high.
+- `input wire data`: Input data stream consisting of a sequence of bits.
+- `output reg start_shifting`: Output signal that will be set high when the target sequence is detected.
+
+**Functional Description:**
+- The module implements a finite-state machine (FSM) designed to detect the binary sequence "1101" within the input bit stream `data`.
+- Upon detecting the sequence "1101", the `start_shifting` output should be set to '1' and remain '1' indefinitely until a reset occurs.
+- The `reset` signal is synchronous and active high. When `reset` is asserted, all state information and the `start_shifting` output must be reset to their initial states.
+- All sequential logic, including flip-flops and state registers, should be triggered on the rising edge of the `clk` signal.
+- The initial state of the FSM should ensure that `start_shifting` is set to '0'.
+- Bit indexing for sequences starts from the most significant bit (e.g., "1101" should be processed as '1', '1', '0', '1' from left to right).
+
+**FSM Implementation Details:**
+- Define states clearly to manage transitions based on the incoming `data` bit.
+- Ensure that the transitions between states correctly handle partial matches and non-matching sequences.
+- Consider edge cases such as continuous streams of '1's or '0's, and ensure the FSM resets correctly after detecting the sequence and upon reset activation.
+
+**Additional Considerations:**
+- Test for boundary conditions, such as the sequence appearing at the very end of the input data stream.
+- Ensure that transitions are stable and free of race conditions by defining state transitions explicitly and using non-overlapping state representations.
+</ENHANCED_SPEC>

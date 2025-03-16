@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Specification: TopModule
+
+Interface:
+- Input Ports:
+  - `in`: A 1-bit input signal.
+  - `state`: A 4-bit input signal representing the current state in a one-hot encoded format.
+- Output Ports:
+  - `next_state`: A 4-bit output signal representing the next state in a one-hot encoded format.
+  - `out`: A 1-bit output signal representing the output of the Moore state machine.
+
+Conventions:
+- Bit Indexing: `state[0]` and `next_state[0]` refer to the least significant bit (LSB).
+- State Encoding (One-Hot):
+  - State A: 4'b0001
+  - State B: 4'b0010
+  - State C: 4'b0100
+  - State D: 4'b1000
+
+State Machine Description:
+- The module implements a Moore state machine with four distinct states: A, B, C, and D.
+- State transitions and outputs are determined by the current state and the `in` input signal.
+
+State Transition Table:
+- Current State | `in` = 0 | `in` = 1
+- A             | A        | B
+- B             | C        | B
+- C             | A        | D
+- D             | C        | B
+
+Output Logic:
+- The output `out` is determined solely by the current state:
+  - In state D, `out` = 1.
+  - In all other states (A, B, C), `out` = 0.
+
+Implementation Notes:
+- The module is purely combinational with no sequential elements.
+- Ensure that the next state and output logic correctly reflects the state transition table and output logic described.
+- Edge cases or invalid states (e.g., multiple bits set in `state`) are not explicitly addressed; assume valid one-hot encoding at all times.
+
+Reset and Initialization:
+- Not applicable as the module does not include sequential elements or registers.
+</ENHANCED_SPEC>

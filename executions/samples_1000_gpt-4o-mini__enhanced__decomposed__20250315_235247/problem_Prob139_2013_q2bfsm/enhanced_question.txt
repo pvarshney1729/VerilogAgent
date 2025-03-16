@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- `input wire clk`: Clock signal, positive edge-triggered.
+- `input wire resetn`: Synchronous active-low reset signal.
+- `input wire x`: Input signal from the motor.
+- `input wire y`: Input signal from the motor.
+- `output reg f`: Output signal to control the motor.
+- `output reg g`: Output signal to control the motor.
+
+Finite State Machine (FSM) Description:
+- The FSM operates based on a synchronous and active-low reset (`resetn`).
+- Upon assertion of `resetn` (low), the FSM remains in the initial state, State A.
+- Once `resetn` is de-asserted (high), the FSM transitions on the next positive clock edge.
+- In State A:
+  - Output `f` is set to `1` for exactly one clock cycle after reset is de-asserted.
+  - The FSM then begins monitoring the `x` input signal.
+- State B:
+  - The FSM transitions to monitoring for the sequence `101` on `x` across three consecutive clock cycles.
+  - Upon detecting `101`, set output `g` to `1` on the following clock cycle.
+- State C:
+  - While `g` is `1`, the FSM monitors `y`.
+  - If `y` is `1` within two clock cycles of `g` becoming `1`, maintain `g = 1` until the next reset.
+  - If `y` does not become `1` within two clock cycles, set `g = 0` until the next reset.
+
+Operational Notes:
+- All state transitions occur on the positive edge of `clk`.
+- Outputs `f` and `g` should have defined initial states:
+  - `f` is initialized to `0`.
+  - `g` is initialized to `0`.
+- Reset behavior:
+  - On assertion of `resetn` (low), the FSM transitions to State A, and outputs `f` and `g` are reset to their initial values.
+- Edge cases and input boundaries:
+  - The sequence detection for `x` (101) must occur on three consecutive clock cycles without interruption.
+  - The monitoring of `y` is strictly limited to two clock cycles after `g` is initially set to `1`.
+
+Ensure that the implementation adheres to these detailed specifications to maintain correctness and intended functionality.
+</ENHANCED_SPEC>

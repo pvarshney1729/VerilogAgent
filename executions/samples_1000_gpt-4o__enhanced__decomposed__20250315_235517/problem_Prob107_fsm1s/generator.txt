@@ -1,0 +1,143 @@
+Generated Response:
+
+<REASONING>
+To implement the requested Moore state machine, we need to follow the given specifications and guidelines closely. The state machine has two states, A and B, with a synchronous reset that initializes the state to B. The output depends solely on the current state, not the input, which is characteristic of a Moore machine.
+
+1. **State Encoding**: We will use a single bit to represent the two states. Let's assign `0` to State A and `1` to State B.
+
+2. **State Transition Logic**: 
+   - From State B, if `in` is `0`, transition to State A; if `in` is `1`, remain in State B.
+   - From State A, if `in` is `0`, transition to State B; if `in` is `1`, remain in State A.
+
+3. **Output Logic**: 
+   - In State B, the output `out` is `1`.
+   - In State A, the output `out` is `0`.
+
+4. **Synchronous Reset**: The reset is active-high and synchronous, meaning it will be checked on the rising edge of the clock. When reset is high, the state should be set to B.
+
+5. **Coding Conventions**: We will use `logic` for all signals, use `always @(*)` for combinational logic, and ensure that all numeric constants are properly sized.
+
+By following these steps, we ensure that the implementation is correct and adheres to the provided guidelines and conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        STATE_A = 1'b0,
+        STATE_B = 1'b1
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            STATE_B: begin
+                if (in == 1'b0) begin
+                    next_state = STATE_A;
+                end else begin
+                    next_state = STATE_B;
+                end
+            end
+            STATE_A: begin
+                if (in == 1'b0) begin
+                    next_state = STATE_B;
+                end else begin
+                    next_state = STATE_A;
+                end
+            end
+            default: begin
+                next_state = STATE_B; // Default state
+            end
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_B: out = 1'b1;
+            STATE_A: out = 1'b0;
+            default: out = 1'b1; // Default output
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        STATE_A = 1'b0,
+        STATE_B = 1'b1
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            STATE_B: begin
+                if (in == 1'b0) begin
+                    next_state = STATE_A;
+                end else begin
+                    next_state = STATE_B;
+                end
+            end
+            STATE_A: begin
+                if (in == 1'b0) begin
+                    next_state = STATE_B;
+                end else begin
+                    next_state = STATE_A;
+                end
+            end
+            default: begin
+                next_state = STATE_B; // Default state
+            end
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_B: out = 1'b1;
+            STATE_A: out = 1'b0;
+            default: out = 1'b1; // Default output
+        endcase
+    end
+
+endmodule

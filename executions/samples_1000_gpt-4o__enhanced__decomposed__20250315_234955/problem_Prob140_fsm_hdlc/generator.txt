@@ -1,0 +1,203 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as specified, we need to design a Moore-type finite state machine (FSM) that can recognize specific bit patterns in a serial data stream. The FSM will have the following states:
+
+1. **IDLE**: Initial state, waiting for the start of a sequence.
+2. **S1 to S6**: Intermediate states to track consecutive '1's.
+3. **DISCARD**: State to signal a bit needs to be discarded after detecting "0111110".
+4. **FLAG**: State to signal a frame boundary after detecting "01111110".
+5. **ERROR**: State to signal an error after detecting "01111111".
+
+The FSM transitions between these states based on the input bit stream. The outputs (`disc`, `flag`, `err`) are asserted for one clock cycle after the respective sequence is detected. The FSM resets to the IDLE state synchronously with the clock when the reset signal is high.
+
+The implementation will use a synchronous reset and will follow the coding conventions provided, using `logic` for all signals and ensuring correct sensitivity lists for combinational logic.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic disc,
+    output logic flag,
+    output logic err
+);
+
+    typedef enum logic [3:0] {
+        IDLE        = 4'b0000,
+        S1          = 4'b0001,
+        S2          = 4'b0010,
+        S3          = 4'b0011,
+        S4          = 4'b0100,
+        S5          = 4'b0101,
+        S6          = 4'b0110,
+        DISCARD     = 4'b0111,
+        FLAG        = 4'b1000,
+        ERROR       = 4'b1001
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always @(*) begin
+        // Default outputs
+        disc = 1'b0;
+        flag = 1'b0;
+        err  = 1'b0;
+        next_state = current_state;
+
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) next_state = S1;
+            end
+            S1: begin
+                if (in == 1'b1) next_state = S2;
+                else next_state = S1;
+            end
+            S2: begin
+                if (in == 1'b1) next_state = S3;
+                else next_state = S1;
+            end
+            S3: begin
+                if (in == 1'b1) next_state = S4;
+                else next_state = S1;
+            end
+            S4: begin
+                if (in == 1'b1) next_state = S5;
+                else next_state = S1;
+            end
+            S5: begin
+                if (in == 1'b1) next_state = S6;
+                else next_state = S1;
+            end
+            S6: begin
+                if (in == 1'b0) begin
+                    next_state = DISCARD;
+                    disc = 1'b1;
+                end else begin
+                    next_state = FLAG;
+                    flag = 1'b1;
+                end
+            end
+            DISCARD: begin
+                next_state = S1;
+            end
+            FLAG: begin
+                next_state = S1;
+            end
+            ERROR: begin
+                if (in == 1'b0) next_state = S1;
+                else next_state = ERROR;
+                err = 1'b1;
+            end
+            default: next_state = IDLE;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic disc,
+    output logic flag,
+    output logic err
+);
+
+    typedef enum logic [3:0] {
+        IDLE        = 4'b0000,
+        S1          = 4'b0001,
+        S2          = 4'b0010,
+        S3          = 4'b0011,
+        S4          = 4'b0100,
+        S5          = 4'b0101,
+        S6          = 4'b0110,
+        DISCARD     = 4'b0111,
+        FLAG        = 4'b1000,
+        ERROR       = 4'b1001
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always @(*) begin
+        // Default outputs
+        disc = 1'b0;
+        flag = 1'b0;
+        err  = 1'b0;
+        next_state = current_state;
+
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) next_state = S1;
+            end
+            S1: begin
+                if (in == 1'b1) next_state = S2;
+                else next_state = S1;
+            end
+            S2: begin
+                if (in == 1'b1) next_state = S3;
+                else next_state = S1;
+            end
+            S3: begin
+                if (in == 1'b1) next_state = S4;
+                else next_state = S1;
+            end
+            S4: begin
+                if (in == 1'b1) next_state = S5;
+                else next_state = S1;
+            end
+            S5: begin
+                if (in == 1'b1) next_state = S6;
+                else next_state = S1;
+            end
+            S6: begin
+                if (in == 1'b0) begin
+                    next_state = DISCARD;
+                    disc = 1'b1;
+                end else begin
+                    next_state = FLAG;
+                    flag = 1'b1;
+                end
+            end
+            DISCARD: begin
+                next_state = S1;
+            end
+            FLAG: begin
+                next_state = S1;
+            end
+            ERROR: begin
+                if (in == 1'b0) next_state = S1;
+                else next_state = ERROR;
+                err = 1'b1;
+            end
+            default: next_state = IDLE;
+        endcase
+    end
+
+endmodule

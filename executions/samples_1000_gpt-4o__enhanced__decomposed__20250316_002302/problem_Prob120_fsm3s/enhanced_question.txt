@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk` : Clock signal, positive edge-triggered.
+  - `input wire reset` : Synchronous active-high reset signal.
+  - `input wire in` : One-bit data input.
+
+- Output Ports:
+  - `output wire out` : One-bit output.
+
+Description:
+This module implements a Moore state machine with four states: A, B, C, and D. The state machine transitions and outputs are defined as follows:
+
+States and Transitions:
+- State A:
+  - If `in` is 0, transition to State A.
+  - If `in` is 1, transition to State B.
+  - Output: 0
+
+- State B:
+  - If `in` is 0, transition to State C.
+  - If `in` is 1, remain in State B.
+  - Output: 0
+
+- State C:
+  - If `in` is 0, transition to State A.
+  - If `in` is 1, transition to State D.
+  - Output: 0
+
+- State D:
+  - If `in` is 0, transition to State C.
+  - If `in` is 1, transition to State B.
+  - Output: 1
+
+Reset Behavior:
+- The FSM is reset synchronously to State A on the positive edge of `clk` when `reset` is high.
+
+General Specifications:
+- The state transitions occur on the positive edge of the `clk` signal.
+- The reset is synchronous, and the FSM enters State A regardless of the current state whenever `reset` is asserted high during a clock cycle.
+- The output `out` is determined solely by the current state, as per Moore FSM characteristics, and is unaffected by the `in` signal during state transitions.
+- Bit[0] refers to the least significant bit in any multi-bit signals, though all current ports are single bit.
+
+Edge Cases:
+- Ensure the FSM correctly handles all possible combinations of `in` and `reset` at every clock cycle, particularly during state transitions and reset conditions.
+</ENHANCED_SPEC>

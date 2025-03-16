@@ -1,0 +1,90 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  x
+ - input  y
+ - output z
+
+The module can be described by the following simulation waveform:
+
+  time  x  y  z
+  0ns   0  0  1
+  5ns   0  0  1
+  10ns  0  0  1
+  15ns  0  0  1
+  20ns  0  0  1
+  25ns  1  0  0
+  30ns  1  0  0
+  35ns  0  1  0
+  40ns  0  1  0
+  45ns  1  1  1
+  50ns  1  1  1
+  55ns  0  0  1
+  60ns  0  1  0
+  65ns  0  1  0
+  70ns  1  1  1
+  75ns  0  1  0
+  80ns  0  1  0
+  85ns  0  1  0
+  90ns  1  0  0
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+**Module Name:**
+- `TopModule`
+
+**Interface:**
+```verilog
+module TopModule (
+    input wire x,  // 1-bit wide, unsigend, input signal x
+    input wire y,  // 1-bit wide, unsigned, input signal y
+    output reg z   // 1-bit wide, unsigned, output signal z
+);
+```
+
+**Timing and Clocking:**
+- The module is assumed to be a combinational logic circuit, meaning it does not rely on a clock signal for its operation. If a clock is required, please provide details.
+
+**Behavioral Description:**
+- The output `z` is determined based on the following logic:
+  - `z` is `1` if both `x` and `y` are `0`.
+  - `z` is `0` if `x` is `1` and `y` is `0`.
+  - `z` is `0` if `x` is `0` and `y` is `1`.
+  - `z` is `1` if both `x` and `y` are `1`.
+
+**Truth Table:**
+
+| x | y | z |
+|---|---|---|
+| 0 | 0 | 1 |
+| 1 | 0 | 0 |
+| 0 | 1 | 0 |
+| 1 | 1 | 1 |
+
+**Reset and Initialization:**
+- Since the module is combinational, there is no reset signal. The output `z` is determined directly from the inputs `x` and `y` at any point in time.
+
+**Boundary Conditions:**
+- The module is designed to handle all possible input combinations of `x` and `y`, as shown in the truth table above. Undefined or unexpected signals should not occur since inputs are constrained to the binary values of `0` and `1`.
+
+**Notes:**
+- The module is a simple logic gate representation based on the given truth table.
+- Ensure inputs are stable before sampling them to avoid glitches in the output.
+
+```verilog
+always @(*) begin
+    case ({x, y})
+        2'b00: z = 1;
+        2'b01: z = 0;
+        2'b10: z = 0;
+        2'b11: z = 1;
+        default: z = 0; // Default fallback
+    endcase
+end
+```
+
+**
+                

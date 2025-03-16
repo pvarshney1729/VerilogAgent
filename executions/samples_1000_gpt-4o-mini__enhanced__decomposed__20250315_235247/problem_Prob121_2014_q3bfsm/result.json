@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input clk,\n    input reset,\n    input x,\n    output reg z\n);\n    logic [2:0] y; // Current state\n\n    // Synchronous reset and state transition logic\n    always @(posedge clk) begin\n        if (reset) begin\n            y <= 3'b000; // Reset to state 000\n        end else begin\n            case (y)\n                3'b000: y <= (x == 1'b0) ? 3'b000 : 3'b001;\n                3'b001: y <= (x == 1'b0) ? 3'b001 : 3'b100;\n                3'b010: y <= (x == 1'b0) ? 3'b010 : 3'b001;\n                3'b011: y <= (x == 1'b0) ? 3'b001 : 3'b010;\n                3'b100: y <= (x == 1'b0) ? 3'b011 : 3'b100;\n                default: y <= 3'b000; // Default case to handle unexpected states\n            endcase\n        end\n    end\n\n    // Output logic based on current state\n    always @(*) begin\n        case (y)\n            3'b000: z = 1'b0;\n            3'b001: z = 1'b0;\n            3'b010: z = 1'b0;\n            3'b011: z = 1'b1;\n            3'b100: z = 1'b1;\n            default: z = 1'b0; // Default case to handle unexpected states\n        endcase\n    end\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

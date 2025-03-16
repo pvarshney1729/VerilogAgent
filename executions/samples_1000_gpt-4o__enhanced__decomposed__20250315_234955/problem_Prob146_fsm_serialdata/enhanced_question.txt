@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and has the following interface. All input and output ports are one bit unless otherwise specified:
+
+- `input clk`: Clock signal, positive edge-triggered.
+- `input in`: Serial input data stream.
+- `input reset`: Active-high synchronous reset signal.
+- `output reg [7:0] out_byte`: 8-bit output representing the correctly received data byte.
+- `output reg done`: Indicates the successful reception of a complete byte, including start and stop bits.
+
+The module will operate as follows:
+
+1. **Idle State**: The line is at logic high (1) when idle. The FSM should remain in this state until a start bit is detected.
+
+2. **Start Bit Detection**: The FSM transitions from the idle state upon detection of a start bit (logic 0).
+
+3. **Data Bit Reception**: After the start bit, the FSM will sequentially shift in 8 data bits. The serial protocol sends bits starting with the least significant bit (LSB), meaning bit[0] is received first.
+
+4. **Stop Bit Verification**: After receiving 8 data bits, the FSM expects a stop bit (logic 1). If the stop bit is correct, the FSM will:
+   - Assert `done` high for one clock cycle.
+   - Load the received 8-bit data into `out_byte`.
+   
+5. **Error Handling**: If a stop bit is not detected, the FSM will wait for a stop bit before resetting to the idle state and attempting to receive the next byte.
+
+6. **Reset Behavior**: On asserting `reset` high, the FSM will initialize to the idle state, `out_byte` is set to a don't-care state unless `done` is asserted, and `done` is set to low. 
+
+7. **Clock Cycle Relationships**: All transitions and data capturing occur on the positive edge of the clock, ensuring synchronization with the input data stream.
+
+This design ensures correct byte reception by adhering to the start bit (0), 8 data bits, and stop bit (1) protocol, with all outputs and state transitions clearly defined.
+</ENHANCED_SPEC>

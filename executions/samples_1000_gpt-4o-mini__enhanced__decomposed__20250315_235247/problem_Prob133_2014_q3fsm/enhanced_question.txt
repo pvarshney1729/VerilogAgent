@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input clk: Clock signal. The module operates on the rising edge of this signal.
+- input reset: Active high synchronous reset. Resets the FSM to the initial state.
+- input s: Control signal for the FSM, evaluated in state A.
+- input w: Input signal evaluated in state B to determine the output.
+- output reg z: Output signal, set based on the evaluation of w.
+
+Finite State Machine Description:
+1. Initial State: A
+   - Upon reset (active high), the FSM enters state A.
+   - While in state A:
+     - If s = 0, remain in state A.
+     - If s = 1, transition to state B on the next rising edge of clk.
+
+2. State B:
+   - In state B, the FSM evaluates the input w over three consecutive clock cycles.
+   - A counter (3-bit wide, initialized to zero on each entry to state B) tracks the number of cycles w is equal to 1.
+   - After three clock cycles:
+     - If the counter value equals 2, set output z to 1 for one clock cycle.
+     - Otherwise, set z to 0.
+   - The FSM then resets the counter and continues checking w in a recurring three-cycle pattern within state B.
+
+Signal Characteristics:
+- All inputs and outputs are single-bit signals.
+- z is a registered output, updated on the rising edge of clk following the third cycle of evaluation in state B.
+
+Reset Behavior:
+- Reset (active high) is synchronized to the clk signal.
+- On reset, the FSM state is set to A and the output z is initialized to 0.
+
+Operational Notes:
+- The signal s influences only transitions from state A to B.
+- In state B, only the input w affects the output z.
+- The FSM uses minimal states to effectively manage operations as described.
+- Ensure proper synchronization with clk to avoid race conditions and ensure deterministic behavior.
+</ENHANCED_SPEC>

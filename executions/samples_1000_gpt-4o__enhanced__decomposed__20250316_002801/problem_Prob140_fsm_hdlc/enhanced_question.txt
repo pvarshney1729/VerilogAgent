@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- `input wire clk`: Clock signal for synchronizing the sequential logic. Trigger on the positive edge.
+- `input wire reset`: Active-high synchronous reset signal. When asserted, the FSM resets to the initial state.
+- `input wire in`: One-bit data input stream to be processed by the FSM.
+- `output reg disc`: One-bit output signal to indicate a bit should be discarded. Asserted for one clock cycle immediately after detecting the pattern 0111110.
+- `output reg flag`: One-bit output signal to indicate the detection of a frame boundary. Asserted for one clock cycle immediately after detecting the pattern 01111110.
+- `output reg err`: One-bit output signal to indicate an error condition when 7 or more consecutive 1s are detected. Asserted for one clock cycle immediately after the condition is detected.
+
+FSM Description:
+- The FSM is a Moore machine designed to process a continuous bit stream and identify specific patterns.
+- The FSM should be designed to recognize and respond to the following sequences:
+  1. Sequence `0111110`: Trigger the `disc` output signal.
+  2. Sequence `01111110`: Trigger the `flag` output signal.
+  3. Sequence `01111111...`: Trigger the `err` output signal, indicating 7 or more consecutive 1s.
+
+Initial State:
+- Upon reset (active-high), the FSM transitions to an initial state that mimics the condition as if the previous input was 0. This ensures that no false recognitions occur immediately after a reset.
+
+Operational Details:
+- The reset is synchronous and considered on the positive edge of `clk`.
+- Output signals (`disc`, `flag`, `err`) are registered and will be asserted for exactly one clock cycle starting in the cycle immediately following the detection of their respective conditions.
+- Bit indexing follows the convention where `bit[0]` corresponds to the least significant bit (LSB).
+
+Edge Cases and Boundary Conditions:
+- The FSM should correctly handle transitions and outputs for continuous streams without introducing delays or errors at sequence boundaries.
+- Ensure there are no race conditions by clearly defining state transitions and signal assertions only on the rising edge of `clk`.
+
+Output Signal Initialization:
+- All output signals (`disc`, `flag`, `err`) should be initialized to logic low (0) at startup and upon reset to ensure predictable behavior.
+
+Clock Cycle Relationship:
+- All sequential elements are triggered on the positive edge of `clk`, ensuring consistent timing and preventing race conditions in the FSM logic.
+</ENHANCED_SPEC>

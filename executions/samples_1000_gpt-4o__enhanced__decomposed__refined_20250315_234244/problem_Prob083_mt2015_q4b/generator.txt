@@ -1,0 +1,41 @@
+Generated Response:
+
+```xml
+<REASONING>
+The task is to implement a combinational logic module named TopModule with inputs x, y, and output z. The behavior of z is defined by a given waveform. By analyzing the waveform, we can derive the logic conditions for z:
+- When both x and y are 0, z should be 1.
+- When x is 1 and y is 0, z should be 0.
+- When x is 0 and y is 1, z should be 0.
+- When both x and y are 1, z should be 1.
+
+This behavior can be captured using a simple combinational logic expression: z = (x & y) | (~x & ~y).
+
+The guidelines specify using logic types for ports, and to use assign statements for combinational logic. There is no mention of a clock or reset signal, so the implementation will be purely combinational.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic x,
+    input logic y,
+    output logic z
+);
+
+    assign z = (x & y) | (~x & ~y);
+
+endmodule
+[DONE]
+</CODE>
+```
+
+Generated Code:
+
+module TopModule(
+    input logic x,
+    input logic y,
+    output logic z
+);
+
+    assign z = (x & y) | (~x & ~y);
+
+endmodule

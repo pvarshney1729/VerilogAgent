@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit input, clock signal; all sequential logic triggers on the positive edge.
+  - `reset`: 1-bit input, synchronous active-high reset signal; initializes the FSM state to `000`.
+  - `x`: 1-bit input, influences state transitions.
+
+- Output Ports:
+  - `z`: 1-bit output, defined by the current state as per the state table.
+
+State Machine Specification:
+- States are encoded as 3-bit vectors `y[2:0]`, where `y[2]` is the most significant bit (MSB) and `y[0]` is the least significant bit (LSB).
+
+- The FSM transitions and output are defined as follows:
+
+| Present State (y[2:0]) | Next State (y[2:0]) if x=0 | Next State (y[2:0]) if x=1 | Output z |
+|------------------------|---------------------------|---------------------------|----------|
+| 000                    | 000                       | 001                       | 0        |
+| 001                    | 001                       | 100                       | 0        |
+| 010                    | 010                       | 001                       | 0        |
+| 011                    | 001                       | 010                       | 1        |
+| 100                    | 011                       | 100                       | 1        |
+
+- Initial State: On reset, the FSM state is set to `000`.
+
+- Reset Behavior: The reset is synchronous and active high, meaning the FSM transitions to the initial state `000` on the next positive clock edge when `reset` is high.
+
+- Clock Domain: All state transitions are synchronized to the rising edge of `clk`.
+
+- Note: Ensure all signal transitions and state changes occur with respect to the clock edge to prevent race conditions. All registers and flip-flops should be initialized to zero unless otherwise specified.
+
+Edge Cases:
+- When `reset` is high, the FSM will not consider the value of `x` and directly transition to the state `000` on the next positive edge of `clk`.
+</ENHANCED_SPEC>

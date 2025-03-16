@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input logic clk: Clock signal, used for state transitions.
+- input logic areset: Active-high asynchronous reset, resets the state machine to the OFF state.
+- input logic j: Input signal that influences state transitions.
+- input logic k: Input signal that influences state transitions.
+- output logic out: Output signal representing the current state.
+
+State Machine Description:
+- The module implements a Moore state machine with two states: OFF and ON.
+- The state output is determined solely by the current state (Moore machine).
+
+State Definitions:
+1. OFF State:
+   - Output (out): 0
+   - Transition:
+     - Remain in OFF if j = 0
+     - Transition to ON if j = 1
+
+2. ON State:
+   - Output (out): 1
+   - Transition:
+     - Remain in ON if k = 0
+     - Transition to OFF if k = 1
+
+Reset Behavior:
+- The reset (areset) is an active-high asynchronous reset.
+- When areset is asserted (high), the state machine immediately transitions to the OFF state, regardless of the clock signal.
+- Upon reset, the output (out) is set to 0.
+
+Clock Behavior:
+- State transitions occur on the rising edge of the clock signal (posedge clk).
+
+Signal Conventions:
+- All inputs and outputs are single-bit signals.
+- Bit[0] refers to the least significant bit (LSB).
+
+Initial Conditions:
+- Upon initialization or reset, the state machine starts in the OFF state with out = 0.
+
+Edge Cases:
+- Ensure that asynchronous reset (areset) takes priority over any clock-triggered state transitions. When areset is high, the state machine immediately enters the OFF state.
+</ENHANCED_SPEC>

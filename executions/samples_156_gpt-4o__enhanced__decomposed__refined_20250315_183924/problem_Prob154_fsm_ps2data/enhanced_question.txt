@@ -1,0 +1,144 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - input  in (8 bits)
+ - output out_bytes (24 bits)
+ - output done
+
+The module should implement a finite state machine that will search for
+message boundaries when given an input byte stream. The algorithm we'll
+use is to discard bytes until we see one with in[3]=1. We then assume
+that this is byte 1 of a message, and signal the receipt of a message
+once all 3 bytes have been received (done). The FSM should signal done in
+the cycle immediately after the third byte of each message was
+successfully received.
+
+Implement the datapath module that will output the 24-bit (3 byte)
+message whenever a packet is received (out_bytes[23:16] is the first
+byte, out_bytes[15:8] is the second byte, etc.). The reset signal is
+active high synchronous. out_bytes needs to be valid whenever the done
+signal is asserted. You may output anything at other times (i.e.,
+don't-care). Assume all sequential logic is triggered on the positive
+edge of the clock.
+
+Here is an example waveform:
+
+  time   clk rst in  done out_bytes
+  0ns    0   1    0  x         x
+  5ns    1   1    0  0         x
+  10ns   0   1    0  0         x
+  15ns   1   0   2c  0         x
+  20ns   0   0   2c  0         x
+  25ns   1   0   81  0         x
+  30ns   0   0   81  0         x
+  35ns   1   0    9  0         x
+  40ns   0   0    9  0         x
+  45ns   1   0   6b  1    2c8109
+  50ns   0   0   6b  1    2c8109
+  55ns   1   0    d  0         x
+  60ns   0   0    d  0         x
+  65ns   1   0   8d  0         x
+  70ns   0   0   8d  0         x
+  75ns   1   0   6d  1    6b0d8d
+  80ns   0   0   6d  1    6b0d8d
+  85ns   1   0   12  0         x
+  90ns   0   0   12  0         x
+  95ns   1   0    1  0         x
+  100ns  0   0    1  0         x
+  105ns  1   0    d  1    6d1201
+  110ns  0   0    d  1    6d1201
+  115ns  1   0   76  0         x
+  120ns  0   0   76  0         x
+  125ns  1   0   3d  0         x
+  130ns  0   0   3d  0         x
+  135ns  1   0   ed  1     d763d
+  140ns  0   0   ed  1     d763d
+  145ns  1   0   8c  0         x
+  150ns  0   0   8c  0         x
+  155ns  1   0   f9  0         x
+  160ns  0   0   f9  0         x
+  165ns  1   0   ce  1    ed8cf9
+  170ns  0   0   ce  1    ed8cf9
+  175ns  1   0   c5  0         x
+  180ns  0   0   c5  0         x
+  185ns  1   0   aa  0         x
+  190ns  0   0   aa  0         x
+
+Here is the enhanced specification which might be useful to you:
+                **Analysis of Ambiguities and Issues:**
+
+1. **Signal Interfaces:**
+   - The specification does not define the signedness of the 'in' and 'out_bytes' signals.
+   - The naming convention for signals is unclear; it uses both 'out_bytes' and 'done' without specifying a prefix for outputs.
+
+2. **Bit-ordering:**
+   - The specification does not clarify the bit ordering within the 'in' and 'out_bytes' signals (e.g., which bit is the MSB and which is the LSB).
+
+3. **Timing Behavior:**
+   - It is unclear whether the FSM should have a defined state transition on every clock cycle or only certain conditions.
+   - The timing of the 'done' signal relative to the 'out_bytes' is not clearly specified, except that it should be asserted in the cycle following the receipt of the third byte.
+
+4. **Reset Behavior:**
+   - The reset is defined as active high and synchronous, but the specification does not state the initial state of the FSM or the initial value of 'out_bytes' and 'done' on reset.
+
+5. **Initial States:**
+   - There is no explicit initial value defined for the FSM states, 'out_bytes', or 'done' after a reset event.
+
+6. **Dependencies & Logic Description:**
+   - The specification does not describe how bytes should be stored or shifted in 'out_bytes' during message reception.
+   - The precedence of operations in the FSM (how it detects in[3]=1 and moves to subsequent states) is not detailed.
+
+7. **Boundary Conditions:**
+   - The behavior when 'in' is continuously zero or when 'in[3]' is always zero is not specified.
+   - The specification does not indicate what happens if a message boundary is detected but the next bytes are not received consecutively.
+
+**<ENHANCED_SPEC>**
+
+**Interface:**
+- Module Name: `TopModule`
+- Ports:
+  - `input wire clk`: Clock signal, positive-edge triggered.
+  - `input wire reset`: Active high, synchronous reset signal.
+  - `input wire [7:0] in`: 8-bit unsigned input data bus.
+  - `output reg [23:0] out_bytes`: 24-bit unsigned output bus representing the received message.
+  - `output reg done`: Output flag indicating message receipt completion.
+
+**Bit-ordering:**
+- `in[7]` is the MSB and `in[0]` is the LSB.
+- In `out_bytes`, `out_bytes[23:16]` is the first byte received, `out_bytes[15:8]` is the second byte, and `out_bytes[7:0]` is the third byte.
+
+**Timing Behavior:**
+- The FSM transitions occur on the positive edge of the `clk`.
+- The `done` signal is asserted in the clock cycle immediately following the successful receipt of the third byte.
+- `out_bytes` is valid whenever `done` is asserted.
+
+**Reset Behavior:**
+- On reset (`reset` = 1), the FSM returns to its initial state, `out_bytes` is set to an undefined state (can be 'x'), and `done` is set to 0.
+
+**Initial States:**
+- The FSM starts in an IDLE state where it waits for `in[3] = 1` to detect the start of a message.
+- Upon reset, `out_bytes` and `done` are initialized to an undefined state and 0, respectively.
+
+**FSM Description:**
+- **IDLE State:** Wait for `in[3] = 1`. Transition to BYTE1 state when detected.
+- **BYTE1 State:** Capture byte as `out_bytes[23:16]`, transition to BYTE2 state.
+- **BYTE2 State:** Capture byte as `out_bytes[15:8]`, transition to BYTE3 state.
+- **BYTE3 State:** Capture byte as `out_bytes[7:0]`, set `done = 1`, and transition back to IDLE state.
+
+**Boundary Conditions:**
+- If `in[3]` remains 0, the FSM stays in the IDLE state.
+- If a message boundary is detected and subsequent bytes are not received consecutively, the FSM waits in the current state until the required byte is received.
+
+**Implementation Notes:**
+- The system assumes continuous input data, and it resets its state based on the `reset` signal.
+- Intermediate states should handle input variations to ensure robustness in detecting valid message sequences.
+
+**Example Waveform Interpretation:**
+- The given waveform illustrates the FSM's behavior for detecting and outputting message sequences based on specified conditions.
+
+**<ENHANCED_SPEC>**
+                

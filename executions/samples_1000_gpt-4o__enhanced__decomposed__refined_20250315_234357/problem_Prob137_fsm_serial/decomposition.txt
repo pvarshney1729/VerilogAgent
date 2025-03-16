@@ -1,0 +1,44 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, and in, and output port done.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  wire clk,\n    input  wire reset,\n    input  wire in,\n    output reg  done\n);\n\n    // State encoding\n    typedef enum reg [3:0] {\n        IDLE        = 4'b0000,\n        START_BIT   = 4'b0001,\n        DATA_BIT_0  = 4'b0010,\n        DATA_BIT_1  = 4'b0011,\n        DATA_BIT_2  = 4'b0100,\n        DATA_BIT_3  = 4'b0101,\n        DATA_BIT_4  = 4'b0110,\n        DATA_BIT_5  = 4'b0111,\n        DATA_BIT_6  = 4'b1000,\n        DATA_BIT_7  = 4'b1001,\n        STOP_BIT    = 4'b1010,\n        ERROR       = 4'b1011\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            current_state <= IDLE;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            IDLE: begin\n                if (in == 1'b0) begin\n                    next_state = START_BIT;\n                end else begin\n                    next_state = IDLE;\n                end\n            end\n            START_BIT: begin\n                next_state = DATA_BIT_0;\n            end\n            DATA_BIT_0: begin\n                next_state = DATA_BIT_1;\n            end\n            DATA_BIT_1: begin\n                next_state = DATA_BIT_2;\n            end\n            DATA_BIT_2: begin\n                next_state = DATA_BIT_3;\n            end\n            DATA_BIT_3: begin\n                next_state = DATA_BIT_4;\n            end\n            DATA_BIT_4: begin\n                next_state = DATA_BIT_5;\n            end\n            DATA_BIT_5: begin\n                next_state = DATA_BIT_6;\n            end\n            DATA_BIT_6: begin\n                next_state = DATA_BIT_7;\n            end\n            DATA_BIT_7: begin\n                next_state = STOP_BIT;\n            end\n            STOP_BIT: begin\n                if (in == 1'b1) begin\n                    next_state = IDLE;\n                    done = 1'b1;\n                end else begin\n                    next_state = ERROR;\n                end\n            end\n            ERROR: begin\n                if (in == 1'b1) begin\n                    next_state = IDLE;\n                end else begin\n                    next_state = ERROR;\n                end\n            end\n            default: begin\n                next_state = IDLE;\n            end\n        endcase\n    end\n\n    // Output logic\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            done <= 1'b0;\n        end else if (current_state == STOP_BIT && in == 1'b1) begin\n            done <= 1'b1;\n        end else begin\n            done <= 1'b0;\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define the states for the FSM: IDLE, START, DATA, and STOP.",
+        "source": "Implement a finite state machine that will identify when bytes have been correctly received when given a stream of bits.",
+        "implementation": "// State encoding for the FSM\n  typedef enum logic [1:0] {\n    IDLE  = 2'b00,\n    START = 2'b01,\n    DATA  = 2'b10,\n    STOP  = 2'b11\n  } state_t;\n\n  state_t current_state, next_state;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state transition logic for the FSM based on the input 'in'. Transition from IDLE to START on detecting a start bit (0), from START to DATA after the start bit, from DATA to STOP after 8 data bits, and from STOP back to IDLE on detecting a stop bit (1).",
+        "source": "It needs to identify the start bit, wait for all 8 data bits, then verify that the stop bit was correct.",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  typedef enum logic [1:0] {\n    IDLE  = 2'b00,\n    START = 2'b01,\n    DATA  = 2'b10,\n    STOP  = 2'b11\n  } state_t;\n\n  state_t current_state, next_state;\n  logic [3:0] bit_count;\n\n  // State transition logic\n  always_ff @(posedge clk or posedge reset) begin\n    if (reset) begin\n      current_state <= IDLE;\n      bit_count <= 4'd0;\n    end else begin\n      current_state <= next_state;\n      if (current_state == DATA) begin\n        bit_count <= bit_count + 1;\n      end else begin\n        bit_count <= 4'd0;\n      end\n    end\n  end\n\n  always_comb begin\n    next_state = current_state;\n    case (current_state)\n      IDLE: begin\n        if (in == 1'b0) begin\n          next_state = START;\n        end\n      end\n      START: begin\n        next_state = DATA;\n      end\n      DATA: begin\n        if (bit_count == 4'd8) begin\n          next_state = STOP;\n        end\n      end\n      STOP: begin\n        if (in == 1'b1) begin\n          next_state = IDLE;\n        end\n      end\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "4",
+        "content": "Implement the logic to count the 8 data bits while in the DATA state.",
+        "source": "It needs to identify the start bit, wait for all 8 data bits, then verify that the stop bit was correct.",
+        "implementation": "reg [3:0] bit_count;\nreg [1:0] state;\nlocalparam IDLE = 2'b00, DATA = 2'b01, STOP = 2'b10;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        bit_count <= 4'b0000;\n    end else begin\n        case (state)\n            DATA: begin\n                if (bit_count < 4'd8) begin\n                    bit_count <= bit_count + 1'b1;\n                end\n            end\n            default: begin\n                bit_count <= 4'b0000;\n            end\n        endcase\n    end\nend"
+    },
+    {
+        "id": "5",
+        "content": "Implement the logic to verify the stop bit in the STOP state. If the stop bit is not correct, remain in the STOP state until a correct stop bit is detected.",
+        "source": "If the stop bit does not appear when expected, the FSM must wait until it finds a stop bit before attempting to receive the next byte.",
+        "implementation": "reg [3:0] state;\nreg stop_bit_correct;\n\nlocalparam IDLE = 4'b0000;\nlocalparam START = 4'b0001;\nlocalparam DATA = 4'b0010;\nlocalparam STOP = 4'b0011;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        state <= IDLE;\n        stop_bit_correct <= 1'b0;\n    end else begin\n        case (state)\n            STOP: begin\n                if (in == 1'b1) begin\n                    stop_bit_correct <= 1'b1;\n                    state <= IDLE; // Transition to IDLE or next state\n                end else begin\n                    stop_bit_correct <= 1'b0;\n                    state <= STOP; // Remain in STOP state\n                end\n            end\n            // Other states...\n        endcase\n    end\nend"
+    },
+    {
+        "id": "6",
+        "content": "Implement the output logic for 'done'. Set 'done' high when a byte is correctly received (transition from STOP to IDLE).",
+        "source": "Implement a finite state machine that will identify when bytes have been correctly received when given a stream of bits.",
+        "implementation": "```verilog\n[BEGIN]\nreg [2:0] state, next_state;\nreg done_reg;\n\nlocalparam IDLE = 3'b000,\n           START = 3'b001,\n           DATA = 3'b010,\n           STOP = 3'b011;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        state <= IDLE;\n        done_reg <= 1'b0;\n    end else begin\n        state <= next_state;\n        if (state == STOP && next_state == IDLE) begin\n            done_reg <= 1'b1;\n        end else begin\n            done_reg <= 1'b0;\n        end\n    end\nend\n\nassign done = done_reg;\n[END]\n```"
+    },
+    {
+        "id": "7",
+        "content": "Implement the synchronous reset logic to reset the FSM to the IDLE state when reset is high.",
+        "source": "Include a active-high synchronous reset.",
+        "implementation": "always @(posedge clk) begin\n    if (reset) begin\n        state <= IDLE; // Reset the FSM to the IDLE state\n    end else begin\n        // Other state transition logic goes here\n    end\nend"
+    }
+]

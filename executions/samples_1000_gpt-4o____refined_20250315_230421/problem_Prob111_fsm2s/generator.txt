@@ -1,0 +1,113 @@
+Generated Response:
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    input  wire j,
+    input  wire k,
+    output reg  out
+);
+
+    // State encoding
+    typedef enum reg [1:0] {
+        OFF = 2'b00,
+        ON  = 2'b01
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= OFF;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always @(*) begin
+        case (current_state)
+            OFF: begin
+                out = 1'b0;
+                if (j) begin
+                    next_state = ON;
+                end else begin
+                    next_state = OFF;
+                end
+            end
+            ON: begin
+                out = 1'b1;
+                if (k) begin
+                    next_state = OFF;
+                end else begin
+                    next_state = ON;
+                end
+            end
+            default: begin
+                next_state = OFF;
+                out = 1'b0;
+            end
+        endcase
+    end
+
+endmodule
+```
+
+Generated Code:
+
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    input  wire j,
+    input  wire k,
+    output reg  out
+);
+
+    // State encoding
+    typedef enum reg [1:0] {
+        OFF = 2'b00,
+        ON  = 2'b01
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= OFF;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always @(*) begin
+        case (current_state)
+            OFF: begin
+                out = 1'b0;
+                if (j) begin
+                    next_state = ON;
+                end else begin
+                    next_state = OFF;
+                end
+            end
+            ON: begin
+                out = 1'b1;
+                if (k) begin
+                    next_state = OFF;
+                end else begin
+                    next_state = ON;
+                end
+            end
+            default: begin
+                next_state = OFF;
+                out = 1'b0;
+            end
+        endcase
+    end
+
+endmodule
+
+// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly

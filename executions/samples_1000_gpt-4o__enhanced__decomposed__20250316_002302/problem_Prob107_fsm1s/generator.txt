@@ -1,0 +1,111 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as a Moore state machine, we need to follow the provided specifications and guidelines. The state machine has two states, A and B, with specific transitions based on the input `in`. The output `out` is determined solely by the current state, not the input, which is characteristic of a Moore machine.
+
+1. **State Encoding**: We will use a single bit to encode the states. Let's assign `0` to State A and `1` to State B.
+
+2. **State Register**: We'll use a sequential always block to update the current state on the rising edge of `clk`. The reset is synchronous, so we'll check for the `reset` signal within this block and set the state to B when `reset` is high.
+
+3. **State Transition Logic**: We'll use a combinational always block to determine the next state based on the current state and input `in`.
+
+4. **Output Logic**: The output `out` is determined by the current state. In State A, `out` is `0`, and in State B, `out` is `1`.
+
+5. **Coding Conventions**: We'll declare all ports and internal signals as `logic`. We'll use `always @(*)` for combinational logic and ensure all numeric constants are properly sized.
+
+By following these steps, we ensure the implementation adheres to the specifications and guidelines provided.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic {
+        STATE_A = 1'b0,
+        STATE_B = 1'b1
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State register with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            STATE_B: next_state = (in == 1'b0) ? STATE_A : STATE_B;
+            STATE_A: next_state = (in == 1'b0) ? STATE_B : STATE_A;
+            default: next_state = STATE_B; // Default to reset state
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b1; // Default to state B output
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic {
+        STATE_A = 1'b0,
+        STATE_B = 1'b1
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State register with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            STATE_B: next_state = (in == 1'b0) ? STATE_A : STATE_B;
+            STATE_A: next_state = (in == 1'b0) ? STATE_B : STATE_A;
+            default: next_state = STATE_B; // Default to reset state
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b1; // Default to state B output
+        endcase
+    end
+
+endmodule

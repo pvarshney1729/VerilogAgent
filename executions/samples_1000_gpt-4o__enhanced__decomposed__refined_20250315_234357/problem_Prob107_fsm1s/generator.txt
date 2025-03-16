@@ -1,0 +1,131 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the guidelines and coding conventions provided. The module is designed to implement a Moore state machine with two states, A and B, as specified. The state machine transitions between states based on the input `in`, and the output `out` is determined solely by the current state.
+
+1. **State Encoding**: Two states are defined using local parameters `STATE_A` and `STATE_B`. These are encoded as single-bit values.
+
+2. **State Transition Logic**: An `always @(*)` block is used to determine the next state based on the current state and input `in`. This block ensures that the state transitions are combinational and follow the specified transitions:
+   - From state B, transition to A if `in` is 0, otherwise stay in B.
+   - From state A, transition to B if `in` is 0, otherwise stay in A.
+
+3. **Sequential Logic for State Update**: An `always @(posedge clk)` block is used to update the current state on the rising edge of the clock. The synchronous reset is implemented by checking if `reset` is high, in which case the state is set to `STATE_B`.
+
+4. **Output Logic**: Another `always @(*)` block is used to determine the output `out` based on the current state. The output is 1 in state B and 0 in state A, as specified.
+
+5. **Coding Conventions**: The code adheres to the conventions by using `logic` for all signals, using `always @(*)` for combinational logic, and ensuring the reset is synchronous by not including it in the sensitivity list of the sequential block.
+
+This implementation ensures that the state machine behaves as specified, with correct state transitions and output logic.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    localparam logic STATE_A = 1'b0;
+    localparam logic STATE_B = 1'b1;
+
+    // State register
+    logic current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_B: begin
+                if (in == 1'b0)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_A: begin
+                if (in == 1'b0)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_B; // Default to reset state
+        endcase
+    end
+
+    // Sequential logic for state update
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_B: out = 1'b1;
+            STATE_A: out = 1'b0;
+            default: out = 1'b1; // Default to reset state's output
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    localparam logic STATE_A = 1'b0;
+    localparam logic STATE_B = 1'b1;
+
+    // State register
+    logic current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_B: begin
+                if (in == 1'b0)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_A: begin
+                if (in == 1'b0)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_B; // Default to reset state
+        endcase
+    end
+
+    // Sequential logic for state update
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_B: out = 1'b1;
+            STATE_A: out = 1'b0;
+            default: out = 1'b1; // Default to reset state's output
+        endcase
+    end
+
+endmodule

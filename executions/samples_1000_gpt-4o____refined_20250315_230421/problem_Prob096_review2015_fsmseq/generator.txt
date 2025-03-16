@@ -1,0 +1,147 @@
+Generated Response:
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    input  wire data,
+    output reg  start_shifting
+);
+
+    // State encoding
+    typedef enum reg [2:0] {
+        IDLE    = 3'b000,
+        S1      = 3'b001, // Detected '1'
+        S11     = 3'b010, // Detected '11'
+        S110    = 3'b011, // Detected '110'
+        S1101   = 3'b100  // Detected '1101'
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            start_shifting <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == S1101) begin
+                start_shifting <= 1'b1;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            IDLE: begin
+                if (data) 
+                    next_state = S1;
+                else 
+                    next_state = IDLE;
+            end
+            S1: begin
+                if (data) 
+                    next_state = S11;
+                else 
+                    next_state = IDLE;
+            end
+            S11: begin
+                if (~data) 
+                    next_state = S110;
+                else 
+                    next_state = S11;
+            end
+            S110: begin
+                if (data) 
+                    next_state = S1101;
+                else 
+                    next_state = IDLE;
+            end
+            S1101: begin
+                next_state = S1101; // Stay in this state once the sequence is detected
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule
+```
+
+This Verilog module implements a finite-state machine (FSM) that detects the sequence `1101` in a serial input stream. Once the sequence is detected, the `start_shifting` output is set to `1` and remains `1` until the module is reset. The reset is synchronous and active high, meaning it will only take effect on the rising edge of the clock when `reset` is high.
+
+Generated Code:
+
+module TopModule (
+    input  wire clk,
+    input  wire reset,
+    input  wire data,
+    output reg  start_shifting
+);
+
+    // State encoding
+    typedef enum reg [2:0] {
+        IDLE    = 3'b000,
+        S1      = 3'b001, // Detected '1'
+        S11     = 3'b010, // Detected '11'
+        S110    = 3'b011, // Detected '110'
+        S1101   = 3'b100  // Detected '1101'
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            start_shifting <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == S1101) begin
+                start_shifting <= 1'b1;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            IDLE: begin
+                if (data) 
+                    next_state = S1;
+                else 
+                    next_state = IDLE;
+            end
+            S1: begin
+                if (data) 
+                    next_state = S11;
+                else 
+                    next_state = IDLE;
+            end
+            S11: begin
+                if (~data) 
+                    next_state = S110;
+                else 
+                    next_state = S11;
+            end
+            S110: begin
+                if (data) 
+                    next_state = S1101;
+                else 
+                    next_state = IDLE;
+            end
+            S1101: begin
+                next_state = S1101; // Stay in this state once the sequence is detected
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule
+
+// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly

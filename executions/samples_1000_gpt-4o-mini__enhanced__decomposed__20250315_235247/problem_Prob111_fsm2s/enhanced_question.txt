@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and has the following interface. All input and output ports are 1-bit wide unless otherwise specified. The module's behavior is defined by a Moore state machine with two states. The reset is an active-high synchronous reset. The detailed specifications are as follows:
+
+- **Inputs:**
+  - `clk`: Clock signal for sequential logic operations.
+  - `reset`: Active-high synchronous reset input. When asserted (logic high), the state machine will transition to the initial state, OFF.
+  - `j`: Input signal to control state transitions from the OFF state.
+  - `k`: Input signal to control state transitions from the ON state.
+
+- **Output:**
+  - `out`: Output of the state machine, driven by the current state.
+
+- **State Definitions:**
+  - State `OFF`: Output `out = 0`
+  - State `ON`: Output `out = 1`
+
+- **State Transitions and Logic:**
+  1. **OFF State Transitions:**
+     - If `j = 0`, remain in the OFF state.
+     - If `j = 1`, transition to the ON state.
+
+  2. **ON State Transitions:**
+     - If `k = 0`, remain in the ON state.
+     - If `k = 1`, transition to the OFF state.
+
+- **Reset Behavior:**
+  - The reset is synchronous with the clock signal. When `reset` is high, the state machine transitions to the OFF state on the next rising edge of `clk`.
+  - On reset, the output `out` is set to 0.
+
+- **Clock and Timing Considerations:**
+  - The state transitions occur on the rising edge of the `clk` signal.
+  - The output `out` is determined solely by the current state of the state machine, consistent with Moore machine principles.
+
+- **Initial Conditions:**
+  - Upon initialization or reset, the state machine should start in the OFF state, ensuring `out = 0`.
+
+This specification defines a simple Moore state machine using a clocked synchronous reset and ensures clear behavior for each state transition and output condition.
+</ENHANCED_SPEC>

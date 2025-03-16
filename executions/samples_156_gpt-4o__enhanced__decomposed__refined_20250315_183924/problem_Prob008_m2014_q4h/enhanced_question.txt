@@ -1,0 +1,56 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in
+ - output out
+
+The module should assign the output port to the same value as the input
+port combinationally.
+
+Here is the enhanced specification which might be useful to you:
+                ### Module Name:
+- `TopModule`
+
+### Interface:
+- **Inputs:**
+  - `input wire in`  // 1-bit input signal, unsigned
+- **Outputs:**
+  - `output wire out` // 1-bit output signal, unsigned
+
+### Signal Conventions:
+- **Naming:** All signal names are lowercase and use underscores to separate words.
+- **Bit-ordering:** Since inputs and outputs are single bits, there is no indexing required.
+
+### Behavior:
+- **Logic Description:**
+  - The module performs a direct combinational assignment from the input `in` to the output `out`.
+  - This means that any change in the `in` signal is immediately reflected on the `out` signal without any delay.
+
+### Timing:
+- **Combinational Logic:**
+  - The output `out` reflects the state of the input `in` in a combinational manner, which means no clock or state elements are involved.
+
+### Reset Behavior and Initial States:
+- **Reset:** Not applicable, as the module does not contain any sequential logic elements.
+- **Initial State:** Not applicable, as the module is purely combinational.
+
+### Boundary Conditions:
+- **Input Low (0):** When `in` is `0`, `out` is `0`.
+- **Input High (1):** When `in` is `1`, `out` is `1`.
+
+### Implementation Notes:
+- This module is designed to mimic a wire connection from `in` to `out`. It is essentially a buffer that provides no logical transformation.
+
+```verilog
+module TopModule (
+  input wire in,  // 1-bit input signal
+  output wire out // 1-bit output signal
+);
+
+  assign out = in; // Combinational assignment from input to output
+
+endmodule
+```
+                

@@ -1,0 +1,44 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, s, w and output port z.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input clk,\n    input reset,\n    input s,\n    input w,\n    output reg z\n);\n    typedef enum reg [1:0] {A, B} state_t;\n    state_t current_state, next_state;\n    reg [2:0] w_count;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= A;\n            z <= 0;\n            w_count <= 0;\n        end else begin\n            current_state <= next_state;\n            if (current_state == B) begin\n                if (w_count < 3) begin\n                    w_count <= w_count + w;\n                end else begin\n                    z <= (w_count == 2) ? 1 : 0;\n                    w_count <= 0; // Reset count for next cycle\n                end\n            end\n        end\n    end\n\n    always @* begin\n        case (current_state)\n            A: begin\n                if (s) begin\n                    next_state = B;\n                    w_count = 0; // Reset count when moving to state B\n                end else begin\n                    next_state = A;\n                end\n            end\n            B: begin\n                next_state = B; // Stay in B until w_count is processed\n            end\n            default: next_state = A;\n        endcase\n    end\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define the states for the FSM: State A (reset state) and State B (checking w).",
+        "source": "The FSM begins in a reset state called A.",
+        "implementation": "typedef enum logic [1:0] {\n    A = 2'b00, // Reset state\n    B = 2'b01  // Checking w state\n} state_t;\n\nstate_t current_state, next_state;\n\nalways_ff @(posedge clk) begin\n    if (reset) begin\n        current_state <= A;\n    end else begin\n        current_state <= next_state;\n    end\nend"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register to hold the current state of the FSM.",
+        "source": "Assume reset is active high synchronous.",
+        "implementation": "reg [1:0] current_state, next_state;\nlocalparam A = 2'b00, B = 2'b01;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        current_state <= A;\n    end else begin\n        current_state <= next_state;\n    end\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement the logic to transition from State A to State B when s = 1.",
+        "source": "The FSM remains in state A as long as s = 0, and it moves to state B when s = 1.",
+        "implementation": "reg state; // 0 for State A, 1 for State B\n\nalways @(posedge clk) begin\n    if (reset) begin\n        state <= 0; // Reset to State A\n    end else begin\n        case (state)\n            0: begin // State A\n                if (s == 1) begin\n                    state <= 1; // Transition to State B\n                end\n            end\n            1: begin\n                // Remain in State B, logic for w will be handled in the full implementation\n            end\n        endcase\n    end\nend"
+    },
+    {
+        "id": "5",
+        "content": "Implement a counter to track the number of clock cycles in State B for checking w.",
+        "source": "Once in state B the FSM examines the value of the input w in the next three clock cycles.",
+        "implementation": "reg [1:0] counter; // 2-bit counter to track the number of clock cycles in State B\n\nalways @(posedge clk) begin\n    if (reset) begin\n        counter <= 2'b00; // Reset the counter\n    end else if (state == B) begin\n        counter <= counter + 1; // Increment counter in State B\n    end else begin\n        counter <= 2'b00; // Reset counter when not in State B\n    end\nend"
+    },
+    {
+        "id": "6",
+        "content": "Implement the logic to count the number of times w = 1 in the three clock cycles.",
+        "source": "If w = 1 in exactly two of these clock cycles, then the FSM has to set an output z to 1.",
+        "implementation": "reg [1:0] count_w; // 2-bit register to count occurrences of w = 1\nreg [2:0] cycle;   // 3-bit register to count clock cycles\n\nalways @(posedge clk) begin\n    if (reset) begin\n        count_w <= 2'b00;\n        cycle <= 3'b000;\n        z <= 1'b0;\n    end else begin\n        if (s) begin\n            if (cycle < 3) begin\n                if (w) begin\n                    count_w <= count_w + 1;\n                end\n                cycle <= cycle + 1;\n            end else begin\n                z <= (count_w == 2) ? 1'b1 : 1'b0;\n                // Reset for the next three cycles\n                count_w <= 2'b00;\n                cycle <= 3'b000;\n            end\n        end\n    end\nend"
+    },
+    {
+        "id": "7",
+        "content": "Implement the output logic to set z based on the count of w = 1 in the previous three cycles.",
+        "source": "Otherwise z has to be 0.",
+        "implementation": "reg [1:0] count_w; // 2-bit counter to count occurrences of w = 1\nreg [2:0] cycle;   // 3-bit counter for the three cycles\n\nalways @(posedge clk) begin\n    if (reset) begin\n        count_w <= 0;\n        cycle <= 0;\n        z <= 0;\n    end else begin\n        if (s) begin\n            if (cycle < 3) begin\n                if (w) begin\n                    count_w <= count_w + 1;\n                end\n                cycle <= cycle + 1;\n            end else begin\n                z <= (count_w == 2) ? 1 : 0; // Set z based on count of w = 1\n                // Reset for the next set of cycles\n                count_w <= 0;\n                cycle <= 0;\n            end\n        end\n    end\nend"
+    }
+]

@@ -1,0 +1,49 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in
+ - output out
+
+The module should behave like a wire.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: `TopModule`
+
+**Interface**:
+- **Inputs**:
+  - `input wire in_bit`: A 1-bit input signal. Explicitly defined as a wire and assumed to be unsigned, as this is typical for single-bit signals.
+- **Outputs**:
+  - `output wire out_bit`: A 1-bit output signal. Explicitly defined as a wire and assumed to be unsigned.
+
+**Behavior**:
+- The module `TopModule` implements a direct connection, behaving like a wire.
+- The output `out_bit` directly follows the input `in_bit` with no delay, implying combinational logic.
+
+**Timing Behavior**:
+- This is a combinational module with no sequential logic elements. There are no clock or reset signals associated with this module.
+
+**Reset Behavior**:
+- Not applicable, as there are no registers or flip-flops within this module.
+
+**Initial States**:
+- Not applicable, as there are no state-holding elements.
+
+**Implementation Notes**:
+- The module should be implemented in a way that any changes on the input `in_bit` are immediately reflected on the output `out_bit`.
+- Ensure that signal integrity is maintained across the wire.
+
+**Example Verilog Implementation**:
+```verilog
+module TopModule (
+    input wire in_bit,
+    output wire out_bit
+);
+    // Direct wire connection
+    assign out_bit = in_bit;
+endmodule
+```
+**Boundary Conditions**:
+- As this module functions as a simple wire, there are no specific boundary conditions beyond ensuring signal integrity.
+                

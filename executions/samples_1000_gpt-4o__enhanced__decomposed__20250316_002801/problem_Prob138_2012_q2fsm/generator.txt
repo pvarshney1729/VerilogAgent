@@ -1,0 +1,123 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as specified, we will follow these steps:
+
+1. **State Encoding**: We will use a 3-bit encoding for the states A, B, C, D, E, and F. This allows us to represent up to 8 states, which is sufficient for our 6 states.
+
+2. **State Transition Logic**: We will implement the state transition logic using a combinational `always @(*)` block. This block will determine the next state based on the current state and the input `w`.
+
+3. **State Register**: We will use a sequential `always @(posedge clk)` block to update the current state. This block will also handle the synchronous reset, setting the state to A when `reset` is high.
+
+4. **Output Logic**: The output `z` will be determined based on the current state. States E and F will output `z = 1`, while all other states will output `z = 0`. This can be implemented using a simple combinational `always @(*)` block.
+
+5. **Coding Conventions**: We will declare all ports and internal signals as `logic`, use `always @(*)` for combinational logic, and ensure that all numeric constants are properly sized.
+
+By following these steps, we will ensure that the module adheres to the given specifications and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic w,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        STATE_A = 3'b000,
+        STATE_B = 3'b001,
+        STATE_C = 3'b010,
+        STATE_D = 3'b011,
+        STATE_E = 3'b100,
+        STATE_F = 3'b101
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: next_state = w ? STATE_B : STATE_A;
+            STATE_B: next_state = w ? STATE_C : STATE_D;
+            STATE_C: next_state = w ? STATE_E : STATE_D;
+            STATE_D: next_state = w ? STATE_F : STATE_A;
+            STATE_E: next_state = w ? STATE_E : STATE_D;
+            STATE_F: next_state = w ? STATE_C : STATE_D;
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // State flip-flops with synchronous reset
+    always @(posedge clk) begin
+        if (reset)
+            current_state <= STATE_A;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_E, STATE_F: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic w,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        STATE_A = 3'b000,
+        STATE_B = 3'b001,
+        STATE_C = 3'b010,
+        STATE_D = 3'b011,
+        STATE_E = 3'b100,
+        STATE_F = 3'b101
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: next_state = w ? STATE_B : STATE_A;
+            STATE_B: next_state = w ? STATE_C : STATE_D;
+            STATE_C: next_state = w ? STATE_E : STATE_D;
+            STATE_D: next_state = w ? STATE_F : STATE_A;
+            STATE_E: next_state = w ? STATE_E : STATE_D;
+            STATE_F: next_state = w ? STATE_C : STATE_D;
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // State flip-flops with synchronous reset
+    always @(posedge clk) begin
+        if (reset)
+            current_state <= STATE_A;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_E, STATE_F: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule

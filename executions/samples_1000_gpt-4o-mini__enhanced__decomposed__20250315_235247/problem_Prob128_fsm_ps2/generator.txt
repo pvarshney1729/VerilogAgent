@@ -1,0 +1,119 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the specified requirements for processing a PS/2 mouse protocol message. The module uses a finite state machine (FSM) to identify the start of a message based on the input signal `in[3]`. The FSM transitions through different states to count the bytes received and signals when a complete message (three bytes) has been received.
+
+1. **State Definition**: The FSM has four states: `IDLE`, `BYTE1`, `BYTE2`, and `DONE`. The `IDLE` state waits for the first byte with `in[3]` set to 1. The `BYTE1`, `BYTE2`, and `DONE` states handle the subsequent bytes and signal completion.
+
+2. **Synchronous Reset**: The reset signal is implemented as a synchronous reset, ensuring that the FSM resets to the `IDLE` state when the reset signal is high.
+
+3. **Byte Counting**: The FSM counts the number of bytes received after detecting the first byte of a message. It transitions to the `DONE` state after receiving the third byte.
+
+4. **Output Signal**: The `done` output is asserted high for one clock cycle immediately after the third byte is received.
+
+5. **Combinational Logic**: The state transitions and output logic are handled in separate always blocks, adhering to the coding conventions provided.
+
+The final implementation is structured to ensure clarity and correctness, following all guidelines and conventions specified.
+</REASONING>
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+    typedef enum logic [1:0] {
+        IDLE   = 2'b00,
+        BYTE1  = 2'b01,
+        BYTE2  = 2'b10,
+        DONE   = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    always_comb begin
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1) begin
+                    next_state = BYTE1;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = DONE;
+            end
+            DONE: begin
+                next_state = IDLE; // Reset to IDLE after signaling done
+            end
+            default: next_state = IDLE;
+        endcase
+    end
+
+    assign done = (current_state == DONE);
+
+endmodule
+[DONE]
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+    typedef enum logic [1:0] {
+        IDLE   = 2'b00,
+        BYTE1  = 2'b01,
+        BYTE2  = 2'b10,
+        DONE   = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    always_comb begin
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1) begin
+                    next_state = BYTE1;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = DONE;
+            end
+            DONE: begin
+                next_state = IDLE; // Reset to IDLE after signaling done
+            end
+            default: next_state = IDLE;
+        endcase
+    end
+
+    assign done = (current_state == DONE);
+
+endmodule

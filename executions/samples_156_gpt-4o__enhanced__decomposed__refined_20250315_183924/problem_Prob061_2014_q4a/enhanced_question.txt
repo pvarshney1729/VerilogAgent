@@ -1,0 +1,56 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  w
+ - input  R
+ - input  E
+ - input  L
+ - output Q
+
+The module will be one stage in a larger n-bit shift register circuit.
+Input E is for enabling shift, R for value to load, L is asserted when it
+should load, and w is the input from the prevous stage of the shift
+register. Assume all sequential logic is triggered on the positive edge
+of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: `TopModule`
+
+**Interface**:
+- **Inputs**:
+  - `input clk`: 1-bit, unsigned, positive-edge-triggered clock signal.
+  - `input w`: 1-bit, unsigned, data input from the previous stage of the shift register.
+  - `input R`: 1-bit, unsigned, reset signal. Assume synchronous reset.
+  - `input E`: 1-bit, unsigned, enable signal for shifting.
+  - `input L`: 1-bit, unsigned, load signal to load specific value when asserted.
+
+- **Outputs**:
+  - `output reg Q`: 1-bit, unsigned, data output to the next stage of the shift register.
+
+**Behavior**:
+1. **Reset Behavior**: When the reset (`R`) is asserted, the output `Q` is set to `0`. This is a synchronous reset occurring on the positive edge of `clk`.
+
+2. **Load and Enable Logic**:
+   - If `L` (load) is asserted on the positive edge of `clk`, `Q` should be loaded with the value of `w`.
+   - If `L` is not asserted but `E` (enable) is asserted on the positive edge of `clk`, `Q` should shift the data from `w`.
+   - If neither `L` nor `E` is asserted, `Q` retains its previous value.
+
+3. **Signal Precedence**: When `L` and `E` are both asserted on the same clock edge, `L` takes precedence, and `Q` should be loaded with `w`.
+
+**Timing**:
+- All operations are triggered on the positive edge of the `clk` signal.
+- Ensure that all changes to `Q` are synchronized with `clk`.
+
+**Implementation Notes**:
+- The module is designed to be a single stage in an n-bit shift register, implying modular and hierarchical design for integration into larger systems.
+- Ensure all synthesis tools are configured to treat `R` as a synchronous reset.
+
+**Boundary Conditions**:
+- If all control signals (`R`, `E`, `L`) are de-asserted, `Q` maintains its current value.
+
+**Initial States**:
+- On power-up, before the first clock edge, assume `Q` to be in an undefined state unless `R` is asserted, which will initialize `Q` to `0` on the first clock edge.
+                

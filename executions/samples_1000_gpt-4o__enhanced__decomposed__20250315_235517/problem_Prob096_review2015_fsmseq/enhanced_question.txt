@@ -1,0 +1,22 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, has the following interface:
+
+- `input clk`: A clock signal that triggers all sequential logic on its rising edge.
+- `input reset`: An active-high, synchronous reset signal. When asserted, it initializes all state registers to their reset state at the next rising edge of `clk`.
+- `input data`: A 1-bit input representing the incoming bit stream to be analyzed.
+- `output reg start_shifting`: A 1-bit output signal that indicates when the sequence 1101 is detected. It remains high after detection until reset.
+
+Functional Description:
+
+- The module implements a finite-state machine (FSM) to search for the binary sequence `1101` within the input bit stream (`data`).
+- The FSM transitions through states as bits are received on each `clk` rising edge. The states should be defined to track the sequence progress: initial state, after detecting '1', '11', '110', and finally '1101'.
+- Once the complete sequence `1101` is detected, the output `start_shifting` should be set to `1` and remain at `1` until a reset occurs.
+- The reset initializes the FSM to its initial state and sets `start_shifting` to `0`.
+
+Additional Notes:
+
+- Bit indexing for multi-bit signals, if any were to be used, would consider `bit[0]` as the least significant bit (LSB).
+- Define state encoding, whether binary, one-hot, etc., for the FSM in the implementation stage.
+- Ensure all sequential elements, such as state registers, have well-defined initial values upon reset activation.
+- Handle edge cases where the sequence may overlap, such as `1101101`, by ensuring the FSM can correctly re-detect the sequence.
+</ENHANCED_SPEC>

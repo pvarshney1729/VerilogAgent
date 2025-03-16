@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- All input and output ports are 1-bit wide.
+- The module performs combinational logic operations using the provided inputs.
+
+Port Definitions:
+- Input Ports:
+  - `input logic a;` // Single-bit input signal
+  - `input logic b;` // Single-bit input signal
+
+- Output Ports:
+  - `output logic out_and;` // Output of AND operation between inputs `a` and `b`
+  - `output logic out_or;` // Output of OR operation between inputs `a` and `b`
+  - `output logic out_xor;` // Output of XOR operation between inputs `a` and `b`
+  - `output logic out_nand;` // Output of NAND operation between inputs `a` and `b`
+  - `output logic out_nor;` // Output of NOR operation between inputs `a` and `b`
+  - `output logic out_xnor;` // Output of XNOR operation between inputs `a` and `b`
+  - `output logic out_anotb;` // Output of AND operation between `a` and NOT `b`
+
+Logic Operations:
+1. `out_and`: Logical AND operation on inputs `a` and `b`.
+   - Expression: `out_and = a & b;`
+
+2. `out_or`: Logical OR operation on inputs `a` and `b`.
+   - Expression: `out_or = a | b;`
+
+3. `out_xor`: Logical XOR operation on inputs `a` and `b`.
+   - Expression: `out_xor = a ^ b;`
+
+4. `out_nand`: Logical NAND operation on inputs `a` and `b`.
+   - Expression: `out_nand = ~(a & b);`
+
+5. `out_nor`: Logical NOR operation on inputs `a` and `b`.
+   - Expression: `out_nor = ~(a | b);`
+
+6. `out_xnor`: Logical XNOR operation on inputs `a` and `b`.
+   - Expression: `out_xnor = ~(a ^ b);`
+
+7. `out_anotb`: Logical AND operation on `a` and the complement of `b`.
+   - Expression: `out_anotb = a & ~b;`
+
+Operational Characteristics:
+- The module is a combinational circuit, meaning outputs are directly determined by the current state of inputs without any clock or sequential dependencies.
+- The logic expressions utilize bitwise operators as applied to single-bit inputs, ensuring correct logical behavior.
+- Ensure that any synthesis tool recognizes the logic gates' intended functionality by correctly interpreting these bitwise operations for single-bit signals.
+</ENHANCED_SPEC>

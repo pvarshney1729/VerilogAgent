@@ -1,0 +1,174 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to design a finite state machine (FSM) that can handle the serial communication protocol described. The FSM will have the following states: IDLE, START, DATA, STOP, and DONE. The module will detect the start bit, collect 8 data bits, verify the stop bit, and then output the received byte. The `done` signal will be asserted when a byte is successfully received.
+
+1. **IDLE State**: The FSM waits for the start bit (logic 0). If detected, it transitions to the START state.
+2. **START State**: This state is a transitional state to ensure the start bit was detected. It immediately transitions to the DATA state.
+3. **DATA State**: The FSM collects 8 data bits, shifting them into a register. The least significant bit is received first.
+4. **STOP State**: After receiving 8 data bits, the FSM checks for the stop bit (logic 1). If correct, it transitions to the DONE state; otherwise, it waits for a stop bit.
+5. **DONE State**: The FSM asserts the `done` signal and outputs the received byte. It then transitions back to the IDLE state.
+
+The FSM uses a synchronous reset to initialize all states and outputs. The `out_byte` is only valid when `done` is high, and it is a don't-care otherwise.
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic in,
+    input logic reset,
+    output logic [7:0] out_byte,
+    output logic done
+);
+
+    typedef enum logic [2:0] {
+        IDLE  = 3'b000,
+        START = 3'b001,
+        DATA  = 3'b010,
+        STOP  = 3'b011,
+        DONE  = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [2:0] bit_count;
+    logic [7:0] data_buffer;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 3'b000;
+            data_buffer <= 8'b00000000;
+            out_byte <= 8'b00000000;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == DATA) begin
+                data_buffer[bit_count] <= in;
+                bit_count <= bit_count + 1;
+            end
+            if (current_state == DONE) begin
+                out_byte <= data_buffer;
+                done <= 1'b1;
+            end else begin
+                done <= 1'b0;
+            end
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) // Start bit detected
+                    next_state = START;
+                else
+                    next_state = IDLE;
+            end
+            START: begin
+                next_state = DATA;
+            end
+            DATA: begin
+                if (bit_count == 3'b111) // All 8 data bits received
+                    next_state = STOP;
+                else
+                    next_state = DATA;
+            end
+            STOP: begin
+                if (in == 1'b1) // Stop bit detected
+                    next_state = DONE;
+                else
+                    next_state = IDLE;
+            end
+            DONE: begin
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic in,
+    input logic reset,
+    output logic [7:0] out_byte,
+    output logic done
+);
+
+    typedef enum logic [2:0] {
+        IDLE  = 3'b000,
+        START = 3'b001,
+        DATA  = 3'b010,
+        STOP  = 3'b011,
+        DONE  = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [2:0] bit_count;
+    logic [7:0] data_buffer;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 3'b000;
+            data_buffer <= 8'b00000000;
+            out_byte <= 8'b00000000;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == DATA) begin
+                data_buffer[bit_count] <= in;
+                bit_count <= bit_count + 1;
+            end
+            if (current_state == DONE) begin
+                out_byte <= data_buffer;
+                done <= 1'b1;
+            end else begin
+                done <= 1'b0;
+            end
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) // Start bit detected
+                    next_state = START;
+                else
+                    next_state = IDLE;
+            end
+            START: begin
+                next_state = DATA;
+            end
+            DATA: begin
+                if (bit_count == 3'b111) // All 8 data bits received
+                    next_state = STOP;
+                else
+                    next_state = DATA;
+            end
+            STOP: begin
+                if (in == 1'b1) // Stop bit detected
+                    next_state = DONE;
+                else
+                    next_state = IDLE;
+            end
+            DONE: begin
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule

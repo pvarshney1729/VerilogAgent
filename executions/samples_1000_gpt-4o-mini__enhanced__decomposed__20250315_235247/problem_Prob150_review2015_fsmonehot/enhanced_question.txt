@@ -1,0 +1,61 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+Interface:
+- Input Ports:
+  - `input wire d` (1-bit)
+  - `input wire done_counting` (1-bit)
+  - `input wire ack` (1-bit)
+  - `input wire [9:0] state` (10-bit, one-hot encoded current state)
+
+- Output Ports:
+  - `output wire B3_next` (1-bit, asserts when next state is B3)
+  - `output wire S_next` (1-bit, asserts when next state is S)
+  - `output wire S1_next` (1-bit, asserts when next state is S1)
+  - `output wire Count_next` (1-bit, asserts when next state is Count)
+  - `output wire Wait_next` (1-bit, asserts when next state is Wait)
+  - `output wire done` (1-bit, active when done)
+  - `output wire counting` (1-bit, active when counting)
+  - `output wire shift_ena` (1-bit, active when shift is enabled)
+
+State Machine:
+- The state machine is a Moore type with three primary inputs: `d`, `done_counting`, `ack`.
+- Outputs are generally zero unless explicitly specified in the transition table.
+
+State Transition Table:
+- State transitions are based on inputs `d`, `done_counting`, and `ack`.
+- The following state transitions are defined:
+  - `S` transitions to `S` when `d=0` and to `S1` when `d=1`.
+  - `S1` transitions to `S` when `d=0` and to `S11` when `d=1`.
+  - `S11` transitions to `S110` when `d=0` and remains in `S11` when `d=1`.
+  - `S110` transitions to `S` when `d=0` and to `B0` when `d=1`.
+  - `B0`, `B1`, `B2`, and `B3` transitions are automatic (move to the next state in sequence).
+  - `Count` remains in `Count` when `done_counting=0` and transitions to `Wait` when `done_counting=1`.
+  - `Wait` remains in `Wait` when `ack=0` and transitions to `S` when `ack=1`.
+
+State Encoding:
+- One-hot encoding is utilized for state representation:
+  - `S = 10'b0000000001`
+  - `S1 = 10'b0000000010`
+  - `S11 = 10'b0000000100`
+  - `S110 = 10'b0000001000`
+  - `B0 = 10'b0000010000`
+  - `B1 = 10'b0000100000`
+  - `B2 = 10'b0001000000`
+  - `B3 = 10'b0010000000`
+  - `Count = 10'b0100000000`
+  - `Wait = 10'b1000000000`
+
+Reset Behavior:
+- The state machine initializes to the `S` state on reset.
+- The reset is assumed to be asynchronous unless otherwise specified. All flip-flops are reset to their initial state as described in the state encoding.
+
+Output Logic:
+- `shift_ena` is asserted in states `B0`, `B1`, `B2`, `B3`.
+- `counting` is asserted in the `Count` state.
+- `done` is asserted in the `Wait` state.
+
+Derived Logic:
+- Next-state signals (`B3_next`, `S_next`, `S1_next`, `Count_next`, `Wait_next`) are combinational outputs derived from the current state and input conditions.
+- The module is responsible for generating these signals based on the described state transitions and output conditions.
+</ENHANCED_SPEC>

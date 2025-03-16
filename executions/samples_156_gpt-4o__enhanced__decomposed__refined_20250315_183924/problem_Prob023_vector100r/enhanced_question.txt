@@ -1,0 +1,45 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in  (100 bits)
+ - output out (100 bits)
+
+The module should reverse the bit ordering of the input and write to the
+output.
+
+Here is the enhanced specification which might be useful to you:
+                ### Module Name
+- **Module Name**: `TopModule`
+
+### Interface Specification
+- **Inputs**:
+  - `input [99:0] data_in` : A 100-bit wide input vector. Bit 0 (`data_in[0]`) is the least significant bit (LSB) and bit 99 (`data_in[99]`) is the most significant bit (MSB).
+- **Outputs**:
+  - `output [99:0] data_out` : A 100-bit wide output vector. It will represent the reversed order of `data_in`.
+
+### Signal Naming and Signedness
+- **Input and Output Naming**: Use `data_in` and `data_out` to avoid keyword conflicts.
+- **Signedness**: Signals are treated as unsigned unless specified otherwise.
+
+### Bit-Ordering
+- **Input Bit Indexing**: `data_in[0]` is the LSB, `data_in[99]` is the MSB.
+- **Output Bit Indexing**: `data_out[0]` will be the MSB of the reversed output, `data_out[99]` will be the LSB of the reversed output.
+
+### Functional Behavior
+- **Operation**: The module should reverse the bit order of `data_in` and assign it to `data_out`. Specifically, `data_out[i]` should equal `data_in[99-i]` for `i` in the range 0 to 99.
+
+### Timing and Implementation
+- **Combinational Logic**: This operation is purely combinational, with no clock or sequential elements involved.
+
+### Reset and Initial State
+- **Reset Behavior**: Not applicable as there are no sequential elements.
+- **Initial State**: Not applicable as the design is combinational.
+
+### Boundary Conditions and Assumptions
+- **Input Assumptions**: It is assumed that `data_in` is always provided as a 100-bit vector. Behavior for inputs of different sizes is undefined.
+
+### Additional Notes
+- This specification assumes a straightforward combinational implementation without any need for reset or clock considerations. Further extensions involving sequential logic would require additional specifications regarding timing and reset behaviors.
+                

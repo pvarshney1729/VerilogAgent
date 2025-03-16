@@ -1,0 +1,125 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  a
+ - output q (3 bits)
+
+The module implements a sequential circuit. Read the simulation waveforms
+to determine what the circuit does, then implement it.
+
+  time  clk a   q
+  0ns   0   1   x
+  5ns   1   1   4
+  10ns  0   1   4
+  15ns  1   1   4
+  20ns  0   1   4
+  25ns  1   1   4
+  30ns  0   1   4
+  35ns  1   1   4
+  40ns  0   1   4
+  45ns  1   0   4
+  50ns  0   0   4
+  55ns  1   0   5
+  60ns  0   0   5
+  65ns  1   0   6
+  70ns  0   0   6
+  75ns  1   0   0
+  80ns  0   0   0
+  85ns  1   0   1
+  90ns  0   0   1
+
+Here is the enhanced specification which might be useful to you:
+                **Analysis of Ambiguities and Issues:**
+
+1. **Input/Output Port Widths and Signedness:**
+   - The input `clk` and `a` are one bit, but the width of output `q` is specified as 3 bits. The signedness (whether they are signed or unsigned) is not specified.
+
+2. **Bit-Ordering and Indexing:**
+   - There is no explicit mention of the bit-ordering convention (MSB/LSB) for the 3-bit output `q`.
+
+3. **Timing Behavior:**
+   - The specification states that the module is a sequential circuit but lacks clear timing behavior definitions, such as the clock edge (rising or falling) used for triggering any state transitions or updates to `q`.
+
+4. **Reset Behavior:**
+   - There is no mention of any reset mechanism (synchronous or asynchronous) or the initial state of the output `q`.
+
+5. **Initial States:**
+   - The initial state of `q` is unspecified in the simulation waveform (denoted by `x`), which suggests an unknown or undefined state.
+
+6. **Dependencies and Operation Precedence:**
+   - The functional relationship between inputs and the output `q` is unclear. There is no description of how `a` affects the sequential logic or the conditions under which `q` changes.
+
+7. **Simulation Waveform Description:**
+   - The simulation waveform is provided without context on what specific behavior or operations it represents, leaving the intended functionality ambiguous.
+
+8. **Boundary Conditions:**
+   - There is no specification of behavior for edge cases, such as what happens if `a` changes mid-cycle or if `clk` is not a perfect square wave.
+
+**<ENHANCED_SPEC>**
+
+**Module Name:**
+- `TopModule`
+
+**Interface:**
+```verilog
+module TopModule(
+    input wire clk,       // Clock signal
+    input wire a,         // Single-bit input
+    output reg [2:0] q    // 3-bit output, unsigned
+);
+```
+
+**Bit-Ordering:**
+- The 3-bit output `q` is indexed from bit 2 to bit 0, where bit 2 is the most significant bit (MSB) and bit 0 is the least significant bit (LSB).
+
+**Timing Behavior:**
+- The module operates on the rising edge of the clock signal `clk`.
+- Changes to the output `q` are triggered by this rising edge.
+
+**Reset Behavior:**
+- An asynchronous reset input is recommended to ensure a defined initial state. However, if no reset is used, the initial state must be explicitly set in the always block.
+
+**Initial States:**
+- Upon instantiation or reset, the output `q` should be initialized to `3'b000`.
+
+**Functional Description:**
+- The module implements a state machine or counter-like behavior based on the input `a`:
+  - When `a` is high (`1`), `q` remains at `4` (`3'b100`).
+  - When `a` goes low (`0`), `q` increments with each clock cycle until it reaches `6` (`3'b110`), then wraps around to `0`.
+
+**Simulation Waveform Description:**
+- The waveform shows that `q` holds the value `4` as long as `a` remains high.
+- When `a` becomes low, `q` increments from `4` to `5`, `6`, and then resets to `0`.
+
+**Implementation Notes:**
+- Ensure that `q` is updated only on the rising edge of `clk`.
+- Add logic to handle the wrap-around behavior of `q` when it transitions from `6` to `0`.
+
+**Verilog Implementation:**
+```verilog
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        q <= 3'b000; // Initial state upon reset
+    end else begin
+        if (a == 1'b1) begin
+            q <= 3'b100; // Hold at '4' when a is high
+        end else begin
+            if (q == 3'b110) begin
+                q <= 3'b000; // Wrap around from '6' to '0'
+            end else begin
+                q <= q + 1; // Increment q
+            end
+        end
+    end
+end
+```
+
+**Boundary Conditions:**
+- Ensure that `clk` is a clean square wave for proper operation.
+- Handle any potential glitches or hazards in `a` with appropriate debouncing or filtering if necessary.
+
+**<ENHANCED_SPEC>**
+                

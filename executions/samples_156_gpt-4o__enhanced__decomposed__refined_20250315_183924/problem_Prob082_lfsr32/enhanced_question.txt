@@ -1,0 +1,68 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - output q (32 bits)
+
+A linear feedback shift register is a shift register usually with a few
+XOR gates to produce the next state of the shift register. A Galois LFSR
+is one particular arrangement that shifts right, where a bit position with
+a "tap" is XORed with the LSB output bit (q[0]) to produce its next value,
+while bit positions without a tap shift right unchanged. 
+
+The module should implement a 32-bit Galois LFSR with taps at bit
+positions 32, 22, 2, and 1. Reset should be active high synchronous, and
+should reset the output q to 32'h1. Assume all sequential logic is
+triggered on the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                ```
+module TopModule (
+    input wire clk,         // Clock signal, positive edge triggered
+    input wire reset,       // Active high synchronous reset
+    output reg [31:0] q     // 32-bit output, unsigned
+);
+
+// Interface Specification:
+// - `clk`: Clock input, positive edge triggered.
+// - `reset`: Synchronous reset input, active high.
+// - `q`: 32-bit output, initialized to 32'h1 on reset. Unsigned integer.
+
+// Bit Indexing and Ordering:
+// - Bit indexing is zero-based, with q[0] as the least significant bit (LSB) and q[31] as the most significant bit (MSB).
+
+// Reset Behavior:
+// - On reset (reset=1), `q` will be set to 32'h1 synchronously with the clock.
+// - Reset is applied on the rising edge of `clk` when `reset` is high.
+
+// Initial State:
+// - Upon power-up, if reset is not asserted, the initial state of `q` is indeterminate until the first reset.
+
+// LFSR Galois Implementation:
+// - The LFSR shifts right on each rising edge of the clock.
+// - Taps are applied on bits 31 (MSB), 21, 1, and 0.
+// - The next state of bit `q[31]` is computed as the XOR of `q[0]` with the current states of the tapped bits.
+// - Non-tapped bits shift right without modification.
+
+// Sequential Logic:
+// - The LFSR operates on the rising edge of `clk`.
+// - `q` updates to its next state on each clock cycle, except during reset.
+
+// Boundary Conditions:
+// - No specific boundary condition for maximum count as LFSR cycles through states determined by tap configuration.
+
+always @(posedge clk) begin
+    if (reset) begin
+        q <= 32'h1;  // Reset state
+    end else begin
+        // LFSR Galois operation
+        q <= {q[30:0], q[0] ^ q[31] ^ q[21] ^ q[1]}; // Shift right with XOR taps
+    end
+end
+
+endmodule
+```
+                

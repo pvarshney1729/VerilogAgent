@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input wire clk: Clock signal for sequential logic. It is a single bit input.
+- input wire areset: Asynchronous reset signal, active-high. It is a single bit input.
+- input wire j: Input signal utilized for state transitions. It is a single bit input.
+- input wire k: Input signal utilized for state transitions. It is a single bit input.
+- output reg out: Output signal representing the current state output. It is a single bit output.
+
+State Encoding:
+- State OFF: Encoded as 1'b0, with output out = 0.
+- State ON: Encoded as 1'b1, with output out = 1.
+
+State Transitions:
+- Current State OFF:
+  - If j = 0, stay in state OFF.
+  - If j = 1, transition to state ON.
+- Current State ON:
+  - If k = 0, stay in state ON.
+  - If k = 1, transition to state OFF.
+
+Reset Behavior:
+- The reset is asynchronous and active-high. When areset is asserted (areset = 1), the state transitions to OFF regardless of the clock signal.
+- Upon reset, the output out is initialized to 0.
+
+Clocking:
+- State transitions are triggered on the rising edge of the clk signal.
+
+Signal Precedence:
+- The asynchronous reset signal areset takes precedence over clock-driven state transitions. When areset is high, the state is immediately set to OFF regardless of the values of j or k.
+
+Bit Indexing:
+- All signals are single bit, with bit[0] being the least significant bit.
+
+Initial Conditions:
+- Upon power-up or reset, the module is in the OFF state, and the output out is set to 0.
+
+Edge Cases:
+- Ensure that during the asynchronous reset, the state is directly set to OFF without waiting for the clock edge to transition.
+- There are no other specific edge cases beyond normal operation as described.
+</ENHANCED_SPEC>

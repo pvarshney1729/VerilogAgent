@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Specification for the Verilog module `TopModule` is defined as follows:
+
+**Module Interface:**
+- `input wire clk`: Clock signal, used for synchronizing sequential logic.
+- `input wire reset`: Active-high synchronous reset signal, initializes the state machine to the reset state.
+- `input wire in`: Input signal, used to determine state transitions.
+- `output reg out`: Output signal, driven by the current state of the state machine.
+
+**State Machine Description:**
+The module implements a Moore state machine with two states: `State_B` and `State_A`.
+
+**State Definitions:**
+- `State_B`: `out = 1`
+- `State_A`: `out = 0`
+
+**Reset Behavior:**
+- The state machine begins in `State_B` upon reset. The reset is active-high and synchronous, meaning the state transitions to `State_B` on the rising edge of `clk` when `reset` is high.
+
+**State Transition Conditions:**
+- From `State_B`:
+  - Transition to `State_A` if `in = 0`
+  - Remain in `State_B` if `in = 1`
+- From `State_A`:
+  - Transition to `State_B` if `in = 0`
+  - Remain in `State_A` if `in = 1`
+
+**Bit and Indexing Conventions:**
+- All ports are single-bit signals, and indexing is not required.
+
+**Clock Cycle Relationships:**
+- State transitions occur on the rising edge of `clk`.
+
+**Initial Conditions and Assumptions:**
+- On reset (with `reset` high during a clock edge), the state is initialized to `State_B` with `out` set to `1`.
+
+**Edge Cases:**
+- Behavior is fully defined for all input combinations since there are only two states and one binary input.
+
+Ensure the state machine logic is implemented using appropriate `always` blocks for synchronous operations, and prioritize the synchronous reset logic within the state transition logic.
+</ENHANCED_SPEC>

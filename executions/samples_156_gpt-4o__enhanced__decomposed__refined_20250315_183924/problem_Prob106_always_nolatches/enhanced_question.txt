@@ -1,0 +1,68 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  scancode (16 bits)
+ - output left
+ - output down
+ - output right
+ - output up
+
+The module should process scancodes from a PS/2 keyboard for a game.
+Given the last two bytes of scancodes received, you need to indicate
+whether one of the arrow keys on the keyboard have been pressed. This
+involves a fairly simple mapping, which can be implemented as a case
+statement (or if-elseif) with four cases.
+
+  Scancode[15:0] | Arrow key
+  16'he06b       | left arrow
+  16'he072       | down arrow
+  16'he074       | right arrow
+  16'he075       | up arrow
+  Anything else  | none
+
+Your circuit has one 16-bit input, and four outputs. Build this circuit
+that recognizes these four scancodes and asserts the correct output.
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+**Module Name:**
+- TopModule
+
+**Interface:**
+- **Inputs:**
+  - `input [15:0] scancode` - A 16-bit input representing the last two bytes of a PS/2 keyboard scancode sequence.
+- **Outputs:**
+  - `output reg left` - 1-bit output that is asserted when the left arrow key is pressed.
+  - `output reg down` - 1-bit output that is asserted when the down arrow key is pressed.
+  - `output reg right` - 1-bit output that is asserted when the right arrow key is pressed.
+  - `output reg up` - 1-bit output that is asserted when the up arrow key is pressed.
+
+**Behavior:**
+- The module continuously monitors the `scancode` input.
+- Based on the value of `scancode`, one of the following outputs will be asserted to indicate the corresponding arrow key press:
+  - `scancode == 16'he06b` -> `left = 1;`
+  - `scancode == 16'he072` -> `down = 1;`
+  - `scancode == 16'he074` -> `right = 1;`
+  - `scancode == 16'he075` -> `up = 1;`
+- If the `scancode` does not match any of the specified values, all outputs should be deasserted.
+
+**Timing and Reset Behavior:**
+- All outputs should be reset to `0` on module initialization and when a reset signal is applied.
+- The module does not require a clock signal as it is purely combinational based on the current `scancode`.
+- A synchronous reset is assumed for initialization purposes.
+
+**Initial States:**
+- On power-up or reset, the outputs `left`, `down`, `right`, and `up` should be initialized to `0`.
+
+**Implementation Notes:**
+- Bit ordering follows the convention where `scancode[15]` is the most significant bit (MSB) and `scancode[0]` is the least significant bit (LSB).
+- The module should be able to handle any input value without entering an undefined state, ensuring robust operation even with unexpected scancodes.
+
+**Boundary Conditions:**
+- For any `scancode` value not listed in the mapping, the default behavior is to deassert all outputs (`left = 0, down = 0, right = 0, up = 0`).
+
+**
+                

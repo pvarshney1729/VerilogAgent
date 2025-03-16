@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, and output port q[31:0].",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  clk - input  reset - output q (32 bits)",
+        "implementation": "module TopModule (\n    input clk,\n    input reset,\n    output reg [31:0] q\n);\n\nalways @(posedge clk) begin\n    if (reset) begin\n        q <= 32'h1;\n    end else begin\n        q <= {q[30:0], q[31] ^ q[21] ^ q[1] ^ q[0]};\n    end\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare a 32-bit register q to hold the state of the LFSR.",
+        "source": "The module should implement a 32-bit Galois LFSR with taps at bit positions 32, 22, 2, and 1.",
+        "implementation": "reg [31:0] q;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the synchronous reset logic to set q to 32'h1 when reset is high.",
+        "source": "Reset should be active high synchronous, and should reset the output q to 32'h1.",
+        "implementation": "always @(posedge clk) begin\n    if (reset) begin\n        q <= 32'h1;\n    end\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement the LFSR logic with taps at bit positions 32, 22, 2, and 1. Use XOR gates to update the state of q based on these taps and the LSB q[0].",
+        "source": "A Galois LFSR is one particular arrangement that shifts right, where a bit position with a \"tap\" is XORed with the LSB output bit (q[0]) to produce its next value, while bit positions without a tap shift right unchanged. The module should implement a 32-bit Galois LFSR with taps at bit positions 32, 22, 2, and 1.",
+        "implementation": "reg [31:0] q;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        q <= 32'h1;\n    end else begin\n        q <= {q[30:0], q[31] ^ q[21] ^ q[1] ^ q[0]};\n    end\nend"
+    },
+    {
+        "id": "5",
+        "content": "Implement the always block triggered on the positive edge of the clock to update the state of the LFSR based on the LFSR logic and reset condition.",
+        "source": "Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "reg [31:0] q_reg, q_next;\n\n  always @(posedge clk) begin\n    if (reset) begin\n      q_reg <= 32'h1;\n    end else begin\n      q_reg[31] <= q_reg[0];\n      q_reg[30] <= q_reg[31];\n      q_reg[29] <= q_reg[30];\n      q_reg[28] <= q_reg[29];\n      q_reg[27] <= q_reg[28];\n      q_reg[26] <= q_reg[27];\n      q_reg[25] <= q_reg[26];\n      q_reg[24] <= q_reg[25];\n      q_reg[23] <= q_reg[24];\n      q_reg[22] <= q_reg[23] ^ q_reg[0];\n      q_reg[21] <= q_reg[22];\n      q_reg[20] <= q_reg[21];\n      q_reg[19] <= q_reg[20];\n      q_reg[18] <= q_reg[19];\n      q_reg[17] <= q_reg[18];\n      q_reg[16] <= q_reg[17];\n      q_reg[15] <= q_reg[16];\n      q_reg[14] <= q_reg[15];\n      q_reg[13] <= q_reg[14];\n      q_reg[12] <= q_reg[13];\n      q_reg[11] <= q_reg[12];\n      q_reg[10] <= q_reg[11];\n      q_reg[9]  <= q_reg[10];\n      q_reg[8]  <= q_reg[9];\n      q_reg[7]  <= q_reg[8];\n      q_reg[6]  <= q_reg[7];\n      q_reg[5]  <= q_reg[6];\n      q_reg[4]  <= q_reg[5];\n      q_reg[3]  <= q_reg[4];\n      q_reg[2]  <= q_reg[3] ^ q_reg[0];\n      q_reg[1]  <= q_reg[2] ^ q_reg[0];\n      q_reg[0]  <= q_reg[1];\n    end\n  end"
+    }
+]

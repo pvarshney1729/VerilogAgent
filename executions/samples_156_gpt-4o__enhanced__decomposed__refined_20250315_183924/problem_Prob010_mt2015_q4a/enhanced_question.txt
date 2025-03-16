@@ -1,0 +1,62 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  x
+ - input  y
+ - output z
+
+The module should implement the boolean function z = (x^y) & x.
+
+Here is the enhanced specification which might be useful to you:
+                ### Module Specification for `TopModule`
+
+#### Interface
+- **Module Name**: `TopModule`
+- **Port Definitions**:
+  - **Inputs**:
+    - `input wire x`: 1-bit input, unsigned.
+    - `input wire y`: 1-bit input, unsigned.
+  - **Outputs**:
+    - `output wire z`: 1-bit output, unsigned.
+
+#### Naming Conventions
+- Port names `x`, `y`, and `z` are chosen for simplicity and should be replaced with context-specific names if integrated into a larger design to avoid naming conflicts.
+
+#### Behavior
+- **Functionality**: The module implements a combinational logic function defined as:
+  - `z = (x XOR y) AND x`
+  - Here, `^` denotes the bitwise XOR operation and `&` denotes the bitwise AND operation.
+
+#### Timing and Reset Behavior
+- **Combinational Logic**: The module is purely combinational with no clocked elements. There are no timing dependencies on any clock signal.
+- **Reset Behavior**: Not applicable as there are no state-holding elements.
+
+#### Initial States
+- The module does not contain any registers or flip-flops, so initial states are not applicable.
+
+#### Bit-ordering and Indexing
+- As the module handles single-bit signals, bit-ordering and indexing are not applicable, but the convention is that the single bit is considered as bit[0].
+
+#### Dependencies and Precedence
+- Operation precedence follows standard boolean algebra without additional dependencies or race conditions.
+
+#### Edge Cases
+- Given the 1-bit nature of inputs `x` and `y`, edge cases are inherently covered by the truth table of the XOR and AND operations:
+  - `x = 0, y = 0` results in `z = 0`
+  - `x = 0, y = 1` results in `z = 0`
+  - `x = 1, y = 0` results in `z = 1`
+  - `x = 1, y = 1` results in `z = 0`
+
+### Verilog Implementation
+```verilog
+module TopModule (
+    input wire x,
+    input wire y,
+    output wire z
+);
+    assign z = (x ^ y) & x;
+endmodule
+```
+                

@@ -1,0 +1,44 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a
+ - input  b
+ - output out
+
+The module should implement an XNOR gate.
+
+Here is the enhanced specification which might be useful to you:
+                ### Module Specification for `TopModule`
+
+#### Interface Definition
+- **Module Name**: `TopModule`
+- **Input Ports**:
+  - `input wire a` : 1-bit wide, unsigned
+  - `input wire b` : 1-bit wide, unsigned
+- **Output Ports**:
+  - `output wire out` : 1-bit wide, unsigned
+
+#### Behavioral Description
+- **Functional Intent**: The module should implement a combinational logic XNOR gate.
+- **Logical Operation**: The output `out` should be the result of the XNOR operation on inputs `a` and `b`.
+  - **Truth Table**:
+    - `a = 0, b = 0 → out = 1`
+    - `a = 0, b = 1 → out = 0`
+    - `a = 1, b = 0 → out = 0`
+    - `a = 1, b = 1 → out = 1`
+  - **Mathematical Expression**: `out = ~(a ^ b)`
+
+#### Timing and State Considerations
+- **Logic Type**: This module is purely combinational with no internal state or memory elements.
+- **Reset Behavior**: Not applicable as there are no sequential elements.
+- **Initial State**: Not applicable.
+
+#### Implementation Notes
+- **Combinational Logic**: Ensure that the module does not infer any latches or flip-flops.
+- **Synthesis and Optimization**: The logic synthesis should recognize this as a simple XNOR gate without unnecessary gates or delays.
+
+#### Edge Case and Boundary Conditions
+- **Input Domains**: Inputs `a` and `b` are expected to be binary (0 or 1). The module does not handle multi-bit inputs or signed operations.
+                

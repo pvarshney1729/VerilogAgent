@@ -1,0 +1,81 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  a
+ - input  b
+ - output out_assign
+ - output out_always_comb
+ - output out_always_ff
+
+The module should implement an XOR gate three ways, using an assign
+statement (output out_assign), a combinational always block (output
+out_always_comb), and a clocked always block (output out_always_ff). Note
+that the clocked always block produces a different circuit from the other
+two: There is a flip- flop so the output is delayed. Assume all
+sequential logic is triggered on the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+**Module Name:** `TopModule`
+
+**Interface Definition:**
+
+```verilog
+module TopModule (
+    input wire clk,           // Clock signal (positive edge-triggered)
+    input wire a,             // Input signal 'a', 1-bit
+    input wire b,             // Input signal 'b', 1-bit
+    output wire out_assign,   // Output using assign statement, 1-bit
+    output wire out_always_comb, // Output using combinational always block, 1-bit
+    output reg out_always_ff  // Output using sequential always block, 1-bit
+);
+```
+
+**Behavioral Specification:**
+
+1. **Output `out_assign`:**
+   - Implements `out_assign = a ^ b;` using an `assign` statement. This is purely combinational logic.
+
+2. **Output `out_always_comb`:**
+   - Implements `out_always_comb = a ^ b;` using a combinational `always` block.
+   - Ensure the block sensitivity list includes all inputs (`a` and `b`) for correct combinational behavior.
+
+3. **Output `out_always_ff`:**
+   - Implements `out_always_ff` to be the XOR of `a` and `b`, but updated on the positive edge of the clock.
+   - The initial state should be defined (e.g., `out_always_ff = 1'b0;` during the reset condition).
+
+**Timing and Reset Behavior:**
+
+- **Clock Signal:** The clock signal, `clk`, is positive edge-triggered for the sequential logic.
+- **Reset Signal (Optional):** If a reset signal is needed, specify whether it is synchronous or asynchronous, and its effect (e.g., resetting `out_always_ff` to a known state such as `0`).
+
+**Implementation Notes:**
+
+- **Bit Ordering:** Although not applicable to single-bit signals, the convention is that `bit[0]` refers to the least significant bit in multi-bit contexts.
+- **Combinational vs. Sequential Logic:**
+  - Combinational outputs (`out_assign` and `out_always_comb`) reflect the current inputs immediately.
+  - Sequential output (`out_always_ff`) reflects the XOR of inputs `a` and `b` from the previous clock edge.
+- **Edge Cases:** For completeness, the XOR operation is defined for all input combinations: `00 -> 0`, `01 -> 1`, `10 -> 1`, `11 -> 0`.
+
+**Example Implementation:**
+
+```verilog
+always @(*) begin
+    out_always_comb = a ^ b; // Combinational logic block
+end
+
+always @(posedge clk) begin
+    out_always_ff <= a ^ b; // Sequential logic block
+end
+
+assign out_assign = a ^ b; // Continuous assignment
+```
+
+**End of Specification**
+
+**
+                

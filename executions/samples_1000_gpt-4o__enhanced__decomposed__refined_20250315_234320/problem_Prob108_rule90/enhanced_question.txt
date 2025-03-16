@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Input Ports:
+- clk: 1-bit input, serves as the clock signal triggering sequential logic on the rising edge.
+- load: 1-bit input, controls whether the system state should be updated with new data.
+- data: 512-bit input, used to initialize the system state when 'load' is asserted.
+
+Output Ports:
+- q: 512-bit output, represents the current state of the 512-cell system.
+
+Functional Description:
+- The module implements Rule 90, a one-dimensional cellular automaton, wherein each cell's next state is determined by the XOR of its two current neighbors.
+- For a given cell indexed at 'i', the next state q[i] is computed as follows:
+  - q[i] = q[i-1] XOR q[i+1].
+
+Boundary Conditions:
+- It is assumed that the boundary conditions q[-1] and q[512] are both zero (off).
+
+Operational Behavior:
+- On the rising edge of the clock ('clk'), the following occurs:
+  - If 'load' is high (1), the current state of the system is initialized to 'data[511:0]'.
+  - If 'load' is low (0), the state of the system advances by one time step according to Rule 90.
+
+Notes:
+- All sequential elements (flip-flops/registers) are sensitive to the positive edge of the clock.
+- The system does not require a reset signal. Initial loading with 'data' serves as the initialization.
+- Bit indexing follows the convention q[0] as the least significant bit and q[511] as the most significant bit.
+
+Edge Cases:
+- When computing the next state for the boundary cells, assume:
+  - The "left" neighbor of q[0] is q[-1] = 0.
+  - The "right" neighbor of q[511] is q[512] = 0.
+</ENHANCED_SPEC>

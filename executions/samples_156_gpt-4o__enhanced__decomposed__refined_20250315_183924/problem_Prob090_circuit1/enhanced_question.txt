@@ -1,0 +1,94 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a
+ - input  b
+ - output q
+
+The module should implement a combinational circuit. Read the simulation
+waveforms to determine what the circuit does, then implement it.
+
+  time  a  b  q
+  0ns   0  0  0
+  5ns   0  0  0
+  10ns  0  0  0
+  15ns  0  0  0
+  20ns  0  0  0
+  25ns  0  1  0
+  30ns  0  1  0
+  35ns  1  0  0
+  40ns  1  0  0
+  45ns  1  1  1
+  50ns  1  1  1
+  55ns  0  0  0
+  60ns  0  0  0
+  65ns  0  1  0
+  70ns  0  1  0
+  75ns  1  0  0
+  80ns  1  0  0
+  85ns  1  1  1
+  90ns  1  1  1
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+**Module Name:**
+- `TopModule`
+
+**Interface:**
+```verilog
+module TopModule (
+    input wire a,  // One-bit input
+    input wire b,  // One-bit input
+    output wire q  // One-bit output
+);
+```
+
+**Signal Characteristics:**
+- All inputs (`a`, `b`) and output (`q`) are single-bit wide.
+- All signals are treated as unsigned.
+
+**Behavior:**
+- The module implements a combinational logic circuit.
+- The truth table for the circuit is as follows:
+
+  | a | b | q |
+  |---|---|---|
+  | 0 | 0 | 0 |
+  | 0 | 1 | 0 |
+  | 1 | 0 | 0 |
+  | 1 | 1 | 1 |
+
+**Logical Description:**
+- The output `q` is the logical AND of inputs `a` and `b`.
+- This can be expressed as: `q = a & b`
+
+**Implementation Notes:**
+- Since this is a combinational circuit, no clock or reset signals are required.
+- The circuit should be free of latches or flip-flops, ensuring purely combinational logic.
+- The output `q` is updated immediately based on the current values of inputs `a` and `b`.
+
+**Boundary Conditions:**
+- The truth table provided covers all possible input combinations for the inputs `a` and `b`.
+- The implementation should be robust against any single-bit input changes.
+
+**Timing:**
+- As a purely combinational circuit, there is no timing dependency or clock cycle relationship. The response of the output `q` to changes in inputs `a` and `b` should be instantaneous.
+
+**Example Verilog Implementation:**
+```verilog
+module TopModule (
+    input wire a,
+    input wire b,
+    output wire q
+);
+    assign q = a & b;  // Logical AND operation
+endmodule
+```
+
+**End of Enhanced Specification**
+
+**
+                

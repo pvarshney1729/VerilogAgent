@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal, 1-bit, positive edge-triggered.
+  - `reset`: Reset signal, 1-bit, active high, synchronous with `clk`.
+
+- Output Ports:
+  - `shift_ena`: Output signal to enable the shift register, 1-bit.
+
+Functional Description:
+The module implements a Finite State Machine (FSM) responsible for controlling a shift register. The FSM will enable the shift register for exactly 4 consecutive clock cycles under specific conditions.
+
+Behavior:
+1. Reset Behavior:
+   - When `reset` is asserted (active high), the `shift_ena` output should be asserted (set to 1) for the first 4 clock cycles after the reset is detected.
+   - After 4 clock cycles, `shift_ena` should be deasserted (set to 0) indefinitely until the next reset.
+
+2. Clock Cycle Dependency:
+   - The FSM transitions and logic updates are triggered on the positive edge of the `clk` signal.
+   - The reset is synchronous; it is sampled on the rising edge of the `clk`.
+
+3. Initial Conditions:
+   - All internal FSM state registers must be initialized to a known state after reset.
+
+4. Edge Cases:
+   - Ensure that during the reset period, the FSM counts exactly 4 clock cycles before deasserting `shift_ena`.
+   - Post-reset behavior must ensure `shift_ena` remains low until the next reset.
+
+Other Considerations:
+- The FSM should be designed to handle transitions cleanly without glitches or race conditions on the `shift_ena` output.
+- Clearly define and document the state transition conditions and outputs in the FSM design.
+
+Ensure all aspects of the FSM design, especially the reset handling and clock cycle counting, are clearly defined and implemented to meet the specified behavior.
+</ENHANCED_SPEC>

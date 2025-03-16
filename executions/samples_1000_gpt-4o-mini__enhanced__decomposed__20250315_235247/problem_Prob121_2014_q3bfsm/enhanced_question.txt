@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- `input clk`: Clock signal for the module, active on the positive edge.
+- `input reset`: Synchronous active high reset signal. Resetting the FSM should set it to the initial state 000.
+- `input x`: Input signal affecting the state transition.
+- `output z`: Output signal determined by the current state and input.
+
+Finite State Machine (FSM) Specifications:
+- State Encoding: The FSM uses a 3-bit state encoding represented by `y[2:0]`, where `y[2]` is the most significant bit and `y[0]` is the least significant bit.
+- Initial State: Upon reset, the FSM should transition to state 000.
+- State Transitions: The FSM transitions between states on the rising edge of the `clk` signal. The transitions are defined as follows:
+
+  | Present State (y[2:0]) | Next State if x=0 (y[2:0]) | Next State if x=1 (y[2:0]) | Output (z) |
+  |-------------------------|----------------------------|----------------------------|------------|
+  | 000                     | 000                        | 001                        | 0          |
+  | 001                     | 001                        | 100                        | 0          |
+  | 010                     | 010                        | 001                        | 0          |
+  | 011                     | 001                        | 010                        | 1          |
+  | 100                     | 011                        | 100                        | 1          |
+
+Behavioral Notes:
+- The FSM is triggered by the positive edge of `clk` and will only change states at these edges.
+- The `reset` signal is synchronous, meaning the FSM will only reset to state 000 on the rising edge of `clk` when `reset` is high.
+- The output `z` is determined by the present state. It remains constant throughout the clock cycle and only updates on the next clock edge in accordance with the transition rules.
+
+Edge Cases and Input Boundaries:
+- Ensure that the FSM can handle all transitions correctly regardless of the input `x`.
+- The module does not define behavior for states other than those specified, ensuring the FSM operates correctly from any valid state.
+</ENHANCED_SPEC>

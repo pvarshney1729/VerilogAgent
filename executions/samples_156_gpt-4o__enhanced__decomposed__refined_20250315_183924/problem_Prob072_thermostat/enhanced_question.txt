@@ -1,0 +1,74 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  mode
+ - input  too_cold
+ - input  too_hot
+ - input  fan_on
+ - output heater
+ - output aircon
+ - output fan
+
+The module should implement a heating/cooling thermostat controller which
+controls both a heater (during winter) and an air conditioner (during
+summer). The module should on and off the heater, air conditioning, and
+blower fan as appropriate. The thermostat can be in one of two modes:
+heating (mode = 1) and cooling (mode = 0). In heating mode, turn the
+heater on when it is too cold (too_cold = 1) but do not use the air
+conditioner. In cooling mode, turn the air conditioner on when it is too
+hot (too_hot = 1), but do not turn on the heater. When the heater or air
+conditioner are on, also turn on the fan to circulate the air. In
+addition, the user can also request the fan to turn on (fan_on = 1), even
+if the heater and air conditioner are off.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: `TopModule`
+
+**Interface**:
+- **Inputs**:
+  - `input wire mode;` // 1-bit, mode = 1 for heating, mode = 0 for cooling
+  - `input wire too_cold;` // 1-bit, indicates if it is too cold
+  - `input wire too_hot;` // 1-bit, indicates if it is too hot
+  - `input wire fan_on;` // 1-bit, user request to turn on the fan
+
+- **Outputs**:
+  - `output reg heater;` // 1-bit, controls the heater
+  - `output reg aircon;` // 1-bit, controls the air conditioner
+  - `output reg fan;` // 1-bit, controls the blower fan
+
+**Behavior**:
+- **Heating Mode (mode = 1)**:
+  - `heater` will be set to 1 if `too_cold` is 1.
+  - `aircon` will always be 0, regardless of other inputs.
+  - `fan` will be set to 1 if either `heater` is 1 or `fan_on` is 1.
+
+- **Cooling Mode (mode = 0)**:
+  - `aircon` will be set to 1 if `too_hot` is 1.
+  - `heater` will always be 0, regardless of other inputs.
+  - `fan` will be set to 1 if either `aircon` is 1 or `fan_on` is 1.
+
+**Timing and Implementation Notes**:
+- The module is purely combinational with no clock signal required. All outputs are determined by the current input values.
+- No reset logic is included as it's not specified, but outputs default to 0 at startup.
+
+**Initial States**:
+- Upon initialization, all outputs (`heater`, `aircon`, `fan`) should default to 0, ensuring a known state.
+
+**Dependencies and Priority**:
+- The priority for turning on the `fan` is based on `heater` or `aircon` being active first, followed by the `fan_on` signal.
+
+**Boundary and Edge Conditions**:
+- Rapid changes in `mode`, `too_cold`, or `too_hot` inputs should be handled smoothly without glitches in `heater`, `aircon`, or `fan` outputs.
+- The outputs should not exhibit any undefined behavior under any combination of inputs.
+
+**Example Truth Table** (for clarity):
+- Mode = 1, too_cold = 1: heater = 1, aircon = 0, fan = 1
+- Mode = 1, too_cold = 0, fan_on = 1: heater = 0, aircon = 0, fan = 1
+- Mode = 0, too_hot = 1: heater = 0, aircon = 1, fan = 1
+- Mode = 0, too_hot = 0, fan_on = 1: heater = 0, aircon = 0, fan = 1
+
+**Design Notes**:
+- Ensure that the implementation correctly reflects the intended behavior through simulation and verification.
+                

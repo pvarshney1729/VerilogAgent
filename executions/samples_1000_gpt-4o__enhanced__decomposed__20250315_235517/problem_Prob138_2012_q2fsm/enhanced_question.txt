@@ -1,0 +1,63 @@
+<ENHANCED_SPEC>
+Module: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, triggers all sequential logic on the positive edge.
+  - `input reset`: Synchronous active-high reset signal, resets the FSM to its initial state.
+  - `input w`: Single-bit input signal.
+
+- Output Ports:
+  - `output reg z`: Single-bit output signal representing the FSM output.
+
+State Machine Specification:
+- State Encoding: Use a binary encoding scheme for the states. Define each state using a 3-bit register `state` with the following assignments:
+  - `A = 3'b000`
+  - `B = 3'b001`
+  - `C = 3'b010`
+  - `D = 3'b011`
+  - `E = 3'b100`
+  - `F = 3'b101`
+
+- Initial State: The FSM starts in state `A` upon reset.
+
+- State Transitions:
+  - From State `A`:
+    - If `w == 1`, transition to `B`
+    - If `w == 0`, remain in `A`
+  - From State `B`:
+    - If `w == 1`, transition to `C`
+    - If `w == 0`, transition to `D`
+  - From State `C`:
+    - If `w == 1`, transition to `E`
+    - If `w == 0`, transition to `D`
+  - From State `D`:
+    - If `w == 1`, transition to `F`
+    - If `w == 0`, transition to `A`
+  - From State `E`:
+    - If `w == 1`, remain in `E`
+    - If `w == 0`, transition to `D`
+  - From State `F`:
+    - If `w == 1`, transition to `C`
+    - If `w == 0`, transition to `D`
+
+- Output Logic:
+  - `z` is determined by the current state:
+    - `z = 1` when in states `E` or `F`
+    - `z = 0` when in states `A`, `B`, `C`, or `D`
+
+Implementation Details:
+- Use separate always blocks for:
+  - State transitions (state table logic).
+  - State register updates (state flip-flops).
+  - Output logic can be handled with either continuous assignment or an always block based on the state.
+
+- Reset Behavior:
+  - Synchronous reset: When `reset` is high, the state is set to `A` on the next positive clock edge.
+
+- Clock Domain:
+  - All sequential elements are synchronized to the positive edge of `clk`.
+
+- Initial Conditions:
+  - Ensure all state registers have defined initial values upon reset.
+</ENHANCED_SPEC>

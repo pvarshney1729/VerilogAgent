@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    output logic [31:0] q\n);\n    // Internal register to hold the state of the LFSR\n    logic [31:0] q_reg;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            q_reg <= 32'h1; // Synchronous reset to 1\n        end else begin\n            // Galois LFSR shift with taps at positions 32, 22, 2, and 1\n            q_reg <= {q_reg[30:0], (q_reg[31] ^ q_reg[21] ^ q_reg[1] ^ q_reg[0])};\n        end\n    end\n\n    // Assign the internal register to the output\n    assign q = q_reg;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "T"
+    }
+}

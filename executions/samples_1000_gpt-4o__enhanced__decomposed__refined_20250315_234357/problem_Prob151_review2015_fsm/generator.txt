@@ -1,0 +1,200 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the specification by creating a finite-state machine (FSM) that detects a specific pattern (`1101`) on the `data` input and then performs a series of actions based on the detected pattern. The FSM is implemented using a set of states encoded as a 3-bit value. The states are:
+
+1. **IDLE**: The initial state where the FSM waits for the first `1` of the pattern.
+2. **DETECT_1**: The state after detecting the first `1`.
+3. **DETECT_11**: The state after detecting the second `1`.
+4. **DETECT_110**: The state after detecting `110`.
+5. **DETECT_1101**: The state after detecting the complete pattern `1101`. This state triggers the `shift_ena` signal.
+6. **SHIFT**: The state where `shift_ena` is asserted for 4 clock cycles to shift in additional bits.
+7. **COUNT**: The state where the FSM waits for the `done_counting` signal, indicating the counting process is complete.
+8. **DONE**: The state where the `done` signal is asserted to notify the user. The FSM waits for the `ack` signal to return to the IDLE state.
+
+The FSM transitions between these states based on the input signals and the current state. The `shift_counter` is used to ensure that `shift_ena` is asserted for exactly 4 clock cycles. The synchronous reset logic ensures that the FSM returns to the IDLE state when `reset` is asserted.
+
+The implementation adheres to the coding conventions by using `logic` for all signals, using `always_ff` for sequential logic, and `always_comb` for combinational logic. The FSM is designed to be robust and handle all specified conditions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic data,
+    input logic done_counting,
+    input logic ack,
+    output logic shift_ena,
+    output logic counting,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        IDLE        = 3'b000,
+        DETECT_1    = 3'b001,
+        DETECT_11   = 3'b010,
+        DETECT_110  = 3'b011,
+        DETECT_1101 = 3'b100,
+        SHIFT       = 3'b101,
+        COUNT       = 3'b110,
+        DONE        = 3'b111
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [2:0] shift_counter;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            shift_counter <= 3'b000;
+        end else begin
+            current_state <= next_state;
+            if (current_state == SHIFT) begin
+                shift_counter <= shift_counter + 1;
+            end else begin
+                shift_counter <= 3'b000;
+            end
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        // Default assignments
+        next_state = current_state;
+        shift_ena = 1'b0;
+        counting = 1'b0;
+        done = 1'b0;
+
+        case (current_state)
+            IDLE: begin
+                if (data) next_state = DETECT_1;
+            end
+            DETECT_1: begin
+                if (data) next_state = DETECT_11;
+                else next_state = IDLE;
+            end
+            DETECT_11: begin
+                if (!data) next_state = DETECT_110;
+                else next_state = IDLE;
+            end
+            DETECT_110: begin
+                if (data) next_state = DETECT_1101;
+                else next_state = IDLE;
+            end
+            DETECT_1101: begin
+                shift_ena = 1'b1;
+                next_state = SHIFT;
+            end
+            SHIFT: begin
+                shift_ena = 1'b1;
+                if (shift_counter == 3'b011) begin
+                    next_state = COUNT;
+                end
+            end
+            COUNT: begin
+                counting = 1'b1;
+                if (done_counting) next_state = DONE;
+            end
+            DONE: begin
+                done = 1'b1;
+                if (ack) next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic data,
+    input logic done_counting,
+    input logic ack,
+    output logic shift_ena,
+    output logic counting,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        IDLE        = 3'b000,
+        DETECT_1    = 3'b001,
+        DETECT_11   = 3'b010,
+        DETECT_110  = 3'b011,
+        DETECT_1101 = 3'b100,
+        SHIFT       = 3'b101,
+        COUNT       = 3'b110,
+        DONE        = 3'b111
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [2:0] shift_counter;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            shift_counter <= 3'b000;
+        end else begin
+            current_state <= next_state;
+            if (current_state == SHIFT) begin
+                shift_counter <= shift_counter + 1;
+            end else begin
+                shift_counter <= 3'b000;
+            end
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        // Default assignments
+        next_state = current_state;
+        shift_ena = 1'b0;
+        counting = 1'b0;
+        done = 1'b0;
+
+        case (current_state)
+            IDLE: begin
+                if (data) next_state = DETECT_1;
+            end
+            DETECT_1: begin
+                if (data) next_state = DETECT_11;
+                else next_state = IDLE;
+            end
+            DETECT_11: begin
+                if (!data) next_state = DETECT_110;
+                else next_state = IDLE;
+            end
+            DETECT_110: begin
+                if (data) next_state = DETECT_1101;
+                else next_state = IDLE;
+            end
+            DETECT_1101: begin
+                shift_ena = 1'b1;
+                next_state = SHIFT;
+            end
+            SHIFT: begin
+                shift_ena = 1'b1;
+                if (shift_counter == 3'b011) begin
+                    next_state = COUNT;
+                end
+            end
+            COUNT: begin
+                counting = 1'b1;
+                if (done_counting) next_state = DONE;
+            end
+            DONE: begin
+                done = 1'b1;
+                if (ack) next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule

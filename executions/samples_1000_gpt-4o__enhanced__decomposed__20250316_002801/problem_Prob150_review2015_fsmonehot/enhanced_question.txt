@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+Interface Description:
+- Input Ports:
+  - `input wire d`: 1-bit input signal.
+  - `input wire done_counting`: 1-bit input signal indicating completion of a counting process.
+  - `input wire ack`: 1-bit input signal for acknowledgment.
+  - `input wire [9:0] state`: 10-bit one-hot encoded input representing the current state of the state machine.
+
+- Output Ports:
+  - `output wire B3_next`: 1-bit signal, asserted when the next state is `B3`.
+  - `output wire S_next`: 1-bit signal, asserted when the next state is `S`.
+  - `output wire S1_next`: 1-bit signal, asserted when the next state is `S1`.
+  - `output wire Count_next`: 1-bit signal, asserted when the next state is `Count`.
+  - `output wire Wait_next`: 1-bit signal, asserted when the next state is `Wait`.
+  - `output wire done`: 1-bit signal, asserted when in the `Wait` state and `done` condition is met.
+  - `output wire counting`: 1-bit signal, asserted when in the `Count` state.
+  - `output wire shift_ena`: 1-bit signal, asserted during states `B0`, `B1`, `B2`, and `B3`.
+
+State Machine Description:
+- The module implements a Moore state machine with states: `S`, `S1`, `S11`, `S110`, `B0`, `B1`, `B2`, `B3`, `Count`, and `Wait`.
+- Initial State: The state machine starts in the `S` state upon reset.
+- Reset: The reset is assumed to be asynchronous and sets the state machine to `S`.
+
+State Transitions:
+- `S` transitions to `S` on `d=0`, and to `S1` on `d=1`.
+- `S1` transitions back to `S` on `d=0`, and to `S11` on `d=1`.
+- `S11` transitions to `S110` on `d=0`, and remains in `S11` on `d=1`.
+- `S110` transitions back to `S` on `d=0`, and to `B0` on `d=1`.
+- The states `B0`, `B1`, `B2`, and `B3` transition sequentially one after the other.
+- The state `B3` transitions to `Count`.
+- `Count` remains in `Count` while `done_counting=0` and transitions to `Wait` when `done_counting=1`.
+- `Wait` remains in `Wait` while `ack=0` and transitions back to `S` when `ack=1`.
+
+Output Logic:
+- `shift_ena`: Asserted in states `B0`, `B1`, `B2`, and `B3`.
+- `counting`: Asserted in the `Count` state.
+- `done`: Asserted in the `Wait` state.
+
+Encoding:
+- One-hot encoding is used for the state representation as follows:
+  - `S` = 10'b0000000001
+  - `S1` = 10'b0000000010
+  - `S11` = 10'b0000000100
+  - `S110` = 10'b0000001000
+  - `B0` = 10'b0000010000
+  - `B1` = 10'b0000100000
+  - `B2` = 10'b0001000000
+  - `B3` = 10'b0010000000
+  - `Count` = 10'b0100000000
+  - `Wait` = 10'b1000000000
+</ENHANCED_SPEC>

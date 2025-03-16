@@ -1,0 +1,135 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as specified, we need to create a finite state machine (FSM) that controls the `shift_ena` signal. The FSM should have two states: `IDLE` and `SHIFT`. The `SHIFT` state is responsible for asserting the `shift_ena` signal for exactly 4 clock cycles. The transition to the `SHIFT` state occurs when the `reset` signal is asserted. After 4 cycles in the `SHIFT` state, the FSM transitions back to the `IDLE` state, where `shift_ena` remains low until another reset occurs.
+
+The `reset` signal is synchronous, meaning it is sampled on the positive edge of the clock. We will use a counter to keep track of the number of cycles in the `SHIFT` state. The counter will be initialized to 4 when entering the `SHIFT` state and decremented on each clock cycle until it reaches zero, at which point the FSM transitions back to the `IDLE` state.
+
+The implementation will adhere to the coding conventions provided, using `logic` for all signals and ensuring that all numeric constants are properly sized.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        IDLE  = 1'b0,
+        SHIFT = 1'b1
+    } state_t;
+
+    // State registers
+    state_t state, next_state;
+    logic [2:0] shift_counter;
+
+    // State transition and output logic
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= SHIFT;
+            shift_counter <= 3'd4; // Initialize counter to 4
+            shift_ena <= 1'b1;     // Assert shift_ena
+        end else begin
+            state <= next_state;
+            if (state == SHIFT) begin
+                if (shift_counter != 3'd0) begin
+                    shift_counter <= shift_counter - 1'b1;
+                    shift_ena <= 1'b1;
+                end else begin
+                    shift_ena <= 1'b0;
+                end
+            end else begin
+                shift_ena <= 1'b0;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (state)
+            IDLE: begin
+                if (reset) begin
+                    next_state = SHIFT;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            SHIFT: begin
+                if (shift_counter == 3'd0) begin
+                    next_state = IDLE;
+                end else begin
+                    next_state = SHIFT;
+                end
+            end
+            default: next_state = IDLE;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        IDLE  = 1'b0,
+        SHIFT = 1'b1
+    } state_t;
+
+    // State registers
+    state_t state, next_state;
+    logic [2:0] shift_counter;
+
+    // State transition and output logic
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= SHIFT;
+            shift_counter <= 3'd4; // Initialize counter to 4
+            shift_ena <= 1'b1;     // Assert shift_ena
+        end else begin
+            state <= next_state;
+            if (state == SHIFT) begin
+                if (shift_counter != 3'd0) begin
+                    shift_counter <= shift_counter - 1'b1;
+                    shift_ena <= 1'b1;
+                end else begin
+                    shift_ena <= 1'b0;
+                end
+            end else begin
+                shift_ena <= 1'b0;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (state)
+            IDLE: begin
+                if (reset) begin
+                    next_state = SHIFT;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            SHIFT: begin
+                if (shift_counter == 3'd0) begin
+                    next_state = IDLE;
+                end else begin
+                    next_state = SHIFT;
+                end
+            end
+            default: next_state = IDLE;
+        endcase
+    end
+
+endmodule

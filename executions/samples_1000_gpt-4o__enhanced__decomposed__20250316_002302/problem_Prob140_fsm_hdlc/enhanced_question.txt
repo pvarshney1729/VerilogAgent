@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, used for synchronizing sequential logic. Triggered on the positive edge.
+  - `input reset`: Reset signal, active high, synchronous. Resets the FSM to its initial state.
+  - `input in`: Serial data input, 1-bit wide.
+
+- Output Ports:
+  - `output disc`: Indicates a bit needs to be discarded, 1-bit wide.
+  - `output flag`: Indicates the detection of a frame boundary, 1-bit wide.
+  - `output err`: Indicates an error due to detecting 7 or more consecutive '1's, 1-bit wide.
+
+Specifications:
+1. The module implements a Moore-type finite state machine (FSM) to process a continuous bit stream and recognize specific bit patterns:
+   - Pattern (1): `0111110` - Signals a bit needs to be discarded. Assert `disc` for one full clock cycle following detection.
+   - Pattern (2): `01111110` - Indicates a frame boundary (beginning/end). Assert `flag` for one full clock cycle following detection.
+   - Pattern (3): `01111111...` - Detects 7 or more consecutive '1's indicating an error. Assert `err` for one full clock cycle following detection.
+
+2. FSM Operation:
+   - Initial State: Upon reset, the FSM enters the initial state as if the previous input was '0'.
+   - State Transitions: On each positive clock edge, the FSM transitions based on the current state and input bit.
+   - Output Assertion: Outputs (`disc`, `flag`, `err`) are asserted for a full clock cycle after the corresponding pattern detection.
+
+3. Reset Behavior:
+   - The reset is synchronous, meaning its effect occurs on the positive edge of the clock.
+   - When reset is active (high), the FSM transitions to the initial state.
+
+4. Bit Indexing and Conventions:
+   - Input and output ports are 1-bit wide, with bit[0] as the least significant bit where applicable.
+   - The FSM operates on a bit-by-bit basis from the serial input stream.
+
+5. Edge Cases and Boundary Conditions:
+   - The FSM correctly handles transitions between states without race conditions.
+   - Ensure proper handling of consecutive '1's and insertion of zeros as per HDLC framing rules.
+
+6. Assumptions:
+   - All sequential logic elements are initialized properly upon reset.
+   - The clock signal is stable and free of glitches.
+
+This specification provides a clear and precise guide for implementing the TopModule with the described functionality.
+</ENHANCED_SPEC>

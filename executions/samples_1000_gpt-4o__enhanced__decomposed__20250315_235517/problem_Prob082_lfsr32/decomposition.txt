@@ -1,0 +1,20 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk and reset, and output port q[31:0].",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  clk - input  reset - output q (32 bits)",
+        "implementation": "module TopModule (\n    input clk,\n    input reset,\n    output reg [31:0] q\n);\n\nalways @(posedge clk) begin\n    if (reset) begin\n        q <= 32'h1;\n    end else begin\n        q <= {q[30:0], q[31] ^ q[21] ^ q[1] ^ q[0]};\n    end\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the synchronous reset logic to set the output q to 32'h1 when reset is high.",
+        "source": "Reset should be active high synchronous, and should reset the output q to 32'h1.",
+        "implementation": "always @(posedge clk) begin\n    if (reset) begin\n        q <= 32'h1;\n    end\n    // Additional logic for LFSR would be implemented here\nend"
+    },
+    {
+        "id": "3",
+        "content": "Implement the Galois LFSR logic with taps at bit positions 32, 22, 2, and 1. The LFSR should shift right, and the tapped positions should be XORed with the LSB output bit (q[0]) to produce their next value.",
+        "source": "The module should implement a 32-bit Galois LFSR with taps at bit positions 32, 22, 2, and 1. A Galois LFSR is one particular arrangement that shifts right, where a bit position with a \"tap\" is XORed with the LSB output bit (q[0]) to produce its next value, while bit positions without a tap shift right unchanged.",
+        "implementation": "reg [31:0] q;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        q <= 32'h1;\n    end else begin\n        q <= {q[0] ^ q[31], q[31:1]};\n        q[21] <= q[0] ^ q[21];\n        q[1] <= q[0] ^ q[1];\n    end\nend"
+    }
+]

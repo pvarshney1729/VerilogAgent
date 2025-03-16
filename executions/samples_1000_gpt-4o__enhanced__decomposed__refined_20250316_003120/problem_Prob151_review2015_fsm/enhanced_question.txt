@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Specification: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal, 1-bit, positive-edge triggered.
+  - `reset`: Active high, synchronous reset, 1-bit.
+  - `data`: Serial data input, 1-bit.
+  - `done_counting`: Indicates counter completion, 1-bit.
+  - `ack`: Acknowledgment from user, 1-bit.
+
+- Output Ports:
+  - `shift_ena`: Shift enable signal, 1-bit.
+  - `counting`: Counting indicator, 1-bit.
+  - `done`: Timer completion notification, 1-bit.
+
+Functional Description:
+1. The state machine begins by searching for the input sequence '1101' on the `data` input. The detection of this pattern triggers the start of the timer.
+
+2. Upon detecting '1101', the state machine:
+   - Asserts `shift_ena` for exactly 4 clock cycles to shift in additional 4 bits, determining the duration for the delay.
+
+3. After 4 clock cycles:
+   - The state machine de-asserts `shift_ena` and asserts `counting` to indicate that it is waiting for the counters to complete their operation.
+
+4. The state machine remains in the counting state until `done_counting` is asserted high, signaling the end of the counting process.
+
+5. Once `done_counting` is high:
+   - The state machine asserts `done` to notify the user that the timer has completed.
+
+6. The state machine remains in this state until the `ack` input is asserted high, indicating the user has acknowledged the timer completion.
+
+7. After receiving `ack`, the state machine resets to the initial state, ready to detect the next occurrence of the '1101' pattern.
+
+Reset Behavior:
+- The reset is active high and synchronous. When `reset` is asserted, the state machine resets to the initial state where it searches for the '1101' pattern.
+- All sequential logic operates on the positive edge of the `clk`.
+
+Bit Indexing and Conventions:
+- The least significant bit (LSB) is considered bit[0].
+- All state transitions and operations are based on the positive edge of the `clk`.
+
+Additional Considerations:
+- Ensure that no race conditions occur by clearly defining state transitions and signal asserts.
+- Edge cases such as partial pattern matches or spurious signals should be managed to prevent false triggers of the state machine.
+</ENHANCED_SPEC>

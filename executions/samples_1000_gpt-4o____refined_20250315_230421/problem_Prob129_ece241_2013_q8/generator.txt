@@ -1,0 +1,127 @@
+Generated Response:
+
+Here's the implementation of the `TopModule` that meets your requirements:
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire aresetn,
+    input  wire x,
+    output reg  z
+);
+
+    // State encoding
+    typedef enum reg [1:0] {
+        S0 = 2'b00, // Initial state
+        S1 = 2'b01, // State after detecting '1'
+        S2 = 2'b10  // State after detecting '10'
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic (combinational)
+    always @(*) begin
+        // Default assignments
+        next_state = current_state;
+        z = 1'b0;
+
+        case (current_state)
+            S0: begin
+                if (x) begin
+                    next_state = S1;
+                end
+            end
+            S1: begin
+                if (~x) begin
+                    next_state = S2;
+                end
+            end
+            S2: begin
+                if (x) begin
+                    next_state = S1;
+                    z = 1'b1; // Sequence "101" detected
+                end else begin
+                    next_state = S0;
+                end
+            end
+            default: begin
+                next_state = S0;
+            end
+        endcase
+    end
+
+    // State register logic (sequential)
+    always @(posedge clk or negedge aresetn) begin
+        if (!aresetn) begin
+            current_state <= S0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+endmodule
+```
+
+This module implements a Mealy-type FSM with three states to detect the sequence "101" on the input `x`. The output `z` is asserted when the sequence is detected, and the FSM supports overlapping sequences. The asynchronous reset is active low and is triggered on the negative edge.
+
+Generated Code:
+
+module TopModule (
+    input  wire clk,
+    input  wire aresetn,
+    input  wire x,
+    output reg  z
+);
+
+    // State encoding
+    typedef enum reg [1:0] {
+        S0 = 2'b00, // Initial state
+        S1 = 2'b01, // State after detecting '1'
+        S2 = 2'b10  // State after detecting '10'
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic (combinational)
+    always @(*) begin
+        // Default assignments
+        next_state = current_state;
+        z = 1'b0;
+
+        case (current_state)
+            S0: begin
+                if (x) begin
+                    next_state = S1;
+                end
+            end
+            S1: begin
+                if (~x) begin
+                    next_state = S2;
+                end
+            end
+            S2: begin
+                if (x) begin
+                    next_state = S1;
+                    z = 1'b1; // Sequence "101" detected
+                end else begin
+                    next_state = S0;
+                end
+            end
+            default: begin
+                next_state = S0;
+            end
+        endcase
+    end
+
+    // State register logic (sequential)
+    always @(posedge clk or negedge aresetn) begin
+        if (!aresetn) begin
+            current_state <= S0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+endmodule
+
+// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly

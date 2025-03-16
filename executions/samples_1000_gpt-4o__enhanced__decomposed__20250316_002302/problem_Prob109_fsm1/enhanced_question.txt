@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, is designed to function as a Moore state machine. The interface consists of the following ports:
+
+- `input clk`: A clock signal for synchronizing sequential logic.
+- `input areset`: An asynchronous reset signal that, when high, forces the state machine to transition to its initial state.
+- `input in`: An input signal that influences state transitions.
+- `output reg out`: An output signal representing the current state's output value.
+
+### State Machine Description
+
+The state machine has two states, named `A` and `B`. The state transitions and outputs are defined as follows:
+
+- **State B**: 
+  - Output `out` = 1
+  - Transition to state `A` on `in` = 0
+  - Remain in state `B` on `in` = 1
+
+- **State A**: 
+  - Output `out` = 0
+  - Transition to state `B` on `in` = 0
+  - Remain in state `A` on `in` = 1
+
+### Reset Behavior
+
+- The state machine enters state `B` upon assertion of the asynchronous reset `areset`. This reset takes immediate effect regardless of the clock signal.
+
+### Signal and State Definitions
+
+- The state machine is implemented using a two-state encoding, where:
+  - State `A` is encoded as binary `0`.
+  - State `B` is encoded as binary `1`.
+  
+- The asynchronous reset signal, `areset`, is active high. When `areset` is high, the state machine transitions to state `B` immediately.
+
+### Bit Indexing and Output
+
+- All input and output ports are single-bit wide.
+- The least significant bit (bit[0]) represents the value of the input signal `in`.
+
+### Initial Conditions
+
+- Upon power-up or reset, the state machine initializes to state `B`, with `out` set to 1.
+
+### Edge Cases and Input Boundaries
+
+- The behavior of the state machine is fully defined for all possible inputs (`in` = 0 or 1) during normal operation.
+- The asynchronous reset (`areset`) overrides all other inputs and immediately resets the state to `B`.
+
+Ensure that the implementation adheres to the above specifications for correctness and reliability in the intended application.
+</ENHANCED_SPEC>

@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Specification for TopModule:
+
+- Module Name: TopModule
+
+- Port Definitions:
+  - Input:
+    - `input in`: A single-bit input signal.
+    - `input [3:0] state`: A 4-bit input representing the current state in a one-hot encoded format.
+  - Output:
+    - `output [3:0] next_state`: A 4-bit output representing the next state in a one-hot encoded format.
+    - `output out`: A single-bit output signal.
+
+- State Encoding:
+  - State A: 4'b0001
+  - State B: 4'b0010
+  - State C: 4'b0100
+  - State D: 4'b1000
+
+- State Transition and Output Logic:
+  - The state machine is a Moore type, meaning the output depends only on the current state.
+  - Transitions are defined as follows:
+    - State A:
+      - If `in` is 0, the next state is A.
+      - If `in` is 1, the next state is B.
+    - State B:
+      - If `in` is 0, the next state is C.
+      - If `in` is 1, the next state is B.
+    - State C:
+      - If `in` is 0, the next state is A.
+      - If `in` is 1, the next state is D.
+    - State D:
+      - If `in` is 0, the next state is C.
+      - If `in` is 1, the next state is B.
+  - Output Logic:
+    - For states A, B, and C, the output is 0.
+    - For state D, the output is 1.
+
+- Implementation Notes:
+  - This module should implement the combinational logic for state transitions and output determination.
+  - All state transitions and outputs should be derived using the provided state transition table.
+  - The implementation should correctly interpret one-hot encoded state inputs and produce the appropriate one-hot encoded next state and output.
+  - Ensure that all combinational logic paths are fully specified to avoid any undefined behavior.
+
+- Edge Cases:
+  - The design assumes that only valid one-hot encoded states are provided at the `state` input.
+  - Inputs outside the defined state encoding are not specified within this module and should be handled externally or lead to an undefined behavior.
+</ENHANCED_SPEC>

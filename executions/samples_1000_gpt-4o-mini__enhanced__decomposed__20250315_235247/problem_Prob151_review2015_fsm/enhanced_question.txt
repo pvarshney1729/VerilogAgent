@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal, 1-bit, positive edge triggered.
+  - `reset`: Active high synchronous reset, 1-bit. When high, initializes the state machine to search for the sequence 1101.
+  - `data`: Serial data input, 1-bit. Used to detect the starting pattern and subsequent bits.
+  - `done_counting`: 1-bit input. Indicates when the delay counting has completed.
+  - `ack`: 1-bit input. Acknowledgement from the user that the timer notification has been received.
+
+- Output Ports:
+  - `shift_ena`: 1-bit output. Asserted high for exactly 4 clock cycles after detecting the starting pattern 1101 to shift in additional bits.
+  - `counting`: 1-bit output. Asserted high to indicate the state machine is waiting for the counting to finish.
+  - `done`: 1-bit output. Asserted high to notify the user that the timer has timed out.
+
+Operation:
+1. Initial State: The state machine begins in a state waiting to detect the 4-bit pattern `1101` on the `data` input, MSB first.
+2. Pattern Detection: Upon detecting the pattern `1101`, the state machine asserts `shift_ena` for 4 consecutive clock cycles to allow shifting in additional bits for the delay duration.
+3. Counting State: After shifting in the 4 bits, `shift_ena` is de-asserted and `counting` is asserted. The state machine remains in this state until `done_counting` is high.
+4. Notification State: Once `done_counting` is high, the state machine asserts `done` to notify the user. It remains in this state until `ack` is high.
+5. Reset Condition: An active high synchronous reset takes precedence over other operations and returns the state machine to the initial state ready to detect the next occurrence of `1101`.
+
+Edge Cases:
+- If `reset` is high at the positive edge of `clk`, the state machine resets immediately to its initial state.
+- The pattern `1101` must be detected sequentially; any interruption resets the detection process.
+- The state machine should handle noise in `data` gracefully, only recognizing a valid `1101` sequence when uninterrupted.
+- Ensure no race conditions occur by managing all transitions and outputs synchronously with `clk`.
+
+All sequential logic operates on the positive edge of the `clk`, ensuring timing predictability and consistency across operations.
+</ENHANCED_SPEC>

@@ -1,0 +1,46 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in  (3 bits)
+ - output out (2 bits)
+
+The module should implement a "population count" circuit that counts the
+number of '1's in the input vector.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name:** TopModule
+
+**Interface:**
+- **Inputs:**
+  - `input [2:0] in`: A 3-bit wide input vector where `in[0]` is the least significant bit (LSB) and `in[2]` is the most significant bit (MSB).
+
+- **Outputs:**
+  - `output [1:0] out`: A 2-bit wide output vector representing the population count of the input vector.
+
+**Behavior:**
+- The module implements a combinational logic circuit that calculates the number of '1's present in the 3-bit input vector `in` and presents the result as a 2-bit binary number on the output `out`.
+- Population Count Table:
+  - `in = 000`: `out = 00`
+  - `in = 001`: `out = 01`
+  - `in = 010`: `out = 01`
+  - `in = 011`: `out = 10`
+  - `in = 100`: `out = 01`
+  - `in = 101`: `out = 10`
+  - `in = 110`: `out = 10`
+  - `in = 111`: `out = 11`
+
+**Timing Behavior:**
+- The circuit is purely combinational, meaning there is no clocked behavior or internal state. The output `out` is continuously driven by the instantaneous values of the input vector `in`.
+
+**Reset Behavior:**
+- As a combinational circuit, reset behavior is not applicable. The output reflects the input changes immediately.
+
+**Implementation Notes:**
+- The module should be implemented using combinational logic gates or a simple arithmetic operation to derive the output based on the input configurations as specified in the behavior section.
+- Ensure that all combinational logic paths are optimized for the intended hardware synthesis to achieve minimal propagation delay.
+
+**Boundary Conditions:**
+- The behavior is explicitly defined for all possible values of the 3-bit input `in`, ensuring robust operation at all input boundaries.
+                

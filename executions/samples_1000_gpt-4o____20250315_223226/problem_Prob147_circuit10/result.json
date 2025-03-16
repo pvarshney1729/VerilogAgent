@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n\n    logic next_state;\n\n    // Combinational logic to determine the next state and output q\n    always @(*) begin\n        if (a & b) begin\n            next_state = ~state;\n        end else if (b) begin\n            next_state = 1'b0;\n        end else if (a) begin\n            next_state = state;\n        end else begin\n            next_state = state;\n        end\n        q = (b & ~a) | (state & ~b);\n    end\n\n    // Sequential logic to update the state\n    always @(posedge clk) begin\n        state <= next_state;\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 28,
+        "passfail": "R"
+    }
+}

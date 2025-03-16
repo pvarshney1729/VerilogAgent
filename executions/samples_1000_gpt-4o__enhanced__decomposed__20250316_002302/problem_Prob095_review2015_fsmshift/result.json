@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    output logic shift_ena\n);\n\n    // State encoding\n    typedef enum logic [2:0] {\n        IDLE    = 3'b000,\n        ENABLE1 = 3'b001,\n        ENABLE2 = 3'b010,\n        ENABLE3 = 3'b011,\n        ENABLE4 = 3'b100\n    } state_t;\n\n    // Internal state registers\n    state_t state, next_state;\n\n    // State transition logic\n    always @(posedge clk) begin\n        if (reset) begin\n            state <= ENABLE1;\n        end else begin\n            state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (state)\n            IDLE:    next_state = IDLE;\n            ENABLE1: next_state = ENABLE2;\n            ENABLE2: next_state = ENABLE3;\n            ENABLE3: next_state = ENABLE4;\n            ENABLE4: next_state = IDLE;\n            default: next_state = IDLE;\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        case (state)\n            ENABLE1, ENABLE2, ENABLE3, ENABLE4: shift_ena = 1'b1;\n            default:                            shift_ena = 1'b0;\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

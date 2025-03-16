@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit input; serves as the clock signal for the sequential logic.
+  - `areset`: 1-bit input; serves as an asynchronous reset signal.
+  - `in`: 1-bit input; serves as the machine's input signal.
+
+- Output Ports:
+  - `out`: 1-bit output; represents the output of the Moore machine.
+
+Operation:
+- The module implements a Moore state machine with two states, A and B.
+- State Encoding:
+  - State A: Outputs `out = 0`.
+  - State B: Outputs `out = 1`.
+
+State Transition Diagram:
+- From State B:
+  - On `in = 0`: Transition to State A.
+  - On `in = 1`: Remain in State B.
+  
+- From State A:
+  - On `in = 0`: Transition to State B.
+  - On `in = 1`: Remain in State A.
+
+Reset Behavior:
+- The module should asynchronously reset to State B when `areset` is high.
+- `areset` has priority over other state transitions.
+
+Additional Specifications:
+- Bit Indexing: The module uses 1-bit signals (no indexing required).
+- The reset initializes the state to B, producing an output of 1.
+- The state transitions occur on the rising edge of `clk`.
+- Ensure there are no race conditions by assuming zero setup and hold time for the `clk` signal relative to `areset` and `in`.
+
+Boundary Conditions:
+- The module handles changes in `in` on any clock edge, but transitions occur only on the rising edge of `clk`.
+- Ensure the state machine remains deterministic and consistent across all input variations.
+
+Note: Ensure that all flip-flops and registers have defined behavior for both reset and normal operational conditions.
+</ENHANCED_SPEC>

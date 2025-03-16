@@ -1,0 +1,76 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  p1a
+ - input  p1b
+ - input  p1c
+ - input  p1d
+ - input  p1e
+ - input  p1f
+ - input  p2a
+ - input  p2b
+ - input  p2c
+ - input  p2d
+ - output p1y
+ - output p2y
+
+The 7458 is a chip with four AND gates and two OR gates. Implement a
+module with the same functionality as the 7458 chip. It has 10 inputs and
+2 outputs. You may choose to use an `assign` statement to drive each of
+the output wires, or you may choose to declare (four) wires for use as
+intermediate signals, where each internal wire is driven by the output of
+one of the AND gates.
+
+In this circuit, p1y should be the OR of two 3-input AND gates: one that
+ANDs p1a, p1b, and p1c, and the second that ANDs p1d, p1e, and p1f. The
+output p2y is the OR of two 2-input AND gates: one that ANDs p2a and p2b,
+and the second that ANDs p2c and p2d.
+
+Here is the enhanced specification which might be useful to you:
+                ### Module Name: TopModule
+
+#### Interface Specification
+- **Inputs**:
+  - `input wire p1a;` // 1-bit input
+  - `input wire p1b;` // 1-bit input
+  - `input wire p1c;` // 1-bit input
+  - `input wire p1d;` // 1-bit input
+  - `input wire p1e;` // 1-bit input
+  - `input wire p1f;` // 1-bit input
+  - `input wire p2a;` // 1-bit input
+  - `input wire p2b;` // 1-bit input
+  - `input wire p2c;` // 1-bit input
+  - `input wire p2d;` // 1-bit input
+
+- **Outputs**:
+  - `output wire p1y;` // 1-bit output, result of OR operation on two 3-input AND gates
+  - `output wire p2y;` // 1-bit output, result of OR operation on two 2-input AND gates
+
+#### Behavioral Specification
+- **Output `p1y`**:
+  - `p1y = (p1a AND p1b AND p1c) OR (p1d AND p1e AND p1f);`
+  - This combines two 3-input AND gates using an OR gate.
+
+- **Output `p2y`**:
+  - `p2y = (p2a AND p2b) OR (p2c AND p2d);`
+  - This combines two 2-input AND gates using an OR gate.
+
+#### Timing Behavior
+- The module implements purely combinational logic with no sequential elements. There are no clock or reset signals involved.
+
+#### Implementation Notes
+- The design is intended to replicate the functionality of a 7458 chip with four AND gates and two OR gates.
+- Intermediate wires may be used to represent the outputs of individual AND gates if desired for clarity or structural purposes.
+- Use of `assign` statements is recommended to express the combinational logic directly.
+
+#### Formal Representation
+- **Boolean Equations**:
+  - `p1y = (p1a & p1b & p1c) | (p1d & p1e & p1f);`
+  - `p2y = (p2a & p2b) | (p2c & p2d);`
+
+#### Edge Cases and Assumptions
+- Given that all inputs are single-bit, boundary conditions are implicitly handled by the AND and OR operations.
+- All inputs and outputs are assumed to be active-high unless specified otherwise.
+                

@@ -1,0 +1,45 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  vec  (3 bits)
+ - output outv (3 bits)
+ - output o2
+ - output o1
+ - output o0
+
+The module has one 3-bit input, then outputs the same vector, and also
+splits it into three separate 1-bit outputs. Connect output o0 to the
+input vector's position 0, o1 to position 1, etc.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: `TopModule`
+
+**Interface**:
+- **Inputs**:
+  - `input [2:0] vec`: A 3-bit unsigned input vector. Bit[0] refers to the least significant bit (LSB).
+- **Outputs**:
+  - `output [2:0] outv`: A 3-bit unsigned output vector, directly reflecting the input vector.
+  - `output o2`: A 1-bit output, connected to `vec[2]`.
+  - `output o1`: A 1-bit output, connected to `vec[1]`.
+  - `output o0`: A 1-bit output, connected to `vec[0]`.
+
+**Behavior**:
+- The module operates purely combinatorially, meaning all outputs are direct combinational functions of the inputs.
+- The 3-bit output vector `outv` is a direct reflection of the input vector `vec`, implying `outv[2:0] = vec[2:0]`.
+- The individual outputs `o2`, `o1`, and `o0` correspond to the respective bits of the input vector `vec`.
+
+**Timing and Synchronization**:
+- As this is a purely combinational module, no clock or reset signals are involved. Outputs change immediately in response to changes on the inputs.
+
+**Implementation Notes**:
+- Bit-ordering is LSB to MSB for both input and output vectors. Bit position 0 is the least significant bit.
+- Since no sequential elements are involved, initial states are not applicable.
+
+**Boundary Conditions**:
+- The module assumes all variations of the 3-bit input vector `vec` are valid and will be the direct source for the outputs without any special handling of boundary conditions.
+
+**Example Connection**:
+- For an input `vec = 3'b101`, the outputs will be `outv = 3'b101`, `o2 = 1`, `o1 = 0`, `o0 = 1`.
+                

@@ -1,0 +1,74 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - input  j
+ - input  k
+ - output out
+
+The module should implement a Moore state machine with two states, two
+inputs, and one output according to diagram described below. Reset is an
+active-high synchronous reset to state OFF.
+
+  OFF (out=0) --j=0--> OFF
+  OFF (out=0) --j=1--> ON
+  ON  (out=1) --k=0--> ON
+  ON  (out=1) --k=1--> OFF
+
+Here is the enhanced specification which might be useful to you:
+                **Module Interface:**
+
+```verilog
+module TopModule (
+    input  wire clk,   // Clock signal
+    input  wire reset, // Active-high synchronous reset
+    input  wire j,     // Input signal j
+    input  wire k,     // Input signal k
+    output reg  out    // Output signal
+);
+```
+
+**Behavioral Description:**
+
+- **State Machine Type**: This module implements a Moore state machine with two states: OFF and ON.
+- **States and Outputs**:
+  - **OFF State**: Output `out` is 0.
+  - **ON State**: Output `out` is 1.
+- **State Transitions**:
+  - **OFF (out=0)**:
+    - If `j=0`, remain in OFF state.
+    - If `j=1`, transition to ON state.
+  - **ON (out=1)**:
+    - If `k=0`, remain in ON state.
+    - If `k=1`, transition to OFF state.
+
+**Timing and Reset Behavior:**
+
+- **Clock Edge**: State transitions occur on the rising edge of `clk`.
+- **Reset**: The reset is active-high and synchronous. When `reset` is high, the state machine transitions to the OFF state on the next rising edge of `clk`.
+
+**Initial State:**
+
+- Upon reset, the system initializes to the OFF state.
+
+**Implementation Notes:**
+
+- The inputs `j` and `k` are evaluated at each rising edge of `clk`.
+- If both `j` and `k` change simultaneously, the next state is determined by prioritizing the current state's transition condition over input changes.
+
+**Formal State Transition Description:**
+
+- **State Transition Table**:
+
+| Current State | j | k | Next State | Output |
+|---------------|---|---|------------|--------|
+| OFF           | 0 | X | OFF        | 0      |
+| OFF           | 1 | X | ON         | 0      |
+| ON            | X | 0 | ON         | 1      |
+| ON            | X | 1 | OFF        | 1      |
+
+- **State Diagram**: A state diagram should accompany this description, illustrating the transitions and outputs clearly.
+                

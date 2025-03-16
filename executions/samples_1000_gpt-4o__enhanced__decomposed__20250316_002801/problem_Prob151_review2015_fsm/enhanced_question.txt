@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `clk`: Clock input, 1 bit. All sequential logic is triggered on the positive edge of this clock.
+  - `reset`: Active-high synchronous reset input, 1 bit. Resets the state machine to its initial state, searching for the "1101" pattern.
+  - `data`: Serial data input, 1 bit. Used to detect the "1101" pattern and determine the delay duration.
+  - `done_counting`: Signal input, 1 bit. Indicates the completion of the counting operation.
+  - `ack`: Acknowledgment input, 1 bit. Used by the user to acknowledge the timer notification.
+
+- Outputs:
+  - `shift_ena`: Enable signal output, 1 bit. Asserted high for exactly four clock cycles after detecting the "1101" pattern to shift in the delay duration.
+  - `counting`: Signal output, 1 bit. Asserted high when waiting for the counters to finish counting.
+  - `done`: Notification signal output, 1 bit. Asserted high to notify the user that the timer has completed its operation.
+
+Functionality:
+1. The finite-state machine (FSM) is responsible for controlling the timer based on the following sequence:
+   - Begin in a state where it searches for the serial input pattern "1101".
+   - Upon detecting the pattern "1101", assert `shift_ena` for exactly four clock cycles. This enables the shifting in of additional 4 bits from the `data` input to determine the delay duration.
+   - After the four cycles, enter a state where the `counting` output is asserted, indicating that the module is waiting for the counters to complete their operation.
+   - Remain in the counting state until the `done_counting` input is asserted high, indicating that the counting operation is finished.
+   - Once `done_counting` is high, assert the `done` output to notify the user that the timer has timed out.
+   - Wait for the `ack` input to be asserted high by the user, acknowledging the timer notification.
+   - Upon acknowledgment, reset the FSM to the initial state to search for the next occurrence of the "1101" pattern.
+
+Sequential Logic and Reset:
+- The FSM transitions are synchronized to the positive edge of the `clk`.
+- The state machine has an active-high synchronous reset (`reset`), which initializes the FSM to the state where it begins searching for the "1101" sequence.
+
+Bit Indexing and MSB/LSB Conventions:
+- All inputs and outputs are single bits, with `bit[0]` referring to the least significant bit where applicable.
+
+Edge Cases and Additional Considerations:
+- The FSM ensures no race conditions by strictly adhering to positive clock edge triggering.
+- The reset state of all registers within the FSM is explicitly defined to return to the initial pattern search state upon reset.
+- The module is designed to handle continuous streams of input data, effectively restarting the sequence detection upon each successful acknowledgment (`ack`) by the user.
+</ENHANCED_SPEC>

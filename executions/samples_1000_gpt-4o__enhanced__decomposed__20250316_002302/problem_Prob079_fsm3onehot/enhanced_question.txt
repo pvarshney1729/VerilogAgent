@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+The module named `TopModule` should be designed with the following interface:
+
+- **Inputs:**
+  - `input wire in`: A single-bit input signal.
+  - `input wire [3:0] state`: A 4-bit input representing the current state of the Moore state machine.
+
+- **Outputs:**
+  - `output reg [3:0] next_state`: A 4-bit output indicating the next state of the state machine.
+  - `output reg out`: A single-bit output signal.
+
+**State Encoding:**
+The Moore state machine uses a one-hot encoding scheme with the following state assignments:
+- State A: `4'b0001`
+- State B: `4'b0010`
+- State C: `4'b0100`
+- State D: `4'b1000`
+
+**State Transition Table:**
+The state transition logic is defined as follows:
+
+- **Current State A:**
+  - Next state when `in = 0`: Remain in A (`next_state = 4'b0001`)
+  - Next state when `in = 1`: Transition to B (`next_state = 4'b0010`)
+  - Output `out = 0`
+
+- **Current State B:**
+  - Next state when `in = 0`: Transition to C (`next_state = 4'b0100`)
+  - Next state when `in = 1`: Remain in B (`next_state = 4'b0010`)
+  - Output `out = 0`
+
+- **Current State C:**
+  - Next state when `in = 0`: Transition to A (`next_state = 4'b0001`)
+  - Next state when `in = 1`: Transition to D (`next_state = 4'b1000`)
+  - Output `out = 0`
+
+- **Current State D:**
+  - Next state when `in = 0`: Transition to C (`next_state = 4'b0100`)
+  - Next state when `in = 1`: Transition to B (`next_state = 4'b0010`)
+  - Output `out = 1`
+
+**Implementation Notes:**
+- The logic described is purely combinational. Thus, there are no clock or reset signals required as part of this specification.
+- The module does not include any sequential elements, and there are no initial conditions or reset states specified, as the logic is purely combinational.
+- Ensure that all combinational logic reflects the one-hot encoding scheme accurately.
+- Handle all possible one-hot encoded states and ensure that transitions adhere strictly to the state transition table provided.
+</ENHANCED_SPEC>

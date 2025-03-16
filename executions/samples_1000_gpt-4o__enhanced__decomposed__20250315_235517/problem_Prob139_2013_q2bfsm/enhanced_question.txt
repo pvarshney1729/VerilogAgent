@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock signal triggering all sequential logic on the positive edge.
+- input wire resetn: Synchronous, active-low reset signal. When resetn is low (0), the FSM resets to state A.
+- input wire x: Motor input signal, monitored for specific sequence.
+- input wire y: Motor input signal, monitored after a specific sequence of x.
+- output reg f: Control output for the motor, initially 0. Set to 1 for one clock cycle after reset is de-asserted.
+- output reg g: Control output for the motor, initially 0. Set based on the state transition conditions.
+
+FSM Description:
+1. Initial State (State A):
+   - Upon power-up or reset (resetn = 0), the FSM resides in State A.
+   - While in State A with resetn = 0, the FSM remains in this state regardless of other inputs.
+
+2. Transition from State A:
+   - When resetn is de-asserted (resetn transitions from 0 to 1), on the next positive clock edge:
+     - The FSM transitions from State A to State B.
+     - Output f is set to 1 for one clock cycle, then reset to 0.
+
+3. State B (Monitor x sequence):
+   - The FSM monitors the input x for a specific sequence: 1, 0, 1 across three successive clock cycles.
+   - If the sequence is detected, transition to State C on the next clock edge, otherwise remain in State B.
+
+4. State C (Set g and monitor y):
+   - Output g is set to 1 upon entering State C.
+   - The FSM monitors the input y for a value of 1 within two clock cycles:
+     - If y is 1 within the first or second clock cycle, g remains 1 permanently (until reset).
+     - If y remains 0 for two consecutive clock cycles, set g to 0 permanently (until reset).
+
+Miscellaneous:
+- All operations and transitions are triggered by the positive edge of the clk.
+- All registers (f, g) and FSM states must have defined initial values to avoid undefined behavior on startup.
+
+Edge Cases:
+- On reset, the FSM immediately returns to State A, and outputs f and g are reset to 0.
+- Ensure that transitions between states do not create race conditions by strictly adhering to the clock edge-triggered design.
+- Carefully handle input boundaries to prevent metastability or erroneous state transitions.
+</ENHANCED_SPEC>

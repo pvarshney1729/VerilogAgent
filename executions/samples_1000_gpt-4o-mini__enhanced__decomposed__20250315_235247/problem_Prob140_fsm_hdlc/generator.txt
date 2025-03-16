@@ -1,0 +1,187 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the requirements for a Moore-type finite state machine (FSM) that detects specific bit patterns in a continuous data stream. The FSM will recognize the sequences `0111110`, `01111110`, and `01111111...` to generate the outputs `disc`, `flag`, and `err`, respectively. 
+
+The FSM will have the following states:
+- `S0`: Initial state (waiting for a '0' or '1').
+- `S1`: Received '0'.
+- `S2`: Received '01'.
+- `S3`: Received '011'.
+- `S4`: Received '0111'.
+- `S5`: Received '01111'.
+- `S6`: Received '011111'.
+- `S7`: Error state (7 or more consecutive '1's).
+
+The outputs will be asserted in the clock cycle following the detection of the respective patterns. The synchronous reset will initialize the FSM to the `S0` state, ensuring that it behaves as if the previous input was '0'. 
+
+The implementation adheres to the coding conventions specified, using `logic` for signal declarations, and ensuring that the FSM transitions and output logic are correctly implemented in accordance with the provided guidelines.
+</REASONING>
+
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic disc,
+    output logic flag,
+    output logic err
+);
+    // State encoding
+    typedef enum logic [2:0] {
+        S0, // Initial state
+        S1, // 0
+        S2, // 01
+        S3, // 011
+        S4, // 0111
+        S5, // 01111
+        S6, // 011111
+        S7  // 0111111 (error state)
+    } state_t;
+
+    state_t current_state, next_state;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= S0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    always_comb begin
+        case (current_state)
+            S0: begin
+                if (in) next_state = S1;
+                else next_state = S0;
+            end
+            S1: begin
+                if (in) next_state = S2;
+                else next_state = S0;
+            end
+            S2: begin
+                if (in) next_state = S3;
+                else next_state = S0;
+            end
+            S3: begin
+                if (in) next_state = S4;
+                else next_state = S0;
+            end
+            S4: begin
+                if (in) next_state = S5;
+                else next_state = S0;
+            end
+            S5: begin
+                if (in) next_state = S6;
+                else next_state = S0;
+            end
+            S6: begin
+                if (in) next_state = S7; // Error state
+                else next_state = S0; // Discard
+            end
+            S7: begin
+                next_state = S7; // Stay in error state
+            end
+            default: next_state = S0;
+        endcase
+    end
+
+    always_ff @(posedge clk) begin
+        disc <= 0;
+        flag <= 0;
+        err <= 0;
+
+        if (current_state == S6 && !in) begin
+            disc <= 1; // Signal discard
+        end else if (current_state == S6 && in) begin
+            flag <= 1; // Signal flag
+        end else if (current_state == S7) begin
+            err <= 1; // Signal error
+        end
+    end
+endmodule
+[DONE]
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic disc,
+    output logic flag,
+    output logic err
+);
+    // State encoding
+    typedef enum logic [2:0] {
+        S0, // Initial state
+        S1, // 0
+        S2, // 01
+        S3, // 011
+        S4, // 0111
+        S5, // 01111
+        S6, // 011111
+        S7  // 0111111 (error state)
+    } state_t;
+
+    state_t current_state, next_state;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= S0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    always_comb begin
+        case (current_state)
+            S0: begin
+                if (in) next_state = S1;
+                else next_state = S0;
+            end
+            S1: begin
+                if (in) next_state = S2;
+                else next_state = S0;
+            end
+            S2: begin
+                if (in) next_state = S3;
+                else next_state = S0;
+            end
+            S3: begin
+                if (in) next_state = S4;
+                else next_state = S0;
+            end
+            S4: begin
+                if (in) next_state = S5;
+                else next_state = S0;
+            end
+            S5: begin
+                if (in) next_state = S6;
+                else next_state = S0;
+            end
+            S6: begin
+                if (in) next_state = S7; // Error state
+                else next_state = S0; // Discard
+            end
+            S7: begin
+                next_state = S7; // Stay in error state
+            end
+            default: next_state = S0;
+        endcase
+    end
+
+    always_ff @(posedge clk) begin
+        disc <= 0;
+        flag <= 0;
+        err <= 0;
+
+        if (current_state == S6 && !in) begin
+            disc <= 1; // Signal discard
+        end else if (current_state == S6 && in) begin
+            flag <= 1; // Signal flag
+        end else if (current_state == S7) begin
+            err <= 1; // Signal error
+        end
+    end
+endmodule

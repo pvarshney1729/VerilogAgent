@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+The module `TopModule` implements a Moore state machine with a synchronous reset. The specifications are as follows:
+
+- **Input Ports:**
+  - `input clk`: Clock signal, used for synchronizing the state transitions.
+  - `input reset`: Active-high synchronous reset signal that initializes the state machine to the `OFF` state.
+  - `input j`: Input signal to influence state transitions when in the `OFF` state.
+  - `input k`: Input signal to influence state transitions when in the `ON` state.
+
+- **Output Ports:**
+  - `output out`: Represents the current output of the state machine. It is `0` when in the `OFF` state and `1` when in the `ON` state.
+
+- **State Machine Description:**
+  - The state machine consists of two states: `OFF` and `ON`.
+  - State transitions occur on the rising edge of the `clk` signal.
+  - Resetting the state machine with an active-high `reset` signal will synchronously set the state to `OFF` with `out = 0`.
+
+- **State Transition Table:**
+  - `OFF` (out = 0):
+    - If `j = 0`: Remain in `OFF`
+    - If `j = 1`: Transition to `ON`
+  - `ON` (out = 1):
+    - If `k = 0`: Remain in `ON`
+    - If `k = 1`: Transition to `OFF`
+
+- **Additional Notes:**
+  - The reset is synchronous and will take effect on the next rising edge of `clk` when `reset` is high.
+  - Bit indexing is not applicable as all signals are single bit.
+  - Ensure all flip-flops or registers used for holding the state are initialized to the `OFF` state on reset.
+</ENHANCED_SPEC>

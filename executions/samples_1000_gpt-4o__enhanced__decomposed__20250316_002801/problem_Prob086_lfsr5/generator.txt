@@ -1,0 +1,65 @@
+Generated Response:
+
+<REASONING>
+To implement the 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. The output `q` is a 5-bit vector.
+
+2. **Signal Declaration**: Use `logic` to declare the internal signals, including the 5-bit register `lfsr` to hold the state of the LFSR.
+
+3. **Synchronous Reset**: Implement a synchronous reset that initializes the LFSR to the binary value `00001` when the `reset` signal is high. This ensures the LFSR starts from a known non-zero state.
+
+4. **LFSR Logic**: Implement the Galois LFSR logic. On each positive edge of the clock:
+   - Shift the bits to the right.
+   - XOR the LSB (`q[0]`) with the tapped positions (`q[2]` and `q[4]`) to determine the new MSB (`q[4]`).
+
+5. **Output Assignment**: Assign the internal LFSR state to the output `q`.
+
+By following these steps, we ensure that the LFSR operates correctly, cycling through all non-zero states and adhering to the specified interface and behavior.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    logic [4:0] lfsr;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            lfsr <= 5'b00001; // Reset state
+        end else begin
+            lfsr <= {lfsr[3:0], lfsr[4] ^ lfsr[2]}; // Shift and feedback
+        end
+    end
+
+    assign q = lfsr;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    logic [4:0] lfsr;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            lfsr <= 5'b00001; // Reset state
+        end else begin
+            lfsr <= {lfsr[3:0], lfsr[4] ^ lfsr[2]}; // Shift and feedback
+        end
+    end
+
+    assign q = lfsr;
+
+endmodule

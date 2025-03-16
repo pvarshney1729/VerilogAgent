@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire in` (1 bit): Single input signal to determine state transitions.
+  - `input wire [1:0] state` (2 bits): Current state of the state machine, encoded as follows:
+    - A = 2'b00
+    - B = 2'b01
+    - C = 2'b10
+    - D = 2'b11
+
+- Output Ports:
+  - `output reg [1:0] next_state` (2 bits): Next state of the state machine, represented in the same encoding as `state`.
+  - `output reg out` (1 bit): Output signal of the state machine.
+
+Clocking and Reset:
+- This specification only includes the combinational logic for state transition and output generation. Sequential elements such as clocking and reset are not part of this specification.
+
+State Transition Logic:
+- The state transition is determined by the current `state` and the input `in` according to the following table:
+
+  | Current State | Next State (in=0) | Next State (in=1) | Output |
+  |---------------|-------------------|-------------------|--------|
+  | A (2'b00)     | A (2'b00)         | B (2'b01)         | 0      |
+  | B (2'b01)     | C (2'b10)         | B (2'b01)         | 0      |
+  | C (2'b10)     | A (2'b00)         | D (2'b11)         | 0      |
+  | D (2'b11)     | C (2'b10)         | B (2'b01)         | 1      |
+
+Output Logic:
+- The output `out` is determined by the current state as follows:
+  - Output is 0 when the current state is A, B, or C.
+  - Output is 1 when the current state is D.
+
+Note:
+- This module only specifies the combinational logic required for determining `next_state` and `out` based on the current `state` and the input `in`. Ensure that the implementation does not assume any specific sequential or clocking behavior.
+</ENHANCED_SPEC>

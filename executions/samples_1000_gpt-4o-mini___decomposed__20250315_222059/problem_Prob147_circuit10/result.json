@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic a,\n    input logic b,\n    output logic q,\n    output logic state\n);\n\nlogic state_reg, next_state;\n\nalways @(posedge clk) begin\n    state_reg <= next_state;\nend\n\nalways @(*) begin\n    case ({state_reg, a, b})\n        3'b000: next_state = 0;\n        3'b001: next_state = 0;\n        3'b010: next_state = 0;\n        3'b011: next_state = 0;\n        3'b100: next_state = 1;\n        3'b101: next_state = 0;\n        3'b110: next_state = 0;\n        3'b111: next_state = 1;\n        default: next_state = 0;\n    endcase\nend\n\nassign state = state_reg;\nassign q = (state_reg == 1) ? 1 : 0;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 22,
+        "passfail": "R"
+    }
+}

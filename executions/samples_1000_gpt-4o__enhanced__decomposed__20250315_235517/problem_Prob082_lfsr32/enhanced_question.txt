@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit, clock signal. All sequential logic is triggered on the positive edge of `clk`.
+  - `reset`: 1-bit, active high synchronous reset signal.
+
+- Output Ports:
+  - `q`: 32-bit unsigned output vector.
+
+Behavior:
+1. The module implements a 32-bit Galois Linear Feedback Shift Register (LFSR).
+2. The Galois LFSR shifts the register contents to the right by one position per clock cycle.
+3. Tap positions are defined at the following bit indices (using 1-based indexing for clarity): 32, 22, 2, and 1. These correspond to the 31st, 21st, 1st, and 0th indices in 0-based indexing.
+4. The bit at the least significant bit position (`q[0]`) is XORed with the values at the tap positions to produce the next state of the LFSR.
+5. During normal operation (when `reset` is low):
+   - The next state for each bit `q[i]` is determined as follows:
+     - `q[31:1]` shifts right by one position, i.e., `q[31] = q[30], q[30] = q[29], ..., q[1] = q[0]`.
+     - `q[0]` is the XOR of `q[31]`, `q[21]`, `q[1]`, and `q[0]`.
+6. On a synchronous reset (`reset` is high on the positive edge of `clk`):
+   - The output `q` is set to the initial value `32'h1`.
+
+Assumptions:
+- Bit indexing is 0-based, with `bit[31]` being the most significant bit and `bit[0]` being the least significant bit.
+- The reset operation takes precedence over normal operation and is synchronous with the clock signal.
+- The initial value of the LFSR on reset ensures the LFSR does not lock into the all-zero state.
+
+Edge Cases:
+- The initial value on reset prevents the LFSR from entering a non-functional state.
+- Ensure XOR operations are correctly implemented to maintain the Galois configuration integrity, avoiding any potential race conditions.
+
+This specification is designed to provide a clear, unambiguous description of the required functionality for a Galois LFSR implementation.
+</ENHANCED_SPEC>

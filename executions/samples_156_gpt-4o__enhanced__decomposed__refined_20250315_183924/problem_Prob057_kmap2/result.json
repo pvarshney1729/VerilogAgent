@@ -1,0 +1,23 @@
+{
+    "code": "[BEGIN]\nmodule TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out\n);\n\nalways @(*) begin\n    case ({c, d})\n        2'b00: out = 1'b1; // ab = 00, 01, 10\n        2'b01: out = (!a & !b) | (!a & b) | (a & !b);\n        2'b11: out = (a & b) | (!a & b) | (a & !b);\n        2'b10: out = (!a & !b) | (!a & b);\n        default: out = 1'b0;\n    endcase\nend\n\nendmodule\n[END]",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "R"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input wire a,\n    input wire b,\n    input wire c,\n    input wire d,\n    output wire out\n);\n\nassign out = (!c & !d & (!a | b)) | (!c & d & !a) | (c & d & (b | !a)) | (c & !d & !b & !a);\n\nendmodule",
+            "issues": [
+                "Runtime issue detected"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "[BEGIN]\nmodule TopModule (\n    input logic a,\n    input logic b,\n    input logic c,\n    input logic d,\n    output logic out\n);\n\nalways @(*) begin\n    case ({c, d})\n        2'b00: out = 1'b1; // ab = 00, 01, 10\n        2'b01: out = (!a & !b) | (!a & b) | (a & !b);\n        2'b11: out = (a & b) | (!a & b) | (a & !b);\n        2'b10: out = (!a & !b) | (!a & b);\n        default: out = 1'b0;\n    endcase\nend\n\nendmodule\n[END]",
+            "issues": []
+        }
+    ],
+    "refinement_count": 1,
+    "remaining_issues": []
+}

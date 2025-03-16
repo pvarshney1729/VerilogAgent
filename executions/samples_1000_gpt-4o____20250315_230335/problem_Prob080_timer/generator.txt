@@ -1,0 +1,53 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a down-counter that can be loaded with a 10-bit value and counts down to zero. The counter should decrement on each clock cycle when `load` is low and should be loaded with the `data` value when `load` is high. The output `tc` should be asserted when the counter reaches zero. Once the counter reaches zero, it should stop counting until it is reloaded. The design will use a single D flip-flop to store the counter value, and the logic will be triggered on the positive edge of the clock. We will ensure that the counter does not decrement below zero.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [9:0] data,
+    output logic tc
+);
+
+    logic [9:0] counter;
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            counter <= data;
+        end else if (counter != 10'b0) begin
+            counter <= counter - 1;
+        end
+    end
+
+    assign tc = (counter == 10'b0);
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [9:0] data,
+    output logic tc
+);
+
+    logic [9:0] counter;
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            counter <= data;
+        end else if (counter != 10'b0) begin
+            counter <= counter - 1;
+        end
+    end
+
+    assign tc = (counter == 10'b0);
+
+endmodule

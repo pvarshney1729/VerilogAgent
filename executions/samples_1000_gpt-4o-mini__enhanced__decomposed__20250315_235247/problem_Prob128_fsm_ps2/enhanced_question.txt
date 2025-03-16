@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: `clk` (1 bit) - Clock signal, positive edge-triggered.
+- Input: `reset` (1 bit) - Active high, synchronous reset.
+- Input: `in` (8 bits) - Data byte from the PS/2 mouse protocol. Bit[0] refers to the least significant bit, and bit[7] refers to the most significant bit.
+- Output: `done` (1 bit) - Indicates the successful reception of a complete three-byte message.
+
+Specifications and Operation:
+1. The module processes a continuous stream of 8-bit bytes according to the PS/2 mouse protocol, which organizes data into messages of three bytes each.
+
+2. Message Identification:
+   - The first byte of a message is identified by `in[3]` being set to 1. The other two bytes of the message may have `in[3]` set to either 0 or 1.
+
+3. Finite State Machine (FSM) Design:
+   - The FSM will discard bytes until it encounters a byte where `in[3]` equals 1, indicating the start of a new message.
+   - Upon detection of the first byte of a message, the FSM transitions to a state that expects the next two bytes.
+   - After receiving the third byte of a message, the FSM will assert the `done` output high for one clock cycle in the cycle immediately following the reception of the third byte.
+   - The FSM then returns to its initial state to search for the start of the next message.
+
+4. Clock and Reset Behavior:
+   - All sequential elements within the FSM are triggered on the positive edge of the `clk`.
+   - The `reset` signal is synchronous, and when asserted high, it resets the FSM to its initial state, ensuring that no partial message processing is retained.
+
+5. Initial Conditions:
+   - Upon power-up or reset, the FSM should be in a state where it is ready to search for the first byte of a message.
+
+6. Edge Cases and Input Boundaries:
+   - The FSM should be robust against continuous input streams and handle cases where `in[3]` is not set for an extended period.
+   - The module should correctly identify and signal message boundaries even when messages are immediately sequential without idle bytes between them.
+
+By following this specification, the FSM will correctly identify and process the three-byte messages according to the PS/2 mouse protocol.
+</ENHANCED_SPEC>

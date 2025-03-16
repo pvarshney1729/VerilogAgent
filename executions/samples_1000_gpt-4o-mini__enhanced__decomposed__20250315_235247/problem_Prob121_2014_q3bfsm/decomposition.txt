@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, x and output port z.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input clk,\n    input reset,\n    input x,\n    output reg z\n);\n    reg [2:0] y;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            y <= 3'b000;\n            z <= 0;\n        end else begin\n            case (y)\n                3'b000: begin\n                    if (x) begin\n                        y <= 3'b001;\n                    end else begin\n                        y <= 3'b000;\n                    end\n                    z <= 0;\n                end\n                3'b001: begin\n                    if (x) begin\n                        y <= 3'b100;\n                    end else begin\n                        y <= 3'b001;\n                    end\n                    z <= 0;\n                end\n                3'b010: begin\n                    if (x) begin\n                        y <= 3'b001;\n                    end else begin\n                        y <= 3'b010;\n                    end\n                    z <= 0;\n                end\n                3'b011: begin\n                    if (x) begin\n                        y <= 3'b010;\n                    end else begin\n                        y <= 3'b001;\n                    end\n                    z <= 1;\n                end\n                3'b100: begin\n                    if (x) begin\n                        y <= 3'b100;\n                    end else begin\n                        y <= 3'b011;\n                    end\n                    z <= 1;\n                end\n            endcase\n        end\n    end\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare a 3-bit register to hold the current state of the FSM.",
+        "source": "Implement a finite-state machine with the state-assigned table shown below.",
+        "implementation": "reg [2:0] current_state;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the synchronous reset logic to set the current state to 000 when reset is high.",
+        "source": "Reset should synchronous active high reset the FSM to state 000.",
+        "implementation": "reg [2:0] y;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        y <= 3'b000;\n    end\nend"
+    },
+    {
+        "id": "4",
+        "content": "Define the next state logic based on the current state and input x according to the state transition table.",
+        "source": "Present state y[2:0] | Next state y[2:0] x=0, Next state y[2:0] x=1.",
+        "implementation": "reg [2:0] y; // Current state\n\nalways @(posedge clk) begin\n    if (reset) begin\n        y <= 3'b000; // Reset to state 000\n    end else begin\n        case (y)\n            3'b000: y <= (x == 1'b0) ? 3'b000 : 3'b001;\n            3'b001: y <= (x == 1'b0) ? 3'b001 : 3'b100;\n            3'b010: y <= (x == 1'b0) ? 3'b010 : 3'b001;\n            3'b011: y <= (x == 1'b0) ? 3'b001 : 3'b010;\n            3'b100: y <= (x == 1'b0) ? 3'b011 : 3'b100;\n            default: y <= 3'b000; // Default case to handle unexpected states\n        endcase\n    end\nend"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output logic z based on the current state according to the state table.",
+        "source": "Output z.",
+        "implementation": "always @(*) begin\n    case (y)\n        3'b000: z = 1'b0;\n        3'b001: z = 1'b0;\n        3'b010: z = 1'b0;\n        3'b011: z = 1'b1;\n        3'b100: z = 1'b1;\n        default: z = 1'b0; // Default case to handle unexpected states\n    endcase\nend"
+    }
+]

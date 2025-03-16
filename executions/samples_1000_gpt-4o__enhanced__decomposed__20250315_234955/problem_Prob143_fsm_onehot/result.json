@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic in,\n    input logic [9:0] state,\n    output logic [9:0] next_state,\n    output logic out1,\n    output logic out2\n);\n\nalways @(*) begin\n    // Default assignments\n    next_state = 10'b0;\n    out1 = 0;\n    out2 = 0;\n\n    // State transition logic\n    if (state[0]) begin\n        if (in) next_state[1] = 1;\n        else next_state[0] = 1;\n    end\n    if (state[1]) begin\n        if (in) next_state[2] = 1;\n        else next_state[0] = 1;\n    end\n    if (state[2]) begin\n        if (in) next_state[3] = 1;\n        else next_state[0] = 1;\n    end\n    if (state[3]) begin\n        if (in) next_state[4] = 1;\n        else next_state[0] = 1;\n    end\n    if (state[4]) begin\n        if (in) next_state[5] = 1;\n        else next_state[0] = 1;\n    end\n    if (state[5]) begin\n        if (in) next_state[6] = 1;\n        else next_state[8] = 1;\n    end\n    if (state[6]) begin\n        if (in) next_state[7] = 1;\n        else next_state[9] = 1;\n    end\n    if (state[7]) begin\n        if (in) next_state[7] = 1;\n        else next_state[0] = 1;\n        out2 = 1;\n    end\n    if (state[8]) begin\n        if (in) next_state[1] = 1;\n        else next_state[0] = 1;\n        out1 = 1;\n    end\n    if (state[9]) begin\n        if (in) next_state[1] = 1;\n        else next_state[0] = 1;\n        out1 = 1;\n        out2 = 1;\n    end\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

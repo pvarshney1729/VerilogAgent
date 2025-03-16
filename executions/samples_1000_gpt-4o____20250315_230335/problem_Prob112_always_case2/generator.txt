@@ -1,0 +1,51 @@
+Generated Response:
+
+<REASONING>
+To implement a 4-bit priority encoder, we need to determine the position of the first '1' in the input vector `in`. The output `pos` is a 2-bit vector that represents the position of the first '1'. If no bits are set in `in`, the output should be zero. The priority encoder will check each bit starting from the most significant bit (MSB) to the least significant bit (LSB) and output the position of the first '1' it encounters.
+
+The logic can be implemented using a combinational always block. We will use an always block with a sensitivity list of all inputs (using `always @(*)`). Inside the block, we will use conditional statements to check each bit of the input vector `in` from MSB to LSB. The output `pos` will be assigned based on the first '1' encountered.
+
+The input `in` is 4 bits wide, so the possible positions are 0 to 3, which can be represented with a 2-bit output `pos`.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [3:0] in,
+    output logic [1:0] pos
+);
+    always @(*) begin
+        if (in[3])
+            pos = 2'b11;
+        else if (in[2])
+            pos = 2'b10;
+        else if (in[1])
+            pos = 2'b01;
+        else if (in[0])
+            pos = 2'b00;
+        else
+            pos = 2'b00; // Output zero if no bits are high
+    end
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [3:0] in,
+    output logic [1:0] pos
+);
+    always @(*) begin
+        if (in[3])
+            pos = 2'b11;
+        else if (in[2])
+            pos = 2'b10;
+        else if (in[1])
+            pos = 2'b01;
+        else if (in[0])
+            pos = 2'b00;
+        else
+            pos = 2'b00; // Output zero if no bits are high
+    end
+endmodule

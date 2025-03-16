@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input wire in`: Single-bit input signal.
+  - `input wire [9:0] state`: 10-bit input vector representing the current state using one-hot encoding. Each bit corresponds to one of the states S0 to S9, with `state[0]` representing S0 and `state[9]` representing S9. Bit[0] refers to the least significant bit.
+  
+- Outputs:
+  - `output reg [9:0] next_state`: 10-bit output vector representing the next state using one-hot encoding. Each bit corresponds to one of the next states S0 to S9, with `next_state[0]` representing S0 and `next_state[9]` representing S9.
+  - `output reg out1`: Single-bit output signal.
+  - `output reg out2`: Single-bit output signal.
+
+State Machine Description:
+- State Encoding: One-hot encoding is utilized, where each state Si is represented by a single high bit within the `state` vector.
+- State Transitions:
+  - S0 transitions to S1 on `in` = 1, else stays in S0.
+  - S1 transitions to S2 on `in` = 1, else returns to S0.
+  - S2 transitions to S3 on `in` = 1, else returns to S0.
+  - S3 transitions to S4 on `in` = 1, else returns to S0.
+  - S4 transitions to S5 on `in` = 1, else returns to S0.
+  - S5 transitions to S6 on `in` = 1, else goes to S8.
+  - S6 transitions to S7 on `in` = 1, else goes to S9.
+  - S7 remains in S7 on `in` = 1, else returns to S0. Outputs (0, 1).
+  - S8 transitions to S1 on `in` = 1, else returns to S0. Outputs (1, 0).
+  - S9 transitions to S1 on `in` = 1, else returns to S0. Outputs (1, 1).
+
+Output Logic:
+- The outputs `out1` and `out2` are defaulted to 0 unless the current state specifies otherwise, as detailed above.
+
+Additional Considerations:
+- The current state `state[9:0]` can be a combination of multiple active states, indicating a potential concurrent state scenario.
+- The module is expected to resolve and handle such combinations appropriately in determining the next state and outputs.
+- This specification does not include the sequential logic for state flip-flops, focusing solely on combinational logic for state transition and output generation.
+</ENHANCED_SPEC>

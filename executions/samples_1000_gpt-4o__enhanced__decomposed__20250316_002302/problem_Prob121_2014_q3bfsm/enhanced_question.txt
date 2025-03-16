@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input clk: Clock signal, triggers all sequential logic on the positive edge.
+- input reset: Synchronous, active-high reset signal, resets the FSM to state 000.
+- input x: Input signal, 1-bit.
+- output reg z: Output signal, 1-bit.
+
+Specifications:
+1. Finite State Machine (FSM) Details:
+   - The FSM comprises states represented by a 3-bit vector y[2:0], where y[2] is the most significant bit (MSB) and y[0] is the least significant bit (LSB).
+   - State Encoding:
+     * State 000: Initial state, entry point upon reset.
+     * State 001: Intermediate state.
+     * State 010: Intermediate state.
+     * State 011: Intermediate state.
+     * State 100: Intermediate state.
+
+2. Reset Behavior:
+   - The reset signal is synchronous.
+   - When reset is asserted (logic high) during a clock cycle, the FSM transitions immediately to state 000 on the next positive clock edge.
+
+3. State Transition Table:
+   - Present State y[2:0] | Next State y[2:0] for x=0, Next State y[2:0] for x=1 | Output z
+   - 000 | 000, 001 | 0
+   - 001 | 001, 100 | 0
+   - 010 | 010, 001 | 0
+   - 011 | 001, 010 | 1
+   - 100 | 011, 100 | 1
+
+4. Output Logic:
+   - The output z is a function of the current state only (Moore machine).
+   - Output z is set to '1' in states 011 and 100; otherwise, it is '0'.
+
+5. Edge Cases:
+   - If the system is powered on and reset is low, behavior is undefined until the first positive clock edge with reset high.
+   - If x changes during a clock cycle, the new value is considered at the next positive clock edge.
+
+6. Initial Conditions:
+   - At power-up or upon reset assertion, all state registers should initialize to state 000.
+   - The output z should initialize to '0' on reset.
+
+Ensure that all logic and state transitions are implemented correctly to satisfy the above specifications.
+</ENHANCED_SPEC>

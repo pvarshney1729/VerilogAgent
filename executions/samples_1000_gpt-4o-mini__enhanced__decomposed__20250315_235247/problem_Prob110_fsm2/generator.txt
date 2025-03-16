@@ -1,0 +1,101 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` will follow the specifications of a Moore state machine with two states: `OFF` and `ON`. The module will have an asynchronous reset (`areset`) that sets the state to `OFF` and the output to `0`. The state transitions will depend on the inputs `j` and `k` as described in the specification. 
+
+1. **State Declaration**: I will define two states using a parameterized approach for clarity.
+2. **State Register**: The current state will be stored in a flip-flop that updates on the rising edge of the clock unless reset.
+3. **Output Logic**: The output will be directly tied to the current state, as per Moore machine design.
+4. **Next State Logic**: The next state will be determined based on the current state and the inputs `j` and `k`.
+5. **Asynchronous Reset**: The reset will be handled in the sequential block to ensure that it takes precedence over the clocked behavior.
+
+The implementation will adhere to the provided guidelines and coding conventions, ensuring that all signals are declared as `logic` and that the sensitivity list is correctly implemented.
+</REASONING>
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+    typedef enum logic {OFF, ON} state_t;
+    state_t current_state, next_state;
+
+    // State register with asynchronous reset
+    always @(posedge clk) begin
+        if (areset) begin
+            current_state <= OFF;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic based on the current state
+    assign out = (current_state == ON) ? 1'b1 : 1'b0;
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            OFF: begin
+                if (j) 
+                    next_state = ON;
+                else 
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k) 
+                    next_state = OFF;
+                else 
+                    next_state = ON;
+            end
+            default: next_state = OFF; // Default case for safety
+        endcase
+    end
+endmodule
+[DONE]
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+    typedef enum logic {OFF, ON} state_t;
+    state_t current_state, next_state;
+
+    // State register with asynchronous reset
+    always @(posedge clk) begin
+        if (areset) begin
+            current_state <= OFF;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic based on the current state
+    assign out = (current_state == ON) ? 1'b1 : 1'b0;
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            OFF: begin
+                if (j) 
+                    next_state = ON;
+                else 
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k) 
+                    next_state = OFF;
+                else 
+                    next_state = ON;
+            end
+            default: next_state = OFF; // Default case for safety
+        endcase
+    end
+endmodule

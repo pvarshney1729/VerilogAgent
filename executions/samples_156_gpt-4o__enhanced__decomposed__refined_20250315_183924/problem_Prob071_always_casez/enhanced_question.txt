@@ -1,0 +1,49 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in  (8 bits)
+ - output pos (3 bits)
+
+The module should implement a priority encoder for an 8-bit input. Given
+an 8-bit vector, the output should report the first (least significant)
+bit in the vector that is 1. Report zero if the input vector has no bits
+that are high. For example, the input 8'b10010000 should output 3'd4,
+because bit[4] is first bit that is high.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: `TopModule`
+
+**Interface Specification**:
+- **Inputs**:
+  - `input [7:0] in`: An 8-bit unsigned vector input. The least significant bit is `in[0]` and the most significant bit is `in[7]`.
+  
+- **Outputs**:
+  - `output [2:0] pos`: A 3-bit unsigned vector output representing the position of the first '1' found in the input vector `in`, starting from the least significant bit. If no '1' is found, `pos` should output `3'b000`.
+
+**Behavior Specification**:
+- The module implements a combinational priority encoder.
+- For an input vector `in`, the output `pos` should report the index of the first '1' bit encountered in the vector, starting from the least significant bit (LSB). 
+- If the input vector is `8'b00000000`, the output `pos` should be `3'b000`, indicating that no high bit is found.
+
+**Timing Behavior**:
+- The module operates in a purely combinational manner and does not depend on any clock signal.
+
+**Bit-Ordering and Indexing**:
+- The input vector `in` is considered with `in[0]` as the least significant bit (LSB) and `in[7]` as the most significant bit (MSB).
+
+**Logical Description**:
+- Priority Encoding Logic: 
+  - Check each bit of the input vector `in` from `in[0]` to `in[7]`. 
+  - Output the index of the first bit that is '1'.
+  - Example: For `in = 8'b10010000`, the output should be `3'd4`, since `in[4]` is the first high bit when evaluating from LSB to MSB.
+
+**Implementation Notes**:
+- Ensure the module uses a combinational logic block (e.g., `always_comb` in SystemVerilog or `always @*` in Verilog) to evaluate the input vector.
+- The logic should be synthesizable and adhere to common digital design practices.
+- No internal state or registers are required since this module is purely combinational.
+
+**Boundary Conditions**:
+- If all bits in `in` are zero, ensure that the output `pos` is `3'b000`.
+                

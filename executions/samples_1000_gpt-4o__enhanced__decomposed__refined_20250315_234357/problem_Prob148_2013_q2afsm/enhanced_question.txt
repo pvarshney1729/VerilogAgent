@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- `input clk`: Clock signal. All sequential logic is triggered on the positive edge of the clock.
+- `input resetn`: Active-low synchronous reset signal. The FSM resets to state A when resetn is asserted low.
+- `input [2:0] r`: 3-bit input vector representing device requests. Bit `r[0]` is the highest priority request, and `r[2]` is the lowest priority.
+- `output reg [2:0] g`: 3-bit output vector representing grants. Bit `g[0]` corresponds to `r[0]`, `g[1]` to `r[1]`, and `g[2]` to `r[2]`.
+
+State Definitions and Behavior:
+- States are represented by an enumerated type or a set of parameters with distinct binary codes.
+- State A: Initial state after reset. Transition to:
+  - B if `r[0] == 1`
+  - C if `r[0] == 0` and `r[1] == 1`
+  - D if `r[0] == 0` and `r[1] == 0` and `r[2] == 1`
+  - Remain in A if `r[0] == 0`, `r[1] == 0`, and `r[2] == 0`
+- State B: `g[0]` is set to 1. Transition to:
+  - Remain in B if `r[0] == 1`
+  - A if `r[0] == 0`
+- State C: `g[1]` is set to 1. Transition to:
+  - Remain in C if `r[1] == 1`
+  - A if `r[1] == 0`
+- State D: `g[2]` is set to 1. Transition to:
+  - Remain in D if `r[2] == 1`
+  - A if `r[2] == 0`
+
+Reset Behavior:
+- The reset is synchronous. When `resetn` is asserted low, the FSM transitions to state A on the next rising edge of `clk`.
+
+Priority Scheme:
+- Priority is managed such that `r[0]` > `r[1]` > `r[2]`.
+
+Design Notes:
+- Use separate always blocks for the state register update and the next state logic.
+- State outputs (`g`) can be described using a continuous assignment or an always block.
+- Ensure all flip-flops and registers have explicitly defined initial values or reset states.
+- Handle edge cases where multiple requests are active simultaneously by following the predefined priority scheme.
+</ENHANCED_SPEC>

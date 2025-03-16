@@ -1,0 +1,67 @@
+Generated Response:
+
+<REASONING>
+To implement the 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. The input ports are `clk` and `reset`, and the output port is `q`, which is 5 bits wide.
+
+2. **Signal Declaration**: Use `logic` to declare the internal signals and ports, as per the coding conventions.
+
+3. **Synchronous Reset**: Implement a synchronous reset that sets the LFSR to the initial state `00001` when `reset` is high. This is done inside an `always_ff` block triggered on the positive edge of `clk`.
+
+4. **Shift Register Logic**: Implement the shift register logic where the bits shift right. The new value of the most significant bit (MSB) is determined by XORing the least significant bit (LSB) with the tap positions.
+
+5. **Feedback Logic**: The feedback for the MSB is calculated using XOR between the LSB and the bits at the tap positions (bit 4 and bit 2).
+
+6. **Output Assignment**: Assign the internal LFSR register to the output `q`.
+
+By following these steps, we ensure that the module adheres to the specifications and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    logic [4:0] lfsr;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            lfsr <= 5'b00001; // Synchronous reset to initial state
+        end else begin
+            // Shift right and apply feedback
+            lfsr <= {lfsr[3:0], lfsr[0] ^ lfsr[2]};
+        end
+    end
+
+    assign q = lfsr; // Assign internal LFSR register to output
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    logic [4:0] lfsr;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            lfsr <= 5'b00001; // Synchronous reset to initial state
+        end else begin
+            // Shift right and apply feedback
+            lfsr <= {lfsr[3:0], lfsr[0] ^ lfsr[2]};
+        end
+    end
+
+    assign q = lfsr; // Assign internal LFSR register to output
+
+endmodule

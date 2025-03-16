@@ -1,0 +1,50 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a
+ - input  b
+ - input  sel
+ - output out
+
+The module should implement a one-bit wide, 2-to-1 multiplexer. When
+sel=0, choose a. When sel=1, choose b.
+
+Here is the enhanced specification which might be useful to you:
+                Module Name: `TopModule`
+
+Interface:
+- **Inputs:**
+  - `input wire a` : 1-bit input signal.
+  - `input wire b` : 1-bit input signal.
+  - `input wire sel` : 1-bit selection input signal.
+  
+- **Outputs:**
+  - `output wire out` : 1-bit output signal.
+
+Behavior:
+- This module implements a combinational logic 2-to-1 multiplexer.
+- The output `out` is determined by the value of `sel`:
+  - If `sel` is 0, `out` is assigned the value of `a`.
+  - If `sel` is 1, `out` is assigned the value of `b`.
+
+Timing:
+- The module is purely combinational and does not involve any clock signals or sequential logic. Changes in inputs instantly reflect in the output.
+
+Additional Notes:
+- It is assumed that `sel` will always be driven with a valid logic level (0 or 1). The module does not handle undefined or invalid logic levels for `sel`.
+- The module does not include or require any reset logic as there are no sequential elements.
+
+Implementation Example:
+```verilog
+module TopModule (
+    input wire a,
+    input wire b,
+    input wire sel,
+    output wire out
+);
+    assign out = (sel == 1'b0) ? a : b;
+endmodule
+```
+                

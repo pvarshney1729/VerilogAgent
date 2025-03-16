@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+The module, `TopModule`, is to be implemented with the following interface. All input and output ports are one bit unless otherwise specified:
+
+- `input clk`: Clock signal used for synchronizing sequential logic.
+- `input areset`: Asynchronous reset input, active high. When high, it resets the state machine to the initial state `OFF`.
+- `input j`: Input signal to transition from state `OFF` to `ON`.
+- `input k`: Input signal to transition from state `ON` to `OFF`.
+- `output reg out`: Output signal representing the state of the machine, where `0` corresponds to the `OFF` state and `1` corresponds to the `ON` state.
+
+The state machine is a Moore type with two states:
+
+1. `OFF` state, where `out = 0`.
+2. `ON` state, where `out = 1`.
+
+State transitions are defined as follows:
+
+- From `OFF` state (`out = 0`):
+  - If `j = 0`, remain in `OFF` state.
+  - If `j = 1`, transition to `ON` state.
+
+- From `ON` state (`out = 1`):
+  - If `k = 0`, remain in `ON` state.
+  - If `k = 1`, transition to `OFF` state.
+
+Reset Behavior:
+
+- The reset is asynchronous and active high. When `areset` is set to `1`, the state machine immediately transitions to the `OFF` state, regardless of the clock signal or any other inputs.
+- When `areset` is `0`, the state machine operates based on the clock signal and the inputs `j` and `k`.
+
+Clock and Timing:
+
+- All state transitions are synchronized with the rising edge of the `clk` signal, except for the asynchronous reset condition.
+
+Initial Condition:
+
+- Upon initialization, or when `areset` is high, the state machine should be in the `OFF` state, with `out` set to `0`.
+
+Bit Indexing:
+
+- The port `out` is a single bit, where its value directly reflects the current state of the machine (`0` for `OFF`, `1` for `ON`).
+
+This specification ensures the correct implementation of a two-state Moore machine with defined behavior for inputs and resets.
+</ENHANCED_SPEC>

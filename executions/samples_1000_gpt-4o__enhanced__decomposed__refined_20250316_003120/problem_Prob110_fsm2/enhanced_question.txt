@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Specification:
+- input clk: Clock signal, 1-bit wide.
+- input areset: Asynchronous reset, active-high, 1-bit wide.
+- input j: Input signal J, 1-bit wide.
+- input k: Input signal K, 1-bit wide.
+- output reg out: Output signal, 1-bit wide.
+
+State Machine Description:
+- The module implements a Moore state machine with two states: OFF and ON.
+- Each state has an associated output value:
+  - OFF state: Output (out) is 0.
+  - ON state: Output (out) is 1.
+
+Reset Behavior:
+- The reset is asynchronous and active-high. When 'areset' is high, the state machine transitions to the OFF state, regardless of the clock signal.
+
+State Transition Logic:
+- OFF State Transitions:
+  - If j = 0, remain in OFF state.
+  - If j = 1, transition to ON state.
+
+- ON State Transitions:
+  - If k = 0, remain in ON state.
+  - If k = 1, transition to OFF state.
+
+Clock and Sequential Logic:
+- State transitions occur on the rising edge of the 'clk' signal unless an asynchronous reset is triggered.
+
+Initial State:
+- Upon initialization or when 'areset' is high, the state machine sets the current state to OFF.
+
+Bit Indexing and Conventions:
+- All signals are 1-bit wide.
+- The state machine uses a single flip-flop to store the current state, where OFF is represented as 0 and ON as 1.
+
+Edge Cases and Input Boundaries:
+- The state machine handles all combinations of input signals J and K as specified by the state transition logic.
+- Asynchronous reset takes precedence over all other inputs, and the state machine will always reset to the OFF state when 'areset' is high.
+</ENHANCED_SPEC>

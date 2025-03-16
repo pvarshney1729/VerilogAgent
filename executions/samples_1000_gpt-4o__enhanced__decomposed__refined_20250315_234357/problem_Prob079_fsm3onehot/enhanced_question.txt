@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire in;` // 1-bit input signal
+  - `input wire [3:0] state;` // 4-bit state input representing one-hot encoding of states A, B, C, D
+- Output Ports:
+  - `output reg [3:0] next_state;` // 4-bit output for the next state, one-hot encoded
+  - `output reg out;` // 1-bit output signal
+
+Description:
+- The module implements a Moore state machine with the following configuration:
+  - States: A, B, C, D, encoded in one-hot format as follows:
+    - State A: 4'b0001
+    - State B: 4'b0010
+    - State C: 4'b0100
+    - State D: 4'b1000
+  - The state machine transitions based on the input `in` and current `state`.
+  - It is purely combinational logic; there is no clock or reset signal involved.
+  - State transitions and outputs are determined as follows:
+
+State Transition Table:
+- Current State: A
+  - Next state if `in = 0`: A
+  - Next state if `in = 1`: B
+  - Output: 0
+- Current State: B
+  - Next state if `in = 0`: C
+  - Next state if `in = 1`: B
+  - Output: 0
+- Current State: C
+  - Next state if `in = 0`: A
+  - Next state if `in = 1`: D
+  - Output: 0
+- Current State: D
+  - Next state if `in = 0`: C
+  - Next state if `in = 1`: B
+  - Output: 1
+
+Notes:
+- The MSB is bit[3] and the LSB is bit[0] in the `state` and `next_state` vectors.
+- The output `out` is determined solely by the current state, reflecting the Moore machine characteristic.
+- Ensure that all transitions and outputs are derived based on the inspection of the state transition table provided above.
+</ENHANCED_SPEC>

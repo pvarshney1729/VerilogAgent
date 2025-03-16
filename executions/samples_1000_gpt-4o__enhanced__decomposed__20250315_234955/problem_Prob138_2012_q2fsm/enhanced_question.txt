@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and should adhere to the following interface specifications. All input and output ports are one bit unless otherwise specified:
+
+- Input: `clk` (Clock signal, positive edge-triggered)
+- Input: `reset` (Synchronous active-high reset)
+- Input: `w` (Input signal to control state transitions)
+- Output: `z` (Output signal representing the FSM's output)
+
+The state machine is defined with six states: A, B, C, D, E, and F. The FSM transitions and outputs are as follows:
+
+- State A (output z = 0):
+  - On `w = 1`: Transition to state B
+  - On `w = 0`: Remain in state A
+- State B (output z = 0):
+  - On `w = 1`: Transition to state C
+  - On `w = 0`: Transition to state D
+- State C (output z = 0):
+  - On `w = 1`: Transition to state E
+  - On `w = 0`: Transition to state D
+- State D (output z = 0):
+  - On `w = 1`: Transition to state F
+  - On `w = 0`: Transition to state A
+- State E (output z = 1):
+  - On `w = 1`: Remain in state E
+  - On `w = 0`: Transition to state D
+- State F (output z = 1):
+  - On `w = 1`: Transition to state C
+  - On `w = 0`: Transition to state D
+
+Upon activation of the synchronous reset (reset = 1), the FSM should transition to state A on the next positive edge of the clock. The initial state on reset is A, with `z = 0`.
+
+- State encoding should be explicitly defined with unique binary codes for each state.
+- The FSM should be implemented using separate `always` blocks for state transition logic and state register (flip-flop) logic.
+- The output `z` should be generated using either a continuous assignment or an `always` block, ensuring that it correctly reflects the current state's output as defined above.
+
+Bit indexing follows the convention where bit[0] refers to the least significant bit (LSB).
+
+Ensure all sequential elements (state registers) have defined initial values as per the reset condition. Proper precedence of operations and signal dependencies must be maintained to prevent race conditions.
+</ENHANCED_SPEC>

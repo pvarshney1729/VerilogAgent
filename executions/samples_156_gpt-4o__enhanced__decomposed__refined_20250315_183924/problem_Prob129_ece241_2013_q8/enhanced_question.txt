@@ -1,0 +1,50 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  aresetn
+ - input  x
+ - output z
+
+The module should implement a Mealy-type finite state machine that
+recognizes the sequence "101" on an input signal named x. Your FSM should
+have an output signal, z, that is asserted to logic-1 when the "101"
+sequence is detected. Your FSM should also have a negative edge triggered
+asynchronous reset. You may only have 3 states in your state machine.
+Your FSM should recognize overlapping sequences. Assume all sequential
+logic is triggered on the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Interface:**
+- **Module Name:** `TopModule`
+- **Inputs:**
+  - `input wire clk`: Clock signal. Positive edge triggered.
+  - `input wire aresetn`: Active-low asynchronous reset. Negative edge-triggered.
+  - `input wire x`: Input signal for sequence detection.
+- **Output:**
+  - `output reg z`: Output signal, asserted to logic-1 when the "101" sequence is detected.
+
+**Behavioral Specification:**
+- **FSM Type:** Mealy-type finite state machine.
+- **Sequence Detection:** The FSM should detect the sequence "101" on the input signal `x`. The output `z` should be asserted to logic-1 immediately upon detection of the sequence.
+- **State Transitions:** The FSM should consist of exactly three states: `S0`, `S1`, and `S2`:
+  - **S0:** Initial state. Transition to `S1` on input `x = 1`.
+  - **S1:** Transition to `S2` on input `x = 0`. Return to `S0` on input `x = 1`.
+  - **S2:** Transition to `S0` on input `x = 1` with `z = 1`. Return to `S0` on input `x = 0` with `z = 0`.
+- **Overlapping Sequences:** The FSM should recognize overlapping sequences, meaning after detecting "101", it should be ready to detect a new sequence from the last '1' of the current sequence.
+
+**Timing and Reset Behavior:**
+- **Clocking:** All state transitions occur on the rising edge of `clk`.
+- **Reset:** The FSM is reset to the initial state `S0` on the negative edge of `aresetn`, irrespective of the clock. The output `z` should be deasserted (set to 0) upon reset.
+
+**Implementation Notes:**
+- The FSM design should prioritize minimizing the number of states while ensuring the correct detection of the sequence with overlapping capability.
+- Ensure that the reset signal (`aresetn`) has the highest precedence, meaning the FSM transitions to the reset state immediately when the reset condition is met.
+- **Initial State:** On power-up or reset, the FSM should start in state `S0`.
+
+**Boundary Conditions:**
+- **Partial Sequence Handling:** If a partial sequence such as "10" is detected, the FSM should transition appropriately without assertion of `z` until a complete "101" sequence is observed.
+- **Edge Cases:** Ensure that the FSM correctly handles cases such as multiple consecutive '1's or '0's, maintaining correct state transitions and output behavior.
+                

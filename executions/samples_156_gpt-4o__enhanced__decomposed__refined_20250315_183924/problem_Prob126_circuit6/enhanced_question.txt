@@ -1,0 +1,74 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a ( 3 bits)
+ - output q (16 bits)
+
+The module should implement a combinational circuit. Read the simulation
+waveforms to determine what the circuit does, then implement it.
+
+  time  a     q
+  0ns   x     x
+  5ns   x     x
+  10ns  x     x
+  15ns  0  1232
+  20ns  1  aee0
+  25ns  2  27d4
+  30ns  3  5a0e
+  35ns  4  2066
+  40ns  5  64ce
+  45ns  6  c526
+  50ns  7  2f19
+  55ns  0  1232
+  60ns  1  aee0
+  65ns  2  27d4
+  70ns  4  2066
+  75ns  1  aee0
+  80ns  1  aee0
+  85ns  3  5a0e
+  90ns  5  64ce
+
+Here is the enhanced specification which might be useful to you:
+                ```
+Module Specification: TopModule
+
+Interface:
+- Input Ports:
+  - `input [2:0] a`: A 3-bit wide input vector, where `a[2]` is the most significant bit (MSB) and `a[0]` is the least significant bit (LSB). This input is considered unsigned.
+
+- Output Ports:
+  - `output [15:0] q`: A 16-bit wide output vector, where `q[15]` is the MSB and `q[0]` is the LSB. This output is considered unsigned.
+
+Behavior:
+- The module implements a combinational circuit that maps the 3-bit input `a` to a 16-bit output `q` based on predefined fixed values. The mapping is as follows:
+  - If `a == 3'b000`, then `q = 16'h1232`
+  - If `a == 3'b001`, then `q = 16'haee0`
+  - If `a == 3'b010`, then `q = 16'h27d4`
+  - If `a == 3'b011`, then `q = 16'h5a0e`
+  - If `a == 3'b100`, then `q = 16'h2066`
+  - If `a == 3'b101`, then `q = 16'h64ce`
+  - If `a == 3'b110`, then `q = 16'hc526`
+  - If `a == 3'b111`, then `q = 16'h2f19`
+
+- Any input value of `a` outside the range 3'b000 to 3'b111 is not valid, and the behavior is undefined.
+
+Timing Behavior:
+- The circuit is purely combinational, with no state retention or memory elements. Changes in `a` will immediately reflect changes in `q` according to the mapping.
+
+Reset Behavior:
+- There is no reset behavior specified as the circuit is purely combinational.
+
+Initial States:
+- Since the circuit is combinational, there are no initial states for flip-flops or registers.
+
+Implementation Notes:
+- The implementation should ensure minimal propagation delay by optimizing the combinational logic, possibly using a lookup table or case statement for efficient mapping.
+- Ensure that the logic synthesis adheres to the specified input-to-output mapping without introducing unintended latches or stateful elements.
+
+Boundary Conditions:
+- The circuit should only be evaluated for valid inputs within the specified range. Inputs outside this range result in undefined behavior and should be handled appropriately during testing.
+
+```
+                

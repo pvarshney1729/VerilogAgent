@@ -1,0 +1,46 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - output out
+
+The module should always drive 0 (or logic low).
+
+Here is the enhanced specification which might be useful to you:
+                ### Module: TopModule
+
+#### Interface
+- **Ports:**
+  - `output logic out`: A 1-bit output port. The signal is named `out` for simplicity, as it is intended to output a constant logic level.
+
+#### Behavior
+- **Functional Description:**
+  - The `TopModule` continuously drives its output port `out` to a logic level of 0 (logic low).
+
+#### Timing Behavior
+- **Combinational Logic:**
+  - The `out` signal is driven directly by combinational logic. There are no clock dependencies or sequential elements involved.
+
+#### Reset Behavior
+- **Reset Requirements:**
+  - No reset is required as the output is continuously driven by combinational logic. The module does not contain any state-holding elements that require initialization.
+
+#### Implementation Notes
+- **Synthesis Considerations:**
+  - Ensure that the synthesis tool recognizes the constant output and optimizes it accordingly.
+  
+- **Port Naming and Width:**
+  - The output port `out` is defined as a 1-bit wide, unsigned logic signal. This is consistent with the naming convention of being a simple output.
+
+#### Example Instantiation
+```verilog
+TopModule top_inst (
+    .out(out_signal)
+);
+```
+
+This example shows how to instantiate the `TopModule` within a higher-level module or testbench environment.
+
+### End of Specification
+                

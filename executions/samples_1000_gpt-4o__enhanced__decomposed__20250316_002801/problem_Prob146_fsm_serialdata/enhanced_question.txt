@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and must adhere to the following interface specifications. All input and output ports are single bit signals unless explicitly stated otherwise.
+
+- `input clk`: The clock signal for sequential logic, operating on the positive edge.
+- `input in`: The serial data input, receiving a stream of bits.
+- `input reset`: An active-high, synchronous reset signal.
+- `output [7:0] out_byte`: An 8-bit output representing the received data byte.
+- `output done`: A signal indicating the completion and validity of `out_byte`.
+
+The module should implement a finite state machine (FSM) to process a serial communication protocol with the following characteristics:
+
+1. **Protocol Overview**: 
+   - Each data transmission consists of one start bit (logic 0), followed by 8 data bits, ending with one stop bit (logic 1).
+   - The idle state of the line is logic 1 when no data is being transmitted.
+
+2. **Data Reception**:
+   - The FSM must detect the start bit (logic 0) to begin receiving a byte.
+   - Following the start bit, it will sequentially capture the 8 data bits, starting with the least significant bit (bit[0]) and ending with the most significant bit (bit[7]).
+   - After capturing the data bits, the FSM must verify the presence of a stop bit (logic 1).
+
+3. **Output Behavior**:
+   - The `out_byte` output is valid only when `done` is asserted (logic 1); otherwise, its value is considered a don't-care.
+   - The `done` signal is asserted each time a complete and correctly received byte, including a valid stop bit, is detected.
+
+4. **Error Handling**:
+   - If the stop bit is incorrect (not logic 1), the FSM will enter a state that waits for the next occurrence of a stop bit before attempting to receive the next byte.
+
+5. **Reset Behavior**:
+   - The synchronous reset initializes all internal state registers and outputs. The FSM returns to its initial state upon reset activation.
+
+The design must ensure clear bit indexing with bit[0] as the least significant bit, handle all edge cases, and avoid race conditions, maintaining operation integrity across clock cycles.
+</ENHANCED_SPEC>

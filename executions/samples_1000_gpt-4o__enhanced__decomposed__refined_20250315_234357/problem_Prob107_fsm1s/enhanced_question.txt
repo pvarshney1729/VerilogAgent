@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule`. The interface consists of the following ports:
+
+- `input wire clk`: The clock signal for the module.
+- `input wire reset`: An active-high synchronous reset signal.
+- `input wire in`: The input signal to the state machine.
+- `output reg out`: The output signal from the state machine.
+
+The design requirement is to implement a Moore state machine with two states, A and B. The state machine operates based on the following conditions and transitions:
+
+1. **Initial Conditions and Reset Behavior**:
+   - The state machine begins in state B upon reset.
+   - The reset signal is synchronous, meaning it only affects the state machine on the rising edge of the clock.
+   - When reset is asserted (high), the state machine transitions to state B regardless of the current state or input.
+
+2. **State Definitions**:
+   - **State B**:
+     - Output (`out`) is `1`.
+     - Transitions:
+       - Remain in state B when `in = 1`.
+       - Transition to state A when `in = 0`.
+
+   - **State A**:
+     - Output (`out`) is `0`.
+     - Transitions:
+       - Remain in state A when `in = 1`.
+       - Transition to state B when `in = 0`.
+
+3. **Output Logic**:
+   - The output is associated with the state and does not depend directly on the input. The output for each state is as follows:
+     - State B: `out = 1`.
+     - State A: `out = 0`.
+
+4. **Clock Cycle Relationships**:
+   - State transitions occur on the rising edge of the `clk` signal.
+   - The output `out` is updated concurrently with state transitions, based on the current state.
+
+5. **Bit Indexing and Port Widths**:
+   - All ports are single-bit (`1`-bit) wide.
+   - Bit indexing is not necessary as there is no multi-bit vector.
+
+This specification ensures a clear implementation of the Moore state machine with defined behavior for synchronous reset and state transitions.
+</ENHANCED_SPEC>

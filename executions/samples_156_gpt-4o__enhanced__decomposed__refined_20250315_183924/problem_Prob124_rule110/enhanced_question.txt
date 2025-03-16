@@ -1,0 +1,82 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  load
+ - input  data (512 bits)
+ - output q    (512 bits)
+
+The module should implement Rule 110, a one-dimensional cellular
+automaton with interesting properties (such as being Turing-complete).
+There is a one-dimensional array of cells (on or off). At each time step,
+the state of each cell changes. In Rule 110, the next state of each cell
+depends only on itself and its two neighbours, according to the following
+table:
+
+  Left[i+1] | Center[i] | Right[i-1] | Center's next state 
+  1         | 1         | 1          | 0
+  1         | 1         | 0          | 1
+  1         | 0         | 1          | 1
+  1         | 0         | 0          | 0
+  0         | 1         | 1          | 1
+  0         | 1         | 0          | 1
+  0         | 0         | 1          | 1
+  0         | 0         | 0          | 0
+
+In this circuit, create a 512-cell system (q[511:0]), and advance by one
+time step each clock cycle. The synchronous active high load input
+indicates the state of the system should be loaded with data[511:0].
+Assume the boundaries (q[-1] and q[512], if they existed) are both zero
+(off). Assume all sequential logic is triggered on the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+**Module Interface:**
+```verilog
+module TopModule (
+    input wire clk,               // 1-bit clock input signal
+    input wire load,              // 1-bit synchronous active high load signal
+    input wire [511:0] data,      // 512-bit data input for initial state load
+    output reg [511:0] q          // 512-bit state of the cellular automaton
+);
+```
+
+**Bit Ordering and Indexing:**
+- `data[0]` and `q[0]` are the least significant bits (LSB) representing the first cell in the array.
+- `data[511]` and `q[511]` are the most significant bits (MSB) representing the last cell in the array.
+
+**Timing Behavior:**
+- The module updates the state of the cellular automaton on the rising edge of the `clk` signal.
+- The computation of the next state for each cell is combinational and uses the current state of `q`.
+
+**Reset Behavior:**
+- The specification does not include a reset functionality. If desired, a reset input can be added to initialize `q` to a known state.
+
+**Initial States:**
+- If `load` is high at the positive edge of `clk`, `q` is loaded with the value of `data`.
+- If `load` is low, the state of `q` evolves according to Rule 110.
+
+**Rule 110 Logic:**
+- The next state of each cell `q[i]` is determined by the current states of `q[i-1]`, `q[i]`, and `q[i+1]` according to Rule 110:
+  - `Left[i+1] = q[i+1]`
+  - `Center[i] = q[i]`
+  - `Right[i-1] = q[i-1]`
+- For boundary cells:
+  - Treat `q[-1]` as `0` for `i=0`.
+  - Treat `q[512]` as `0` for `i=511`.
+
+**Implementation Notes:**
+- The module does not wrap around. Boundary conditions are assumed to have zero padding outside the valid index range.
+- Ensure that the next state logic for `q` is fully combinational and does not introduce any race conditions or hold-time violations.
+
+**Boundary Conditions:**
+- The system assumes that both boundaries (logical `q[-1]` and `q[512]`) are `0` at all times.
+- This ensures that the cells at the edges of the array behave predictably according to the specified rules.
+
+**End of Enhanced Specification**
+
+**
+                

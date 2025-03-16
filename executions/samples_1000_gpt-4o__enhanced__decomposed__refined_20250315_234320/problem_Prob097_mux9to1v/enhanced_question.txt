@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description:
+The objective is to design a 16-bit wide, 9-to-1 multiplexer. The module selects one of the nine 16-bit inputs (a to i) based on a 4-bit selector input (sel). For any selector value outside the range of 0 to 8, the output should be set to all '1's.
+
+Port Definitions:
+- Inputs:
+  - input [15:0] a: 16-bit input signal.
+  - input [15:0] b: 16-bit input signal.
+  - input [15:0] c: 16-bit input signal.
+  - input [15:0] d: 16-bit input signal.
+  - input [15:0] e: 16-bit input signal.
+  - input [15:0] f: 16-bit input signal.
+  - input [15:0] g: 16-bit input signal.
+  - input [15:0] h: 16-bit input signal.
+  - input [15:0] i: 16-bit input signal.
+  - input [3:0] sel: 4-bit selector input.
+
+- Output:
+  - output [15:0] out: 16-bit output signal.
+
+Behavioral Specification:
+- The output 'out' is determined based on the value of the 'sel' input.
+- Selection Logic:
+  - If sel is 0, 'out' is assigned the value of 'a'.
+  - If sel is 1, 'out' is assigned the value of 'b'.
+  - If sel is 2, 'out' is assigned the value of 'c'.
+  - If sel is 3, 'out' is assigned the value of 'd'.
+  - If sel is 4, 'out' is assigned the value of 'e'.
+  - If sel is 5, 'out' is assigned the value of 'f'.
+  - If sel is 6, 'out' is assigned the value of 'g'.
+  - If sel is 7, 'out' is assigned the value of 'h'.
+  - If sel is 8, 'out' is assigned the value of 'i'.
+  - For sel values in the range of 9 to 15, 'out' should be set to 16'b1111_1111_1111_1111 (all bits set to '1').
+
+Additional Considerations:
+- The bit indexing convention used is as follows: bit[15] refers to the most significant bit (MSB) and bit[0] refers to the least significant bit (LSB).
+- This specification assumes a purely combinational logic design for the multiplexer with no sequential elements or clock dependencies.
+- Ensure that operations are not susceptible to race conditions by maintaining a clear priority order based on the sel value.
+</ENHANCED_SPEC>

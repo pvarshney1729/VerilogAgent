@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit, clock signal for synchronizing sequential logic.
+  - reset: 1-bit, active high signal to reset the state machine synchronously.
+  - in: 8-bit wide input, where bit[0] is the least significant bit and bit[7] is the most significant bit.
+
+- Output Ports:
+  - done: 1-bit, signal indicating the completion of receiving a full 3-byte message.
+
+Functional Requirements:
+- The module shall implement a finite state machine (FSM) to delineate message boundaries within a continuous byte stream following the PS/2 mouse protocol.
+  
+- Message Detection:
+  - Each message consists of exactly three bytes.
+  - The first byte of each message has the condition in[3] = 1.
+  - Bytes two and three have no restrictions on in[3].
+
+- FSM Operation:
+  - The FSM will discard all incoming bytes until it detects a byte where in[3] = 1. This byte is assumed to be the first byte of a new message.
+  - Upon detection of the first byte, the FSM will continue to process the next two bytes as part of the current message.
+  - After the third byte of the message is successfully received, the FSM shall assert the 'done' signal for one clock cycle in the cycle immediately following the receipt of the third byte.
+
+- Reset Behavior:
+  - The reset signal is active high and synchronous with the clock.
+  - Upon assertion of the reset signal, the FSM shall return to its initial state, ready to detect the start of a new message.
+
+- Clocking:
+  - All sequential elements, including state registers, are triggered on the rising edge of the clk signal.
+
+- Initial State:
+  - On system initialization or reset, the FSM shall be in a state ready to detect the start of a new message.
+
+Edge Cases and Input Boundaries:
+- The FSM must correctly handle cases where multiple consecutive bytes meet the in[3] = 1 condition, ensuring proper message alignment.
+- In the event of a reset during message reception, the partially received message should be discarded, and the FSM should resume searching for a new message start.
+</ENHANCED_SPEC>

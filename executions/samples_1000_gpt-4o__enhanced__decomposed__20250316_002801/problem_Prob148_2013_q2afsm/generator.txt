@@ -1,0 +1,160 @@
+Generated Response:
+
+<REASONING>
+To implement the FSM as described, we need to define a module named `TopModule` with the specified interface. The FSM has four states (A, B, C, D) with specific transitions based on the input requests `r[2:0]`. The FSM should prioritize requests from device 0 over device 1, and device 1 over device 2. The FSM should also have an active-low synchronous reset that initializes the state to A.
+
+The implementation will include:
+1. State encoding using a `typedef` for better readability.
+2. A state register to hold the current state, updated on the positive edge of the clock.
+3. Next state logic to determine the next state based on the current state and input requests.
+4. Output logic to drive the grant signals `g[2:0]` based on the current state.
+5. Adherence to coding conventions such as using `logic` for signal declarations and `always @(*)` for combinational logic.
+
+The FSM will be implemented using separate always blocks for the state transition logic and the state register update, as per the guidelines.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic resetn,
+    input logic [2:0] r,
+    output logic [2:0] g
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic (next state logic)
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else if (r[1])
+                    next_state = STATE_C;
+                else if (r[2])
+                    next_state = STATE_D;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_B: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_C: begin
+                if (r[1])
+                    next_state = STATE_C;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_D: begin
+                next_state = STATE_A; // Assuming STATE_D transitions back to STATE_A
+            end
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // State flip-flops (state register)
+    always @(posedge clk) begin
+        if (!resetn)
+            current_state <= STATE_A;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        g = 3'b000; // Default output
+        case (current_state)
+            STATE_B: g[0] = 1;
+            STATE_C: g[1] = 1;
+            // STATE_D does not set any g[i]
+            default: g = 3'b000;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic resetn,
+    input logic [2:0] r,
+    output logic [2:0] g
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic (next state logic)
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else if (r[1])
+                    next_state = STATE_C;
+                else if (r[2])
+                    next_state = STATE_D;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_B: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_C: begin
+                if (r[1])
+                    next_state = STATE_C;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_D: begin
+                next_state = STATE_A; // Assuming STATE_D transitions back to STATE_A
+            end
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // State flip-flops (state register)
+    always @(posedge clk) begin
+        if (!resetn)
+            current_state <= STATE_A;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        g = 3'b000; // Default output
+        case (current_state)
+            STATE_B: g[0] = 1;
+            STATE_C: g[1] = 1;
+            // STATE_D does not set any g[i]
+            default: g = 3'b000;
+        endcase
+    end
+
+endmodule

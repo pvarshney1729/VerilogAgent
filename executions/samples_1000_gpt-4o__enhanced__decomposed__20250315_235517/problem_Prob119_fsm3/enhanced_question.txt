@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal, 1 bit, positive edge-triggered.
+  - `areset`: Asynchronous reset signal, 1 bit, active high.
+  - `in`: State machine input, 1 bit.
+- Output Ports:
+  - `out`: State machine output, 1 bit.
+
+Operational Details:
+1. State Encoding:
+   - The module implements a Moore state machine with four states: A, B, C, and D.
+   - State encoding can be binary, with A = 2'b00, B = 2'b01, C = 2'b10, D = 2'b11.
+
+2. State Transition Table:
+   - Current State: A
+     - Next State: A if `in` = 0, B if `in` = 1
+     - Output: 0
+   - Current State: B
+     - Next State: C if `in` = 0, B if `in` = 1
+     - Output: 0
+   - Current State: C
+     - Next State: A if `in` = 0, D if `in` = 1
+     - Output: 0
+   - Current State: D
+     - Next State: C if `in` = 0, B if `in` = 1
+     - Output: 1
+
+3. Reset Behavior:
+   - The asynchronous reset (`areset`) is active high and resets the FSM to state A. It is triggered on the positive edge of `areset`.
+   - On reset, all sequential elements should initialize to their respective values for state A.
+
+4. Clocking:
+   - All sequential logic, including state transitions, should be triggered on the positive edge of the `clk` signal.
+
+5. Output Logic:
+   - The output `out` is determined solely by the current state of the FSM, as per Moore machine operation.
+   - Ensure that the output reflects the defined state output immediately upon entering a state.
+
+6. Bit Indexing:
+   - State encoding and any related operations should assume bit[0] refers to the least significant bit (LSB).
+
+Edge Cases and Additional Notes:
+- Ensure that operations are well-defined for all possible input sequences.
+- Consider any potential race conditions and ensure proper synchronization with the clock and reset signals.
+</ENHANCED_SPEC>

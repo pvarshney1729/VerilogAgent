@@ -1,0 +1,71 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as specified, we need to design a simple FSM that controls the `shift_ena` signal. The FSM should assert `shift_ena` for exactly 4 clock cycles upon reset and then keep it deasserted until the next reset. Here's the step-by-step reasoning:
+
+1. **Interface Definition**: The module has a clock (`clk`), a synchronous reset (`reset`), and an output (`shift_ena`). All are 1-bit signals.
+
+2. **State Management**: We don't need explicit state encoding since the behavior is straightforward. Instead, we use a counter (`cycle_count`) to track the number of cycles `shift_ena` has been asserted.
+
+3. **Synchronous Reset**: On reset, we initialize `cycle_count` to zero and assert `shift_ena`. This ensures that `shift_ena` is asserted immediately after reset.
+
+4. **Cycle Counting**: After reset, we increment `cycle_count` on each clock cycle while `shift_ena` is asserted. Once `cycle_count` reaches 3 (indicating 4 cycles have passed since it starts from 0), we deassert `shift_ena`.
+
+5. **Output Logic**: The `shift_ena` output is controlled directly within the sequential logic block. It is asserted during the first 4 cycles after reset and deasserted thereafter.
+
+6. **Coding Conventions**: We use `logic` for all signals, avoid explicit sensitivity lists in combinational logic, and ensure numeric constants are properly sized.
+
+This approach ensures that the module meets the specification requirements, with `shift_ena` being asserted for exactly 4 cycles after a reset and remaining deasserted until the next reset.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    output logic shift_ena
+);
+
+    logic [2:0] cycle_count;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            cycle_count <= 3'b000;
+            shift_ena <= 1'b1;
+        end else if (shift_ena) begin
+            if (cycle_count < 3'b011) begin
+                cycle_count <= cycle_count + 1'b1;
+            end else begin
+                shift_ena <= 1'b0;
+            end
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    output logic shift_ena
+);
+
+    logic [2:0] cycle_count;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            cycle_count <= 3'b000;
+            shift_ena <= 1'b1;
+        end else if (shift_ena) begin
+            if (cycle_count < 3'b011) begin
+                cycle_count <= cycle_count + 1'b1;
+            end else begin
+                shift_ena <= 1'b0;
+            end
+        end
+    end
+
+endmodule

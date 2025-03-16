@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic x,\n    input logic y,\n    output logic z\n);\n\nalways @(*) begin\n    if (x == 1'b1 && y == 1'b0) begin\n        z = 1'b0; // Set z to 0 when x is 1 and y is 0\n    end else if (x == 1'b0 && y == 1'b1) begin\n        z = 1'b0; // Set z to 0 when x is 0 and y is 1\n    end else if (x == 1'b1 && y == 1'b1) begin\n        z = 1'b1; // Set z to 1 when both x and y are 1\n    end else begin\n        z = 1'b1; // Default state when both x and y are 0\n    end\nend\n\ninitial begin\n    z = 1'b1; // Initial state when both x and y are 0\nend\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

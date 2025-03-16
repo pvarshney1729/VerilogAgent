@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+The module `TopModule` is a Verilog module with the following interface:
+
+- `input  clk`: A clock signal for the sequential logic of the state machine.
+- `input  reset`: An active-high synchronous reset signal that initializes the state machine to the OFF state.
+- `input  j`: A control input signal for transitioning between states.
+- `input  k`: A control input signal for transitioning between states.
+- `output reg out`: A one-bit output signal representing the current state of the machine.
+
+The module implements a Moore state machine with two states: OFF and ON. The output `out` is determined solely by the current state, not by the inputs.
+
+- OFF state: `out = 0`
+- ON state: `out = 1`
+
+State Transition Rules:
+1. From the OFF state (`out = 0`):
+   - If `j = 0`, remain in the OFF state.
+   - If `j = 1`, transition to the ON state.
+
+2. From the ON state (`out = 1`):
+   - If `k = 0`, remain in the ON state.
+   - If `k = 1`, transition to the OFF state.
+
+Reset Behavior:
+- The reset is synchronous and active-high, meaning the state is set to OFF on the rising edge of the `clk` when `reset` is asserted (i.e., `reset = 1`).
+- Upon reset, the state machine initializes the state to OFF, setting `out` to 0.
+
+Clock Cycle and Timing:
+- State transitions occur on the rising edge of the `clk`.
+- Ensure that changes to `j` and `k` are stable and correctly sampled on the rising edge of the `clk`.
+
+Initial State:
+- On power-up or reset, the state machine should initialize to the OFF state, with `out` set to 0.
+
+Signal Conventions:
+- Bit indexing is not applicable as all signals are one bit.
+- Ensure that `out` is driven as a registered output to reflect the state accurately.
+
+Edge Cases:
+- The behavior at the edges of state transitions is fully defined by the provided state transition rules.
+- No undefined or race conditions should occur given the synchronous design.
+</ENHANCED_SPEC>

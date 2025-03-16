@@ -1,0 +1,16 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [3:0] q\n);\n\n    // Internal register to hold the counter value\n    logic [3:0] count;\n\n    // Sequential logic for the decade counter\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            count <= 4'b0000; // Reset the counter to 0\n        end else if (count == 4'b1001) begin\n            count <= 4'b0000; // Reset the counter to 0 after reaching 9\n        end else begin\n            count <= count + 4'b0001; // Increment the counter\n        end\n    end\n\n    // Assign the internal counter to the output\n    assign q = count;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [3:0] q\n);\n\n    // Internal register to hold the counter value\n    logic [3:0] count;\n\n    // Sequential logic for the decade counter\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            count <= 4'b0000; // Reset the counter to 0\n        end else if (count == 4'b1001) begin\n            count <= 4'b0000; // Reset the counter to 0 after reaching 9\n        end else begin\n            count <= count + 4'b0001; // Increment the counter\n        end\n    end\n\n    // Assign the internal counter to the output\n    assign q = count;\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}

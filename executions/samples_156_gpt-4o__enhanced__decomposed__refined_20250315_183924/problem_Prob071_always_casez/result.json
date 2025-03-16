@@ -1,0 +1,23 @@
+{
+    "code": "[BEGIN]\nmodule TopModule (\n    input logic [7:0] in,\n    output logic [2:0] pos\n);\n\nalways @(*) begin\n    if (in == 8'b00000000) \n        pos = 3'b000;\n    else if (in[0])\n        pos = 3'd0;\n    else if (in[1])\n        pos = 3'd1;\n    else if (in[2])\n        pos = 3'd2;\n    else if (in[3])\n        pos = 3'd3;\n    else if (in[4])\n        pos = 3'd4;\n    else if (in[5])\n        pos = 3'd5;\n    else if (in[6])\n        pos = 3'd6;\n    else if (in[7])\n        pos = 3'd7;\nend\n\nendmodule\n[END]",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "S"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input [7:0] in,\n    output reg [2:0] pos\n);\n\nalways @(*) begin\n    casez (in)\n        8'b00000001: pos = 3'd0;\n        8'b0000001?: pos = 3'd1;\n        8'b000001??: pos = 3'd2;\n        8'b00001???: pos = 3'd3;\n        8'b0001????: pos = 3'd4;\n        8'b001?????: pos = 3'd5;\n        8'b01??????: pos = 3'd6;\n        8'b1???????: pos = 3'd7;\n        default:     pos = 3'd0;\n    endcase\nend\n\nendmodule",
+            "issues": [
+                "Runtime issue detected"
+            ]
+        },
+        {
+            "iteration": 1,
+            "code": "[BEGIN]\nmodule TopModule (\n    input logic [7:0] in,\n    output logic [2:0] pos\n);\n\nalways @(*) begin\n    if (in == 8'b00000000) \n        pos = 3'b000;\n    else if (in[0])\n        pos = 3'd0;\n    else if (in[1])\n        pos = 3'd1;\n    else if (in[2])\n        pos = 3'd2;\n    else if (in[3])\n        pos = 3'd3;\n    else if (in[4])\n        pos = 3'd4;\n    else if (in[5])\n        pos = 3'd5;\n    else if (in[6])\n        pos = 3'd6;\n    else if (in[7])\n        pos = 3'd7;\nend\n\nendmodule\n[END]",
+            "issues": []
+        }
+    ],
+    "refinement_count": 1,
+    "remaining_issues": []
+}

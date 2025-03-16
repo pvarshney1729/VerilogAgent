@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit, clock signal, positive edge-triggered.
+  - reset: 1-bit, active-high synchronous reset.
+  - in: 1-bit, serial data input.
+
+- Output Ports:
+  - done: 1-bit, indicates successful byte reception.
+
+Description:
+The TopModule implements a finite state machine (FSM) to process a serial communication protocol characterized by the following bit pattern: 1 start bit (0), 8 data bits, and 1 stop bit (1). The line remains at logic 1 when idle. The data byte is transmitted with the least significant bit first.
+
+State Machine Design:
+1. Initial/Idle State: The FSM remains in this state when the line is idle (logic 1). Transitions to the "Start Bit Detected" state upon detecting a start bit (logic 0).
+
+2. Start Bit Detected: The FSM waits for a start bit (logic 0). Upon detection, it transitions to the "Data Reception" state.
+
+3. Data Reception: This state reads the next 8 bits as data bits, least significant bit first. The FSM transitions to the "Stop Bit Expected" state after successfully reading 8 data bits.
+
+4. Stop Bit Expected: The FSM verifies the presence of a stop bit (logic 1). If detected, the "done" signal is asserted high for one clock cycle, then returns to the initial/idle state. If the stop bit is not detected, the FSM remains in this state until a stop bit is found.
+
+5. Error Handling: If the expected stop bit is not detected after 8 data bits, the FSM does not transition back to the start but waits for a valid stop bit before restarting the byte reception process.
+
+Reset Behavior:
+- The reset signal is synchronous and active-high, initializing the FSM to the Initial/Idle State.
+- All internal registers and states are reset to their initial conditions on the assertion of the reset signal.
+
+Clock and Timing:
+- All sequential logic is triggered on the positive edge of the clk signal.
+- Ensure no race conditions by clearly defining the state transitions and signal sampling at the clock edges.
+
+Edge Cases:
+- In scenarios where the start bit is immediately followed by another start bit without a stop bit, the FSM will wait in the "Stop Bit Expected" state until a valid stop bit is detected.
+- Ensure correct handling of continuous '1's on the line, maintaining the FSM in the Initial/Idle State unless a valid start sequence is detected.
+
+Note: The bit indexing begins at 0, with bit[0] referring to the least significant bit.
+</ENHANCED_SPEC>

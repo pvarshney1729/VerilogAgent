@@ -1,0 +1,38 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with inputs clk, load, data[9:0] and output tc.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  clk, - input  load, - input  data (10 bits) - output tc",
+        "implementation": "module TopModule (\n    input clk,\n    input load,\n    input [9:0] data,\n    output reg tc\n);\n\n    reg [9:0] counter;\n\n    always @(posedge clk) begin\n        if (load) begin\n            counter <= data;\n        end else if (counter != 0) begin\n            counter <= counter - 1;\n        end\n        tc <= (counter == 0);\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare a 10-bit register to serve as the internal counter.",
+        "source": "A good way to implement this is with a down-counter that asserts an output signal when the count becomes 0.",
+        "implementation": "reg [9:0] counter; // 10-bit register for the internal counter"
+    },
+    {
+        "id": "3",
+        "content": "Implement logic to load the internal counter with the 10-bit data when load is high.",
+        "source": "(1) If load = 1, load the internal counter with the 10-bit data, the number of clock cycles the timer should count before timing out.",
+        "implementation": "reg [9:0] counter;\n\nalways @(posedge clk) begin\n    if (load) begin\n        counter <= data;\n    end\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement logic to decrement the internal counter by 1 when load is low and the counter is not zero.",
+        "source": "(2) If load = 0, the internal counter should decrement by 1.",
+        "implementation": "always @(posedge clk) begin\n    if (!load && counter != 0) begin\n        counter <= counter - 1;\n    end\nend"
+    },
+    {
+        "id": "5",
+        "content": "Implement logic to assert the output signal tc when the internal counter reaches 0.",
+        "source": "The output signal tc (\"terminal count\") indicates whether the internal counter has reached 0.",
+        "implementation": "reg [9:0] counter;\nreg tc;\n\nalways @(posedge clk) begin\n    if (load) begin\n        counter <= data;\n    end else if (counter != 10'b0) begin\n        counter <= counter - 1;\n    end\n    tc <= (counter == 10'b0);\nend"
+    },
+    {
+        "id": "6",
+        "content": "Ensure the internal counter stops decrementing once it reaches 0 until it is loaded again.",
+        "source": "Once the internal counter has reached 0, it should stay 0 (stop counting) until the counter is loaded again.",
+        "implementation": "reg [9:0] counter;\nwire tc;\n\nalways @(posedge clk) begin\n    if (load) begin\n        counter <= data;\n    end else if (counter != 10'b0) begin\n        counter <= counter - 1;\n    end\nend\n\nassign tc = (counter == 10'b0);"
+    }
+]

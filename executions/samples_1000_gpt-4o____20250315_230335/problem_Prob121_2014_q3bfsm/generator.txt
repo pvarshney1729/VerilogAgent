@@ -1,0 +1,150 @@
+Generated Response:
+
+<REASONING>
+To implement the finite-state machine (FSM) as described, we need to follow these steps:
+
+1. **State Encoding**: We have five states, which can be represented using 3 bits (y[2:0]). The states are:
+   - 000
+   - 001
+   - 010
+   - 011
+   - 100
+
+2. **State Transition Logic**: Based on the input `x`, the FSM transitions between states according to the provided table.
+
+3. **Output Logic**: The output `z` depends on the current state:
+   - `z = 0` for states 000, 001, and 010.
+   - `z = 1` for states 011 and 100.
+
+4. **Synchronous Reset**: The FSM should reset to state 000 on a synchronous active high reset.
+
+5. **Sequential Logic**: Use an always block triggered by the positive edge of the clock to update the state.
+
+6. **Combinational Logic**: Use an always block to determine the next state and output based on the current state and input `x`.
+
+By following these steps, we ensure that the FSM behaves as specified in the problem statement.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        S0 = 3'b000,
+        S1 = 3'b001,
+        S2 = 3'b010,
+        S3 = 3'b011,
+        S4 = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= S0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always_comb begin
+        case (current_state)
+            S0: begin
+                next_state = (x == 1'b0) ? S0 : S1;
+                z = 1'b0;
+            end
+            S1: begin
+                next_state = (x == 1'b0) ? S1 : S4;
+                z = 1'b0;
+            end
+            S2: begin
+                next_state = (x == 1'b0) ? S2 : S1;
+                z = 1'b0;
+            end
+            S3: begin
+                next_state = (x == 1'b0) ? S1 : S2;
+                z = 1'b1;
+            end
+            S4: begin
+                next_state = (x == 1'b0) ? S3 : S4;
+                z = 1'b1;
+            end
+            default: begin
+                next_state = S0;
+                z = 1'b0;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        S0 = 3'b000,
+        S1 = 3'b001,
+        S2 = 3'b010,
+        S3 = 3'b011,
+        S4 = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= S0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always_comb begin
+        case (current_state)
+            S0: begin
+                next_state = (x == 1'b0) ? S0 : S1;
+                z = 1'b0;
+            end
+            S1: begin
+                next_state = (x == 1'b0) ? S1 : S4;
+                z = 1'b0;
+            end
+            S2: begin
+                next_state = (x == 1'b0) ? S2 : S1;
+                z = 1'b0;
+            end
+            S3: begin
+                next_state = (x == 1'b0) ? S1 : S2;
+                z = 1'b1;
+            end
+            S4: begin
+                next_state = (x == 1'b0) ? S3 : S4;
+                z = 1'b1;
+            end
+            default: begin
+                next_state = S0;
+                z = 1'b0;
+            end
+        endcase
+    end
+
+endmodule

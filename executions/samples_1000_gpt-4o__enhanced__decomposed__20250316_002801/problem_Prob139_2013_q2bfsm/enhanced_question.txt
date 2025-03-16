@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input clk: 1-bit clock input, positive edge-triggered.
+- input resetn: 1-bit synchronous, active-low reset input.
+- input x: 1-bit input from the motor.
+- input y: 1-bit input from the motor.
+- output reg f: 1-bit output to control the motor.
+- output reg g: 1-bit output to control the motor.
+
+Finite State Machine (FSM) Description:
+- Initial State: State A is the reset state.
+- Reset Behavior: 
+  * When resetn is low (asserted), the FSM remains in State A, and outputs f and g should be reset to 0.
+  * When resetn is deasserted (high), the FSM transitions from State A on the next positive clock edge.
+  
+FSM Operation:
+1. Upon reset deassertion, the FSM transitions from State A and sets f = 1 for exactly one clock cycle.
+2. The FSM then enters a monitoring phase for input x:
+   - It waits for the pattern 1, 0, 1 from input x across three successive positive clock edges.
+   - Once the pattern is detected, g is set to 1 on the next clock cycle.
+3. After setting g = 1, the FSM enters a monitoring phase for input y:
+   - If y becomes 1 within the next two positive clock edges, g remains 1 permanently (until reset).
+   - If y does not become 1 within these two clock cycles, g is set to 0 permanently (until reset).
+
+Operational Details:
+- All state transitions and output updates occur on the rising edge of clk.
+- Assume bit[0] is the least significant bit when referring to bit positions, if applicable.
+- All outputs, including f and g, must be initialized to 0 during reset.
+- Ensure no race conditions exist by properly capturing inputs on clock edges.
+- Edge cases, such as transitions during reset deassertion, must follow the defined FSM state transitions and output assignments as specified above.
+</ENHANCED_SPEC>

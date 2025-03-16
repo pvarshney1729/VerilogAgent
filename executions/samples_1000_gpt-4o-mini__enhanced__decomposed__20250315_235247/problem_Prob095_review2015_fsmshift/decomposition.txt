@@ -1,0 +1,26 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, and output port shift_ena.",
+        "source": "input clk, input reset, output shift_ena",
+        "implementation": "module TopModule (\n    input clk,\n    input reset,\n    output reg shift_ena\n);\n\nreg [1:0] count;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        count <= 2'b00;\n        shift_ena <= 1'b1;\n    end else if (count < 2'b11) begin\n        count <= count + 1;\n        shift_ena <= 1'b1;\n    end else begin\n        shift_ena <= 1'b0;\n    end\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement a 2-bit counter to keep track of the number of clock cycles for which shift_ena should be asserted.",
+        "source": "enable the shift register for exactly 4 clock cycles",
+        "implementation": "reg [1:0] counter; // 2-bit counter\nreg shift_ena;     // Shift enable signal\n\nalways @(posedge clk) begin\n    if (reset) begin\n        counter <= 2'b00; // Reset counter\n        shift_ena <= 1'b1; // Assert shift_ena\n    end else if (counter < 2'b11) begin\n        counter <= counter + 1; // Increment counter\n        shift_ena <= 1'b1; // Keep shift_ena asserted\n    end else begin\n        shift_ena <= 1'b0; // Deassert shift_ena after 4 cycles\n    end\nend"
+    },
+    {
+        "id": "3",
+        "content": "Implement the logic to assert shift_ena for 4 clock cycles when reset is high, and then deassert it.",
+        "source": "reset should be active high synchronous",
+        "implementation": "reg [1:0] count; // 2-bit counter to count 4 cycles\nreg shift_ena_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        count <= 2'b00;\n        shift_ena_reg <= 1'b1; // Assert shift_ena\n    end else if (count < 2'b11) begin\n        count <= count + 1; // Increment count\n    end else begin\n        shift_ena_reg <= 1'b0; // Deassert shift_ena after 4 cycles\n    end\nend\n\nassign shift_ena = shift_ena_reg;"
+    },
+    {
+        "id": "4",
+        "content": "Implement the logic to ensure shift_ena remains low after the initial 4 cycles until the next reset.",
+        "source": "0 forever (until reset)",
+        "implementation": "reg [2:0] cycle_count; // 3-bit counter to count up to 4\n\nalways @(posedge clk) begin\n    if (reset) begin\n        cycle_count <= 3'b000; // Reset the counter\n        shift_ena <= 1'b1;     // Enable shift_ena on reset\n    end else if (cycle_count < 3'b100) begin\n        cycle_count <= cycle_count + 1; // Increment counter\n        shift_ena <= 1'b1;     // Keep shift_ena high for 4 cycles\n    end else begin\n        shift_ena <= 1'b0;     // Set shift_ena low after 4 cycles\n    end\nend"
+    }
+]

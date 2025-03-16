@@ -1,0 +1,69 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - input  s
+ - input  w
+ - output z
+
+The module should implement a finite state machine with inputs s and w.
+Assume that the FSM begins in a reset state called A, as depicted below.
+The FSM remains in state A as long as s = 0, and it moves to state B when
+s = 1. Once in state B the FSM examines the value of the input w in the
+next three clock cycles. If w = 1 in exactly two of these clock cycles,
+then the FSM has to set an output z to 1 in the following clock cycle.
+Otherwise z has to be 0. The FSM continues checking w for the next three
+clock cycles, and so on. Use as few states as possible. Note that the s
+input is used only in state A, so you need to consider just the w input.
+Assume reset is active high synchronous. Assume all sequential logic is
+triggered on the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                ### Module Interface
+```verilog
+module TopModule (
+    input wire clk,          // Clock input, positive edge triggered
+    input wire reset,        // Active-high synchronous reset
+    input wire s,            // Input signal to control state transitions
+    input wire w,            // Input signal for FSM logic
+    output reg z             // Output signal, set according to FSM logic
+);
+```
+
+### FSM Description
+
+- **State Encoding**: Use binary encoding for state representation:
+  - State A: `2'b00`
+  - State B: `2'b01`
+
+- **Initial State**: Upon reset, the FSM enters state A and the output `z` is initialized to 0.
+
+- **State A Behavior**:
+  - Remain in state A as long as `s` is 0.
+  - Transition to state B on the next positive clock edge if `s` is 1.
+
+- **State B Behavior**:
+  - Monitor input `w` over the next three positive clock edges.
+  - Count the number of times `w` is 1 during these cycles.
+  - If `w` is 1 exactly twice, set `z` to 1 on the fourth clock cycle; otherwise, set `z` to 0.
+  - Reset the count and continue the next set of three cycles for `w`.
+
+### Timing Behavior
+
+- **Clock Edge Sensitivity**: All sequential logic is triggered on the positive edge of the clock.
+- **Reset Behavior**: On asserting `reset`, the FSM immediately transitions to state A on the next clock edge, and `z` is set to 0.
+
+### Implementation Notes
+
+- **State Transition Dependencies**: The input `s` is only considered in state A. In state B, only input `w` is relevant.
+- **Output Timing**: The output `z` is determined based on the count of `w` being 1 during the specified three cycles in state B.
+
+### Edge Cases
+
+- **s Changes While in State B**: The input `s` is ignored in state B. The FSM will not react to changes in `s` until it returns to state A.
+
+- **Handling of Reset While in State B**: If `reset` is asserted while in state B, the FSM will return to state A on the next clock edge and reinitialize as described.
+                

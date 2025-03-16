@@ -1,0 +1,16 @@
+{
+    "code": "module TopModule (\n    input logic [2:0] in,\n    output logic [1:0] out\n);\n\n    always @(*) begin\n        out = 2'b00; // Initialize output\n        out[0] = in[0] ^ in[1] ^ in[2]; // Count odd number of 1's\n        out[1] = (in[0] & in[1]) | (in[1] & in[2]) | (in[0] & in[2]); // Count pairs of 1's\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "R"
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "module TopModule (\n    input logic [2:0] in,\n    output logic [1:0] out\n);\n\n    always @(*) begin\n        out = 2'b00; // Initialize output\n        out[0] = in[0] ^ in[1] ^ in[2]; // Count odd number of 1's\n        out[1] = (in[0] & in[1]) | (in[1] & in[2]) | (in[0] & in[2]); // Count pairs of 1's\n    end\n\nendmodule",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}

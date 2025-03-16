@@ -1,0 +1,16 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic x,  // 1-bit wide, input signal x\n    input logic y,  // 1-bit wide, input signal y\n    output logic z  // 1-bit wide, output signal z\n);\n\n    always @(*) begin\n        case ({x, y})\n            2'b00: z = 1;\n            2'b01: z = 0;\n            2'b10: z = 0;\n            2'b11: z = 1;\n            default: z = 0; // Default fallback\n        endcase\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "```verilog\nmodule TopModule (\n    input logic x,  // 1-bit wide, input signal x\n    input logic y,  // 1-bit wide, input signal y\n    output logic z  // 1-bit wide, output signal z\n);\n\n    always @(*) begin\n        case ({x, y})\n            2'b00: z = 1;\n            2'b01: z = 0;\n            2'b10: z = 0;\n            2'b11: z = 1;\n            default: z = 0; // Default fallback\n        endcase\n    end\n\nendmodule\n```",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}

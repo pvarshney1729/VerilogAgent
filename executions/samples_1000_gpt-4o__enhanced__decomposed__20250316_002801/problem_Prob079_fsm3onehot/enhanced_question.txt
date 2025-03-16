@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Inputs:
+  - `input wire in`: Single-bit input signal for state transition control.
+  - `input wire [3:0] state`: Four-bit input representing current state using one-hot encoding.
+
+- Outputs:
+  - `output reg [3:0] next_state`: Four-bit output representing the next state using one-hot encoding.
+  - `output reg out`: Single-bit output signal derived from the current state.
+
+State Encoding:
+- Use the following one-hot encoding for the state representation:
+  - State A: 4'b0001
+  - State B: 4'b0010
+  - State C: 4'b0100
+  - State D: 4'b1000
+
+State Transition Table:
+- The state transitions are defined as follows based on the input `in`:
+  - From State A:
+    - If `in` = 0: Transition to State A
+    - If `in` = 1: Transition to State B
+  - From State B:
+    - If `in` = 0: Transition to State C
+    - If `in` = 1: Transition to State B
+  - From State C:
+    - If `in` = 0: Transition to State A
+    - If `in` = 1: Transition to State D
+  - From State D:
+    - If `in` = 0: Transition to State C
+    - If `in` = 1: Transition to State B
+
+Output Logic:
+- The output `out` is determined solely by the current state:
+  - State A: `out` = 0
+  - State B: `out` = 0
+  - State C: `out` = 0
+  - State D: `out` = 1
+
+Design Requirements:
+- This module implements a combinational logic section of a Moore state machine. The transitions and outputs depend only on the current state and input.
+- Assume that all inputs and the current state are stable during the evaluation of the combinational logic.
+- There are no sequential elements (flip-flops or registers) to implement in this module, and no clock or reset signals are defined, as the specification only covers combinational logic.
+
+Note: Ensure correct synthesis of one-hot encoded states for optimal performance and resource usage.
+</ENHANCED_SPEC>

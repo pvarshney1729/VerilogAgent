@@ -1,0 +1,67 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  x
+ - input  y (3 bits)
+ - output Y0
+ - output z
+
+The module should implement the output logic and next state logic for an
+FSM using the table shown below. Note that the output Y0 is Y[0] of the
+next state signal.
+
+   Present state input y[2:0] | Next state Y[2:0] when x=0, Next state Y[2:0] when x=1 | Output z
+   000 | 000, 001 | 0
+   001 | 001, 100 | 0
+   010 | 010, 001 | 0
+   011 | 001, 010 | 1
+   100 | 011, 100 | 1
+
+Here is the enhanced specification which might be useful to you:
+                ### Enhanced Specification for `TopModule`
+
+#### Module Interface
+- **Module Name:** `TopModule`
+- **Inputs:**
+  - `input wire clk`: Clock signal, rising edge-triggered.
+  - `input wire x`: 1-bit input signal for state transition control.
+  - `input wire [2:0] y`: 3-bit unsigned input representing the current state, with `y[2]` as the MSB and `y[0]` as the LSB.
+- **Outputs:**
+  - `output wire Y0`: 1-bit output, representing the least significant bit of the next state.
+  - `output wire z`: 1-bit output based on the state transition.
+
+#### Behavior Specification
+- **State Transition Table:**
+
+| Present State `y[2:0]` | Next State `Y[2:0]` when `x=0` | Next State `Y[2:0]` when `x=1` | Output `z` |
+|------------------------|---------------------------------|---------------------------------|------------|
+| `000`                  | `000`                           | `001`                           | `0`        |
+| `001`                  | `001`                           | `100`                           | `0`        |
+| `010`                  | `010`                           | `001`                           | `0`        |
+| `011`                  | `001`                           | `010`                           | `1`        |
+| `100`                  | `011`                           | `100`                           | `1`        |
+
+- **Unused States:**
+  - States `101`, `110`, and `111` are considered invalid and should transition to a safe default state, typically `000`.
+
+#### Timing and Implementation Notes
+- **Sequential Logic:**
+  - This FSM is edge-triggered and all state transitions occur on the rising edge of `clk`.
+  
+- **Reset Behavior:**
+  - Implement an asynchronous active-low reset signal `reset_n`. On reset, the FSM should transition to the initial state `000`.
+
+- **Initial States:**
+  - Upon reset, the FSM enters state `000`.
+
+- **Output Logic:**
+  - The output `Y0` is directly derived from the LSB (`Y[0]`) of the next state.
+  - The output `z` is determined by the present state and is updated synchronously with the state changes.
+
+#### Boundary Conditions
+- **State Transition Logic:**
+  - Ensure that undefined state transitions (from states such as `101`, `110`, `111`) default to a known safe state, preferably `000`, during implementation to prevent undefined behavior.
+                

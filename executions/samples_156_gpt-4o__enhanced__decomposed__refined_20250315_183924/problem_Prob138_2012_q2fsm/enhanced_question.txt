@@ -1,0 +1,98 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - input  w
+ - output z
+
+The module should implement the state machine shown below:
+
+  A (0) --1--> B
+  A (0) --0--> A
+  B (0) --1--> C
+  B (0) --0--> D
+  C (0) --1--> E
+  C (0) --0--> D
+  D (0) --1--> F
+  D (0) --0--> A
+  E (1) --1--> E
+  E (1) --0--> D
+  F (1) --1--> C
+  F (1) --0--> D
+
+Reset resets into state A and is synchronous active-high. Assume all
+sequential logic is triggered on the positive edge of the clock.
+
+Use separate always blocks for the state table and the state flip-flops.
+Describe the FSM output, which is called _z_, using either continuous
+assignment statement(s) or an always block (at your discretion). Assign
+any state codes that you wish to use.
+
+Here is the enhanced specification which might be useful to you:
+                ### TopModule Specification
+
+#### Interface:
+- **Inputs:**
+  - `input wire clk`: Clock signal, positive edge-triggered.
+  - `input wire reset`: Synchronous active-high reset signal.
+  - `input wire w`: Input signal that drives state transitions.
+
+- **Outputs:**
+  - `output reg z`: Output signal, updated based on the current state.
+
+#### Behavior:
+The module implements a finite state machine (FSM) with the following states and transitions:
+
+- **States and Output:**
+  - **State A:** 
+    - Output `z = 0`
+    - Transition on `w = 1` to State B
+    - Transition on `w = 0` to State A
+  - **State B:** 
+    - Output `z = 0`
+    - Transition on `w = 1` to State C
+    - Transition on `w = 0` to State D
+  - **State C:** 
+    - Output `z = 0`
+    - Transition on `w = 1` to State E
+    - Transition on `w = 0` to State D
+  - **State D:** 
+    - Output `z = 0`
+    - Transition on `w = 1` to State F
+    - Transition on `w = 0` to State A
+  - **State E:** 
+    - Output `z = 1`
+    - Transition on `w = 1` to State E
+    - Transition on `w = 0` to State D
+  - **State F:** 
+    - Output `z = 1`
+    - Transition on `w = 1` to State C
+    - Transition on `w = 0` to State D
+
+- **Reset Behavior:** 
+  - On a synchronous active-high reset, the FSM transitions to State A.
+
+#### Timing:
+- All sequential logic should trigger on the rising edge of `clk`.
+- The reset signal is synchronous with the clock.
+
+#### Implementation Notes:
+- Use separate `always` blocks for state transition logic and state storage (state flip-flops).
+- State encoding is left to the implementer's discretion. For example, states could be encoded as binary or one-hot.
+
+- **Example State Encoding (Binary):**
+  - `A = 3'b000`
+  - `B = 3'b001`
+  - `C = 3'b010`
+  - `D = 3'b011`
+  - `E = 3'b100`
+  - `F = 3'b101`
+  
+- Ensure that state transitions and output logic are clearly described, either using continuous assignments or an `always` block.
+
+#### Boundary Conditions:
+- All state transitions are defined for `w` being either `0` or `1`. Ensure that no undefined behavior occurs.
+                

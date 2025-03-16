@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit clock input. All sequential logic operations occur on the rising edge of this clock.
+  - load: 1-bit control input. When high, it loads the counter with the specified data.
+  - data: 10-bit unsigned input. Represents the number of clock cycles for which the timer should count down.
+
+- Output Ports:
+  - tc: 1-bit output. Terminal count signal indicating the counter has reached zero.
+
+Bit Indexing and Conventions:
+- The input data[9:0] is a 10-bit unsigned number, where data[9] is the most significant bit (MSB) and data[0] is the least significant bit (LSB).
+
+Operational Description:
+1. Counter Initialization and Behavior:
+   - The internal counter is a 10-bit register initialized to zero during the first clock cycle or after a reset.
+   - Reset behavior is not explicitly specified; therefore, the counter assumes zero on power-up only.
+
+2. Load Operation:
+   - On each positive edge of the clk:
+     - If load is high (1), the internal counter is loaded with the 10-bit input data[9:0].
+     - This operation will overwrite the current counter value regardless of its current state.
+
+3. Countdown Operation:
+   - If load is low (0), the internal counter decrements by 1 on each rising edge of clk.
+   - The counter stops decrementing once it reaches zero and maintains a zero value until a new load operation occurs.
+
+4. Output Signal:
+   - The tc output is high (1) when the counter reaches zero and remains high until the counter is loaded again.
+   - The tc signal is updated synchronously with the clk on each positive edge.
+
+Edge Cases and Boundary Conditions:
+- If the counter is loaded with zero, tc will immediately be set high (1) after the next clock cycle.
+- If the counter is decremented from a non-zero value that is not loaded, it will count down to zero at which point tc will be asserted.
+
+Sequential Logic and Flip-Flops:
+- The module uses a single D flip-flop for the output tc signal, updated on the rising edge of clk based on the counter reaching zero.
+- Ensure all sequential elements are properly initialized to prevent undefined behavior.
+
+Race Conditions:
+- The design ensures that loading and counting operations do not interfere with each other due to synchronous clock edge operation.
+</ENHANCED_SPEC>

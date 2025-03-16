@@ -1,0 +1,45 @@
+```verilog
+<ENHANCED_SPEC>
+Module Specification for FSM in Verilog:
+
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock signal, positive edge-triggered.
+- input wire reset: Synchronous, active-high reset signal.
+- input wire w: Input signal for state transitions.
+- output reg z: Output signal indicating state-dependent output.
+
+State Encoding:
+- Use a 3-bit vector to represent states. Assign the following binary codes to each state:
+  - State A: 3'b000
+  - State B: 3'b001
+  - State C: 3'b010
+  - State D: 3'b011
+  - State E: 3'b100
+  - State F: 3'b101
+
+State Transition Table:
+- A (000) on w=1 transitions to B (001), on w=0 remains in A (000).
+- B (001) on w=1 transitions to C (010), on w=0 transitions to D (011).
+- C (010) on w=1 transitions to E (100), on w=0 transitions to D (011).
+- D (011) on w=1 transitions to F (101), on w=0 transitions to A (000).
+- E (100) on w=1 remains in E (100), on w=0 transitions to D (011).
+- F (101) on w=1 transitions to C (010), on w=0 transitions to D (011).
+
+Reset Behavior:
+- Reset is synchronous and active-high, setting the FSM to state A (000) on the next positive clock edge.
+
+Output Definition:
+- The output signal z is determined by the current state:
+  - z = 1 when in states E (100) or F (101).
+  - z = 0 in all other states.
+
+Implementation Guidelines:
+- Use two always blocks: one for the state transition logic and one for the state register logic.
+- State transitions should occur on the positive edge of clk or when reset is asserted.
+- Ensure all flip-flops and registers have explicitly defined initial values, particularly ensuring the FSM starts in state A upon reset.
+
+This specification ensures that the functional intent is preserved while adding clarity for implementation, addressing all necessary design constraints and initial conditions.
+</ENHANCED_SPEC>
+```

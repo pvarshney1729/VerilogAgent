@@ -1,0 +1,63 @@
+<ENHANCED_SPEC>
+Module Specification for TopModule:
+
+1. **Module Interface:**
+
+   - Input Ports:
+     - `clk`: Clock signal (1 bit, positive edge-triggered).
+     - `resetn`: Active-low, synchronous reset (1 bit).
+     - `r`: Request signal from devices, a 3-bit vector where `r[0]` is the highest priority request and `r[2]` is the lowest priority.
+
+   - Output Ports:
+     - `g`: Grant signal to devices, a 3-bit vector where `g[0]` corresponds to granting device 0, `g[1]` to device 1, and `g[2]` to device 2.
+
+2. **Finite State Machine (FSM) Description:**
+
+   - **States:**
+     - State `A`: Initial state with no requests granted.
+     - State `B`: `g[0] = 1`, granting device 0.
+     - State `C`: `g[1] = 1`, granting device 1.
+     - State `D`: `g[2] = 1`, granting device 2.
+
+   - **State Transitions:**
+     - From State `A`:
+       - Transition to `B` if `r[0] = 1`.
+       - Transition to `C` if `r[0] = 0` and `r[1] = 1`.
+       - Transition to `D` if `r[0] = 0`, `r[1] = 0`, and `r[2] = 1`.
+       - Remain in `A` if `r[0] = 0`, `r[1] = 0`, and `r[2] = 0`.
+
+     - From State `B`:
+       - Remain in `B` if `r[0] = 1`.
+       - Transition to `A` if `r[0] = 0`.
+
+     - From State `C`:
+       - Remain in `C` if `r[1] = 1`.
+       - Transition to `A` if `r[1] = 0`.
+
+   - **Reset Behavior:**
+     - On `resetn` being asserted low, the FSM resets synchronously to State `A`.
+
+3. **Implementation Guidelines:**
+
+   - Use separate `always` blocks:
+     - One for state transitions (combinational logic).
+     - One for state memory (sequential logic, triggered on the positive edge of `clk`).
+
+   - Use either continuous assignment statements or an `always` block to describe the output logic for `g`.
+
+   - Assign appropriate binary codes to the states for implementation, ensuring clarity and simplicity.
+
+   - Assure all flip-flops and registers have explicitly defined initial values.
+
+4. **Precedence and Edge Cases:**
+
+   - Priority is given to `r[0]` over `r[1]`, and `r[1]` over `r[2]`.
+   - Device 2 (`r[2]`) will only be granted if it is the sole requester when the FSM is in state `A`.
+
+5. **Bit Indexing Convention:**
+
+   - `r[0]`, `r[1]`, `r[2]` refer to requests from devices 0, 1, and 2 respectively, with `r[0]` having the highest priority.
+   - `g[0]`, `g[1]`, `g[2]` refer to grants for devices 0, 1, and 2 respectively.
+
+Ensure the design is free from race conditions and reflects the intended arbitration policy. The implementation should be robust to handle all possible input scenarios within the defined constraints.
+</ENHANCED_SPEC>

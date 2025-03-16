@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal for synchronization, positive-edge triggered.
+  - `input reset`: Active high, synchronous reset signal.
+  - `input data`: Serial data input for pattern detection.
+  - `input done_counting`: Signal indicating the completion of the counting process.
+  - `input ack`: Acknowledgment signal from the user.
+
+- Output Ports:
+  - `output shift_ena`: Signal to enable shifting operation for 4 clock cycles.
+  - `output counting`: Signal indicating the state machine is waiting for counters to finish.
+  - `output done`: Signal to notify the user that the timer has completed timing.
+
+Functional Description:
+1. **Pattern Detection**: The state machine monitors the `data` input for the specific sequence '1101'. Upon detection, the state transitions to start the delay process.
+
+2. **Shift Enable**: After detecting the pattern '1101', the state machine asserts `shift_ena` for exactly 4 consecutive clock cycles to allow shifting of additional bits determining the delay duration.
+
+3. **Counting Phase**: Once the 4-bit shift is complete, the state machine asserts `counting`, indicating that it is waiting for the counting process to finish. The state machine remains in this state until `done_counting` is asserted high.
+
+4. **Completion Notification**: Upon receiving a high `done_counting` signal, the state machine asserts `done`, notifying the user that the timer has timed out.
+
+5. **Acknowledgment and Reset**: The state machine waits for the user to acknowledge by setting `ack` high. Once acknowledged, the state machine resets and begins searching for the next occurrence of the start sequence '1101'.
+
+Reset and Initialization:
+- The state machine is initialized and reset synchronously with the `reset` signal. Upon reset, the state machine returns to its initial state, ready to detect the pattern '1101'.
+- All sequential logic is triggered on the rising edge of `clk`.
+
+Note:
+- Bit indexing follows the convention where bit[0] is the least significant bit (LSB).
+- All operations and state transitions are synchronous with the clock signal `clk`.
+- There should be no race conditions given the positive-edge triggering and synchronous reset design.
+
+Edge Cases and Input Boundaries:
+- Ensure that any noise or glitches on the `data` input do not falsely trigger the pattern detection by using robust filtering logic or debouncing as necessary.
+- The state machine should handle continuous input streams and reset correctly after each complete timer cycle without missing any pattern occurrences.
+</ENHANCED_SPEC>

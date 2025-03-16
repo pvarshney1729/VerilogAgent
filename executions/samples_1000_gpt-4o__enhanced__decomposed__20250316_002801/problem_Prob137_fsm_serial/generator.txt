@@ -1,0 +1,219 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a finite state machine (FSM) that processes a serial bit stream according to a protocol with 1 start bit, 8 data bits, and 1 stop bit. The FSM will have several states to handle the start bit detection, data bit collection, and stop bit verification. The FSM will transition between states based on the input bit and current state. The `done` signal will be asserted when a complete byte is correctly received.
+
+1. **State Encoding**: We will define states for IDLE, START_BIT, DATA_BIT_0 to DATA_BIT_7, and STOP_BIT. These states will help in tracking the progress of byte reception.
+
+2. **State Register**: A state register will hold the current state of the FSM. It will be updated on the positive edge of the clock, with a synchronous reset to initialize the FSM to the IDLE state.
+
+3. **Next State Logic**: This combinational logic will determine the next state based on the current state and input bit. It will handle transitions from IDLE to START_BIT when a start bit is detected, through the data bit states, and finally to STOP_BIT.
+
+4. **Output Logic**: The `done` signal will be set high when the FSM is in the STOP_BIT state and the stop bit is correctly received.
+
+5. **Synchronous Reset**: The reset signal will be used to initialize the FSM to the IDLE state, ensuring that the FSM starts in a known state.
+
+By following these steps, we ensure that the FSM correctly identifies and processes the byte structure in the serial stream.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [3:0] {
+        IDLE        = 4'b0000,
+        START_BIT   = 4'b0001,
+        DATA_BIT_0  = 4'b0010,
+        DATA_BIT_1  = 4'b0011,
+        DATA_BIT_2  = 4'b0100,
+        DATA_BIT_3  = 4'b0101,
+        DATA_BIT_4  = 4'b0110,
+        DATA_BIT_5  = 4'b0111,
+        DATA_BIT_6  = 4'b1000,
+        DATA_BIT_7  = 4'b1001,
+        STOP_BIT    = 4'b1010
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        next_state = current_state; // Default to hold state
+        done = 1'b0; // Default done to 0
+
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) begin
+                    next_state = START_BIT;
+                end
+            end
+
+            START_BIT: begin
+                next_state = DATA_BIT_0;
+            end
+
+            DATA_BIT_0: begin
+                next_state = DATA_BIT_1;
+            end
+
+            DATA_BIT_1: begin
+                next_state = DATA_BIT_2;
+            end
+
+            DATA_BIT_2: begin
+                next_state = DATA_BIT_3;
+            end
+
+            DATA_BIT_3: begin
+                next_state = DATA_BIT_4;
+            end
+
+            DATA_BIT_4: begin
+                next_state = DATA_BIT_5;
+            end
+
+            DATA_BIT_5: begin
+                next_state = DATA_BIT_6;
+            end
+
+            DATA_BIT_6: begin
+                next_state = DATA_BIT_7;
+            end
+
+            DATA_BIT_7: begin
+                next_state = STOP_BIT;
+            end
+
+            STOP_BIT: begin
+                if (in == 1'b1) begin
+                    done = 1'b1;
+                    next_state = IDLE;
+                end else begin
+                    next_state = IDLE; // Wait for the next start bit
+                end
+            end
+
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [3:0] {
+        IDLE        = 4'b0000,
+        START_BIT   = 4'b0001,
+        DATA_BIT_0  = 4'b0010,
+        DATA_BIT_1  = 4'b0011,
+        DATA_BIT_2  = 4'b0100,
+        DATA_BIT_3  = 4'b0101,
+        DATA_BIT_4  = 4'b0110,
+        DATA_BIT_5  = 4'b0111,
+        DATA_BIT_6  = 4'b1000,
+        DATA_BIT_7  = 4'b1001,
+        STOP_BIT    = 4'b1010
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        next_state = current_state; // Default to hold state
+        done = 1'b0; // Default done to 0
+
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) begin
+                    next_state = START_BIT;
+                end
+            end
+
+            START_BIT: begin
+                next_state = DATA_BIT_0;
+            end
+
+            DATA_BIT_0: begin
+                next_state = DATA_BIT_1;
+            end
+
+            DATA_BIT_1: begin
+                next_state = DATA_BIT_2;
+            end
+
+            DATA_BIT_2: begin
+                next_state = DATA_BIT_3;
+            end
+
+            DATA_BIT_3: begin
+                next_state = DATA_BIT_4;
+            end
+
+            DATA_BIT_4: begin
+                next_state = DATA_BIT_5;
+            end
+
+            DATA_BIT_5: begin
+                next_state = DATA_BIT_6;
+            end
+
+            DATA_BIT_6: begin
+                next_state = DATA_BIT_7;
+            end
+
+            DATA_BIT_7: begin
+                next_state = STOP_BIT;
+            end
+
+            STOP_BIT: begin
+                if (in == 1'b1) begin
+                    done = 1'b1;
+                    next_state = IDLE;
+                end else begin
+                    next_state = IDLE; // Wait for the next start bit
+                end
+            end
+
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule

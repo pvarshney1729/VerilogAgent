@@ -1,0 +1,52 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - input  in    (32 bits)
+ - output out   (32 bits)
+
+The module should examine each bit in the 32-bit input vector, and
+capture when the input signal changes from 1 in one clock cycle to 0 the
+next. "Capture" means that the output will remain 1 until the register is
+reset (active high synchronous reset). Assume all sequential logic is
+triggered on the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name:** TopModule
+
+**Interface:**
+- Input Ports:
+  - `input logic clk` : Single-bit clock signal, triggers on the positive edge.
+  - `input logic reset` : Single-bit active-high synchronous reset.
+  - `input logic [31:0] in` : 32-bit input vector, bit[31] is the most significant bit (MSB), bit[0] is the least significant bit (LSB).
+
+- Output Ports:
+  - `output logic [31:0] out` : 32-bit output vector, same ordering as input, initialized to 0.
+
+**Behavior:**
+- The module continuously monitors the 32-bit input vector `in`.
+- For each bit position `i` (where 0 <= i <= 31), the module detects when `in[i]` transitions from 1 in one clock cycle to 0 in the next.
+- Upon detecting a transition from 1 to 0 at any bit position `i`, `out[i]` is set to 1.
+- Once `out[i]` is set to 1 due to a detected transition, it remains 1 until the reset signal is asserted.
+
+**Timing:**
+- All sequential operations are triggered on the rising edge of the `clk`.
+- The detection of a 1-to-0 transition and the update of the `out` register occur within the same clock cycle.
+
+**Reset Behavior:**
+- The `reset` signal is synchronous and active high.
+- When `reset` is asserted, the `out` register is reset to all zeros (`32'b0`) in the next clock cycle.
+
+**Initial States:**
+- Upon initialization and after reset, the `out` register is set to all zeros (`32'b0`).
+
+**Implementation Notes:**
+- The module must ensure that each bit in the `out` vector independently reflects the transition detection for its corresponding bit in the `in` vector.
+- The transition detection logic should be implemented efficiently to minimize resource usage and ensure correct operation at the target clock frequency.
+
+**Boundary Conditions:**
+- If no 1-to-0 transition is detected on any bit of `in`, the `out` register remains unchanged unless reset is asserted.
+                

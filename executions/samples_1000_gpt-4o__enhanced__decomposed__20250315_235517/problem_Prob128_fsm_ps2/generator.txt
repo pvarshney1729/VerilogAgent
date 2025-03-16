@@ -1,0 +1,142 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a finite state machine (FSM) that can detect the start of a message in a byte stream and signal when a complete message has been received. The FSM will have four states: `IDLE`, `BYTE1`, `BYTE2`, and `BYTE3`. The `IDLE` state will wait for a byte with `in[3] = 1` to transition to `BYTE1`. The FSM will then transition through `BYTE2` and `BYTE3` on subsequent clock cycles. After receiving the third byte, the FSM will signal `done` for one clock cycle and return to `IDLE`.
+
+The FSM will be implemented using a synchronous reset, meaning the reset signal will be sampled with the clock. The `done` signal will be asserted in the cycle immediately after the third byte is received. We will use `logic` for all signals and adhere to the coding conventions provided.
+
+The state transitions and output logic will be handled in separate `always` blocks. The state transition logic will determine the next state based on the current state and input conditions. The output logic will determine when to assert the `done` signal.
+
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+            end
+            BYTE3: begin
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+    // Output logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            done <= 1'b0;
+        end else if (current_state == BYTE3) begin
+            done <= 1'b1;
+        end else begin
+            done <= 1'b0;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+            end
+            BYTE3: begin
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+    // Output logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            done <= 1'b0;
+        end else if (current_state == BYTE3) begin
+            done <= 1'b1;
+        end else begin
+            done <= 1'b0;
+        end
+    end
+
+endmodule

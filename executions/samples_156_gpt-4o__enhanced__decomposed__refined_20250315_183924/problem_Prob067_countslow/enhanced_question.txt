@@ -1,0 +1,55 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - input  slowena
+ - output q (4 bits)
+
+The module should implement a decade counter that counts from 0 through
+9, inclusive, with a period of 10. The reset input is active high
+synchronous, and should reset the counter to 0. We want to be able to
+pause the counter rather than always incrementing every clock cycle, so
+the "slowena" input if high indicates when the counter should increment.
+Assume all sequential logic is triggered on the positive edge of the
+clock.
+
+Here is the enhanced specification which might be useful to you:
+                ### Enhanced Specification for TopModule
+
+#### Module Interface:
+- **Module Name**: `TopModule`
+- **Inputs**:
+  - `input wire clk`: Clock signal, positive edge-triggered.
+  - `input wire reset`: Active high, synchronous reset signal.
+  - `input wire slowena`: Control signal to enable counting.
+- **Outputs**:
+  - `output reg [3:0] q`: 4-bit counter output. `q[3]` is the Most Significant Bit (MSB) and `q[0]` is the Least Significant Bit (LSB).
+
+#### Functional Description:
+- The `TopModule` implements a decade counter that counts from 0 to 9.
+- The counter increments by 1 on each rising edge of `clk` if `slowena` is high.
+- The counter should wrap around from 9 back to 0.
+- When `reset` is high, the counter `q` will reset to 0 on the next rising edge of the clock.
+
+#### Timing Behavior:
+- **Clock**: All sequential logic is triggered on the rising edge of `clk`.
+- **Reset**: 
+  - The reset is synchronous and active high.
+  - When `reset` is high, the counter output `q` is set to 0 on the next rising edge of `clk`, regardless of the state of `slowena`.
+
+#### Initial State:
+- The counter output `q` initializes to 0 at power-up and after a reset.
+
+#### Boundary Conditions:
+- When the counter value reaches 9 (`q == 4'b1001`) and `slowena` is high, the next value will be 0 (`q == 4'b0000`).
+
+#### Signal Dependencies and Precedence:
+- If `reset` is high, it takes precedence over `slowena`. The counter will reset to 0 on the next clock cycle, irrespective of the `slowena` signal.
+
+#### Implementation Notes:
+- Use a synchronous reset to ensure the counter resets predictably with the clock.
+- Ensure the Verilog description accurately reflects these specifications, with clear comments to maintain readability and correctness during implementation.
+                

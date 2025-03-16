@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Ports:
+- input clk: Clock signal, positive edge-triggered.
+- input resetn: Active low, synchronous reset signal.
+- input x: Input signal from the motor.
+- input y: Input signal from the motor.
+- output reg f: Output signal to control the motor.
+- output reg g: Output signal to control the motor.
+
+Specifications:
+1. Reset Behavior:
+   - The FSM remains in the initial state (State A) while resetn is asserted (logic 0).
+   - Upon de-assertion of resetn (logic 1), the FSM transitions from State A on the next positive clock edge.
+
+2. FSM Initial Actions:
+   - After resetn is de-asserted, the FSM sets f = 1 for one clock cycle on the first positive clock edge.
+
+3. Transition Conditions:
+   - From State A, the FSM monitors the x input.
+   - The FSM transitions to the next relevant state when x follows the sequence: 1, 0, 1 over three successive clock cycles.
+
+4. Output Logic for g:
+   - Upon detecting the x sequence (1, 0, 1), the FSM sets g = 1 on the next clock cycle.
+   - While g = 1, the FSM monitors the y input:
+     - If y = 1 within two clock cycles, g remains 1 permanently until reset.
+     - If y ≠ 1 within two clock cycles, g is set to 0 permanently until reset.
+
+5. Edge Cases and Initial Conditions:
+   - All registers, including f and g, should be initialized to 0 during reset.
+   - The FSM should handle input edge cases by maintaining proper state transitions based on the described conditions.
+
+6. Clock and Reset Note:
+   - All sequential elements are triggered by the positive edge of clk.
+   - Reset behavior is synchronous, affecting state transitions and output register values.
+
+7. Bit Indexing and MSB/LSB Conventions:
+   - Not applicable for single-bit signals in this specification.
+
+8. Additional Considerations:
+   - Ensure no race conditions by adhering to the described clock-edge-triggering mechanisms.
+</ENHANCED_SPEC>

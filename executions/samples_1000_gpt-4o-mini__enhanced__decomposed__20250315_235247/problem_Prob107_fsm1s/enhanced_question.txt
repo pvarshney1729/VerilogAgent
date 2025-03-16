@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- `input  wire clk` : Clock signal, used for synchronous operations.
+- `input  wire reset` : Active-high synchronous reset signal.
+- `input  wire in` : Single-bit input signal.
+- `output reg out` : Single-bit output signal.
+
+Specification:
+- The module implements a Moore state machine with two states: State A and State B.
+- State Encoding: 
+  - State A: 1'b0
+  - State B: 1'b1
+- Initial State: On reset, the state machine transitions to State B.
+- Reset Behavior: The reset signal is active-high and synchronous, meaning the state machine transitions to the reset state (State B) on the rising edge of the clock when the reset signal is high.
+- Output Logic:
+  - In State B, the output `out` is set to 1.
+  - In State A, the output `out` is set to 0.
+- State Transitions:
+  - From State B:
+    - If `in` = 0, transition to State A.
+    - If `in` = 1, remain in State B.
+  - From State A:
+    - If `in` = 0, transition to State B.
+    - If `in` = 1, remain in State A.
+
+Bit Indexing and Conventions:
+- All signals are single bits; no additional bit indexing is necessary.
+- The output and state transitions are updated on the rising edge of the clock.
+
+Edge Case Handling:
+- Ensure the reset signal is not asserted during normal operation to avoid unintended state transitions.
+- The state machine should handle all input combinations, ensuring no undefined states.
+</ENHANCED_SPEC>

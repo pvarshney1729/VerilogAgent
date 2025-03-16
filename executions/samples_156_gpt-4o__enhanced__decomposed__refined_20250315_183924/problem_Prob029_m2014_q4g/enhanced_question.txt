@@ -1,0 +1,51 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in1
+ - input  in2
+ - input  in3
+ - output out
+
+The module should impement the following circuit: A two-input XNOR
+(connected to 'in1' and 'in2) has an output connected to the input of a
+two-input XOR. The second input of the XOR is 'in3.' The output of the
+XOR is 'out'.
+
+Here is the enhanced specification which might be useful to you:
+                Module Name: TopModule
+
+**Interface Definition:**
+- `input wire in1` : 1-bit input signal.
+- `input wire in2` : 1-bit input signal.
+- `input wire in3` : 1-bit input signal.
+- `output wire out` : 1-bit output signal.
+
+**Bit-ordering Convention:**
+- All signals are 1-bit wide, therefore bit-ordering is not applicable.
+
+**Behavioral Specification:**
+- The module implements a combinational logic circuit.
+- A two-input XNOR gate is connected to inputs `in1` and `in2`. The formal logic expression for XNOR is: 
+  \[
+  xnor\_out = in1 \oplus \lnot in2
+  \]
+  where \(\oplus\) denotes the XNOR operation.
+- The output of the XNOR (`xnor_out`) is connected to the first input of a two-input XOR gate.
+- The second input of the XOR gate is `in3`.
+- The output of the XOR gate, which is the module output `out`, is defined by:
+  \[
+  out = xnor\_out \oplus in3
+  \]
+
+**Timing Behavior:**
+- This module is a purely combinational circuit with no sequential elements. All outputs are directly affected by the current inputs without any clock dependencies.
+
+**Implementation Notes:**
+- Ensure that the XNOR operation is evaluated before the XOR operation to maintain the correct logical sequence.
+- All logical operations are level-sensitive and should propagate changes instantaneously within the simulation environment, adhering to standard Verilog simulation semantics.
+
+**Boundary Conditions:**
+- Given the 1-bit nature of all inputs, all possible input combinations (000 to 111) are valid and must be handled by the logic as specified.
+                

@@ -1,0 +1,145 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as a Moore state machine, we need to follow the given state transition diagram and ensure that the asynchronous reset is handled correctly. The module has two states: `OFF` and `ON`, with transitions based on inputs `j` and `k`. The output `out` is determined solely by the current state, making it a Moore machine.
+
+1. **State Encoding**: We define two states, `OFF` and `ON`, using a single-bit logic type. This is efficient since we only have two states.
+
+2. **State Register**: We use a state register to hold the current state. This register is updated on the rising edge of the clock or when the asynchronous reset (`areset`) is active.
+
+3. **Asynchronous Reset**: The reset logic is implemented to set the state to `OFF` when `areset` is high, regardless of the clock. This is achieved by including `areset` in the sensitivity list of the sequential always block.
+
+4. **Next State Logic**: We use a combinational always block to determine the next state based on the current state and inputs `j` and `k`. The transitions are defined as per the state diagram.
+
+5. **Output Logic**: The output `out` is determined by the current state. In the `OFF` state, `out` is `0`, and in the `ON` state, `out` is `1`.
+
+6. **Coding Conventions**: We adhere to the conventions by using `logic` for all signals, using `always_comb` for combinational logic, and ensuring all numeric constants are properly sized.
+
+By following these steps, we ensure that the module behaves as specified and adheres to the given guidelines and conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        OFF = 1'b0,
+        ON  = 1'b1
+    } state_t;
+
+    // State register
+    state_t state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= OFF;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            OFF: begin
+                if (j) begin
+                    next_state = ON;
+                end else begin
+                    next_state = OFF;
+                end
+            end
+            ON: begin
+                if (k) begin
+                    next_state = OFF;
+                end else begin
+                    next_state = ON;
+                end
+            end
+            default: begin
+                next_state = OFF;
+            end
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        OFF = 1'b0,
+        ON  = 1'b1
+    } state_t;
+
+    // State register
+    state_t state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= OFF;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            OFF: begin
+                if (j) begin
+                    next_state = ON;
+                end else begin
+                    next_state = OFF;
+                end
+            end
+            ON: begin
+                if (k) begin
+                    next_state = OFF;
+                end else begin
+                    next_state = ON;
+                end
+            end
+            default: begin
+                next_state = OFF;
+            end
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule

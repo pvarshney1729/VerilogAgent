@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input wire in`: A single-bit input signal.
+  - `input wire [1:0] state`: A 2-bit input representing the current state. Bit[1] is the most significant bit (MSB), and bit[0] is the least significant bit (LSB).
+
+- Outputs:
+  - `output reg [1:0] next_state`: A 2-bit output representing the next state. Bit[1] is the MSB, and bit[0] is the LSB.
+  - `output reg out`: A single-bit output signal.
+
+Functional Description:
+- The module implements the combinational logic for a Moore state machine with four states and one input, according to the following state encoding:
+  - State A: 2'b00
+  - State B: 2'b01
+  - State C: 2'b10
+  - State D: 2'b11
+
+State Transition and Output Logic:
+- Given the current state (`state`) and input (`in`), the module computes the `next_state` and `out` as follows:
+
+  | Current State | Next State when in=0 | Next State when in=1 | Output |
+  |---------------|----------------------|----------------------|--------|
+  | A (2'b00)     | A (2'b00)            | B (2'b01)            | 0      |
+  | B (2'b01)     | C (2'b10)            | B (2'b01)            | 0      |
+  | C (2'b10)     | A (2'b00)            | D (2'b11)            | 0      |
+  | D (2'b11)     | C (2'b10)            | B (2'b01)            | 1      |
+
+- The output (`out`) is determined solely by the current state and is not affected by the input (`in`).
+
+Implementation Notes:
+- Ensure that the module only contains combinational logic for state transitions and output generation.
+- No sequential logic or clock-related elements are included in this module.
+- The reset behavior and initial values of state registers are assumed to be handled externally, as this module focuses on combinational logic only.
+</ENHANCED_SPEC>

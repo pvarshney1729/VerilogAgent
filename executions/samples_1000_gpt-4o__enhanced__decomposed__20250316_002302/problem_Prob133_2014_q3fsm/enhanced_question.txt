@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and has the following interface. All input and output ports are one bit unless otherwise specified.
+
+- `input clk`: Clock signal for synchronizing sequential logic, positive edge-triggered.
+- `input reset`: Reset signal, active high, synchronous. Resets the FSM to its initial state.
+- `input s`: Control signal used only in the initial state A.
+- `input w`: Data signal evaluated during certain states for FSM transitions.
+- `output z`: Output signal, determined based on the FSM's evaluation of input `w`.
+
+The module implements a finite state machine (FSM) with inputs `s` and `w`. Details are as follows:
+
+1. **Initial State and Reset Behavior**:
+   - The FSM begins in state `A` upon reset.
+   - The `reset` signal, when asserted, synchronously returns the FSM to state `A`.
+
+2. **FSM State Transitions**:
+   - **State A**: The FSM remains in state `A` as long as `s = 0`. When `s = 1`, it transitions to state `B` at the next positive edge of the clock.
+   - **State B**: Upon entering state `B`, the FSM evaluates the input `w` over the next three clock cycles.
+
+3. **State B Logic**:
+   - During the three clock cycles in state `B`, the FSM counts the occurrences of `w = 1`.
+   - If `w = 1` in exactly two of these three cycles, the FSM sets the output `z` to 1 during the next clock cycle after the three-cycle evaluation. Otherwise, `z` is set to 0.
+   - After setting `z`, the FSM immediately starts a new three-cycle evaluation of `w`.
+
+4. **Output Signal `z`**:
+   - The output `z` is updated based on the evaluation of `w` only after the completion of the three-cycle count within state `B`.
+
+5. **Clock and Reset Specifications**:
+   - All sequential operations are triggered on the positive edge of the `clk`.
+   - The `reset` signal is synchronous, meaning the FSM transitions to state `A` on the next clock cycle after the reset is asserted.
+
+6. **Input and Output Conventions**:
+   - Bit indexing is not applicable as all signals are single-bit.
+   - Ensure that the state transitions and output logic are free from race conditions by adhering to the specified clock cycle timing.
+
+7. **Edge Case Handling**:
+   - When transitioning from state `A` to `B`, only the value of `s` is considered.
+   - While in state `B`, only `w` is considered for counting purposes.
+
+This specification aims to clarify the functional intent and ensure a correct implementation of the FSM using a minimum number of states.
+</ENHANCED_SPEC>

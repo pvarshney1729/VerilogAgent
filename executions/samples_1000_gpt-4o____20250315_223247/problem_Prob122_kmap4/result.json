@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input  logic a,\n    input  logic b,\n    input  logic c,\n    input  logic d,\n    output logic out\n);\n\n    always @(*) begin\n        case ({c, d, a, b})\n            4'b0001, 4'b0011, 4'b0100, 4'b0110, \n            4'b1000, 4'b1010, 4'b1101, 4'b1111: out = 1'b1;\n            default: out = 1'b0;\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 117,
+        "passfail": "R"
+    }
+}

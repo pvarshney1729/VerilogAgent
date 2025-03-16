@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic areset,\n    input logic in,\n    output logic out\n);\n    logic state; // 0 for A, 1 for B\n\n    // Asynchronous reset and state transition logic\n    always @(posedge clk or posedge areset) begin\n        if (areset) begin\n            state <= 1'b1; // Reset to state B\n        end else begin\n            case (state)\n                1'b1: begin // State B\n                    if (in == 1'b0) \n                        state <= 1'b0; // Transition to A\n                    // Stay in B if in == 1\n                end\n                1'b0: begin // State A\n                    if (in == 1'b0) \n                        state <= 1'b1; // Transition to B\n                    // Stay in A if in == 1\n                end\n            endcase\n        end\n    end\n\n    // Output logic based on the current state\n    assign out = state; // Output is 1 when in state B, 0 when in state A\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

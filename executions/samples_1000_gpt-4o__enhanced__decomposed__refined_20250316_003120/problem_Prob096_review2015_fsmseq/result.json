@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    input logic data,\n    output logic start_shifting\n);\n\n    // State encoding\n    typedef enum logic [2:0] {\n        IDLE  = 3'b000,\n        S1    = 3'b001,\n        S11   = 3'b010,\n        S110  = 3'b011,\n        S1101 = 3'b100\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State register with synchronous reset\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= IDLE;\n            start_shifting <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            if (current_state == S1101)\n                start_shifting <= 1'b1;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            IDLE: next_state = (data) ? S1 : IDLE;\n            S1: next_state = (data) ? S11 : IDLE;\n            S11: next_state = (data) ? S11 : S110;\n            S110: next_state = (data) ? S1101 : IDLE;\n            S1101: next_state = S1101; // Remain in this state once sequence is detected\n            default: next_state = IDLE;\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "e"
+    }
+}

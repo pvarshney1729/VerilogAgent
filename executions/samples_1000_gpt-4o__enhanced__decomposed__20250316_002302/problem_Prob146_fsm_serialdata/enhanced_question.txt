@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+The module `TopModule` is designed to receive and decode a byte of data transmitted serially with a start bit, 8 data bits, and a stop bit. It interfaces with the following ports:
+
+- `input wire clk`: The clock signal. It triggers all sequential logic on its positive edge.
+- `input wire in`: The serial data input signal.
+- `input wire reset`: An active-high, synchronous reset signal that initializes the module.
+- `output reg [7:0] out_byte`: An 8-bit output register that holds the correctly received data byte. The value is valid when `done` is asserted.
+- `output reg done`: A 1-bit output signal indicating the successful reception of a complete byte, including start and stop bits.
+
+Design Specifications:
+1. **Serial Data Format**: Each data byte is framed with a start bit (`0`) and a stop bit (`1`). The line remains at logic `1` when idle. The 8 data bits are transmitted with the least significant bit first.
+
+2. **Finite State Machine (FSM) Design**:
+   - **Idle State**: The FSM waits for a start bit (`0`). It transitions to the next state upon detecting a `0`.
+   - **Data Reception**: After detecting the start bit, the FSM sequentially shifts in 8 data bits (from LSB to MSB) into `out_byte`.
+   - **Stop Bit Verification**: After 8 data bits are received, the FSM checks for the stop bit (`1`).
+   - **Completion and Validity**:
+     - If the stop bit is correct, the FSM sets `done` to `1` and holds `out_byte` valid for one clock cycle.
+     - If the stop bit is incorrect, the FSM waits for the next valid stop bit before attempting to receive a new byte.
+
+3. **Reset Behavior**:
+   - The `reset` signal, when asserted high, synchronously initializes the FSM to the idle state and clears `out_byte` and `done`.
+
+4. **Operational Notes**:
+   - The bit indexing follows `bit[0]` as the least significant bit.
+   - `done` is set to `1` only when a valid byte is received with correct start and stop bits. Otherwise, it remains `0`.
+   - The FSM ensures that `out_byte` holds valid data only when `done` is `1`.
+
+5. **Edge Cases**:
+   - The module handles continuous streams of serial data without assuming fixed packet boundaries.
+   - It gracefully handles incorrect stop bits by resetting the byte reception process until a valid stop bit is detected.
+</ENHANCED_SPEC>

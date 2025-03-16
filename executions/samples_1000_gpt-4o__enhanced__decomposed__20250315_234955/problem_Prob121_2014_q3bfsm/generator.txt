@@ -1,0 +1,116 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as specified, we need to design a finite-state machine (FSM) with synchronous reset and state transitions based on the input `x`. The FSM will have five states, each represented by a 3-bit vector. The state transitions and output logic are defined by the provided state table. The module will use a synchronous reset to initialize the state to `000` on the rising edge of the clock when `reset` is high. The output `z` is determined by the current state.
+
+The implementation will follow these steps:
+1. Define the module with the specified interface.
+2. Declare the state and next state registers using `logic`.
+3. Implement the synchronous reset and state transition logic in an `always` block triggered by the positive edge of the clock.
+4. Implement the combinational logic for determining the next state and output `z` based on the current state and input `x`.
+5. Ensure all coding conventions and guidelines are followed, such as using `logic` for signals and using `always @(*)` for combinational logic.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    logic [2:0] state, next_state;
+
+    // State transition logic with synchronous reset
+    always @(posedge clk) begin
+        if (reset)
+            state <= 3'b000;
+        else
+            state <= next_state;
+    end
+
+    // Next state logic and output logic
+    always @(*) begin
+        case (state)
+            3'b000: begin
+                next_state = (x == 1'b0) ? 3'b000 : 3'b001;
+                z = 1'b0;
+            end
+            3'b001: begin
+                next_state = (x == 1'b0) ? 3'b001 : 3'b100;
+                z = 1'b0;
+            end
+            3'b010: begin
+                next_state = (x == 1'b0) ? 3'b010 : 3'b001;
+                z = 1'b0;
+            end
+            3'b011: begin
+                next_state = (x == 1'b0) ? 3'b001 : 3'b010;
+                z = 1'b1;
+            end
+            3'b100: begin
+                next_state = (x == 1'b0) ? 3'b011 : 3'b100;
+                z = 1'b1;
+            end
+            default: begin
+                next_state = 3'b000;
+                z = 1'b0;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    logic [2:0] state, next_state;
+
+    // State transition logic with synchronous reset
+    always @(posedge clk) begin
+        if (reset)
+            state <= 3'b000;
+        else
+            state <= next_state;
+    end
+
+    // Next state logic and output logic
+    always @(*) begin
+        case (state)
+            3'b000: begin
+                next_state = (x == 1'b0) ? 3'b000 : 3'b001;
+                z = 1'b0;
+            end
+            3'b001: begin
+                next_state = (x == 1'b0) ? 3'b001 : 3'b100;
+                z = 1'b0;
+            end
+            3'b010: begin
+                next_state = (x == 1'b0) ? 3'b010 : 3'b001;
+                z = 1'b0;
+            end
+            3'b011: begin
+                next_state = (x == 1'b0) ? 3'b001 : 3'b010;
+                z = 1'b1;
+            end
+            3'b100: begin
+                next_state = (x == 1'b0) ? 3'b011 : 3'b100;
+                z = 1'b1;
+            end
+            default: begin
+                next_state = 3'b000;
+                z = 1'b0;
+            end
+        endcase
+    end
+
+endmodule

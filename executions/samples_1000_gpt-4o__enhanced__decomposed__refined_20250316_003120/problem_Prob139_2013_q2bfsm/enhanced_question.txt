@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal for synchronization (1 bit).
+  - `resetn`: Active-low, synchronous reset signal (1 bit). The FSM remains in the initial state while this signal is asserted (logic 0).
+  - `x`: Input signal from the motor (1 bit).
+  - `y`: Input signal from the motor (1 bit).
+
+- Output Ports:
+  - `f`: Control signal for the motor (1 bit).
+  - `g`: Control signal for the motor (1 bit).
+
+Finite State Machine (FSM) Description:
+1. Initial State:
+   - The FSM starts in the initial state A whenever `resetn` is asserted (logic 0). 
+   - In state A, both outputs `f` and `g` are set to 0.
+
+2. State Transition on Reset De-assertion:
+   - When `resetn` is de-asserted (logic 1), the FSM transitions on the next rising edge of `clk`.
+   - The output `f` is set to 1 for exactly one clock cycle during this transition.
+
+3. Monitoring Input `x`:
+   - After setting `f` to 1, the FSM monitors the input `x` over three successive clock cycles.
+   - The sequence to detect is: `x` = 1, 0, 1.
+   - Once this sequence is detected, set `g` to 1 on the subsequent clock cycle.
+
+4. Monitoring Input `y`:
+   - After setting `g` to 1, the FSM monitors the input `y`.
+   - If `y` becomes 1 within the next two clock cycles, maintain `g` at 1 permanently (until a reset is triggered).
+   - If `y` remains 0 for both cycles, set `g` to 0 permanently (until a reset is triggered).
+
+5. Edge Cases and Boundary Conditions:
+   - All operations and state transitions are triggered on the rising edge of the `clk`.
+   - Ensure that all registers and flip-flops have a defined initial state upon reset (e.g., `f` = 0, `g` = 0).
+   - Handle any potential race conditions by clearly defining the precedence and dependencies of signal evaluations within the FSM.
+
+6. Signal Convention:
+   - Bit[0] is defined as the least significant bit in any multi-bit signal conventions.
+   - Ensure synchronous logic design to prevent any unintended latching or delays.
+</ENHANCED_SPEC>

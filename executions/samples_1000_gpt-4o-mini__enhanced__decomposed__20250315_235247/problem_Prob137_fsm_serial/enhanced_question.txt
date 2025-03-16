@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: Clock signal (1-bit), positive edge-triggered.
+  - reset: Active-high synchronous reset (1-bit).
+  - in: Serial data input (1-bit).
+
+- Output Ports:
+  - done: Indicates successful reception of a complete byte (1-bit).
+
+Port and Signal Conventions:
+- All input and output ports are 1-bit wide unless otherwise specified.
+- The signal 'in' represents the serial data stream.
+
+Operation Description:
+- The module implements a finite state machine (FSM) to decode a serial communication protocol with the following format:
+  - 1 Start Bit: Logic '0'.
+  - 8 Data Bits: Transmitted least significant bit (LSB) first.
+  - 1 Stop Bit: Logic '1'.
+  - Idle Line: Logic '1' when no data is transmitted.
+
+FSM Behavior:
+- The FSM detects the start of a new byte when it sees a transition from idle (logic '1') to a start bit (logic '0').
+- After detecting the start bit, the FSM will sequentially read the next 8 bits as data bits.
+- Following the 8 data bits, the FSM checks for a stop bit (logic '1').
+- If the stop bit is detected correctly, the 'done' output will be asserted (logic '1') for one clock cycle, indicating successful byte reception.
+- If the stop bit is incorrect (logic '0'), the FSM will ignore subsequent bits until a valid stop bit (logic '1') is detected to reset the byte reception process.
+
+Reset Behavior:
+- The reset is synchronous and active-high, initializing the FSM to its idle state on the next positive clock edge when 'reset' is asserted.
+- After reset, the FSM will begin monitoring the 'in' signal for a start bit.
+
+Operational Edge Cases:
+- The FSM handles continuous idle conditions by remaining in the idle state until a start bit is detected.
+- If noise or errors lead to unexpected transitions, the FSM will wait for a valid stop bit before restarting byte detection.
+
+Implementation Notes:
+- All state transitions occur on the positive edge of the 'clk' signal.
+- Initial states and conditions must be explicitly defined for all sequential elements in the FSM.
+</ENHANCED_SPEC>

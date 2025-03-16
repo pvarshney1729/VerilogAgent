@@ -1,0 +1,77 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - input  in
+ - output disc
+ - output flag
+ - output err
+
+Synchronous HDLC framing involves decoding a continuous bit stream of
+data to look for bit patterns that indicate the beginning and end of
+frames (packets). Seeing exactly 6 consecutive 1s (i.e., 01111110) is a
+"flag" that indicate frame boundaries. To avoid the data stream from
+accidentally containing "flags", the sender inserts a zero after every 5
+consecutive 1s which the receiver must detect and discard. We also need
+to signal an error if there are 7 or more consecutive 1s. Create a
+Moore-type finite state machine to recognize these three sequences:
+
+  (1) 0111110: Signal a bit needs to be discarded (disc).
+  (2) 01111110: Flag the beginning/end of a frame (flag).
+  (3) 01111111...: Error (7 or more 1s) (err).
+
+When the FSM is reset, it should be in a state that behaves as though the
+previous input were 0. The reset signal is active high synchronous. The
+output signals should be asserted for a complete cycle beginning on the
+clock cycle after the condition occurs. Assume all sequential
+logic is triggered on the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: TopModule
+
+**Interface:**
+```verilog
+module TopModule (
+    input wire clk,        // Clock signal, positive edge triggered
+    input wire reset,      // Synchronous active-high reset
+    input wire in,         // Serial data input, LSB first
+    output reg disc,       // High for one cycle when a bit is discarded
+    output reg flag,       // High for one cycle at frame boundaries
+    output reg err         // High for one cycle when an error is detected
+);
+```
+
+**Behavior:**
+
+1. **Bit Indexing and Order**: The input is treated as a serial bit stream with `bit[0]` being the least significant bit.
+
+2. **Reset Behavior**: Upon reset, the FSM should initialize to a state that effectively treats the previous input as '0'. All outputs (`disc`, `flag`, `err`) should be set to `0` during reset.
+
+3. **Initial States**: After reset, the FSM starts in a default state where it awaits the detection of the specified bit patterns.
+
+4. **FSM Description**:
+   - **States**: Define states for tracking the number of consecutive '1's detected, including distinct states for each of the specified conditions (e.g., 5 consecutive '1's, 6 consecutive '1's, 7 or more consecutive '1's).
+   - **Transitions**: Clearly define transitions based on the input bit stream. Transition back to the initial state on encountering a '0'.
+   - **Outputs**: 
+     - `disc` is asserted for one cycle when the sequence `0111110` is detected.
+     - `flag` is asserted for one cycle when the sequence `01111110` is detected.
+     - `err` is asserted for one cycle when `01111111` or more '1's are detected.
+
+5. **Output Timing**: All outputs (`disc`, `flag`, `err`) should be asserted for one full clock cycle, starting on the clock edge immediately following the detection of the respective condition.
+
+6. **Error Condition**: The transition to an error state should occur immediately upon detecting 7 consecutive '1's, and `err` should remain asserted for one cycle. The FSM should reset to the initial state after signaling the error.
+
+7. **Boundary Conditions**: 
+   - Continuous '0's should reset the FSM to the initial state.
+   - The FSM should handle transitions from sequences of '0's to sequences of '1's seamlessly without false detections.
+
+**Timing**:
+- All sequential logic is triggered on the positive edge of the `clk`.
+
+**Implementation Notes**:
+- Use a shift register approach to track the last 8 bits of the input stream for easy pattern matching.
+- Ensure that the state machine is robust against noise and glitches in the input by considering debouncing or filtering mechanisms if necessary.
+                

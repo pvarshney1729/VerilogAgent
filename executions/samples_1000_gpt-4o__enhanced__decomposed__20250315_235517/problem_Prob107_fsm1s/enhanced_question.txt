@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk` : Clock signal for sequential logic.
+  - `input wire reset` : Active-high synchronous reset signal.
+  - `input wire in` : Single-bit input to the state machine.
+
+- Output Ports:
+  - `output reg out` : Single-bit output of the state machine.
+
+State Machine Description:
+- This is a Moore state machine with two states: A and B.
+- State A is represented by a binary value `0`.
+- State B is represented by a binary value `1`.
+- The reset state is State B.
+
+State Transition Table:
+- State B (out=1):
+  - Transition to State A when `in=0`.
+  - Remain in State B when `in=1`.
+- State A (out=0):
+  - Transition to State B when `in=0`.
+  - Remain in State A when `in=1`.
+
+Reset Behavior:
+- The reset signal is synchronous and active-high, meaning it affects the state during the clock edge.
+- Upon reset, the state machine transitions to State B.
+
+Output Behavior:
+- In State B, the output `out` is `1`.
+- In State A, the output `out` is `0`.
+
+Timing and Clocking:
+- The state transitions occur on the rising edge of the `clk` signal.
+- Ensure that the `reset` signal is sampled on the rising edge of `clk` to perform the reset action.
+
+Initial Conditions:
+- On power-up, the state machine should initialize to State B to ensure a known startup condition.
+
+Bit Indexing Conventions:
+- Since all inputs and outputs are single-bit, no specific bit indexing is applicable.
+
+Edge Cases and Input Boundaries:
+- Ensure that any glitches or transitions on the `in` signal are synchronized to the `clk` to avoid metastability. Consider using a debouncing mechanism if necessary for noisy inputs.
+</ENHANCED_SPEC>

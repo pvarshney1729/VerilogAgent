@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: clk (1-bit, clock signal, triggers on positive edge)
+- Input: reset (1-bit, active high, synchronous reset)
+- Input: s (1-bit, used in state A to transition to state B when high)
+- Input: w (1-bit, examined in state B over three consecutive clock cycles)
+- Output: z (1-bit, outputs 1 if condition met, otherwise 0)
+
+Finite State Machine (FSM) Description:
+- Initial State: A (reset state)
+  - Action: Remain in state A while s = 0.
+  - Transition: Move to state B when s = 1.
+  
+- State B:
+  - The FSM monitors the input w over three consecutive clock cycles.
+  - Condition: If w equals 1 during exactly two of these three cycles, set output z = 1 in the immediate next clock cycle. Otherwise, set z = 0.
+  - Continuation: After evaluating w over three cycles and setting z, the FSM continues monitoring w for the next set of three cycles.
+
+Reset and Initialization:
+- Reset: The FSM transitions to state A when reset is high. All internal registers related to FSM state and cycle counting are reset to their initial values.
+- Initial Value: Assume all sequential elements (e.g., state registers, cycle counters) are initialized to zero upon reset.
+
+Signal Details:
+- s is only evaluated in state A.
+- In state B, only the w input is relevant for determining the output z.
+- z is updated based on the evaluation of w in the previous three cycles.
+
+Additional Clarifications:
+- All registers and flip-flops are edge-triggered on the positive edge of clk.
+- Bit Indexing: Not applicable as all ports are 1-bit.
+- Edge Cases: Ensure proper handling when transitioning from state A to B and subsequent evaluations in state B.
+</ENHANCED_SPEC>

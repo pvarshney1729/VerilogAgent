@@ -1,0 +1,52 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in     (16 bits)
+ - output out_hi ( 8 bits)
+ - output out_lo ( 8 bits)
+
+The module should implement a combinational circuit that splits an input
+half-word (16 bits, [15:0] ) into lower [7:0] and upper [15:8] bytes.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: `TopModule`
+
+**Port Definitions**:
+- `input  wire [15:0] in_data` : A 16-bit unsigned input signal representing a half-word. The bit [15] is the Most Significant Bit (MSB), and bit [0] is the Least Significant Bit (LSB).
+- `output wire [7:0]  out_hi`  : An 8-bit unsigned output signal representing the upper byte [15:8] of the input signal.
+- `output wire [7:0]  out_lo`  : An 8-bit unsigned output signal representing the lower byte [7:0] of the input signal.
+
+**Behavior**:
+- The module implements a purely combinational logic circuit without any clock or reset signals. It continuously outputs the upper and lower bytes of the input signal.
+- `out_hi` is assigned the value of `in_data[15:8]`.
+- `out_lo` is assigned the value of `in_data[7:0]`.
+
+**Bit-Ordering and Indexing**:
+- The input and output signals follow a big-endian ordering, where bit [15] is the MSB and bit [0] is the LSB.
+
+**Timing**:
+- The outputs `out_hi` and `out_lo` change immediately with any change in the input `in_data`, reflecting the behavior of combinational logic.
+
+**Implementation Notes**:
+- This module does not require any clock signal or reset logic, as it performs a simple combinational operation.
+- Ensure that the synthesis tools correctly infer the intended logic for the combinational splitting of input data.
+
+**Example Usage**:
+- If the input `in_data` is `16'b1010_1100_1111_0000`, then `out_hi` will be `8'b1010_1100` and `out_lo` will be `8'b1111_0000`.
+
+**Verilog Implementation**:
+```verilog
+module TopModule (
+    input  wire [15:0] in_data,
+    output wire [7:0]  out_hi,
+    output wire [7:0]  out_lo
+);
+
+assign out_hi = in_data[15:8];
+assign out_lo = in_data[7:0];
+
+endmodule
+```
+                

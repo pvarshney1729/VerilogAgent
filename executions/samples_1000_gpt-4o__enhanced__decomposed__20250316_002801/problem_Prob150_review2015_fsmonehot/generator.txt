@@ -1,0 +1,107 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to follow the specification of a Moore state machine with one-hot encoding. The state machine transitions between states based on the inputs `d`, `done_counting`, and `ack`. The outputs `shift_ena`, `counting`, and `done` are determined by the current state. We will use combinational logic to determine the next state and the outputs based on the current state and inputs.
+
+1. **State Encoding**: We will use one-hot encoding for the states, where each state is represented by a unique bit in a 10-bit vector. This allows us to easily determine the current state and transition to the next state.
+
+2. **Next State Logic**: We will implement combinational logic to determine the next state based on the current state and inputs. This logic will be implemented using `assign` statements.
+
+3. **Output Logic**: The outputs `shift_ena`, `counting`, and `done` are determined by the current state. We will implement this logic using `assign` statements.
+
+4. **Port Declarations**: We will declare all ports as `logic` as per the coding conventions.
+
+5. **Combinational Logic**: We will use `always @(*)` blocks for combinational logic, ensuring that all inputs are considered in the sensitivity list.
+
+6. **Synchronous Reset**: Although the specification does not explicitly mention a reset signal, we will assume that the state machine starts in the `S` state, which is the default state after reset.
+
+By following these steps, we can implement the `TopModule` according to the given specification and guidelines.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic d,
+    input logic done_counting,
+    input logic ack,
+    input logic [9:0] state,
+    output logic B3_next,
+    output logic S_next,
+    output logic S1_next,
+    output logic Count_next,
+    output logic Wait_next,
+    output logic done,
+    output logic counting,
+    output logic shift_ena
+);
+
+    // State encoding
+    localparam logic [9:0] S     = 10'b0000000001;
+    localparam logic [9:0] S1    = 10'b0000000010;
+    localparam logic [9:0] S11   = 10'b0000000100;
+    localparam logic [9:0] S110  = 10'b0000001000;
+    localparam logic [9:0] B0    = 10'b0000010000;
+    localparam logic [9:0] B1    = 10'b0000100000;
+    localparam logic [9:0] B2    = 10'b0001000000;
+    localparam logic [9:0] B3    = 10'b0010000000;
+    localparam logic [9:0] Count = 10'b0100000000;
+    localparam logic [9:0] Wait  = 10'b1000000000;
+
+    // Next-state logic
+    assign S_next     = (state == S && d == 0) || (state == S1 && d == 0) || (state == S110 && d == 0) || (state == Wait && ack == 1);
+    assign S1_next    = (state == S && d == 1);
+    assign B3_next    = (state == B2);
+    assign Count_next = (state == B3);
+    assign Wait_next  = (state == Count && done_counting == 1);
+
+    // Output logic
+    assign shift_ena = (state == B0) || (state == B1) || (state == B2) || (state == B3);
+    assign counting  = (state == Count);
+    assign done      = (state == Wait);
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic d,
+    input logic done_counting,
+    input logic ack,
+    input logic [9:0] state,
+    output logic B3_next,
+    output logic S_next,
+    output logic S1_next,
+    output logic Count_next,
+    output logic Wait_next,
+    output logic done,
+    output logic counting,
+    output logic shift_ena
+);
+
+    // State encoding
+    localparam logic [9:0] S     = 10'b0000000001;
+    localparam logic [9:0] S1    = 10'b0000000010;
+    localparam logic [9:0] S11   = 10'b0000000100;
+    localparam logic [9:0] S110  = 10'b0000001000;
+    localparam logic [9:0] B0    = 10'b0000010000;
+    localparam logic [9:0] B1    = 10'b0000100000;
+    localparam logic [9:0] B2    = 10'b0001000000;
+    localparam logic [9:0] B3    = 10'b0010000000;
+    localparam logic [9:0] Count = 10'b0100000000;
+    localparam logic [9:0] Wait  = 10'b1000000000;
+
+    // Next-state logic
+    assign S_next     = (state == S && d == 0) || (state == S1 && d == 0) || (state == S110 && d == 0) || (state == Wait && ack == 1);
+    assign S1_next    = (state == S && d == 1);
+    assign B3_next    = (state == B2);
+    assign Count_next = (state == B3);
+    assign Wait_next  = (state == Count && done_counting == 1);
+
+    // Output logic
+    assign shift_ena = (state == B0) || (state == B1) || (state == B2) || (state == B3);
+    assign counting  = (state == Count);
+    assign done      = (state == Wait);
+
+endmodule

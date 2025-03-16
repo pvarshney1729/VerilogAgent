@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: Clock signal, positive edge-triggered.
+  - `input wire reset`: Synchronous active high reset.
+  - `input wire in`: Input signal for state transition.
+
+- Output Ports:
+  - `output reg out`: Output signal, updated according to the state.
+
+State Machine Description:
+- Type: Moore state machine.
+- States: Four states denoted as State A, State B, State C, and State D.
+- Initialization: On reset, the FSM initializes to State A.
+- State Encoding: Use binary encoding for states, where:
+  - State A = 2'b00
+  - State B = 2'b01
+  - State C = 2'b10
+  - State D = 2'b11
+
+State Transition Table:
+- Current State: State A
+  - Next State if `in`=0: State A
+  - Next State if `in`=1: State B
+  - Output: 0
+
+- Current State: State B
+  - Next State if `in`=0: State C
+  - Next State if `in`=1: State B
+  - Output: 0
+
+- Current State: State C
+  - Next State if `in`=0: State A
+  - Next State if `in`=1: State D
+  - Output: 0
+
+- Current State: State D
+  - Next State if `in`=0: State C
+  - Next State if `in`=1: State B
+  - Output: 1
+
+Operational Details:
+- The FSM transitions between states based on the input `in`, at the rising edge of `clk`.
+- The `reset` signal, when high, synchronously resets the FSM to State A at the next positive edge of `clk`.
+- The output `out` is determined solely by the current state and does not depend on the input `in`.
+
+Additional Notes:
+- Ensure that all state transitions and output updates occur on the positive edge of `clk`.
+- The FSM should handle all possible input conditions and transitions without undefined behavior.
+- The output and state transitions should be clearly defined for all input combinations, ensuring no race conditions exist.
+</ENHANCED_SPEC>

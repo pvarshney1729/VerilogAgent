@@ -1,0 +1,77 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  ring
+ - input  vibrate_mode
+ - output ringer
+ - output motor
+
+The module should implement a circuit to control a cellphone's ringer and
+vibration motor. Whenever the phone needs to ring from an incoming call
+(input ring), your circuit must either turn on the ringer (output ringer
+= 1) or the motor (output motor = 1), but not both. If the phone is in
+vibrate mode (input vibrate_mode = 1), turn on the motor. Otherwise, turn
+on the ringer.
+
+Here is the enhanced specification which might be useful to you:
+                #### Interface:
+```verilog
+module TopModule (
+    input wire ring,           // 1-bit input: indicates incoming call
+    input wire vibrate_mode,   // 1-bit input: indicates if phone is in vibrate mode
+    output reg ringer,         // 1-bit output: controls ringer
+    output reg motor           // 1-bit output: controls vibration motor
+);
+```
+
+#### Behavioral Specification:
+- **Functional Description:**
+  - The module controls whether the cellphone's ringer or vibration motor is activated upon an incoming call signal.
+  - Inputs:
+    - `ring` (1-bit): High indicates an incoming call.
+    - `vibrate_mode` (1-bit): High indicates that the phone is set to vibrate mode.
+  - Outputs:
+    - `ringer` (1-bit): High activates the phone's ringer.
+    - `motor` (1-bit): High activates the vibration motor.
+
+- **Logic Description:**
+  - If `ring` is high (1):
+    - If `vibrate_mode` is high (1), set `motor` to high (1) and `ringer` to low (0).
+    - Otherwise, set `ringer` to high (1) and `motor` to low (0).
+  - If `ring` is low (0):
+    - Both `ringer` and `motor` should be set to low (0).
+
+#### Timing Behavior:
+- The logic is combinational, with no clock signal involved. The outputs `ringer` and `motor` should update immediately based on the current values of `ring` and `vibrate_mode`.
+
+#### Initial States:
+- Although this is a combinational circuit, if implemented in a larger sequential system, the initial state of `ringer` and `motor` should be low (0) by default.
+
+#### Implementation Notes:
+- Ensure that the circuit uses simple combinational logic gates to implement the described behavior.
+- No reset is required as the circuit is purely combinational.
+
+#### Boundary Conditions:
+- The specification explicitly handles the case where `ring = 0`, ensuring both `ringer` and `motor` are off.
+
+```verilog
+always @(*) begin
+    if (ring) begin
+        if (vibrate_mode) begin
+            motor = 1;
+            ringer = 0;
+        end else begin
+            motor = 0;
+            ringer = 1;
+        end
+    end else begin
+        motor = 0;
+        ringer = 0;
+    end
+end
+```
+
+### End of Specification
+                

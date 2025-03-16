@@ -1,0 +1,112 @@
+Generated Response:
+
+<REASONING>
+To implement the module `TopModule`, we need to create a combinational logic block that determines the `next_state` and `out` based on the current `state` and input `in`. This is a Moore state machine, so the output depends only on the current state, not the input.
+
+1. **State Encoding**: We have four states encoded as:
+   - A = 2'b00
+   - B = 2'b01
+   - C = 2'b10
+   - D = 2'b11
+
+2. **State Transition Logic**:
+   - From state A (2'b00):
+     - If `in` = 0, stay in A (2'b00).
+     - If `in` = 1, move to B (2'b01).
+   - From state B (2'b01):
+     - If `in` = 0, move to C (2'b10).
+     - If `in` = 1, stay in B (2'b01).
+   - From state C (2'b10):
+     - If `in` = 0, move to A (2'b00).
+     - If `in` = 1, move to D (2'b11).
+   - From state D (2'b11):
+     - If `in` = 0, move to C (2'b10).
+     - If `in` = 1, move to B (2'b01).
+
+3. **Output Logic**:
+   - The output `out` is 0 for states A, B, and C.
+   - The output `out` is 1 for state D.
+
+4. **Coding Conventions**:
+   - Use `logic` for all ports and signals.
+   - Use `always @(*)` for combinational logic.
+   - Ensure all numeric constants are properly sized.
+
+5. **Implementation**:
+   - Use a case statement to handle the state transitions and output logic.
+   - Ensure the module adheres to the specified interface.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic in,
+    input logic [1:0] state,
+    output logic [1:0] next_state,
+    output logic out
+);
+
+    always @(*) begin
+        case (state)
+            2'b00: begin // State A
+                next_state = (in == 1'b0) ? 2'b00 : 2'b01; // A -> A or A -> B
+                out = 1'b0;
+            end
+            2'b01: begin // State B
+                next_state = (in == 1'b0) ? 2'b10 : 2'b01; // B -> C or B -> B
+                out = 1'b0;
+            end
+            2'b10: begin // State C
+                next_state = (in == 1'b0) ? 2'b00 : 2'b11; // C -> A or C -> D
+                out = 1'b0;
+            end
+            2'b11: begin // State D
+                next_state = (in == 1'b0) ? 2'b10 : 2'b01; // D -> C or D -> B
+                out = 1'b1;
+            end
+            default: begin
+                next_state = 2'b00;
+                out = 1'b0;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic in,
+    input logic [1:0] state,
+    output logic [1:0] next_state,
+    output logic out
+);
+
+    always @(*) begin
+        case (state)
+            2'b00: begin // State A
+                next_state = (in == 1'b0) ? 2'b00 : 2'b01; // A -> A or A -> B
+                out = 1'b0;
+            end
+            2'b01: begin // State B
+                next_state = (in == 1'b0) ? 2'b10 : 2'b01; // B -> C or B -> B
+                out = 1'b0;
+            end
+            2'b10: begin // State C
+                next_state = (in == 1'b0) ? 2'b00 : 2'b11; // C -> A or C -> D
+                out = 1'b0;
+            end
+            2'b11: begin // State D
+                next_state = (in == 1'b0) ? 2'b10 : 2'b01; // D -> C or D -> B
+                out = 1'b1;
+            end
+            default: begin
+                next_state = 2'b00;
+                out = 1'b0;
+            end
+        endcase
+    end
+
+endmodule

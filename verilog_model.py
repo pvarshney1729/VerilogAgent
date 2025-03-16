@@ -135,7 +135,7 @@ class Verifier:
  
         compile_log_path = os.path.join(os.getcwd(), "compile_log.txt") 
 
-        shutil.copy(compile_log_path, self.problem_dir / "compile_log.txt")
+        #shutil.copy(compile_log_path, self.problem_dir / "compile_log.txt")
 
         if os.path.exists(compile_log_path):
             os.remove(compile_log_path)

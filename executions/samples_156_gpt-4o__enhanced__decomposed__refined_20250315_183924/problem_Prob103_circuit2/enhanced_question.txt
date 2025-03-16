@@ -1,0 +1,119 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a
+ - input  b
+ - input  c
+ - input  d
+ - output q
+
+The module should implement a combinational circuit. Read the simulation
+waveforms to determine what the circuit does, then implement it.
+
+  time  a  b  c  d  q
+  0ns   0  0  0  0  1
+  5ns   0  0  0  0  1
+  10ns  0  0  0  0  1
+  15ns  0  0  0  0  1
+  20ns  0  0  0  1  0
+  25ns  0  0  1  0  0
+  30ns  0  0  1  1  1
+  35ns  0  1  0  0  0
+  40ns  0  1  0  1  1
+  45ns  0  1  1  0  1
+  50ns  0  1  1  1  0
+  55ns  1  0  0  0  0
+  60ns  1  0  0  1  1
+  65ns  1  0  1  0  1
+  70ns  1  0  1  1  0
+  75ns  1  1  0  0  1
+  80ns  1  1  0  1  0
+  85ns  1  1  1  0  0
+  90ns  1  1  1  1  1
+
+Here is the enhanced specification which might be useful to you:
+                **Analysis of Ambiguities and Issues:**
+
+1. **Implicit Port Widths and Types:** The specification states that all input and output ports are one bit unless otherwise specified. This is clear, but it's important to emphasize that these are single-bit, unsigned inputs and outputs.
+
+2. **Signal Naming Conventions:** The names 'a', 'b', 'c', 'd', and 'q' are clear for a small combinational circuit, but in larger designs, more descriptive names might be beneficial.
+
+3. **Combinational Circuit Specification:** The specification states that the circuit is combinational, but does not define the combinational logic explicitly. The behavior must be inferred from the waveform table.
+
+4. **Timing Information:** The timings given (in nanoseconds) suggest a simulation environment, but since this is combinational logic, the specific timing is less relevant. The key point is that the output `q` should be a combinational function of inputs `a`, `b`, `c`, and `d`.
+
+5. **Waveform Table Interpretation:** The truth table is somewhat like a Karnaugh map. However, the logic condition that maps inputs to output `q` is not explicitly defined.
+
+6. **Edge Cases and Boundary Conditions:** All possible input combinations are considered in the table provided, but the logic extracting these conditions should be clearly defined.
+
+**<ENHANCED_SPEC>**
+
+**Module Name:** TopModule
+
+**Interface:**
+- **Inputs:**
+  - `input wire a`  // One-bit unsigned input
+  - `input wire b`  // One-bit unsigned input
+  - `input wire c`  // One-bit unsigned input
+  - `input wire d`  // One-bit unsigned input
+- **Output:**
+  - `output wire q` // One-bit unsigned output
+
+**Behavioral Description:**
+
+The module implements a combinational logic circuit with the following truth table (derived from the waveform analysis):
+
+| a | b | c | d | q |
+|---|---|---|---|---|
+| 0 | 0 | 0 | 0 | 1 |
+| 0 | 0 | 0 | 1 | 0 |
+| 0 | 0 | 1 | 0 | 0 |
+| 0 | 0 | 1 | 1 | 1 |
+| 0 | 1 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 1 | 1 |
+| 0 | 1 | 1 | 0 | 1 |
+| 0 | 1 | 1 | 1 | 0 |
+| 1 | 0 | 0 | 0 | 0 |
+| 1 | 0 | 0 | 1 | 1 |
+| 1 | 0 | 1 | 0 | 1 |
+| 1 | 0 | 1 | 1 | 0 |
+| 1 | 1 | 0 | 0 | 1 |
+| 1 | 1 | 0 | 1 | 0 |
+| 1 | 1 | 1 | 0 | 0 |
+| 1 | 1 | 1 | 1 | 1 |
+
+**Logical Expression:**
+
+Based on the truth table, the logic for output `q` can be derived as follows (simplified using Boolean algebra):
+
+\[ q = (a \land \overline{b} \land c) \lor (\overline{a} \land b \land \overline{c}) \lor (\overline{a} \land \overline{b} \land \overline{c} \land \overline{d}) \lor (a \land b \land \overline{c} \land \overline{d}) \]
+
+**Implementation Notes:**
+
+- The circuit is purely combinational; hence, no clock or reset signals are involved.
+- The output `q` is directly and instantaneously determined by the logic function applied to the inputs `a`, `b`, `c`, and `d`.
+- Ensure that the Verilog implementation is synthesizable and follows the logic expression derived above.
+
+**Example Verilog Implementation:**
+
+```verilog
+module TopModule (
+    input wire a,
+    input wire b,
+    input wire c,
+    input wire d,
+    output wire q
+);
+
+assign q = (a & ~b & c) | (~a & b & ~c) | (~a & ~b & ~c & ~d) | (a & b & ~c & ~d);
+
+endmodule
+```
+
+**Verification:**
+- Verification should involve comparing the Verilog simulation results with the provided truth table to ensure correct functionality.
+
+**<ENHANCED_SPEC>**
+                

@@ -1,0 +1,60 @@
+<ENHANCED_SPEC>
+Module Specification for `TopModule`:
+
+1. **Module Interface:**
+   - **Input Ports:**
+     - `input wire clk`: Clock signal, positive edge-triggered.
+     - `input wire reset`: Synchronous active-high reset signal.
+     - `input wire w`: Input signal determining state transitions.
+   - **Output Ports:**
+     - `output reg z`: Output signal, represents the state machine output.
+
+2. **State Machine Description:**
+   - **State Encoding:**
+     - Use a 3-bit encoded state variable `state` to represent each state.
+     - Assign the following state codes:
+       - State A: 3'b000
+       - State B: 3'b001
+       - State C: 3'b010
+       - State D: 3'b011
+       - State E: 3'b100
+       - State F: 3'b101
+
+   - **State Transitions:**
+     - From State A:
+       - `w == 1` : Transition to State B
+       - `w == 0` : Remain in State A
+     - From State B:
+       - `w == 1` : Transition to State C
+       - `w == 0` : Transition to State D
+     - From State C:
+       - `w == 1` : Transition to State E
+       - `w == 0` : Transition to State D
+     - From State D:
+       - `w == 1` : Transition to State F
+       - `w == 0` : Transition to State A
+     - From State E:
+       - `w == 1` : Remain in State E
+       - `w == 0` : Transition to State D
+     - From State F:
+       - `w == 1` : Transition to State C
+       - `w == 0` : Transition to State D
+
+3. **Output Logic:**
+   - The output `z` depends on the current state as follows:
+     - `z = 1` for States E and F
+     - `z = 0` for States A, B, C, and D
+
+4. **Reset Behavior:**
+   - On the assertion of the `reset` signal, the state machine transitions to State A irrespective of the input `w`.
+
+5. **Implementation Guidelines:**
+   - Use separate `always` blocks for:
+     - State transitions (state table) based on current state and input `w`.
+     - State register updates on the positive edge of the `clk` and synchronous `reset`.
+   - `z` should be assigned using an `always` block sensitive to state changes or a continuous assignment.
+
+6. **Edge Cases and Boundaries:**
+   - Ensure that all possible states are accounted for, and transitions are clearly defined for each input condition.
+   - State transitions should be handled carefully to avoid any undefined behavior.
+</ENHANCED_SPEC>

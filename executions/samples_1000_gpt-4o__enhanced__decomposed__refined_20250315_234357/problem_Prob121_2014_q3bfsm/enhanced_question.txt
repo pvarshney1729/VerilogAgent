@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input wire clk: Clock signal, triggers all sequential logic on the positive edge.
+- input wire reset: Synchronous active-high reset signal, resets the FSM to state 3'b000.
+- input wire x: FSM input signal, affects the state transition.
+- output reg z: Output signal, determined by the current state.
+
+Port Details:
+- All ports are 1-bit wide.
+- Inputs are of type 'wire', outputs are of type 'reg'.
+
+FSM Description:
+- The finite-state machine (FSM) consists of five states, represented by a 3-bit state variable y[2:0].
+- The reset state is 3'b000, and it is entered synchronously whenever 'reset' is high at the positive edge of 'clk'.
+- State transitions and outputs are determined by the current state and input 'x'.
+
+State Transition Table:
+- Present state (y[2:0]) | Next state (y[2:0]) when x=0, Next state (y[2:0]) when x=1 | Output z
+  - 000 | 000, 001 | 0
+  - 001 | 001, 100 | 0
+  - 010 | 010, 001 | 0
+  - 011 | 001, 010 | 1
+  - 100 | 011, 100 | 1
+
+Indexing and Bit Conventions:
+- The state bits y[2:0] are indexed with y[2] as the most significant bit (MSB) and y[0] as the least significant bit (LSB).
+
+Operational Details:
+- All state transitions occur at the rising edge of 'clk'.
+- The output z is a combinational logic output based on the current state.
+- The FSM is designed to operate correctly under the assumption of a glitch-free clock signal.
+- Ensure that care is taken to avoid race conditions by maintaining the synchronous reset and edge-triggered state transitions.
+
+Edge Cases:
+- During reset (when 'reset' is high), the FSM state is forced to 3'b000 upon the next rising edge of 'clk', irrespective of the current state or input 'x'.
+- The behavior with respect to the input 'x' is deterministic and follows the provided state transition table.
+</ENHANCED_SPEC>

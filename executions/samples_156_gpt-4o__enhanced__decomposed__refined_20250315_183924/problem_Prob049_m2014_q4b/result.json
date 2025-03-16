@@ -1,0 +1,16 @@
+{
+    "code": "```verilog\nmodule TopModule(\n    input logic clk,\n    input logic ar,\n    input logic d,\n    output logic q\n);\n\n// Asynchronous reset, positive edge-triggered D flip-flop\nalways @(posedge clk or posedge ar) begin\n    if (ar) begin\n        q <= 1'b0;\n    end else begin\n        q <= d;\n    end\nend\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "```verilog\nmodule TopModule(\n    input logic clk,\n    input logic ar,\n    input logic d,\n    output logic q\n);\n\n// Asynchronous reset, positive edge-triggered D flip-flop\nalways @(posedge clk or posedge ar) begin\n    if (ar) begin\n        q <= 1'b0;\n    end else begin\n        q <= d;\n    end\nend\n\nendmodule\n```",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}

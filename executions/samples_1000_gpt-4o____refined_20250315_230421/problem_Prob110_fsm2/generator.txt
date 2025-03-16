@@ -1,0 +1,119 @@
+Generated Response:
+
+Here's the implementation of the `TopModule` as per your requirements:
+
+```verilog
+module TopModule (
+    input  wire clk,
+    input  wire areset,
+    input  wire j,
+    input  wire k,
+    output reg  out
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        OFF = 2'b00,
+        ON  = 2'b01
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            OFF: begin
+                if (j == 1'b1)
+                    next_state = ON;
+                else
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k == 1'b1)
+                    next_state = OFF;
+                else
+                    next_state = ON;
+            end
+            default: next_state = OFF; // Default to OFF for safety
+        endcase
+    end
+
+    // State register with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            current_state <= OFF;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0; // Default to 0 for safety
+        endcase
+    end
+
+endmodule
+```
+
+This module implements a Moore state machine with two states: `OFF` and `ON`. The state transitions are based on the inputs `j` and `k`, and the output `out` is determined by the current state. The module also includes an asynchronous reset (`areset`) that sets the state to `OFF` when activated.
+
+Generated Code:
+
+module TopModule (
+    input  wire clk,
+    input  wire areset,
+    input  wire j,
+    input  wire k,
+    output reg  out
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        OFF = 2'b00,
+        ON  = 2'b01
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            OFF: begin
+                if (j == 1'b1)
+                    next_state = ON;
+                else
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k == 1'b1)
+                    next_state = OFF;
+                else
+                    next_state = ON;
+            end
+            default: next_state = OFF; // Default to OFF for safety
+        endcase
+    end
+
+    // State register with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            current_state <= OFF;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0; // Default to 0 for safety
+        endcase
+    end
+
+endmodule
+
+// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly

@@ -1,0 +1,26 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, and output port shift_ena.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  wire clk,\n    input  wire reset,\n    output reg  shift_ena\n);\n\n    reg [2:0] cycle_count;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            cycle_count <= 3'b100; // Initialize to 4 cycles\n            shift_ena <= 1'b1;\n        end else if (cycle_count != 3'b000) begin\n            cycle_count <= cycle_count - 1;\n            shift_ena <= 1'b1;\n        end else begin\n            shift_ena <= 1'b0;\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Determine the number of states for the FSM to control the shift register. The FSM should have at least 5 states: an initial state, 4 states for enabling the shift register, and a final state where shift_ena is 0.",
+        "source": "This module is a part of the FSM for controlling a shift register, we want the ability to enable the shift register for exactly 4 clock cycles whenever the proper bit pattern is detected.",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  typedef enum logic [2:0] {\n    STATE_INIT = 3'b000,\n    STATE_SHIFT1 = 3'b001,\n    STATE_SHIFT2 = 3'b010,\n    STATE_SHIFT3 = 3'b011,\n    STATE_SHIFT4 = 3'b100,\n    STATE_FINAL = 3'b101\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // State transition logic\n  always_ff @(posedge clk) begin\n    if (reset) begin\n      current_state <= STATE_INIT;\n    end else begin\n      current_state <= next_state;\n    end\n  end\n\n  // Next state logic\n  always_comb begin\n    case (current_state)\n      STATE_INIT: next_state = STATE_SHIFT1;\n      STATE_SHIFT1: next_state = STATE_SHIFT2;\n      STATE_SHIFT2: next_state = STATE_SHIFT3;\n      STATE_SHIFT3: next_state = STATE_SHIFT4;\n      STATE_SHIFT4: next_state = STATE_FINAL;\n      STATE_FINAL: next_state = STATE_FINAL;\n      default: next_state = STATE_INIT;\n    endcase\n  end\n\n  // Output logic\n  assign shift_ena = (current_state == STATE_SHIFT1) ||\n                     (current_state == STATE_SHIFT2) ||\n                     (current_state == STATE_SHIFT3) ||\n                     (current_state == STATE_SHIFT4);\n[END]\n```"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state transition logic for the FSM. The FSM should transition from the initial state to the 4 enabling states sequentially, and then to the final state. Reset should bring the FSM back to the initial state.",
+        "source": "Whenever the FSM is reset, assert shift_ena for 4 cycles, then 0 forever (until reset). Reset should be active high synchronous.",
+        "implementation": "// State encoding\n  localparam STATE_INIT   = 3'b000;\n  localparam STATE_ENA1   = 3'b001;\n  localparam STATE_ENA2   = 3'b010;\n  localparam STATE_ENA3   = 3'b011;\n  localparam STATE_ENA4   = 3'b100;\n  localparam STATE_FINAL  = 3'b101;\n\n  reg [2:0] state, next_state;\n\n  // State transition logic\n  always @(posedge clk) begin\n    if (reset) begin\n      state <= STATE_INIT;\n    end else begin\n      state <= next_state;\n    end\n  end\n\n  // Next state logic\n  always @(*) begin\n    case (state)\n      STATE_INIT:  next_state = STATE_ENA1;\n      STATE_ENA1:  next_state = STATE_ENA2;\n      STATE_ENA2:  next_state = STATE_ENA3;\n      STATE_ENA3:  next_state = STATE_ENA4;\n      STATE_ENA4:  next_state = STATE_FINAL;\n      STATE_FINAL: next_state = STATE_FINAL;\n      default:     next_state = STATE_INIT;\n    endcase\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the output logic for shift_ena. It should be asserted (1) during the 4 enabling states and deasserted (0) in the initial and final states.",
+        "source": "Whenever the FSM is reset, assert shift_ena for 4 cycles, then 0 forever (until reset).",
+        "implementation": "reg [2:0] shift_counter;\nreg shift_ena_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        shift_counter <= 3'b000;\n        shift_ena_reg <= 1'b1;\n    end else if (shift_counter < 3'b100) begin\n        shift_counter <= shift_counter + 1;\n        shift_ena_reg <= 1'b1;\n    end else begin\n        shift_ena_reg <= 1'b0;\n    end\nend\n\nassign shift_ena = shift_ena_reg;"
+    }
+]

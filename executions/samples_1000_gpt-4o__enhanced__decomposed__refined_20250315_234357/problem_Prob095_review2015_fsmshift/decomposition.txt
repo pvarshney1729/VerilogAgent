@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, and output port shift_ena.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  clk,\n    input  reset,\n    output reg shift_ena\n);\n\n    reg [2:0] shift_counter;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            shift_counter <= 3'b100;\n            shift_ena <= 1'b1;\n        end else if (shift_counter != 3'b000) begin\n            shift_counter <= shift_counter - 1;\n            shift_ena <= 1'b1;\n        end else begin\n            shift_ena <= 1'b0;\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define the states for the FSM: IDLE, ASSERT_SHIFT, and DONE.",
+        "source": "This module is a part of the FSM for controlling a shift register, we want the ability to enable the shift register for exactly 4 clock cycles whenever the proper bit pattern is detected.",
+        "implementation": "// State encoding for the FSM\n  typedef enum logic [1:0] {\n    IDLE = 2'b00,\n    ASSERT_SHIFT = 2'b01,\n    DONE = 2'b10\n  } state_t;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state transition logic for the FSM based on the current state and reset signal.",
+        "source": "Whenever the FSM is reset, assert shift_ena for 4 cycles, then 0 forever (until reset). Reset should be active high synchronous.",
+        "implementation": "reg [2:0] state;\nreg shift_ena_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        state <= 3'b000;\n        shift_ena_reg <= 1'b1;\n    end else begin\n        if (state < 3'b100) begin\n            state <= state + 1'b1;\n            shift_ena_reg <= 1'b1;\n        end else begin\n            shift_ena_reg <= 1'b0;\n        end\n    end\nend\n\nassign shift_ena = shift_ena_reg;"
+    },
+    {
+        "id": "4",
+        "content": "Implement the output logic for shift_ena based on the current state. Assert shift_ena for 4 cycles when in ASSERT_SHIFT state.",
+        "source": "Whenever the FSM is reset, assert shift_ena for 4 cycles, then 0 forever (until reset).",
+        "implementation": "reg [2:0] shift_counter;\nreg shift_ena_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        shift_counter <= 3'b100; // Initialize counter to 4\n        shift_ena_reg <= 1'b1;   // Assert shift_ena\n    end else if (shift_counter != 3'b000) begin\n        shift_counter <= shift_counter - 1'b1;\n        shift_ena_reg <= 1'b1;   // Keep asserting shift_ena\n    end else begin\n        shift_ena_reg <= 1'b0;   // Deassert shift_ena after 4 cycles\n    end\nend\n\nassign shift_ena = shift_ena_reg;"
+    },
+    {
+        "id": "5",
+        "content": "Implement the synchronous reset logic to transition the FSM to the ASSERT_SHIFT state and start the 4-cycle count.",
+        "source": "Reset should be active high synchronous. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "```verilog\n[BEGIN]\nreg [2:0] state, next_state;\nreg [1:0] cycle_count;\nreg shift_ena_reg;\n\n// State encoding\nlocalparam IDLE = 3'b000;\nlocalparam ASSERT_SHIFT = 3'b001;\n\n// Synchronous reset and state transition logic\nalways @(posedge clk) begin\n    if (reset) begin\n        state <= ASSERT_SHIFT;\n        cycle_count <= 2'b00;\n    end else begin\n        state <= next_state;\n        if (state == ASSERT_SHIFT) begin\n            cycle_count <= cycle_count + 1;\n        end\n    end\nend\n\n// Next state logic\nalways @(*) begin\n    case (state)\n        ASSERT_SHIFT: begin\n            if (cycle_count == 2'b11)\n                next_state = IDLE;\n            else\n                next_state = ASSERT_SHIFT;\n        end\n        default: next_state = IDLE;\n    endcase\nend\n\n// Output logic\nalways @(*) begin\n    shift_ena_reg = (state == ASSERT_SHIFT);\nend\n\nassign shift_ena = shift_ena_reg;\n[END]\n```"
+    }
+]

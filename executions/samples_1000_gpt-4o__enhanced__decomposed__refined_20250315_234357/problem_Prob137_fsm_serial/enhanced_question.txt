@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit, positive edge-triggered clock input.
+  - reset: 1-bit, active-high synchronous reset input.
+  - in: 1-bit, serial data input.
+
+- Output Ports:
+  - done: 1-bit, indicates a correctly received byte sequence.
+
+Design Description:
+The module implements a finite state machine (FSM) to identify correctly received bytes in a serial communication stream. The protocol consists of a start bit, 8 data bits, and a stop bit. The line is idle at logic level 1.
+
+FSM States:
+1. IDLE: The FSM waits for a start bit (logic 0).
+2. RECEIVE: The FSM receives 8 data bits, starting with the least significant bit first.
+3. VERIFY_STOP: The FSM checks for a stop bit (logic 1).
+4. DONE: The FSM sets the done output high if the byte is correctly received.
+5. ERROR: The FSM enters this state if the stop bit is incorrect and waits for the next start bit.
+
+Behavioral Details:
+- The FSM transitions from IDLE to RECEIVE upon detecting a start bit.
+- During the RECEIVE state, 8 bits are sequentially captured, with each bit being stored on the rising edge of clk.
+- After receiving 8 bits, the FSM transitions to VERIFY_STOP to check the stop bit.
+- If the stop bit is correct, the FSM transitions to DONE, and the done signal is asserted high for one clock cycle.
+- If the stop bit is incorrect, the FSM transitions to ERROR, where it waits for the next correct start bit.
+
+Edge Cases:
+- Only valid start bits (logic 0) initiate the byte reception process.
+- The FSM resets to the IDLE state upon a synchronous reset (active-high) or if the line remains idle (logic 1) beyond expected timing during ERROR.
+
+Signal Dependencies:
+- The FSM is fully synchronous, with all state transitions and operations occurring on the positive edge of clk.
+- The in signal is sampled on the rising edge of clk.
+
+Initial Conditions:
+- On synchronous reset (active-high), the FSM returns to the IDLE state, and the done output is set to logic 0.
+
+Bit Indexing:
+- The least significant bit (LSB) is received first, and bit[0] refers to the LSB of the data byte.
+</ENHANCED_SPEC>

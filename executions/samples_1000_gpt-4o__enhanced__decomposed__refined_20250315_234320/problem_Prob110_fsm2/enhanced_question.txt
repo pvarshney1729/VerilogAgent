@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, active on the rising edge.
+  - `input areset`: Asynchronous reset signal, active high. Resets the state machine to the initial state (OFF).
+  - `input j`: Input signal for state transition from OFF to ON.
+  - `input k`: Input signal for state transition from ON to OFF.
+- Output Ports:
+  - `output out`: Output signal representing the current state (0 for OFF, 1 for ON).
+
+Specifications:
+1. State Machine Type: Moore
+2. States:
+   - State `OFF`: 
+     - Output `out` = 0
+     - Transitions:
+       - Remain in `OFF` when `j = 0`
+       - Transition to `ON` when `j = 1`
+   - State `ON`: 
+     - Output `out` = 1
+     - Transitions:
+       - Remain in `ON` when `k = 0`
+       - Transition to `OFF` when `k = 1`
+
+3. Reset Behavior:
+   - Reset Type: Asynchronous
+   - Reset Condition: Active-high signal on `areset`.
+   - Reset Action: Immediately transitions the state machine to the `OFF` state, regardless of the clock.
+
+4. Clock Domain:
+   - The state transitions occur on the rising edge of `clk`.
+   - The state output (`out`) is updated at the same clock edge as the state transition.
+
+5. Initial Conditions:
+   - On reset (`areset` = 1), the initial state is `OFF` with `out` = 0.
+
+6. Additional Considerations:
+   - Inputs `j` and `k` are evaluated only on the rising edge of the `clk` unless `areset` is active.
+   - Ensure correct handling of race conditions by prioritizing the `areset` signal over clock-induced transitions.
+   - All transitions and outputs should adhere strictly to the state transition diagram described.
+
+This specification ensures a clear implementation of the Moore state machine with well-defined input, output, and reset behaviors.
+</ENHANCED_SPEC>

@@ -1,0 +1,55 @@
+```verilog
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit, clock signal, positive edge-triggered.
+  - areset: 1-bit, asynchronous reset signal, active high, resets the FSM to initial state A.
+  - in: 1-bit, primary input to the state machine.
+
+- Output Ports:
+  - out: 1-bit, output determined by current state of the FSM.
+
+State Machine Specifications:
+- Type: Moore State Machine
+- Number of States: 4
+- State Encoding: Use a 2-bit register to encode the states.
+  - State A: 2'b00
+  - State B: 2'b01
+  - State C: 2'b10
+  - State D: 2'b11
+
+- State Transition Table:
+  | Current State | Next State when in=0 | Next State when in=1 | Output |
+  |---------------|----------------------|----------------------|--------|
+  | A (00)        | A (00)               | B (01)               | 0      |
+  | B (01)        | C (10)               | B (01)               | 0      |
+  | C (10)        | A (00)               | D (11)               | 0      |
+  | D (11)        | C (10)               | B (01)               | 1      |
+
+- Output Logic: 
+  - The output 'out' is determined solely by the current state.
+  - Output is 0 for states A, B, and C. Output is 1 for state D.
+
+Clock and Reset Specifications:
+- The FSM is triggered on the positive edge of the 'clk' signal.
+- The 'areset' signal is asynchronous and resets the FSM to state A.
+- Upon activation of 'areset', the FSM transitions immediately to state A, regardless of the clock signal.
+
+Initial Conditions:
+- On initial power-up or upon reset, the FSM enters state A (2'b00).
+
+Indexing and Bit Conventions:
+- Bit[0] refers to the least significant bit (LSB) in multi-bit signals.
+
+Edge Cases:
+- Ensure that all transitions are handled correctly during clock and reset signal changes to avoid metastability.
+
+Design Assumptions:
+- Assume all flip-flops and sequential elements are positive-edge triggered.
+- No undefined or unused states. All possible 2-bit combinations are defined in the state table.
+
+Note: The state transition and output logic must be implemented according to the specified behavior in the table above.
+</ENHANCED_SPEC>
+```

@@ -1,0 +1,55 @@
+Generated Response:
+
+<REASONING>
+To implement the 32-bit Galois LFSR with the specified taps, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified interface, including the input ports `clk` and `reset`, and the output port `q` which is 32 bits wide.
+
+2. **Synchronous Reset**: Implement a synchronous reset that sets the output `q` to `32'h1` when the `reset` signal is high. This ensures that the LFSR starts from a known non-zero state.
+
+3. **Shift Register Logic**: On each rising edge of the clock, if the reset is not active, the LFSR should shift right by one bit. The new MSB (`q[31]`) is determined by XORing the current LSB (`q[0]`) with the bits at the tap positions (`q[31]`, `q[21]`, `q[1]`, and `q[0]`).
+
+4. **Bitwise Operations**: Use bitwise XOR operations to calculate the feedback for the LFSR. The feedback is inserted into the MSB position while the rest of the bits shift right.
+
+5. **Coding Conventions**: Use `logic` for all signals, and utilize `always_ff` for sequential logic triggered by the clock. The reset logic is synchronous, so it is handled within the clock edge-triggered block.
+
+By following these steps, we ensure that the module adheres to the specified behavior and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            q <= 32'h1;
+        end else begin
+            q <= {q[30:0], q[31] ^ q[21] ^ q[1] ^ q[0]};
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            q <= 32'h1;
+        end else begin
+            q <= {q[30:0], q[31] ^ q[21] ^ q[1] ^ q[0]};
+        end
+    end
+
+endmodule

@@ -1,0 +1,67 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a
+ - input  b
+ - input  sel_b1
+ - input  sel_b2
+ - output out_assign
+ - output out_always
+
+The module should implement a 2-to-1 mux that chooses between a and b.
+Choose b if both sel_b1 and sel_b2 are true. Otherwise, choose a. Do the
+same twice, once using assign statements and once using a procedural if
+statement.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name:**
+- `TopModule`
+
+**Interface:**
+```verilog
+module TopModule (
+    input wire a,       // 1-bit input
+    input wire b,       // 1-bit input
+    input wire sel_b1,  // 1-bit input
+    input wire sel_b2,  // 1-bit input
+    output wire out_assign, // 1-bit output from assign statement
+    output reg out_always   // 1-bit output from procedural statement
+);
+```
+
+**Behavior:**
+- The module implements a 2-to-1 multiplexer. The selection of the output is based on the following conditions:
+  - If both `sel_b1` and `sel_b2` are `true` (logical high, 1), the output should be `b`.
+  - If either `sel_b1` or `sel_b2` is `false` (logical low, 0), the output should be `a`.
+- This logic should be implemented twice:
+  - Once using continuous assignment statements (`assign`).
+  - Once using an `always` block with a procedural `if` statement.
+
+**Timing and Implementation Notes:**
+- The module is intended to be purely combinational. There are no sequential elements or clock dependencies involved.
+- Since the module is combinational, no reset behavior is defined or required.
+- The output `out_always` is driven by a procedural block and hence is declared as a `reg` type.
+  
+**Example Implementation:**
+```verilog
+assign out_assign = (sel_b1 && sel_b2) ? b : a;
+
+always @(*) begin
+    if (sel_b1 && sel_b2) begin
+        out_always = b;
+    end else begin
+        out_always = a;
+    end
+end
+```
+
+**Additional Notes:**
+- Both outputs `out_assign` and `out_always` should produce the same logic result based on the selection criteria.
+- The module assumes that the inputs are stable and valid for the duration of the operation, as it is a combinational circuit with no internal storage.
+- Bit ordering and indexing are not applicable in this context as all ports are single-bit signals.
+
+**Boundary Conditions:**
+- The behavior is fully defined for all possible input combinations of `sel_b1` and `sel_b2` since the selection condition explicitly covers both possible scenarios.
+                

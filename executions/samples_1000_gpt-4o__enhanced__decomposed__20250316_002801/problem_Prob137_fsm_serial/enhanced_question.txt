@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input logic clk` (Clock signal for triggering sequential logic on the positive edge)
+  - `input logic reset` (Active-high synchronous reset)
+  - `input logic in` (Serial input stream containing bits for processing)
+
+- Output Ports:
+  - `output logic done` (Indicates when a byte has been correctly received)
+
+Functional Description:
+This module implements a finite state machine (FSM) to interpret a serial bit stream according to an older communication protocol that uses 1 start bit, 8 data bits, and 1 stop bit. The protocol transmits the least significant bit (LSB) first.
+
+Behavior and Processing:
+- Start Bit Detection: The FSM begins by detecting a start bit, which is a '0'.
+- Data Bit Reception: Following the start bit, the FSM captures 8 data bits, one per clock cycle.
+- Stop Bit Verification: The FSM expects a stop bit ('1') immediately after the 8th data bit.
+- Error Handling: If the stop bit is not '1' when expected, the FSM halts further processing until it detects a '1' to signify the end of a potential erroneous byte sequence.
+- Completion Signal: The `done` output is asserted high when a complete byte (start bit, 8 data bits, and stop bit) is correctly received.
+
+Clock and Reset:
+- The FSM transitions occur on the positive edge of the `clk`.
+- The `reset` input is synchronous and active-high, initializing the FSM to its idle state. All registers and flip-flops return to their default states upon reset.
+
+Signal Behavior:
+- All sequential elements are initialized to zero or their respective idle states at reset.
+- The FSM ensures no race conditions by strictly adhering to clock edge transitions for state updates.
+
+Edge Cases:
+- If continuous logic '1' is received representing idle states, the FSM will remain in the idle state waiting for a start bit.
+- If a start bit is followed by fewer than 8 data bits before receiving a stop bit, the FSM resets to idle and waits for a new start bit sequence.
+
+Indexing and Conventions:
+- Bit indexing follows the convention where bit[0] is the least significant bit (LSB).
+
+Note: Ensure the logic is optimized to handle noise or spurious signals that may mimic the protocol frames to prevent false positive byte detections.
+</ENHANCED_SPEC>

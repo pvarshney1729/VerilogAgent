@@ -1,0 +1,59 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a
+ - input  b
+ - input  c
+ - output out
+
+The module should implement the circuit described by the Karnaugh map
+below.
+
+          a
+   bc   0   1
+   00 | 0 | 1 |
+   01 | 1 | 1 |
+   11 | 1 | 1 |
+   10 | 1 | 1 |
+
+Here is the enhanced specification which might be useful to you:
+                ```verilog
+// Enhanced Specification for TopModule
+
+// Module Interface
+module TopModule (
+    input wire a,  // 1-bit input signal
+    input wire b,  // 1-bit input signal
+    input wire c,  // 1-bit input signal
+    output wire out // 1-bit output signal
+);
+
+// Description:
+// TopModule is a combinational logic circuit implementing the function described by the following Karnaugh map:
+// Inputs are designated as 'a' for the column (MSB), and 'b' and 'c' for the row (LSB, MSB respectively).
+//
+//       a
+//   bc   0   1
+//   00 | 0 | 1 |
+//   01 | 1 | 1 |
+//   11 | 1 | 1 |
+//   10 | 1 | 1 |
+
+// Logic Behavior:
+// The output 'out' is defined by the truth table derived from the Karnaugh map as follows:
+// - out = 1 if (b & c) or (a)
+//   Simplified boolean expression: out = (b & c) | a;
+
+// Implementation Notes:
+// - This circuit is purely combinational with no clock or reset logic involved.
+// - Ensure the implementation adheres to the described logic without any sequential elements.
+// - The design assumes all inputs are stable during the evaluation of the combinational logic.
+
+assign out = (b & c) | a;
+
+endmodule
+```
+###
+                

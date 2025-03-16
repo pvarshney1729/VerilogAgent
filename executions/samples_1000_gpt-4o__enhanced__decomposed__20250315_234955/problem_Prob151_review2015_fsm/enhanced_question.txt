@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal; triggers all sequential logic on the positive edge.
+  - `reset`: Active high, synchronous reset signal; initializes the state machine to the pattern detection state.
+  - `data`: Serial data input; used for pattern detection and counting duration.
+  - `done_counting`: Indicates completion of the counting duration.
+  - `ack`: Acknowledgment signal from the user after the timer has notified completion.
+
+- Output Ports:
+  - `shift_ena`: Enables shifting of additional bits for counting duration; asserted for exactly 4 clock cycles.
+  - `counting`: Indicates the state machine is waiting for counting to complete.
+  - `done`: Notifies the user that the timer has completed its count.
+
+Behavior:
+1. Pattern Detection:
+   - The state machine begins in an idle state, actively searching for the pattern `1101` on the `data` input.
+   - Upon detecting the complete pattern `1101` in the serial data stream, the state machine transitions to the next phase.
+
+2. Duration Determination:
+   - Following pattern detection, the state machine asserts the `shift_ena` output for 4 consecutive clock cycles, during which it shifts in 4 additional bits from the `data` input to determine the counting duration.
+
+3. Counting:
+   - Once the duration bits are shifted in, the state machine asserts the `counting` output.
+   - It remains in this state until the `done_counting` input is asserted high, indicating the counters have finished counting.
+
+4. Notification and Acknowledgment:
+   - When `done_counting` is high, the state machine asserts the `done` output to notify the user that the timer has timed out.
+   - The state machine waits for the `ack` input to be asserted high by the user, signifying acknowledgment of the timer's completion.
+
+5. Reset and Initialization:
+   - Upon receiving an active high `reset` signal, the state machine synchronously resets, returning to the initial state where it searches for the pattern `1101`.
+   - All sequential elements should be initialized appropriately to ensure consistent operation starting from the initial state.
+
+Edge Cases and Boundary Conditions:
+- Ensure the state machine reliably detects the `1101` pattern without false positives, even if the pattern occurs across clock cycle boundaries.
+- Ensure the `shift_ena` signal is asserted for precisely 4 cycles regardless of input conditions.
+
+Indexing and Conventions:
+- All inputs and outputs are single-bit signals.
+- Bit[0] refers to the least significant bit in any multi-bit operations or internal registers.
+
+Note: The data path components such as counters and comparators are not included in this specification and should be designed to interface properly with the control signals provided by this state machine.
+</ENHANCED_SPEC>

@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Specification for `TopModule`:
+
+1. **Module Interface:**
+   - **Input Ports:**
+     - `clk`: Clock signal, 1 bit.
+     - `resetn`: Active-low synchronous reset signal, 1 bit.
+     - `r`: Request signals from devices, 3 bits (r[2:0]), where `r[0]` is the highest priority and `r[2]` is the lowest priority.
+   - **Output Ports:**
+     - `g`: Grant signals to devices, 3 bits (g[2:0]), where `g[0]` corresponds to the grant for device 0, `g[1]` for device 1, and `g[2]` for device 2.
+
+2. **FSM Description:**
+   - **States:**
+     - State `A`: Idle state where no grants are given. Transition conditions:
+       - Remain in `A` if `r` is 3'b000.
+       - Transition to `B` if `r[0]` is 1 (highest priority).
+       - Transition to `C` if `r[1]` is 1 and `r[0]` is 0.
+       - Transition to `D` if `r[2]` is 1 and `r[0]` and `r[1]` are 0 (lowest priority).
+     - State `B`: Grant to device 0 (`g[0]` = 1). Transition conditions:
+       - Remain in `B` if `r[0]` is 1.
+       - Transition to `A` if `r[0]` is 0.
+     - State `C`: Grant to device 1 (`g[1]` = 1). Transition conditions:
+       - Remain in `C` if `r[1]` is 1.
+       - Transition to `A` if `r[1]` is 0.
+     - State `D`: Grant to device 2 (`g[2]` = 1). Transition conditions:
+       - Remain in `D` if `r[2]` is 1.
+       - Transition to `A` if `r[2]` is 0.
+
+3. **Clock and Reset:**
+   - The FSM is triggered on the positive edge of the clock (`clk`).
+   - `resetn` is a synchronous reset. When `resetn` is low, the FSM resets to state `A`.
+
+4. **Implementation Notes:**
+   - Use separate always blocks for state transition logic (state table) and state memory (state flip-flops).
+   - The outputs `g[i]` can be described using either continuous assignment statements or an always block. Ensure that only one `g[i]` signal is high at a time based on the current state.
+   - Assign state codes for states `A`, `B`, `C`, and `D` as needed. Ensure that the state encoding allows for correct priority handling and efficient transitions.
+   - All state flip-flops should have a defined reset state, which is state `A`.
+</ENHANCED_SPEC>

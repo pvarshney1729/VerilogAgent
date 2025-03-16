@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, positive edge-triggered.
+  - `input reset`: Synchronous active-high reset signal.
+  - `input in`: Data input stream, 1-bit.
+
+- Output Ports:
+  - `output disc`: Indicates a bit should be discarded, 1-bit.
+  - `output flag`: Indicates the detection of a frame boundary, 1-bit.
+  - `output err`: Indicates an error condition, 1-bit.
+
+Design Requirements:
+1. The module should implement a Moore-type finite state machine (FSM) to process a continuous bit stream (input `in`) and recognize specific bit patterns.
+
+2. The FSM should detect the following patterns:
+   - `0111110`: This pattern indicates that a bit needs to be discarded. The `disc` output should be asserted for one clock cycle, starting the cycle after this pattern is detected.
+   - `01111110`: This pattern indicates a frame boundary. The `flag` output should be asserted for one clock cycle, starting the cycle after this pattern is detected.
+   - `01111111...`: This pattern indicates an error due to 7 or more consecutive '1's. The `err` output should be asserted for one clock cycle, starting the cycle after this pattern is detected.
+
+3. Initial State and Reset Behavior:
+   - The FSM should start in an initial state that behaves as though the previous input was '0'.
+   - On receiving a synchronous active-high reset signal, the FSM should return to the initial state.
+   - All outputs (`disc`, `flag`, `err`) should be deasserted upon reset.
+
+4. Sequential Logic:
+   - All state transitions and updates are to occur on the positive edge of the `clk` signal.
+   - Outputs (`disc`, `flag`, `err`) should reflect the FSM's state and be updated on the positive edge of `clk`.
+
+5. Bit Indexing and Conventions:
+   - Bit sequences are described from left (most significant bit) to right (least significant bit).
+   - The input `in` is processed one bit per clock cycle.
+
+6. Edge Cases:
+   - If multiple patterns are detected simultaneously, the priority of outputs should be: `err` > `flag` > `disc`.
+   - If an error condition (`01111111...`) is detected, the FSM should immediately assert `err` and not detect other patterns until reset or enough '0's are encountered to break the sequence of '1's.
+
+This specification ensures the correct and efficient implementation of HDLC framing detection using a Moore-type FSM.
+</ENHANCED_SPEC>

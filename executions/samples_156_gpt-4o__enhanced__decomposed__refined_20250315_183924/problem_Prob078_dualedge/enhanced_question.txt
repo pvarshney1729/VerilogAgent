@@ -1,0 +1,64 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  d
+ - output q
+
+A dual-edge triggered flip-flop is triggered on both edges of the clock.
+However, FPGAs don't have dual-edge triggered flip-flops, and using an
+always @(posedge clk or negedge clk) is not accepted as a legal
+sensitivity list. Build a circuit that functionally behaves like a
+dual-edge triggered flip-flop.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Name**: `TopModule`
+
+**Interface Specification**:
+- **Inputs**:
+  - `input wire clk`: Clock signal, assumed active high.
+  - `input wire d`: Data input, one bit, unsigned.
+- **Outputs**:
+  - `output reg q`: Data output, one bit, unsigned.
+
+**Behavior and Timing**:
+- The module emulates a dual-edge triggered flip-flop using standard FPGA resources.
+- The flip-flop captures the input `d` on both the rising and falling edge of the `clk` signal.
+- This is achieved by using intermediate storage elements to capture the value `d` on the rising edge and updating the output `q` on the falling edge, or vice versa.
+  
+**Reset Behavior**:
+- The module does not include an explicit reset signal in this specification. Implementations should consider adding a reset signal if necessary for specific applications or environments.
+
+**Initial State**:
+- The initial value of `q` is explicitly defined as `0` at power-up.
+
+**Implementation Notes**:
+- A common method to achieve dual-edge triggering in FPGAs is to use two separate always blocks: one triggered on the rising edge of the clock to capture `d` into an internal register, and another on the falling edge to update the output `q`.
+- This approach ensures compatibility with FPGA architectures that do not natively support dual-edge triggering.
+
+**Example Implementation**:
+```verilog
+module TopModule (
+    input wire clk,
+    input wire d,
+    output reg q
+);
+
+    reg d_rising_edge;
+
+    always @(posedge clk) begin
+        d_rising_edge <= d;
+    end
+
+    always @(negedge clk) begin
+        q <= d_rising_edge;
+    end
+
+endmodule
+```
+
+**Boundary Conditions**:
+- The behavior on any clock glitches or metastability conditions is dependent on the physical implementation and should be considered during synthesis and placement/routing optimizations. Ensure proper clock tree synthesis and signal integrity to avoid issues.
+                

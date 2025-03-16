@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Details:
+- Inputs:
+  - `input clk`: Clock signal (1-bit). All sequential logic is triggered on the positive edge of this clock.
+  - `input areset`: Asynchronous reset signal (1-bit). This is a positive edge triggered reset.
+  - `input in`: Input signal (1-bit).
+
+- Output:
+  - `output reg out`: Output signal (1-bit).
+
+State Machine Description:
+- Type: Moore State Machine
+- States: Four states labeled as A, B, C, and D.
+- Initial State: State A
+
+Reset Behavior:
+- The asynchronous reset (`areset`) immediately resets the state machine to state A when triggered by a positive edge.
+
+State Transition Table:
+- The state transitions are determined by the current state and the input signal `in`.
+- The output is determined solely by the current state.
+
+  | Current State | Next State when in=0 | Next State when in=1 | Output |
+  |---------------|----------------------|----------------------|--------|
+  | A             | A                    | B                    | 0      |
+  | B             | C                    | B                    | 0      |
+  | C             | A                    | D                    | 0      |
+  | D             | C                    | B                    | 1      |
+
+Bit Conventions:
+- All input and output ports are 1-bit wide.
+- Bit indices are not applicable as all signals are single-bit.
+
+Sequential Logic:
+- All state transitions and outputs are updated on the positive edge of the `clk`, except when the `areset` is activated.
+
+Edge Cases:
+- The state machine is guaranteed to return to state A upon the assertion of the `areset` signal, regardless of the current state or input.
+- Outputs are defined for all states, ensuring predictable behavior at all times.
+
+All operational details have been explicitly defined to ensure clarity and correctness in the implementation of the module.
+</ENHANCED_SPEC>

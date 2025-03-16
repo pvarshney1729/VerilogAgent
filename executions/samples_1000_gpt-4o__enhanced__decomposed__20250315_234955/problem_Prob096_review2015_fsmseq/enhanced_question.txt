@@ -1,0 +1,28 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock signal; triggers all sequential logic on the positive edge.
+- input wire reset: Active-high, synchronous reset signal.
+- input wire data: Input bit stream (1-bit).
+- output reg start_shifting: Output signal that becomes high when the sequence is detected.
+
+Specifications:
+1. The module will implement a finite-state machine (FSM) to detect the bit sequence "1101" in the input stream, 'data'.
+2. The FSM will consist of multiple states to represent partial detection of the sequence "1101".
+3. The output signal 'start_shifting' should be set to 1 once the sequence "1101" is detected and should remain high until a reset occurs.
+4. The reset signal is synchronous, meaning it affects the FSM state and 'start_shifting' output on the next positive clock edge when high.
+5. The initial state of the FSM and 'start_shifting' should be set to the default state (sequence not found) whenever reset is activated.
+
+Behavioral Details:
+- The FSM should transition states based on the input 'data' at each positive clock edge.
+- Upon detecting the final '1' of the sequence "1101", the FSM sets 'start_shifting' to 1.
+- The 'start_shifting' output, once set to 1, remains high until the next reset event.
+
+Edge Cases and Input Boundaries:
+- The FSM must correctly handle any arbitrary length of input bit stream.
+- Overlapping sequences should be detected (e.g., in input "1101101", both sequences should be recognized).
+- The reset will clear the FSM to its initial state and set 'start_shifting' to 0 on the next positive clock edge if 'reset' is high.
+
+Note: Ensure that all state transitions and output logic are designed to avoid race conditions or glitches.
+</ENHANCED_SPEC>

@@ -1,0 +1,63 @@
+
+Consider the following adder-subtractor with a zero flag:
+
+  synthesis verilog_input_version verilog_2001
+  module TopModule (
+      input do_sub,
+      input [7:0] a,
+      input [7:0] b,
+      output reg [7:0] out,
+      output reg result_is_zero
+  );
+
+      always @(*) begin
+          case (do_sub)
+            0: out = a+b;
+            1: out = a-b;
+          endcase
+
+          if (~out)
+              result_is_zero = 1;
+      end
+
+  endmodule
+
+Unfortunately, this module has a bug. Implement a new version of this
+module that fixes the bug.
+
+Here is the enhanced specification which might be useful to you:
+                ```verilog
+// Enhanced specification for a combinational adder-subtractor with a zero flag
+module TopModule (
+    input wire do_sub,                   // 1-bit control signal: 0 for addition, 1 for subtraction
+    input wire [7:0] a,                  // 8-bit unsigned operand a
+    input wire [7:0] b,                  // 8-bit unsigned operand b
+    output reg [7:0] out,                // 8-bit unsigned result of the operation
+    output reg result_is_zero            // 1-bit flag indicating if the result is zero
+);
+
+    // Combinational logic for adder-subtractor with zero detection
+    always @(*) begin
+        // Perform addition or subtraction based on the control signal
+        case (do_sub)
+            1'b0: out = a + b;           // Addition when do_sub is 0
+            1'b1: out = a - b;           // Subtraction when do_sub is 1
+            default: out = 8'b0;         // Default case for safety (though should not occur)
+        endcase
+
+        // Set the zero flag based on the output
+        result_is_zero = (out == 8'b0) ? 1'b1 : 1'b0; // 1 if out is zero, otherwise 0
+    end
+
+endmodule
+```
+
+### Implementation Notes:
+
+- **Signal Interfaces:** The input `do_sub` is clarified as a single-bit signal. All inputs and outputs are defined as unsigned 8-bit wide signals to align with typical usage in arithmetic operations.
+- **Bit-Ordering:** The specification assumes LSB is bit 0, which is standard in Verilog.
+- **Timing Behavior:** The use of `always @(*)` is appropriate for describing combinational logic, ensuring the module operates without clock dependencies.
+- **Reset Behavior and Initial States:** Although not typically relevant for combinational logic, initialization of output signals is implied during synthesis or simulation setup.
+- **Logical Descriptions:** The zero detection logic explicitly sets `result_is_zero` based on the comparison `out == 8'b0`.
+- **Boundary Conditions:** Overflow and underflow are not explicitly handled, as the arithmetic operations are unsigned and wrap around by default in Verilog. Additional logic might be needed if overflow detection is required.
+                

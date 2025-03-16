@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input Ports:
+  - `input wire clk`: Clock signal. All sequential elements are triggered on the positive edge.
+  - `input wire reset`: Active-high synchronous reset signal.
+  - `input wire data`: Serial data input for pattern detection and duration specification.
+  - `input wire done_counting`: Signal that indicates the counting process is complete.
+  - `input wire ack`: Acknowledgment signal from the user after the timer completion notification.
+
+- Output Ports:
+  - `output reg shift_ena`: Enable signal for shifting in additional bits, active for exactly 4 clock cycles.
+  - `output reg counting`: Signal indicating the timer is in the counting state.
+  - `output reg done`: Signal to notify the user that the timer has completed its duration.
+
+Functional Description:
+1. **Pattern Detection**: The state machine monitors the `data` input for the specific bit sequence `1101`. This is the starting sequence for the timer operation.
+
+2. **Bit Shifting for Duration**:
+   - Upon detecting the `1101` pattern, the state machine asserts `shift_ena` for exactly 4 consecutive clock cycles to shift in additional bits that determine the counting duration.
+
+3. **Counting State**:
+   - After the 4 bits are shifted in, `shift_ena` is de-asserted, and the state machine asserts `counting` to indicate that it is in the counting phase.
+   - The state machine remains in this state until `done_counting` is asserted high, indicating that the counting process has finished.
+
+4. **Completion Notification**:
+   - Upon completion of counting, the state machine asserts `done` to notify the user.
+   - The state machine waits in this state until `ack` is asserted high by the user, signaling acknowledgment of the timer completion.
+
+5. **Reset and State Initialization**:
+   - The reset is synchronous and active high. When `reset` is high, the state machine transitions to its initial state, ready to detect the next occurrence of the `1101` pattern.
+   - All state transitions occur on the rising edge of the `clk`.
+
+Boundary Conditions:
+- Ensure that the state machine handles noise or incomplete sequences by resetting or ignoring intermediate states if the exact pattern `1101` is not detected sequentially.
+- The system should be robust against any input signal glitches by checking the sequence strictly over four consecutive clock cycles.
+
+Note: The data path for counters and comparators is not part of this specification and should be handled separately.
+</ENHANCED_SPEC>

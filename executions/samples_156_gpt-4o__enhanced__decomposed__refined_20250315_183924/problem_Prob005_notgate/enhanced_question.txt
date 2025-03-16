@@ -1,0 +1,49 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in
+ - output out
+
+The module should implement a NOT gate.
+
+Here is the enhanced specification which might be useful to you:
+                Module Name: `TopModule`
+
+### Interface Specification
+- **Inputs**:
+  - `input wire in` : A 1-bit unsigned input signal.
+  
+- **Outputs**:
+  - `output wire out` : A 1-bit unsigned output signal representing the logical NOT of the input.
+
+### Bit-Ordering and Indexing
+- All ports are single-bit and therefore do not require specific bit-ordering conventions. However, if expanded in the future, note that `bit[0]` would refer to the least significant bit (LSB).
+
+### Timing Behavior
+- This module implements combinational logic. The output `out` is directly dependent on the input `in` without any clock cycle delay.
+
+### Reset Behavior
+- This module does not incorporate any reset logic as it consists purely of combinational logic.
+
+### Logical Description
+- **Truth Table**:
+  | `in` | `out` |
+  |------|-------|
+  |  0   |   1   |
+  |  1   |   0   |
+
+- **Equation**:
+  - `out = ~in`
+
+### Implementation Notes
+- The module is a simple combinational circuit implementing a NOT gate, providing an inverted output of the input signal.
+- Ensure that the design adheres to standard synthesis and simulation practices for combinational circuits.
+
+### Boundary Conditions
+- As a combinational NOT gate, there are no special boundary conditions to consider beyond standard logic inversion.
+
+### Additional Considerations
+- Keep the module flexible for potential expansion to handle wider buses by maintaining consistent naming and structural practices.
+                

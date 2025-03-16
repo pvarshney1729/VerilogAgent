@@ -1,0 +1,78 @@
+Generated Response:
+
+<REASONING>
+To implement the TopModule that simulates Rule 90 cellular automaton, we need to create a 512-bit wide register to hold the current state of the cells. The module will have inputs for a clock signal, a load signal, and a 512-bit data input. The output will be a 512-bit signal representing the current state of the cells.
+
+The key operation is to update each cell based on the XOR of its two neighbors. Since the boundaries are assumed to be zero, we need to handle the edge cases where the leftmost and rightmost cells have only one neighbor.
+
+The module will use a synchronous process to update the state of the cells on the positive edge of the clock. If the load signal is high, the state will be initialized with the input data. Otherwise, the state will be updated according to Rule 90.
+
+The implementation will use an always block triggered by the positive edge of the clock to handle the sequential logic. We will use a for loop to iterate over the cells and compute the next state using the XOR operation.
+
+The coding conventions require that we declare all ports and signals as logic and use always @(*) for combinational logic. Since this is a sequential process, we will use an always block with posedge clk.
+
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] current_state, next_state;
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            current_state <= data;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    always_comb begin
+        next_state[0] = current_state[1]; // Left boundary
+        next_state[511] = current_state[510]; // Right boundary
+        for (int i = 1; i < 511; i++) begin
+            next_state[i] = current_state[i-1] ^ current_state[i+1];
+        end
+    end
+
+    assign q = current_state;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] current_state, next_state;
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            current_state <= data;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    always_comb begin
+        next_state[0] = current_state[1]; // Left boundary
+        next_state[511] = current_state[510]; // Right boundary
+        for (int i = 1; i < 511; i++) begin
+            next_state[i] = current_state[i-1] ^ current_state[i+1];
+        end
+    end
+
+    assign q = current_state;
+
+endmodule

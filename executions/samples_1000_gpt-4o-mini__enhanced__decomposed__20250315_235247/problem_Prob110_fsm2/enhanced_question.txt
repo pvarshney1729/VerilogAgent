@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock signal used for state transitions.
+  - `areset`: 1-bit asynchronous active-high reset signal. Resets the state machine to the initial state `OFF`.
+  - `j`: 1-bit input signal determining state transition from `OFF`.
+  - `k`: 1-bit input signal determining state transition from `ON`.
+
+- Output Ports:
+  - `out`: 1-bit output signal reflecting the current state. It is `0` when the state is `OFF` and `1` when the state is `ON`.
+
+State Machine Description:
+- Type: Moore State Machine
+- States:
+  - `OFF`: Initial state after reset. The output `out` is `0`.
+  - `ON`: The output `out` is `1`.
+
+- Transitions:
+  - From `OFF` state:
+    - If `j == 0`, remain in `OFF`.
+    - If `j == 1`, transition to `ON`.
+  - From `ON` state:
+    - If `k == 0`, remain in `ON`.
+    - If `k == 1`, transition to `OFF`.
+
+Reset Behavior:
+- The reset (`areset`) is asynchronous and active-high. When `areset` is asserted (`areset = 1`), the state is immediately set to `OFF` regardless of the clock signal, and the output `out` is set to `0`.
+
+Implementation Notes:
+- Ensure that all state transitions are synchronized with the rising edge of the `clk` signal, except for transitions triggered by the asynchronous reset.
+- Initial state after power-up or reset should be `OFF` with `out = 0`.
+- The state machine should be free of race conditions, with clear precedence given to the asynchronous reset over synchronous transitions.
+- Bit conventions: `bit[0]` refers to the least significant bit (LSB).
+</ENHANCED_SPEC>

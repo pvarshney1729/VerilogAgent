@@ -1,0 +1,73 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - output q (5 bits)
+
+A linear feedback shift register is a shift register usually with a few
+XOR gates to produce the next state of the shift register. A Galois LFSR
+is one particular arrangement that shifts right, where a bit position with
+a "tap" is XORed with the LSB output bit (q[0]) to produce its next value,
+while bit positions without a tap shift right unchanged.  If the taps positions
+are carefully chosen, the LFSR can be made to be "maximum-length". A maximum-length
+LFSR of n bits cycles through 2**n-1 states before repeating (the all-zero state is
+never reached).
+
+The module should implement a 5-bit maximal-length Galois LFSR with taps
+at bit positions 5 and 3. The active-high synchronous reset should reset
+the LFSR output to 1. Assume all sequential logic is triggered on the
+positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                #### Module Interface
+
+```verilog
+module TopModule (
+    input wire clk,            // Clock input, triggers on rising edge
+    input wire reset,          // Active-high synchronous reset
+    output reg [4:0] q         // 5-bit output representing the LFSR state
+);
+```
+
+#### Operational Behavior
+
+- **Bit-Ordering and Indexing**: The LFSR output `q` is indexed from 4 down to 0, where `q[4]` is the most significant bit (MSB) and `q[0]` is the least significant bit (LSB).
+
+- **Reset Behavior**: On an active-high synchronous reset, the LFSR state `q` is initialized to `5'b00001`.
+
+- **Feedback Logic**: The Galois LFSR shifts its bits right on each positive clock edge. The new value of `q[4]` is determined by XORing the current `q[0]` (LSB) with the bits at tap positions `q[3]` and `q[1]`.
+
+- **Tap Positions**: The taps are at positions 5 and 3, which correspond to `q[4]` and `q[2]` in the 0-indexed array of `q`. The feedback logic at each clock cycle is defined by:
+  - `new_q[4] = q[0] ^ q[2];`
+  - The rest of the bits shift right: `new_q[3:0] = q[4:1];`
+
+#### Timing and Clock Behavior
+
+- The LFSR is clocked on the rising edge of `clk`.
+
+- **Sequential Operation**: The feedback and shifting operation occur synchronously with the clock.
+
+#### Implementation Notes
+
+- The LFSR is designed to cycle through all possible non-zero states of a 5-bit register, which results in a maximum-length sequence of \(2^5 - 1 = 31\) states.
+
+- **Boundary Conditions**: The all-zero state is explicitly avoided by the initial reset state, ensuring the LFSR does not enter this condition under normal operation.
+
+- The described tap and feedback logic ensure the maximal-length property of the LFSR.
+
+#### Example Code
+
+```verilog
+always @(posedge clk) begin
+    if (reset) begin
+        q <= 5'b00001;  // Reset state
+    end else begin
+        q[4] <= q[0] ^ q[2];   // Feedback logic
+        q[3:0] <= q[4:1];      // Shift operation
+    end
+end
+```
+                

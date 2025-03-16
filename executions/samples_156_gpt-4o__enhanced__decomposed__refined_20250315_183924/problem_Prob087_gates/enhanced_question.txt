@@ -1,0 +1,68 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a
+ - input  b
+ - output out_and
+ - output out_or
+ - output out_xor
+ - output out_nand
+ - output out_nor
+ - output out_xnor
+ - output out_anotb
+
+The module should implement a combinational circuit with two inputs, a
+and b. There are 7 outputs, each with a logic gate driving it:
+
+  (1) out_and: a and b
+  (2) out_or: a or b
+  (3) out_xor: a xor b
+  (4) out_nand: a nand b
+  (5) out_nor: a nor b
+  (6) out_xnor: a xnor b
+  (7) out_anotb: a and-not b
+
+Here is the enhanced specification which might be useful to you:
+                ### Module Name
+- `TopModule`
+
+### Interface
+- **Inputs**:
+  - `input wire a`: 1-bit input, unsigned.
+  - `input wire b`: 1-bit input, unsigned.
+
+- **Outputs**:
+  - `output wire out_and`: 1-bit output, result of `a AND b`.
+  - `output wire out_or`: 1-bit output, result of `a OR b`.
+  - `output wire out_xor`: 1-bit output, result of `a XOR b`.
+  - `output wire out_nand`: 1-bit output, result of `a NAND b`.
+  - `output wire out_nor`: 1-bit output, result of `a NOR b`.
+  - `output wire out_xnor`: 1-bit output, result of `a XNOR b`.
+  - `output wire out_anotb`: 1-bit output, result of `a AND (NOT b)`.
+
+### Behavior
+- The module is purely combinational, producing outputs based solely on the current input values without any dependence on clock cycles.
+
+### Timing and Reset
+- **Combinational Circuit**: The module does not include any sequential logic and thus has no clock or reset signals.
+- **Reset Behavior**: Not applicable.
+
+### Implementation Notes
+- **Logical Operations**:
+  1. `out_and = a & b`: Logical AND.
+  2. `out_or = a | b`: Logical OR.
+  3. `out_xor = a ^ b`: Logical XOR.
+  4. `out_nand = ~(a & b)`: Logical NAND.
+  5. `out_nor = ~(a | b)`: Logical NOR.
+  6. `out_xnor = ~(a ^ b)`: Logical XNOR.
+  7. `out_anotb = a & ~b`: Logical AND-NOT.
+
+### Naming Conventions
+- All signal names are in lowercase and use underscores to separate words for readability.
+
+### Additional Notes
+- **Bit-Ordering**: Not applicable as all operations are single-bit, but future designs should specify MSB/LSB conventions.
+- **Boundary Conditions**: Inputs `a` and `b` are single-bit, thus inherently bounded to 0 or 1.
+                

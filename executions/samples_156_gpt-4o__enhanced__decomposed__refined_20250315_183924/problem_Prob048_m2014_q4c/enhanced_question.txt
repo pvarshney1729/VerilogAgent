@@ -1,0 +1,64 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  d
+ - input  r
+ - output q
+
+The module should implement a simple D flip flop with active high
+synchronous reset (reset output to 0).
+
+Here is the enhanced specification which might be useful to you:
+                Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: Clock signal. This is a 1-bit signal used for synchronizing the flip-flop.
+  - `input wire d`: Data input for the D flip-flop. This is a 1-bit signal.
+  - `input wire r`: Reset signal. This is a 1-bit active-high synchronous reset signal.
+
+- Output Ports:
+  - `output reg q`: Output of the D flip-flop. This is a 1-bit signal that holds the state of the flip-flop.
+
+Bit Indexing and Order:
+- All signals are single-bit, so bit indexing is not applicable in this context.
+
+Timing Behavior:
+- The D flip-flop captures the value of input `d` on the rising edge of `clk`.
+- The reset `r` is active high and synchronous. It resets the output `q` to 0 on the rising edge of `clk` when `r` is high, regardless of the value of `d`.
+
+Reset Behavior:
+- Synchronous Reset: The reset occurs on the rising edge of `clk` if `r` is high. When `r` is low, the D flip-flop operates normally, capturing the input `d` into the output `q` on the rising edge of `clk`.
+
+Initial State:
+- Upon initialization, the output `q` should be set to 0. This ensures a defined starting condition for simulation purposes.
+
+Clock Edge Specification:
+- The flip-flop operates on the rising edge of the clock signal `clk`.
+
+Implementation Notes:
+- This module is designed to be a simple D flip-flop with synchronous reset. The reset takes precedence over the data input, meaning if `r` is high, `q` will be reset to 0 irrespective of the value of `d` on the rising edge of `clk`.
+
+Verilog Implementation:
+```verilog
+module TopModule (
+    input wire clk,  // Clock signal
+    input wire d,    // Data input
+    input wire r,    // Synchronous active high reset
+    output reg q     // Output of the flip-flop
+);
+
+always @(posedge clk) begin
+    if (r) begin
+        q <= 1'b0;  // Reset output to 0
+    end else begin
+        q <= d;     // Capture data input
+    end
+end
+
+endmodule
+```
+                

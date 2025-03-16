@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Specification: TopModule
+
+Interface:
+- input wire clk: Clock signal, positive edge-triggered.
+- input wire reset: Active high synchronous reset signal.
+- input wire in: Serial input data stream.
+- output reg disc: Indicates a bit needs to be discarded.
+- output reg flag: Indicates a frame boundary.
+- output reg err: Indicates an error due to 7 or more consecutive 1s.
+
+Port Widths and Conventions:
+- All input and output ports are 1-bit wide.
+- Bit[0] refers to the least significant bit when indexing is required.
+
+Behavior Description:
+The module implements a synchronous HDLC framing protocol using a Moore-type finite state machine (FSM) to process a continuous bit stream.
+
+Finite State Machine (FSM) Description:
+1. Initial State: On reset, the FSM should default to a state as if the previous input was '0'.
+2. State Transitions: 
+   - Detect and discard a zero following five consecutive 1s: Input sequence "0111110" triggers 'disc' to be asserted.
+   - Detect a frame boundary with six consecutive 1s, "01111110": Trigger 'flag' to be asserted.
+   - Detect an error condition with seven or more consecutive 1s: Trigger 'err' to be asserted.
+
+Output Signal Timing:
+- 'disc', 'flag', and 'err' signals are asserted for a full clock cycle immediately following the detection of the respective condition.
+
+Reset Behavior:
+- The FSM transitions to the initial state on the rising edge of the 'reset' signal.
+- The reset is synchronous, and all sequential elements, including output registers, are initialized to zero upon reset.
+
+Edge and Boundary Cases:
+- The FSM must correctly handle transitions between states to avoid false positives when detecting patterns.
+- Ensure output signals are not asserted beyond their intended time frame or due to incorrect pattern recognition.
+</ENHANCED_SPEC>

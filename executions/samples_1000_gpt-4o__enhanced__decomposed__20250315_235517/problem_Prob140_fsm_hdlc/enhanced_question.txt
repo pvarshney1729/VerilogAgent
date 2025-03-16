@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- Inputs:
+  - `input clk`: Clock signal for triggering sequential logic (positive edge-triggered).
+  - `input reset`: Synchronous, active-high reset signal. Resets the FSM and all internal states as though the previous input were 0.
+  - `input in`: Serial input data stream. 
+
+- Outputs:
+  - `output disc`: Asserted (logic high) when a zero should be discarded following five consecutive ones.
+  - `output flag`: Asserted (logic high) when a valid frame boundary is detected (6 consecutive ones).
+  - `output err`: Asserted (logic high) when an error is detected (7 or more consecutive ones).
+
+Bit Conventions:
+- All signals are 1-bit wide. 
+- Bit indexing is not applicable as all signals are scalar (1-bit).
+
+Finite State Machine (FSM) Description:
+- Type: Moore-type FSM where outputs depend only on the current state.
+- Initial State: On reset, the FSM initializes to a state that behaves as if the last input was 0.
+- States and Transitions:
+  - Detect sequences of ones to determine when to assert `disc`, `flag`, or `err`.
+  - Sequence to recognize:
+    1. "0111110" triggers `disc`.
+    2. "01111110" triggers `flag`.
+    3. "01111111..." (7 or more ones) triggers `err`.
+
+Behavior and Timing:
+- The output signals (`disc`, `flag`, `err`) are asserted during the entire clock cycle immediately following the detection of the respective condition.
+- All state transitions and output assertions are synchronized to the positive edge of the `clk`.
+
+Edge Cases and Input Boundaries:
+- Proper handling of overlapping patterns within the input stream.
+- Ensure no race conditions by asserting outputs one clock cycle after detection.
+- The FSM should return to a state consistent with having just processed an input of 0 upon reset.
+
+Reset Behavior:
+- On the assertion of `reset`, the FSM returns to its initial state, and all outputs (`disc`, `flag`, `err`) are de-asserted (logic low).
+- The reset operation is synchronous, aligning with the positive clock edge.
+
+General Notes:
+- Ensure that any inadvertent sequence of inputs leading to 7 or more consecutive ones results in the `err` signal being asserted.
+- The design must account for back-to-back frames and handle potential input noise or glitches effectively.
+</ENHANCED_SPEC>

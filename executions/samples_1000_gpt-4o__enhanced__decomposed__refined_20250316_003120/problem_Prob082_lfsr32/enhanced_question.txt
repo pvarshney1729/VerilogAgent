@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `clk`: 1-bit input, used as the clock signal for triggering all sequential logic. All operations are triggered on the positive edge.
+  - `reset`: 1-bit input, active high, used to reset the module. The reset is synchronous, meaning it is synchronized with the clock.
+
+- Outputs:
+  - `q`: 32-bit output register, represents the current state of the Galois Linear Feedback Shift Register (LFSR).
+
+Specifications:
+1. **Galois LFSR Description:**
+   - The module implements a 32-bit Galois LFSR.
+   - The LFSR shifts right; bit positions with a tap are XORed with the least significant bit (LSB) of `q` (i.e., `q[0]`) to determine their next value. If a bit position does not have a tap, it simply inherits the value of the bit to its immediate left.
+
+2. **Tap Positions:**
+   - The tap positions for this LFSR are at bit indices 31 (MSB index in a 0-based system for a 32-bit register), 21, 1, and 0. These positions will use XOR with `q[0]` to compute their new value.
+
+3. **Reset Behavior:**
+   - When the `reset` signal is active (logic high), on the next positive edge of `clk`, the output register `q` should be set to the initial value of 32'h1.
+   
+4. **Bit Indexing Convention:**
+   - Bit indexing follows a 0-based convention, where `q[0]` represents the least significant bit (LSB), and `q[31]` represents the most significant bit (MSB).
+
+5. **Initial Values:**
+   - On reset, the LFSR output `q` is initialized to 32'h1.
+
+6. **Operational Details:**
+   - On each positive edge of the clock, if reset is not active, the Galois LFSR should update its state according to the described feedback mechanism.
+   - Ensure no race conditions occur by strictly adhering to the synchronous reset and clock edge specifications.
+
+7. **Edge Cases:**
+   - Verify that the LFSR does not enter a stuck state by ensuring the sequence can cycle through all possible states except the all-zero state, which the reset prevents.
+   
+Note: This specification assumes a 0-based indexing system for bit positions, which is standard in Verilog.
+</ENHANCED_SPEC>

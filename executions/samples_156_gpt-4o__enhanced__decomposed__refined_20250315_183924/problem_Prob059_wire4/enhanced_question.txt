@@ -1,0 +1,80 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a
+ - input  b
+ - input  c
+ - output w
+ - output x
+ - output y
+ - output z
+
+The module should behave like wires that makes these connections:
+
+  a -> w
+  b -> x
+  b -> y
+  c -> z
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+**Module: TopModule**
+
+**Interface:**
+- **Inputs:**
+  - `input wire a; // 1-bit input signal`
+  - `input wire b; // 1-bit input signal`
+  - `input wire c; // 1-bit input signal`
+- **Outputs:**
+  - `output wire w; // 1-bit output signal, directly driven by input 'a'`
+  - `output wire x; // 1-bit output signal, directly driven by input 'b'`
+  - `output wire y; // 1-bit output signal, directly driven by input 'b'`
+  - `output wire z; // 1-bit output signal, directly driven by input 'c'`
+
+**Behavior:**
+- The module acts as a combinational logic circuit with direct wire connections from inputs to outputs.
+- The connections are as follows:
+  - `a` drives output `w`
+  - `b` drives outputs `x` and `y`
+  - `c` drives output `z`
+
+**Timing:**
+- The module is purely combinational and does not involve any clocked elements or sequential logic. There is no dependency on clock edges or cycles.
+
+**Reset and Initial States:**
+- Since the module is combinational, no reset behavior or initial states are required.
+
+**Implementation Notes:**
+- Ensure that the connections are direct and no additional logic is introduced.
+- Bit-ordering is trivial in this context due to single-bit signals, but for multi-bit extensions, ensure `bit[0]` is the least significant bit (LSB).
+
+**Boundary Conditions:**
+- The design should function correctly for all possible input combinations of the single-bit inputs `a`, `b`, and `c`.
+
+**Verilog Implementation:**
+
+```verilog
+module TopModule (
+  input wire a,
+  input wire b,
+  input wire c,
+  output wire w,
+  output wire x,
+  output wire y,
+  output wire z
+);
+
+  // Direct connections
+  assign w = a;
+  assign x = b;
+  assign y = b;
+  assign z = c;
+
+endmodule
+```
+
+**
+                

@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock signal. The FSM's sequential logic is triggered on the positive edge.
+  - `reset`: 1-bit synchronous reset signal, active high. Resets the FSM to the initial state (000).
+  - `x`: 1-bit input signal used to determine the next state.
+
+- Output Ports:
+  - `z`: 1-bit output signal derived from the current state.
+
+State Encoding:
+- The FSM uses a 3-bit state encoding, represented by `y[2:0]`. 
+  - `bit[2]` is the most significant bit (MSB).
+  - `bit[0]` is the least significant bit (LSB).
+
+State Transition and Output Table:
+- Present State `y[2:0]` | Next State when `x=0` | Next State when `x=1` | Output `z`
+  - 000 | 000 | 001 | 0
+  - 001 | 001 | 100 | 0
+  - 010 | 010 | 001 | 0
+  - 011 | 001 | 010 | 1
+  - 100 | 011 | 100 | 1
+
+Reset Behavior:
+- Upon a high `reset` signal and the next rising edge of `clk`, the FSM transitions to the initial state `000`.
+- The reset is synchronous, meaning it only affects the FSM at the rising edge of the clock when `reset` is high.
+
+Sequential Logic:
+- All state transitions occur at the positive edge of the clock (`clk`).
+- The FSM transitions between states based on the current state `y[2:0]` and input `x`.
+
+Output Logic:
+- The output `z` is determined solely by the current state and does not depend on the input `x`.
+
+Initial State:
+- When reset is applied, the FSM initializes to the state `000`.
+
+Edge Case Handling:
+- Ensure all undefined transitions are handled appropriately to avoid unintended behavior.
+- The FSM should maintain stability and not transition to any undefined states.
+
+This specification ensures a clear understanding of the FSM's behavior, input/output configurations, and operational constraints.
+</ENHANCED_SPEC>

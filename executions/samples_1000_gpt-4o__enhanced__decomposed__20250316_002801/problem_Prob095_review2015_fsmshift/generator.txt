@@ -1,0 +1,82 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a finite state machine (FSM) that controls the `shift_ena` signal. The FSM should assert `shift_ena` for exactly 4 clock cycles upon reset and then keep it deasserted until the next reset. The reset is synchronous, meaning it is sampled on the positive edge of the clock.
+
+1. **State Encoding**: We will use a simple counter to track the number of cycles for which `shift_ena` should be asserted. The counter will be initialized to 4 upon reset and decremented each clock cycle until it reaches zero.
+
+2. **State Transition**: 
+   - On reset, the counter is set to 4, and `shift_ena` is asserted.
+   - Each clock cycle, the counter is decremented.
+   - Once the counter reaches zero, `shift_ena` is deasserted and remains so until the next reset.
+
+3. **Output Logic**: The `shift_ena` signal is directly driven by whether the counter is non-zero.
+
+4. **Coding Conventions**: We will use `logic` for all signals, and the always block will be triggered on the positive edge of the clock for synchronous logic. We will adhere to the convention of using `always @(*)` for combinational logic, although in this case, all logic is sequential.
+
+5. **Initialization**: In simulation, all signals will be initialized to zero unless specified otherwise.
+
+This approach ensures that the `shift_ena` signal behaves as specified, asserting for 4 cycles after a reset and remaining deasserted otherwise.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    logic [2:0] shift_counter;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            shift_counter <= 3'd4; // Initialize counter to 4 on reset
+        end else if (shift_counter != 3'd0) begin
+            shift_counter <= shift_counter - 1'b1; // Decrement counter
+        end
+    end
+
+    always @(posedge clk) begin
+        if (reset) begin
+            shift_ena <= 1'b1; // Assert shift_ena on reset
+        end else if (shift_counter != 3'd0) begin
+            shift_ena <= 1'b1; // Assert shift_ena while counter is non-zero
+        end else begin
+            shift_ena <= 1'b0; // Deassert shift_ena when counter reaches zero
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    logic [2:0] shift_counter;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            shift_counter <= 3'd4; // Initialize counter to 4 on reset
+        end else if (shift_counter != 3'd0) begin
+            shift_counter <= shift_counter - 1'b1; // Decrement counter
+        end
+    end
+
+    always @(posedge clk) begin
+        if (reset) begin
+            shift_ena <= 1'b1; // Assert shift_ena on reset
+        end else if (shift_counter != 3'd0) begin
+            shift_ena <= 1'b1; // Assert shift_ena while counter is non-zero
+        end else begin
+            shift_ena <= 1'b0; // Deassert shift_ena when counter reaches zero
+        end
+    end
+
+endmodule

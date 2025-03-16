@@ -1,0 +1,87 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a
+ - input  b
+ - input  c
+ - input  d
+ - output q
+
+The module should implement a combinational circuit. Read the simulation
+waveforms to determine what the circuit does, then implement it.
+
+  time  a  b  c  d  q
+  0ns   0  0  0  0  0
+  5ns   0  0  0  0  0
+  10ns  0  0  0  0  0
+  15ns  0  0  0  0  0
+  20ns  0  0  0  1  0
+  25ns  0  0  1  0  0
+  30ns  0  0  1  1  0
+  35ns  0  1  0  0  0
+  40ns  0  1  0  1  1
+  45ns  0  1  1  0  1
+  50ns  0  1  1  1  1
+  55ns  1  0  0  0  0
+  60ns  1  0  0  1  1
+  65ns  1  0  1  0  1
+  70ns  1  0  1  1  1
+  75ns  1  1  0  0  0
+  80ns  1  1  0  1  1
+  85ns  1  1  1  0  1
+  90ns  1  1  1  1  1
+
+Here is the enhanced specification which might be useful to you:
+                ### TopModule Specification
+
+**Interface Definition:**
+- **Module Name**: `TopModule`
+- **Input Ports**:
+  - `input wire a`: Single-bit input, representing the most significant input variable.
+  - `input wire b`: Single-bit input.
+  - `input wire c`: Single-bit input.
+  - `input wire d`: Single-bit input, representing the least significant input variable.
+- **Output Ports**:
+  - `output wire q`: Single-bit output.
+
+**Behavioral Description:**
+- **Combinational Logic Function**: The circuit implements a combinational logic function based on the inputs `a`, `b`, `c`, and `d`. The output `q` is determined by the following conditions derived from the simulation waveform:
+
+  - `q = 1` if any of the following conditions are true:
+    - `(b AND d) = 1`
+    - `(c AND (a OR b)) = 1`
+  - Otherwise, `q = 0`.
+
+**Truth Table:**
+- The logic for `q` based on inputs `a`, `b`, `c`, `d` is captured in the following truth table:
+
+  | a | b | c | d | q |
+  |---|---|---|---|---|
+  | 0 | 0 | 0 | 0 | 0 |
+  | 0 | 0 | 0 | 1 | 0 |
+  | 0 | 0 | 1 | 0 | 0 |
+  | 0 | 0 | 1 | 1 | 0 |
+  | 0 | 1 | 0 | 0 | 0 |
+  | 0 | 1 | 0 | 1 | 1 |
+  | 0 | 1 | 1 | 0 | 1 |
+  | 0 | 1 | 1 | 1 | 1 |
+  | 1 | 0 | 0 | 0 | 0 |
+  | 1 | 0 | 0 | 1 | 1 |
+  | 1 | 0 | 1 | 0 | 1 |
+  | 1 | 0 | 1 | 1 | 1 |
+  | 1 | 1 | 0 | 0 | 0 |
+  | 1 | 1 | 0 | 1 | 1 |
+  | 1 | 1 | 1 | 0 | 1 |
+  | 1 | 1 | 1 | 1 | 1 |
+
+**Implementation Notes:**
+- **Timing Considerations**: As this is a combinational circuit, the output `q` should reflect changes to the input signals `a`, `b`, `c`, or `d` immediately without any timing delay or dependence on clock cycles.
+- **Bit-ordering**: Inputs are treated in descending significance from `a` to `d`, with `a` being the most significant bit and `d` being the least significant bit.
+- **No Reset or Initial State Required**: As it is a purely combinational circuit, there are no registers or flip-flops that require reset behavior or initial state definitions.
+
+**Boundary Conditions:**
+- The behavior of the circuit is fully defined for all possible combinations of inputs `a`, `b`, `c`, and `d`.
+- No undefined or unexpected behavior is expected outside of the specified input conditions.
+                

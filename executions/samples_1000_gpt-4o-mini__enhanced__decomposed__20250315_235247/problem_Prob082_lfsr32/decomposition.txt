@@ -1,0 +1,26 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, and output port q (32 bits).",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input clk,\n    input reset,\n    output reg [31:0] q\n);\n\n    always @(posedge clk) begin\n        if (reset) begin\n            q <= 32'h1;\n        end else begin\n            q <= {q[30:0], (q[31] ^ q[21] ^ q[1] ^ q[0])};\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the synchronous reset logic to set the output q to 32'h1 when reset is high.",
+        "source": "Reset should be active high synchronous, and should reset the output q to 32'h1.",
+        "implementation": "always @(posedge clk) begin\n    if (reset) begin\n        q <= 32'h1;\n    end\nend"
+    },
+    {
+        "id": "3",
+        "content": "Define the shift register logic to implement the Galois LFSR with taps at bit positions 32, 22, 2, and 1.",
+        "source": "A 32-bit Galois LFSR with taps at bit positions 32, 22, 2, and 1.",
+        "implementation": "reg [31:0] q_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        q_reg <= 32'h1;\n    end else begin\n        q_reg <= {q_reg[30:0], q_reg[31] ^ q_reg[21] ^ q_reg[1] ^ q_reg[0]};\n    end\nend\n\nassign q = q_reg;"
+    },
+    {
+        "id": "4",
+        "content": "Implement the logic to shift the bits of the register to the right and apply the XOR operation based on the tap positions.",
+        "source": "A Galois LFSR is one particular arrangement that shifts right, where a bit position with a 'tap' is XORed with the LSB output bit (q[0]) to produce its next value.",
+        "implementation": "reg [31:0] q_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        q_reg <= 32'h1;\n    end else begin\n        q_reg <= {q_reg[30:0], (q_reg[31] ^ q_reg[21] ^ q_reg[1] ^ q_reg[0])};\n    end\nend\n\nassign q = q_reg;"
+    }
+]

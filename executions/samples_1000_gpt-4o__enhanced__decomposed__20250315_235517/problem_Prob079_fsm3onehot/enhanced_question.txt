@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- `input wire in;` // Single-bit input signal
+- `input wire [3:0] state;` // 4-bit input representing the current state using one-hot encoding
+- `output reg [3:0] next_state;` // 4-bit output for the next state, using one-hot encoding
+- `output reg out;` // Single-bit output signal
+
+State Machine Description:
+- The module implements a Moore state machine with one input (`in`), one output (`out`), and four states (A, B, C, D).
+- The state machine utilizes a one-hot encoding scheme: 
+  - State A is represented as 4'b0001
+  - State B is represented as 4'b0010
+  - State C is represented as 4'b0100
+  - State D is represented as 4'b1000
+
+State Transition Table:
+- Based on the input `in`, the next state transitions are defined as follows:
+  - Current State A: 
+    - `in = 0`: Remain in State A (next_state = 4'b0001)
+    - `in = 1`: Transition to State B (next_state = 4'b0010)
+  - Current State B: 
+    - `in = 0`: Transition to State C (next_state = 4'b0100)
+    - `in = 1`: Remain in State B (next_state = 4'b0010)
+  - Current State C: 
+    - `in = 0`: Transition to State A (next_state = 4'b0001)
+    - `in = 1`: Transition to State D (next_state = 4'b1000)
+  - Current State D: 
+    - `in = 0`: Transition to State C (next_state = 4'b0100)
+    - `in = 1`: Transition to State B (next_state = 4'b0010)
+
+Output Logic:
+- The output `out` is determined solely by the current state:
+  - `out = 0` for states A, B, and C
+  - `out = 1` for state D
+
+Additional Considerations:
+- The provided specification covers only the combinational logic for state transitions and output logic. Sequential elements such as flip-flops for state retention are not detailed here.
+- Assume that the state transitions and output logic are updated synchronously with the clock edge, though clock and reset signals are not explicitly specified in this task.
+</ENHANCED_SPEC>

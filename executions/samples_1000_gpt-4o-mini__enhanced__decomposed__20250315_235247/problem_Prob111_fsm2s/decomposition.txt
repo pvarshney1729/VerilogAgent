@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, j, k and output port out.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input clk,\n    input reset,\n    input j,\n    input k,\n    output reg out\n);\n\n    typedef enum reg [1:0] {OFF, ON} state_t;\n    state_t current_state, next_state;\n\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            current_state <= OFF;\n            out <= 0;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    always @(*) begin\n        case (current_state)\n            OFF: begin\n                out = 0;\n                if (j) begin\n                    next_state = ON;\n                end else begin\n                    next_state = OFF;\n                end\n            end\n            ON: begin\n                out = 1;\n                if (k) begin\n                    next_state = OFF;\n                end else begin\n                    next_state = ON;\n                end\n            end\n            default: begin\n                next_state = OFF;\n            end\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define the state encoding for the two states: OFF and ON.",
+        "source": "The module should implement a Moore state machine with two states, two inputs, and one output according to diagram described below.",
+        "implementation": "parameter OFF = 1'b0;\nparameter ON  = 1'b1;\n\nreg state, next_state;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register to hold the current state of the FSM, including the synchronous reset logic to set the state to OFF when reset is high.",
+        "source": "Reset is an active-high synchronous reset to state OFF.",
+        "implementation": "reg current_state;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        current_state <= 1'b0; // Set state to OFF\n    end\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement the output logic based on the current state of the FSM, ensuring that out is 0 in OFF state and 1 in ON state.",
+        "source": "OFF (out=0) --j=0--> OFF, OFF (out=0) --j=1--> ON, ON (out=1) --k=0--> ON, ON (out=1) --k=1--> OFF.",
+        "implementation": "always @(posedge clk or posedge reset) begin\n    if (reset) begin\n        out <= 1'b0; // Reset to OFF state\n    end else begin\n        case (current_state)\n            OFF: out <= 1'b0; // OFF state\n            ON:  out <= 1'b1; // ON state\n        endcase\n    end\nend"
+    },
+    {
+        "id": "5",
+        "content": "Implement the state transition logic based on inputs j and k according to the state diagram.",
+        "source": "OFF (out=0) --j=0--> OFF, OFF (out=0) --j=1--> ON, ON (out=1) --k=0--> ON, ON (out=1) --k=1--> OFF.",
+        "implementation": "reg state; // 0 for OFF, 1 for ON\nparameter OFF = 1'b0, ON = 1'b1;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        state <= OFF;\n    end else begin\n        case (state)\n            OFF: begin\n                if (j) begin\n                    state <= ON;\n                end\n            end\n            ON: begin\n                if (k) begin\n                    state <= OFF;\n                end\n            end\n        endcase\n    end\nend\n\nassign out = state;"
+    }
+]

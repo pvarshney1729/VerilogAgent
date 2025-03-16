@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: `clk` (1-bit) - Clock signal, all sequential logic is triggered on the positive edge.
+- Input: `reset` (1-bit) - Active high synchronous reset signal. When asserted, it initializes the FSM and the output.
+- Output: `shift_ena` (1-bit) - Control signal to enable the shift register for 4 clock cycles.
+
+Functional Description:
+This module implements a Finite State Machine (FSM) to control a shift register. The FSM has the following behavior:
+
+1. Upon detecting the proper bit pattern (specification of the pattern is assumed to be external to this description), the FSM enables the shift register for exactly 4 clock cycles by asserting `shift_ena`.
+
+2. Upon receiving a reset signal (`reset` is high), the FSM should immediately initialize and assert `shift_ena` for exactly 4 clock cycles, regardless of the current state. After this, `shift_ena` should remain deasserted (low) indefinitely until another reset occurs or the proper bit pattern is detected again.
+
+3. The FSM and all its associated sequential elements are clocked on the rising edge of `clk`.
+
+Reset Behavior:
+- The reset (`reset`) is a synchronous active high signal. Upon assertion of `reset`, the FSM should transition to the initial state, and `shift_ena` should be asserted for 4 clock cycles before being deasserted.
+- Initial values for all registers and flip-flops should be explicitly defined. Upon reset, all registers should be set to a state that enables the 4-cycle assertion of `shift_ena`.
+
+Edge Cases and Boundary Conditions:
+- Ensure that `shift_ena` is asserted precisely for 4 clock cycles, with no overlap or gaps, both after reset and upon detection of the bit pattern.
+- The FSM should correctly handle back-to-back resets and pattern detections without missing the 4-cycle window for `shift_ena`.
+
+Note: The specification assumes that pattern detection logic is handled externally and triggers the FSM to enable the shift register when appropriate.
+</ENHANCED_SPEC>

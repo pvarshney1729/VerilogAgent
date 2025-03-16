@@ -1,0 +1,14 @@
+[
+    {
+        "role": "system",
+        "content": "You are a Verilog RTL designer that only writes code using correct Verilog syntax."
+    },
+    {
+        "role": "user",
+        "content": "\nI would like you to implement a module named TopModule with the following\ninterface. All input and output ports are one bit unless otherwise\nspecified.\n\n - input  in  (1024 bits)\n - input  sel (   8 bits)\n - output out (   4 bits)\n\nThe module should implement a 4-bit wide, 256-to-1 multiplexer. The 256\n4-bit inputs are all packed into a single 1024-bit input vector. sel=0\nshould select bits in[3:0], sel=1 selects bits in[7:4], sel=2 selects\nbits in[11:8], etc.\n\n"
+    },
+    {
+        "role": "assistant",
+        "content": "module TopModule (\n    input  wire [1023:0] in,  // 1024-bit input vector\n    input  wire [7:0]    sel, // 8-bit select signal\n    output reg  [3:0]    out  // 4-bit output\n);\n\n    always @(*) begin\n        // Calculate the starting bit position based on the select signal\n        integer start_bit;\n        start_bit = sel * 4;\n\n        // Assign the selected 4-bit segment to the output\n        out = in[start_bit +: 4];\n    end\n\nendmodule\n\n// VERILOG-EVAL: response did not use [BEGIN]/[DONE] correctly"
+    }
+]

@@ -1,0 +1,68 @@
+<ENHANCED_SPEC>
+The module `TopModule` is to be implemented with the following interface specifications. Each input and output port is 1 bit wide unless otherwise specified. The module employs a Moore state machine design with defined state transitions and output behavior.
+
+**Ports:**
+- Inputs:
+  - `input wire d`: Control input for state transitions.
+  - `input wire done_counting`: Indicates completion of a counting process.
+  - `input wire ack`: Acknowledgment signal for transitioning from the Wait state.
+  - `input wire [9:0] state`: One-hot encoded current state of the state machine.
+- Outputs:
+  - `output wire B3_next`: Asserted when the next state is B3.
+  - `output wire S_next`: Asserted when the next state is S.
+  - `output wire S1_next`: Asserted when the next state is S1.
+  - `output wire Count_next`: Asserted when the next state is Count.
+  - `output wire Wait_next`: Asserted when the next state is Wait.
+  - `output wire done`: Active when the state machine is in the Wait state.
+  - `output wire counting`: Active when the state machine is in the Count state.
+  - `output wire shift_ena`: Active during states B0, B1, B2, and B3.
+
+**State Machine Description:**
+The state machine operates with the following states: S, S1, S11, S110, B0, B1, B2, B3, Count, and Wait. Each state is represented by a one-hot encoding, as follows:
+- S = 10'b0000000001
+- S1 = 10'b0000000010
+- S11 = 10'b0000000100
+- S110 = 10'b0000001000
+- B0 = 10'b0000010000
+- B1 = 10'b0000100000
+- B2 = 10'b0001000000
+- B3 = 10'b0010000000
+- Count = 10'b0100000000
+- Wait = 10'b1000000000
+
+**State Transitions:**
+- From `S`: 
+  - Remain in `S` if `d=0`.
+  - Transition to `S1` if `d=1`.
+- From `S1`:
+  - Transition back to `S` if `d=0`.
+  - Proceed to `S11` if `d=1`.
+- From `S11`:
+  - Go to `S110` if `d=0`.
+  - Remain in `S11` if `d=1`.
+- From `S110`:
+  - Transition back to `S` if `d=0`.
+  - Move to `B0` if `d=1`.
+- From `B0` to `B3`: Sequentially transition from `B0` to `B3` regardless of inputs, asserting `shift_ena` in each state.
+- From `B3`:
+  - Transition to `Count`.
+- From `Count`:
+  - Remain in `Count` if `done_counting=0`.
+  - Move to `Wait` if `done_counting=1`.
+- From `Wait`:
+  - Remain in `Wait` if `ack=0`, asserting `done`.
+  - Transition back to `S` if `ack=1`.
+
+**Reset Behavior:**
+- On reset, the state machine initializes to the `S` state.
+
+**Output Logic:**
+- `B3_next` is high when the next state is B3.
+- `S_next` is high when the next state is S.
+- `S1_next` is high when the next state is S1.
+- `Count_next` is high when the next state is Count.
+- `Wait_next` is high when the next state is Wait.
+- `done` outputs high in the Wait state.
+- `counting` outputs high in the Count state.
+- `shift_ena` outputs high in states B0, B1, B2, and B3.
+</ENHANCED_SPEC>

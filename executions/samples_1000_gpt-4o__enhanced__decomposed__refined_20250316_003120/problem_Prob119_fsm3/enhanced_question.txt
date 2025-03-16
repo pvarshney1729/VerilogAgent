@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Ports:
+- `input wire clk`: Clock signal for triggering all sequential logic elements. Active on the positive edge.
+- `input wire areset`: Asynchronous reset signal. Active high. Resets the FSM to the initial state (State A) upon assertion.
+- `input wire in`: Single-bit input used for determining state transitions.
+- `output reg out`: Single-bit output reflecting the current state's output value.
+
+State Machine Specification:
+- Type: Moore state machine with a total of four states (A, B, C, D).
+- State Encoding: Use two bits to encode the four states.
+  - State A: 2'b00
+  - State B: 2'b01
+  - State C: 2'b10
+  - State D: 2'b11
+
+State Transition Table:
+- Current State | Next State (in=0) | Next State (in=1) | Output
+  - A           | A                 | B                 | 0
+  - B           | C                 | B                 | 0
+  - C           | A                 | D                 | 0
+  - D           | C                 | B                 | 1
+
+Functional Details:
+- All state transitions and output updates occur on the positive edge of the `clk` signal.
+- The `areset` input is an asynchronous reset. When `areset` is asserted (high), the FSM will immediately transition to State A, regardless of the clock.
+- Initial state upon power-up or reset is State A. The output `out` is initialized to 0.
+- Output `out` is solely determined by the current state and is independent of the input `in`.
+
+Bit Indexing:
+- For state encoding and any other multi-bit signals, bit[0] is considered the least significant bit (LSB).
+
+Edge Cases:
+- Ensure that during the transition from any state to another, the `out` signal is updated correctly based on the state transition table.
+- When `areset` is deasserted, the FSM resumes normal operation and transitions as per the state table on the next positive clock edge.
+</ENHANCED_SPEC>

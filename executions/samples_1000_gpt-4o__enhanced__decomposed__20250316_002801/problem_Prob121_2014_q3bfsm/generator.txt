@@ -1,0 +1,113 @@
+Generated Response:
+
+```xml
+<REASONING>
+To implement the FSM as specified, we need to create a Verilog module named `TopModule` with the given interface. The FSM will have a synchronous reset that sets the state to `000` on the next positive clock edge when `reset` is high. The state transitions and output logic are based on the provided state table. We will use a 3-bit register to hold the current state and another 3-bit register for the next state. The state transition logic will be implemented in a combinational always block, and the state update will be in a sequential always block triggered by the positive edge of the clock. The output `z` will be determined by the current state.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    logic [2:0] state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= 3'b000;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always @(*) begin
+        case (state)
+            3'b000: begin
+                next_state = (x == 1'b0) ? 3'b000 : 3'b001;
+                z = 1'b0;
+            end
+            3'b001: begin
+                next_state = (x == 1'b0) ? 3'b001 : 3'b100;
+                z = 1'b0;
+            end
+            3'b010: begin
+                next_state = (x == 1'b0) ? 3'b010 : 3'b001;
+                z = 1'b0;
+            end
+            3'b011: begin
+                next_state = (x == 1'b0) ? 3'b001 : 3'b010;
+                z = 1'b1;
+            end
+            3'b100: begin
+                next_state = (x == 1'b0) ? 3'b011 : 3'b100;
+                z = 1'b1;
+            end
+            default: begin
+                next_state = 3'b000;
+                z = 1'b0;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+```
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    logic [2:0] state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= 3'b000;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always @(*) begin
+        case (state)
+            3'b000: begin
+                next_state = (x == 1'b0) ? 3'b000 : 3'b001;
+                z = 1'b0;
+            end
+            3'b001: begin
+                next_state = (x == 1'b0) ? 3'b001 : 3'b100;
+                z = 1'b0;
+            end
+            3'b010: begin
+                next_state = (x == 1'b0) ? 3'b010 : 3'b001;
+                z = 1'b0;
+            end
+            3'b011: begin
+                next_state = (x == 1'b0) ? 3'b001 : 3'b010;
+                z = 1'b1;
+            end
+            3'b100: begin
+                next_state = (x == 1'b0) ? 3'b011 : 3'b100;
+                z = 1'b1;
+            end
+            default: begin
+                next_state = 3'b000;
+                z = 1'b0;
+            end
+        endcase
+    end
+
+endmodule

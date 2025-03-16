@@ -1,0 +1,16 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input  logic clk,\n    input  logic reset,\n    output logic [3:0] q\n);\n\n    logic [3:0] count;\n\n    // Synchronous logic for the decade counter\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            count <= 4'b0000; // Reset counter to 0\n        end else if (count == 4'b1001) begin\n            count <= 4'b0000; // Wrap around after 9\n        end else begin\n            count <= count + 1'b1; // Increment counter\n        end\n    end\n\n    // Assign the count to output q\n    assign q = count;\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "```verilog\nmodule TopModule (\n    input  logic clk,\n    input  logic reset,\n    output logic [3:0] q\n);\n\n    logic [3:0] count;\n\n    // Synchronous logic for the decade counter\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            count <= 4'b0000; // Reset counter to 0\n        end else if (count == 4'b1001) begin\n            count <= 4'b0000; // Wrap around after 9\n        end else begin\n            count <= count + 1'b1; // Increment counter\n        end\n    end\n\n    // Assign the count to output q\n    assign q = count;\n\nendmodule\n```",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}

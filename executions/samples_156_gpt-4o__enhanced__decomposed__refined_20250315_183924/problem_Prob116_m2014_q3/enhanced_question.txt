@@ -1,0 +1,57 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  x (4 bits)
+ - output f
+
+The module should implement the function f shown in the Karnaugh map
+below. d is don't-care, which means you may choose to output whatever
+value is convenient.
+
+                x[1]x[2]
+  x[3]x[4]   00  01  11  10
+        00 | d | 0 | d | d |
+        01 | 0 | d | 1 | 0 |
+        11 | 1 | 1 | d | d |
+        10 | 1 | 1 | 0 | d |
+
+Here is the enhanced specification which might be useful to you:
+                ### Enhanced Specification for `TopModule`
+
+#### Module Interface:
+- **Module Name**: `TopModule`
+- **Inputs**:
+  - `input [3:0] x`: A 4-bit input vector where `x[3]` is the most significant bit (MSB) and `x[0]` is the least significant bit (LSB).
+- **Outputs**:
+  - `output reg f`: A 1-bit output signal, initially set to 0.
+
+#### Behavior:
+- **Functionality**: The module implements the function `f` defined in the following Karnaugh map, where `d` represents a don't-care condition:
+  ```
+                x[1]x[0]
+  x[3]x[2]   00  01  11  10
+        00 |  d |  0 |  d |  d |
+        01 |  0 |  d |  1 |  0 |
+        11 |  1 |  1 |  d |  d |
+        10 |  1 |  1 |  0 |  d |
+  ```
+  - The rows correspond to the binary values of `x[3]x[2]` and the columns correspond to the binary values of `x[1]x[0]`.
+
+- **Don't-Care Handling**: For positions marked as `d`, the output `f` may be optimized for minimal logic complexity, potentially outputting 0 or 1 as convenient.
+
+#### Timing and Reset Behavior:
+- **Logic Type**: This is a purely combinational logic module. The output `f` is computed from the current value of `x` without any clock dependency.
+- **Reset Behavior**: Not applicable as the module is combinational and does not store or retain state.
+- **Initial State**: The output `f` is initialized to 0 at the start.
+
+#### Implementation Notes:
+1. The input vector `x` is interpreted such that `x[3]` is the MSB and `x[0]` is the LSB. This ordering is critical for the correct interpretation of the Karnaugh map.
+2. The implementation should aim to minimize logic complexity, leveraging the don't-care conditions appropriately.
+3. The module should handle all potential input combinations from `0000` to `1111`, with specific attention to the defined Karnaugh map entries.
+
+#### Boundary Conditions:
+- The module should correctly interpret and process all 16 possible input combinations of the 4-bit vector `x`.
+- The output `f` should reflect the values specified in the Karnaugh map for defined conditions and may be optimized for don't-care conditions.
+                

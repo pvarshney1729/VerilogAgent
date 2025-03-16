@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `clk`: 1-bit clock input. All sequential logic is triggered on the positive edge of this clock.
+  - `areset`: 1-bit asynchronous reset input. The state machine resets to state A on the positive edge of this signal.
+  - `in`: 1-bit data input signal.
+
+- Outputs:
+  - `out`: 1-bit data output signal.
+
+State Machine:
+- Type: Moore state machine
+- States: Four states, labeled A, B, C, and D.
+- State Encoding: Utilize a 2-bit state register to encode the states.
+  - State A: 2'b00
+  - State B: 2'b01
+  - State C: 2'b10
+  - State D: 2'b11
+
+State Transition Table:
+- Current State | Next State with in=0 | Next State with in=1 | Output
+  - A (00)      | A (00)               | B (01)               | 0
+  - B (01)      | C (10)               | B (01)               | 0
+  - C (10)      | A (00)               | D (11)               | 0
+  - D (11)      | C (10)               | B (01)               | 1
+
+Reset Behavior:
+- The reset is asynchronous and active on the positive edge of `areset`.
+- Upon reset, the state machine returns to state A (2'b00).
+- All flip-flops and registers involved in the state machine should initialize to 0 on reset.
+
+Output Logic:
+- The `out` output is determined solely by the current state, not the input `in`.
+- The output is 0 for states A, B, and C, and 1 for state D.
+
+Bit Indexing:
+- Use the convention that bit[0] refers to the least significant bit.
+
+Edge Cases:
+- Ensure that the state transitions and output behavior are defined for all combinations of current state and `in` input.
+- Handle any potential race conditions by ensuring that the state transitions occur on the positive edge of the clock, and the reset is properly synchronized.
+
+Dependencies:
+- The state transitions depend on both the current state and the input `in`.
+- Output depends only on the current state.
+
+All logic should conform to the above specifications for consistent and correct behavior of the state machine.
+</ENHANCED_SPEC>

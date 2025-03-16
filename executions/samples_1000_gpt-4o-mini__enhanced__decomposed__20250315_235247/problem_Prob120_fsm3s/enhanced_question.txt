@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: Clock signal, positive edge triggered.
+  - `input wire reset`: Active high synchronous reset.
+  - `input wire in`: Single-bit input signal.
+
+- Output Ports:
+  - `output reg out`: Single-bit output signal.
+
+Functional Description:
+- The module implements a Moore state machine with four states: A, B, C, and D.
+- The state transitions and outputs are defined as follows:
+
+  | Current State | Next State (in=0) | Next State (in=1) | Output |
+  |---------------|-------------------|-------------------|--------|
+  | A             | A                 | B                 | 0      |
+  | B             | C                 | B                 | 0      |
+  | C             | A                 | D                 | 0      |
+  | D             | C                 | B                 | 1      |
+
+- The FSM uses a synchronous active high reset. When `reset` is asserted, the FSM transitions to State A on the next positive clock edge.
+- The output `out` is determined by the current state and is updated at the positive edge of the clock.
+
+Implementation Details:
+- All sequential elements (flip-flops) are triggered on the positive edge of the `clk` signal.
+- The reset is synchronous, meaning it takes effect on the next clock edge when `reset` is high.
+- The initial state of the FSM upon reset is State A. In this state, the output `out` is set to 0.
+- Bit indexing is not applicable as all signals are single-bit wide.
+- There are no undefined states; the FSM always transitions between the specified states based on the input `in`.
+
+Edge Cases and Boundary Conditions:
+- The reset signal is assumed to be glitch-free and reliably asserts for at least one clock cycle.
+- The input `in` is assumed to be stable during the clock edge.
+- No metastability concerns are addressed, assuming clean input signals.
+
+Note: Ensure all sequential logic is correctly synchronized with the clock and reset signals.
+</ENHANCED_SPEC>

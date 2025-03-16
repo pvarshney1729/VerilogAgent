@@ -1,0 +1,51 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  d
+ - input  ena
+ - output q
+
+The module should impement a D latch using an always block.
+
+Here is the enhanced specification which might be useful to you:
+                #### Module Interface
+```verilog
+module TopModule (
+    input wire d,      // Data input (unsigned, 1-bit)
+    input wire ena,    // Enable signal (unsigned, 1-bit)
+    output reg q       // Output (unsigned, 1-bit)
+);
+```
+
+#### Behavioral Description
+- **Functionality**: The module implements a level-sensitive D latch.
+- **Operation**: 
+  - When the enable (`ena`) signal is high, the data input (`d`) is passed to the output (`q`).
+  - When the enable (`ena`) signal is low, the output (`q`) retains its previous state. 
+
+#### Timing Behavior
+- **Level Sensitivity**: The latch is sensitive to the level of the `ena` signal. It is not edge-triggered.
+- **Timing**: The module should use an always block to describe the behavior based on `ena`.
+
+#### Implementation Notes
+- **No Reset**: There is no reset input, so the initial state is indeterminate unless otherwise initialized at a higher level.
+- **Initial State**: If a specific initial state is required, it should be handled externally or with additional initialization logic.
+
+#### Example Implementation
+```verilog
+always @ (ena or d) begin
+    if (ena) begin
+        q <= d; // Pass data to output when enabled
+    end
+    // Output remains unchanged when ena is low
+end
+```
+
+#### Boundary Conditions
+- **Constant Enable**: If `ena` is constantly high, `q` will always follow `d`.
+- **Constant Disable**: If `ena` is constantly low, `q` retains its last latched value.
+
+### End of Specification
+                

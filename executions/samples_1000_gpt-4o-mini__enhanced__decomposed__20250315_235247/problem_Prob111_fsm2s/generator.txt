@@ -1,0 +1,121 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the guidelines and specifications provided. The module is designed as a Moore state machine with two states: OFF and ON. The state transitions are controlled by the inputs `j` and `k`, and the output `out` is determined solely by the current state. The synchronous reset ensures that the state machine starts in the OFF state when the reset signal is high. 
+
+The implementation uses a single always block for state transitions and another for output logic, adhering to the coding conventions specified. The use of `logic` for signal declarations ensures compatibility with modern Verilog standards. The sensitivity list for the sequential logic does not include the reset signal, as required for synchronous resets.
+
+The state encoding is straightforward, with `OFF` represented as `1'b0` and `ON` as `1'b1`. The output is updated based on the current state, ensuring that it reflects the correct value according to the state machine's behavior.
+
+Overall, the implementation is structured to be clear, maintainable, and compliant with the provided specifications and coding conventions.
+</REASONING>
+
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+    typedef enum logic [1:0] {OFF = 1'b0, ON = 1'b1} state_t;
+    state_t current_state, next_state;
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= OFF; // Reset to OFF state
+        end else begin
+            current_state <= next_state; // Update to next state
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            OFF: begin
+                if (j) begin
+                    next_state = ON; // Transition to ON state
+                end else begin
+                    next_state = OFF; // Remain in OFF state
+                end
+            end
+            ON: begin
+                if (k) begin
+                    next_state = OFF; // Transition to OFF state
+                end else begin
+                    next_state = ON; // Remain in ON state
+                end
+            end
+            default: begin
+                next_state = OFF; // Default to OFF state
+            end
+        endcase
+    end
+
+    // Output logic based on current state
+    always @(*) begin
+        case (current_state)
+            OFF: out = 1'b0; // Output is 0 in OFF state
+            ON:  out = 1'b1; // Output is 1 in ON state
+            default: out = 1'b0; // Default output
+        endcase
+    end
+
+endmodule
+[DONE]
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+    typedef enum logic [1:0] {OFF = 1'b0, ON = 1'b1} state_t;
+    state_t current_state, next_state;
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= OFF; // Reset to OFF state
+        end else begin
+            current_state <= next_state; // Update to next state
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            OFF: begin
+                if (j) begin
+                    next_state = ON; // Transition to ON state
+                end else begin
+                    next_state = OFF; // Remain in OFF state
+                end
+            end
+            ON: begin
+                if (k) begin
+                    next_state = OFF; // Transition to OFF state
+                end else begin
+                    next_state = ON; // Remain in ON state
+                end
+            end
+            default: begin
+                next_state = OFF; // Default to OFF state
+            end
+        endcase
+    end
+
+    // Output logic based on current state
+    always @(*) begin
+        case (current_state)
+            OFF: out = 1'b0; // Output is 0 in OFF state
+            ON:  out = 1'b1; // Output is 1 in ON state
+            default: out = 1'b0; // Default output
+        endcase
+    end
+
+endmodule

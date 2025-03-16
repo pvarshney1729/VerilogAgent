@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, w, and output port z.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  clk,\n    input  reset,\n    input  w,\n    output reg z\n);\n\n    // State encoding\n    typedef enum reg [2:0] {\n        A = 3'b000,\n        B = 3'b001,\n        C = 3'b010,\n        D = 3'b011,\n        E = 3'b100,\n        F = 3'b101\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State flip-flops\n    always @(posedge clk) begin\n        if (reset)\n            current_state <= A;\n        else\n            current_state <= next_state;\n    end\n\n    // State table\n    always @(*) begin\n        case (current_state)\n            A: next_state = (w) ? B : A;\n            B: next_state = (w) ? C : D;\n            C: next_state = (w) ? E : D;\n            D: next_state = (w) ? F : A;\n            E: next_state = (w) ? E : D;\n            F: next_state = (w) ? C : D;\n            default: next_state = A;\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        case (current_state)\n            E, F: z = 1'b1;\n            default: z = 1'b0;\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define the state encoding for the FSM with states A, B, C, D, E, and F.",
+        "source": "Assign any state codes that you wish to use.",
+        "implementation": "// State encoding\n  localparam STATE_A = 3'b000;\n  localparam STATE_B = 3'b001;\n  localparam STATE_C = 3'b010;\n  localparam STATE_D = 3'b011;\n  localparam STATE_E = 3'b100;\n  localparam STATE_F = 3'b101;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state transition logic using an always block triggered on the positive edge of the clock and synchronous reset. Define transitions based on input w and current state.",
+        "source": "Reset resets into state A and is synchronous active-high. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  typedef enum logic [2:0] {\n    STATE_A = 3'b000,\n    STATE_B = 3'b001,\n    STATE_C = 3'b010,\n    STATE_D = 3'b011,\n    STATE_E = 3'b100,\n    STATE_F = 3'b101\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // State transition logic\n  always @(posedge clk) begin\n    if (reset) begin\n      current_state <= STATE_A;\n    end else begin\n      current_state <= next_state;\n    end\n  end\n\n  // Next state logic\n  always @(*) begin\n    case (current_state)\n      STATE_A: next_state = (w) ? STATE_B : STATE_A;\n      STATE_B: next_state = (w) ? STATE_C : STATE_D;\n      STATE_C: next_state = (w) ? STATE_E : STATE_D;\n      STATE_D: next_state = (w) ? STATE_F : STATE_A;\n      STATE_E: next_state = (w) ? STATE_E : STATE_D;\n      STATE_F: next_state = (w) ? STATE_C : STATE_D;\n      default: next_state = STATE_A;\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "4",
+        "content": "Implement the state flip-flops to hold the current state of the FSM.",
+        "source": "Use separate always blocks for the state table and the state flip-flops.",
+        "implementation": "// State encoding\n  typedef enum logic [2:0] {\n    STATE_A = 3'b000,\n    STATE_B = 3'b001,\n    STATE_C = 3'b010,\n    STATE_D = 3'b011,\n    STATE_E = 3'b100,\n    STATE_F = 3'b101\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // State flip-flops\n  always_ff @(posedge clk) begin\n    if (reset) begin\n      current_state <= STATE_A; // Reset to state A\n    end else begin\n      current_state <= next_state; // Transition to next state\n    end\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output logic for z based on the current state using either continuous assignment or an always block.",
+        "source": "Describe the FSM output, which is called _z_, using either continuous assignment statement(s) or an always block (at your discretion).",
+        "implementation": "reg [2:0] state;\nreg z;\n\n// State encoding\nlocalparam A = 3'b000,\n           B = 3'b001,\n           C = 3'b010,\n           D = 3'b011,\n           E = 3'b100,\n           F = 3'b101;\n\n// Output logic for z\nalways @(*) begin\n    case (state)\n        E: z = 1'b1;\n        F: z = 1'b1;\n        default: z = 1'b0;\n    endcase\nend"
+    }
+]

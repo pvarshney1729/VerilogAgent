@@ -1,0 +1,141 @@
+Generated Response:
+
+<REASONING>
+To implement the finite-state machine (FSM) as specified, I followed these steps:
+
+1. **Module Declaration**: I declared the module `TopModule` with the specified input and output ports. All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **State Encoding**: I defined local parameters for each state using 3-bit binary values. This makes the code more readable and maintainable.
+
+3. **State Registers**: I declared `state` and `next_state` as 3-bit logic vectors to hold the current and next states of the FSM.
+
+4. **Synchronous Reset and State Transition**: I implemented an `always` block triggered on the positive edge of `clk`. This block checks the `reset` signal and sets the `state` to `STATE_000` if `reset` is high. Otherwise, it updates the `state` to `next_state`.
+
+5. **Next State and Output Logic**: I used an `always @(*)` block to determine the `next_state` and output `z` based on the current `state` and input `x`. This block implements the state transition table provided in the specification.
+
+6. **Default Case**: I included a default case in the `case` statement to handle any unexpected states by resetting to `STATE_000` and setting `z` to 0.
+
+7. **Coding Conventions**: I ensured that all numeric constants are sized, and I used `always @(*)` for combinational logic without explicitly specifying the sensitivity list.
+
+This implementation ensures that the FSM behaves as specified, with synchronous reset and correct state transitions based on the input `x`.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    localparam logic [2:0] STATE_000 = 3'b000;
+    localparam logic [2:0] STATE_001 = 3'b001;
+    localparam logic [2:0] STATE_010 = 3'b010;
+    localparam logic [2:0] STATE_011 = 3'b011;
+    localparam logic [2:0] STATE_100 = 3'b100;
+
+    // State registers
+    logic [2:0] state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset)
+            state <= STATE_000;
+        else
+            state <= next_state;
+    end
+
+    // Next state and output logic
+    always @(*) begin
+        case (state)
+            STATE_000: begin
+                next_state = (x == 1'b0) ? STATE_000 : STATE_001;
+                z = 1'b0;
+            end
+            STATE_001: begin
+                next_state = (x == 1'b0) ? STATE_001 : STATE_100;
+                z = 1'b0;
+            end
+            STATE_010: begin
+                next_state = (x == 1'b0) ? STATE_010 : STATE_001;
+                z = 1'b0;
+            end
+            STATE_011: begin
+                next_state = (x == 1'b0) ? STATE_001 : STATE_010;
+                z = 1'b1;
+            end
+            STATE_100: begin
+                next_state = (x == 1'b0) ? STATE_011 : STATE_100;
+                z = 1'b1;
+            end
+            default: begin
+                next_state = STATE_000;
+                z = 1'b0;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    localparam logic [2:0] STATE_000 = 3'b000;
+    localparam logic [2:0] STATE_001 = 3'b001;
+    localparam logic [2:0] STATE_010 = 3'b010;
+    localparam logic [2:0] STATE_011 = 3'b011;
+    localparam logic [2:0] STATE_100 = 3'b100;
+
+    // State registers
+    logic [2:0] state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset)
+            state <= STATE_000;
+        else
+            state <= next_state;
+    end
+
+    // Next state and output logic
+    always @(*) begin
+        case (state)
+            STATE_000: begin
+                next_state = (x == 1'b0) ? STATE_000 : STATE_001;
+                z = 1'b0;
+            end
+            STATE_001: begin
+                next_state = (x == 1'b0) ? STATE_001 : STATE_100;
+                z = 1'b0;
+            end
+            STATE_010: begin
+                next_state = (x == 1'b0) ? STATE_010 : STATE_001;
+                z = 1'b0;
+            end
+            STATE_011: begin
+                next_state = (x == 1'b0) ? STATE_001 : STATE_010;
+                z = 1'b1;
+            end
+            STATE_100: begin
+                next_state = (x == 1'b0) ? STATE_011 : STATE_100;
+                z = 1'b1;
+            end
+            default: begin
+                next_state = STATE_000;
+                z = 1'b0;
+            end
+        endcase
+    end
+
+endmodule

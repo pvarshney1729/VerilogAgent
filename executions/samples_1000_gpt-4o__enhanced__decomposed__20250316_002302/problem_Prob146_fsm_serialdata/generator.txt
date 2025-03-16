@@ -1,0 +1,179 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to design a finite state machine (FSM) that processes a serial data stream formatted with a start bit, 8 data bits, and a stop bit. The FSM will have the following states:
+
+1. **IDLE**: Waits for the start bit (`0`). Transitions to the START state upon detecting a `0`.
+2. **START**: Confirms the start bit and transitions to the DATA state.
+3. **DATA**: Collects 8 data bits, shifting them into a temporary register. Transitions to the STOP state after receiving all 8 bits.
+4. **STOP**: Verifies the stop bit (`1`). If correct, transitions to the DONE state; otherwise, returns to IDLE.
+5. **DONE**: Outputs the received byte and asserts `done`. Returns to IDLE for the next byte.
+
+The FSM will use a synchronous reset to initialize the state to IDLE. The `out_byte` is valid only when `done` is asserted. The module will adhere to the specified interface and coding conventions, using `logic` for all signals and ensuring synchronous reset behavior.
+
+The implementation will use a state register to hold the current state and a next-state logic to determine the transitions. A bit counter will track the number of data bits received. The `out_byte` and `done` signals will be updated based on the FSM state transitions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic in,
+    input logic reset,
+    output logic [7:0] out_byte,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        IDLE  = 3'b000,
+        START = 3'b001,
+        DATA  = 3'b010,
+        STOP  = 3'b011,
+        DONE  = 3'b100
+    } state_t;
+
+    // State registers
+    state_t current_state, next_state;
+    logic [2:0] bit_count;
+    logic [7:0] data_reg;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 3'b000;
+            data_reg <= 8'b00000000;
+            out_byte <= 8'b00000000;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always_comb begin
+        // Default assignments
+        next_state = current_state;
+        done = 1'b0;
+
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) begin
+                    next_state = START;
+                end
+            end
+            START: begin
+                next_state = DATA;
+                bit_count = 3'b000;
+            end
+            DATA: begin
+                data_reg[bit_count] = in;
+                if (bit_count == 3'b111) begin
+                    next_state = STOP;
+                end else begin
+                    bit_count = bit_count + 1;
+                end
+            end
+            STOP: begin
+                if (in == 1'b1) begin
+                    next_state = DONE;
+                end else begin
+                    next_state = IDLE; // Error recovery
+                end
+            end
+            DONE: begin
+                out_byte = data_reg;
+                done = 1'b1;
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE; // Default case for synthesis
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic in,
+    input logic reset,
+    output logic [7:0] out_byte,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        IDLE  = 3'b000,
+        START = 3'b001,
+        DATA  = 3'b010,
+        STOP  = 3'b011,
+        DONE  = 3'b100
+    } state_t;
+
+    // State registers
+    state_t current_state, next_state;
+    logic [2:0] bit_count;
+    logic [7:0] data_reg;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 3'b000;
+            data_reg <= 8'b00000000;
+            out_byte <= 8'b00000000;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always_comb begin
+        // Default assignments
+        next_state = current_state;
+        done = 1'b0;
+
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) begin
+                    next_state = START;
+                end
+            end
+            START: begin
+                next_state = DATA;
+                bit_count = 3'b000;
+            end
+            DATA: begin
+                data_reg[bit_count] = in;
+                if (bit_count == 3'b111) begin
+                    next_state = STOP;
+                end else begin
+                    bit_count = bit_count + 1;
+                end
+            end
+            STOP: begin
+                if (in == 1'b1) begin
+                    next_state = DONE;
+                end else begin
+                    next_state = IDLE; // Error recovery
+                end
+            end
+            DONE: begin
+                out_byte = data_reg;
+                done = 1'b1;
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE; // Default case for synthesis
+            end
+        endcase
+    end
+
+endmodule

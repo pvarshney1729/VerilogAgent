@@ -1,0 +1,70 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input wire in;`
+    - Description: Single-bit input signal used for state transitions.
+  - `input wire [9:0] state;`
+    - Description: One-hot encoded current state vector. Each bit represents a state, with `state[0]` being the least significant bit corresponding to S0 and `state[9]` corresponding to S9.
+
+- Outputs:
+  - `output wire [9:0] next_state;`
+    - Description: One-hot encoded next state vector. Each bit represents the transition to a specific state, with `next_state[0]` through `next_state[9]` corresponding to S0 through S9 respectively.
+  - `output wire out1;`
+    - Description: Single-bit output. Primarily 0 except when specified by state transitions.
+  - `output wire out2;`
+    - Description: Single-bit output. Primarily 0 except when specified by state transitions.
+
+State Machine Description:
+- The state machine is defined with states S0 to S9, using one-hot encoding.
+- Each state transition is triggered by the `in` input, moving to a new state based on the current state and input value.
+- Outputs `(out1, out2)` are predominantly `(0, 0)` except for specific transitions where they are explicitly defined otherwise.
+
+State Transitions and Outputs:
+- S0: 
+  - Transition: `in == 0` --> S0
+  - Transition: `in == 1` --> S1
+  - Output: `(out1, out2) = (0, 0)`
+- S1: 
+  - Transition: `in == 0` --> S0
+  - Transition: `in == 1` --> S2
+  - Output: `(out1, out2) = (0, 0)`
+- S2: 
+  - Transition: `in == 0` --> S0
+  - Transition: `in == 1` --> S3
+  - Output: `(out1, out2) = (0, 0)`
+- S3: 
+  - Transition: `in == 0` --> S0
+  - Transition: `in == 1` --> S4
+  - Output: `(out1, out2) = (0, 0)`
+- S4: 
+  - Transition: `in == 0` --> S0
+  - Transition: `in == 1` --> S5
+  - Output: `(out1, out2) = (0, 0)`
+- S5: 
+  - Transition: `in == 0` --> S8
+  - Transition: `in == 1` --> S6
+  - Output: `(out1, out2) = (0, 0)`
+- S6: 
+  - Transition: `in == 0` --> S9
+  - Transition: `in == 1` --> S7
+  - Output: `(out1, out2) = (0, 0)`
+- S7: 
+  - Transition: `in == 0` --> S0
+  - Transition: `in == 1` --> S7
+  - Output: `(out1, out2) = (0, 1)`
+- S8: 
+  - Transition: `in == 0` --> S0
+  - Transition: `in == 1` --> S1
+  - Output: `(out1, out2) = (1, 0)`
+- S9: 
+  - Transition: `in == 0` --> S0
+  - Transition: `in == 1` --> S1
+  - Output: `(out1, out2) = (1, 1)`
+
+Additional Details:
+- The module must handle cases where multiple states are active in the input `state[9:0]`. This may occur if the input vector represents a combination of states, and the module should appropriately transition each active state to its respective next state.
+- Ensure that the output `next_state` is a valid one-hot encoded vector reflecting the transitions of all active states.
+- The design does not include the state flip-flops; it only implements the combinational logic for determining the next state and outputs based on the current state and input.
+</ENHANCED_SPEC>

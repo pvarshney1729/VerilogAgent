@@ -1,0 +1,63 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  x3
+ - input  x2
+ - input  x1
+ - output f
+
+The module should implement a combinational circuit for the following
+truth table:
+
+  x3 | x2 | x1 | f
+  0  | 0  | 0  | 0
+  0  | 0  | 1  | 0
+  0  | 1  | 0  | 1
+  0  | 1  | 1  | 1
+  1  | 0  | 0  | 0
+  1  | 0  | 1  | 1
+  1  | 1  | 0  | 0
+  1  | 1  | 1  | 1
+
+Here is the enhanced specification which might be useful to you:
+                **
+
+### Module Name: `TopModule`
+
+#### Interface
+- **Inputs**:
+  - `input wire x3`: 1-bit input representing the most significant bit (MSB).
+  - `input wire x2`: 1-bit input representing the middle bit.
+  - `input wire x1`: 1-bit input representing the least significant bit (LSB).
+
+- **Outputs**:
+  - `output wire f`: 1-bit output.
+
+#### Behavior
+- The module implements a combinational logic circuit defined by the following truth table:
+  
+  | x3 | x2 | x1 | f |
+  |----|----|----|---|
+  | 0  | 0  | 0  | 0 |
+  | 0  | 0  | 1  | 0 |
+  | 0  | 1  | 0  | 1 |
+  | 0  | 1  | 1  | 1 |
+  | 1  | 0  | 0  | 0 |
+  | 1  | 0  | 1  | 1 |
+  | 1  | 1  | 0  | 0 |
+  | 1  | 1  | 1  | 1 |
+
+- **Logic Equation**:
+  - The output `f` can be expressed as: `f = (x2 AND NOT x1) OR (x3 AND x1)`
+
+#### Timing
+- This is a purely combinational circuit with no clock or reset signals involved.
+
+#### Implementation Notes
+- Ensure the module is implemented without sequential elements as it is purely combinational.
+- The logic should be optimized for minimal gate usage based on the provided truth table.
+
+**
+                

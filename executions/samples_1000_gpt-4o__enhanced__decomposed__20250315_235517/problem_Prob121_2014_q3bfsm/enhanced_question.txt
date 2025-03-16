@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+The goal is to implement a Verilog module named `TopModule` with a specific interface and behavior. The module features a finite-state machine (FSM) with defined state transitions and output logic. Below are the refined specifications:
+
+**Module Interface:**
+- **Inputs:**
+  - `input clk`: Clock signal, positive edge-triggered.
+  - `input reset`: Synchronous reset signal, active high.
+  - `input x`: Control input signal.
+
+- **Outputs:**
+  - `output z`: Output signal.
+
+**Port Characteristics:**
+- All input and output ports are single-bit (`1` bit) signals.
+
+**Finite State Machine (FSM) Description:**
+- **State Representation:**
+  - The FSM uses a 3-bit state vector `y[2:0]`, where `y[2]` is the most significant bit (MSB) and `y[0]` is the least significant bit (LSB).
+
+- **Reset Behavior:**
+  - The FSM resets synchronously to the state `000` upon a high signal on the `reset` input.
+
+- **Triggering:**
+  - All state transitions occur on the positive edge of the `clk` signal.
+
+- **State Transition Table:**
+
+  | Present State `y[2:0]` | Next State `y[2:0]` if `x=0` | Next State `y[2:0]` if `x=1` | Output `z` |
+  |------------------------|-------------------------------|-------------------------------|------------|
+  | 000                    | 000                           | 001                           | 0          |
+  | 001                    | 001                           | 100                           | 0          |
+  | 010                    | 010                           | 001                           | 0          |
+  | 011                    | 001                           | 010                           | 1          |
+  | 100                    | 011                           | 100                           | 1          |
+
+**Output Logic:**
+- The output `z` is determined by the current state as per the state transition table. It does not depend directly on `x`.
+
+**Edge Cases:**
+- Upon reset, the FSM enters state `000` regardless of the state prior to the reset.
+- If `clk` and `reset` are asserted simultaneously, the reset takes precedence, ensuring the FSM transitions to state `000`.
+
+**Initial Conditions:**
+- Upon initialization and after a reset, the state of the FSM will be `000`, and output `z` will be `0`.
+
+**Operational Notes:**
+- Ensure that all state transitions and the output logic are implemented according to the above state transition table to maintain the correct behavior of the FSM.
+</ENHANCED_SPEC>

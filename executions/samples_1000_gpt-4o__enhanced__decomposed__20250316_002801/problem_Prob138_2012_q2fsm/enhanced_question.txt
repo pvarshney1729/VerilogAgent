@@ -1,0 +1,73 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` with the following interface. All input and output ports are one bit unless otherwise specified:
+
+- `input wire clk`: Clock input for synchronizing the state transitions. Transitions occur on the rising edge of the clock.
+- `input wire reset`: Active-high, synchronous reset signal. When asserted, the state machine resets to its initial state.
+- `input wire w`: Input signal to determine state transitions.
+- `output reg z`: Output signal representing the current state's output value.
+
+### State Machine Description
+
+The state machine has six states: A, B, C, D, E, and F. Each state is encoded uniquely using a minimum number of bits (3 bits recommended for encoding).
+
+#### State Encodings (suggested):
+
+- A: `3'b000`
+- B: `3'b001`
+- C: `3'b010`
+- D: `3'b011`
+- E: `3'b100`
+- F: `3'b101`
+
+#### State Transition Table:
+
+- From State A:
+  - On `w = 1`: Transition to State B
+  - On `w = 0`: Remain in State A
+
+- From State B:
+  - On `w = 1`: Transition to State C
+  - On `w = 0`: Transition to State D
+
+- From State C:
+  - On `w = 1`: Transition to State E
+  - On `w = 0`: Transition to State D
+
+- From State D:
+  - On `w = 1`: Transition to State F
+  - On `w = 0`: Transition to State A
+
+- From State E:
+  - On `w = 1`: Remain in State E
+  - On `w = 0`: Transition to State D
+
+- From State F:
+  - On `w = 1`: Transition to State C
+  - On `w = 0`: Transition to State D
+
+#### Output Logic:
+
+- In State A, B, C, or D: `z = 0`
+- In State E or F: `z = 1`
+
+### Reset Behavior:
+
+- The `reset` signal, when asserted, resets the state machine to State A. This occurs synchronously with the clock.
+
+### Implementation Guidelines:
+
+- Use separate `always` blocks for the state transition logic (state table) and the state register update (state flip-flops).
+- The state register should be updated on the positive edge of the clock or when the reset is asserted.
+- The output logic can be implemented using a continuous assignment statement or within an `always` block sensitive to the state register.
+
+### Edge Cases:
+
+- Ensure that all possible state encodings are accounted for, including any unused state encodings, which should safely transition to State A or a known state.
+- Handle input boundaries by making sure `w` is strictly treated as a single-bit input.
+
+### Bit Indexing:
+
+- Bit indexing follows the MSB-LSB convention where bit[0] refers to the least significant bit.
+
+This specification ensures clarity and correctness, facilitating precise Verilog implementation of the state machine described.
+</ENHANCED_SPEC>

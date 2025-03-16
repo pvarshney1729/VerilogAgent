@@ -1,0 +1,67 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as specified, we need to create a finite state machine (FSM) that controls the `shift_ena` signal. The FSM should assert `shift_ena` for exactly 4 clock cycles upon reset and then keep it deasserted until another reset occurs. The reset is synchronous, meaning it should be sampled on the rising edge of the clock.
+
+1. **State Encoding**: We'll use a simple counter to track the number of cycles for which `shift_ena` should be asserted. This counter will count from 4 down to 0.
+
+2. **State Transition**: On reset, the counter is initialized to 4. On each clock cycle, if the counter is not zero, it decrements by 1. When the counter reaches zero, `shift_ena` is deasserted.
+
+3. **Output Logic**: The `shift_ena` signal is asserted whenever the counter is greater than zero.
+
+4. **Synchronous Reset**: The reset logic is implemented within the clocked always block, ensuring that the reset is sampled with the clock.
+
+5. **Coding Conventions**: We will use `logic` for all signals, and the always block will be sensitive only to the clock edge, adhering to the synchronous reset requirement.
+
+This approach ensures that `shift_ena` is asserted for exactly 4 cycles after a reset and remains deasserted otherwise.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    output logic shift_ena
+);
+
+    logic [2:0] cycle_count;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            cycle_count <= 3'b100; // Initialize to 4 cycles
+        end else if (cycle_count != 3'b000) begin
+            cycle_count <= cycle_count - 1;
+        end
+    end
+
+    always_comb begin
+        shift_ena = (cycle_count != 3'b000);
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    output logic shift_ena
+);
+
+    logic [2:0] cycle_count;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            cycle_count <= 3'b100; // Initialize to 4 cycles
+        end else if (cycle_count != 3'b000) begin
+            cycle_count <= cycle_count - 1;
+        end
+    end
+
+    always_comb begin
+        shift_ena = (cycle_count != 3'b000);
+    end
+
+endmodule

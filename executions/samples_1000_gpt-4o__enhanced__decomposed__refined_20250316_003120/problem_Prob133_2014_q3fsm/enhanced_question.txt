@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- `input  wire clk`: Clock signal (1-bit). The module's sequential logic is triggered on the positive edge of this clock.
+- `input  wire reset`: Reset signal (1-bit). Active high, synchronous reset, which initializes the FSM to state A.
+- `input  wire s`: Input signal (1-bit) used to control state transitions from state A.
+- `input  wire w`: Input signal (1-bit) evaluated in state B to determine the output.
+- `output reg z`: Output signal (1-bit) set based on the evaluation of input w.
+
+Finite State Machine (FSM) Description:
+1. **State Definitions**:
+   - **State A**: Initial state after reset. The FSM remains in state A as long as `s = 0`. Transitions to state B occur when `s = 1`.
+   - **State B**: Once in state B, the FSM evaluates the input `w` over a span of three consecutive clock cycles.
+
+2. **State Transition and Output Logic**:
+   - **Transition from State A to State B**: Occurs on the positive edge of the clock when `s = 1`.
+   - **Operation in State B**:
+     - The FSM counts the number of times `w = 1` during the next three clock cycles.
+     - If `w = 1` for exactly two out of these three cycles, `z` is set to `1` in the clock cycle immediately following this three-cycle evaluation.
+     - Otherwise, `z` is set to `0`.
+   - The process then repeats, continuously evaluating `w` every set of three clock cycles.
+
+3. **Reset Logic**:
+   - When `reset` is asserted (high), the FSM transitions to state A, and `z` is initialized to `0`.
+   - The reset is synchronous, meaning it is effective only on the positive edge of the clock.
+
+4. **Signal and Bit Indexing**:
+   - All signals are 1-bit wide.
+   - No explicit bit indexing is required due to single-bit nature of signals.
+
+5. **Edge Cases**:
+   - If `reset` is asserted at any point, the FSM immediately returns to state A on the next positive clock edge, regardless of the current state or input values.
+   - During the transition from state A to state B, the evaluation of `w` begins immediately on the next clock cycle after entering state B.
+
+6. **Operational Constraints**:
+   - Ensure no race conditions occur between transitions from state A to state B.
+   - Output `z` must be synchronous with the clock, determined solely by the FSM logic described.
+
+Note: The FSM uses as few states as necessary to achieve the specified behavior.
+</ENHANCED_SPEC>

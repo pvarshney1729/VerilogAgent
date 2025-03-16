@@ -1,0 +1,75 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  a
+ - input  b
+ - input  c
+ - input  d
+ - output q
+
+The module should implement a combinational circuit. Read the simulation
+waveforms to determine what the circuit does, then implement it.
+
+  time  a  b  c  d  q
+  0ns   0  0  0  0  0
+  5ns   0  0  0  0  0
+  10ns  0  0  0  0  0
+  15ns  0  0  0  0  0
+  20ns  0  0  0  1  0
+  25ns  0  0  1  0  1
+  30ns  0  0  1  1  1
+  35ns  0  1  0  0  1
+  40ns  0  1  0  1  1
+  45ns  0  1  1  0  1
+  50ns  0  1  1  1  1
+  55ns  1  0  0  0  0
+  60ns  1  0  0  1  0
+  65ns  1  0  1  0  1
+  70ns  1  0  1  1  1
+  75ns  1  1  0  0  1
+  80ns  1  1  0  1  1
+  85ns  1  1  1  0  1
+  90ns  1  1  1  1  1
+
+Here is the enhanced specification which might be useful to you:
+                ### Module Interface
+The module `TopModule` should be defined as follows:
+- **Inputs**:
+  - `input wire a;` // 1-bit input, unsigned
+  - `input wire b;` // 1-bit input, unsigned
+  - `input wire c;` // 1-bit input, unsigned
+  - `input wire d;` // 1-bit input, unsigned
+- **Output**:
+  - `output wire q;` // 1-bit output, unsigned
+
+### Module Behavior
+- The circuit implements a combinational logic function. The output `q` is determined by the logical equation derived from the truth table:
+  - `q = (b & !a) | (c & !d & !a) | (d & c);`
+
+### Timing Behavior
+- The module is purely combinational, meaning that the output `q` changes immediately in response to changes in the inputs `a`, `b`, `c`, and `d`, without any clock dependency.
+
+### Initial Conditions
+- For a combinational circuit, initial conditions are not applicable as there is no internal state to initialize. The output `q` will directly depend on the input conditions from the start.
+
+### Implementation Notes
+- Ensure that the logic synthesis tools are set to optimize the logic as a purely combinational circuit, without introducing unnecessary latches or flip-flops.
+- Verify the behavior against edge cases and input combinations directly from the logical expression provided.
+
+### Example Code
+```verilog
+module TopModule (
+    input wire a,
+    input wire b,
+    input wire c,
+    input wire d,
+    output wire q
+);
+
+    assign q = (b & !a) | (c & !d & !a) | (d & c);
+
+endmodule
+```
+                

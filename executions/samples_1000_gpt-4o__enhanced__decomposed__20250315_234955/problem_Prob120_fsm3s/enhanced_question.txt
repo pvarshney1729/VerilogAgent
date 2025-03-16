@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule`, with the following defined interface. All input and output ports are one bit wide.
+
+- `input logic clk`  // Clock signal, positive edge-triggered for all sequential logic.
+- `input logic reset` // Synchronous active high reset signal.
+- `input logic in`    // Input signal for state machine transitions.
+- `output logic out`  // Output signal determined by the current state.
+
+The module should implement a Moore state machine characterized by four states: A, B, C, and D. The reset functionality is synchronous, meaning the FSM will reset to state A on the next positive clock edge when `reset` is high.
+
+### State Transition Table:
+- **State A**: 
+  - `Next state`: Remains in state A if `in` is 0; transitions to state B if `in` is 1.
+  - `Output`: 0
+
+- **State B**: 
+  - `Next state`: Transitions to state C if `in` is 0; remains in state B if `in` is 1.
+  - `Output`: 0
+
+- **State C**: 
+  - `Next state`: Transitions to state A if `in` is 0; transitions to state D if `in` is 1.
+  - `Output`: 0
+
+- **State D**: 
+  - `Next state`: Transitions to state C if `in` is 0; transitions to state B if `in` is 1.
+  - `Output`: 1
+
+### Additional Specifications:
+- The state transitions occur on the positive edge of the `clk`.
+- The output `out` is strictly determined by the current state, independent of the input `in`.
+- All signals should be initialized according to their default values on reset, with the FSM starting from state A.
+- Bit indexing, where used, assumes `bit[0]` is the least significant bit (LSB).
+
+This specification ensures that all sequential elements, including state registers, are initialized and transition correctly based on the provided state transition logic. Ensure that all state transitions and outputs adhere strictly to the Moore machine paradigm described above.
+</ENHANCED_SPEC>

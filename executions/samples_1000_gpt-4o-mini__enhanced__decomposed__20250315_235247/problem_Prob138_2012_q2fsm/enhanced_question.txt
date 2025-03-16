@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input wire clk`: Clock signal, triggering on the positive edge.
+  - `input wire reset`: Synchronous active-high reset signal.
+  - `input wire w`: Input signal driving state transitions.
+- Outputs:
+  - `output reg z`: Output signal representing the state machine's output.
+
+State Machine Description:
+- State Encoding:
+  - State `A`: Binary code `3'b000`
+  - State `B`: Binary code `3'b001`
+  - State `C`: Binary code `3'b010`
+  - State `D`: Binary code `3'b011`
+  - State `E`: Binary code `3'b100`
+  - State `F`: Binary code `3'b101`
+
+- Reset Behavior:
+  - On reset, the state machine transitions to state `A`.
+  - The reset is synchronous, meaning it is recognized on the rising edge of `clk` when `reset` is high.
+
+- State Transition Table:
+  - From State `A`:
+    - `w = 1`: Transition to State `B`
+    - `w = 0`: Remain in State `A`
+  - From State `B`:
+    - `w = 1`: Transition to State `C`
+    - `w = 0`: Transition to State `D`
+  - From State `C`:
+    - `w = 1`: Transition to State `E`
+    - `w = 0`: Transition to State `D`
+  - From State `D`:
+    - `w = 1`: Transition to State `F`
+    - `w = 0`: Transition to State `A`
+  - From State `E`:
+    - `w = 1`: Remain in State `E`
+    - `w = 0`: Transition to State `D`
+  - From State `F`:
+    - `w = 1`: Transition to State `C`
+    - `w = 0`: Transition to State `D`
+
+- Output Logic:
+  - Output `z` is `1` when the current state is `E` or `F`.
+  - Output `z` is `0` when the current state is `A`, `B`, `C`, or `D`.
+
+Design Guidelines:
+- Separate always blocks must be used for state transition logic (combinational) and state memory (sequential).
+- The state memory block should be sensitive to the positive edge of `clk` and the synchronous `reset`.
+- Ensure proper handling of edge cases, such as undefined states or transitions, by defaulting to state `A` if necessary.
+</ENHANCED_SPEC>

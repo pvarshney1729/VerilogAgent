@@ -1,0 +1,79 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  areset
+ - input  d      (8 bits)
+ - output q      (8 bits)
+
+The module should include 8 D flip-flops with active high asynchronous
+reset. The output should be reset to 0. All DFFs should be triggered by
+the positive edge of clk.
+
+Here is the enhanced specification which might be useful to you:
+                **Analysis of Ambiguities and Issues:**
+
+1. **Signal Interfaces:**
+   - The widths of inputs and outputs are not explicitly defined using a formal syntax, which can lead to confusion.
+   - The signedness of the 8-bit input `d` and output `q` is not specified.
+
+2. **Bit-Ordering:**
+   - The specification does not clarify the bit-ordering for the 8-bit signals `d` and `q`, potentially leading to different implementations.
+
+3. **Timing Behavior:**
+   - The distinction between combinational and sequential logic is not directly addressed, though it is implied by the use of D flip-flops.
+   - The specification mentions asynchronous reset but does not define what state the flip-flops should be in after a reset, other than the output being reset to 0.
+
+4. **Reset Behavior:**
+   - The reset behavior is specified as active high, but the initial state of the flip-flops before the reset is not explicitly mentioned.
+
+5. **Initial States:**
+   - There is an implicit assumption about the initial state after a reset, but no explicit statement about the power-on state before any reset occurs.
+
+6. **Dependencies:**
+   - There is no explicit mention of how the input `d` maps to the output `q` during normal operation, aside from being reset to 0.
+
+7. **Boundary Conditions:**
+   - The behavior of the module when the reset signal is asserted and deasserted in quick succession is not specified.
+
+**<ENHANCED_SPEC>**
+
+**Module Name:**
+- `TopModule`
+
+**Interface:**
+- `input wire clk`: Clock signal, positive edge-triggered.
+- `input wire areset`: Asynchronous reset signal, active high.
+- `input wire [7:0] d`: 8-bit input data, unsigned.
+- `output reg [7:0] q`: 8-bit output data, unsigned.
+
+**Bit-Ordering:**
+- Bit 0 of `d` and `q` refers to the least significant bit (LSB).
+
+**Behavior:**
+- The module consists of 8 D flip-flops.
+- Each flip-flop captures the corresponding bit of input `d` on the rising edge of `clk`.
+- If `areset` is asserted (high), `q` is asynchronously reset to 8'b00000000, overriding the clock behavior.
+- When `areset` is deasserted, the flip-flops resume normal operation, capturing input `d` on the next rising edge of `clk`.
+
+**Timing Behavior:**
+- Asynchronous reset takes precedence over the clock edge. If `areset` is high, the output `q` is immediately set to 8'b00000000 regardless of `clk`.
+- On the positive edge of `clk`, if `areset` is low, `q` is updated to the value of `d`.
+
+**Reset Behavior:**
+- The asynchronous reset is active high. When `areset` is high, all bits of `q` are immediately set to 0.
+
+**Initial States:**
+- Upon power-up, the state of `q` is undefined until a reset occurs. After reset, `q` is initialized to 8'b00000000.
+
+**Boundary Conditions:**
+- If `areset` is asserted and deasserted in quick succession, the output `q` will be reset to 0 as long as `areset` is high. Normal operation resumes on the next clock edge after `areset` is low.
+
+**Implementation Notes:**
+- Ensure that flip-flops are implemented with an active-high asynchronous reset capability.
+- The module should be synthesized to ensure that the reset path is properly optimized to meet timing requirements.
+
+**<ENHANCED_SPEC>**
+                

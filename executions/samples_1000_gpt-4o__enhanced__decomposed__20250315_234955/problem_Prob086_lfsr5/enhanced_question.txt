@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `clk`: 1-bit clock signal, positive edge-triggered.
+  - `reset`: 1-bit active-high synchronous reset signal.
+- Outputs:
+  - `q`: 5-bit output representing the state of the LFSR.
+
+Specification Details:
+1. The module implements a 5-bit maximal-length Galois Linear Feedback Shift Register (LFSR).
+2. The LFSR is designed to cycle through 31 unique states (2^5 - 1), avoiding the all-zero state.
+3. The LFSR operates as follows:
+   - On each positive edge of the `clk`, the LFSR shifts right by one position.
+   - The least significant bit (LSB), `q[0]`, is used to compute the next state.
+   - The taps are located at bit positions 5 (`q[4]`) and 3 (`q[2]`).
+   - The next state's bit at position 5 (`q[4]`) is XORed with the current LSB (`q[0]`) if a tap is present.
+   - Bits without taps shift to the right unchanged.
+4. Reset Behavior:
+   - On an active-high `reset`, the LFSR synchronously resets to the binary value `00001`.
+   - This reset behavior occurs on the positive edge of the `clk`.
+5. Bit Indexing:
+   - Bit indices range from 4 (most significant bit, MSB) to 0 (least significant bit, LSB).
+6. Initial Conditions:
+   - Upon reset, the LFSR state is initialized to `00001`.
+7. Edge Cases:
+   - Ensure that the all-zero state is never reached or maintained during operation.
+
+Note: This specification assumes the correct implementation of the clock and reset logic to avoid race conditions and ensure predictable LFSR behavior.
+</ENHANCED_SPEC>

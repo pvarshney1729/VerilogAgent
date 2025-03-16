@@ -1,0 +1,169 @@
+Generated Response:
+
+```xml
+<REASONING>
+1. **Module Interface**: The module `TopModule` is defined with inputs `clk`, `resetn`, and `r` (3 bits), and output `g` (3 bits).
+
+2. **State Encoding**: The FSM states are encoded using a 2-bit `enum` type for clarity and readability. The states are `STATE_A`, `STATE_B`, `STATE_C`, and `STATE_D`.
+
+3. **State Transition Logic**: An `always @(*)` block is used to determine the next state based on the current state and input `r`. The priority logic is implemented such that `r[0]` has the highest priority, followed by `r[1]`, and then `r[2]`.
+
+4. **State Flip-Flops**: An `always @(posedge clk)` block is used to update the current state on the positive edge of the clock. The synchronous reset is implemented by checking `resetn` within this block.
+
+5. **Output Logic**: Another `always @(*)` block is used to determine the output `g` based on the current state. The output is set such that only one bit of `g` is high at a time, corresponding to the granted device.
+
+6. **Coding Conventions**: The code adheres to the specified coding conventions, using `logic` for all signals, and `always @(*)` for combinational logic. The synchronous reset is correctly implemented without including `resetn` in the sensitivity list of the sequential block.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic resetn,
+    input logic [2:0] r,
+    output logic [2:0] g
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else if (r[1])
+                    next_state = STATE_C;
+                else if (r[2])
+                    next_state = STATE_D;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_B: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_C: begin
+                if (r[1])
+                    next_state = STATE_C;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_D: begin
+                if (r[2])
+                    next_state = STATE_D;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // State flip-flops
+    always @(posedge clk) begin
+        if (!resetn)
+            current_state <= STATE_A;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        g = 3'b000; // Default output
+        case (current_state)
+            STATE_B: g = 3'b001; // Grant to device 0
+            STATE_C: g = 3'b010; // Grant to device 1
+            STATE_D: g = 3'b100; // Grant to device 2
+            default: g = 3'b000; // No grants in state A
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+```
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic resetn,
+    input logic [2:0] r,
+    output logic [2:0] g
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else if (r[1])
+                    next_state = STATE_C;
+                else if (r[2])
+                    next_state = STATE_D;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_B: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_C: begin
+                if (r[1])
+                    next_state = STATE_C;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_D: begin
+                if (r[2])
+                    next_state = STATE_D;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // State flip-flops
+    always @(posedge clk) begin
+        if (!resetn)
+            current_state <= STATE_A;
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        g = 3'b000; // Default output
+        case (current_state)
+            STATE_B: g = 3'b001; // Grant to device 0
+            STATE_C: g = 3'b010; // Grant to device 1
+            STATE_D: g = 3'b100; // Grant to device 2
+            default: g = 3'b000; // No grants in state A
+        endcase
+    end
+
+endmodule

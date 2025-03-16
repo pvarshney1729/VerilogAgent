@@ -1,0 +1,48 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in  (4 bits)
+ - output pos (2 bits)
+
+The module should implement a priority encoder. A priority encoder is a
+combinational circuit that, when given an input bit vector, outputs the
+position of the first 1 bit in the vector. For example, a 8-bit priority
+encoder given the input 8'b10010000 would output 3'd4, because bit[4] is
+first bit that is high. Build a 4-bit priority encoder. For this problem,
+if none of the input bits are high (i.e., input is zero), output zero.
+Note that a 4-bit number has 16 possible combinations.
+
+Here is the enhanced specification which might be useful to you:
+                ### Enhanced Specification for TopModule
+
+#### 1. Module Interface
+- **Module Name:** TopModule
+- **Inputs:**
+  - `input [3:0] in` - A 4-bit wide input vector. Bit[0] is the least significant bit (LSB) and bit[3] is the most significant bit (MSB). All bits are unsigned.
+- **Outputs:**
+  - `output [1:0] pos` - A 2-bit wide output vector representing the position of the first high bit in the input vector. This output is also unsigned.
+
+#### 2. Functionality
+- The module implements a 4-bit priority encoder.
+- **Priority Logic:** The priority is given to the bit with the highest index (i.e., bit[3] has the highest priority, followed by bit[2], bit[1], and bit[0]).
+- **Output Behavior:** 
+  - If `in[3]` is high, `pos` outputs `2'b11`.
+  - If `in[3]` is low but `in[2]` is high, `pos` outputs `2'b10`.
+  - If `in[3:2]` are low and `in[1]` is high, `pos` outputs `2'b01`.
+  - If `in[3:1]` are low and `in[0]` is high, `pos` outputs `2'b00`.
+  - If all `in` bits are low, `pos` outputs `2'b00`.
+
+#### 3. Timing Behavior
+- **Combinational Logic:** 
+  - The module is purely combinational with no clock input. The output `pos` changes immediately in response to changes in the input `in`.
+
+#### 4. Additional Implementation Notes
+- **No Reset Required:** As a combinational circuit, no reset condition is necessary.
+- **No Initial States Required:** Since this is a combinational logic block, there's no need for initial state definitions.
+- **Boundary Conditions:** Explicitly specified such that if all input bits are zero, the output will be zero (`2'b00`).
+
+#### 5. Example
+For an input vector `in = 4'b1001`, the output will be `pos = 2'b11`, reflecting the priority of bit[3] over bit[0].
+                

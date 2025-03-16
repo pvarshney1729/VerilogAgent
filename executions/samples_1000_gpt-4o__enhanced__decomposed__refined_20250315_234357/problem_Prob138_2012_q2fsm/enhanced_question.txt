@@ -1,0 +1,57 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and should adhere to the following interface, where all input and output ports are one bit unless otherwise specified:
+
+- `input logic clk` : Clock signal, positive-edge triggered.
+- `input logic reset` : Synchronous active-high reset signal.
+- `input logic w` : Input signal to determine state transitions.
+- `output logic z` : Output signal determined by the current state.
+
+The module implements a finite state machine (FSM) with six states, labeled A, B, C, D, E, and F. The state transitions and outputs are defined as follows:
+
+- State A: 
+  - On input `w = 1`, transition to state B.
+  - On input `w = 0`, remain in state A.
+  - Output `z = 0`.
+
+- State B:
+  - On input `w = 1`, transition to state C.
+  - On input `w = 0`, transition to state D.
+  - Output `z = 0`.
+
+- State C:
+  - On input `w = 1`, transition to state E.
+  - On input `w = 0`, transition to state D.
+  - Output `z = 0`.
+
+- State D:
+  - On input `w = 1`, transition to state F.
+  - On input `w = 0`, transition to state A.
+  - Output `z = 0`.
+
+- State E:
+  - On input `w = 1`, remain in state E.
+  - On input `w = 0`, transition to state D.
+  - Output `z = 1`.
+
+- State F:
+  - On input `w = 1`, transition to state C.
+  - On input `w = 0`, transition to state D.
+  - Output `z = 1`.
+
+The FSM should reset into state A when the `reset` signal is asserted high. This reset is synchronous and occurs on the positive edge of the clock. All state transitions and the output `z` are evaluated on the positive edge of the clock.
+
+State encoding can be defined as follows (using a 3-bit encoding for simplicity, though other encodings are permissible):
+
+- A = 3'b000
+- B = 3'b001
+- C = 3'b010
+- D = 3'b011
+- E = 3'b100
+- F = 3'b101
+
+Use separate always blocks for the state transition logic and the state registers. The output `z` can be described using either continuous assignment or an additional always block, depending on implementation preference.
+
+Ensure all registers are initialized to a known state. On reset, each state register should be explicitly set to the encoding for state A.
+
+Edge cases and potential race conditions should be carefully considered, ensuring that the FSM remains stable and functions correctly under all valid input conditions.
+</ENHANCED_SPEC>

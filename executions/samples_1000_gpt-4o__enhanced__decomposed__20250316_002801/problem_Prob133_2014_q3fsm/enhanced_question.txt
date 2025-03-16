@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: Clock signal, 1-bit, positive edge-triggered.
+  - reset: Synchronous reset signal, active high, 1-bit.
+  - s: Control input for state transition, 1-bit.
+  - w: Data input for FSM evaluation, 1-bit.
+
+- Output Ports:
+  - z: Output signal indicating FSM condition met, 1-bit.
+
+FSM Description:
+- The FSM initially resides in State A upon reset. Reset initializes all states and registers to their default values, specifically State A and any counters to zero.
+
+- State Transitions:
+  - State A: The FSM remains in State A as long as input 's' is 0. Transition to State B occurs when 's' becomes 1.
+  - State B: Upon entering State B, the FSM begins to evaluate the input 'w' over the next three consecutive clock cycles.
+
+- Operation in State B:
+  - A counter (initialized to zero) tracks the number of cycles where 'w' equals 1 during these three clock cycles.
+  - If 'w' is equal to 1 in exactly two of these three cycles, set output 'z' to 1 in the immediate subsequent clock cycle.
+  - If the condition is not met, set 'z' to 0 in the immediate subsequent clock cycle.
+  - The FSM continues to evaluate 'w' in three-cycle intervals while remaining in State B.
+
+- Input and Output Conditions:
+  - The input 's' is only relevant for transitions from State A to State B.
+  - The evaluation of 'w' is only relevant in State B.
+  - The 'z' output is updated based on the count of 'w' after every three cycles within State B.
+
+- Bit Indexing:
+  - All signals are treated as single-bit signals. There is no multi-bit indexing involved.
+
+- Initial Conditions:
+  - On reset, the FSM is placed in State A. All internal counters and state indicators are reset to zero.
+
+Edge Cases:
+- Ensure that the FSM correctly evaluates 'w' precisely during the three specified clock cycles and that 'z' is updated immediately after these evaluations.
+- The FSM must handle unexpected transitions caused by glitches on the 's' or 'w' inputs by ensuring robust state management and transition logic.
+
+The FSM must utilize minimal states to achieve the described functionality effectively and efficiently.
+</ENHANCED_SPEC>

@@ -1,0 +1,175 @@
+Generated Response:
+
+<REASONING>
+To implement the FSM described in the specification, we need to follow these steps:
+
+1. **Define the States**: We have four states: A, B, C, and D. We'll use a 2-bit encoding for these states.
+
+2. **State Transition Logic**: 
+   - From State A, transition to:
+     - State B if `r[0]` is high.
+     - State C if `r[1]` is high and `r[0]` is low.
+     - State D if `r[2]` is high and both `r[0]` and `r[1]` are low.
+     - Remain in State A if all requests are low.
+   - From State B, remain in State B if `r[0]` is high, otherwise transition to State A.
+   - From State C, remain in State C if `r[1]` is high, otherwise transition to State A.
+   - State D is not explicitly defined in the transitions, so it will transition back to State A.
+
+3. **Output Logic**: 
+   - In State B, set `g[0]` high.
+   - In State C, set `g[1]` high.
+   - In State D, set `g[2]` high.
+   - In State A, all grants are low.
+
+4. **Synchronous Reset**: Implement an active-low synchronous reset to initialize the FSM to State A.
+
+5. **Coding Conventions**: Use `logic` for all signals, and follow the guidelines for always blocks and sensitivity lists.
+
+By following these steps, we can ensure that the FSM behaves according to the specification and handles the priority of requests correctly.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic resetn,
+    input logic [2:0] r,
+    output logic [2:0] g
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State flip-flops with synchronous reset
+    always @(posedge clk) begin
+        if (!resetn)
+            current_state <= STATE_A;
+        else
+            current_state <= next_state;
+    end
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else if (r[1])
+                    next_state = STATE_C;
+                else if (r[2])
+                    next_state = STATE_D;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_B: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_C: begin
+                if (r[1])
+                    next_state = STATE_C;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_D: begin
+                next_state = STATE_A;
+            end
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        g = 3'b000;
+        case (current_state)
+            STATE_B: g[0] = 1'b1;
+            STATE_C: g[1] = 1'b1;
+            STATE_D: g[2] = 1'b1;
+            default: g = 3'b000;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic resetn,
+    input logic [2:0] r,
+    output logic [2:0] g
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State flip-flops with synchronous reset
+    always @(posedge clk) begin
+        if (!resetn)
+            current_state <= STATE_A;
+        else
+            current_state <= next_state;
+    end
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else if (r[1])
+                    next_state = STATE_C;
+                else if (r[2])
+                    next_state = STATE_D;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_B: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_C: begin
+                if (r[1])
+                    next_state = STATE_C;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_D: begin
+                next_state = STATE_A;
+            end
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        g = 3'b000;
+        case (current_state)
+            STATE_B: g[0] = 1'b1;
+            STATE_C: g[1] = 1'b1;
+            STATE_D: g[2] = 1'b1;
+            default: g = 3'b000;
+        endcase
+    end
+
+endmodule

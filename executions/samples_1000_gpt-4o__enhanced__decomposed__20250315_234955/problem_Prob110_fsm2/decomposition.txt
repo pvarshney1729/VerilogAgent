@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, areset, j, k, and output port out.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input clk,\n    input areset,\n    input j,\n    input k,\n    output reg out\n);\n\n    typedef enum reg [1:0] {OFF = 2'b00, ON = 2'b01} state_t;\n    state_t state, next_state;\n\n    always @(posedge clk or posedge areset) begin\n        if (areset) begin\n            state <= OFF;\n        end else begin\n            state <= next_state;\n        end\n    end\n\n    always @(*) begin\n        case (state)\n            OFF: begin\n                out = 1'b0;\n                if (j) begin\n                    next_state = ON;\n                end else begin\n                    next_state = OFF;\n                end\n            end\n            ON: begin\n                out = 1'b1;\n                if (k) begin\n                    next_state = OFF;\n                end else begin\n                    next_state = ON;\n                end\n            end\n            default: begin\n                next_state = OFF;\n            end\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define the state encoding for the Moore state machine with two states: OFF and ON.",
+        "source": "The module should implement a Moore state machine with two states, two inputs, and one output according to diagram described below.",
+        "implementation": "// State encoding for the Moore state machine\n  localparam OFF = 1'b0;\n  localparam ON  = 1'b1;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the asynchronous reset logic to set the state to OFF when areset is high.",
+        "source": "Reset is an active-high asynchronous reset to state OFF.",
+        "implementation": "reg state;\n  localparam OFF = 1'b0, ON = 1'b1;\n\n  always @(posedge clk or posedge areset) begin\n    if (areset) begin\n      state <= OFF; // Asynchronous reset logic to set state to OFF\n    end else begin\n      // State transition logic will be implemented here\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the state transition logic: from OFF to ON when j=1, and from ON to OFF when k=1.",
+        "source": "OFF (out=0) --j=1--> ON\nON  (out=1) --k=1--> OFF",
+        "implementation": "// State encoding\n  localparam OFF = 1'b0;\n  localparam ON  = 1'b1;\n\n  // State transition logic\n  always @(posedge clk or posedge areset) begin\n    if (areset) begin\n      state <= OFF;\n    end else begin\n      case (state)\n        OFF: if (j) state <= ON;\n        ON:  if (k) state <= OFF;\n      endcase\n    end\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output logic for the Moore state machine: output out=0 in state OFF and out=1 in state ON.",
+        "source": "OFF (out=0) --j=0--> OFF\nON  (out=1) --k=0--> ON",
+        "implementation": "// State encoding\n  localparam OFF = 1'b0;\n  localparam ON  = 1'b1;\n\n  // State register\n  reg state;\n\n  // Output logic for Moore state machine\n  always @(*) begin\n    case (state)\n      OFF: out = 1'b0;\n      ON:  out = 1'b1;\n      default: out = 1'b0; // Default case to handle unexpected states\n    endcase\n  end"
+    }
+]

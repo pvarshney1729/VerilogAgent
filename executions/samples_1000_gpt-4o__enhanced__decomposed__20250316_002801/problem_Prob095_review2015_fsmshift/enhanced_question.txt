@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock signal. All sequential logic is triggered on the positive edge of this clock.
+  - `reset`: 1-bit active-high synchronous reset signal.
+
+- Output Ports:
+  - `shift_ena`: 1-bit output to enable the shift register.
+
+Functional Description:
+- This module is part of a finite state machine (FSM) responsible for controlling a shift register.
+- The goal is to enable the shift register for exactly 4 consecutive clock cycles when a specific bit pattern is detected.
+- Upon receiving a synchronous reset signal (`reset` is high at the positive edge of `clk`), the module should assert `shift_ena` for 4 clock cycles and then deassert it indefinitely until another reset occurs.
+- While the reset is asserted, `shift_ena` should begin its 4-cycle assertion at the next positive clock edge following the deassertion of reset.
+
+Reset Behavior:
+- The reset is active-high and synchronous with the clock.
+- During reset:
+  - All internal state registers should be initialized to ensure `shift_ena` is asserted for 4 cycles after reset.
+
+Initial Conditions:
+- Upon power-up, assume any internal state registers are in their reset condition until reset is applied.
+
+Signal Timing and Dependencies:
+- The `shift_ena` signal is dependent on the FSM state triggered by the `clk` and `reset` signals.
+- Ensure there are no race conditions by resolving signal dependencies in a sequential manner, respecting the clock edges.
+
+Edge Cases:
+- If the reset signal is asserted and then deasserted within a very short duration, ensure the 4-cycle assertion behavior is maintained by resetting the internal counters or state registers appropriately.
+- After the 4-cycle assertion post-reset, `shift_ena` should remain deasserted (low) indefinitely until the next reset.
+</ENHANCED_SPEC>

@@ -1,0 +1,83 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  load
+ - input  data (256 bits)
+ - output q (256 bits)
+
+The module should implemement a "game" played on a two-dimensional grid
+of cells, where each cell is either 1 (alive) or 0 (dead). At each time
+step, each cell changes state depending on how many neighbours it has:
+
+  (1) 0-1 neighbour: Cell becomes 0.
+  (2) 2 neighbours: Cell state does not change.
+  (3) 3 neighbours: Cell becomes 1.
+  (4) 4+ neighbours: Cell becomes 0.
+
+The game is formulated for an infinite grid. In this circuit, we will use
+a 16x16 grid. To make things more interesting, we will use a 16x16
+toroid, where the sides wrap around to the other side of the grid. For
+example, the corner cell (0,0) has 8 neighbours: (15,1), (15,0), (15,15),
+(0,1), (0,15), (1,1), (1,0), and (1,15). The 16x16 grid is represented by
+a length 256 vector, where each row of 16 cells is represented by a
+sub-vector: q[15:0] is row 0, q[31:16] is row 1, etc.
+
+  (1) load: Loads data into q at the next clock edge, for loading initial
+       state. Active high synchronous.
+  (2) q: The 16x16 current state of the game, updated every clock cycle.
+
+The game state should advance by one timestep every clock cycle. Assume
+all sequential logic is triggered on the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                ### Module Interface
+- **Module Name**: `TopModule`
+- **Input Ports**:
+  - `input wire clk;` // Clock signal, 1-bit width.
+  - `input wire load;` // Active-high synchronous load signal, 1-bit width.
+  - `input wire [255:0] data;` // 256-bit input vector for initial grid state.
+- **Output Ports**:
+  - `output reg [255:0] q;` // 256-bit output vector representing the current grid state.
+
+### Bit-ordering and Grid Representation
+- **Grid Representation**: The 16x16 grid is represented as a single 256-bit vector `q`.
+  - `q[15:0]` corresponds to row 0 (top row).
+  - `q[31:16]` corresponds to row 1, and so on.
+  - `q[255:240]` corresponds to row 15 (bottom row).
+- **Bit Indexing**: Bit[0] is the least significant bit of each row.
+
+### Timing Behavior
+- **Clock Edge**: All sequential logic is triggered on the positive edge of `clk`.
+- **Load Operation**: When `load` is high, the `data` input is loaded into `q` on the next rising edge of `clk`.
+- **Game State Update**: If `load` is not asserted, the game state advances by one timestep every clock cycle.
+
+### Reset Behavior
+- **Reset Signal**: A reset input (not originally specified) should be added for initialization.
+  - `input wire reset;` // Active-high asynchronous reset signal, 1-bit width.
+  - When `reset` is asserted, `q` should be cleared to a default state (e.g., all zeros).
+
+### Initial States
+- **Power-up State**: If a reset is not used, define the power-up state of `q`. Typically, this would be all zeros unless otherwise specified.
+
+### Boundary Conditions and Toroidal Grid
+- **Toroidal Behavior**: The grid wraps around in both horizontal and vertical directions.
+  - Example: Cell (0,0) neighbors include (15,1), (15,0), (15,15), (0,1), (0,15), (1,1), (1,0), and (1,15).
+
+### Game Logic
+- **Cell State Transition Rules**:
+  - **0-1 Neighbour**: Cell becomes 0.
+  - **2 Neighbours**: Cell state does not change.
+  - **3 Neighbours**: Cell becomes 1.
+  - **4+ Neighbours**: Cell becomes 0.
+- **Implementation Note**: Use combinational logic to count neighbors and determine the next state of each cell.
+
+### Precedence and Dependencies
+- **Operation Precedence**: The `load` operation takes precedence over the game state update. If `load` is high, the `data` is loaded into `q`, otherwise, the state update occurs.
+
+### Implementation Notes
+- **Simulation and Verification**: Ensure to simulate boundary conditions, especially the toroidal wrap-around, to verify correct implementation.
+- **Synthesis Considerations**: Ensure the synthesis tool correctly implements the combinational logic for cell state transitions.
+                

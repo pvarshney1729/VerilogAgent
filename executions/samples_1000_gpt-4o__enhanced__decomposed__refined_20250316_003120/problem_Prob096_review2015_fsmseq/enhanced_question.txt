@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, shall have the following interface:
+
+- `input clk`: A single-bit clock signal. The module operates on the positive edge of this clock.
+- `input reset`: A single-bit active-high synchronous reset signal.
+- `input data`: A single-bit input representing a bit stream.
+- `output start_shifting`: A single-bit output that indicates when the sequence has been detected.
+
+**Functional Description:**
+
+The module implements a finite-state machine (FSM) that searches for the binary sequence `1101` in the input bit stream `data`. The FSM should have the following states:
+
+1. **Idle State**: The initial state, waiting for the sequence to start.
+2. **State 1**: Detected an initial '1'.
+3. **State 2**: Detected '11'.
+4. **State 3**: Detected '110'.
+5. **Detect State**: Detected the full sequence '1101'.
+
+Upon detecting the sequence '1101', the module will set the `start_shifting` output to '1'. The `start_shifting` signal remains '1' indefinitely until a reset occurs.
+
+**Reset Behavior:**
+
+- The reset signal is synchronous with the clock. 
+- When `reset` is asserted (logic high) on the rising edge of `clk`, the FSM should return to the Idle State, and `start_shifting` should be reset to '0'.
+
+**Initial Conditions:**
+
+- On power-up or reset, the FSM starts in the Idle State.
+- The `start_shifting` output should be initialized to '0'.
+
+**Bit Indexing and Conventions:**
+
+- Bit indexing is not applicable as all ports are single-bit.
+- Ensure that all sequential logic and state transitions are triggered by the positive edge of `clk`.
+
+**Edge Cases and Considerations:**
+
+- The FSM should correctly handle overlapping sequences. For example, if the stream is '1101101', it should recognize both occurrences of '1101'.
+- Ensure that race conditions are avoided by ensuring all state transitions occur on the edge of the clock.
+</ENHANCED_SPEC>

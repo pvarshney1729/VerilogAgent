@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic load,\n    input logic [9:0] data,\n    output logic tc\n);\n\n    logic [9:0] counter;\n\n    always @(posedge clk) begin\n        if (load) begin\n            counter <= data;\n        end else if (counter > 0) begin\n            counter <= counter - 1;\n        end\n    end\n\n    assign tc = (counter == 0);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

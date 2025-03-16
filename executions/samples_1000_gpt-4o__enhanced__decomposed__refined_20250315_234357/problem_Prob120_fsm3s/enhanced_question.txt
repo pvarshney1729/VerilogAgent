@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Specification: TopModule
+
+- Module Name: TopModule
+- Port List:
+  - Input: 
+    - clk (1-bit): Clock signal, triggers on the positive edge.
+    - reset (1-bit): Synchronous active high reset, resets FSM to initial state A.
+    - in (1-bit): Input signal for state transitions.
+  - Output:
+    - out (1-bit): Output signal based on the current state.
+
+- State Machine Description:
+  - Type: Moore state machine
+  - States: Four states labeled as A, B, C, and D.
+  - Initial State: State A upon reset.
+  - Clock Edge: All state transitions occur on the positive edge of the clock.
+  - State Transition Table:
+
+    | Current State | Next State (in=0) | Next State (in=1) | Output |
+    |---------------|-------------------|-------------------|--------|
+    | A             | A                 | B                 | 0      |
+    | B             | C                 | B                 | 0      |
+    | C             | A                 | D                 | 0      |
+    | D             | C                 | B                 | 1      |
+
+- Reset Behavior:
+  - Reset Type: Synchronous active high.
+  - On reset, the FSM transitions to State A and the output 'out' is set to 0.
+
+- Signal Details:
+  - All ports are 1-bit wide and unsigned.
+  - The output 'out' value is dependent solely on the current state, not the input 'in'.
+
+- Implementation Notes:
+  - Ensure all flip-flops and registers are initialized correctly as per the reset behavior.
+  - No undefined states or state transitions; handle all possible input combinations.
+  - Bit Indexing: Not applicable as all signals are single bit.
+
+- Edge Cases and Input Boundaries:
+  - Ensure correct transitions and output behavior across all state boundaries and input conditions.
+  - Check for race conditions or glitches in state transitions and output signaling.
+</ENHANCED_SPEC>

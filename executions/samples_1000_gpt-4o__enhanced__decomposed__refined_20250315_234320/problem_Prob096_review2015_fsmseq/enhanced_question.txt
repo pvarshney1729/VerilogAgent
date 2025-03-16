@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit clock signal. All sequential logic is triggered on the positive edge.
+  - reset: 1-bit active-high synchronous reset. Resets all state elements to their initial state.
+  - data: 1-bit input stream.
+
+- Output Ports:
+  - start_shifting: 1-bit output that is set to '1' when the sequence is detected and remains '1' until reset.
+
+Functional Description:
+The module implements a finite-state machine (FSM) to detect the sequence '1101' in the input bit stream 'data'. The FSM transitions between states based on the input sequence and sets the output 'start_shifting' to '1' upon detecting the sequence.
+
+FSM States:
+1. IDLE: Initial state. Transition to state S1 on receiving '1'.
+2. S1: Transition to S11 on receiving '1'. Otherwise, return to IDLE.
+3. S11: Transition to S110 on receiving '0'. If '1', remain in S11.
+4. S110: Transition to DETECT on receiving '1'. If '0', return to IDLE.
+5. DETECT: Output 'start_shifting' is set to '1'. Remain in this state until reset.
+
+State Transition Logic:
+- On each positive edge of 'clk', the FSM evaluates transitions based on the input 'data'.
+- The 'reset' signal, when high, forces a transition to the IDLE state and resets 'start_shifting' to '0'.
+
+Output Logic:
+- The output 'start_shifting' is set to '1' when the FSM enters the DETECT state. It remains '1' until a reset occurs.
+
+Edge Cases and Boundary Conditions:
+- If the sequence is detected just before a reset, 'start_shifting' resets to '0'.
+- The FSM correctly handles overlapping sequences, ensuring continuous operation in detecting subsequent patterns.
+
+Bit Indexing:
+- All signals in the module are single-bit wide, with bit[0] being the least significant bit.
+
+Initial Conditions:
+- On reset, the FSM starts in the IDLE state. The output 'start_shifting' is initialized to '0'.
+
+Assumptions:
+- The input 'data' stream is valid on each clock cycle.
+</ENHANCED_SPEC>

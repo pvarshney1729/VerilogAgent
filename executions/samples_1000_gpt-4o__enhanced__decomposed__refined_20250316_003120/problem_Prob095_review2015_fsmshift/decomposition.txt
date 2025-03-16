@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, and output port shift_ena.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  wire clk,\n    input  wire reset,\n    output reg  shift_ena\n);\n\n    reg [2:0] cycle_count;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            cycle_count <= 3'b000;\n            shift_ena <= 1'b1;\n        end else if (cycle_count < 3'b100) begin\n            cycle_count <= cycle_count + 1'b1;\n            shift_ena <= 1'b1;\n        end else begin\n            shift_ena <= 1'b0;\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare the state register and state encoding using localparam for a 2-bit state register. Define states: IDLE (2'b00), ASSERT (2'b01), and DONE (2'b10).",
+        "source": "Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "// State encoding using localparam\n  localparam IDLE   = 2'b00;\n  localparam ASSERT = 2'b01;\n  localparam DONE   = 2'b10;\n\n  // State register declaration\n  reg [1:0] state;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic. On reset, transition to ASSERT state.",
+        "source": "Reset should be active high synchronous.",
+        "implementation": "// State encoding\n  localparam ASSERT = 1'b0;\n  localparam IDLE   = 1'b1;\n\n  // State register\n  reg state;\n\n  // Synchronous reset logic\n  always @(posedge clk) begin\n    if (reset) begin\n      state <= ASSERT;\n    end else begin\n      // State transition logic (to be implemented)\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic. Transition from ASSERT to DONE after 4 cycles, and from DONE to IDLE. Remain in IDLE until reset.",
+        "source": "Whenever the FSM is reset, assert shift_ena for 4 cycles, then 0 forever (until reset).",
+        "implementation": "```verilog\n[BEGIN]\n  reg [2:0] state, next_state;\n  reg [2:0] cycle_count;\n\n  // State encoding\n  localparam IDLE   = 3'b000;\n  localparam ASSERT = 3'b001;\n  localparam DONE   = 3'b010;\n\n  // Next state logic\n  always @(*) begin\n    case (state)\n      IDLE: begin\n        if (reset)\n          next_state = ASSERT;\n        else\n          next_state = IDLE;\n      end\n      ASSERT: begin\n        if (cycle_count == 3'b100)\n          next_state = DONE;\n        else\n          next_state = ASSERT;\n      end\n      DONE: begin\n        next_state = IDLE;\n      end\n      default: next_state = IDLE;\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic. Assert shift_ena when in ASSERT state, otherwise deassert it.",
+        "source": "Whenever the FSM is reset, assert shift_ena for 4 cycles, then 0 forever (until reset).",
+        "implementation": "reg [2:0] cycle_count;\nreg shift_ena_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        cycle_count <= 3'b000;\n        shift_ena_reg <= 1'b1;\n    end else if (shift_ena_reg) begin\n        if (cycle_count < 3'b011) begin\n            cycle_count <= cycle_count + 1'b1;\n        end else begin\n            shift_ena_reg <= 1'b0;\n        end\n    end\nend\n\nassign shift_ena = shift_ena_reg;"
+    }
+]

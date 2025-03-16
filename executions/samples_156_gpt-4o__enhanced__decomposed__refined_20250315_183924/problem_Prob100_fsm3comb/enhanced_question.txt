@@ -1,0 +1,119 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  in
+ - input  state (2 bits)
+ - output next_state (2 bits)
+ - output out
+
+The module should implement the following is the state transition table
+for a Moore state machine with one input, one output, and four states.
+Use the following state encoding: A=2'b00, B=2'b01, C=2'b10,
+D=2'b11.Implement only the state transition logic and output logic (the
+combinational logic portion) for this state machine. Given the current
+state (state), compute the next_state and output (out) based on the state
+transition table.
+
+  State | Next state in=0, Next state in=1 | Output
+  A     | A, B                             | 0
+  B     | C, B                             | 0
+  C     | A, D                             | 0
+  D     | C, B                             | 1
+
+Here is the enhanced specification which might be useful to you:
+                **Module Interface:**
+
+- **Module Name:** `TopModule`
+- **Inputs:**
+  - `input wire in` (1 bit, unsigned)
+  - `input wire [1:0] state` (2 bits, unsigned, current state)
+- **Outputs:**
+  - `output reg [1:0] next_state` (2 bits, unsigned, next state)
+  - `output reg out` (1 bit, unsigned)
+- **Clock and Reset:**
+  - `input wire clk` (1 bit, clock signal for synchronous transitions)
+  - `input wire rst_n` (1 bit, active-low synchronous reset)
+
+**Bit-Ordering:**
+
+- Multi-bit signals such as `state` and `next_state` use the convention where `state[1]` is the most significant bit (MSB) and `state[0]` is the least significant bit (LSB).
+
+**State Encoding:**
+
+- State A: `2'b00`
+- State B: `2'b01`
+- State C: `2'b10`
+- State D: `2'b11`
+
+**Initial States:**
+
+- On reset (`rst_n` is low), the state machine initializes to state A (`2'b00`).
+
+**State Transition and Output Logic:**
+
+- The state machine is a Moore machine, meaning outputs depend only on the current state.
+- State Transition Table:
+
+  | Current State | `in=0` Next State | `in=1` Next State | `out` |
+  |---------------|-------------------|-------------------|-------|
+  | A             | A                 | B                 | 0     |
+  | B             | C                 | B                 | 0     |
+  | C             | A                 | D                 | 0     |
+  | D             | C                 | B                 | 1     |
+
+**Timing Behavior:**
+
+- State transitions occur on the rising edge of `clk`.
+- The reset is synchronous; the state machine transitions to the initial state on the next rising edge of `clk` after `rst_n` is deasserted.
+
+**Implementation Notes:**
+
+- Ensure proper handling of illegal or undefined states. If an illegal state is detected, the system will transition to a safe state (e.g., state A).
+- The combinational logic for `next_state` and `out` should be derived directly from the state transition table.
+
+**Boundary Conditions:**
+
+- The design should handle unexpected conditions gracefully, ensuring no undefined behavior occurs.
+
+**Verilog Module Template:**
+```verilog
+module TopModule (
+    input wire clk,
+    input wire rst_n,
+    input wire in,
+    input wire [1:0] state,
+    output reg [1:0] next_state,
+    output reg out
+);
+
+// Combinational logic for next_state and out
+always @(*) begin
+    case (state)
+        2'b00: begin // State A
+            next_state = (in == 1'b0) ? 2'b00 : 2'b01;
+            out = 1'b0;
+        end
+        2'b01: begin // State B
+            next_state = (in == 1'b0) ? 2'b10 : 2'b01;
+            out = 1'b0;
+        end
+        2'b10: begin // State C
+            next_state = (in == 1'b0) ? 2'b00 : 2'b11;
+            out = 1'b0;
+        end
+        2'b11: begin // State D
+            next_state = (in == 1'b0) ? 2'b10 : 2'b01;
+            out = 1'b1;
+        end
+        default: begin // Handle illegal state
+            next_state = 2'b00; // Transition to state A
+            out = 1'b0;
+        end
+    endcase
+end
+
+endmodule
+```
+                

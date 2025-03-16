@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock signal; triggers all sequential logic on the positive clock edge.
+  - `reset`: 1-bit active high synchronous reset signal; resets all state registers to their initial values on the next positive clock edge when high.
+  - `data`: 1-bit input data stream.
+
+- Output Ports:
+  - `start_shifting`: 1-bit output signal; set to 1 when the sequence 1101 is detected, and remains 1 until a reset occurs.
+
+Specifications:
+1. The module implements a finite-state machine (FSM) to detect the bit sequence "1101" in the input `data` stream.
+2. State Encoding:
+   - Define states as follows:
+     - `IDLE`: Initial state, waiting for the sequence to begin.
+     - `S1`: Detected first '1'.
+     - `S11`: Detected '11'.
+     - `S110`: Detected '110'.
+     - `S1101`: Sequence '1101' detected.
+3. State Transitions:
+   - Transition from `IDLE` to `S1` on detecting '1'.
+   - Transition from `S1` to `S11` on detecting another '1'.
+   - Transition from `S11` to `S110` on detecting '0'.
+   - Transition from `S110` to `S1101` on detecting '1'.
+   - Remain in `S1101` once reached, until reset is applied.
+   - Return to `IDLE` on any incorrect sequence or on reset.
+4. Output Logic:
+   - `start_shifting` should be set to '1' when in state `S1101`.
+   - `start_shifting` should reset to '0' upon activation of the reset signal.
+5. Reset Behavior:
+   - The reset is synchronous; state registers are reset to `IDLE` on the next positive edge of the clock when `reset` is high.
+   - `start_shifting` is also reset to '0' in synchrony with the state reset.
+
+Edge Cases:
+- Ensure transitions occur correctly on each clock edge.
+- Reset should take precedence over normal state transitions.
+- Consider the case when `reset` is high at the clock edge to ensure `start_shifting` and state registers are correctly set to their initial values.
+
+Bit Indexing:
+- Not applicable as all ports are single-bit signals.
+
+Note: The design should avoid race conditions by ensuring transitions and outputs are only affected at the positive edge of the clock.
+</ENHANCED_SPEC>

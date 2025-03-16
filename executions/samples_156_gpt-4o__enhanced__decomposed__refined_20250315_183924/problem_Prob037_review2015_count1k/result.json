@@ -1,0 +1,16 @@
+{
+    "code": "```verilog\nmodule TopModule (\n    input logic clk,                      // Clock signal, triggers on positive edge\n    input logic reset,                    // Active high, synchronous reset\n    output logic [9:0] q                  // 10-bit counter output, q[9] is MSB, q[0] is LSB\n);\n\n    always @(posedge clk) begin\n        if (reset)\n            q <= 10'b0000000000;         // Reset counter to 0\n        else if (q == 10'b1111100111)    // Check if counter reached 999\n            q <= 10'b0000000000;         // Wrap back to 0\n        else\n            q <= q + 1;                  // Increment counter\n    end\n\nendmodule\n```",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    },
+    "iterations": [
+        {
+            "iteration": 0,
+            "code": "```verilog\nmodule TopModule (\n    input logic clk,                      // Clock signal, triggers on positive edge\n    input logic reset,                    // Active high, synchronous reset\n    output logic [9:0] q                  // 10-bit counter output, q[9] is MSB, q[0] is LSB\n);\n\n    always @(posedge clk) begin\n        if (reset)\n            q <= 10'b0000000000;         // Reset counter to 0\n        else if (q == 10'b1111100111)    // Check if counter reached 999\n            q <= 10'b0000000000;         // Wrap back to 0\n        else\n            q <= q + 1;                  // Increment counter\n    end\n\nendmodule\n```",
+            "issues": []
+        }
+    ],
+    "refinement_count": 0,
+    "remaining_issues": []
+}

@@ -1,0 +1,55 @@
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1)
+                    next_state = BYTE1;
+                else
+                    next_state = IDLE;
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+            end
+            BYTE3: begin
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        done = (current_state == BYTE3);
+    end
+
+endmodule

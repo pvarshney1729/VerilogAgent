@@ -1,0 +1,75 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  reset
+ - input  in
+ - output done
+
+In many (older) serial communications protocols, each data byte is sent
+along with a start bit and a stop bit, to help the receiver delimit bytes
+from the stream of bits. One common scheme is to use one start bit (0), 8
+data bits, and 1 stop bit (1). The line is also at logic 1 when nothing
+is being transmitted (idle).
+
+Implement a finite state machine that will identify when bytes have been
+correctly received when given a stream of bits. It needs to identify the
+start bit, wait for all 8 data bits, then verify that the stop bit was
+correct. If the stop bit does not appear when expected, the FSM must wait
+until it finds a stop bit before attempting to receive the next byte.
+Include a active-high synchronous reset. Note that the serial protocol
+sends the least significant bit first.
+
+Assume all sequential logic is triggered on the positive edge of the
+clock.
+
+Here is the enhanced specification which might be useful to you:
+                **Module Interface:**
+```verilog
+module TopModule (
+    input  wire clk,        // Clock signal, positive edge triggered
+    input  wire reset,      // Active-high synchronous reset
+    input  wire in,         // Serial input bit stream
+    output reg  done        // Output signal asserted when a byte is correctly received
+);
+```
+
+**Bit Ordering and Indexing:**
+- The serial protocol sends the least significant bit (LSB) first.
+- Bit indexing is 0-based, where bit[0] refers to the LSB.
+
+**Reset Behavior:**
+- The reset is active-high and synchronous, affecting all internal states and registers.
+- Upon reset, the FSM transitions to the IDLE state, and the 'done' output is set to 0.
+
+**Initial States:**
+- The FSM starts in the IDLE state, waiting for a start bit.
+- All internal registers and signals, including 'done', are initialized to 0 on reset.
+
+**Finite State Machine (FSM) Description:**
+1. **IDLE State**: The FSM remains in this state while the line is idle (logic 1). It transitions to the START state upon detecting a start bit (logic 0).
+2. **START State**: Confirms the start bit is present, then transitions to DATA state to receive 8 bits.
+3. **DATA State**: Sequentially receives 8 data bits. A counter tracks the number of bits received.
+4. **STOP State**: Verifies the presence of a stop bit (logic 1). If present, transitions to DONE state; otherwise, returns to IDLE state to resynchronize with the stream.
+5. **DONE State**: Asserts 'done' for one clock cycle, then transitions back to IDLE.
+
+**Output Behavior:**
+- The 'done' signal is asserted for one clock cycle when a byte is correctly received, including a valid start and stop bit.
+
+**Handling Incorrect Stop Bits:**
+- If the expected stop bit is incorrect (not logic 1), the FSM transitions back to the IDLE state to resynchronize with the input stream.
+
+**Boundary Conditions:**
+- The FSM handles consecutive start bits by transitioning back to START state upon detecting a new start bit after a complete byte is processed.
+
+**Timing and Sequential Logic:**
+- All sequential logic is triggered on the positive edge of the clock.
+- The FSM states and outputs are updated synchronously with the clock.
+
+**Implementation Notes:**
+- Consider using a shift register to collect the 8 data bits.
+- A counter is used to track the number of data bits received.
+- Ensure metastability is handled for the 'in' input signal if necessary.
+                

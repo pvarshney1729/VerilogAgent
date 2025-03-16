@@ -1,0 +1,58 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+Interface:
+- **Inputs**
+  - `input wire in`: Single-bit input signal.
+  - `input wire [9:0] state`: A 10-bit input representing the current state using one-hot encoding. Each bit corresponds to a state from S0 to S9, with `state[0]` for S0 and `state[9]` for S9.
+
+- **Outputs**
+  - `output wire [9:0] next_state`: A 10-bit output representing the next state in one-hot encoding. Each bit corresponds to a state from S0 to S9, with `next_state[0]` for S0 and `next_state[9]` for S9.
+  - `output wire out1, out2`: Single-bit output signals as specified by state transitions.
+
+State Machine Specification:
+- The state machine employs one-hot encoding; thus, only one bit in `state[9:0]` is expected to be high at any given time under normal operation.
+- The next state is determined by the current state and the input `in`.
+
+State Transitions:
+- From State S0:
+  - If `in == 0`, remain in S0.
+  - If `in == 1`, transition to S1.
+- From State S1:
+  - If `in == 0`, transition to S0.
+  - If `in == 1`, transition to S2.
+- From State S2:
+  - If `in == 0`, transition to S0.
+  - If `in == 1`, transition to S3.
+- From State S3:
+  - If `in == 0`, transition to S0.
+  - If `in == 1`, transition to S4.
+- From State S4:
+  - If `in == 0`, transition to S0.
+  - If `in == 1`, transition to S5.
+- From State S5:
+  - If `in == 0`, transition to S8.
+  - If `in == 1`, transition to S6.
+- From State S6:
+  - If `in == 0`, transition to S9.
+  - If `in == 1`, transition to S7.
+- From State S7:
+  - If `in == 0`, transition to S0.
+  - If `in == 1`, remain in S7.
+- From State S8:
+  - If `in == 0`, transition to S0.
+  - If `in == 1`, transition to S1.
+- From State S9:
+  - If `in == 0`, transition to S0.
+  - If `in == 1`, transition to S1.
+
+Outputs:
+- Default outputs `out1` and `out2` are 0, except:
+  - In State S7: `out1 = 0`, `out2 = 1`.
+  - In State S8: `out1 = 1`, `out2 = 0`.
+  - In State S9: `out1 = 1`, `out2 = 1`.
+
+Additional Implementation Notes:
+- The module should handle cases where multiple bits in `state[9:0]` are set (non-standard operation) by processing each active state independently according to the transition rules.
+- The state machine should not implement internal state flip-flops or registers; it purely computes `next_state` and the outputs based on the provided `state` and `in` inputs.
+</ENHANCED_SPEC>

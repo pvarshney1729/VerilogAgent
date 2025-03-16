@@ -1,0 +1,135 @@
+Generated Response:
+
+<REASONING>
+To implement the Verilog module for the specified Moore state machine, we will follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. All ports will be declared as `logic` to adhere to the coding conventions.
+
+2. **State Encoding**: Define the states A and B using local parameters. We will use a single bit to represent each state since there are only two states.
+
+3. **State Register**: Declare a `logic` variable to hold the current state of the state machine.
+
+4. **Synchronous Reset and State Transition Logic**: Use an `always_ff` block to implement the synchronous reset and state transition logic. On the rising edge of the clock, if the reset is high, the state will be set to B. Otherwise, the state will transition based on the input `in`.
+
+5. **Output Logic**: Implement the output logic using an `always_comb` block. The output `out` will be set based on the current state.
+
+6. **Adherence to Guidelines**: Ensure that the reset is synchronous, and all logic is implemented using the correct coding conventions, such as using `always_ff` for sequential logic and `always_comb` for combinational logic.
+
+By following these steps, we ensure that the module adheres to the specification and coding conventions provided.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    localparam logic STATE_A = 1'b0;
+    localparam logic STATE_B = 1'b1;
+
+    // State register
+    logic current_state, next_state;
+
+    // State transition logic with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B; // Reset state is B
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            STATE_B: begin
+                if (in == 1'b0)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_A: begin
+                if (in == 1'b0)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: begin
+                next_state = STATE_B; // Default to state B
+            end
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (current_state)
+            STATE_B: out = 1'b1;
+            STATE_A: out = 1'b0;
+            default: out = 1'b1; // Default output for safety
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    localparam logic STATE_A = 1'b0;
+    localparam logic STATE_B = 1'b1;
+
+    // State register
+    logic current_state, next_state;
+
+    // State transition logic with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B; // Reset state is B
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            STATE_B: begin
+                if (in == 1'b0)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_A: begin
+                if (in == 1'b0)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: begin
+                next_state = STATE_B; // Default to state B
+            end
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (current_state)
+            STATE_B: out = 1'b1;
+            STATE_A: out = 1'b0;
+            default: out = 1'b1; // Default output for safety
+        endcase
+    end
+
+endmodule

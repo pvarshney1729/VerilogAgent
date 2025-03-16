@@ -1,0 +1,99 @@
+
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk,
+ - input  load,
+ - input  data (10 bits)
+ - output tc
+
+The module should implement a timer that counts down for a given number
+of clock cycles, then asserts a signal to indicate that the given
+duration has elapsed. A good way to implement this is with a down-counter
+that asserts an output signal when the count becomes 0. At each clock
+cycle:
+
+  (1) If load = 1, load the internal counter with the 10-bit data, the
+  number of clock cycles the timer should count before timing out. The
+  counter can be loaded at any time, including when it is still counting
+  and has not yet reached 0.
+
+  (2) If load = 0, the internal counter should decrement by 1. The output
+  signal tc ("terminal count") indicates whether the internal counter has
+  reached 0. Once the internal counter has reached 0, it should stay 0
+  (stop counting) until the counter is loaded again.
+
+The module should implement a single D flip-flop. Assume all sequential
+logic is triggered on the positive edge of the clock.
+
+Here is the enhanced specification which might be useful to you:
+                **Analysis of Ambiguities and Issues:**
+
+1. **Port Widths and Naming Conventions:**
+   - The input `data` is specified as 10 bits, but the signedness is not specified. It should be clarified whether `data` is treated as a signed or unsigned value.
+   
+2. **Bit-Ordering and Indexing:**
+   - The specification does not state which bit of `data` is the most significant bit (MSB) and which is the least significant bit (LSB).
+
+3. **Timing Behavior:**
+   - The specification states that the module uses a D flip-flop, but does not specify how the flip-flop interacts with the counter or the `tc` output.
+
+4. **Reset Behavior:**
+   - There is no mention of how the module should behave during a reset or if there is any reset signal. A reset behavior should be defined.
+
+5. **Initial States:**
+   - The initial state of the internal counter and `tc` output is not specified. This could lead to undefined behavior upon power-up.
+
+6. **Dependencies and Operation Precedence:**
+   - The precedence between loading the counter and decrementing it needs explicit clarification, especially when `load` is asserted.
+
+7. **Boundary Conditions:**
+   - Behavior when `data` is zero or when the counter reaches zero should be clearly defined.
+
+**<ENHANCED_SPEC>**
+
+**Module Name:** TopModule
+
+**Interface:**
+- **Inputs:**
+  - `clk`: Clock signal (1 bit, positive edge triggered)
+  - `load`: Load control signal (1 bit)
+  - `data`: 10-bit data input, unsigned (`bit[9:0]` where `bit[9]` is MSB and `bit[0]` is LSB)
+
+- **Outputs:**
+  - `tc`: Terminal count indicator (1 bit)
+
+**Behavior:**
+1. **Counter Loading and Decrementing:**
+   - On each positive edge of `clk`:
+     - If `load` is `1`: Load the internal 10-bit counter with the value from `data`.
+     - If `load` is `0` and the counter is not zero: Decrement the internal counter by `1`.
+     - If the counter is zero, it remains zero until loaded again.
+
+2. **Output Signal `tc`:**
+   - `tc` is asserted (`1`) when the internal counter reaches `0`.
+   - `tc` is de-asserted (`0`) when the counter is non-zero.
+
+**Timing and Reset Behavior:**
+- The module operates synchronously with the `clk` signal.
+- A synchronous reset signal `rst` is assumed to be present:
+  - When `rst` is `1`, the internal counter is reset to `0`, and `tc` is reset to `0`.
+  - Reset behavior should occur before any load or decrement operations on the same clock edge.
+
+**Initial State:**
+- On power-up or reset, the internal counter is initialized to `0`, and `tc` is initialized to `0`.
+
+**Implementation Notes:**
+- The module should use a single D flip-flop to control the `tc` signal based on the internal counter's state.
+- Ensure proper synchronization and debouncing of the `load` signal if it comes from an asynchronous source.
+
+**Boundary Conditions:**
+- If `data` is set to `0`, the counter will load `0` and immediately assert `tc` on the next clock edge.
+- If the counter is already `0` and `load` is not asserted, `tc` remains `1`.
+
+**Dependencies and Operation Precedence:**
+- Loading the counter takes precedence over decrementing. If `load` is asserted on the same clock cycle as the counter reaches `0`, the counter should load the new value from `data` instead of remaining zero.
+
+**<END OF ENHANCED_SPEC>**
+                

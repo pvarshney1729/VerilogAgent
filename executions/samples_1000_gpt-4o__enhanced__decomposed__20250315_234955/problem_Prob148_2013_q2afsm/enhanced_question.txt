@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specifications:
+- Input: `clk` (1 bit) - Clock signal, active on the positive edge.
+- Input: `resetn` (1 bit) - Active-low synchronous reset. When asserted (0), it resets the FSM to State A.
+- Input: `r` (3 bits) - Request signals from devices, where `r[0]` has the highest priority and `r[2]` has the lowest. Each bit `r[i]` corresponds to a request from device `i`.
+- Output: `g` (3 bits) - Grant signals to devices, where each bit `g[i]` is set high (1) when the corresponding device `i` is granted access to the resource.
+
+FSM State Descriptions:
+- State A: Default state. Transition conditions:
+  - If `r[0] == 1`, transition to State B.
+  - Else if `r[1] == 1`, transition to State C.
+  - Else if `r[2] == 1`, transition to State D.
+  - Otherwise, remain in State A.
+- State B: Grant `g[0] = 1`. Transition conditions:
+  - If `r[0] == 1`, remain in State B.
+  - Else, transition to State A.
+- State C: Grant `g[1] = 1`. Transition conditions:
+  - If `r[1] == 1`, remain in State C.
+  - Else, transition to State A.
+- State D: Grant `g[2] = 1`. Transition conditions are not specified in the original specification, implying state D is unreachable with the given conditions.
+
+Initial Conditions:
+- On reset (`resetn = 0`), the FSM initializes to State A.
+
+Priority and Grant Logic:
+- Device 0 (r[0]) has the highest priority.
+- Device 1 (r[1]) has medium priority.
+- Device 2 (r[2]) has the lowest priority.
+
+State Encoding:
+- Use a binary encoding for states. The specific encoding is left flexible but should be consistent within the implementation.
+
+Implementation Guidelines:
+- Use separate always blocks for state transition logic and state register updates.
+- The state transition logic should be sensitive to changes on the `r` inputs and the current state.
+- The state register updates should be synchronous with the positive edge of `clk` and reset via `resetn`.
+- The outputs `g[i]` can be assigned using either continuous assignments or within an always block, based on designer preference.
+- Ensure that `g[i]` is only set when the corresponding device `i` is granted access, as determined by the current state.
+
+Assumptions:
+- All sequential logic is triggered on the positive edge of the clock.
+- The reset operation is synchronous with the clock signal.
+</ENHANCED_SPEC>

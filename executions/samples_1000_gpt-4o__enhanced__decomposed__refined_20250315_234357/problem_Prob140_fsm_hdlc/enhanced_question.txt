@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock signal for synchronizing sequential logic.
+- input wire reset: Active-high synchronous reset signal.
+- input wire in: Single-bit serial data input stream.
+- output reg disc: Output signal indicating a bit should be discarded.
+- output reg flag: Output signal indicating the detection of a frame boundary.
+- output reg err: Output signal indicating an error due to 7 or more consecutive '1's.
+
+Bit Indexing and Conventions:
+- All single-bit inputs and outputs are treated as unsigned.
+- Bit[0] refers to the least significant bit in any multi-bit signal specification.
+
+Behavioral Specification:
+- Implement a Moore-type finite state machine (FSM) to decode the input bit stream.
+- The FSM should have the following states to recognize specific sequences:
+  1. Sequence "0111110": Output `disc` should be asserted for one clock cycle following detection.
+  2. Sequence "01111110": Output `flag` should be asserted for one clock cycle following detection.
+  3. Sequence "01111111..." (7 or more consecutive '1's): Output `err` should be asserted for one clock cycle following detection.
+
+FSM Initial State and Reset Behavior:
+- On an active-high synchronous reset, the FSM should transition to an initial state that assumes the last received input was '0'.
+- The reset state ensures that the FSM is ready to process a new input sequence immediately after reset.
+
+Clock and Timing:
+- All sequential logic elements, including state transitions, are triggered on the rising edge of the clock signal `clk`.
+
+Output Signal Assertion:
+- The output signals `disc`, `flag`, and `err` should be asserted for exactly one clock cycle, starting from the cycle immediately after the respective condition is detected.
+
+Edge Cases and Input Boundaries:
+- The FSM must correctly handle transitions between states, ensuring no race conditions or undefined behaviors.
+- Ensure proper operation when input sequences are interrupted by resets or clock edges.
+
+This specification aims to ensure a clear understanding and correct implementation of the HDLC framing logic within the TopModule.
+</ENHANCED_SPEC>

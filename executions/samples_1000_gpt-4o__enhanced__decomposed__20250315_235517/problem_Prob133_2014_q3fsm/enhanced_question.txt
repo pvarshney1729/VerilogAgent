@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input clk: Clock signal, positive edge-triggered.
+- input reset: Asynchronous active-high reset.
+- input s: State transition control input.
+- input w: Input for FSM evaluation.
+- output reg z: Output signal, 1-bit wide.
+
+FSM Specification:
+1. Initial State: The FSM begins in state A upon reset.
+2. State A:
+   - Remains in state A as long as input s = 0.
+   - Transitions to state B when s = 1 on the next positive clock edge.
+3. State B:
+   - The FSM evaluates input w over the following three consecutive clock cycles.
+   - If w = 1 exactly two times within these three clock cycles, set output z to 1 in the fourth clock cycle.
+   - If this condition is not met, set z to 0 in the fourth clock cycle.
+   - The FSM continues to evaluate w over each subsequent set of three clock cycles while in state B.
+
+Reset Behavior:
+- The reset signal is active-high and synchronous. Upon activation, the FSM returns to state A, and output z is reset to 0.
+
+Sequential Logic:
+- All sequential elements are triggered by the positive edge of the clock signal.
+
+Signal Details:
+- z is a registered output, explicitly set to 0 upon reset.
+- The FSM logic uses a counter or similar mechanism to track the number of clock cycles and occurrences of w = 1 within those cycles.
+
+Bit Indexing:
+- All single-bit signals: no specific indexing required.
+
+Edge Cases:
+- Ensure the FSM handles transitions correctly when s changes on the clock edge.
+- Confirm that w is evaluated correctly across clock cycles.
+
+The FSM should utilize minimal states beyond A and B to fulfill the specified behavior.
+</ENHANCED_SPEC>

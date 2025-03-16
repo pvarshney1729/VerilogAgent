@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock input. All sequential logic transitions occur on the positive edge of this signal.
+  - `reset`: 1-bit active-high synchronous reset input. When asserted, the FSM resets and specific actions are taken.
+- Output Port:
+  - `shift_ena`: 1-bit output signal to enable the shift register for exactly 4 clock cycles.
+
+Functional Description:
+This module forms part of a Finite State Machine (FSM) designed to control a shift register. Its primary function is to assert the `shift_ena` signal for four consecutive clock cycles when a specific bit pattern is detected. Additionally, upon resetting the FSM, the `shift_ena` signal must be asserted for exactly four cycles, then remain deasserted (logic 0) indefinitely until another reset occurs.
+
+Key Specifications:
+1. **Reset Behavior**: 
+   - The reset signal is synchronous and active high. It resets the FSM state and associated counters or registers to their initial values at the next positive clock edge when asserted.
+   - Upon reset, the `shift_ena` output is asserted (logic high) for exactly 4 consecutive clock cycles, regardless of any input patterns.
+
+2. **Clock Domain**:
+   - All sequential elements, including the FSM states and any counters, are triggered on the rising edge of the clock signal (`clk`).
+
+3. **Output Behavior**:
+   - The `shift_ena` output should transition from logic high to logic low after being asserted for exactly 4 clock cycles post-reset.
+   - After these initial 4 cycles post-reset, `shift_ena` should remain at logic low indefinitely until a new reset occurs.
+
+4. **Initial Conditions**:
+   - Upon power-up or initial start, all registers and flip-flops should be initialized to a known state, consistent with a reset condition. This ensures predictable behavior.
+
+5. **Edge Cases**:
+   - Ensure that the `shift_ena` output does not glitch or transition unexpectedly due to race conditions or asynchronous behavior since all logic is synchronous.
+
+6. **Bit Indexing**:
+   - Bit indexing, if required for internal logic, should consider bit[0] as the least significant bit (LSB).
+
+This specification ensures that the module performs deterministic and predictable operations, aligning with its intended functional requirements.
+</ENHANCED_SPEC>
