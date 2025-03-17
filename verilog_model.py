@@ -18,6 +18,60 @@ from openai import OpenAI
 
 DEBUG_PRINTS = True
 
+def generate_case_statement(truth_table):
+    """
+    Generate a Verilog case statement from a truth table.
+    
+    Parameters:
+    -----------
+    truth_table : list
+        A 2D list representing a truth table where:
+        - First row contains variable names with the last column being the output
+        - Subsequent rows contain the input combinations and corresponding outputs
+        
+    module_name : str, optional
+        The name of the Verilog module (default: "my_module")
+        
+    output_name : str, optional
+        The name of the output signal (default: "f")
+        
+    Returns:
+    --------
+    str
+        A complete Verilog module with a case statement implementing the truth table
+    """
+    # Extract header and data rows
+    header, *rows = truth_table
+    
+    # Find the index of the output column (usually the last column)
+    output_index = len(header) - 1
+    output_name = header[output_index]
+    
+    # Get input variable names
+    input_vars = header[:output_index]
+    
+    # Generate input concatenation for case expression
+    case_expr = "{" + ", ".join(input_vars) + "}"
+    
+    # Generate case items
+    case_items = []
+    for row in rows:
+        inputs = row[:output_index]
+        output = row[output_index]
+        
+        # Convert input values to binary string for case item
+        binary_str = "".join(str(bit) for bit in inputs)
+        
+        # Format the case item: N'b[binary] : [output] = [value];
+        input_width = len(inputs)
+        case_item = f"{input_width}'b{binary_str}: {output_name} = {output};"
+        case_items.append(case_item)
+    
+    # Format the complete case statement
+    case_statement = "case (" + case_expr + ")\n    " + "\n    ".join(case_items) + "\n    " + f"default: {output_name} = 0;\nendcase"
+
+    return case_statement
+
 def extract_between_tags(text: str, tag: str) -> str:
     """Extract content between XML-style tags"""
     start_tag = f"<{tag}>"
@@ -135,8 +189,6 @@ class Verifier:
  
         compile_log_path = os.path.join(os.getcwd(), "compile_log.txt") 
 
-        shutil.copy(compile_log_path, self.problem_dir / "compile_log.txt")
-
         if os.path.exists(compile_log_path):
             os.remove(compile_log_path)
 
@@ -159,6 +211,8 @@ class Verifier:
                     text=True
                 )
             os.remove("temp_top")
+
+        shutil.copy(compile_log_path, self.problem_dir / "compile_log.txt")
 
         with open("compile_log.txt", "r") as f:
 
@@ -994,8 +1048,128 @@ class VerilogModel:
 
                 
             if decompose:
+
+                design_rules = """The following plan/guidelines might be useful for generating the correct Verilog code:
+                - Initialize the flip-flops to zero in simulation.
+                - Ensure synchronous reset is implemented as specified.
+                - Adhere strictly to the provided interface and signal names.
+                - Generate results in the specified cycle timing.
+                - Infer logic correctly, especially when using Karnaugh maps.
+                - Handle bitwise operations and signal broadcasting correctly.
+                - Don't introduce redundant components or signals
+                - Order of precedence for multiplexers is important, and infer from the module specification.
+                - To translate a truth table to Verilog, use the provided case statement, don't try to minimise the logic or modify the order of inputs, you may correct the names of the signals.
+                """
+
+                gen_truth_table_prompt = f"""
+                Given the query: {base_query}
+
+                TASK: Generate a truth table from the specification if possible. This will help in understanding the problem and creating correct Verilog code.
+
+                OUTPUT FORMAT:
+                If you can generate a truth table, format it as:
+                [
+                [signal1, signal2, ..., signalN, output],
+                [input1_1, input2_1, ..., inputN_1, output_1],
+                ...
+                [input1_2^N, input2_2^N, ..., inputN_2^N, output_2^N]
+                ]
+
+                If a truth table cannot be generated, respond with: "NO TRUTH TABLE"
+
+                EXAMPLE:
+                For a specification with a K-map:
+                        x[0]x[1]
+                x[2]x[3]   00  01  11  10
+                    00 | 1 | 1 | 0 | 1 |
+                    01 | 1 | 0 | 0 | 1 |
+                    11 | 0 | 1 | 1 | 1 |
+                    10 | 1 | 1 | 0 | 0 |
+
+                The truth table should be formatted as:
+                [
+                [x[2], x[3], x[0], x[1], out],
+                [0, 0, 0, 0, 1],
+                [0, 0, 0, 1, 1],
+                [0, 0, 1, 1, 0],
+                [0, 0, 1, 0, 1],
+                [0, 1, 0, 0, 1],
+                [0, 1, 0, 1, 0],
+                [0, 1, 1, 1, 0],
+                [0, 1, 1, 0, 1],
+                [1, 1, 0, 0, 0],
+                [1, 1, 0, 1, 1],
+                [1, 1, 1, 1, 1],
+                [1, 1, 1, 0, 1],
+                [1, 0, 0, 0, 1],
+                [1, 0, 0, 1, 1],
+                [1, 0, 1, 1, 0],
+                [1, 0, 1, 0, 0]
+                ]
+
+                IMPORTANT:
+                - Maintain the exact order of inputs as specified in the query
+                - For example, if the specification mentions x[2]x[3]x[0]x[1], use that precise order in the truth table
+                - Include all possible input combinations (2^N rows for N inputs)
+                - Use 0 and 1 for binary values in the output
+                - Use d for don't care values in the output
+                - Ensure the truth table is correct and complete
+                """
+
+                table_dict = {
+                    "name": "truth_table",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "truth_table": {
+                                "type": "array",
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"                              }
+                                }
+                            }
+                        },
+                        "required": ["truth_table"]
+                    }
+                }               
+           
+                client = OpenAI()
+                gen_truth_table_response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": "You are a helpful assistant that extracts truth tables from user queries."},
+                        {"role": "user", "content": gen_truth_table_prompt}
+                    ],
+                    functions=[table_dict],
+                    function_call={"name": "truth_table"}
+                )
+
+                if "NO TRUTH TABLE" not in gen_truth_table_response:
+                    gen_truth_table_response = gen_truth_table_response.choices[0].message.function_call.arguments
+                    try:
+                        gen_truth_table_response = json.loads(gen_truth_table_response)
+                        gen_truth_table_response = gen_truth_table_response.get("truth_table", [])
+                    except:
+                        gen_truth_table_response = []
+
+                    if gen_truth_table_response:
+                        case_statment = generate_case_statement(gen_truth_table_response)
+
+                    base_query += f"""Here is the truth table generated from the specification:
+                    and here is the corresponding case statement, you should be using a similar structure:
+                    {case_statment} to make sure you are implementing the correct logic.
+                    Don't try to minimise the logic, 
+                    you may correct the signal names if needed, and use the case statement as is in the final code.
+                    """
+
+
                 print("Decomposing the problem into subtasks...")
-                decomposition_result = self.decompose_and_implement(base_query, model=model)
+                decomposition_prompt = base_query + f"""Here are some guidelines to follow: {design_rules}"""
+               
+                """
+                
+                decomposition_result = self.decompose_and_implement(decomposition_prompt, model=model)
 
                 implementation_hints = "\n\n".join([
                     f"SUBTASK {impl['id']}: {impl['content']}\nIMPLEMENTATION:\n{impl['implementation']}"
@@ -1004,13 +1178,16 @@ class VerilogModel:
 
                 if enhance_spec:
                     messages[-1] = {"role": "user", "content": "Can you now decompose the specification into independent submodules, which might be useful in generating the final code?"}
+                """
         
                 messages.extend([
                     {"role": "assistant", "content": f"""To implement your requested module, I have decomposed it into the following subtasks and come up with an approach for each:
-                    {implementation_hints}
+                    {decomposition_prompt}
                     """},
                     {"role": "user", "content": f"Now using ALL the research you have done so far, please implement the Verilog module for the original specification:\n{full_prompt}"},
                 ])
+
+                """
 
                 with open(self.problem_dir / "messages.txt", 'w') as f:
                     f.write(json.dumps(messages, indent=4))
@@ -1020,6 +1197,8 @@ class VerilogModel:
                     f.write(json.dumps(decomposition_result, indent=4))
                     f.write("\n\nModified Base Query:")
                     f.write(f"\n\n{base_query}")
+                """
+
 
                 base_response = self.generator.generate_with_messages(messages, model=model, temperature=0.2, top_p=0.1)
 

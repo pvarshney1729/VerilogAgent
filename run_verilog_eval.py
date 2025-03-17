@@ -252,6 +252,9 @@ def main():
         # Limit number of samples if specified
         if args.num_samples:
             problem_files = problem_files[:args.num_samples]
+            if args.num_samples == 1000:
+                kmap_list = [56, 69, 92, 98, 101, 102, 112, 115, 116, 121, 124]
+                problem_files = [problem_files[i] for i in kmap_list]
             print(f"Processing {len(problem_files)} samples...")
         else:
             print(f"Processing all {len(problem_files)} samples...")
