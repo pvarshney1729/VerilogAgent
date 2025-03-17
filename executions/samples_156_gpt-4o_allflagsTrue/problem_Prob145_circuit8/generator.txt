@@ -1,0 +1,68 @@
+Generated Response:
+
+<REASONING>
+The task is to implement a sequential circuit based on the provided simulation waveforms. The circuit has two outputs, `p` and `q`, which are determined by the input `a` and the clock signal. The waveform suggests that `p` is set to `1` on the rising edge of the clock when `a` is `1`, and `q` follows `p` on the falling edge of the clock.
+
+1. **Output `p` Logic**: 
+   - `p` is updated on the rising edge of the clock.
+   - If `a` is `1`, `p` is set to `1`.
+   - If `a` is `0`, `p` is set to `0`.
+
+2. **Output `q` Logic**:
+   - `q` is updated on the falling edge of the clock.
+   - `q` takes the value of `p` from the previous clock cycle.
+
+The implementation uses two always blocks: one for the rising edge of the clock to update `p`, and another for the falling edge to update `q`. This ensures that `q` follows the state of `p` after the clock cycle completes.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clock,
+    input logic a,
+    output logic p,
+    output logic q
+);
+
+    // Sequential logic for output p
+    always @(posedge clock) begin
+        if (a) begin
+            p <= 1'b1;
+        end else begin
+            p <= 1'b0;
+        end
+    end
+
+    // Sequential logic for output q
+    always @(negedge clock) begin
+        q <= p;
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clock,
+    input logic a,
+    output logic p,
+    output logic q
+);
+
+    // Sequential logic for output p
+    always @(posedge clock) begin
+        if (a) begin
+            p <= 1'b1;
+        end else begin
+            p <= 1'b0;
+        end
+    end
+
+    // Sequential logic for output q
+    always @(negedge clock) begin
+        q <= p;
+    end
+
+endmodule

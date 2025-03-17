@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input [7:0] in`: An 8-bit input vector where `in[0]` is the least significant bit (LSB) and `in[7]` is the most significant bit (MSB).
+
+- Output Ports:
+  - `output parity`: A 1-bit output representing the even parity bit for the input data.
+
+Functional Description:
+- The module calculates an even parity bit for the 8-bit input vector `in`. The parity bit ensures that the total number of '1' bits in the 9 bits (8 data bits + 1 parity bit) is even.
+
+- The even parity bit is computed as the XOR of all 8 bits of the input vector:
+  - `parity = in[0] ^ in[1] ^ in[2] ^ in[3] ^ in[4] ^ in[5] ^ in[6] ^ in[7]`
+
+Operational Details:
+- The logic for computing the parity bit is combinational. There are no clocked elements or sequential logic involved.
+- As this is purely combinational logic, there are no reset conditions or initial values to define for this module.
+- The output `parity` is updated immediately with any change in the input vector `in`, ensuring that the parity bit always reflects the current state of the input.
+
+Edge Case Considerations:
+- The parity calculation is valid for all possible 8-bit input combinations (from 0x00 to 0xFF).
+- The module should correctly handle all input transitions, with the parity bit updated asynchronously relative to the input changes.
+
+This specification ensures that the implementation will correctly compute and output an even parity bit for any 8-bit input vector provided.
+</ENHANCED_SPEC>

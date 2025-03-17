@@ -1,0 +1,20 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the TopModule with input ports clk, L, q_in, r_in, and output port Q.",
+        "source": "Create the submodule called 'TopModule' with the specified interface.",
+        "implementation": "module TopModule (\n    input clk,\n    input L,\n    input q_in,\n    input r_in,\n    output reg Q\n);\n\n    always @(posedge clk) begin\n        if (L) begin\n            Q <= r_in;\n        end else begin\n            Q <= q_in;\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement a 2:1 multiplexer inside TopModule to select between q_in and r_in based on the control signal L.",
+        "source": "You want to factor full_module into a hierarchical design, flipflop and 2:1 multiplexer are in a submodule 'TopModule'.",
+        "implementation": "module TopModule (\n    input clk,\n    input L,\n    input q_in,\n    input r_in,\n    output reg Q\n);\n\n    always @(posedge clk) begin\n        if (L) begin\n            Q <= r_in;\n        end else begin\n            Q <= q_in;\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "3",
+        "content": "Implement a flip-flop inside TopModule that captures the output of the multiplexer on the rising edge of clk and drives the output Q.",
+        "source": "q[2:0] is three bits wide, representing three flip-flops that can be loaded from r when L is asserted.",
+        "implementation": "module TopModule (\n    input clk,\n    input L,\n    input q_in,\n    input r_in,\n    output reg Q\n);\n\n    always @(posedge clk) begin\n        if (L) begin\n            Q <= r_in;\n        end else begin\n            Q <= q_in;\n        end\n    end\n\nendmodule"
+    }
+]

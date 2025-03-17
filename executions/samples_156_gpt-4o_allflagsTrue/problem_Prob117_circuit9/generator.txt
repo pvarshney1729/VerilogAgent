@@ -1,0 +1,59 @@
+Generated Response:
+
+<REASONING>
+The module `TopModule` is designed to implement a sequential circuit based on the provided waveform. The key observations from the waveform are:
+
+1. When the input `a` is high, the output `q` is set to 4 on each rising edge of the clock.
+2. When `a` is low, `q` increments by 1 on each rising edge of the clock, cycling through values 0 to 6.
+3. After `q` reaches 6, it resets to 0 on the next increment when `a` is low.
+
+The implementation uses a single always block triggered on the rising edge of `clk`. Inside the block, a conditional statement checks the value of `a`. If `a` is high, `q` is set to 4. If `a` is low, another conditional checks if `q` is 6, in which case `q` is reset to 0. Otherwise, `q` is incremented by 1.
+
+This logic ensures that the output `q` behaves as specified in the waveform, with the correct cycling and resetting behavior.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic a,
+    output logic [2:0] q
+);
+
+    always @(posedge clk) begin
+        if (a) begin
+            q <= 3'b100; // Set q to 4 when a is high
+        end else begin
+            if (q == 3'b110) begin
+                q <= 3'b000; // Reset q to 0 after reaching 6
+            end else begin
+                q <= q + 1; // Increment q by 1
+            end
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic a,
+    output logic [2:0] q
+);
+
+    always @(posedge clk) begin
+        if (a) begin
+            q <= 3'b100; // Set q to 4 when a is high
+        end else begin
+            if (q == 3'b110) begin
+                q <= 3'b000; // Reset q to 0 after reaching 6
+            end else begin
+                q <= q + 1; // Increment q by 1
+            end
+        end
+    end
+
+endmodule

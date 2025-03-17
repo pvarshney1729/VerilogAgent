@@ -1,0 +1,99 @@
+Generated Response:
+
+```xml
+<REASONING>
+The implementation of the TopModule follows the guidelines and conventions provided. The module is designed as a Moore state machine with two states: INVERT and PASS. The INVERT state is responsible for generating the 2's complement by inverting the input bit x, while the PASS state simply passes the input bit as is. The state machine transitions from INVERT to PASS on the next clock cycle after reset is deasserted. The asynchronous reset initializes the state to INVERT, ensuring the machine starts in the correct state to begin the 2's complement operation. The output logic is determined by the current state, adhering to the Moore machine principle where the output depends only on the current state.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic x,
+    output logic z
+);
+
+    typedef enum logic [1:0] {
+        INVERT = 2'b00,
+        PASS = 2'b01
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= INVERT;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            INVERT: next_state = PASS;
+            PASS: next_state = PASS;
+            default: next_state = INVERT;
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (current_state)
+            INVERT: z = ~x;
+            PASS: z = x;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+```
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic x,
+    output logic z
+);
+
+    typedef enum logic [1:0] {
+        INVERT = 2'b00,
+        PASS = 2'b01
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= INVERT;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            INVERT: next_state = PASS;
+            PASS: next_state = PASS;
+            default: next_state = INVERT;
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (current_state)
+            INVERT: z = ~x;
+            PASS: z = x;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule

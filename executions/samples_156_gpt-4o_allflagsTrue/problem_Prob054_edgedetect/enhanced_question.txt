@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock input signal.
+  - `in`: 8-bit unsigned input vector, where `in[0]` represents the least significant bit (LSB) and `in[7]` represents the most significant bit (MSB).
+
+- Output Ports:
+  - `pedge`: 8-bit unsigned output vector, where `pedge[0]` represents the LSB and `pedge[7]` represents the MSB.
+
+Functional Description:
+- The module detects a positive edge on each bit of the input vector `in`.
+- A positive edge is defined as a transition from logic level 0 to logic level 1 on a given bit between consecutive clock cycles.
+- For each bit `in[i]` (where `i` ranges from 0 to 7), the corresponding output bit `pedge[i]` should be set to 1 during the clock cycle immediately after a 0 to 1 transition on `in[i]` is detected.
+- If no 0 to 1 transition occurs, `pedge[i]` should remain at 0.
+
+Clocking and Reset:
+- The design is synchronous, operating on the rising edge of `clk`.
+- All flip-flops and sequential elements must be initialized to 0 at power-up or reset.
+- A reset mechanism is not explicitly described; it is assumed that the initial condition of all registers is reset to 0 on power-up.
+
+Edge Case Considerations:
+- The behavior of the circuit at power-up should begin with all `pedge` bits at 0.
+- If input `in` holds a constant value (all bits are static), the corresponding `pedge` output will remain 0.
+
+Dependencies and Precedence:
+- The detection of the 0 to 1 transition and the setting of the `pedge` output occur in the same cycle following the detected transition.
+- Ensure no race conditions by basing decisions solely on the sampled input vector value at the rising edge of `clk`.
+
+Note: This specification assumes that all necessary initialization and operating conditions are met, and it does not involve asynchronous resets.
+</ENHANCED_SPEC>

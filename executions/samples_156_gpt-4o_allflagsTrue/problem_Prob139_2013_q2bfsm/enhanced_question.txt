@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input Ports:
+  - `input clk`: Clock signal for sequential logic, triggered on the positive edge.
+  - `input resetn`: Synchronous, active-low reset signal. When asserted (0), the FSM remains in the initial state. When de-asserted (1), normal operation begins.
+  - `input x`: Sequential input from the motor, used for monitoring specific patterns.
+  - `input y`: Sequential input from the motor, used for conditional state transitions.
+
+- Output Ports:
+  - `output reg f`: Control signal for the motor, set high (1) for one clock cycle after the first clock edge following reset de-assertion.
+  - `output reg g`: Control signal for the motor, which behaves based on the x and y input patterns.
+
+FSM Description and Behavior:
+- The FSM starts in the initial state, State A, as long as `resetn` is asserted (0).
+- Upon de-assertion of `resetn` (1), the FSM transitions out of State A and sets `f = 1` for the next clock cycle, then returns `f` to 0.
+- The FSM monitors the `x` input for the pattern {1, 0, 1} over three consecutive clock cycles:
+  1. First cycle: `x = 1`
+  2. Second cycle: `x = 0`
+  3. Third cycle: `x = 1`
+- Upon detecting the x-pattern, the FSM sets `g = 1` in the following clock cycle.
+- Once `g` is set to 1, the FSM monitors the `y` input:
+  - If `y = 1` within the next two clock cycles, `g` remains 1 permanently until the next reset.
+  - If `y` does not equal 1 within the two clock cycles, then `g` is set back to 0 permanently until reset.
+- The FSM behavior is described above, ensuring all transitions and output settings occur on the positive edge of `clk`.
+
+Initial State and Reset Behavior:
+- The initial state upon power-up or reset assertion is State A.
+- All output registers (`f` and `g`) are initially set to 0.
+- The reset is synchronous, meaning the FSM responds to the reset signal during the active clock edge, ensuring a predictable reset state.
+
+Indexing and Bit Conventions:
+- Inputs and outputs are single-bit signals unless otherwise specified.
+- Bit[0] refers to the least significant bit for any multi-bit signals, though currently not applicable as all ports are one-bit.
+
+Edge Cases and Input Boundaries:
+- The FSM assumes stable clock and input signals. Any changes to inputs should be synchronized to the clock edges to avoid metastability.
+- The FSM appropriately handles the transition from reset to operational states, ensuring no unintended behavior during power-on or reset cycles.
+</ENHANCED_SPEC>

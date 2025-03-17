@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, triggering on the positive edge.
+  - `input resetn`: Synchronous active-low reset signal. When `resetn` is low, all flip-flops reset to their initial state.
+  - `input [1:0] byteena`: Byte-enable signal, 2 bits.
+    - `byteena[1]` controls the writing of the upper byte `d[15:8]`.
+    - `byteena[0]` controls the writing of the lower byte `d[7:0]`.
+  - `input [15:0] d`: Data input, 16 bits wide.
+
+- Output Ports:
+  - `output [15:0] q`: Output data, 16 bits wide. This represents the current state of the flip-flops.
+
+Functional Description:
+- The module consists of 16 D flip-flops, each corresponding to a bit in the output `q`.
+- The flip-flops are sensitive to the positive edge of the `clk` signal.
+- The `resetn` signal is a synchronous active-low reset. When `resetn` is asserted (0), all flip-flops will reset to 0 on the next rising edge of `clk`.
+- During normal operation (when `resetn` is high), the flip-flops' behavior is determined by the `byteena` signals:
+  - If `byteena[1]` is high, the upper byte `q[15:8]` is updated with `d[15:8]`.
+  - If `byteena[0]` is high, the lower byte `q[7:0]` is updated with `d[7:0]`.
+  - If a `byteena` bit is low, the corresponding byte in `q` retains its previous value.
+
+Additional Details:
+- Bit Indexing: `bit[0]` refers to the least significant bit (LSB).
+- Edge Cases: Ensure proper operation when the `resetn` is toggled or when `byteena` changes at the clock edge.
+- Initialization: At power-up, ensure all flip-flops start with a known state, typically reset to 0 on the first reset event.
+</ENHANCED_SPEC>

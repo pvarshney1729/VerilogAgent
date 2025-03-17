@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    output logic [4:0] q\n);\n\n    logic [4:0] lfsr_reg;\n    logic feedback;\n\n    // XOR feedback logic for Galois LFSR with taps at bit positions 5 and 3\n    assign feedback = lfsr_reg[0] ^ lfsr_reg[2];\n\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            lfsr_reg <= 5'b00001; // Reset state\n        end else begin\n            lfsr_reg <= {feedback, lfsr_reg[4:1]}; // Shift right with feedback\n        end\n    end\n\n    // Assign the internal register to the output\n    assign q = lfsr_reg;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 4000,
+        "passfail": "R"
+    }
+}

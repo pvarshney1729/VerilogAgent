@@ -1,0 +1,65 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` that finds the minimum of four 8-bit unsigned inputs, we can break down the problem into smaller steps. First, we compare pairs of inputs to find the smaller of each pair. Then, we compare the results of these comparisons to find the overall minimum. This approach simplifies the logic by reducing the number of comparisons needed at each step.
+
+1. **Compare Inputs a and b**: Determine which of the two inputs is smaller and store the result in a temporary variable `min_ab`.
+2. **Compare Inputs c and d**: Similarly, determine the smaller of these two inputs and store the result in another temporary variable `min_cd`.
+3. **Compare Results**: Finally, compare `min_ab` and `min_cd` to find the smallest value among all four inputs, and assign this value to the output `min`.
+
+The implementation uses combinational logic with an `always @(*)` block to ensure that the output `min` is updated whenever any of the inputs change. This approach adheres to the coding conventions specified, such as using `logic` for signal declarations and avoiding explicit sensitivity lists in combinational `always` blocks.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input  logic [7:0] a,
+    input  logic [7:0] b,
+    input  logic [7:0] c,
+    input  logic [7:0] d,
+    output logic [7:0] min
+);
+
+    always @(*) begin
+        logic [7:0] min_ab;
+        logic [7:0] min_cd;
+
+        // Find minimum between a and b
+        min_ab = (a < b) ? a : b;
+
+        // Find minimum between c and d
+        min_cd = (c < d) ? c : d;
+
+        // Find minimum between min_ab and min_cd
+        min = (min_ab < min_cd) ? min_ab : min_cd;
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input  logic [7:0] a,
+    input  logic [7:0] b,
+    input  logic [7:0] c,
+    input  logic [7:0] d,
+    output logic [7:0] min
+);
+
+    always @(*) begin
+        logic [7:0] min_ab;
+        logic [7:0] min_cd;
+
+        // Find minimum between a and b
+        min_ab = (a < b) ? a : b;
+
+        // Find minimum between c and d
+        min_cd = (c < d) ? c : d;
+
+        // Find minimum between min_ab and min_cd
+        min = (min_ab < min_cd) ? min_ab : min_cd;
+    end
+
+endmodule

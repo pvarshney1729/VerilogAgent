@@ -1,0 +1,38 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with a 4-bit input port 'in' and a 2-bit output port 'pos'.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input in (4 bits) - output pos (2 bits)",
+        "implementation": "module TopModule (\n    input  [3:0] in,\n    output reg [1:0] pos\n);\n\n    always @(*) begin\n        casez (in)\n            4'b1???: pos = 2'd3;\n            4'b01??: pos = 2'd2;\n            4'b001?: pos = 2'd1;\n            4'b0001: pos = 2'd0;\n            default: pos = 2'd0;\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the logic to check the highest priority bit (bit 3) of the input 'in'. If it is high, set the output 'pos' to 2'b11.",
+        "source": "The module should implement a priority encoder. A priority encoder is a combinational circuit that, when given an input bit vector, outputs the position of the first 1 bit in the vector.",
+        "implementation": "assign pos = (in[3]) ? 2'b11 : 2'b00;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the logic to check the next highest priority bit (bit 2) of the input 'in'. If bit 3 is low and bit 2 is high, set the output 'pos' to 2'b10.",
+        "source": "The module should implement a priority encoder. A priority encoder is a combinational circuit that, when given an input bit vector, outputs the position of the first 1 bit in the vector.",
+        "implementation": "assign pos = (~in[3] & in[2]) ? 2'b10 : pos;"
+    },
+    {
+        "id": "4",
+        "content": "Implement the logic to check the next highest priority bit (bit 1) of the input 'in'. If bits 3 and 2 are low and bit 1 is high, set the output 'pos' to 2'b01.",
+        "source": "The module should implement a priority encoder. A priority encoder is a combinational circuit that, when given an input bit vector, outputs the position of the first 1 bit in the vector.",
+        "implementation": "assign pos = (~in[3] & ~in[2] & in[1]) ? 2'b01 : 2'b00;"
+    },
+    {
+        "id": "5",
+        "content": "Implement the logic to check the lowest priority bit (bit 0) of the input 'in'. If bits 3, 2, and 1 are low and bit 0 is high, set the output 'pos' to 2'b00.",
+        "source": "The module should implement a priority encoder. A priority encoder is a combinational circuit that, when given an input bit vector, outputs the position of the first 1 bit in the vector.",
+        "implementation": "assign pos = (in[3:1] == 3'b000 && in[0] == 1'b1) ? 2'b00 : 2'bxx;"
+    },
+    {
+        "id": "6",
+        "content": "Implement the default case where if none of the input bits are high, set the output 'pos' to 2'b00.",
+        "source": "For this problem, if none of the input bits are high (i.e., input is zero), output zero.",
+        "implementation": "always @(*) begin\n    case (in)\n        4'b0000: pos = 2'b00; // Default case when none of the input bits are high\n        // Other cases would be implemented here\n        default: pos = 2'b00; // Ensure default case is covered\n    endcase\nend"
+    }
+]

@@ -1,0 +1,71 @@
+Generated Response:
+
+<REASONING>
+To implement the TopModule, we need to follow the given specifications and guidelines. The module requires a synchronous, active-low reset and byte-enable functionality for writing to specific bytes of a 16-bit register. The design involves using D flip-flops to store the 16-bit data, with the ability to selectively update the upper or lower byte based on the byteena signals.
+
+1. **Module Declaration**: We declare the module with the specified inputs and outputs. All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **Sequential Logic**: We use an `always @(posedge clk)` block to implement the synchronous behavior. The block is triggered on the positive edge of the clock.
+
+3. **Synchronous Reset**: Inside the always block, we first check the reset condition. If `resetn` is low, we reset the output `q` to zero. This is a synchronous reset, meaning it occurs on the clock edge.
+
+4. **Byte-Enable Logic**: If `resetn` is high, we proceed to check the byteena signals. We use conditional statements to determine which bytes of `q` should be updated:
+   - If `byteena[1]` is high, we update the upper byte `q[15:8]` with `d[15:8]`.
+   - If `byteena[0]` is high, we update the lower byte `q[7:0]` with `d[7:0]`.
+
+5. **Output Assignment**: The output `q` is directly driven by the logic within the always block, ensuring it reflects the current state of the flip-flops.
+
+This implementation adheres to the guidelines by ensuring a synchronous reset, using logic for all signals, and correctly handling the byte-enable functionality.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic [1:0] byteena,
+    input logic [15:0] d,
+    output logic [15:0] q
+);
+
+    always @(posedge clk) begin
+        if (!resetn) begin
+            q <= 16'b0;
+        end else begin
+            if (byteena[1]) begin
+                q[15:8] <= d[15:8];
+            end
+            if (byteena[0]) begin
+                q[7:0] <= d[7:0];
+            end
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic [1:0] byteena,
+    input logic [15:0] d,
+    output logic [15:0] q
+);
+
+    always @(posedge clk) begin
+        if (!resetn) begin
+            q <= 16'b0;
+        end else begin
+            if (byteena[1]) begin
+                q[15:8] <= d[15:8];
+            end
+            if (byteena[0]) begin
+                q[7:0] <= d[7:0];
+            end
+        end
+    end
+
+endmodule

@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - `input wire a` : 1-bit, unsigned
+  - `input wire b` : 1-bit, unsigned
+  - `input wire c` : 1-bit, unsigned
+  - `input wire d` : 1-bit, unsigned
+- Output Ports:
+  - `output wire q` : 1-bit, unsigned
+
+Circuit Type:
+- The module implements a combinational logic circuit.
+
+Bit Indexing and Conventions:
+- All inputs and outputs are single-bit signals.
+- Bit[0] refers to the least significant bit (LSB).
+
+Functional Description:
+- The output `q` is determined based on the logical combination of inputs `a`, `b`, `c`, and `d`.
+- The truth table below provides the mapping of input combinations to the output `q`:
+
+  | a | b | c | d | q |
+  |---|---|---|---|---|
+  | 0 | 0 | 0 | 0 | 0 |
+  | 0 | 0 | 0 | 1 | 0 |
+  | 0 | 0 | 1 | 0 | 0 |
+  | 0 | 0 | 1 | 1 | 0 |
+  | 0 | 1 | 0 | 0 | 0 |
+  | 0 | 1 | 0 | 1 | 1 |
+  | 0 | 1 | 1 | 0 | 1 |
+  | 0 | 1 | 1 | 1 | 1 |
+  | 1 | 0 | 0 | 0 | 0 |
+  | 1 | 0 | 0 | 1 | 1 |
+  | 1 | 0 | 1 | 0 | 1 |
+  | 1 | 0 | 1 | 1 | 1 |
+  | 1 | 1 | 0 | 0 | 0 |
+  | 1 | 1 | 0 | 1 | 1 |
+  | 1 | 1 | 1 | 0 | 1 |
+  | 1 | 1 | 1 | 1 | 1 |
+
+Implementation Notes:
+- Ensure that the combinational logic is implemented to match the truth table provided.
+- No clock or reset signals are involved as it is purely combinational logic.
+- Ensure no race conditions as the circuit is purely combinational.
+
+Edge Cases:
+- All 16 possible combinations of inputs are covered within the truth table.
+</ENHANCED_SPEC>

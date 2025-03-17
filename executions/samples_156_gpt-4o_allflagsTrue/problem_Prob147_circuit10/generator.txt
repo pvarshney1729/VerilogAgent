@@ -1,0 +1,145 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the guidelines and coding conventions provided. Here's the step-by-step reasoning:
+
+1. **Module Declaration**: The module is named `TopModule` with inputs `clk`, `a`, `b`, and outputs `q`, `state`. All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **State Logic**: A single flip-flop is used to store the state, which is updated on the positive edge of the clock. The state is observable through the `state` output.
+
+3. **Combinational Logic**: The `always @(*)` block is used to determine the next state and output `q` based on the current inputs `a`, `b`, and the current `state`. The logic is derived from the provided simulation waveforms.
+
+4. **State Transition**: The `state_next` logic is determined by the combination of inputs and the current state. The waveform analysis suggests specific transitions and output conditions, which are implemented in the case statement.
+
+5. **Output Logic**: The output `q` is determined by the same combinational logic that determines the next state. The conditions for `q` are derived from the waveform analysis.
+
+6. **Sequential Logic**: The `always @(posedge clk)` block updates the `state` with `state_next` on the rising edge of the clock, ensuring synchronous operation.
+
+7. **Default Conditions**: Default conditions are provided in the case statement to ensure defined behavior for all input combinations.
+
+This implementation strictly follows the provided guidelines and coding conventions, ensuring correct functionality as per the waveform analysis.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic a,
+    input logic b,
+    output logic q,
+    output logic state
+);
+
+    logic state_next;
+
+    // Combinational logic to determine next state and output q
+    always @(*) begin
+        case ({a, b, state})
+            3'b000: begin
+                state_next = 0;
+                q = 0;
+            end
+            3'b001: begin
+                state_next = 1;
+                q = 1;
+            end
+            3'b010: begin
+                state_next = 0;
+                q = 0;
+            end
+            3'b011: begin
+                state_next = 1;
+                q = 1;
+            end
+            3'b100: begin
+                state_next = 0;
+                q = 0;
+            end
+            3'b101: begin
+                state_next = 1;
+                q = 1;
+            end
+            3'b110: begin
+                state_next = 0;
+                q = 0;
+            end
+            3'b111: begin
+                state_next = ~state;
+                q = state_next;
+            end
+            default: begin
+                state_next = 0;
+                q = 0;
+            end
+        endcase
+    end
+
+    // Sequential logic to update the state
+    always @(posedge clk) begin
+        state <= state_next;
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic a,
+    input logic b,
+    output logic q,
+    output logic state
+);
+
+    logic state_next;
+
+    // Combinational logic to determine next state and output q
+    always @(*) begin
+        case ({a, b, state})
+            3'b000: begin
+                state_next = 0;
+                q = 0;
+            end
+            3'b001: begin
+                state_next = 1;
+                q = 1;
+            end
+            3'b010: begin
+                state_next = 0;
+                q = 0;
+            end
+            3'b011: begin
+                state_next = 1;
+                q = 1;
+            end
+            3'b100: begin
+                state_next = 0;
+                q = 0;
+            end
+            3'b101: begin
+                state_next = 1;
+                q = 1;
+            end
+            3'b110: begin
+                state_next = 0;
+                q = 0;
+            end
+            3'b111: begin
+                state_next = ~state;
+                q = state_next;
+            end
+            default: begin
+                state_next = 0;
+                q = 0;
+            end
+        endcase
+    end
+
+    // Sequential logic to update the state
+    always @(posedge clk) begin
+        state <= state_next;
+    end
+
+endmodule

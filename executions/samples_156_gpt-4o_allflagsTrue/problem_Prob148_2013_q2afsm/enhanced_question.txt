@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Specification for `TopModule`:
+
+1. **Module Ports**:
+   - `input clk`: Clock signal, active on the rising edge.
+   - `input resetn`: Active-low, synchronous reset signal.
+   - `input [2:0] r`: 3-bit input vector representing requests from three devices. Each bit `r[i]` (where `i` ranges from 0 to 2) corresponds to a request from device `i`, with `r[0]` being the highest priority and `r[2]` the lowest.
+   - `output reg [2:0] g`: 3-bit output vector representing grants for the three devices. Each bit `g[i]` corresponds to a grant for device `i`.
+
+2. **State Definitions**:
+   - State Encoding (binary representation suggestive, modify as needed):
+     - `STATE_A`: 2'b00
+     - `STATE_B`: 2'b01
+     - `STATE_C`: 2'b10
+     - `STATE_D`: 2'b11
+
+3. **FSM Behavior**:
+   - The FSM will start in `STATE_A` after reset.
+   - `STATE_A` Transitions:
+     - Remain in `STATE_A` if `r[0] == 0` and `r[1] == 0` and `r[2] == 0`.
+     - Transition to `STATE_B` if `r[0] == 1`.
+     - Transition to `STATE_C` if `r[0] == 0` and `r[1] == 1`.
+     - Transition to `STATE_D` if `r[0] == 0` and `r[1] == 0` and `r[2] == 1`.
+   - `STATE_B` Transitions:
+     - Remain in `STATE_B` if `r[0] == 1`.
+     - Transition to `STATE_A` if `r[0] == 0`.
+   - `STATE_C` Transitions:
+     - Remain in `STATE_C` if `r[1] == 1`.
+     - Transition to `STATE_A` if `r[1] == 0`.
+
+4. **Output Behavior**:
+   - In `STATE_B`: `g[0] = 1`, `g[1] = 0`, `g[2] = 0`.
+   - In `STATE_C`: `g[0] = 0`, `g[1] = 1`, `g[2] = 0`.
+   - In `STATE_D`: `g[0] = 0`, `g[1] = 0`, `g[2] = 1`.
+   - In `STATE_A`: `g[0] = 0`, `g[1] = 0`, `g[2] = 0`.
+
+5. **Implementation Requirements**:
+   - Use separate always blocks for the state transition logic and state register updates.
+   - The state transition logic should be implemented in a combinational always block, sensitive to the current state and input `r`.
+   - State register updates should occur in a sequential always block, sensitive to the positive edge of `clk` and `resetn`.
+   - Ensure that the reset logic sets the state to `STATE_A` and all output grants `g[i]` to 0.
+
+6. **Edge Cases and Priorities**:
+   - Ensure the priority handling such that device 0 has the highest priority, followed by device 1, then device 2.
+   - If multiple requests occur simultaneously, the FSM should only grant the request with the highest priority.
+
+By following this specification, the `TopModule` will correctly implement the described FSM with appropriate handling of requests and grant signals.
+</ENHANCED_SPEC>

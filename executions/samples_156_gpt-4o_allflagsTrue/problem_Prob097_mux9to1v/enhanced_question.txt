@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, implements a 16-bit wide, 9-to-1 multiplexer with the following interface specifications. All ports are defined with specific bit widths and naming conventions:
+
+- Input Ports:
+  - `input [15:0] a`  : 16-bit input
+  - `input [15:0] b`  : 16-bit input
+  - `input [15:0] c`  : 16-bit input
+  - `input [15:0] d`  : 16-bit input
+  - `input [15:0] e`  : 16-bit input
+  - `input [15:0] f`  : 16-bit input
+  - `input [15:0] g`  : 16-bit input
+  - `input [15:0] h`  : 16-bit input
+  - `input [15:0] i`  : 16-bit input
+  - `input [3:0] sel` : 4-bit selector input where `sel[3]` is the most significant bit and `sel[0]` is the least significant bit.
+
+- Output Ports:
+  - `output reg [15:0] out`: 16-bit output, where `out[15]` is the most significant bit and `out[0]` is the least significant bit.
+
+Functional Description:
+- The module functions as a multiplexer, selecting one of the nine 16-bit inputs (`a` to `i`) based on the 4-bit selector input `sel`.
+- The selection mapping is as follows:
+  - `sel = 4'b0000` selects `a`
+  - `sel = 4'b0001` selects `b`
+  - `sel = 4'b0010` selects `c`
+  - `sel = 4'b0011` selects `d`
+  - `sel = 4'b0100` selects `e`
+  - `sel = 4'b0101` selects `f`
+  - `sel = 4'b0110` selects `g`
+  - `sel = 4'b0111` selects `h`
+  - `sel = 4'b1000` selects `i`
+- For `sel` values from `4'b1001` to `4'b1111`, the output `out` should be set to all bits '1' (`16'b1111111111111111`).
+
+Edge Cases:
+- Ensure that the `sel` is correctly interpreted as a 4-bit unsigned integer for proper selection.
+- Outputs for unused `sel` values (9 to 15) are explicitly defined to avoid unintended behavior.
+
+The module does not include any internal state or sequential logic, and therefore, it does not require any clock or reset signals.
+</ENHANCED_SPEC>

@@ -1,0 +1,33 @@
+Generated Response:
+
+<REASONING>
+The task is to implement a 256-to-1 multiplexer using Verilog. The module, named `TopModule`, has a 256-bit input vector `in`, an 8-bit selection input `sel`, and a 1-bit output `out`. The selection input `sel` determines which bit from the input vector `in` is assigned to the output `out`. The design is purely combinational, so an `assign` statement is used to directly map the selected bit to the output. This approach adheres to the coding conventions by using `logic` for port declarations and an `assign` statement for combinational logic.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input  logic [255:0] in,
+    input  logic [7:0]   sel,
+    output logic         out
+);
+
+    // Combinational logic for 256-to-1 multiplexer
+    assign out = in[sel];
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input  logic [255:0] in,
+    input  logic [7:0]   sel,
+    output logic         out
+);
+
+    // Combinational logic for 256-to-1 multiplexer
+    assign out = in[sel];
+
+endmodule

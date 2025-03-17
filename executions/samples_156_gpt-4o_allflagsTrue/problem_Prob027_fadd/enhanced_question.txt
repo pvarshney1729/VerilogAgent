@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description:
+The TopModule is a digital logic circuit implementing a full adder. A full adder takes three input bits—two significant bits and a carry-in—and produces two output bits: a sum and a carry-out.
+
+Port Definitions:
+- Inputs:
+  - input wire a: 1-bit input representing the first operand.
+  - input wire b: 1-bit input representing the second operand.
+  - input wire cin: 1-bit input representing the carry-in.
+
+- Outputs:
+  - output wire cout: 1-bit output representing the carry-out.
+  - output wire sum: 1-bit output representing the sum of the input bits.
+
+Bit Indexing and Conventions:
+- All inputs and outputs are single-bit wide, with bit[0] representing the least significant bit (LSB).
+
+Functional Description:
+- The full adder performs the following operation:
+  - sum = a ⊕ b ⊕ cin
+  - cout = (a & b) | (b & cin) | (a & cin)
+
+- The operation involves bitwise XOR (⊕) and AND (&) operations to compute the sum and carry-out.
+
+Edge Cases:
+- The module properly handles all binary combinations of the inputs a, b, and cin.
+
+Implementation Notes:
+- This module describes combinational logic; therefore, there are no clock or reset signals involved.
+- Ensure the absence of any race conditions by properly defining the precedence of operations.
+</ENHANCED_SPEC>

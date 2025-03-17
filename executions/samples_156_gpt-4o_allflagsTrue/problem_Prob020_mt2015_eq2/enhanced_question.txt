@@ -1,0 +1,25 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - A: 2-bit vector, input. Naming convention: `A[1:0]`, where `A[1]` is the most significant bit (MSB) and `A[0]` is the least significant bit (LSB).
+  - B: 2-bit vector, input. Naming convention: `B[1:0]`, where `B[1]` is the MSB and `B[0]` is the LSB.
+
+- Outputs:
+  - z: 1-bit scalar, output. 
+
+Functional Description:
+- The module compares the two 2-bit input vectors, `A` and `B`.
+- The output `z` should be set to 1 if the two input vectors are equal, i.e., if `A[1:0]` equals `B[1:0]`.
+- If `A` does not equal `B`, the output `z` should be set to 0.
+
+Operational Details:
+- This is a combinational logic circuit; the output `z` is determined purely by the current values of inputs `A` and `B` without any clock dependency.
+- Ensure that the comparison checks all bits of the input vectors simultaneously to avoid any race conditions.
+
+Boundary Conditions:
+- All possible values of `A` (00, 01, 10, 11) and `B` (00, 01, 10, 11) shall be considered, resulting in a total of 16 combinations.
+- The output `z` should accurately reflect equality only when `A` matches `B` exactly across all bits.
+
+</ENHANCED_SPEC>

@@ -1,0 +1,61 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- **Ports**:
+  - **Input**: 
+    - `clk`: Clock signal (1 bit). This signal serves as the timing reference for sequential logic, triggering on the positive edge.
+    - `reset`: Active-high reset signal (1 bit). This signal is asynchronous and will initialize all state registers to their default state when asserted.
+    - `w`: Input data signal (1 bit). This signal determines the state transitions based on its value.
+  - **Output**: 
+    - `z`: Output signal (1 bit). This signal represents the output of the state machine, where specific states produce a high output.
+
+State Machine Description:
+- **States**: The module implements a state machine with six states: A, B, C, D, E, and F.
+- **State Encoding**: Each state is encoded as follows:
+  - State A: 3'b000
+  - State B: 3'b001
+  - State C: 3'b010
+  - State D: 3'b011
+  - State E: 3'b100
+  - State F: 3'b101
+
+- **Transitions**: The transitions between states are determined by the input `w`:
+  - From State A:
+    - If `w` is 0, transition to State B.
+    - If `w` is 1, remain in State A.
+  - From State B:
+    - If `w` is 0, transition to State C.
+    - If `w` is 1, transition to State D.
+  - From State C:
+    - If `w` is 0, transition to State E.
+    - If `w` is 1, transition to State D.
+  - From State D:
+    - If `w` is 0, transition to State F.
+    - If `w` is 1, transition to State A.
+  - From State E:
+    - If `w` is 0, remain in State E.
+    - If `w` is 1, transition to State D.
+  - From State F:
+    - If `w` is 0, transition to State C.
+    - If `w` is 1, transition to State D.
+
+- **Output Logic**:
+  - The output `z` is determined by the current state:
+    - `z` is 1 when the state is E or F.
+    - `z` is 0 for all other states.
+
+- **Reset Behavior**:
+  - On the assertion of `reset`, the state machine transitions to the initial state, State A (3'b000), and the output `z` is set to 0.
+
+- **Clock and Timing**:
+  - All state transitions occur on the positive edge of the `clk` signal.
+  - Ensure proper synchronization between the `clk` and `reset` signals to avoid metastability.
+
+- **Bit Indexing**:
+  - The least significant bit is indexed as bit[0].
+
+Edge Cases:
+- Verify functionality for both `w` inputs (0 and 1) at each state transition.
+- Ensure the state machine correctly resets to State A upon reset assertion regardless of the current state.
+</ENHANCED_SPEC>

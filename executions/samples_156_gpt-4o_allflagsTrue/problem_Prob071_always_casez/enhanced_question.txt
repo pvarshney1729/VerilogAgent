@@ -1,0 +1,25 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, shall be implemented with the following interface specifications. Unless otherwise specified, all input and output ports are one bit.
+
+- Input Ports:
+  - `in` (8 bits): This input vector is named `in` and is an 8-bit wide bus. The index bit[0] represents the least significant bit (LSB), and bit[7] represents the most significant bit (MSB).
+
+- Output Ports:
+  - `pos` (3 bits): This output is a 3-bit wide bus that indicates the position of the first high bit in the input vector `in`, starting from the least significant bit.
+
+Functional Description:
+- The module shall function as a priority encoder for the 8-bit input `in`.
+- The `pos` output will report the zero-based index of the first bit set to '1' in the input vector `in`. The search for a bit set to '1' should begin at bit[0] and proceed towards bit[7].
+- If no bits in the input vector `in` are set to '1', the output `pos` shall be 3'd0.
+
+Example:
+- For an input `in` of 8'b10010000, the output `pos` should be 3'd4, as bit[4] is the first bit set to '1'.
+
+Edge Cases:
+- If the input vector `in` is 8'b00000000, the output `pos` must be 3'd0, indicating no bits are high.
+
+Additional Notes:
+- This module implements combinational logic; there are no clocked or sequential elements required.
+- No reset signals are needed since the module does not contain any state or memory elements.
+- Ensure that the output `pos` is always valid and stable with respect to the input `in`.
+</ENHANCED_SPEC>

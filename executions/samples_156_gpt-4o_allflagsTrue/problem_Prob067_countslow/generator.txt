@@ -1,0 +1,83 @@
+Generated Response:
+
+<REASONING>
+To implement the decade counter as specified, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. Use `logic` for all ports as per the coding conventions.
+
+2. **Internal Register**: Declare an internal 4-bit register `count` to hold the current count value. This register will be updated on the positive edge of the clock.
+
+3. **Sequential Logic**: Use an `always` block triggered by the positive edge of the clock to implement the synchronous reset and counting logic:
+   - **Synchronous Reset**: If `reset` is high, set `count` to 0.
+   - **Counting Logic**: If `reset` is low and `slowena` is high, increment the counter. If the counter reaches 9 (`4'b1001`), wrap it back to 0.
+
+4. **Output Assignment**: Assign the internal `count` register to the output `q`.
+
+This approach ensures that the counter behaves as a decade counter, counting from 0 to 9 and wrapping around, with the ability to pause counting based on the `slowena` signal.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic slowena,
+    output logic [3:0] q
+);
+
+    // Internal register to hold the count value
+    logic [3:0] count;
+
+    // Sequential logic for the decade counter
+    always @(posedge clk) begin
+        if (reset) begin
+            // Synchronous reset: set count to 0
+            count <= 4'b0000;
+        end else if (slowena) begin
+            // Increment the counter if slowena is high
+            if (count == 4'b1001) begin
+                count <= 4'b0000; // Wrap around to 0 after 9
+            end else begin
+                count <= count + 1;
+            end
+        end
+    end
+
+    // Assign the count value to the output q
+    assign q = count;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic slowena,
+    output logic [3:0] q
+);
+
+    // Internal register to hold the count value
+    logic [3:0] count;
+
+    // Sequential logic for the decade counter
+    always @(posedge clk) begin
+        if (reset) begin
+            // Synchronous reset: set count to 0
+            count <= 4'b0000;
+        end else if (slowena) begin
+            // Increment the counter if slowena is high
+            if (count == 4'b1001) begin
+                count <= 4'b0000; // Wrap around to 0 after 9
+            end else begin
+                count <= count + 1;
+            end
+        end
+    end
+
+    // Assign the count value to the output q
+    assign q = count;
+
+endmodule

@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - c: 1-bit, unsigned
+  - d: 1-bit, unsigned
+- Outputs:
+  - mux_in: 4-bit vector, unsigned, with bit indexing such that mux_in[3] is the most significant bit (MSB) and mux_in[0] is the least significant bit (LSB)
+
+Functional Description:
+- The TopModule is responsible for generating the 4-bit output vector `mux_in` based on the provided Karnaugh map. The values in the Karnaugh map are used to determine the output values of `mux_in` for each combination of inputs `c` and `d`.
+
+Karnaugh Map Interpretation:
+- The Karnaugh map provided is as follows, where `ab` select lines correspond to the mux inputs:
+  
+  ```
+  ab
+  cd  00  01  11  10
+  00 | 0 | 0 | 0 | 1 |
+  01 | 1 | 0 | 0 | 0 |
+  11 | 1 | 0 | 1 | 1 |
+  10 | 1 | 0 | 0 | 1 |
+  ```
+
+- Input `c` and `d` combinations determine the rows, and `a` and `b` (external to this module) determine the column selections for the 4-to-1 multiplexer.
+
+Output Description:
+- `mux_in` is connected to a 4-to-1 multiplexer such that:
+  - mux_in[0] corresponds to `ab = 00`
+  - mux_in[1] corresponds to `ab = 01`
+  - mux_in[2] corresponds to `ab = 11`
+  - mux_in[3] corresponds to `ab = 10`
+  
+- The values placed into `mux_in` are derived directly from the Karnaugh map for each `cd` input combination.
+
+Implementation Constraints:
+- Use one 4-to-1 multiplexer and as many 2-to-1 multiplexers as required, minimizing their count.
+- Do not use any other logic gates.
+- Use inputs `a` and `b` as the select inputs for the 4-to-1 multiplexer.
+
+Assumptions:
+- All input signals are stable and free from glitches before being sampled.
+- There are no reset requirements or sequential elements within this module as it is purely combinational logic.
+
+Note:
+- This specification defines only the TopModule. The 4-to-1 multiplexer and the select signals `a` and `b` are assumed to be external to this module.
+</ENHANCED_SPEC>

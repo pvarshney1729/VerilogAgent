@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- `input  wire clk`: Clock signal, triggers state transitions on the rising edge.
+- `input  wire reset`: Active-high synchronous reset signal, resets the state machine to the initial state.
+- `input  wire in`: Single-bit input to the state machine.
+- `output reg out`: Single-bit output, determined by the current state of the state machine.
+
+State Encoding:
+- Use two states, encoded as 1-bit:
+  - State B: 1'b0
+  - State A: 1'b1
+
+Initial State:
+- On reset, the state machine transitions to State B.
+
+Reset Behavior:
+- The reset is synchronous, meaning the state transition to the initial state (State B) occurs on the rising edge of `clk` when `reset` is high.
+
+State Transition Table (Moore State Machine):
+- State B (out=1): 
+  - `in=0`: Transition to State A.
+  - `in=1`: Remain in State B.
+- State A (out=0):
+  - `in=0`: Transition to State B.
+  - `in=1`: Remain in State A.
+
+Output Logic:
+- The output `out` is determined solely by the current state:
+  - In State B, `out` = 1.
+  - In State A, `out` = 0.
+
+Bit Indexing:
+- Consider the least significant bit (LSB) as bit[0].
+
+Clock and Edge Sensitivity:
+- All state transitions and reset logic are sensitive to the rising edge of `clk`.
+
+Assumptions:
+- The input `in` is stable and valid at the rising edge of `clk`.
+
+Edge Cases:
+- Ensure that during reset, the output `out` reflects the corresponding state output value immediately after a clock edge occurs with `reset` high.
+</ENHANCED_SPEC>

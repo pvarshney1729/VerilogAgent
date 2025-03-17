@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic c,\n    input logic d,\n    output logic [3:0] mux_in\n);\n\n    // Implementing the logic for each bit of mux_in using 2-to-1 multiplexers\n    assign mux_in[0] = (~d) | (c & d); // Simplified logic for mux_in[0]\n    assign mux_in[1] = 0;              // Constant 0\n    assign mux_in[2] = c & d;          // Direct AND operation\n    assign mux_in[3] = d;              // Simplified logic for mux_in[3]\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 60,
+        "passfail": "R"
+    }
+}

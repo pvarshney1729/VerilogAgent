@@ -1,0 +1,25 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk` : Clock signal, active on the negative edge.
+  - `input wire reset` : Synchronous active high reset signal.
+  - `input wire [7:0] d` : 8-bit data input, where `d[0]` is the least significant bit (LSB).
+
+- Output Ports:
+  - `output reg [7:0] q` : 8-bit data output, where `q[0]` is the least significant bit (LSB).
+
+Functional Specification:
+- The module shall consist of 8 D-type flip-flops.
+- Each flip-flop is triggered on the falling (negative) edge of the `clk` signal.
+- The reset is synchronous and active high; when `reset` is asserted (logic high), the output `q` shall be initialized to the value 0x34 (hexadecimal), equivalent to 8'b00110100 in binary.
+- When `reset` is not asserted during a clock cycle, the flip-flops shall capture and hold the value present on the input `d` at the falling edge of `clk`.
+
+Behavioral Considerations:
+- During reset, the output `q` shall be set to 0x34 regardless of the input `d`.
+- When `reset` is low, the output `q` will reflect the value of `d` after the next negative clock edge.
+- Ensure there are no race conditions by clearly defining the clock edge triggering and reset synchronization.
+
+Ensure all flip-flops and registers are initialized according to the specification during the reset condition.
+</ENHANCED_SPEC>

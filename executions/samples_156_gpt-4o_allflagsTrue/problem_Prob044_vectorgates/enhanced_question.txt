@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description:
+The TopModule computes the bitwise OR, logical OR, and bitwise NOT of two 3-bit input vectors.
+
+Interface:
+- Inputs:
+  - input [2:0] a  // 3-bit wide input vector 'a'
+  - input [2:0] b  // 3-bit wide input vector 'b'
+
+- Outputs:
+  - output [2:0] out_or_bitwise  // 3-bit wide output representing the bitwise OR of 'a' and 'b'
+  - output out_or_logical        // 1-bit output representing the logical OR of 'a' and 'b'
+  - output [5:0] out_not         // 6-bit wide output where:
+                                 // bits [5:3] are the bitwise NOT of 'b'
+                                 // bits [2:0] are the bitwise NOT of 'a'
+
+Details:
+1. Bit Indexing: 
+   - bit[0] refers to the least significant bit (LSB).
+   - bit[2] refers to the most significant bit (MSB) for the 3-bit vectors 'a' and 'b'.
+   - In 'out_not', bit[5] is the MSB and bit[0] is the LSB.
+
+2. Logic Types:
+   - Combinational logic is used for all operations, as there are no clocked elements or sequential dependencies.
+
+3. Operations:
+   - Bitwise OR: out_or_bitwise = a | b
+   - Logical OR: out_or_logical = |a || |b (true if any bit in either vector is '1')
+   - Bitwise NOT:
+     - Invert 'b' and assign to out_not[5:3]
+     - Invert 'a' and assign to out_not[2:0]
+
+4. Edge Cases:
+   - All operations handle all possible values of the 3-bit inputs 'a' and 'b' (range: 0 to 7).
+
+5. No reset or clock signals are necessary for this purely combinational module.
+
+Note: Ensure all operations follow standard precedence and correct bit indexing as specified.
+</ENHANCED_SPEC>

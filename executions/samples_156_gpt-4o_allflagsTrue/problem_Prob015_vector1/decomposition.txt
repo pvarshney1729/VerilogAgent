@@ -1,0 +1,20 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input port 'in' (16 bits) and output ports 'out_hi' and 'out_lo' (8 bits each).",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input in (16 bits) - output out_hi (8 bits) - output out_lo (8 bits)",
+        "implementation": "module TopModule(\n    input [15:0] in,\n    output [7:0] out_hi,\n    output [7:0] out_lo\n);\n\nassign out_hi = in[15:8];\nassign out_lo = in[7:0];\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the logic to assign the upper byte of the input 'in' to the output 'out_hi'.",
+        "source": "The module should implement a combinational circuit that splits an input half-word (16 bits, [15:0] ) into lower [7:0] and upper [15:8] bytes.",
+        "implementation": "assign out_hi = in[15:8];"
+    },
+    {
+        "id": "3",
+        "content": "Implement the logic to assign the lower byte of the input 'in' to the output 'out_lo'.",
+        "source": "The module should implement a combinational circuit that splits an input half-word (16 bits, [15:0] ) into lower [7:0] and upper [15:8] bytes.",
+        "implementation": "assign out_lo = in[7:0];"
+    }
+]

@@ -1,0 +1,23 @@
+<ENHANCED_SPEC>
+The module is to be named `TopModule`. It should have the following interface, with specified bit widths and naming conventions:
+
+- Inputs:
+  - `sel`: A 3-bit unsigned input used to select between data inputs. The most significant bit (MSB) is `sel[2]` and the least significant bit (LSB) is `sel[0]`.
+  - `data0`: A 4-bit unsigned input vector. The LSB is `data0[0]` and the MSB is `data0[3]`.
+  - `data1`: A 4-bit unsigned input vector. The LSB is `data1[0]` and the MSB is `data1[3]`.
+  - `data2`: A 4-bit unsigned input vector. The LSB is `data2[0]` and the MSB is `data2[3]`.
+  - `data3`: A 4-bit unsigned input vector. The LSB is `data3[0]` and the MSB is `data3[3]`.
+  - `data4`: A 4-bit unsigned input vector. The LSB is `data4[0]` and the MSB is `data4[3]`.
+  - `data5`: A 4-bit unsigned input vector. The LSB is `data5[0]` and the MSB is `data5[3]`.
+
+- Outputs:
+  - `out`: A 4-bit unsigned output vector. The LSB is `out[0]` and the MSB is `out[3]`.
+
+Functionality:
+- The module implements a 6-to-1 multiplexer.
+- The `sel` input determines which of the 4-bit `data` inputs (`data0` through `data5`) is routed to the `out` output.
+- When `sel` is within the range of 0 to 5 (inclusive), the corresponding `data` input is output. For instance, if `sel` is `3'b000`, `data0` is output; if `sel` is `3'b001`, `data1` is output, and so on up to `sel` `3'b101`.
+- If `sel` is outside the range of 0 to 5 (i.e., `sel` is `3'b110` or `3'b111`), the output `out` should be set to `4'b0000`.
+
+This specification defines a purely combinational logic circuit with no sequential elements, hence no clock or reset signals are required. 
+</ENHANCED_SPEC>

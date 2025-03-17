@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - `input clk`: Clock signal for synchronous operations. All sequential logic is triggered on the positive edge.
+  - `input areset`: Asynchronous reset signal, active-high. Resets the state machine to the initial state.
+  - `input bump_left`: Signal indicating a bump on the left side. Active-high.
+  - `input bump_right`: Signal indicating a bump on the right side. Active-high.
+
+- Output Ports:
+  - `output walk_left`: Indicates the critter is walking left. Active-high.
+  - `output walk_right`: Indicates the critter is walking right. Active-high.
+
+State Machine Specification:
+- The module implements a Moore finite state machine (FSM) with two states:
+  1. State LEFT: The critter is walking left (`walk_left = 1`, `walk_right = 0`).
+  2. State RIGHT: The critter is walking right (`walk_left = 0`, `walk_right = 1`).
+
+- Initial State: Upon assertion of `areset`, the FSM transitions to State LEFT, setting `walk_left = 1` and `walk_right = 0`.
+
+- State Transition Logic:
+  - From State LEFT:
+    - If `bump_left == 1`, transition to State RIGHT.
+    - If `bump_left == 0`, remain in State LEFT.
+  - From State RIGHT:
+    - If `bump_right == 1`, transition to State LEFT.
+    - If `bump_right == 0`, remain in State RIGHT.
+  - If both `bump_left` and `bump_right` are asserted simultaneously, switch direction.
+
+- Asynchronous Reset Behavior:
+  - The `areset` signal, when asserted, will immediately reset the FSM to State LEFT, regardless of the current state or clock edge.
+
+- Bit Indexing Convention:
+  - All signals are single-bit, where `1` represents the active or asserted state.
+
+Edge Cases:
+- When both `bump_left` and `bump_right` are asserted, the FSM should switch directions. The precedence of state transition in this case is handled by simultaneous evaluation.
+
+- Ensure that the outputs are correctly updated based on the current state of the FSM to avoid race conditions.
+
+- The module does not account for any additional input conditions or undefined states beyond the specified behavior.
+
+</ENHANCED_SPEC>

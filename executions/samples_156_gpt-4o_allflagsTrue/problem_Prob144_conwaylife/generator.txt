@@ -1,0 +1,136 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the specification of Conway's Game of Life on a 16x16 toroidal grid. The module has a clock input `clk`, a load signal `load`, a 256-bit input `data`, and a 256-bit output `q`. The grid is represented as a 256-bit vector, with each bit representing a cell's state (alive or dead).
+
+1. **Function `count_neighbors`:** This function calculates the number of alive neighbors for a given cell, considering the toroidal wrapping. It iterates over the 3x3 neighborhood of the cell, excluding the cell itself, and sums the states of the neighboring cells.
+
+2. **Combinational Logic:** The `always @(*)` block computes the next state of each cell based on the number of alive neighbors. The rules are:
+   - If a cell has exactly 3 neighbors, it becomes alive.
+   - If a cell has exactly 2 neighbors, it retains its current state.
+   - Otherwise, the cell becomes dead.
+
+3. **Sequential Logic:** The `always @(posedge clk)` block updates the grid state. If `load` is high, the grid is initialized with the `data` input. Otherwise, the grid state is updated to `q_next`, which is computed in the combinational logic block.
+
+The implementation adheres to the guidelines and coding conventions, using `logic` for all signals and ensuring that the combinational logic is correctly implemented without an explicit sensitivity list. The grid updates synchronously with the clock, and the toroidal wrapping is handled by using modulo operations.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [255:0] data,
+    output logic [255:0] q
+);
+
+    logic [255:0] q_next;
+    integer i, j, ni, nj, count;
+
+    // Function to count the number of alive neighbors for a given cell
+    function logic [3:0] count_neighbors;
+        input logic [255:0] grid;
+        input integer row;
+        input integer col;
+        integer r, c;
+        logic [3:0] count;
+    begin
+        count = 0;
+        for (r = -1; r <= 1; r = r + 1) begin
+            for (c = -1; c <= 1; c = c + 1) begin
+                if (!(r == 0 && c == 0)) begin
+                    count = count + grid[((row + r + 16) % 16) * 16 + ((col + c + 16) % 16)];
+                end
+            end
+        end
+        count_neighbors = count;
+    end
+    endfunction
+
+    // Combinational logic to determine the next state of the grid
+    always @(*) begin
+        for (i = 0; i < 16; i = i + 1) begin
+            for (j = 0; j < 16; j = j + 1) begin
+                count = count_neighbors(q, i, j);
+                if (count == 3) begin
+                    q_next[i * 16 + j] = 1;
+                end else if (count == 2) begin
+                    q_next[i * 16 + j] = q[i * 16 + j];
+                end else begin
+                    q_next[i * 16 + j] = 0;
+                end
+            end
+        end
+    end
+
+    // Sequential logic to update the grid state
+    always @(posedge clk) begin
+        if (load) begin
+            q <= data;
+        end else begin
+            q <= q_next;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [255:0] data,
+    output logic [255:0] q
+);
+
+    logic [255:0] q_next;
+    integer i, j, ni, nj, count;
+
+    // Function to count the number of alive neighbors for a given cell
+    function logic [3:0] count_neighbors;
+        input logic [255:0] grid;
+        input integer row;
+        input integer col;
+        integer r, c;
+        logic [3:0] count;
+    begin
+        count = 0;
+        for (r = -1; r <= 1; r = r + 1) begin
+            for (c = -1; c <= 1; c = c + 1) begin
+                if (!(r == 0 && c == 0)) begin
+                    count = count + grid[((row + r + 16) % 16) * 16 + ((col + c + 16) % 16)];
+                end
+            end
+        end
+        count_neighbors = count;
+    end
+    endfunction
+
+    // Combinational logic to determine the next state of the grid
+    always @(*) begin
+        for (i = 0; i < 16; i = i + 1) begin
+            for (j = 0; j < 16; j = j + 1) begin
+                count = count_neighbors(q, i, j);
+                if (count == 3) begin
+                    q_next[i * 16 + j] = 1;
+                end else if (count == 2) begin
+                    q_next[i * 16 + j] = q[i * 16 + j];
+                end else begin
+                    q_next[i * 16 + j] = 0;
+                end
+            end
+        end
+    end
+
+    // Sequential logic to update the grid state
+    always @(posedge clk) begin
+        if (load) begin
+            q <= data;
+        end else begin
+            q <= q_next;
+        end
+    end
+
+endmodule

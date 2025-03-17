@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+**Interface:**
+- `input logic clk`: Clock signal for the module; positive edge-triggered.
+- `input logic reset`: Synchronous active-high reset signal.
+- `input logic data`: Serial input data, used for pattern detection.
+- `input logic done_counting`: Indicates when the counting operation is complete.
+- `input logic ack`: Acknowledgment signal from the user.
+
+- `output logic shift_ena`: Control signal to enable shifting of bits.
+- `output logic counting`: Signal indicating the module is in counting mode.
+- `output logic done`: Signal indicating the timer has completed its operation.
+
+**Behavioral Description:**
+
+1. **Pattern Detection:** 
+   - The module monitors the `data` input for the specific pattern `1101`.
+   - Upon detection of the pattern `1101`, the state machine transitions from its initial state to a state where it needs to shift in additional bits.
+
+2. **Shifting Operation:**
+   - After detecting the pattern, assert `shift_ena` for exactly 4 consecutive clock cycles. 
+   - These 4 clock cycles are used to shift in additional bits that determine the delay duration.
+
+3. **Counting Phase:**
+   - Once the 4 bits are shifted in, assert the `counting` signal to indicate the state machine is waiting for the counting operation to complete.
+   - Remain in this state until the `done_counting` input is asserted high.
+
+4. **Completion Notification:**
+   - Upon `done_counting` being high, assert the `done` signal to notify the user that the timer has completed.
+   - Wait in this state until the `ack` input is asserted high by the user.
+
+5. **Reset and Reinitialization:**
+   - Once `ack` is high, the state machine resets to its initial state to begin monitoring for the next occurrence of the pattern `1101`.
+   - The module's reset is synchronous and will initialize the state machine to the pattern detection state.
+
+**Additional Notes:**
+- Bit Indexing: `bit[0]` refers to the least significant bit (LSB).
+- All sequential elements are triggered on the rising edge of `clk`.
+- Upon reset, the module will clear any pending operations and begin fresh pattern detection.
+</ENHANCED_SPEC>

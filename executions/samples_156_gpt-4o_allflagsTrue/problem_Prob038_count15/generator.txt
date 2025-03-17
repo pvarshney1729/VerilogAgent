@@ -1,0 +1,65 @@
+Generated Response:
+
+<REASONING>
+To implement the 4-bit binary counter with a synchronous reset, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. The input ports are `clk` and `reset`, both 1-bit signals. The output port `q` is a 4-bit signal.
+
+2. **Signal Declaration**: Use a 4-bit logic signal `count` to hold the current value of the counter. This will be updated on each clock cycle.
+
+3. **Sequential Logic**: Use an `always` block triggered on the positive edge of `clk` to implement the counter logic. Inside this block:
+   - Check if the `reset` signal is high. If it is, set `count` to `4'b0000` to reset the counter.
+   - If `reset` is not high, increment the `count` by 1. This will naturally wrap around from 15 to 0 due to the 4-bit width.
+
+4. **Output Assignment**: Assign the value of `count` to the output `q`. This ensures that the output reflects the current count value.
+
+5. **Coding Conventions**: Follow the specified coding conventions, such as using `logic` for signal declarations and ensuring that the synchronous reset is implemented correctly without including `reset` in the sensitivity list.
+
+By following these steps, we ensure that the module meets the specification requirements and adheres to the provided guidelines and conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    logic [3:0] count;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            count <= 4'b0000;
+        end else begin
+            count <= count + 1;
+        end
+    end
+
+    assign q = count;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    logic [3:0] count;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            count <= 4'b0000;
+        end else begin
+            count <= count + 1;
+        end
+    end
+
+    assign q = count;
+
+endmodule

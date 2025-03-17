@@ -1,0 +1,57 @@
+Generated Response:
+
+<REASONING>
+To implement the priority encoder as specified, we need to create a Verilog module named `TopModule` with an 8-bit input `in` and a 3-bit output `pos`. The module should determine the position of the first '1' in the input vector starting from the least significant bit. If no bits are set to '1', the output should be zero.
+
+The implementation will use a combinational `always @(*)` block to evaluate the input vector and determine the output. The `casez` statement is suitable for this task as it allows us to match patterns with don't-care conditions, making it efficient to find the first '1' bit.
+
+We will adhere to the coding conventions provided, such as using `logic` for signal declarations and ensuring all numeric constants have a size greater than zero. Since this is a purely combinational design, there is no need for a clock or reset signal.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [7:0] in,
+    output logic [2:0] pos
+);
+
+    always @(*) begin
+        casez (in)
+            8'b???????1: pos = 3'd0;
+            8'b??????10: pos = 3'd1;
+            8'b?????100: pos = 3'd2;
+            8'b????1000: pos = 3'd3;
+            8'b???10000: pos = 3'd4;
+            8'b??100000: pos = 3'd5;
+            8'b?1000000: pos = 3'd6;
+            8'b10000000: pos = 3'd7;
+            default:     pos = 3'd0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [7:0] in,
+    output logic [2:0] pos
+);
+
+    always @(*) begin
+        casez (in)
+            8'b???????1: pos = 3'd0;
+            8'b??????10: pos = 3'd1;
+            8'b?????100: pos = 3'd2;
+            8'b????1000: pos = 3'd3;
+            8'b???10000: pos = 3'd4;
+            8'b??100000: pos = 3'd5;
+            8'b?1000000: pos = 3'd6;
+            8'b10000000: pos = 3'd7;
+            default:     pos = 3'd0;
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,44 @@
+Generated Response:
+
+<REASONING>
+To implement the module `TopModule`, we need to derive the logic expression for the output `q` based on the provided truth table. By analyzing the truth table, we can observe that the output `q` is `1` in the following cases:
+- When `c` is `1`, regardless of the values of `a`, `b`, and `d`.
+- When `b` is `1` and `d` is `0`, regardless of the values of `a` and `c`.
+
+This can be expressed as a logical OR between `c` and the AND of `b` and the negation of `d`. The expression for `q` is:
+\[ q = c \lor (b \land \lnot d) \]
+
+This expression is purely combinational, so we will use an `assign` statement to implement it. We will declare all ports as `logic` to adhere to the coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic a,
+    input logic b,
+    input logic c,
+    input logic d,
+    output logic q
+);
+
+    // Combinational logic for output q
+    assign q = c | (b & ~d);
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic a,
+    input logic b,
+    input logic c,
+    input logic d,
+    output logic q
+);
+
+    // Combinational logic for output q
+    assign q = c | (b & ~d);
+
+endmodule

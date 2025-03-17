@@ -1,0 +1,60 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input wire clk: Clock signal, positive edge-triggered for all sequential logic.
+- input wire areset: Asynchronous reset signal, active high, resets the system to initial state.
+- input wire bump_left: Input signal indicating a bump on the left.
+- input wire bump_right: Input signal indicating a bump on the right.
+- input wire ground: Input signal indicating presence of ground (1) or absence (0).
+- input wire dig: Input signal to initiate digging.
+- output reg walk_left: Output signal, high when Lemming is walking left.
+- output reg walk_right: Output signal, high when Lemming is walking right.
+- output reg aaah: Output signal, high when Lemming is falling.
+- output reg digging: Output signal, high when Lemming is digging.
+
+Signal Conventions:
+- All signals are 1-bit wide.
+- bit[0] refers to the least significant bit.
+
+Finite State Machine (FSM) Design:
+- The FSM is a Moore machine, where outputs depend only on the current state.
+- States include: WALK_LEFT, WALK_RIGHT, FALLING, and DIGGING.
+- Initial state after reset: WALK_LEFT.
+
+State Transition Logic:
+1. WALK_LEFT:
+   - Transitions to WALK_RIGHT if bump_left is 1.
+   - Transitions to FALLING if ground is 0.
+   - Transitions to DIGGING if dig is 1 and ground is 1.
+
+2. WALK_RIGHT:
+   - Transitions to WALK_LEFT if bump_right is 1.
+   - Transitions to FALLING if ground is 0.
+   - Transitions to DIGGING if dig is 1 and ground is 1.
+
+3. FALLING:
+   - Remains in FALLING while ground is 0.
+   - Returns to previous walking state (either WALK_LEFT or WALK_RIGHT) when ground is 1.
+
+4. DIGGING:
+   - Continues in DIGGING until ground is 0, transitioning to FALLING.
+   - Previous walking direction is resumed when ground reappears.
+
+Precedence of Operations:
+- Falling (aaah) has the highest precedence.
+- Digging has higher precedence than switching directions.
+- Direction switch occurs if neither falling nor digging conditions are met.
+
+Reset Behavior:
+- On areset (active high), return to initial state WALK_LEFT regardless of current state.
+
+Edge Cases:
+- If bumps occur on both sides at the same time, direction switches.
+- If ground disappears and bumps occur simultaneously, falling takes precedence, and bumps do not affect direction.
+- If dig is asserted while falling or when no ground is present, it is ignored.
+
+Clock and Reset:
+- All state transitions occur on the positive edge of clk.
+- Areset is asynchronous and resets the FSM to WALK_LEFT immediately when active.
+</ENHANCED_SPEC>

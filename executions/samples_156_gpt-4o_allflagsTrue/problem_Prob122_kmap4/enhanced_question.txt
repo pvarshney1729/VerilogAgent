@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- `input wire a`: Single-bit input.
+- `input wire b`: Single-bit input.
+- `input wire c`: Single-bit input.
+- `input wire d`: Single-bit input.
+- `output wire out`: Single-bit output.
+
+Bit Indexing and Conventions:
+- All input and output ports are single-bit, thus bit indexing does not apply.
+
+Logic Implementation:
+- The module implements a combinational logic circuit based on the provided Karnaugh map.
+
+Karnaugh Map Definition:
+- The Karnaugh map is defined with inputs `a` and `b` representing the column indices and inputs `c` and `d` representing the row indices.
+
+Karnaugh Map Table:
+
+             ab
+  cd   00  01  11  10
+  00 | 0 | 1 | 0 | 1 |
+  01 | 1 | 0 | 1 | 0 |
+  11 | 0 | 1 | 0 | 1 |
+  10 | 1 | 0 | 1 | 0 |
+
+- Each entry in the table specifies the output `out` for the corresponding combination of inputs `a`, `b`, `c`, and `d`.
+
+Operational Details:
+- The module is purely combinational; there are no clock signals or sequential elements such as flip-flops or registers.
+- Ensure that the logic is implemented to evaluate combinationally without any race conditions or hazards.
+
+Edge Cases:
+- As all inputs are single-bit, the Karnaugh map covers all possible input combinations, ensuring defined behavior for every possible input state.
+</ENHANCED_SPEC>

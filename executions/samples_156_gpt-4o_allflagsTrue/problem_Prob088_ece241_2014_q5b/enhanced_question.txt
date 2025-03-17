@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- `input wire clk`: Clock signal, triggers on the rising edge.
+- `input wire areset`: Asynchronous active-high reset signal.
+- `input wire x`: 1-bit input signal.
+- `output reg z`: 1-bit output signal.
+
+Finite-State Machine (FSM) Description:
+The FSM is a Mealy-type machine utilizing one-hot encoding to implement a 2's complementer. The module resets to state A upon receiving an active-high signal on `areset`.
+
+State Encoding:
+- State A: 2'b01
+- State B: 2'b10
+
+State Transition and Output Logic:
+1. **State A:**
+   - Transition: Remains in state A if `x` is 0.
+   - Output: `z` = 0.
+   - Transition: Moves to state B if `x` is 1.
+   - Output: `z` = 1.
+
+2. **State B:**
+   - Transition: Remains in state B if `x` is 0.
+   - Output: `z` = 1.
+   - Transition: Remains in state B if `x` is 1.
+   - Output: `z` = 0.
+
+Clock and Reset Behavior:
+- The FSM transitions and output logic are evaluated at the rising edge of `clk`.
+- The reset (`areset`) is asynchronous and active-high, immediately forcing the FSM into state A regardless of the clock.
+
+Initial Conditions:
+- Upon reset, the FSM is in state A, and the output `z` is initialized accordingly based on the input `x`.
+
+Signal Conventions:
+- Bit indexing: Single bit signals; no indexing required.
+- All signals are treated as unsigned.
+
+Edge Cases:
+- Ensure that transitions between states are glitch-free and comply with the one-hot encoding scheme.
+- The FSM should handle continuous high `areset` signals gracefully by remaining in state A.
+</ENHANCED_SPEC>

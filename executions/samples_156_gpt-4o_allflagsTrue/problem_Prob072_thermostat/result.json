@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input  logic mode,\n    input  logic too_cold,\n    input  logic too_hot,\n    input  logic fan_on,\n    output logic heater,\n    output logic aircon,\n    output logic fan\n);\n\n    // Heater logic: On in heating mode when too cold\n    assign heater = mode & too_cold;\n\n    // Air conditioner logic: On in cooling mode when too hot\n    assign aircon = ~mode & too_hot;\n\n    // Fan logic: On when heater or aircon is on, or when fan_on is requested\n    assign fan = heater | aircon | fan_on;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

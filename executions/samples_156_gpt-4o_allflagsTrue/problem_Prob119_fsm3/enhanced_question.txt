@@ -1,0 +1,56 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock input. Positive edge-triggered.
+  - `areset`: 1-bit asynchronous reset input. Positive edge-triggered. Resets the FSM to the initial state (State A).
+  - `in`: 1-bit input for state transitions.
+
+- Output Ports:
+  - `out`: 1-bit output indicating the current state's output value.
+
+State Machine Specifications:
+- Type: Moore State Machine
+- Number of States: 4 (State A, State B, State C, State D)
+- State Encoding: Use binary encoding with the following assignments:
+  - State A: 2'b00
+  - State B: 2'b01
+  - State C: 2'b10
+  - State D: 2'b11
+
+- State Transition Table:
+  - Current State: State A
+    - Next State if in=0: State A
+    - Next State if in=1: State B
+    - Output: 0
+  - Current State: State B
+    - Next State if in=0: State C
+    - Next State if in=1: State B
+    - Output: 0
+  - Current State: State C
+    - Next State if in=0: State A
+    - Next State if in=1: State D
+    - Output: 0
+  - Current State: State D
+    - Next State if in=0: State C
+    - Next State if in=1: State B
+    - Output: 1
+
+Reset Behavior:
+- The reset (`areset`) is asynchronous and positive edge-triggered.
+- Upon activation of `areset`, the FSM immediately enters State A regardless of the clock.
+
+Clock Behavior:
+- All state transitions and output evaluations occur on the positive edge of the clock (`clk`).
+
+Initial Conditions:
+- Upon reset, the FSM initializes to State A, and the output is set to 0.
+
+Signal Considerations:
+- The state transitions are governed solely by the input `in`, with no dependencies on non-specified conditions or signals.
+- The precedence of state transitions follows the table specified above, ensuring no race conditions occur.
+
+Edge Cases:
+- Proper handling of any undefined or transient input conditions is not explicitly required beyond specified state transitions.
+</ENHANCED_SPEC>

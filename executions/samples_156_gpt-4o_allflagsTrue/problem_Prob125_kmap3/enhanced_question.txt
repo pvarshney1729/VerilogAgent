@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Specification for TopModule:
+
+Module Name: TopModule
+
+Port Definitions:
+- Input Ports:
+  - input wire a: 1-bit input signal.
+  - input wire b: 1-bit input signal.
+  - input wire c: 1-bit input signal.
+  - input wire d: 1-bit input signal.
+
+- Output Ports:
+  - output wire out: 1-bit output signal.
+
+Karnaugh Map Implementation:
+- The module implements the following functionality based on the Karnaugh map provided:
+  
+  |      ab       |
+  | cd | 01 | 00 | 10 | 11 |
+  |----|----|----|----|----|
+  | 00 |  d |  0 |  1 |  1 |
+  | 01 |  0 |  0 |  d |  d |
+  | 11 |  0 |  1 |  1 |  1 |
+  | 10 |  0 |  1 |  1 |  1 |
+
+- 'd' in the Karnaugh map represents a don't-care condition, where the output can be either 0 or 1, depending on what is more convenient or optimal for minimizing logic.
+
+Inputs and Outputs:
+- The input signals (a, b, c, d) are treated as binary variables where:
+  - 'a' and 'b' together form a 2-bit binary number representing the columns of the Karnaugh map.
+  - 'c' and 'd' together form a 2-bit binary number representing the rows of the Karnaugh map.
+
+- The output 'out' is determined by the values of 'a', 'b', 'c', and 'd' according to the Karnaugh map specified above.
+
+Operational Details:
+- The module should be implemented using combinational logic only, as there are no sequential elements or clocked operations specified.
+
+- Ensure that the logic minimizes the use of gates and optimizes for the don't-care conditions ('d') where applicable.
+
+- The output 'out' should reflect the correct logic level based on the specified Karnaugh map in all valid combinations of inputs.
+
+Edge Cases and Input Boundaries:
+- All possible combinations of the inputs (a, b, c, and d) should be accounted for, including all don't-care conditions.
+
+- The implementation should be robust to handle any input values, ensuring that the output is consistent with the specified logic.
+</ENHANCED_SPEC>

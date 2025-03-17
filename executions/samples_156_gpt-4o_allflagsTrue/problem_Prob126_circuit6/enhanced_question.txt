@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Specification for Module: TopModule
+
+1. Module Interface:
+   - Input Ports:
+     - `a`: 3-bit wide input vector. Each bit is denoted as `a[2:0]` where `a[0]` is the least significant bit (LSB) and `a[2]` is the most significant bit (MSB).
+   - Output Ports:
+     - `q`: 16-bit wide output vector.
+
+2. Circuit Type:
+   - The module implements a purely combinational logic circuit with no sequential elements or clock dependencies.
+
+3. Functionality:
+   - The output `q` is determined solely by the input `a` based on the provided mapping:
+     - When `a` is 3'b000, `q` outputs 16'h1232.
+     - When `a` is 3'b001, `q` outputs 16'haee0.
+     - When `a` is 3'b010, `q` outputs 16'h27d4.
+     - When `a` is 3'b011, `q` outputs 16'h5a0e.
+     - When `a` is 3'b100, `q` outputs 16'h2066.
+     - When `a` is 3'b101, `q` outputs 16'h64ce.
+     - When `a` is 3'b110, `q` outputs 16'hc526.
+     - When `a` is 3'b111, `q` outputs 16'h2f19.
+
+4. Special Considerations:
+   - The output `q` is undefined for input values outside the range of 3'b000 to 3'b111.
+   - There are no reset conditions or initial states required for this combinational circuit.
+   - The output `q` should change immediately in response to any change in input `a`, as it is a combinational circuit.
+
+5. Edge Cases:
+   - Ensure that the circuit behavior strictly follows the specified mapping for each valid input value of `a`.
+   - The circuit should not introduce any delays or race conditions, given that it is purely combinational.
+
+Note: All hexadecimal values are assumed to be in lower case as per the given specification.
+</ENHANCED_SPEC>

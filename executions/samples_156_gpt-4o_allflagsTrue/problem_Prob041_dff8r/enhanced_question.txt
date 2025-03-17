@@ -1,0 +1,26 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit clock signal. Triggering occurs on the positive edge.
+  - reset: 1-bit active high reset signal. The reset is synchronous with the clock.
+  - d: 8-bit input vector, where d[7] is the most significant bit (MSB) and d[0] is the least significant bit (LSB).
+
+- Output Ports:
+  - q: 8-bit output vector, where q[7] is the MSB and q[0] is the LSB.
+
+Functional Description:
+- The module consists of 8 D flip-flops (DFFs).
+- Each DFF is responsible for storing one bit of the 8-bit input vector 'd'.
+- All DFFs are triggered by the rising edge (positive edge) of the 'clk' signal.
+- On the rising edge of 'clk', if 'reset' is high (1), the output vector 'q' is set to zero (all bits in 'q' are reset to 0).
+- If 'reset' is low (0) on the rising edge of 'clk', each bit of the output vector 'q' is updated to reflect the corresponding bit of the input vector 'd'.
+- Initial State: On reset, each DFF is initialized to 0.
+
+Edge Cases and Boundaries:
+- Ensure that the 'reset' signal is properly synchronized with 'clk' to avoid metastability.
+- No additional behavior is specified for when 'reset' and 'clk' are both low or when 'reset' transitions between clock edges.
+
+All signals and operations should be verified for potential race conditions and appropriate timing to ensure reliable operation. 
+</ENHANCED_SPEC>

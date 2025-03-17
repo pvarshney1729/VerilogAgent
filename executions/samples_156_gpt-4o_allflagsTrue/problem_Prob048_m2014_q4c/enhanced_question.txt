@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+The module, named TopModule, is required to implement a simple D flip-flop with a synchronous reset. Below is the refined specification for clarity and correctness in implementation:
+
+- **Module Name**: TopModule
+- **Port Definitions**:
+  - `input wire clk`: This is the clock signal input. It triggers all sequential operations on the rising edge.
+  - `input wire d`: This is the data input for the D flip-flop.
+  - `input wire r`: This is the reset input, which is active high and synchronous.
+  - `output reg q`: This is the data output of the D flip-flop.
+
+- **Operational Behavior**:
+  - The module implements a D flip-flop that samples the data input `d` on the rising edge of the `clk` signal.
+  - If the reset input `r` is asserted high during a clock edge, the output `q` will be reset to `0` synchronously with the clock edge.
+  - If the reset input `r` is not asserted (i.e., is low), the output `q` will take the value of the data input `d` on the rising edge of the `clk`.
+  
+- **Bit Indexing and Conventions**:
+  - All signal ports (`clk`, `d`, `r`, and `q`) are single-bit signals.
+  - The most significant bit (MSB) and the least significant bit (LSB) for each signal are the same, given that they are all 1-bit wide.
+
+- **Reset Specification**:
+  - The reset is synchronous, meaning it only affects the output `q` on the rising edge of the clock.
+  - The reset state of the output `q` is defined to be `0`.
+  
+- **Initial Conditions**:
+  - Explicit initialization of the output `q` is not required, as it is determined by the first active clock edge after reset.
+
+- **Edge Cases and Boundaries**:
+  - The behavior is explicitly defined for the synchronous reset and normal data sampling. Any undefined states or transitions should default to the last known state of `q` unless reset is asserted.
+
+This specification ensures that the intended functionality of a synchronous D flip-flop with a reset is clearly outlined, supporting accurate implementation.
+</ENHANCED_SPEC>

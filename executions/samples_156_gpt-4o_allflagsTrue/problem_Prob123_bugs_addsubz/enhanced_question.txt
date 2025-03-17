@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+The given specification describes an 8-bit adder-subtractor module with a zero flag. The module is designed for use in a digital circuit, performing addition or subtraction based on the control signal `do_sub`. The following enhancements are applied to ensure clarity and correctness in the implementation:
+
+1. **Module Name and Interface:**
+   - The module is named `TopModule` and implements an adder-subtractor function with a zero flag indicator.
+   - Inputs:
+     - `do_sub`: 1-bit control signal, where logic '0' selects addition and logic '1' selects subtraction.
+     - `a`: 8-bit unsigned operand.
+     - `b`: 8-bit unsigned operand.
+   - Outputs:
+     - `out`: 8-bit unsigned result of the arithmetic operation.
+     - `result_is_zero`: 1-bit flag indicating if the result `out` is zero.
+
+2. **Port and Signal Conventions:**
+   - All inputs and outputs are unsigned.
+   - Bit[7] is the most significant bit (MSB) and Bit[0] is the least significant bit (LSB).
+
+3. **Combinational Logic:**
+   - The arithmetic operation is performed using combinational logic, determined by the `do_sub` signal:
+     - When `do_sub` is `0`, perform addition: `out = a + b`.
+     - When `do_sub` is `1`, perform subtraction: `out = a - b`.
+   - The zero flag `result_is_zero` is updated based on the output `out`. It is set to `1` if the result is zero and `0` otherwise.
+
+4. **Zero Flag Calculation:**
+   - The zero flag `result_is_zero` is evaluated directly from the output:
+     - `result_is_zero = (out == 8'b00000000) ? 1'b1 : 1'b0;`
+
+5. **Operational Edge Cases:**
+   - Handle potential overflow or underflow from arithmetic operations implicitly, as the module processes unsigned 8-bit numbers.
+
+6. **Dependencies and Precedence:**
+   - The operations within the always block are executed in sequence, ensuring that `out` is computed before the zero flag is evaluated.
+   - The zero flag computation should occur immediately after the arithmetic calculation to ensure correctness.
+
+By refining the specification with these enhancements, the intended functionality of the adder-subtractor module is clearly defined, allowing for precise and correct implementation in Verilog.
+</ENHANCED_SPEC>

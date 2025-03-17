@@ -1,0 +1,60 @@
+Generated Response:
+
+<REASONING>
+The task is to create a submodule named `TopModule` that will be used in a hierarchical design. This submodule should include a flip-flop and a 2:1 multiplexer. The multiplexer selects between two inputs (`q_in` and `r_in`) based on a control signal (`L`). The selected input is then stored in a flip-flop on the rising edge of the clock (`clk`).
+
+1. **Interface Definition**: The module has four inputs (`clk`, `L`, `q_in`, `r_in`) and one output (`Q`). All are single-bit signals.
+
+2. **Multiplexer Logic**: The multiplexer selects `r_in` when `L` is high and `q_in` when `L` is low. This is implemented using an `if-else` statement inside an `always` block.
+
+3. **Flip-Flop Logic**: The `always` block is triggered on the rising edge of `clk`, ensuring that the flip-flop captures the selected input at the correct time.
+
+4. **Coding Conventions**: 
+   - All ports and signals are declared as `logic` to adhere to modern SystemVerilog conventions.
+   - The `always` block is used for sequential logic with `posedge clk` to ensure synchronous operation.
+   - No reset logic is included as it was not specified in the original requirements.
+
+5. **Hierarchical Design**: This module is designed to be instantiated multiple times in a larger module (e.g., `full_module`), allowing for a scalable and modular design approach.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic L,
+    input logic q_in,
+    input logic r_in,
+    output logic Q
+);
+
+    always @(posedge clk) begin
+        if (L) begin
+            Q <= r_in;
+        end else begin
+            Q <= q_in;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic L,
+    input logic q_in,
+    input logic r_in,
+    output logic Q
+);
+
+    always @(posedge clk) begin
+        if (L) begin
+            Q <= r_in;
+        end else begin
+            Q <= q_in;
+        end
+    end
+
+endmodule

@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input  logic a  // 1-bit input
+- input  logic b  // 1-bit input
+- input  logic c  // 1-bit input
+- input  logic d  // 1-bit input
+- input  logic e  // 1-bit input
+- output logic [24:0] out  // 25-bit output vector
+
+Specification:
+1. The module takes five 1-bit input signals: a, b, c, d, and e.
+2. The output 'out' is a 25-bit vector that stores the results of all pairwise comparisons between the inputs.
+3. Each bit in the output vector 'out[i]' (where 0 <= i <= 24) represents the result of a comparison between two bits:
+   - The result is 1 if the compared bits are equal, and 0 otherwise.
+4. The comparisons should be ordered as follows:
+   - out[24] = (a == a)
+   - out[23] = (a == b)
+   - out[22] = (a == c)
+   - out[21] = (a == d)
+   - out[20] = (a == e)
+   - out[19] = (b == a)
+   - out[18] = (b == b)
+   - out[17] = (b == c)
+   - out[16] = (b == d)
+   - out[15] = (b == e)
+   - out[14] = (c == a)
+   - out[13] = (c == b)
+   - out[12] = (c == c)
+   - out[11] = (c == d)
+   - out[10] = (c == e)
+   - out[9]  = (d == a)
+   - out[8]  = (d == b)
+   - out[7]  = (d == c)
+   - out[6]  = (d == d)
+   - out[5]  = (d == e)
+   - out[4]  = (e == a)
+   - out[3]  = (e == b)
+   - out[2]  = (e == c)
+   - out[1]  = (e == d)
+   - out[0]  = (e == e)
+5. Each comparison is performed using the equality operator (==).
+6. This module implements combinational logic; hence, there is no clock or reset involved.
+
+Note: Bit[24] represents the MSB (Most Significant Bit) of the output, whereas bit[0] represents the LSB (Least Significant Bit).
+</ENHANCED_SPEC>

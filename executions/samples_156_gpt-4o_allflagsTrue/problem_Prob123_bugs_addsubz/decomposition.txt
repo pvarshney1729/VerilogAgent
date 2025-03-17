@@ -1,0 +1,20 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module with inputs do_sub, a[7:0], b[7:0] and outputs out[7:0], result_is_zero.",
+        "source": "module TopModule (\n      input do_sub,\n      input [7:0] a,\n      input [7:0] b,\n      output reg [7:0] out,\n      output reg result_is_zero\n  );",
+        "implementation": "always @(*) begin\n      case (do_sub)\n        0: out = a + b;\n        1: out = a - b;\n      endcase\n\n      if (out == 8'b0)\n          result_is_zero = 1;\n      else\n          result_is_zero = 0;\n  end"
+    },
+    {
+        "id": "2",
+        "content": "Implement the combinational logic to perform addition or subtraction based on the do_sub signal.",
+        "source": "always @(*) begin\n          case (do_sub)\n            0: out = a+b;\n            1: out = a-b;\n          endcase",
+        "implementation": "always @(*) begin\n    case (do_sub)\n        1'b0: out = a + b;\n        1'b1: out = a - b;\n        default: out = 8'b0; // Adding default case to handle unexpected values\n    endcase\n\n    result_is_zero = (out == 8'b0); // Correctly set result_is_zero based on out\nend"
+    },
+    {
+        "id": "3",
+        "content": "Implement the logic to correctly set the result_is_zero flag when the output is zero.",
+        "source": "if (~out)\n              result_is_zero = 1;",
+        "implementation": "always @(*) begin\n          case (do_sub)\n            0: out = a + b;\n            1: out = a - b;\n          endcase\n\n          if (out == 8'b0)\n              result_is_zero = 1;\n          else\n              result_is_zero = 0;\n      end"
+    }
+]

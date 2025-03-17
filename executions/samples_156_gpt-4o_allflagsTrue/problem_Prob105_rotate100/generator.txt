@@ -1,0 +1,69 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a 100-bit rotator with specific functionalities based on the input signals. The module has a clock input `clk`, a load signal `load`, a 2-bit enable signal `ena`, a 100-bit data input `data`, and a 100-bit output `q`. The behavior of the module is as follows:
+
+1. **Load Operation**: When the `load` signal is high, the module should load the `data` input into the output `q`. This operation is synchronous with the clock.
+
+2. **Rotation Operation**: If the `load` signal is not asserted, the module should perform a rotation based on the `ena` signal:
+   - `ena = 2'b01`: Rotate the bits in `q` to the right by one position. The bit shifted out from the right end should be shifted back into the left end.
+   - `ena = 2'b10`: Rotate the bits in `q` to the left by one position. The bit shifted out from the left end should be shifted back into the right end.
+   - `ena = 2'b00` or `ena = 2'b11`: No rotation should occur, and the output `q` should remain unchanged.
+
+3. **Implementation Details**:
+   - The module uses an `always_ff` block triggered on the rising edge of the clock to ensure synchronous operation.
+   - The `case` statement is used to handle the different values of `ena` and apply the appropriate rotation or maintain the current state.
+   - The `logic` data type is used for all signals to adhere to modern Verilog conventions.
+
+By following these steps, we ensure that the module behaves as specified, with correct handling of loading and rotating operations.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [1:0] ena,
+    input logic [99:0] data,
+    output logic [99:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            q <= data;
+        end else begin
+            case (ena)
+                2'b01: q <= {q[0], q[99:1]}; // Rotate right
+                2'b10: q <= {q[98:0], q[99]}; // Rotate left
+                default: q <= q; // No rotation
+            endcase
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [1:0] ena,
+    input logic [99:0] data,
+    output logic [99:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (load) begin
+            q <= data;
+        end else begin
+            case (ena)
+                2'b01: q <= {q[0], q[99:1]}; // Rotate right
+                2'b10: q <= {q[98:0], q[99]}; // Rotate left
+                default: q <= q; // No rotation
+            endcase
+        end
+    end
+
+endmodule

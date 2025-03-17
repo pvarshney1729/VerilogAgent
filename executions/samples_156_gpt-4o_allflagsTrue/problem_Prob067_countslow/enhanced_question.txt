@@ -1,0 +1,22 @@
+<ENHANCED_SPEC>
+The module, named TopModule, is required to have the following interface. Unless specifically stated otherwise, all input and output ports are single-bit signals.
+
+- `input  wire clk` : Clock input signal triggering on the positive edge.
+- `input  wire reset` : Synchronous active-high reset signal that resets the counter to 0 when asserted.
+- `input  wire slowena` : Control signal that enables the counter to increment when high.
+- `output reg [3:0] q` : 4-bit output representing the current count value, with `q[3]` as the most significant bit (MSB) and `q[0]` as the least significant bit (LSB).
+
+The module should implement a decade counter that counts from 0 to 9 inclusive, with a complete cycle having a period of 10 clock cycles. This counter should only increment when the `slowena` input is high; otherwise, it retains its current state.
+
+The reset signal is synchronous, meaning the counter will reset to 0 on the next positive clock edge if the reset is high. All sequential logic within the module is triggered by the positive edge of the `clk` signal.
+
+Initial condition: On power-up or reset, the counter should be initialized to 0.
+
+The counter's primary operation is as follows:
+- On the rising edge of `clk`, if `reset` is high, the counter `q` is set to 0.
+- If `reset` is low and `slowena` is high, the counter `q` increments by 1.
+- If `reset` is low and `slowena` is low, the counter `q` maintains its current value.
+- When the counter reaches 9, the next increment should wrap around the counter back to 0.
+
+This design ensures predictable operation in all scenarios, including reset, enable, and normal counting sequences.
+</ENHANCED_SPEC>

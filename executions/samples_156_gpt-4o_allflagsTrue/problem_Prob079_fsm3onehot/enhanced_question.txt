@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Specification for Module: TopModule
+
+Interface:
+- Input Ports:
+  - `input in`: 1-bit input signal
+  - `input [3:0] state`: 4-bit input signal representing current state, using one-hot encoding
+
+- Output Ports:
+  - `output [3:0] next_state`: 4-bit output signal representing next state, using one-hot encoding
+  - `output out`: 1-bit output signal
+
+State Encoding:
+- State A: 4'b0001
+- State B: 4'b0010
+- State C: 4'b0100
+- State D: 4'b1000
+
+State Transition Table and Output Logic:
+- Current State A:
+  - If `in` = 0, `next_state` = A; `out` = 0
+  - If `in` = 1, `next_state` = B; `out` = 0
+
+- Current State B:
+  - If `in` = 0, `next_state` = C; `out` = 0
+  - If `in` = 1, `next_state` = B; `out` = 0
+
+- Current State C:
+  - If `in` = 0, `next_state` = A; `out` = 0
+  - If `in` = 1, `next_state` = D; `out` = 0
+
+- Current State D:
+  - If `in` = 0, `next_state` = C; `out` = 1
+  - If `in` = 1, `next_state` = B; `out` = 1
+
+Design Considerations:
+- Implement only the combinational logic for state transition and output, with no sequential elements.
+- Ensure that the logic correctly interprets the one-hot encoding for state transitions.
+- The `output out` reflects the Moore FSM output logic, determined solely by the current state, not by the input `in`.
+
+Note:
+- Ensure that the implementation adheres to the bit indexing where bit[0] refers to the least significant bit (LSB) and bit[3] refers to the most significant bit (MSB).
+- The module assumes ideal conditions where inputs are stable during evaluation of the combinational logic, with no race conditions present.
+</ENHANCED_SPEC>

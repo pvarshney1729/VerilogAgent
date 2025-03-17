@@ -1,0 +1,51 @@
+Generated Response:
+
+<REASONING>
+The task is to implement a Verilog module named `TopModule` with specified input and output ports, where each port is a single bit. The module should act as a set of direct connections (wires) between the inputs and outputs. The connections are straightforward: input `a` is connected to output `w`, input `b` is connected to outputs `x` and `y`, and input `c` is connected to output `z`.
+
+Given the simplicity of the task, there is no need for any complex logic or sequential elements like flip-flops. The module only requires combinational logic, which can be implemented using continuous assignment statements (`assign`). The use of `logic` for port declarations is in line with modern SystemVerilog practices, although the task could also be implemented using `wire` in traditional Verilog. However, the guidelines suggest using `logic`.
+
+The guidelines and coding conventions provided do not apply directly to this task since there are no flip-flops, no synchronous reset, and no need for an `always` block. The task is purely combinational, so `assign` statements are appropriate.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic a,
+    input logic b,
+    input logic c,
+    output logic w,
+    output logic x,
+    output logic y,
+    output logic z
+);
+
+    // Direct wire connections
+    assign w = a;
+    assign x = b;
+    assign y = b;
+    assign z = c;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic a,
+    input logic b,
+    input logic c,
+    output logic w,
+    output logic x,
+    output logic y,
+    output logic z
+);
+
+    // Direct wire connections
+    assign w = a;
+    assign x = b;
+    assign y = b;
+    assign z = c;
+
+endmodule

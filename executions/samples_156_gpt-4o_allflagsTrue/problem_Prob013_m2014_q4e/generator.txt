@@ -1,0 +1,33 @@
+Generated Response:
+
+<REASONING>
+The task is to implement a Verilog module named `TopModule` that functions as a 2-input NOR gate. The NOR gate is a basic digital logic gate that outputs true or high only when both inputs are false or low. The provided guidelines and conventions suggest using `logic` for port declarations and using an `assign` statement for combinational logic. Since the NOR gate is purely combinational and does not require a clock or reset, we can directly use an `assign` statement to define the output. The expression `~(in1 | in2)` effectively implements the NOR operation by first performing a bitwise OR on the inputs and then negating the result.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic in1,
+    input logic in2,
+    output logic out
+);
+
+    // Implementing the 2-input NOR gate
+    assign out = ~(in1 | in2);
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic in1,
+    input logic in2,
+    output logic out
+);
+
+    // Implementing the 2-input NOR gate
+    assign out = ~(in1 | in2);
+
+endmodule

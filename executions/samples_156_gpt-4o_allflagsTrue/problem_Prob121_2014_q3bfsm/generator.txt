@@ -1,0 +1,109 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the guidelines and specifications provided. The module is designed to implement a finite-state machine (FSM) with a synchronous reset and state transitions based on the input `x`. The FSM is defined using a 3-bit state encoding, where each state is represented by a unique 3-bit value. The state transition and output logic are implemented using `always` blocks, with the state transition logic being combinational and the state update logic being sequential, triggered on the positive edge of the clock. The synchronous reset ensures that the FSM resets to the initial state `000` when the reset signal is high. The output logic is determined by the current state, with specific states producing an output of `1` as specified in the state table.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        STATE_000 = 3'b000,
+        STATE_001 = 3'b001,
+        STATE_010 = 3'b010,
+        STATE_011 = 3'b011,
+        STATE_100 = 3'b100
+    } state_t;
+
+    state_t state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (state)
+            STATE_000: next_state = (x == 1'b0) ? STATE_000 : STATE_001;
+            STATE_001: next_state = (x == 1'b0) ? STATE_001 : STATE_100;
+            STATE_010: next_state = (x == 1'b0) ? STATE_010 : STATE_001;
+            STATE_011: next_state = (x == 1'b0) ? STATE_001 : STATE_010;
+            STATE_100: next_state = (x == 1'b0) ? STATE_011 : STATE_100;
+            default: next_state = STATE_000;
+        endcase
+    end
+
+    // Sequential logic with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= STATE_000;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Output logic
+    always @(*) begin
+        case (state)
+            STATE_011, STATE_100: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        STATE_000 = 3'b000,
+        STATE_001 = 3'b001,
+        STATE_010 = 3'b010,
+        STATE_011 = 3'b011,
+        STATE_100 = 3'b100
+    } state_t;
+
+    state_t state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (state)
+            STATE_000: next_state = (x == 1'b0) ? STATE_000 : STATE_001;
+            STATE_001: next_state = (x == 1'b0) ? STATE_001 : STATE_100;
+            STATE_010: next_state = (x == 1'b0) ? STATE_010 : STATE_001;
+            STATE_011: next_state = (x == 1'b0) ? STATE_001 : STATE_010;
+            STATE_100: next_state = (x == 1'b0) ? STATE_011 : STATE_100;
+            default: next_state = STATE_000;
+        endcase
+    end
+
+    // Sequential logic with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= STATE_000;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Output logic
+    always @(*) begin
+        case (state)
+            STATE_011, STATE_100: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule

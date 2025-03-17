@@ -1,0 +1,39 @@
+Generated Response:
+
+<REASONING>
+The task is to implement a Verilog module named `TopModule` that performs sign-extension of an 8-bit input to a 32-bit output. The sign-extension process involves replicating the most significant bit (MSB), which is the sign bit, of the input 24 times to fill the upper bits of the output, while the lower bits of the output are directly assigned from the input.
+
+1. **Module Declaration**: The module is named `TopModule` with an 8-bit input `in` and a 32-bit output `out`.
+2. **Port Declaration**: The ports are declared using `logic` as per the coding conventions, which is a more modern approach than using `wire` or `reg`.
+3. **Sign Bit Extraction**: The MSB of the input `in[7]` is extracted to be used for sign extension.
+4. **Replication and Concatenation**: The sign bit `in[7]` is replicated 24 times using the replication operator `{}` and concatenated with the original 8-bit input using the concatenation operator `{}`.
+5. **Assign Statement**: An `assign` statement is used for combinational logic to directly assign the result of the concatenation to the output `out`.
+
+The implementation adheres to the guidelines and coding conventions provided, ensuring that the module is combinational and does not involve any sequential logic or clock signals.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input  logic [7:0] in,
+    output logic [31:0] out
+);
+
+    // Sign-extend the 8-bit input to 32 bits
+    assign out = { {24{in[7]}}, in };
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input  logic [7:0] in,
+    output logic [31:0] out
+);
+
+    // Sign-extend the 8-bit input to 32 bits
+    assign out = { {24{in[7]}}, in };
+
+endmodule

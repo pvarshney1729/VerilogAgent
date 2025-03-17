@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk` : Clock signal (positive edge-triggered).
+  - `input wire areset` : Asynchronous reset signal (active high).
+  - `input wire predict_valid` : Indicates a branch prediction event.
+  - `input wire predict_taken` : Result of the branch prediction (1 bit).
+  - `input wire train_mispredicted` : Indicates a branch misprediction event.
+  - `input wire train_taken` : Actual result of the branch (1 bit).
+  - `input wire [31:0] train_history` : The branch history before the mispredicted branch (32 bits).
+
+- Output Ports:
+  - `output reg [31:0] predict_history` : The current branch history register (32 bits).
+
+Behavior:
+1. Clock and Reset:
+   - The module operates on the positive edge of `clk`.
+   - `areset` is an asynchronous reset. When `areset` is high, the `predict_history` register is reset to all zeros.
+
+2. Branch Prediction:
+   - When `predict_valid` is high (1), the module shifts in `predict_taken` at the least significant bit (LSB) of `predict_history`. 
+   - The existing `predict_history` is shifted left by one bit before the new bit is inserted.
+
+3. Misprediction Handling:
+   - If `train_mispredicted` is high (1), the `predict_history` register is updated with the value of `train_history` concatenated with `train_taken` as the LSB.
+   - This operation takes precedence over the branch prediction shift to handle the pipeline flush.
+
+4. Precedence of Operations:
+   - If both `predict_valid` and `train_mispredicted` are high simultaneously, `train_mispredicted` operation takes precedence. The `predict_history` register will be updated according to the misprediction logic, thus nullifying the prediction update for that clock cycle.
+
+5. Signal Indexing:
+   - Bit indexing follows the convention where `predict_history[0]` is the least significant bit (LSB) and represents the direction of the most recently considered branch.
+
+Edge Cases:
+- In the case of simultaneous `areset` and `clk` events, the `areset` has the highest priority and will reset the `predict_history` to zero.
+
+Initial Values:
+- All sequential elements should initialize to zero upon reset.
+
+</ENHANCED_SPEC>

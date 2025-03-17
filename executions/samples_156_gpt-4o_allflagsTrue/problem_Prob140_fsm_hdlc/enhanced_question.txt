@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: clk (1 bit) - Clock signal, positive edge-triggered.
+- Input: reset (1 bit) - Active high, synchronous reset signal.
+- Input: in (1 bit) - Serial data input stream.
+- Output: disc (1 bit) - Asserted for one cycle when a bit is to be discarded.
+- Output: flag (1 bit) - Asserted for one cycle to indicate the detection of a frame boundary flag.
+- Output: err (1 bit) - Asserted for one cycle when an error condition (7 or more consecutive 1s) is detected.
+
+Description:
+The module implements a Moore-type finite state machine (FSM) to decode a continuous HDLC bit stream, identifying specific patterns to control the outputs.
+
+FSM Logic:
+- Initial State on Reset: Upon a synchronous reset, the FSM initializes to a state as if the previous input bit was '0'.
+- State Transitions: Occur on the positive edge of the clock.
+- Outputs are asserted for the entire clock cycle following the detection of their respective conditions.
+
+Pattern Recognition:
+1. Sequence "0111110":
+   - Output 'disc' is asserted for one clock cycle, indicating that the trailing '0' should be discarded.
+2. Sequence "01111110":
+   - Output 'flag' is asserted for one clock cycle, indicating detection of a frame boundary.
+3. Sequence "01111111...":
+   - Output 'err' is asserted for one clock cycle when 7 or more consecutive '1's are detected, indicating an error.
+
+Behavioral Notes:
+- Input bit 'in' is sampled on the rising edge of 'clk'.
+- Bit indexing: The least significant bit is denoted as bit[0].
+- Ensure no race conditions occur by specifying that state transitions and output updates are both triggered by the clock edge.
+- All outputs (disc, flag, err) are reset to '0' during the initialization cycle and when their respective conditions are not met.
+
+Edge Cases:
+- If 'reset' is asserted, the FSM returns to the initial state immediately after the rising edge of 'clk' while 'reset' is high.
+- The FSM must correctly handle back-to-back flag detections and error conditions without missing any transitions or assertions.
+</ENHANCED_SPEC>

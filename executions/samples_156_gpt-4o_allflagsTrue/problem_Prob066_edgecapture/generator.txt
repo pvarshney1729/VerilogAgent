@@ -1,0 +1,67 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the given specification and guidelines. The module is designed to detect a 1-to-0 transition for each bit in the 32-bit input vector `in` and set the corresponding bit in the output vector `out` to 1. The output will remain 1 until a synchronous reset is applied.
+
+1. **Port Declaration**: The module has a clock (`clk`), a synchronous reset (`reset`), a 32-bit input vector (`in`), and a 32-bit output vector (`out`). All ports are declared using `logic` as per the coding conventions.
+
+2. **Previous State Storage**: A register `prev_in` is used to store the previous state of the input vector `in`. This allows the module to detect transitions from 1 to 0.
+
+3. **Synchronous Reset**: The reset logic is implemented inside the `always` block triggered on the positive edge of the clock. When `reset` is high, both `out` and `prev_in` are set to zero.
+
+4. **Transition Detection**: The logic `out <= out | (prev_in & ~in);` detects a 1-to-0 transition. It uses bitwise AND and NOT operations to identify bits that changed from 1 to 0. The result is ORed with the current value of `out` to ensure captured transitions are retained.
+
+5. **Sequential Logic**: The `always` block is used for sequential logic, ensuring that changes are captured on the rising edge of the clock.
+
+6. **Initialization**: The reset logic ensures that all registers are initialized to zero, aligning with the simulation requirements.
+
+This implementation adheres to the provided interface, guidelines, and coding conventions, ensuring correct functionality and simulation behavior.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [31:0] in,
+    output logic [31:0] out
+);
+
+    logic [31:0] prev_in;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            out <= 32'b0;
+            prev_in <= 32'b0;
+        end else begin
+            out <= out | (prev_in & ~in);
+            prev_in <= in;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [31:0] in,
+    output logic [31:0] out
+);
+
+    logic [31:0] prev_in;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            out <= 32'b0;
+            prev_in <= 32'b0;
+        end else begin
+            out <= out | (prev_in & ~in);
+            prev_in <= in;
+        end
+    end
+
+endmodule

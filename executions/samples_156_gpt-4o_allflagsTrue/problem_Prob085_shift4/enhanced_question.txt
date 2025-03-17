@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit input, used as the clock signal. All sequential logic is triggered on the positive edge.
+  - `areset`: 1-bit input, asynchronous and active high. Resets the shift register.
+  - `load`: 1-bit input, synchronous and active high. Loads data into the shift register.
+  - `ena`: 1-bit input, synchronous and active high. Enables the right shift operation.
+  - `data`: 4-bit input, used for loading data into the shift register.
+  
+- Output Ports:
+  - `q`: 4-bit output, representing the contents of the shift register.
+
+Functional Description:
+1. Asynchronous Reset (`areset`):
+   - When `areset` is asserted (high), the shift register `q` is immediately reset to 4'b0000, regardless of the clock.
+
+2. Load Operation (`load`):
+   - When `load` is asserted (high) on the positive edge of `clk`, the shift register `q` is synchronously loaded with `data[3:0]`.
+
+3. Enable Operation (`ena`):
+   - When `ena` is asserted (high) and `load` is not asserted, on the positive edge of `clk`, the shift register performs a right shift operation.
+   - During the right shift, `q[3]` is set to 0, `q[2:0]` are shifted right, and `q[0]` is discarded.
+
+4. Priority:
+   - If both `load` and `ena` are asserted simultaneously, `load` takes precedence, and the shift register is loaded with `data[3:0]`.
+
+Bit Indexing and Conventions:
+- Bit indexing starts from 0, with `q[0]` being the least significant bit (LSB) and `q[3]` being the most significant bit (MSB).
+
+Edge Cases:
+- If `areset` is asserted, it takes precedence over both `load` and `ena`.
+- The reset state of the shift register is explicitly defined as 4'b0000.
+
+Assumptions:
+- The behavior described assumes ideal conditions without race conditions or glitches.
+- All operations other than reset are synchronized to the positive edge of `clk`.
+</ENHANCED_SPEC>

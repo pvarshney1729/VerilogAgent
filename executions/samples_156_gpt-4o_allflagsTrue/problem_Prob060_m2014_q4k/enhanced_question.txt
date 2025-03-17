@@ -1,0 +1,28 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: A single-bit clock input signal. The module operates on the rising edge of this clock.
+  - resetn: A single-bit active-low synchronous reset input. A '0' value on this signal will reset the shift register.
+  - in: A single-bit data input for the shift register.
+- Output Ports:
+  - out: A single-bit output representing the most significant bit (MSB) of the shift register.
+
+Functional Description:
+- The module implements a 4-bit shift register using D flip-flops.
+- The shift register shifts data on the rising edge of the clk signal.
+- The resetn signal is a synchronous active-low reset. When resetn is '0' during a clock edge, all bits in the shift register are reset to '0'.
+- The initial state of all flip-flops in the shift register is '0'.
+- Data shifts from the least significant bit (LSB) to the most significant bit (MSB) with each positive clock edge.
+- The input 'in' is loaded into the LSB of the shift register on each clock cycle.
+- The output 'out' directly reflects the current MSB of the shift register.
+
+Signal Conventions:
+- Bit[0] refers to the least significant bit (LSB) of the shift register.
+- Bit[3] refers to the most significant bit (MSB) of the shift register.
+
+Edge Cases:
+- During synchronous reset (resetn = '0'), all bits in the shift register are cleared to '0' on the next rising clock edge.
+- If resetn is held low across multiple clock cycles, the shift register remains in the reset state with all bits '0'.
+</ENHANCED_SPEC>

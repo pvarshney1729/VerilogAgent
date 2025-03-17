@@ -1,0 +1,47 @@
+Generated Response:
+
+<REASONING>
+The task is to create a Verilog module named `TopModule` with a specific interface and functionality. The module has a 3-bit input vector `vec` and outputs the same vector as `outv`. Additionally, it splits the input vector into three separate 1-bit outputs: `o0`, `o1`, and `o2`. Each of these outputs corresponds to a specific bit position in the input vector. The implementation is straightforward as it involves direct assignments without any complex logic or state elements. The use of `logic` for port declarations is in line with modern Verilog practices, and the assignments are done using continuous assignment statements (`assign`), which are suitable for combinational logic.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [2:0] vec,
+    output logic [2:0] outv,
+    output logic o2,
+    output logic o1,
+    output logic o0
+);
+
+    // Assign the input vector to the output vector
+    assign outv = vec;
+
+    // Split the input vector into individual bits
+    assign o0 = vec[0];
+    assign o1 = vec[1];
+    assign o2 = vec[2];
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [2:0] vec,
+    output logic [2:0] outv,
+    output logic o2,
+    output logic o1,
+    output logic o0
+);
+
+    // Assign the input vector to the output vector
+    assign outv = vec;
+
+    // Split the input vector into individual bits
+    assign o0 = vec[0];
+    assign o1 = vec[1];
+    assign o2 = vec[2];
+
+endmodule

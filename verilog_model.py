@@ -334,15 +334,15 @@ class SimpleVerifier:
 
         
         generation_prompt = f"""
-        Your task is to generate test stimuli that will be used to verify its correctness for this design code: 
-        <DESIGN_CODE>
-        {base_response}
-        </DESIGN_CODE>
-
         The specification problem for which the design code was generated is: 
         <SPECIFICATION>
         {base_query}
         </SPECIFICATION
+
+        Your task is to generate test stimuli that will be used to verify its correctness for this design code: 
+        <DESIGN_CODE>
+        {base_response}
+        </DESIGN_CODE>
 
         <STIMULI GENERATION GUIDELINES>
         - The test stimuli should be generated as a json object. 
@@ -446,8 +446,6 @@ class SimpleVerifier:
             messages=messages,
             functions=[stimuli_dict],
             function_call={"name": "stimuli"},
-            temperature=0.2,
-            top_p=0.1
         )
 
         # Extract the response from the API

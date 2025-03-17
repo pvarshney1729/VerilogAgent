@@ -1,0 +1,199 @@
+Generated Response:
+
+<REASONING>
+To implement the Lemming's behavior as described, we need to create a finite state machine (FSM) with four states: WALK_LEFT, WALK_RIGHT, FALLING, and DIGGING. The FSM transitions between these states based on the input signals: bump_left, bump_right, ground, and dig. The state transitions are governed by the following rules:
+
+1. **WALK_LEFT State**:
+   - Transition to FALLING if ground is 0.
+   - Transition to DIGGING if dig is 1 and ground is 1.
+   - Transition to WALK_RIGHT if bump_left is 1.
+   - Remain in WALK_LEFT otherwise.
+
+2. **WALK_RIGHT State**:
+   - Transition to FALLING if ground is 0.
+   - Transition to DIGGING if dig is 1 and ground is 1.
+   - Transition to WALK_LEFT if bump_right is 1.
+   - Remain in WALK_RIGHT otherwise.
+
+3. **FALLING State**:
+   - Remain in FALLING if ground is 0.
+   - Return to the previous walking state (either WALK_LEFT or WALK_RIGHT) when ground is 1.
+
+4. **DIGGING State**:
+   - Transition to FALLING if ground is 0.
+   - Remain in DIGGING if ground is 1.
+
+The outputs are determined by the current state:
+- walk_left is high when in WALK_LEFT state.
+- walk_right is high when in WALK_RIGHT state.
+- aaah is high when in FALLING state.
+- digging is high when in DIGGING state.
+
+The FSM is reset asynchronously to the WALK_LEFT state when areset is high. All state transitions occur on the positive edge of the clock.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic bump_left,
+    input logic bump_right,
+    input logic ground,
+    input logic dig,
+    output logic walk_left,
+    output logic walk_right,
+    output logic aaah,
+    output logic digging
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        WALK_LEFT  = 2'b00,
+        WALK_RIGHT = 2'b01,
+        FALLING    = 2'b10,
+        DIGGING    = 2'b11
+    } state_t;
+
+    state_t state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (state)
+            WALK_LEFT: begin
+                if (!ground)
+                    next_state = FALLING;
+                else if (dig)
+                    next_state = DIGGING;
+                else if (bump_left)
+                    next_state = WALK_RIGHT;
+                else
+                    next_state = WALK_LEFT;
+            end
+            WALK_RIGHT: begin
+                if (!ground)
+                    next_state = FALLING;
+                else if (dig)
+                    next_state = DIGGING;
+                else if (bump_right)
+                    next_state = WALK_LEFT;
+                else
+                    next_state = WALK_RIGHT;
+            end
+            FALLING: begin
+                if (ground)
+                    next_state = (state == WALK_LEFT) ? WALK_LEFT : WALK_RIGHT;
+                else
+                    next_state = FALLING;
+            end
+            DIGGING: begin
+                if (!ground)
+                    next_state = FALLING;
+                else
+                    next_state = DIGGING;
+            end
+            default: next_state = WALK_LEFT;
+        endcase
+    end
+
+    // State update logic
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            state <= WALK_LEFT;
+        else
+            state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        walk_left = (state == WALK_LEFT);
+        walk_right = (state == WALK_RIGHT);
+        aaah = (state == FALLING);
+        digging = (state == DIGGING);
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic bump_left,
+    input logic bump_right,
+    input logic ground,
+    input logic dig,
+    output logic walk_left,
+    output logic walk_right,
+    output logic aaah,
+    output logic digging
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        WALK_LEFT  = 2'b00,
+        WALK_RIGHT = 2'b01,
+        FALLING    = 2'b10,
+        DIGGING    = 2'b11
+    } state_t;
+
+    state_t state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (state)
+            WALK_LEFT: begin
+                if (!ground)
+                    next_state = FALLING;
+                else if (dig)
+                    next_state = DIGGING;
+                else if (bump_left)
+                    next_state = WALK_RIGHT;
+                else
+                    next_state = WALK_LEFT;
+            end
+            WALK_RIGHT: begin
+                if (!ground)
+                    next_state = FALLING;
+                else if (dig)
+                    next_state = DIGGING;
+                else if (bump_right)
+                    next_state = WALK_LEFT;
+                else
+                    next_state = WALK_RIGHT;
+            end
+            FALLING: begin
+                if (ground)
+                    next_state = (state == WALK_LEFT) ? WALK_LEFT : WALK_RIGHT;
+                else
+                    next_state = FALLING;
+            end
+            DIGGING: begin
+                if (!ground)
+                    next_state = FALLING;
+                else
+                    next_state = DIGGING;
+            end
+            default: next_state = WALK_LEFT;
+        endcase
+    end
+
+    // State update logic
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            state <= WALK_LEFT;
+        else
+            state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        walk_left = (state == WALK_LEFT);
+        walk_right = (state == WALK_RIGHT);
+        aaah = (state == FALLING);
+        digging = (state == DIGGING);
+    end
+
+endmodule

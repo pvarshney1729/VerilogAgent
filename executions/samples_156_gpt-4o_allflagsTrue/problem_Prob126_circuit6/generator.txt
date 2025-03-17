@@ -1,0 +1,53 @@
+Generated Response:
+
+<REASONING>
+The task is to implement a combinational logic circuit that maps a 3-bit input `a` to a 16-bit output `q` based on a predefined set of values. The mapping is derived from the simulation waveforms provided. Since the circuit is purely combinational, we use an `always @(*)` block to describe the behavior, which ensures that the output `q` is updated immediately whenever the input `a` changes. The `case` statement is used to map each possible value of `a` to its corresponding output `q`. The default case handles any undefined states, although in this specific scenario, all 3-bit combinations are covered.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [2:0] a,
+    output logic [15:0] q
+);
+
+always @(*) begin
+    case (a)
+        3'b000: q = 16'h1232;
+        3'b001: q = 16'haee0;
+        3'b010: q = 16'h27d4;
+        3'b011: q = 16'h5a0e;
+        3'b100: q = 16'h2066;
+        3'b101: q = 16'h64ce;
+        3'b110: q = 16'hc526;
+        3'b111: q = 16'h2f19;
+        default: q = 16'hxxxx; // Undefined for values outside 0-7
+    endcase
+end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [2:0] a,
+    output logic [15:0] q
+);
+
+always @(*) begin
+    case (a)
+        3'b000: q = 16'h1232;
+        3'b001: q = 16'haee0;
+        3'b010: q = 16'h27d4;
+        3'b011: q = 16'h5a0e;
+        3'b100: q = 16'h2066;
+        3'b101: q = 16'h64ce;
+        3'b110: q = 16'hc526;
+        3'b111: q = 16'h2f19;
+        default: q = 16'hxxxx; // Undefined for values outside 0-7
+    endcase
+end
+
+endmodule

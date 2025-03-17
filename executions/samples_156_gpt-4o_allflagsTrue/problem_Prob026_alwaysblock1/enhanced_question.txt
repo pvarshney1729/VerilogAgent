@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire a;` // Single-bit input, representing operand 'a'.
+  - `input wire b;` // Single-bit input, representing operand 'b'.
+
+- Output Ports:
+  - `output wire out_assign;` // Single-bit output for AND operation using assign statement.
+  - `output wire out_alwaysblock;` // Single-bit output for AND operation using combinational always block.
+
+Functional Description:
+- The module `TopModule` will perform a logical AND operation on the inputs `a` and `b`.
+- The AND operation will be implemented in two ways:
+  1. Using an `assign` statement to drive the output `out_assign`.
+  2. Using a combinational `always` block to drive the output `out_alwaysblock`.
+
+Signal and Block Descriptions:
+- The `assign` statement should directly assign the result of the logical AND operation (`a & b`) to `out_assign`.
+- The `always` block should be a combinational logic block, sensitive to any changes in inputs `a` or `b`. It should compute the AND operation and assign the result to `out_alwaysblock`.
+
+Timing and Sensitivity:
+- Ensure that the `always` block is specified as a combinational block (`always @*` or `always @(a, b)`) to reflect changes immediately when inputs change.
+- There are no sequential elements; hence, there are no clock or reset conditions to specify.
+
+Edge Cases and Boundary Conditions:
+- As both inputs and outputs are single-bit, the only logical conditions to consider are the truth table for the AND operation:
+  - `a = 0, b = 0` results in `out_assign = 0`, `out_alwaysblock = 0`
+  - `a = 0, b = 1` results in `out_assign = 0`, `out_alwaysblock = 0`
+  - `a = 1, b = 0` results in `out_assign = 0`, `out_alwaysblock = 0`
+  - `a = 1, b = 1` results in `out_assign = 1`, `out_alwaysblock = 1`
+
+No additional initialization or special conditions apply, as all operations are purely combinational.
+</ENHANCED_SPEC>

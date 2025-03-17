@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock signal. All sequential elements are triggered on the rising edge of this clock.
+  - `reset`: 1-bit active-high synchronous reset signal. When asserted, all registers will be reset to their initial values.
+  - `in`: 8-bit input vector representing the incoming data stream. Bit indexing is such that `in[0]` is the least significant bit (LSB) and `in[7]` is the most significant bit (MSB).
+
+- Output Ports:
+  - `done`: 1-bit output signal. This signal is asserted high for one clock cycle immediately following the successful reception of the third byte of a message.
+
+Functional Description:
+The module implements a finite state machine (FSM) to detect boundaries of a PS/2 mouse protocol message within a continuous byte stream. Each message is exactly three bytes long, and the first byte of each message is uniquely identified by `in[3]` being equal to 1.
+
+FSM Operation:
+1. **Idle State**: Initially, or after a reset, the FSM remains in an idle state, discarding all bytes until a byte with `in[3] = 1` is detected.
+2. **Byte 1 Detected State**: Upon detecting a byte with `in[3] = 1`, the FSM transitions to a state indicating that the first byte of a message has been detected.
+3. **Byte 2 State**: Upon receiving the next byte, the FSM transitions to a state indicating that the second byte of a message has been received.
+4. **Byte 3 State**: Upon receiving the third byte, the FSM transitions to a state indicating the completion of a message. During this state transition, the `done` signal is asserted high for one clock cycle.
+5. **Return to Idle**: After signaling `done`, the FSM returns to the idle state to await the next message.
+
+Reset Behavior:
+- Upon the assertion of `reset`, the FSM returns to the Idle state, and any intermediate state information is cleared. This reset is synchronous with the clock.
+
+Edge Cases:
+- If a message boundary is incorrectly detected (i.e., an error in the stream), the FSM will continue to process bytes in sequence and will naturally return to the Idle state after three bytes have been processed.
+
+Assumptions:
+- The input byte stream is continuous and synchronous with the clock signal.
+- All operations are performed on the positive edge of the clock.
+- No assumptions are made about the data values of the second or third bytes in terms of `in[3]`.
+
+The module is designed to be robust against noise or incorrect byte alignments due to its continuous monitoring and FSM-based state transitions.
+</ENHANCED_SPEC>

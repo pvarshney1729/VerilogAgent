@@ -1,0 +1,54 @@
+Generated Response:
+
+```xml
+<REASONING>
+To implement the module `TopModule` that adheres to the given Karnaugh map, we need to derive the logic expression from the map. The Karnaugh map provides a visual representation of the truth table, allowing us to simplify the logic expression using grouping of 1s.
+
+The Karnaugh map is:
+              ab
+   cd   00  01  11  10
+   00 | 1 | 1 | 0 | 1 |
+   01 | 1 | 0 | 0 | 1 |
+   11 | 0 | 1 | 1 | 1 |
+   10 | 1 | 1 | 0 | 0 |
+
+From this map, we can derive the following simplified expression using grouping:
+- Group 1: (c'd') covers (00, 00), (00, 01), (00, 10)
+- Group 2: (cd'a') covers (01, 00), (01, 10)
+- Group 3: (cda) covers (11, 01), (11, 10), (11, 11)
+- Group 4: (c'da) covers (10, 00), (10, 01)
+
+Combining these groups, the simplified expression for `out` is:
+out = (c'd') + (cd'a') + (cda) + (c'da)
+
+This expression is implemented directly in the Verilog code using combinational logic.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input  logic a,
+    input  logic b,
+    input  logic c,
+    input  logic d,
+    output logic out
+);
+    // Implementing the logic derived from the Karnaugh map
+    assign out = (~c & ~d) | (c & ~d & ~a) | (c & d & a) | (~c & d & a);
+endmodule
+[DONE]
+</CODE>
+```
+
+Generated Code:
+
+module TopModule(
+    input  logic a,
+    input  logic b,
+    input  logic c,
+    input  logic d,
+    output logic out
+);
+    // Implementing the logic derived from the Karnaugh map
+    assign out = (~c & ~d) | (c & ~d & ~a) | (c & d & a) | (~c & d & a);
+endmodule

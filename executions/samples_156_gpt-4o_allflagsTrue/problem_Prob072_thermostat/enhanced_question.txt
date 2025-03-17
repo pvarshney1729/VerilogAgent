@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire mode      // Specifies the operational mode: 1 for heating, 0 for cooling
+  - input wire too_cold  // Indicates if the temperature is below the desired threshold (1 if true)
+  - input wire too_hot   // Indicates if the temperature is above the desired threshold (1 if true)
+  - input wire fan_on    // User request to turn on the fan (1 if requested)
+
+- Output Ports:
+  - output reg heater    // Controls the heater: 1 to turn on, 0 to turn off
+  - output reg aircon    // Controls the air conditioner: 1 to turn on, 0 to turn off
+  - output reg fan       // Controls the blower fan: 1 to turn on, 0 to turn off
+
+Functional Description:
+1. The module operates as a thermostat controller with two modes: heating and cooling.
+   - Heating Mode (mode = 1):
+     - Activate the heater (heater = 1) when it is too cold (too_cold = 1).
+     - Do not activate the air conditioner (aircon = 0) in this mode.
+   - Cooling Mode (mode = 0):
+     - Activate the air conditioner (aircon = 1) when it is too hot (too_hot = 1).
+     - Do not activate the heater (heater = 0) in this mode.
+
+2. The fan operation is determined by the state of the heater or air conditioner:
+   - Turn on the fan (fan = 1) whenever either the heater or air conditioner is active.
+   - Additionally, the fan can be turned on independently based on user input (fan_on = 1), even if both the heater and air conditioner are off.
+
+3. Ensure that at any time, either the heater or air conditioner is active, the fan is also active to facilitate air circulation.
+
+Initial Conditions and Reset Behavior:
+- All output signals (heater, aircon, fan) should initialize to 0.
+- There is no explicit reset signal; assume the initial state is the power-on state.
+
+Signal Relationships:
+- The operation of the fan depends on the states of heater, aircon, and fan_on.
+- Ensure no conflicting states occur between heater and aircon to avoid simultaneous activation.
+
+Edge Case Handling:
+- Ensure proper handling when all inputs are 0; outputs should remain at their default states unless user control (fan_on) dictates otherwise.
+- Handle transitions between modes and ensure outputs are updated accordingly with each change in input signals.
+</ENHANCED_SPEC>

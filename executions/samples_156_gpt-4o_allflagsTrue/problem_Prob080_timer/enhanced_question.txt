@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit, clock signal, positive edge-triggered
+  - load: 1-bit, control signal to load the counter
+  - data: 10-bit, unsigned input, specifies the number of clock cycles for the countdown
+- Output Port:
+  - tc: 1-bit, output signal indicating if the counter has reached zero (terminal count)
+
+Functional Description:
+The module implements a countdown timer using a down-counter. The timer loads a specified value and counts down to zero, asserting an output signal when it reaches zero.
+
+Operational Details:
+1. Clock and Edge Sensitivity:
+   - All sequential logic is sensitive to the positive edge of the clk signal.
+
+2. Counter Loading and Operation:
+   - When load = 1, the internal 10-bit counter (referred to as 'counter') is synchronously loaded with the value from the data input at the next positive clock edge.
+   - When load = 0, if the counter is non-zero, it decrements by 1 on each positive clock edge.
+   - If the counter reaches 0, it remains at 0 and does not decrement further until a new value is loaded.
+
+3. Output Signal (tc):
+   - The tc output is asserted (logic high) when the counter reaches 0, indicating the end of the countdown.
+   - The tc output remains asserted until the counter is reloaded with a new non-zero value.
+
+4. Initial Conditions:
+   - The internal counter and tc output should be initialized to 0 on reset.
+   - The specification does not define a reset signal, assuming the initial state as described.
+
+5. Signal Conventions:
+   - Bit indexing follows the convention where bit[0] is the least significant bit (LSB).
+
+Edge Cases and Considerations:
+- The load operation can occur at any time, even if the counter is actively counting down.
+- There are no asynchronous resets; assume synchronous behavior with the clock.
+
+Note:
+- The module utilizes a single D flip-flop for its operation, implementing the described functionality through sequential logic.
+</ENHANCED_SPEC>

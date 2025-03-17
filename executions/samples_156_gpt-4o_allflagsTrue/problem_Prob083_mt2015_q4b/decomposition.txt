@@ -1,0 +1,20 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with inputs x, y, and output z.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  x - input  y - output z",
+        "implementation": "module TopModule(\n    input x,\n    input y,\n    output reg z\n);\n\nalways @(*) begin\n    if (x == 0 && y == 0)\n        z = 1;\n    else if (x == 1 && y == 1)\n        z = 1;\n    else\n        z = 0;\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Analyze the waveform to determine the logic for output z based on inputs x and y.",
+        "source": "The module can be described by the following simulation waveform: time  x  y  z 0ns   0  0  1 5ns   0  0  1 10ns  0  0  1 15ns  0  0  1 20ns  0  0  1 25ns  1  0  0 30ns  1  0  0 35ns  0  1  0 40ns  0  1  0 45ns  1  1  1 50ns  1  1  1 55ns  0  0  1 60ns  0  1  0 65ns  0  1  0 70ns  1  1  1 75ns  0  1  0 80ns  0  1  0 85ns  0  1  0 90ns  1  0  0",
+        "implementation": "assign z = (x & y) | (~x & ~y);"
+    },
+    {
+        "id": "3",
+        "content": "Implement the logic for output z based on the analysis of the waveform.",
+        "source": "The module can be described by the following simulation waveform: time  x  y  z 0ns   0  0  1 5ns   0  0  1 10ns  0  0  1 15ns  0  0  1 20ns  0  0  1 25ns  1  0  0 30ns  1  0  0 35ns  0  1  0 40ns  0  1  0 45ns  1  1  1 50ns  1  1  1 55ns  0  0  1 60ns  0  1  0 65ns  0  1  0 70ns  1  1  1 75ns  0  1  0 80ns  0  1  0 85ns  0  1  0 90ns  1  0  0",
+        "implementation": "assign z = (~x & ~y) | (x & y);"
+    }
+]

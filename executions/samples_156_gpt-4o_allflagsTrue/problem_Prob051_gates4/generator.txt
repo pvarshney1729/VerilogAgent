@@ -1,0 +1,47 @@
+Generated Response:
+
+<REASONING>
+The task is to implement a combinational logic module named `TopModule` with a 4-bit input and three 1-bit outputs. The outputs are derived using basic logic gates: AND, OR, and XOR. Since the operations are purely combinational, we use `assign` statements to directly map the logic operations to the outputs. The guidelines specify using `logic` for port declarations and to avoid using `wire` or `reg`. Since the operations are straightforward bitwise operations on the input vector, no `always` block is necessary. The module does not require a clock or reset signal as it is purely combinational.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [3:0] in,
+    output logic out_and,
+    output logic out_or,
+    output logic out_xor
+);
+
+    // Combinational logic for 4-input AND gate
+    assign out_and = in[3] & in[2] & in[1] & in[0];
+
+    // Combinational logic for 4-input OR gate
+    assign out_or = in[3] | in[2] | in[1] | in[0];
+
+    // Combinational logic for 4-input XOR gate
+    assign out_xor = in[3] ^ in[2] ^ in[1] ^ in[0];
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [3:0] in,
+    output logic out_and,
+    output logic out_or,
+    output logic out_xor
+);
+
+    // Combinational logic for 4-input AND gate
+    assign out_and = in[3] & in[2] & in[1] & in[0];
+
+    // Combinational logic for 4-input OR gate
+    assign out_or = in[3] | in[2] | in[1] | in[0];
+
+    // Combinational logic for 4-input XOR gate
+    assign out_xor = in[3] ^ in[2] ^ in[1] ^ in[0];
+
+endmodule

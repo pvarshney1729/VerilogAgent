@@ -1,0 +1,129 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the given specifications and guidelines:
+
+1. **Module Interface**: The module is defined with the specified inputs (`clk`, `reset`, `w`) and output (`z`). All signals are declared as `logic` to adhere to the coding conventions.
+
+2. **State Encoding**: The FSM states are encoded using a 3-bit `enum` type, which provides a clear and readable representation of the states: `STATE_A`, `STATE_B`, `STATE_C`, `STATE_D`, `STATE_E`, and `STATE_F`.
+
+3. **State Flip-Flops**: The state register (`current_state`) is updated on the positive edge of the clock. A synchronous active-high reset is implemented, which resets the FSM to `STATE_A`.
+
+4. **State Transition Logic**: An `always @(*)` block is used to determine the `next_state` based on the `current_state` and input `w`. This block implements the state transition table as specified.
+
+5. **Output Logic**: The output `z` is determined based on the `current_state`. It is set to `1` in states `E` and `F`, and `0` otherwise. This logic is implemented in an `always @(*)` block for clarity and adherence to the guidelines.
+
+6. **Guidelines Compliance**: The implementation follows the guidelines by using `logic` for all signals, employing `always @(*)` for combinational logic, and ensuring the synchronous reset is correctly implemented without including `reset` in the sensitivity list of sequential logic.
+
+7. **Code Structure**: The code is structured with separate always blocks for state transition and state flip-flops, as specified. The output logic is also separated for clarity.
+
+Overall, the implementation is designed to be clear, maintainable, and compliant with the given specifications and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic w,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        STATE_A = 3'b000,
+        STATE_B = 3'b001,
+        STATE_C = 3'b010,
+        STATE_D = 3'b011,
+        STATE_E = 3'b100,
+        STATE_F = 3'b101
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State flip-flops with synchronous active-high reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_A;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: next_state = (w) ? STATE_B : STATE_A;
+            STATE_B: next_state = (w) ? STATE_C : STATE_D;
+            STATE_C: next_state = (w) ? STATE_E : STATE_D;
+            STATE_D: next_state = (w) ? STATE_F : STATE_A;
+            STATE_E: next_state = (w) ? STATE_E : STATE_D;
+            STATE_F: next_state = (w) ? STATE_C : STATE_D;
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_E, STATE_F: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic w,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        STATE_A = 3'b000,
+        STATE_B = 3'b001,
+        STATE_C = 3'b010,
+        STATE_D = 3'b011,
+        STATE_E = 3'b100,
+        STATE_F = 3'b101
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State flip-flops with synchronous active-high reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_A;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: next_state = (w) ? STATE_B : STATE_A;
+            STATE_B: next_state = (w) ? STATE_C : STATE_D;
+            STATE_C: next_state = (w) ? STATE_E : STATE_D;
+            STATE_D: next_state = (w) ? STATE_F : STATE_A;
+            STATE_E: next_state = (w) ? STATE_E : STATE_D;
+            STATE_F: next_state = (w) ? STATE_C : STATE_D;
+            default: next_state = STATE_A;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_E, STATE_F: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule

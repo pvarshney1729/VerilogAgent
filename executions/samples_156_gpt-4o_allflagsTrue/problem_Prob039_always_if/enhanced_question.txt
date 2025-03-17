@@ -1,0 +1,20 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule`, and it has the following interface. All input and output ports are single-bit signals, and their behavior will be defined as follows:
+
+- `input wire a`: A single-bit input signal.
+- `input wire b`: A single-bit input signal.
+- `input wire sel_b1`: A single-bit input signal used as a selector.
+- `input wire sel_b2`: A single-bit input signal used as a selector.
+- `output wire out_assign`: A single-bit output signal that will be derived using an `assign` statement.
+- `output reg out_always`: A single-bit output signal that will be derived using a procedural `if` statement.
+
+The functional behavior of the module is to implement a 2-to-1 multiplexer as follows:
+- The output will select the input `b` if both `sel_b1` and `sel_b2` are asserted (i.e., both are logic high).
+- If either `sel_b1` or `sel_b2` is not asserted (logic low), the output will select the input `a`.
+
+This selection logic is to be implemented twice:
+1. Using continuous assignment with an `assign` statement to determine the value of `out_assign`.
+2. Using a procedural block (within an `always` block) to determine the value of `out_always`.
+
+Ensure that the procedural block uses an `if-else` construct to maintain clarity in operation. As this is a combinational logic design, there are no clocked elements, and thus no reset conditions or initial values are applicable. The logic should be free from race conditions and should handle input changes instantaneously as typical for combinational logic.
+</ENHANCED_SPEC>

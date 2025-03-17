@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: Clock signal. The module is triggered on the positive edge of this clock.
+  - `input wire reset`: Active high, synchronous reset signal. Resets the counter on the next positive clock edge when high.
+
+- Output Ports:
+  - `output reg [3:0] q`: 4-bit output representing the current count value, with `q[3]` as the most significant bit (MSB) and `q[0]` as the least significant bit (LSB).
+
+Functional Description:
+- The module implements a decade counter that counts from 1 to 10, inclusively.
+- On each positive edge of the clock, if the reset signal is high, the counter is reset to 4'b0001 (representing the decimal value 1).
+- If the reset signal is low, the counter increments its value by 1 after each clock cycle until it reaches 4'b1010 (representing the decimal value 10).
+- After reaching 10, the counter should wrap around and continue counting from 1 on the next clock cycle.
+
+Reset Behavior:
+- The reset is synchronous with the clock; hence, the counter resets on the positive clock edge when `reset` is high.
+- The initial value of the counter on reset is 4'b0001.
+
+Edge Cases and Boundaries:
+- The output `q` should never represent a value outside 1 to 10 due to the wrap-around behavior when the count reaches 10.
+- Ensure that the counter properly wraps from 10 back to 1, maintaining the decade count cycle.
+
+Note:
+- All input and output ports are 1-bit wide unless explicitly specified otherwise.
+- The design assumes the environment provides a stable clock and reset signals as per the given conditions.
+</ENHANCED_SPEC>

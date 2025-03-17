@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input wire clk: Clock signal triggering sequential logic on the positive edge.
+- input wire reset: Active-high, synchronous reset signal. When asserted, all state elements are reset to their initial state.
+- input wire data: Input bit stream to be monitored for the sequence.
+- output reg start_shifting: Output signal set high upon detection of the sequence 1101, remains high until reset.
+
+Specifications:
+1. The module implements a finite-state machine (FSM) that detects the sequence '1101' in the input bit stream 'data'.
+2. The FSM shall transition through states that represent partial matches of the sequence '1101'. These states include:
+   - Initial state (IDLE): No match yet.
+   - State S1: Detected '1'.
+   - State S2: Detected '11'.
+   - State S3: Detected '110'.
+   - State S4: Detected '1101'.
+
+3. State Transitions:
+   - From IDLE, move to S1 if input 'data' is '1'.
+   - From S1, move to S2 if input 'data' is '1', otherwise return to IDLE.
+   - From S2, move to S3 if input 'data' is '0', otherwise remain in S2.
+   - From S3, move to S4 if input 'data' is '1', otherwise return to IDLE.
+   - Remain in S4 indefinitely once reached, until reset is asserted.
+
+4. Output Behavior:
+   - The 'start_shifting' output is set to '1' upon reaching state S4.
+   - 'start_shifting' remains '1' until a reset occurs.
+
+5. Reset Behavior:
+   - On the assertion of 'reset', the FSM returns to the IDLE state, and 'start_shifting' is set to '0'.
+
+6. Edge Cases:
+   - If 'reset' is asserted during any state, the FSM transitions immediately to the IDLE state, and 'start_shifting' is cleared to '0'.
+   - The reset signal is synchronous and must be asserted at the positive edge of 'clk' to take effect.
+
+Note:
+- All operations are assumed to have precedence from left to right unless parentheses dictate otherwise.
+- Bit[0] refers to the least significant bit (LSB) in any multi-bit operations, though all ports are single-bit in this specification.
+</ENHANCED_SPEC>

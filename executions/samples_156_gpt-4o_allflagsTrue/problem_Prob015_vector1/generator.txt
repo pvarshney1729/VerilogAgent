@@ -1,0 +1,39 @@
+Generated Response:
+
+<REASONING>
+The task is to implement a combinational logic module named `TopModule` that splits a 16-bit input into two 8-bit outputs. The input is a half-word, and the outputs are the upper and lower bytes of this input. The module does not require any sequential logic or reset functionality, as it is purely combinational. The guidelines and conventions provided are mostly applicable to sequential logic, which is not needed here. Therefore, the implementation will use continuous assignment statements to map the appropriate bits from the input to the outputs. The use of `logic` for port declarations is in line with modern Verilog practices, although it is not strictly necessary for this simple combinational logic.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [15:0] in,
+    output logic [7:0] out_hi,
+    output logic [7:0] out_lo
+);
+
+    // Assign the upper byte of 'in' to 'out_hi'
+    assign out_hi = in[15:8];
+
+    // Assign the lower byte of 'in' to 'out_lo'
+    assign out_lo = in[7:0];
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [15:0] in,
+    output logic [7:0] out_hi,
+    output logic [7:0] out_lo
+);
+
+    // Assign the upper byte of 'in' to 'out_hi'
+    assign out_hi = in[15:8];
+
+    // Assign the lower byte of 'in' to 'out_lo'
+    assign out_lo = in[7:0];
+
+endmodule

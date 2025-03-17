@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+This module is designed to function as a single stage within an n-bit shift register circuit. Below is the refined specification for the module interface and behavior:
+
+Interface:
+- Input Ports:
+  - `input clk`: A single-bit clock signal. All sequential logic is triggered on the positive edge of this clock.
+  - `input w`: A single-bit data input from the previous stage of the shift register.
+  - `input R`: A single-bit data input representing the value to be loaded into the register when loading is enabled.
+  - `input E`: A single-bit enable signal for shifting. When high, the shift operation is enabled.
+  - `input L`: A single-bit load signal. When asserted high, the module loads the value from R into the register.
+  
+- Output Port:
+  - `output Q`: A single-bit output representing the current state of the register, which is the data passed to the next stage in the shift register.
+
+Behavior:
+1. The register within this module is a D flip-flop, storing a single bit of data.
+2. The flip-flop is triggered by the positive edge of the `clk` signal, making it synchronous.
+3. The register supports two operations:
+   - **Load Operation**: When `L` is high, the value on `R` is loaded into the output `Q` on the next positive clock edge.
+   - **Shift Operation**: When `L` is low and `E` is high, the value on `w` is shifted into the register on the next positive clock edge, updating `Q`.
+4. If both `L` and `E` are low, the output `Q` retains its previous state.
+5. At each clock cycle, the precedence of operations is such that the load operation takes priority over the shift operation.
+6. The module does not have an explicit reset; thus, the initial power-up state of `Q` is undefined unless specified by the surrounding system.
+
+Edge Cases:
+- If both `L` and `E` are asserted simultaneously, the load operation (`L`) takes precedence, and `Q` will be set to the value of `R`.
+
+Note: The module assumes that the inputs `L`, `E`, `R`, and `w` are stable before the clock edge to avoid race conditions.
+</ENHANCED_SPEC>

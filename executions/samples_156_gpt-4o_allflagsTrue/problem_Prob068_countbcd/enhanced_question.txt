@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input: clk (1 bit) - Clock signal. All sequential logic operations are triggered on the positive edge of this clock.
+- Input: reset (1 bit) - Synchronous active-high reset signal. When high, the counter will reset to its initial state on the next positive clock edge.
+- Output: ena (3 bits) - Enable signals for the upper three BCD digits. Each bit corresponds to one of the upper three BCD digits, indicating when that digit should increment.
+  - ena[0] corresponds to the tens digit (q[7:4])
+  - ena[1] corresponds to the hundreds digit (q[11:8])
+  - ena[2] corresponds to the thousands digit (q[15:12])
+- Output: q (16 bits) - The BCD counter value where:
+  - q[3:0] represents the ones digit
+  - q[7:4] represents the tens digit
+  - q[11:8] represents the hundreds digit
+  - q[15:12] represents the thousands digit
+
+Counter Functionality:
+- The module implements a 4-digit BCD counter.
+- Each digit of the counter is a 4-bit BCD value.
+- The BCD digits increment from 0 to 9 and then reset to 0, carrying over to the next higher digit.
+
+Reset Behavior:
+- When reset is asserted (high), the entire 16-bit output q is set to 0 on the next positive edge of clk.
+- The ena outputs will be undefined during reset because the counter is initialized to 0.
+
+Operation:
+- On every positive clock edge, if the reset is not asserted, the ones digit (q[3:0]) increments by 1.
+- When a digit reaches the value of 10 (binary 1010), it resets to 0, and the corresponding ena signal is asserted to indicate the need to increment the next higher BCD digit.
+- The behavior cascades through the tens, hundreds, and thousands digits accordingly, using the ena signals.
+
+Edge Cases:
+- If the entire counter reaches 9999 (decimal), the next increment will reset the counter to 0000 (decimal), and all ena signals will be asserted sequentially due to the carry-over effect.
+
+Note:
+- Ensure that all sequential elements are initialized appropriately to prevent undefined states or race conditions.
+</ENHANCED_SPEC>

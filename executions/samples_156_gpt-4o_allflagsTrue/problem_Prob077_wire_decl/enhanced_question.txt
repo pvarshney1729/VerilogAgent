@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input Ports:
+  - `input wire a` : 1-bit input signal.
+  - `input wire b` : 1-bit input signal.
+  - `input wire c` : 1-bit input signal.
+  - `input wire d` : 1-bit input signal.
+
+- Output Ports:
+  - `output wire out` : 1-bit output signal.
+  - `output wire out_n` : 1-bit output signal that is the logical NOT of `out`.
+
+Circuit Description:
+1. Intermediate Signal Definitions:
+   - `wire and1_out` : Output of the AND gate connected to inputs `a` and `b`.
+   - `wire and2_out` : Output of the AND gate connected to inputs `c` and `d`.
+
+2. Layer 1 - AND Gates:
+   - `and1_out = a AND b` : Connect inputs `a` and `b` to the first AND gate.
+   - `and2_out = c AND d` : Connect inputs `c` and `d` to the second AND gate.
+
+3. Layer 2 - OR Gate:
+   - `out = and1_out OR and2_out` : Connect the outputs of the two AND gates to an OR gate to produce `out`.
+
+4. Inversion:
+   - `out_n = NOT out` : The output `out_n` is the inverted value of `out`.
+
+Design Considerations:
+- Ensure that each wire is driven by only one source and can fan out to multiple inputs.
+- All inputs and outputs are single-bit signals, and no additional signal width specifications are required.
+- The implementation is purely combinational logic with no sequential elements or timing considerations.
+- Ensure correct logic operation under all input combinations.
+
+Edge Cases and Input Boundaries:
+- The implementation must function correctly for all 16 possible input combinations of `a`, `b`, `c`, and `d`.
+- The output `out` will be high if either pair of inputs (`a AND b` or `c AND d`) is high, otherwise it will be low.
+- The output `out_n` will always be the logical complement of `out`.
+</ENHANCED_SPEC>

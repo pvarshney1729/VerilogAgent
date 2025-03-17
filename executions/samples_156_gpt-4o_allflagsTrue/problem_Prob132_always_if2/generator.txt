@@ -1,0 +1,59 @@
+Generated Response:
+
+<REASONING>
+The original module had a bug where the outputs `shut_off_computer` and `keep_driving` were not reset when their conditions were not met. This could lead to incorrect behavior if the conditions change over time. To fix this, I ensured that both `shut_off_computer` and `keep_driving` are explicitly set to 0 when their respective conditions are not met. This ensures that the outputs are always driven to a known state, preventing any potential latching of previous values.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input      cpu_overheated,
+    output reg shut_off_computer,
+    input      arrived,
+    input      gas_tank_empty,
+    output reg keep_driving
+);
+
+    always @(*) begin
+        if (cpu_overheated)
+            shut_off_computer = 1;
+        else
+            shut_off_computer = 0; // Ensure shut_off_computer is reset when not overheated
+    end
+
+    always @(*) begin
+        if (~arrived)
+            keep_driving = ~gas_tank_empty;
+        else
+            keep_driving = 0; // Ensure keep_driving is reset when arrived
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input      cpu_overheated,
+    output reg shut_off_computer,
+    input      arrived,
+    input      gas_tank_empty,
+    output reg keep_driving
+);
+
+    always @(*) begin
+        if (cpu_overheated)
+            shut_off_computer = 1;
+        else
+            shut_off_computer = 0; // Ensure shut_off_computer is reset when not overheated
+    end
+
+    always @(*) begin
+        if (~arrived)
+            keep_driving = ~gas_tank_empty;
+        else
+            keep_driving = 0; // Ensure keep_driving is reset when arrived
+    end
+
+endmodule

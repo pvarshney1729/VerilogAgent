@@ -1,0 +1,159 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the specification for a gshare branch predictor with a 7-bit PC and a 7-bit global history. The module uses a 128-entry table of two-bit saturating counters (PHT) and a 7-bit global branch history register. The prediction and training logic is implemented as follows:
+
+1. **Global History Register**: A 7-bit register `global_history` is used to maintain the global branch history. It is updated based on the prediction and training operations.
+
+2. **Pattern History Table (PHT)**: A 128-entry table of two-bit saturating counters is used to store the prediction states. Each entry is initialized to a weakly not taken state (2'b01).
+
+3. **Index Calculation**: The index for accessing the PHT is calculated by XORing the 7-bit PC with the 7-bit global history for both prediction and training.
+
+4. **Prediction Logic**: When `predict_valid` is high, the module outputs the predicted branch direction (`predict_taken`) based on the current state of the PHT entry indexed by `predict_index`. The current global history is also output as `predict_history`.
+
+5. **Training Logic**: When `train_valid` is high, the PHT entry indexed by `train_index` is updated based on the actual branch outcome (`train_taken`). If the branch was mispredicted (`train_mispredicted`), the global history is recovered to the state immediately after the mispredicting branch. Otherwise, the global history is updated with the actual branch outcome.
+
+6. **Reset Logic**: The module uses an asynchronous active-high reset (`areset`) to initialize the global history and PHT entries.
+
+7. **Priority Handling**: If both training and prediction occur in the same cycle, training takes precedence. The prediction uses the PHT state before training because training updates occur on the next positive clock edge.
+
+The implementation adheres to the coding conventions by using `logic` for all signals, using `always @(*)` for combinational logic, and ensuring all numeric constants have a size greater than zero.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic predict_valid,
+    input logic [6:0] predict_pc,
+    output logic predict_taken,
+    output logic [6:0] predict_history,
+    input logic train_valid,
+    input logic train_taken,
+    input logic train_mispredicted,
+    input logic [6:0] train_history,
+    input logic [6:0] train_pc
+);
+
+    // 7-bit global branch history register
+    logic [6:0] global_history;
+
+    // 128-entry table of two-bit saturating counters
+    logic [1:0] PHT [0:127];
+
+    // Calculate indices for prediction and training
+    logic [6:0] predict_index;
+    logic [6:0] train_index;
+
+    assign predict_index = predict_pc ^ global_history;
+    assign train_index = train_pc ^ train_history;
+
+    // Prediction logic
+    assign predict_taken = PHT[predict_index][1];
+    assign predict_history = global_history;
+
+    // Sequential logic for updating global history and PHT
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            global_history <= 7'b0;
+            // Initialize PHT entries to weakly not taken (01)
+            for (int i = 0; i < 128; i++) begin
+                PHT[i] <= 2'b01;
+            end
+        end else begin
+            if (train_valid) begin
+                // Update PHT based on training
+                if (train_taken) begin
+                    if (PHT[train_index] != 2'b11) begin
+                        PHT[train_index] <= PHT[train_index] + 1;
+                    end
+                end else begin
+                    if (PHT[train_index] != 2'b00) begin
+                        PHT[train_index] <= PHT[train_index] - 1;
+                    end
+                end
+                // Update global history if mispredicted
+                if (train_mispredicted) begin
+                    global_history <= train_history;
+                end else begin
+                    global_history <= {global_history[5:0], train_taken};
+                end
+            end else if (predict_valid) begin
+                // Update global history for prediction
+                global_history <= {global_history[5:0], predict_taken};
+            end
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic predict_valid,
+    input logic [6:0] predict_pc,
+    output logic predict_taken,
+    output logic [6:0] predict_history,
+    input logic train_valid,
+    input logic train_taken,
+    input logic train_mispredicted,
+    input logic [6:0] train_history,
+    input logic [6:0] train_pc
+);
+
+    // 7-bit global branch history register
+    logic [6:0] global_history;
+
+    // 128-entry table of two-bit saturating counters
+    logic [1:0] PHT [0:127];
+
+    // Calculate indices for prediction and training
+    logic [6:0] predict_index;
+    logic [6:0] train_index;
+
+    assign predict_index = predict_pc ^ global_history;
+    assign train_index = train_pc ^ train_history;
+
+    // Prediction logic
+    assign predict_taken = PHT[predict_index][1];
+    assign predict_history = global_history;
+
+    // Sequential logic for updating global history and PHT
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            global_history <= 7'b0;
+            // Initialize PHT entries to weakly not taken (01)
+            for (int i = 0; i < 128; i++) begin
+                PHT[i] <= 2'b01;
+            end
+        end else begin
+            if (train_valid) begin
+                // Update PHT based on training
+                if (train_taken) begin
+                    if (PHT[train_index] != 2'b11) begin
+                        PHT[train_index] <= PHT[train_index] + 1;
+                    end
+                end else begin
+                    if (PHT[train_index] != 2'b00) begin
+                        PHT[train_index] <= PHT[train_index] - 1;
+                    end
+                end
+                // Update global history if mispredicted
+                if (train_mispredicted) begin
+                    global_history <= train_history;
+                end else begin
+                    global_history <= {global_history[5:0], train_taken};
+                end
+            end else if (predict_valid) begin
+                // Update global history for prediction
+                global_history <= {global_history[5:0], predict_taken};
+            end
+        end
+    end
+
+endmodule

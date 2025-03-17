@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input: 
+  - `ring`: 1-bit unsigned input. This signal indicates an incoming call.
+  - `vibrate_mode`: 1-bit unsigned input. This signal indicates whether the phone is in vibrate mode.
+
+- Output:
+  - `ringer`: 1-bit unsigned output. This signal controls the phone's ringer.
+  - `motor`: 1-bit unsigned output. This signal controls the phone's vibration motor.
+
+Functional Description:
+- The module controls the behavior of a cellphone's ringer and vibration motor based on incoming call status and vibrate mode settings.
+- When an incoming call is detected (`ring = 1`), the module must activate either the `ringer` or the `motor`, but not both, ensuring mutual exclusivity.
+
+Operational Logic:
+1. If `vibrate_mode` is asserted (`vibrate_mode = 1`), the `motor` output should be activated (`motor = 1`) and the `ringer` output should remain deactivated (`ringer = 0`).
+2. If `vibrate_mode` is not asserted (`vibrate_mode = 0`), the `ringer` output should be activated (`ringer = 1`) and the `motor` output should remain deactivated (`motor = 0`).
+
+- Default State: When `ring = 0`, both `ringer` and `motor` outputs should be deactivated (`ringer = 0`, `motor = 0`).
+
+Edge Cases:
+- Ensure that at no time both `ringer` and `motor` are active simultaneously under any input conditions.
+- The implementation should not contain sequential logic or state-holding elements, as the described functionality is purely combinational based on the given inputs.
+
+Bit Indexing:
+- All bits are indexed from 0, where `bit[0]` is the least significant bit.
+
+Reset/Initialization: 
+- Since the module is purely combinational, no reset mechanism is required, and no initial values need to be defined for outputs as they depend directly on inputs at all times.
+</ENHANCED_SPEC>

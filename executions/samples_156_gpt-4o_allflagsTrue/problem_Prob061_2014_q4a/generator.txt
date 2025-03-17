@@ -1,0 +1,61 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a single-bit register that can either load a value or shift a value based on control signals. The module has a clock input `clk` that triggers the sequential logic on its positive edge. The control signals are `L` for load and `E` for enable shift. The data inputs are `R` for the load value and `w` for the shift input. The output `Q` holds the current state of the register.
+
+1. **Module Declaration**: We declare the module with the specified input and output ports. All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **Sequential Logic**: We use an `always @(posedge clk)` block to ensure that the logic is triggered on the positive edge of the clock. This block will handle the loading and shifting operations.
+
+3. **Load Operation**: If the load signal `L` is asserted (high), the register should load the value from `R` into `Q`. This operation takes precedence over the shift operation.
+
+4. **Shift Operation**: If the load signal `L` is not asserted and the enable shift signal `E` is asserted, the register should shift the value from `w` into `Q`.
+
+5. **Output Retention**: If neither `L` nor `E` is asserted, the output `Q` retains its previous state.
+
+By following these steps, we ensure that the module behaves as a single stage in a shift register, with the ability to load or shift data based on the control signals.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic w,
+    input  logic R,
+    input  logic E,
+    input  logic L,
+    output logic Q
+);
+
+    always @(posedge clk) begin
+        if (L) begin
+            Q <= R; // Load operation
+        end else if (E) begin
+            Q <= w; // Shift operation
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic w,
+    input  logic R,
+    input  logic E,
+    input  logic L,
+    output logic Q
+);
+
+    always @(posedge clk) begin
+        if (L) begin
+            Q <= R; // Load operation
+        end else if (E) begin
+            Q <= w; // Shift operation
+        end
+    end
+
+endmodule

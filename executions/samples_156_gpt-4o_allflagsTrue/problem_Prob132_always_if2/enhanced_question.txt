@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Specification for the TopModule:
+
+Module Name: TopModule
+
+Ports:
+- Input: 
+  - `cpu_overheated`: 1-bit, active-high, indicates whether the CPU is overheated. 
+  - `arrived`: 1-bit, active-high, indicates whether the destination has been reached.
+  - `gas_tank_empty`: 1-bit, active-high, indicates whether the gas tank is empty.
+- Output:
+  - `shut_off_computer`: 1-bit, active-high, indicates whether to shut off the computer.
+  - `keep_driving`: 1-bit, active-high, indicates whether to keep driving.
+
+Behavior:
+1. The modules `shut_off_computer` and `keep_driving` signals are driven by combinational logic.
+2. `shut_off_computer` should be set high if and only if `cpu_overheated` is high.
+3. `keep_driving` should be set high if and only if `arrived` is low (not arrived) and `gas_tank_empty` is low (not empty).
+
+Logical Operations:
+- The condition for `shut_off_computer` is directly dependent on the `cpu_overheated` input.
+- The condition for `keep_driving` is determined by a logical AND between the negation of `arrived` and the negation of `gas_tank_empty`.
+
+Edge Cases:
+- If `cpu_overheated` is low, `shut_off_computer` must be low.
+- If `arrived` is high, `keep_driving` must be low, regardless of the `gas_tank_empty` state.
+- If `arrived` is low and `gas_tank_empty` is high, `keep_driving` must be low.
+
+Ensure that all conditions are mutually exclusive and take precedence as per the logical operation definitions above. No race conditions or undefined states should occur in the implementation.
+</ENHANCED_SPEC>

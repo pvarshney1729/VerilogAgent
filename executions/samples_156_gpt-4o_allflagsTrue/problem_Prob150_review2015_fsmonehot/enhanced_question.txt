@@ -1,0 +1,71 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Inputs:
+  - `input wire d`: 1-bit input signal.
+  - `input wire done_counting`: 1-bit input signal indicating if counting is complete.
+  - `input wire ack`: 1-bit input signal for acknowledgment.
+  - `input wire [9:0] state`: 10-bit input representing the current state of the state machine.
+
+- Outputs:
+  - `output wire B3_next`: 1-bit output, asserts when the next state is B3.
+  - `output wire S_next`: 1-bit output, asserts when the next state is S.
+  - `output wire S1_next`: 1-bit output, asserts when the next state is S1.
+  - `output wire Count_next`: 1-bit output, asserts when the next state is Count.
+  - `output wire Wait_next`: 1-bit output, asserts when the next state is Wait.
+  - `output wire done`: 1-bit output signal, asserts in the Wait state.
+  - `output wire counting`: 1-bit output signal, asserts in the Count state.
+  - `output wire shift_ena`: 1-bit output signal, asserts in states B0, B1, B2, and B3.
+
+State Machine Definition:
+- Type: Moore state machine with 3 inputs (`d`, `done_counting`, `ack`) and 3 outputs (`shift_ena`, `counting`, `done`).
+- Reset Behavior: On reset, the state machine initializes to the "S" state. Reset is asynchronous.
+- State Encoding: One-hot encoding is used. The encoding for each state is as follows:
+  - S    = 10'b0000000001
+  - S1   = 10'b0000000010
+  - S11  = 10'b0000000100
+  - S110 = 10'b0000001000
+  - B0   = 10'b0000010000
+  - B1   = 10'b0000100000
+  - B2   = 10'b0001000000
+  - B3   = 10'b0010000000
+  - Count= 10'b0100000000
+  - Wait = 10'b1000000000
+
+State Transitions:
+- From state S:
+  - If `d == 0`, remain in S.
+  - If `d == 1`, transition to S1.
+- From state S1:
+  - If `d == 0`, transition to S.
+  - If `d == 1`, transition to S11.
+- From state S11:
+  - If `d == 0`, transition to S110.
+  - If `d == 1`, remain in S11.
+- From state S110:
+  - If `d == 0`, transition to S.
+  - If `d == 1`, transition to B0.
+- From state B0 to B1, B1 to B2, B2 to B3, and B3 to Count:
+  - Always transition to the next state.
+- From state Count:
+  - If `done_counting == 0`, remain in Count.
+  - If `done_counting == 1`, transition to Wait.
+- From state Wait:
+  - If `ack == 0`, remain in Wait.
+  - If `ack == 1`, transition to S.
+
+Output Logic:
+- `shift_ena`: Asserted (1) in states B0, B1, B2, and B3.
+- `counting`: Asserted (1) in the Count state.
+- `done`: Asserted (1) in the Wait state.
+
+Next-State Logic:
+- `B3_next`: Asserted if the next state is B3.
+- `S_next`: Asserted if the next state is S.
+- `S1_next`: Asserted if the next state is S1.
+- `Count_next`: Asserted if the next state is Count.
+- `Wait_next`: Asserted if the next state is Wait.
+
+All flip-flops and registers should have explicitly defined initial values corresponding to the reset state, which is the "S" state.
+</ENHANCED_SPEC>

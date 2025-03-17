@@ -1,0 +1,26 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, enable, S, A, B, C, and output port Z.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  clk,\n    input  enable,\n    input  S,\n    input  A,\n    input  B,\n    input  C,\n    output reg Z\n);\n\n    reg [7:0] Q; // 8-bit shift register\n\n    always @(posedge clk) begin\n        if (enable) begin\n            Q <= {Q[6:0], S}; // Shift in the new bit S\n        end\n    end\n\n    always @(*) begin\n        case ({A, B, C})\n            3'b000: Z = Q[0];\n            3'b001: Z = Q[1];\n            3'b010: Z = Q[2];\n            3'b011: Z = Q[3];\n            3'b100: Z = Q[4];\n            3'b101: Z = Q[5];\n            3'b110: Z = Q[6];\n            3'b111: Z = Q[7];\n            default: Z = 1'b0; // Default case, though not strictly necessary\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement an 8-bit shift register using D-type flip-flops. The input to the shift register should be S, and the outputs should be labeled Q[0] to Q[7].",
+        "source": "First, create an 8-bit shift register with 8 D-type flip-flops. Label the flip-flop outputs from Q[0]...Q[7]. The shift register input should be called S, which feeds the input of Q[0] (MSB is shifted in first).",
+        "implementation": "module ShiftRegister (\n    input clk,\n    input enable,\n    input S,\n    output reg [7:0] Q\n);\n\nalways @(posedge clk) begin\n    if (enable) begin\n        Q <= {Q[6:0], S}; // Shift left and insert S into Q[0]\n    end\nend\n\nendmodule"
+    },
+    {
+        "id": "3",
+        "content": "Implement the synchronous enable control for the shift register, which allows shifting only when enable is high.",
+        "source": "The enable input is synchronous active high and controls whether to shift.",
+        "implementation": "reg [7:0] Q;\n\nalways @(posedge clk) begin\n    if (enable) begin\n        Q <= {Q[6:0], S}; // Shift right and input S into Q[0]\n    end\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement a multiplexer that selects one of the Q[0] to Q[7] outputs based on the inputs A, B, and C, and assigns the selected output to Z.",
+        "source": "Extend the circuit to have 3 additional inputs A,B,C and an output Z. The circuit's behaviour should be as follows: when ABC is 000, Z=Q[0], when ABC is 001, Z=Q[1], and so on.",
+        "implementation": "always @(*) begin\n    case ({A, B, C})\n        3'b000: Z = Q[0];\n        3'b001: Z = Q[1];\n        3'b010: Z = Q[2];\n        3'b011: Z = Q[3];\n        3'b100: Z = Q[4];\n        3'b101: Z = Q[5];\n        3'b110: Z = Q[6];\n        3'b111: Z = Q[7];\n        default: Z = 1'b0; // Default case, though not necessary\n    endcase\nend"
+    }
+]

@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit clock signal. The module operates on the positive edge of this clock.
+  - load: 1-bit synchronous active high signal. When asserted, the module should load the input data into the system.
+  - data: 512-bit input vector. This vector is loaded into the system when 'load' is high. Bit[0] represents the least significant bit, and bit[511] represents the most significant bit.
+  
+- Output Ports:
+  - q: 512-bit output vector representing the current state of the cellular automaton. Bit[0] is the least significant bit, and bit[511] is the most significant bit.
+
+Functional Description:
+- The module implements Rule 110, a one-dimensional cellular automaton.
+- The system consists of 512 cells. Each cell can be either on (1) or off (0).
+- The state of each cell at the next clock cycle is determined by its current state and the state of its immediate left and right neighbors, according to the following truth table:
+
+  | Left[i+1] | Center[i] | Right[i-1] | Next State of Center[i] |
+  |-----------|-----------|------------|-------------------------|
+  | 1         | 1         | 1          | 0                       |
+  | 1         | 1         | 0          | 1                       |
+  | 1         | 0         | 1          | 1                       |
+  | 1         | 0         | 0          | 0                       |
+  | 0         | 1         | 1          | 1                       |
+  | 0         | 1         | 0          | 1                       |
+  | 0         | 0         | 1          | 1                       |
+  | 0         | 0         | 0          | 0                       |
+
+- Boundary Conditions:
+  - Assume virtual boundary cells q[-1] and q[512] are always 0 (off).
+
+Operational Details:
+- At each positive edge of the clock signal, if the 'load' signal is high, the module loads the input 'data' vector into the 'q' output vector.
+- If 'load' is low, the module computes the next state of each cell based on Rule 110 and updates 'q' accordingly.
+- The initial value of all cells in 'q' is undefined unless explicitly loaded by the 'load' operation.
+
+Edge Cases:
+- Ensure that when calculating the next state of q[0], the left neighbor is assumed to be q[-1] = 0.
+- For q[511], the right neighbor is assumed to be q[512] = 0.
+
+Reset Conditions:
+- No explicit reset signal is specified; the system relies on the load operation to initialize the state.
+
+This specification ensures a clear, precise, and correct implementation of the Rule 110 cellular automaton within the constraints provided.
+</ENHANCED_SPEC>

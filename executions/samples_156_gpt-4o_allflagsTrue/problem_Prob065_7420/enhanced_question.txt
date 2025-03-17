@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description:
+The TopModule is designed to replicate the functionality of the 7420 chip, which includes two 4-input NAND gates. This module will process two sets of four input signals each and produce two output signals, each representing the NAND operation on the respective set of inputs.
+
+Ports:
+- Inputs:
+  - input wire p1a: First input for the first 4-input NAND gate.
+  - input wire p1b: Second input for the first 4-input NAND gate.
+  - input wire p1c: Third input for the first 4-input NAND gate.
+  - input wire p1d: Fourth input for the first 4-input NAND gate.
+  - input wire p2a: First input for the second 4-input NAND gate.
+  - input wire p2b: Second input for the second 4-input NAND gate.
+  - input wire p2c: Third input for the second 4-input NAND gate.
+  - input wire p2d: Fourth input for the second 4-input NAND gate.
+
+- Outputs:
+  - output wire p1y: Result of the NAND operation on inputs p1a, p1b, p1c, and p1d.
+  - output wire p2y: Result of the NAND operation on inputs p2a, p2b, p2c, and p2d.
+
+Functional Details:
+- The module contains two distinct 4-input NAND gates.
+- For each 4-input NAND gate, the output is high (logic '1') except when all the inputs are high (logic '1'), in which case the output is low (logic '0').
+- The outputs p1y and p2y are determined by the following logic equations:
+  - p1y = !(p1a & p1b & p1c & p1d)
+  - p2y = !(p2a & p2b & p2c & p2d)
+
+Signal Conventions:
+- All inputs and outputs are 1-bit wide.
+- Bit[0] refers to the least significant bit and is the only bit used since they are single-bit signals.
+- No clock or reset signals are involved as the module implements purely combinational logic.
+
+Edge Cases:
+- The output of each NAND gate will be '1' if any of the inputs are '0'.
+- The output will be '0' only when all respective inputs are '1'.
+
+The specification ensures the correct logical behavior of the 7420 chip's functionality within the TopModule using two 4-input NAND gate representations.
+</ENHANCED_SPEC>

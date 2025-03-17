@@ -1,0 +1,175 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` is designed to create a 4-digit BCD counter with synchronous reset and enable signals for each digit. The module uses four separate always blocks to handle the counting logic for each BCD digit (ones, tens, hundreds, and thousands). Each digit is incremented based on its enable signal, which is determined by the overflow of the lower digit. The enable signals are generated using combinational logic, ensuring that they are updated immediately when the lower digit reaches its maximum value (9 in BCD). The synchronous reset ensures that all digits are reset to zero on the next positive clock edge when the reset signal is high. The use of logic data types and adherence to coding conventions ensures clean and efficient code.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [2:0] ena,
+    output logic [15:0] q
+);
+
+    logic [3:0] ones_digit, tens_digit, hundreds_digit, thousands_digit;
+
+    // Sequential logic for ones digit
+    always @(posedge clk) begin
+        if (reset) begin
+            ones_digit <= 4'b0000;
+        end else if (ones_digit == 4'b1001) begin
+            ones_digit <= 4'b0000;
+        end else begin
+            ones_digit <= ones_digit + 1'b1;
+        end
+    end
+
+    // Enable signal for tens digit
+    always @(*) begin
+        ena[0] = (ones_digit == 4'b1001);
+    end
+
+    // Sequential logic for tens digit
+    always @(posedge clk) begin
+        if (reset) begin
+            tens_digit <= 4'b0000;
+        end else if (ena[0]) begin
+            if (tens_digit == 4'b1001) begin
+                tens_digit <= 4'b0000;
+            end else begin
+                tens_digit <= tens_digit + 1'b1;
+            end
+        end
+    end
+
+    // Enable signal for hundreds digit
+    always @(*) begin
+        ena[1] = (tens_digit == 4'b1001) && (ones_digit == 4'b0000);
+    end
+
+    // Sequential logic for hundreds digit
+    always @(posedge clk) begin
+        if (reset) begin
+            hundreds_digit <= 4'b0000;
+        end else if (ena[1]) begin
+            if (hundreds_digit == 4'b1001) begin
+                hundreds_digit <= 4'b0000;
+            end else begin
+                hundreds_digit <= hundreds_digit + 1'b1;
+            end
+        end
+    end
+
+    // Enable signal for thousands digit
+    always @(*) begin
+        ena[2] = (hundreds_digit == 4'b1001) && (tens_digit == 4'b0000) && (ones_digit == 4'b0000);
+    end
+
+    // Sequential logic for thousands digit
+    always @(posedge clk) begin
+        if (reset) begin
+            thousands_digit <= 4'b0000;
+        end else if (ena[2]) begin
+            if (thousands_digit == 4'b1001) begin
+                thousands_digit <= 4'b0000;
+            end else begin
+                thousands_digit <= thousands_digit + 1'b1;
+            end
+        end
+    end
+
+    // Assign the digits to the output q
+    assign q[3:0] = ones_digit;
+    assign q[7:4] = tens_digit;
+    assign q[11:8] = hundreds_digit;
+    assign q[15:12] = thousands_digit;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [2:0] ena,
+    output logic [15:0] q
+);
+
+    logic [3:0] ones_digit, tens_digit, hundreds_digit, thousands_digit;
+
+    // Sequential logic for ones digit
+    always @(posedge clk) begin
+        if (reset) begin
+            ones_digit <= 4'b0000;
+        end else if (ones_digit == 4'b1001) begin
+            ones_digit <= 4'b0000;
+        end else begin
+            ones_digit <= ones_digit + 1'b1;
+        end
+    end
+
+    // Enable signal for tens digit
+    always @(*) begin
+        ena[0] = (ones_digit == 4'b1001);
+    end
+
+    // Sequential logic for tens digit
+    always @(posedge clk) begin
+        if (reset) begin
+            tens_digit <= 4'b0000;
+        end else if (ena[0]) begin
+            if (tens_digit == 4'b1001) begin
+                tens_digit <= 4'b0000;
+            end else begin
+                tens_digit <= tens_digit + 1'b1;
+            end
+        end
+    end
+
+    // Enable signal for hundreds digit
+    always @(*) begin
+        ena[1] = (tens_digit == 4'b1001) && (ones_digit == 4'b0000);
+    end
+
+    // Sequential logic for hundreds digit
+    always @(posedge clk) begin
+        if (reset) begin
+            hundreds_digit <= 4'b0000;
+        end else if (ena[1]) begin
+            if (hundreds_digit == 4'b1001) begin
+                hundreds_digit <= 4'b0000;
+            end else begin
+                hundreds_digit <= hundreds_digit + 1'b1;
+            end
+        end
+    end
+
+    // Enable signal for thousands digit
+    always @(*) begin
+        ena[2] = (hundreds_digit == 4'b1001) && (tens_digit == 4'b0000) && (ones_digit == 4'b0000);
+    end
+
+    // Sequential logic for thousands digit
+    always @(posedge clk) begin
+        if (reset) begin
+            thousands_digit <= 4'b0000;
+        end else if (ena[2]) begin
+            if (thousands_digit == 4'b1001) begin
+                thousands_digit <= 4'b0000;
+            end else begin
+                thousands_digit <= thousands_digit + 1'b1;
+            end
+        end
+    end
+
+    // Assign the digits to the output q
+    assign q[3:0] = ones_digit;
+    assign q[7:4] = tens_digit;
+    assign q[11:8] = hundreds_digit;
+    assign q[15:12] = thousands_digit;
+
+endmodule

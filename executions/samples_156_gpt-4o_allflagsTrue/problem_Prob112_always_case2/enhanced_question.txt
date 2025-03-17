@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port: 
+  - Name: in
+  - Width: 4 bits
+  - Type: Unsigned
+  - Description: Input vector for the priority encoder. Bit[3] represents the most significant bit, and bit[0] represents the least significant bit.
+
+- Output Port:
+  - Name: pos
+  - Width: 2 bits
+  - Type: Unsigned
+  - Description: Encoded position of the first high bit in the input vector. If all input bits are zero, 'pos' should output 2'b00.
+
+Functional Description:
+- The module implements a 4-bit priority encoder, a combinational logic circuit.
+- The priority encoder checks the input vector 'in' from the most significant bit (MSB) to the least significant bit (LSB).
+- It outputs the binary position of the first '1' encountered, with priorities assigned from bit[3] to bit[0].
+- If 'in' is 4'b0000, the output 'pos' will be 2'b00, indicating no bits are set.
+
+Behavior and Edge Cases:
+- The module is purely combinational and does not involve any clocked elements or registers.
+- No resets are applicable as there are no sequential elements.
+- The module must correctly handle the edge case where all input bits are zero by outputting 2'b00.
+
+Example:
+- Input: in = 4'b1000
+  Output: pos = 2'b11 (indicating bit[3] is high)
+- Input: in = 4'b1010
+  Output: pos = 2'b11 (indicating bit[3] is the first high bit)
+- Input: in = 4'b0000
+  Output: pos = 2'b00 (indicating no bits are high)
+</ENHANCED_SPEC>

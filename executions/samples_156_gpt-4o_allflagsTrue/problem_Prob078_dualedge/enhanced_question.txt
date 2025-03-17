@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- Input Ports:
+  - clk: 1-bit clock input. 
+  - d: 1-bit data input.
+- Output Ports:
+  - q: 1-bit data output.
+
+Functional Specification:
+1. The module emulates the behavior of a dual-edge triggered flip-flop, which captures the input data 'd' on both the rising and falling edges of the clock signal 'clk'. 
+
+2. Due to hardware constraints in FPGAs, which lack native support for dual-edge triggered flip-flops, this behavior should be achieved using alternative logic.
+
+3. The module will use combinational and sequential logic to mimic dual-edge triggering by utilizing positive-edge and negative-edge triggered logic blocks.
+
+Clock and Reset:
+- The module should be designed to respond to clock edges as specified, without any explicit reset behavior. If reset is required, additional instructions must be provided for synchronous or asynchronous reset implementation.
+
+Logic Implementation:
+- The implementation should ensure that the output 'q' changes state immediately after the clock edge where input 'd' is sampled.
+- Care must be taken to avoid race conditions and ensure that 'q' is stable between clock edges.
+
+Signal Dependencies and Precedence:
+- The output 'q' directly depends on the value of input 'd', with precedence given to the most recent clock edge (either rising or falling) where 'd' is sampled.
+- Ensure that there is no ambiguity in the value of 'q' at any time, i.e., it should match 'd' as captured on the last valid clock edge.
+
+Edge Cases and Input Boundaries:
+- The behavior at the clock signal's rising and falling edges must be identical, ensuring consistent dual-edge behavior.
+- The module must handle all possible transitions of 'd' cleanly across both clock edges.
+
+Design Constraints:
+- Avoid using constructs not supported by the target FPGA, such as "always @(posedge clk or negedge clk)".
+- Ensure the logic is synthesizable on typical FPGA architectures, using available resources efficiently.
+
+Ensure that all aspects of the design adhere to these enhanced guidelines for correct and reliable implementation of the specified functionality. 
+</ENHANCED_SPEC>

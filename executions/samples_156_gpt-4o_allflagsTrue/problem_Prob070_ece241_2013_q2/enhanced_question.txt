@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Inputs:
+  - input wire a : 1-bit input, representing the most significant bit (MSB)
+  - input wire b : 1-bit input
+  - input wire c : 1-bit input
+  - input wire d : 1-bit input, representing the least significant bit (LSB)
+
+Outputs:
+  - output wire out_sop : 1-bit output for sum-of-products (SOP) logic
+  - output wire out_pos : 1-bit output for product-of-sums (POS) logic
+
+Functional Description:
+The module is designed to output a logic '1' on the outputs out_sop and out_pos when the 4-bit binary input (abcd) represents the decimal values 2, 7, or 15. Conversely, the output should be logic '0' for the decimal values 0, 1, 4, 5, 6, 9, 10, 13, or 14. The binary inputs corresponding to decimal values 3, 8, 11, and 12 will not be provided, and thus do not need to be handled in this design.
+
+Output Logic Descriptions:
+1. out_sop (Minimum Sum-of-Products Form):
+   - This output should be derived using a minimized SOP expression for the specified input conditions.
+   - The expression should be simplified and verified using a Karnaugh map or Boolean algebra.
+
+2. out_pos (Minimum Product-of-Sums Form):
+   - This output should be derived using a minimized POS expression for the specified input conditions.
+   - The expression should be simplified and verified using a Karnaugh map or Boolean algebra.
+
+Bit Indexing and Conventions:
+- The input bits are indexed as follows: a (MSB), b, c, d (LSB).
+- Binary representations for decimal numbers are considered as follows:
+  - Decimal 2: 0010 (a=0, b=0, c=1, d=0)
+  - Decimal 7: 0111 (a=0, b=1, c=1, d=1)
+  - Decimal 15: 1111 (a=1, b=1, c=1, d=1)
+
+Implementation Notes:
+- Ensure that the logic is synthesized correctly to adhere to the above specifications.
+- Avoid race conditions by ensuring proper logic synthesis without feedback paths.
+- All logic is combinational; there are no clocked or sequential elements involved in this design.
+
+Edge Cases:
+- The system assumes inputs for the values 3, 8, 11, and 12 will never occur, thus no specific handling for these cases is necessary.
+
+The above specifications should be strictly followed to ensure accurate and reliable implementation of the TopModule.
+</ENHANCED_SPEC>

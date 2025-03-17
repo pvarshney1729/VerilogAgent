@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, positive edge-triggered.
+  - `input load`: Control signal to load initial state, active high, synchronous with the clock.
+  - `input [255:0] data`: 256-bit input vector for loading initial state. Each bit represents a cell state (1 for alive, 0 for dead).
+
+- Output Ports:
+  - `output reg [255:0] q`: 256-bit output vector representing the current 16x16 grid state. Each bit represents a cell state.
+
+Grid Configuration:
+- Grid Size: 16x16, represented as a 256-bit vector.
+- Bit Indexing: 
+  - `q[15:0]` represents row 0.
+  - `q[31:16]` represents row 1, and so on up to `q[255:240]` for row 15.
+  - Bit indexing follows MSB to LSB order; `q[0]` is the least significant bit.
+
+Game Rules (Conway's Game of Life on a Toroidal Grid):
+- Each cell has 8 neighbours (considering toroidal wrapping).
+- State Transition Rules per Cell:
+  1. 0-1 neighbour: Cell becomes 0 (dead).
+  2. 2 neighbours: Cell state remains unchanged.
+  3. 3 neighbours: Cell becomes 1 (alive).
+  4. 4 or more neighbours: Cell becomes 0 (dead).
+
+Operational Details:
+- `load` Signal: 
+  - When `load` is high, the `data` input is loaded into `q` on the next positive clock edge.
+  - This operation is used to initialize the grid with a specific state.
+  
+- `q` Output:
+  - Represents the current state of the 16x16 grid.
+  - Updated every clock cycle based on the game rules, unless `load` is active.
+
+- Clocking:
+  - All sequential logic, including state updates and loading, is triggered on the rising edge of `clk`.
+  
+- Initial State:
+  - When `load` is active, `q` is set to the value of `data` on the next clock edge.
+  - If `load` is not active, the grid state is updated based on the current rules.
+
+- Edge Case Handling:
+  - The grid is treated as a toroid, meaning the edges wrap around, and each cell always has 8 neighbours.
+
+- Reset: Not explicitly mentioned; assume no asynchronous reset is required unless further specified.
+
+Timing:
+- State updates occur every clock cycle, provided `load` is not active, ensuring the game progresses by one timestep per cycle.
+</ENHANCED_SPEC>

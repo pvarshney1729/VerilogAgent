@@ -1,0 +1,20 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with inputs a, b, sel_b1, sel_b2, and outputs out_assign, out_always.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  wire a,\n    input  wire b,\n    input  wire sel_b1,\n    input  wire sel_b2,\n    output wire out_assign,\n    output reg  out_always\n);\n\n    // Using assign statement for 2-to-1 mux\n    assign out_assign = (sel_b1 && sel_b2) ? b : a;\n\n    // Using procedural if statement for 2-to-1 mux\n    always @(*) begin\n        if (sel_b1 && sel_b2)\n            out_always = b;\n        else\n            out_always = a;\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the 2-to-1 mux logic using assign statements to produce out_assign. Choose b if both sel_b1 and sel_b2 are true; otherwise, choose a.",
+        "source": "The module should implement a 2-to-1 mux that chooses between a and b. Choose b if both sel_b1 and sel_b2 are true. Otherwise, choose a. Do the same twice, once using assign statements and once using a procedural if statement.",
+        "implementation": "assign out_assign = (sel_b1 && sel_b2) ? b : a;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the 2-to-1 mux logic using a procedural if statement to produce out_always. Choose b if both sel_b1 and sel_b2 are true; otherwise, choose a.",
+        "source": "The module should implement a 2-to-1 mux that chooses between a and b. Choose b if both sel_b1 and sel_b2 are true. Otherwise, choose a. Do the same twice, once using assign statements and once using a procedural if statement.",
+        "implementation": "always @(*) begin\n    if (sel_b1 && sel_b2)\n        out_always = b;\n    else\n        out_always = a;\nend"
+    }
+]

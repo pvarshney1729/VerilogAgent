@@ -1,0 +1,63 @@
+Generated Response:
+
+<REASONING>
+To implement the JK flip-flop as specified, we need to create a module named `TopModule` with a clock input (`clk`), two control inputs (`j` and `k`), and an output (`Q`). The behavior of the flip-flop is defined by the truth table provided. The flip-flop should update its state on the rising edge of the clock signal. 
+
+1. **Module Declaration**: We declare the module `TopModule` with the specified inputs and output. All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **Sequential Logic**: We use an `always` block triggered on the positive edge of the clock (`posedge clk`). This block will handle the state transitions of the JK flip-flop.
+
+3. **State Transition Logic**: Inside the `always` block, we use a `case` statement to implement the truth table:
+   - `2'b00`: The output `Q` retains its previous value (`Qold`).
+   - `2'b01`: The output `Q` is reset to `0`.
+   - `2'b10`: The output `Q` is set to `1`.
+   - `2'b11`: The output `Q` toggles its current value (`~Qold`).
+
+4. **Initialization**: Although not explicitly required by the specification, initializing `Q` to a known state can be beneficial in simulation. However, since no initial value is specified, we assume `Q` starts in an indeterminate state.
+
+5. **Coding Conventions**: We adhere to the provided coding conventions by using `logic` for all signals, using a `case` statement for clarity, and ensuring the `always` block is triggered by the clock edge without additional sensitivity list entries.
+
+By following these steps, we ensure that the module meets the specified behavior and adheres to the provided guidelines and conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic j,
+    input logic k,
+    output logic Q
+);
+
+    always @(posedge clk) begin
+        case ({j, k})
+            2'b00: Q <= Q;       // No change
+            2'b01: Q <= 1'b0;    // Reset
+            2'b10: Q <= 1'b1;    // Set
+            2'b11: Q <= ~Q;      // Toggle
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic j,
+    input logic k,
+    output logic Q
+);
+
+    always @(posedge clk) begin
+        case ({j, k})
+            2'b00: Q <= Q;       // No change
+            2'b01: Q <= 1'b0;    // Reset
+            2'b10: Q <= 1'b1;    // Set
+            2'b11: Q <= ~Q;      // Toggle
+        endcase
+    end
+
+endmodule

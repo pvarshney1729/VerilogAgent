@@ -1,0 +1,67 @@
+Generated Response:
+
+<REASONING>
+To implement the shift register with the specified interface and behavior, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. Use `logic` for all signals as per the coding conventions.
+
+2. **Shift Register Declaration**: Declare a 4-bit register `shift_reg` to hold the state of the shift register. This will store the intermediate values as the input `in` is shifted through the register.
+
+3. **Sequential Logic**: Use an `always` block triggered on the positive edge of the clock (`posedge clk`) to implement the sequential logic. This block will handle both the shifting operation and the synchronous reset.
+
+4. **Synchronous Reset**: Implement the active-low synchronous reset logic. When `resetn` is low (`0`), the shift register should be reset to `4'b0000`. This is done within the `always` block.
+
+5. **Shifting Operation**: On each positive clock edge, if `resetn` is high (`1`), shift the current contents of the register left by one bit and load the input `in` into the least significant bit (LSB).
+
+6. **Output Assignment**: Assign the most significant bit (MSB) of the shift register to the output `out`. This is done using a continuous assignment (`assign` statement).
+
+By following these steps, we ensure that the module adheres to the specified behavior and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic resetn,
+    input  logic in,
+    output logic out
+);
+
+    logic [3:0] shift_reg;
+
+    always @(posedge clk) begin
+        if (!resetn) begin
+            shift_reg <= 4'b0000;
+        end else begin
+            shift_reg <= {shift_reg[2:0], in};
+        end
+    end
+
+    assign out = shift_reg[3];
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic resetn,
+    input  logic in,
+    output logic out
+);
+
+    logic [3:0] shift_reg;
+
+    always @(posedge clk) begin
+        if (!resetn) begin
+            shift_reg <= 4'b0000;
+        end else begin
+            shift_reg <= {shift_reg[2:0], in};
+        end
+    end
+
+    assign out = shift_reg[3];
+
+endmodule

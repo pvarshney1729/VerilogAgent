@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+The module named TopModule should be implemented with the following interface. All input and output ports are one bit unless otherwise specified.
+
+- input clk: Clock signal for triggering sequential logic. All sequential elements are triggered on the positive edge of this clock.
+- input areset: Asynchronous reset signal. This is a positive edge-triggered reset that initializes the counter.
+- input train_valid: Indicates whether the train operation is valid for the current clock cycle.
+- input train_taken: Indicates whether the train operation should increment or decrement the counter when train_valid is asserted.
+- output [1:0] state: Two-bit output representing the current counter value.
+
+The module should implement a two-bit saturating counter with the following behavior:
+
+1. **Counter Operation**:
+   - The counter increments by 1 (up to a maximum value of 3) when train_valid = 1 and train_taken = 1.
+   - The counter decrements by 1 (down to a minimum value of 0) when train_valid = 1 and train_taken = 0.
+   - The counter retains its current value when train_valid = 0, regardless of the train_taken signal.
+
+2. **Reset Behavior**:
+   - The areset signal, when asserted, asynchronously resets the counter to a state of 'weakly not-taken', represented by 2'b01.
+   - This reset has priority over the clock-triggered operations.
+
+3. **Initial State**:
+   - Upon asserting the areset signal, the counter's initial state is set to 2'b01.
+
+4. **Bit Indexing**:
+   - The state[1] is the most significant bit (MSB), and state[0] is the least significant bit (LSB).
+
+5. **Edge Cases**:
+   - Ensure that the counter does not exceed the maximum value of 3 or go below the minimum value of 0 during increment or decrement operations.
+
+This specification ensures that the module behaves correctly under all specified conditions and edge cases.
+</ENHANCED_SPEC>

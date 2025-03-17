@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, positive-edge triggered.
+  - `input areset`: Asynchronous active-high reset signal.
+  - `input predict_valid`: Signal indicating a prediction request is valid.
+  - `input [6:0] predict_pc`: 7-bit program counter for prediction.
+  - `input train_valid`: Signal indicating a training request is valid.
+  - `input train_taken`: Actual outcome of the branch (1 if taken).
+  - `input train_mispredicted`: Signal indicating the branch was mispredicted.
+  - `input [6:0] train_history`: 7-bit branch history at the time of training.
+  - `input [6:0] train_pc`: 7-bit program counter for training.
+
+- Output Ports:
+  - `output predict_taken`: Predicted branch direction (1 if predicted taken).
+  - `output [6:0] predict_history`: 7-bit history used for prediction.
+
+Functional Description:
+1. **Branch Predictor Architecture**: 
+   - Implements a gshare branch predictor using a 7-bit PC and a 7-bit global history register.
+   - The PC and history are XORed to form a 7-bit index for accessing a Pattern History Table (PHT) containing 128 entries of 2-bit saturating counters.
+
+2. **Prediction Interface**:
+   - When `predict_valid = 1`, the module outputs `predict_taken` and `predict_history`, representing the predicted branch direction and the state of the branch history register.
+   - The branch history register updates at the next positive clock edge following a prediction request.
+
+3. **Training Interface**:
+   - When `train_valid = 1`, the module receives the actual outcome of a branch and adjusts the corresponding PHT entry to improve prediction accuracy.
+   - If `train_mispredicted = 1`, it also recovers the branch history register to the state immediately after the mispredicting branch execution.
+
+4. **Priority Handling**:
+   - If training and prediction requests occur simultaneously and target different branches, training takes precedence, especially in the case of a misprediction.
+   - If both requests target the same PHT entry, prediction uses the pre-training PHT state, as PHT updates occur on the next positive clock edge.
+
+5. **Reset Behavior**:
+   - The reset is asynchronous and active-high, setting all registers, including the global history register, to their initial states.
+
+6. **Bit Indexing**:
+   - All multi-bit signals use bit indexing where `bit[0]` is the least significant bit (LSB).
+
+7. **Edge Cases and Boundaries**:
+   - Proper handling is ensured for cases where multiple requests target the same resource. Training modifies states at the next clock cycle, guaranteeing prediction accesses current states without conflict.
+
+8. **Clock and Reset**:
+   - All sequential elements are triggered on the positive edge of the `clk`.
+   - The module is reset asynchronously on `areset` high, ensuring all state elements reach a known initial state.
+
+Ensure the implementation adheres to these specifications to maintain clarity and correctness in functionality.
+</ENHANCED_SPEC>

@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+The module named `TopModule` is to be implemented with the following interface. All input and output ports are one bit wide:
+
+- `input clock`: The clock signal for the sequential circuit.
+- `input a`: A one-bit input signal.
+- `output p`: A one-bit output signal.
+- `output q`: A one-bit output signal.
+
+### Signal Conventions and Logic Descriptions:
+
+1. **Clock Signal (`clock`)**:
+   - This is the primary clock signal for the module.
+   - All sequential logic within the module is triggered on the rising edge of this clock signal.
+
+2. **Input Signal (`a`)**:
+   - This is a one-bit input that affects the behavior of the output signals `p` and `q`.
+
+3. **Output Signals (`p` and `q`)**:
+   - These are one-bit outputs which are driven by the sequential logic of the circuit.
+
+### Circuit Behavior:
+
+- **Sequential Logic**:
+  - The circuit is sequential, utilizing flip-flops that are sensitive to the rising edge of the clock.
+  - The initial state of the outputs `p` and `q` should be considered as undefined (`x`) until the first rising edge of the clock.
+
+- **State Transitions**:
+  - On the rising edge of the clock:
+    - If `a` is `1`, `p` is set to `1`.
+    - If `a` is `0`, `p` is set to `0`.
+  - The `q` output is updated on the falling edge of the clock and follows the logic state of `p` from the previous clock cycle.
+
+### Initial Conditions:
+
+- **Reset**:
+  - There is no explicit reset signal; initial conditions should consider `p` and `q` as `x` until defined by the clock cycles.
+
+### Edge Cases:
+
+- **Undefined Conditions**:
+  - Prior to the first clock edge, both `p` and `q` should be considered in an undefined state (`x`).
+  - During any change in the input `a`, outputs should be evaluated only on the rising edge of the clock for `p` and the falling edge for `q`.
+
+### Timing Constraints:
+
+- **Timing of Signals**:
+  - Ensure that input `a` is stable at least one clock cycle before evaluating the output.
+  - Outputs must be stable before the subsequent clock edge following any change in the input condition.
+
+Use this refined specification to implement the `TopModule` in Verilog, ensuring that all sequential elements are correctly synchronized with the clock signal.
+</ENHANCED_SPEC>

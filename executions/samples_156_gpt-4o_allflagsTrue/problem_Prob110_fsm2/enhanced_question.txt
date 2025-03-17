@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal. One bit.
+  - `areset`: Asynchronous reset signal, active high. One bit.
+  - `j`: State transition input. One bit.
+  - `k`: State transition input. One bit.
+
+- Output Ports:
+  - `out`: Current state output. One bit.
+
+State Machine Description:
+- Type: Moore State Machine
+- States: Two states named OFF and ON.
+- Initial State: OFF (when `areset` is high).
+- State Encoding:
+  - OFF: `out = 0`
+  - ON: `out = 1`
+
+State Transitions:
+- From OFF:
+  - If `j = 0`, remain in OFF.
+  - If `j = 1`, transition to ON.
+- From ON:
+  - If `k = 0`, remain in ON.
+  - If `k = 1`, transition to OFF.
+
+Reset Behavior:
+- Asynchronous reset (`areset` is active high) immediately sets the state to OFF, regardless of the clock.
+- Upon reset, `out` is set to 0.
+
+Clocking:
+- State transitions occur on the rising edge of `clk`.
+- Ensure proper synchronization of inputs `j` and `k` with `clk` to avoid metastability.
+
+Miscellaneous:
+- Inputs `j` and `k` should be considered stable and valid during the rising edge of `clk` for accurate state transitions.
+- The output `out` reflects the state of the machine and changes synchronously with `clk` according to the state transitions defined above.
+
+Edge Cases:
+- Ensure that transitions are correctly handled when inputs `j` and `k` change simultaneously with a clock edge.
+- Handle any potential race conditions by ensuring stable inputs during state transitions.
+</ENHANCED_SPEC>

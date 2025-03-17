@@ -1,0 +1,45 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as specified, we need to create a module with the given interface and behavior. The module will have a clock (`clk`), a synchronous reset (`reset`), an 8-bit input (`d`), and an 8-bit output (`q`). The behavior is defined by 8 D flip-flops, each storing one bit of the input vector `d` and updating the output vector `q` on the positive edge of the clock. If the reset is high during a clock edge, the output `q` should be set to zero. The use of `logic` for all signals is in line with modern SystemVerilog conventions, which allow for more flexible signal declarations compared to `wire` and `reg`. The synchronous reset is implemented within the `always` block triggered by the positive edge of `clk`, ensuring that the reset condition is sampled with the clock.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 8'b00000000;
+        end else begin
+            q <= d;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 8'b00000000;
+        end else begin
+            q <= d;
+        end
+    end
+
+endmodule

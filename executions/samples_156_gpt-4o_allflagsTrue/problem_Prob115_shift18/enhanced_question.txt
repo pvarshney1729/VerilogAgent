@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+**Port Definitions:**
+- `input wire clk`: Clock signal used for synchronous operations.
+- `input wire load`: Active-high control signal for loading data into the shift register.
+- `input wire ena`: Active-high control signal for enabling the shift operation.
+- `input wire [1:0] amount`: 2-bit control signal to determine the direction and magnitude of the shift.
+- `input wire [63:0] data`: 64-bit input data to be loaded into the shift register.
+- `output reg [63:0] q`: 64-bit output representing the current contents of the shift register.
+
+**Operational Details:**
+1. **Load Operation:**
+   - When `load` is high (`1`), the shift register is loaded with `data[63:0]` on the rising edge of `clk`.
+   - This operation takes precedence over the shift operation if `ena` is also high.
+
+2. **Shift Operation:**
+   - When `load` is low (`0`) and `ena` is high (`1`), the register performs a shift operation on the rising edge of `clk`.
+   - The `amount` signal specifies the direction and magnitude of the shift:
+     - `2'b00`: Shift the register left by 1 bit. The least significant bit (LSB) is filled with `0`.
+     - `2'b01`: Shift the register left by 8 bits. The least significant 8 bits are filled with zeros.
+     - `2'b10`: Perform an arithmetic right shift by 1 bit. This maintains the sign bit at `q[63]`.
+     - `2'b11`: Perform an arithmetic right shift by 8 bits. The most significant 8 bits are filled with the value of `q[63]`.
+
+3. **Clock and Reset Relationship:**
+   - The module operates on the positive edge of `clk`.
+   - No reset signal is specified; the initial state of `q` is undefined and should be considered random unless otherwise initialized in a simulation environment.
+
+4. **Bit Indexing:**
+   - `q[63]` is the most significant bit (MSB), and `q[0]` is the least significant bit (LSB).
+
+5. **Edge Cases:**
+   - If both `ena` and `load` are high, the `load` operation will take precedence, and the shift will not occur on that clock cycle.
+   - If `ena` is low, the contents of `q` remain unchanged regardless of the `amount` value.
+
+**Note:** Ensure all operations are performed synchronously with respect to the `clk` signal.
+</ENHANCED_SPEC>

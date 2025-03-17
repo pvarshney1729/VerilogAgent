@@ -1,0 +1,49 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input [5:0] y`: A 6-bit input representing the current state of the finite-state machine using one-hot encoding. Each bit corresponds to a specific state as follows:
+    - y[0]: State A
+    - y[1]: State B
+    - y[2]: State C
+    - y[3]: State D
+    - y[4]: State E
+    - y[5]: State F
+  - `input w`: A 1-bit input that determines state transitions.
+
+- Outputs:
+  - `output Y1`: A 1-bit output that corresponds to the next state condition for state B (y[1] flip-flop input).
+  - `output Y3`: A 1-bit output that corresponds to the next state condition for state D (y[3] flip-flop input).
+
+Finite-State Machine (FSM) Description:
+- The FSM uses a one-hot state encoding scheme where each state is represented by a single high bit in the 6-bit vector `y`.
+- State Transitions:
+  - State A: 
+    - If `w` == 1, transition to State B.
+    - If `w` == 0, remain in State A.
+  - State B:
+    - If `w` == 1, transition to State C.
+    - If `w` == 0, transition to State D.
+  - State C:
+    - If `w` == 1, transition to State E.
+    - If `w` == 0, transition to State D.
+  - State D:
+    - If `w` == 1, transition to State F.
+    - If `w` == 0, transition to State A.
+  - State E:
+    - If `w` == 1, remain in State E.
+    - If `w` == 0, transition to State D.
+  - State F:
+    - If `w` == 1, transition to State C.
+    - If `w` == 0, transition to State D.
+
+Output Logic:
+- `Y1` is derived from the condition to potentially enter State B. Therefore, `Y1 = y[0] & w`.
+- `Y3` is derived from the condition to potentially enter State D. Therefore, `Y3 = (y[1] & ~w) | (y[2] & ~w) | (y[4] & ~w) | (y[5] & ~w)`.
+
+General Notes:
+- The FSM is assumed to be driven by a clock (not explicitly specified here) but should be designed to operate on the rising edge.
+- The reset conditions are not specified but should initialize the FSM to a known state, typically State A.
+- The module is assumed to be free of race conditions given the one-hot encoding and explicit next-state logic.
+</ENHANCED_SPEC>

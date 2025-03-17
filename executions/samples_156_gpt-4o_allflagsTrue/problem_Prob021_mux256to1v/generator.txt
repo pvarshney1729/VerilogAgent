@@ -1,0 +1,33 @@
+Generated Response:
+
+<REASONING>
+The task is to implement a 256-to-1 multiplexer where each input is 4 bits wide, packed into a 1024-bit vector. The selection is done using an 8-bit `sel` input, which determines which 4-bit segment of the `in` vector is routed to the `out` output. The `sel` value is multiplied by 4 to calculate the starting bit position of the desired 4-bit segment. The `+:` operator is used to select a 4-bit slice starting from this calculated position. This approach ensures that the correct 4-bit segment is selected based on the `sel` input.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input  logic [1023:0] in,
+    input  logic [7:0]    sel,
+    output logic [3:0]    out
+);
+
+    // Combinational logic to select the appropriate 4-bit segment
+    assign out = in[sel * 4 +: 4];
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input  logic [1023:0] in,
+    input  logic [7:0]    sel,
+    output logic [3:0]    out
+);
+
+    // Combinational logic to select the appropriate 4-bit segment
+    assign out = in[sel * 4 +: 4];
+
+endmodule

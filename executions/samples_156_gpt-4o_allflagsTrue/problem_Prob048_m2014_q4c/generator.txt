@@ -1,0 +1,55 @@
+Generated Response:
+
+<REASONING>
+To implement the requested D flip-flop with synchronous reset, we need to follow the guidelines and coding conventions provided. The module will have a clock input (`clk`), a data input (`d`), a reset input (`r`), and an output (`q`). The reset is synchronous, meaning it will only affect the output on the rising edge of the clock. The output `q` will be set to `0` when the reset `r` is high during a clock edge. Otherwise, `q` will take the value of `d`.
+
+1. **Module Declaration**: We declare the module `TopModule` with the specified inputs and outputs. All ports are declared as `logic` as per the coding conventions.
+
+2. **Sequential Logic**: We use an `always` block triggered by the rising edge of the clock (`posedge clk`). This block will handle the synchronous operations.
+
+3. **Synchronous Reset**: Inside the `always` block, we first check if the reset `r` is high. If it is, we set `q` to `0`. This ensures that the reset is synchronous with the clock.
+
+4. **Data Capture**: If the reset is not asserted, we capture the value of `d` into `q` on the rising edge of the clock.
+
+5. **Coding Conventions**: We adhere to the conventions by using `logic` for all signals, ensuring the reset is synchronous, and not including `posedge r` in the sensitivity list.
+
+This approach ensures that the module behaves as a D flip-flop with a synchronous reset, meeting all specified requirements.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic d,
+    input logic r,
+    output logic q
+);
+
+    always @(posedge clk) begin
+        if (r)
+            q <= 1'b0;
+        else
+            q <= d;
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic d,
+    input logic r,
+    output logic q
+);
+
+    always @(posedge clk) begin
+        if (r)
+            q <= 1'b0;
+        else
+            q <= d;
+    end
+
+endmodule

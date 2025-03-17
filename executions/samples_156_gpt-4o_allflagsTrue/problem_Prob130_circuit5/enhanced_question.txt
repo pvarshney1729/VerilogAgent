@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specifications:
+- Inputs:
+  - `input [3:0] a`: A 4-bit input signal.
+  - `input [3:0] b`: A 4-bit input signal.
+  - `input [3:0] c`: A 4-bit input signal.
+  - `input [3:0] d`: A 4-bit input signal.
+  - `input [3:0] e`: A 4-bit input signal.
+
+- Output:
+  - `output [3:0] q`: A 4-bit output signal.
+
+Operational Details:
+- The module implements a combinational logic circuit.
+- Output `q` is determined based on the value of the input `c` as follows:
+  - If `c == 4'b0000`, then `q = b`.
+  - If `c == 4'b0001`, then `q = e`.
+  - If `c == 4'b0010`, then `q = a`.
+  - If `c == 4'b0011`, then `q = d`.
+  - If `c >= 4'b0100` and `c <= 4'b1111`, then `q = 4'b1111`.
+- There are no sequential elements, and the circuit is purely combinational.
+- All operations are performed in a single cycle as there are no clocked elements.
+
+Indexing Convention:
+- All bit indexing follows the convention where `bit[0]` refers to the least significant bit (LSB).
+
+Edge Cases:
+- For `c` values from `4'b0100` to `4'b1111`, `q` is always set to `4'b1111`.
+
+Note:
+- Ensure that the logic is optimized for a combinational implementation without any latches or flip-flops.
+</ENHANCED_SPEC>

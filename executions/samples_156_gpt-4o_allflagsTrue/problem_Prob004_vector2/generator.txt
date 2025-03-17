@@ -1,0 +1,31 @@
+Generated Response:
+
+<REASONING>
+The task is to reverse the byte order of a 32-bit input vector. The input vector is divided into four 8-bit bytes. The goal is to rearrange these bytes in reverse order for the output. The module is purely combinational, so an `assign` statement is appropriate for this task. The guidelines specify using `logic` for port declarations, which aligns with SystemVerilog conventions. Since no synchronous reset or clock is required for this combinational logic, the implementation is straightforward.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input  logic [31:0] in,
+    output logic [31:0] out
+);
+
+    // Reverse the byte order of the 32-bit input vector
+    assign out = {in[7:0], in[15:8], in[23:16], in[31:24]};
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input  logic [31:0] in,
+    output logic [31:0] out
+);
+
+    // Reverse the byte order of the 32-bit input vector
+    assign out = {in[7:0], in[15:8], in[23:16], in[31:24]};
+
+endmodule

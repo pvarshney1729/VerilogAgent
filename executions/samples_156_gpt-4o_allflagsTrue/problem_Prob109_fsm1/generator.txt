@@ -1,0 +1,121 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the specification of a Moore machine with two states, A and B. The module uses an asynchronous reset to initialize the state to B when the `areset` signal is high. The state transitions are defined based on the input `in` and the current state, as per the state diagram provided.
+
+1. **State Encoding**: The states are encoded as `STATE_A` and `STATE_B` using a typedef enum for clarity and maintainability.
+
+2. **State Transition Logic**: An `always @(*)` block is used to determine the next state based on the current state and input `in`. This block is combinational and does not depend on the clock.
+
+3. **Sequential Logic with Asynchronous Reset**: An `always @(posedge clk or posedge areset)` block is used to update the current state. The asynchronous reset ensures that the state is set to B immediately when `areset` is high, regardless of the clock.
+
+4. **Output Logic**: The output `out` is determined solely by the current state, consistent with Moore machine behavior. An `always @(*)` block is used to assign the output based on the current state.
+
+5. **Coding Conventions**: The code adheres to the specified coding conventions, using `logic` for all signals, and ensuring that all numeric constants have a size greater than zero. The use of `always @(*)` for combinational logic ensures that all relevant signals are included in the sensitivity list implicitly.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {STATE_A = 1'b0, STATE_B = 1'b1} state_t;
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (in)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_B: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_B; // Default to state B
+        endcase
+    end
+
+    // Sequential logic with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= STATE_B; // Reset to state B
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b0; // Default case to handle unexpected states
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {STATE_A = 1'b0, STATE_B = 1'b1} state_t;
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (in)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_B: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_B; // Default to state B
+        endcase
+    end
+
+    // Sequential logic with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            current_state <= STATE_B; // Reset to state B
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b0; // Default case to handle unexpected states
+        endcase
+    end
+
+endmodule

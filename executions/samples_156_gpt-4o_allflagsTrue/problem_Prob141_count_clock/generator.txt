@@ -1,0 +1,151 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` is based on the decomposition of the clock functionality into three main counters: seconds, minutes, and hours, each represented in Binary-Coded Decimal (BCD) format. The module handles the synchronous reset, which sets the clock to "12:00:00 AM" when asserted. The enable signal (`ena`) allows the clock to increment by one second on each positive edge of the clock (`clk`).
+
+1. **Synchronous Reset**: The reset logic is implemented to set the hours (`hh`) to 12, minutes (`mm`), and seconds (`ss`) to 00, and the PM indicator (`pm`) to 0 (AM) when the reset signal is high. This reset logic has the highest priority.
+
+2. **Seconds Counter**: The seconds counter (`ss`) increments from 00 to 59 in BCD format. When it reaches 59, it resets to 00 and triggers the increment of the minutes counter.
+
+3. **Minutes Counter**: The minutes counter (`mm`) operates similarly to the seconds counter, incrementing from 00 to 59. When it reaches 59, it resets to 00 and triggers the increment of the hours counter.
+
+4. **Hours Counter**: The hours counter (`hh`) increments from 01 to 12 in BCD format. When it reaches 12, it resets to 01 and toggles the PM indicator (`pm`). The transition from 11 to 12 and from 12 to 01 is handled explicitly to ensure correct BCD representation.
+
+5. **PM Indicator**: The PM indicator (`pm`) toggles when the hours counter transitions from 12 to 01, indicating a change from AM to PM or vice versa.
+
+The implementation adheres to the provided interface and coding conventions, ensuring correct BCD counting and synchronous reset behavior.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic ena,
+    output logic pm,
+    output logic [7:0] hh,
+    output logic [7:0] mm,
+    output logic [7:0] ss
+);
+
+    // Internal registers for BCD counting
+    logic [3:0] hh_ones;
+    logic [3:0] hh_tens;
+    logic [3:0] mm_ones;
+    logic [3:0] mm_tens;
+    logic [3:0] ss_ones;
+    logic [3:0] ss_tens;
+
+    // Synchronous reset and clock logic
+    always @(posedge clk) begin
+        if (reset) begin
+            hh <= 8'b0001_0010; // 12 in BCD
+            mm <= 8'b0000_0000; // 00 in BCD
+            ss <= 8'b0000_0000; // 00 in BCD
+            pm <= 1'b0;         // AM
+        end else if (ena) begin
+            // Seconds counter
+            if (ss == 8'b0101_1001) begin // 59 in BCD
+                ss <= 8'b0000_0000; // Reset to 00
+                // Minutes counter
+                if (mm == 8'b0101_1001) begin // 59 in BCD
+                    mm <= 8'b0000_0000; // Reset to 00
+                    // Hours counter
+                    if (hh == 8'b0001_0010) begin // 12 in BCD
+                        hh <= 8'b0000_0001; // Reset to 01
+                        pm <= ~pm; // Toggle PM
+                    end else if (hh == 8'b0000_1001) begin // 09 in BCD
+                        hh <= 8'b0001_0000; // Increment to 10
+                    end else if (hh == 8'b0001_0000) begin // 10 in BCD
+                        hh <= 8'b0001_0001; // Increment to 11
+                    end else if (hh == 8'b0001_0001) begin // 11 in BCD
+                        hh <= 8'b0001_0010; // Increment to 12
+                    end else begin
+                        hh <= hh + 1; // Increment hours
+                    end
+                end else begin
+                    if (mm[3:0] == 4'b1001) begin // Lower BCD digit is 9
+                        mm <= {mm[7:4] + 1'b1, 4'b0000}; // Increment tens place
+                    end else begin
+                        mm <= mm + 1; // Increment minutes
+                    end
+                end
+            end else begin
+                if (ss[3:0] == 4'b1001) begin // Lower BCD digit is 9
+                    ss <= {ss[7:4] + 1'b1, 4'b0000}; // Increment tens place
+                end else begin
+                    ss <= ss + 1; // Increment seconds
+                end
+            end
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic ena,
+    output logic pm,
+    output logic [7:0] hh,
+    output logic [7:0] mm,
+    output logic [7:0] ss
+);
+
+    // Internal registers for BCD counting
+    logic [3:0] hh_ones;
+    logic [3:0] hh_tens;
+    logic [3:0] mm_ones;
+    logic [3:0] mm_tens;
+    logic [3:0] ss_ones;
+    logic [3:0] ss_tens;
+
+    // Synchronous reset and clock logic
+    always @(posedge clk) begin
+        if (reset) begin
+            hh <= 8'b0001_0010; // 12 in BCD
+            mm <= 8'b0000_0000; // 00 in BCD
+            ss <= 8'b0000_0000; // 00 in BCD
+            pm <= 1'b0;         // AM
+        end else if (ena) begin
+            // Seconds counter
+            if (ss == 8'b0101_1001) begin // 59 in BCD
+                ss <= 8'b0000_0000; // Reset to 00
+                // Minutes counter
+                if (mm == 8'b0101_1001) begin // 59 in BCD
+                    mm <= 8'b0000_0000; // Reset to 00
+                    // Hours counter
+                    if (hh == 8'b0001_0010) begin // 12 in BCD
+                        hh <= 8'b0000_0001; // Reset to 01
+                        pm <= ~pm; // Toggle PM
+                    end else if (hh == 8'b0000_1001) begin // 09 in BCD
+                        hh <= 8'b0001_0000; // Increment to 10
+                    end else if (hh == 8'b0001_0000) begin // 10 in BCD
+                        hh <= 8'b0001_0001; // Increment to 11
+                    end else if (hh == 8'b0001_0001) begin // 11 in BCD
+                        hh <= 8'b0001_0010; // Increment to 12
+                    end else begin
+                        hh <= hh + 1; // Increment hours
+                    end
+                end else begin
+                    if (mm[3:0] == 4'b1001) begin // Lower BCD digit is 9
+                        mm <= {mm[7:4] + 1'b1, 4'b0000}; // Increment tens place
+                    end else begin
+                        mm <= mm + 1; // Increment minutes
+                    end
+                end
+            end else begin
+                if (ss[3:0] == 4'b1001) begin // Lower BCD digit is 9
+                    ss <= {ss[7:4] + 1'b1, 4'b0000}; // Increment tens place
+                end else begin
+                    ss <= ss + 1; // Increment seconds
+                end
+            end
+        end
+    end
+
+endmodule

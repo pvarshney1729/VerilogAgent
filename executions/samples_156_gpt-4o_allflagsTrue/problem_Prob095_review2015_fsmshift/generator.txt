@@ -1,0 +1,67 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` is based on the requirement to assert the `shift_ena` signal for exactly 4 clock cycles upon a synchronous reset. The module uses a 3-bit counter (`shift_counter`) to track the number of cycles for which `shift_ena` should be asserted.
+
+1. **Interface Definition**: The module has three ports: `clk`, `reset`, and `shift_ena`. All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **Counter Initialization**: On a synchronous reset (detected on the positive edge of `clk`), the `shift_counter` is initialized to 4 (`3'd4`). This ensures that `shift_ena` is asserted for the next 4 clock cycles.
+
+3. **Counter Decrement**: If `shift_counter` is not zero, it is decremented by 1 on each clock cycle. This countdown controls the duration for which `shift_ena` remains asserted.
+
+4. **Output Logic**: The `shift_ena` signal is driven by a combinational always block. It is asserted (`1`) when `shift_counter` is non-zero, and deasserted (`0`) when `shift_counter` reaches zero.
+
+5. **Synchronous Reset**: The reset logic is synchronous, meaning it is sampled with respect to the clock. The reset condition is checked within the sequential always block triggered by `posedge clk`.
+
+This design ensures that `shift_ena` is asserted for exactly 4 cycles after a reset and remains deasserted until the next reset.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    logic [2:0] shift_counter;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            shift_counter <= 3'd4; // Initialize counter to 4
+        end else if (shift_counter != 3'd0) begin
+            shift_counter <= shift_counter - 1;
+        end
+    end
+
+    always @(*) begin
+        shift_ena = (shift_counter != 3'd0);
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    logic [2:0] shift_counter;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            shift_counter <= 3'd4; // Initialize counter to 4
+        end else if (shift_counter != 3'd0) begin
+            shift_counter <= shift_counter - 1;
+        end
+    end
+
+    always @(*) begin
+        shift_ena = (shift_counter != 3'd0);
+    end
+
+endmodule

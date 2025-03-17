@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - `in`: A 100-bit wide input vector, indexed from `in[99]` (most significant bit) to `in[0]` (least significant bit).
+- Output Ports:
+  - `out_and`: A 1-bit output representing the result of a 100-input AND operation.
+  - `out_or`: A 1-bit output representing the result of a 100-input OR operation.
+  - `out_xor`: A 1-bit output representing the result of a 100-input XOR operation.
+
+Functional Description:
+- The module is a purely combinational circuit, meaning it has no internal state and does not rely on a clock signal.
+- The logic for each output is defined as follows:
+  1. `out_and`: This output is high (`1`) if and only if all bits of the input vector `in[99:0]` are high (`1`). It is low (`0`) if any bit in the input vector is low (`0`).
+  2. `out_or`: This output is high (`1`) if at least one bit of the input vector `in[99:0]` is high (`1`). It is low (`0`) if all bits in the input vector are low (`0`).
+  3. `out_xor`: This output is high (`1`) if there is an odd number of high (`1`) bits in the input vector `in[99:0]`. It is low (`0`) if there is an even number of high (`1`) bits.
+
+Operation Precedence and Edge Cases:
+- Ensure that the operations are performed on the entire 100-bit input vector simultaneously.
+- There are no race conditions or state dependencies, as the module is purely combinational.
+- The outputs are directly driven by the inputs with no intermediate storage or sequential logic.
+
+Implementation Constraints:
+- Ensure that the bitwise operations are performed efficiently to handle the full 100-bit width of the input vector.
+- The module does not require any reset signal, as it does not contain sequential elements or memory.
+</ENHANCED_SPEC>

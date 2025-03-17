@@ -1,0 +1,61 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` is based on the requirements to create a four-bit shift register that can also act as a down counter. The module uses a single always block that is triggered on the positive edge of the clock (`clk`). This ensures that all operations are synchronized with the clock.
+
+1. **Shift Register Functionality**: When `shift_ena` is high, the module shifts the current contents of the register `q` to the left by one bit and inserts the new data bit at the least significant bit (LSB) position. This is achieved using the concatenation operator `{}`.
+
+2. **Down Counter Functionality**: When `count_ena` is high, the module decrements the current value of the register `q` by 1. This is done using the subtraction operation.
+
+3. **Undefined Behavior Handling**: The specification states that the behavior is undefined when both `shift_ena` and `count_ena` are high simultaneously. The implementation prioritizes the shift operation over the count operation, but this is arbitrary since the behavior is unspecified.
+
+4. **Signal Declaration**: All signals are declared using `logic` as per the coding conventions, which avoids the use of `wire` or `reg`.
+
+5. **Sequential Logic**: The use of `always_ff` ensures that the block is recognized as sequential logic, which is appropriate for operations that depend on the clock edge.
+
+6. **No Explicit Reset**: The specification does not mention a reset signal, so the module does not include one. Initial conditions are assumed to be managed externally.
+
+The implementation adheres to the provided interface and coding conventions, ensuring correct bitwise operations and signal handling.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic shift_ena,
+    input logic count_ena,
+    input logic data,
+    output logic [3:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (shift_ena) begin
+            q <= {q[2:0], data}; // Shift left and insert new data at LSB
+        end else if (count_ena) begin
+            q <= q - 4'b0001; // Decrement the current value
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic shift_ena,
+    input logic count_ena,
+    input logic data,
+    output logic [3:0] q
+);
+
+    always_ff @(posedge clk) begin
+        if (shift_ena) begin
+            q <= {q[2:0], data}; // Shift left and insert new data at LSB
+        end else if (count_ena) begin
+            q <= q - 4'b0001; // Decrement the current value
+        end
+    end
+
+endmodule

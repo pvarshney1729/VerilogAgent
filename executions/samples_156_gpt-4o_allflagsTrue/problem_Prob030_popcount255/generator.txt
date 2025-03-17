@@ -1,0 +1,59 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` for counting the number of '1's in a 255-bit input vector, we will follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. The input is a 255-bit vector, and the output is an 8-bit vector.
+
+2. **Population Count Logic**: We will use a combinational logic block to count the number of '1's in the input vector. This will be done using an `always @(*)` block to ensure that the logic is combinational and reacts to any changes in the input.
+
+3. **Output Assignment**: The result of the population count will be assigned to the output port `out`.
+
+4. **Coding Conventions**: We will adhere to the specified coding conventions, using `logic` for all signals and ensuring all numeric constants have a size greater than zero.
+
+5. **No Synchronous Reset**: Since the specification does not mention a clock or reset, we will implement this as a purely combinational module without any sequential logic or reset conditions.
+
+6. **Efficiency**: The implementation will efficiently sum the bits of the input vector using a loop within the `always @(*)` block.
+
+By following these steps, we ensure that the module meets the specification and adheres to the provided guidelines and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [254:0] in,
+    output logic [7:0] out
+);
+
+    always @(*) begin
+        integer i;
+        logic [7:0] count;
+        count = 8'b0;
+        for (i = 0; i < 255; i = i + 1) begin
+            count = count + in[i];
+        end
+        out = count;
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [254:0] in,
+    output logic [7:0] out
+);
+
+    always @(*) begin
+        integer i;
+        logic [7:0] count;
+        count = 8'b0;
+        for (i = 0; i < 255; i = i + 1) begin
+            count = count + in[i];
+        end
+        out = count;
+    end
+
+endmodule

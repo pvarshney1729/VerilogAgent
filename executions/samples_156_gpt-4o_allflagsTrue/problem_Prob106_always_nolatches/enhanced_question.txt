@@ -1,0 +1,25 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, should be implemented with the following interface specifications. The module is designed to process scancodes from a PS/2 keyboard to determine if one of the arrow keys has been pressed. 
+
+1. **Port Definitions:**
+   - `input [15:0] scancode`: A 16-bit input vector representing the scancode received from the keyboard. Bit indexing follows standard MSB to LSB convention, where `bit[15]` is the most significant bit and `bit[0]` is the least significant bit.
+   - `output left`: A 1-bit output signal, asserted to indicate the left arrow key has been pressed.
+   - `output down`: A 1-bit output signal, asserted to indicate the down arrow key has been pressed.
+   - `output right`: A 1-bit output signal, asserted to indicate the right arrow key has been pressed.
+   - `output up`: A 1-bit output signal, asserted to indicate the up arrow key has been pressed.
+
+2. **Functional Description:**
+   The module should evaluate the 16-bit `scancode` input and drive the corresponding output signals based on the following mapping:
+   - If `scancode` equals `16'he06b`, assert `left`.
+   - If `scancode` equals `16'he072`, assert `down`.
+   - If `scancode` equals `16'he074`, assert `right`.
+   - If `scancode` equals `16'he075`, assert `up`.
+   - For any other `scancode` value, none of the outputs (`left`, `down`, `right`, `up`) should be asserted.
+
+3. **Implementation Notes:**
+   - The logic to determine the output signals should be combinational, meaning that the outputs should change immediately in response to changes in the `scancode` input.
+   - It is recommended to use a `case` statement or an `if-elseif` construct to implement the mapping of `scancode` to output signals.
+   - Ensure that only one output is asserted for any valid input `scancode`, and all outputs should remain de-asserted for any non-matching `scancode`.
+
+This specification ensures that the module correctly interprets the four specific scancodes associated with the arrow keys and asserts the corresponding outputs as needed for game control.
+</ENHANCED_SPEC>

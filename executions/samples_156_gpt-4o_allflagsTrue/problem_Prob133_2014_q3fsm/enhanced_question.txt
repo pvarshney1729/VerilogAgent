@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input clk: Clock signal for synchronous operations. All sequential logic is triggered on the positive edge.
+- input reset: Active-high synchronous reset signal. The reset initializes the FSM to state A. 
+- input s: Control signal used to transition from state A to state B.
+- input w: Signal observed in state B to determine the output z.
+- output z: Output signal set based on the FSM's evaluation of input w.
+
+State Machine Description:
+- Initial State: The FSM begins in state A upon reset. This state is maintained as long as s = 0.
+- State Transition from A: The FSM transitions from state A to state B when s = 1.
+- State B Operation: In state B, the FSM evaluates the input w over the next three consecutive clock cycles. 
+  - If w = 1 occurs exactly two times within these three cycles, set output z to 1 in the cycle immediately following these three cycles.
+  - If w = 1 occurs less than or more than two times, set output z to 0 in the cycle immediately following these three cycles.
+- Cycle Continuation: After setting z, the FSM continues to monitor w in sets of three cycles while in state B.
+
+Sequential Logic and Reset:
+- The reset signal is synchronous and active high. On reset, the FSM returns to state A.
+- All registers and flip-flops are initialized to zero unless otherwise specified.
+
+Bit Indexing:
+- All ports are 1-bit wide. Bit[0] represents the least significant bit.
+
+Edge Case Handling:
+- The FSM effectively handles boundary conditions by resetting the count of w observations every three cycles in state B.
+- The input s is only checked in state A, and any changes to s while in state B do not affect the FSM until it returns to state A.
+
+No race conditions are anticipated due to the synchronous nature of the FSM and the clear separation of state transitions and logic evaluations based on clock cycles.
+</ENHANCED_SPEC>

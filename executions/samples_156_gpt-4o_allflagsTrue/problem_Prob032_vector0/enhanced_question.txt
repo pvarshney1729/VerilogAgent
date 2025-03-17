@@ -1,0 +1,23 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input [2:0] vec`: A 3-bit unsigned vector input. Bit indexing follows the convention where `vec[0]` refers to the least significant bit (LSB).
+
+- Output Ports:
+  - `output [2:0] outv`: A 3-bit unsigned vector output that mirrors the input vector `vec`. Bit indexing follows the convention where `outv[0]` refers to the least significant bit (LSB).
+  - `output o2`: A 1-bit output connected to the most significant bit (MSB) of the input vector `vec[2]`.
+  - `output o1`: A 1-bit output connected to the middle bit of the input vector `vec[1]`.
+  - `output o0`: A 1-bit output connected to the least significant bit (LSB) of the input vector `vec[0]`.
+
+Functional Description:
+- The module, TopModule, receives a 3-bit input vector `vec`.
+- The output `outv` directly replicates the input `vec`, preserving bit order.
+- Outputs `o2`, `o1`, and `o0` are individual 1-bit signals that represent each bit of the input vector `vec`:
+  - `o0` corresponds to `vec[0]`,
+  - `o1` corresponds to `vec[1]`,
+  - `o2` corresponds to `vec[2]`.
+
+- This module's logic is purely combinational, with no clocking or state elements involved.
+</ENHANCED_SPEC>

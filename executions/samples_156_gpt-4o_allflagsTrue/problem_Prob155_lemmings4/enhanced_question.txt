@@ -1,0 +1,72 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specifications:
+- Inputs:
+  - clk: 1-bit clock signal, triggers on the positive edge.
+  - areset: 1-bit asynchronous reset signal, active high. Resets the FSM to the initial state (walking left) immediately upon activation.
+  - bump_left: 1-bit signal indicating a bump on the left side.
+  - bump_right: 1-bit signal indicating a bump on the right side.
+  - ground: 1-bit signal indicating whether the ground is present (1) or absent (0).
+  - dig: 1-bit signal to initiate digging.
+
+- Outputs:
+  - walk_left: 1-bit output, high when the Lemming is walking left.
+  - walk_right: 1-bit output, high when the Lemming is walking right.
+  - aaah: 1-bit output, high when the Lemming is falling.
+  - digging: 1-bit output, high when the Lemming is digging.
+
+Finite State Machine (FSM) Description:
+- States:
+  1. WALK_LEFT: Lemming is walking to the left.
+  2. WALK_RIGHT: Lemming is walking to the right.
+  3. FALLING_LEFT: Lemming is falling while initially walking left.
+  4. FALLING_RIGHT: Lemming is falling while initially walking right.
+  5. DIGGING_LEFT: Lemming is digging while initially walking left.
+  6. DIGGING_RIGHT: Lemming is digging while initially walking right.
+  7. SPLATTERED: Lemming has splattered and all outputs are 0.
+
+- State Transitions:
+  - Upon areset: Transition to WALK_LEFT.
+  - From WALK_LEFT:
+    - If ground = 0: Transition to FALLING_LEFT.
+    - Else if dig = 1 and ground = 1: Transition to DIGGING_LEFT.
+    - Else if bump_left = 1 or bump_right = 1: Transition to WALK_RIGHT.
+  - From WALK_RIGHT:
+    - If ground = 0: Transition to FALLING_RIGHT.
+    - Else if dig = 1 and ground = 1: Transition to DIGGING_RIGHT.
+    - Else if bump_left = 1 or bump_right = 1: Transition to WALK_LEFT.
+  - From FALLING_LEFT or FALLING_RIGHT:
+    - If ground = 1 and fall duration ≤ 20 cycles: Transition to the respective WALK state.
+    - If ground = 1 and fall duration > 20 cycles: Transition to SPLATTERED.
+  - From DIGGING_LEFT or DIGGING_RIGHT:
+    - If ground = 0: Transition to the respective FALLING state.
+  - SPLATTERED: Remains in SPLATTERED state indefinitely unless areset is activated.
+
+- Output Logic:
+  - WALK_LEFT: walk_left = 1, walk_right = 0, aaah = 0, digging = 0.
+  - WALK_RIGHT: walk_left = 0, walk_right = 1, aaah = 0, digging = 0.
+  - FALLING_LEFT or FALLING_RIGHT: walk_left = 0, walk_right = 0, aaah = 1, digging = 0.
+  - DIGGING_LEFT or DIGGING_RIGHT: walk_left = 0, walk_right = 0, aaah = 0, digging = 1.
+  - SPLATTERED: walk_left = 0, walk_right = 0, aaah = 0, digging = 0.
+
+- Initial Values:
+  - On areset, the FSM is set to WALK_LEFT.
+  - The fall duration counter resets to 0 whenever a Lemming hits the ground after falling.
+
+- Precedence of Actions:
+  1. Falling: If ground = 0, falling has the highest priority.
+  2. Digging: If ground = 1 and dig = 1, digging takes precedence over direction switching.
+  3. Direction Switching: Changes direction if bumped while on the ground.
+
+- Clock Cycle Relationships:
+  - All state transitions occur on the positive edge of clk.
+  - The fall duration counter increments every clock cycle while in the FALLING state.
+
+- Boundary Conditions:
+  - Simultaneous bumps (bump_left and bump_right) result in direction switch.
+  - Dig commands while falling or without ground are ignored.
+  - The FSM does not reset to a walking state automatically after SPLATTERED; requires areset.
+
+This specification ensures that the Lemming's behavior, as modeled by the FSM, aligns with the described rules and priorities of the Lemmings' world.
+</ENHANCED_SPEC>

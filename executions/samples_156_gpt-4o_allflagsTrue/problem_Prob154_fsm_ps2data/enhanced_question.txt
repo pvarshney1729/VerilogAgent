@@ -1,0 +1,24 @@
+<ENHANCED_SPEC>
+The module `TopModule` is designed to process an incoming byte stream and identify message boundaries using a finite state machine (FSM). The module interface and its behavior are defined as follows:
+
+**Ports:**
+- `input clk`: Clock signal for synchronous operation. All sequential elements are triggered on the positive edge of this clock.
+- `input reset`: Active-high synchronous reset. When asserted, the module will reset to its initial state.
+- `input [7:0] in`: An 8-bit input port representing bytes of the incoming data stream.
+- `output reg [23:0] out_bytes`: A 24-bit output port that holds a 3-byte message when a complete message is detected. The output is valid when `done` is asserted.
+- `output reg done`: A 1-bit output that signals the completion of a message reception. This signal is asserted in the clock cycle immediately after the entire message is received.
+
+**Behavior:**
+- The FSM will monitor the incoming bytes on `in`. It will discard bytes until it detects a byte where `in[3] == 1`. This is interpreted as the start of a new message.
+- Once a byte with `in[3] == 1` is detected, it is considered as the first byte of the message. The FSM will then collect the next two sequential bytes to form a complete 3-byte message.
+- After collecting three bytes, the FSM will assert the `done` signal for one clock cycle while outputting the collected message on `out_bytes`. The byte order is such that `out_bytes[23:16]` holds the first byte, `out_bytes[15:8]` holds the second byte, and `out_bytes[7:0]` holds the third byte.
+- The `out_bytes` signal is only guaranteed to be valid when `done` is asserted. At other times, the content of `out_bytes` is considered don't-care.
+- The reset operation will return the FSM to its initial state, ready to detect the start of a new message. All internal state and outputs will be reset accordingly.
+
+**Implementation Details:**
+- The FSM consists of states to handle the detection of the start byte and the collection of the subsequent bytes.
+- Ensure that any registers used in this module are initialized appropriately on reset to avoid undefined states.
+- Handle edge cases where bytes are rapidly switched or when the input stream ends before a complete message is detected.
+
+This specification ensures clarity in the design and implementation of the `TopModule` in Verilog, facilitating accurate and efficient development.
+</ENHANCED_SPEC>

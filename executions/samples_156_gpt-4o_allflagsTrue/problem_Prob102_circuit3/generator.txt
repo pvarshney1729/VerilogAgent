@@ -1,0 +1,49 @@
+Generated Response:
+
+```xml
+<REASONING>
+The task is to implement a combinational logic circuit based on the provided truth table. The truth table indicates the output `q` for all combinations of inputs `a`, `b`, `c`, and `d`. By analyzing the truth table, we can derive the logic expression for `q`.
+
+From the truth table:
+- `q` is `1` when:
+  - `b` is `1` and `d` is `1`
+  - `b` is `1` and `c` is `1`
+  - `a` is `1` and `d` is `1`
+  - `a` is `1` and `c` is `1`
+
+The logic expression for `q` can be derived as:
+- `q = (b & d) | (b & c) | (a & d) | (a & c)`
+
+This expression covers all the cases where `q` is `1` according to the truth table. The implementation will use this logic expression to drive the output `q`.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input  logic a,
+    input  logic b,
+    input  logic c,
+    input  logic d,
+    output logic q
+);
+
+    assign q = (b & d) | (b & c) | (a & d) | (a & c);
+
+endmodule
+[DONE]
+</CODE>
+```
+
+Generated Code:
+
+module TopModule(
+    input  logic a,
+    input  logic b,
+    input  logic c,
+    input  logic d,
+    output logic q
+);
+
+    assign q = (b & d) | (b & c) | (a & d) | (a & c);
+
+endmodule

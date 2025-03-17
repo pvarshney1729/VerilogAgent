@@ -1,0 +1,68 @@
+Generated Response:
+
+<REASONING>
+To implement the decade counter as specified, we need a 4-bit register to hold the count value, which will be output through the port `q`. The counter should increment from 0 to 9 and then wrap back to 0. The reset is synchronous, meaning it should only affect the counter on the rising edge of the clock.
+
+1. **Module Declaration**: We declare the module `TopModule` with inputs `clk` and `reset`, and a 4-bit output `q`.
+
+2. **Register Declaration**: We declare a 4-bit logic register `count` to hold the current count value.
+
+3. **Sequential Logic**: We use an `always_ff` block triggered on the positive edge of `clk` to implement the counter logic. Inside this block:
+   - If `reset` is high, we set `count` to 0.
+   - If `count` reaches 9 (4'b1001), we reset it to 0 on the next clock cycle.
+   - Otherwise, we increment `count` by 1.
+
+4. **Output Assignment**: We assign the value of `count` to the output `q`.
+
+This implementation adheres to the guidelines and coding conventions provided, ensuring synchronous reset and correct counter operation.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    logic [3:0] count;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            count <= 4'b0000;
+        end else if (count == 4'b1001) begin
+            count <= 4'b0000;
+        end else begin
+            count <= count + 1;
+        end
+    end
+
+    assign q = count;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    logic [3:0] count;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            count <= 4'b0000;
+        end else if (count == 4'b1001) begin
+            count <= 4'b0000;
+        end else begin
+            count <= count + 1;
+        end
+    end
+
+    assign q = count;
+
+endmodule

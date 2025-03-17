@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Specification for TopModule:
+
+Interface:
+- Input Ports:
+  - `y`: A 6-bit wide input port representing the current state of a state machine. The port uses a one-hot encoding scheme where each bit represents a specific state.
+  - `w`: A 1-bit input signal used as a transition condition for the state machine.
+  
+- Output Ports:
+  - `Y1`: A 1-bit output signal that represents a specific condition or state output.
+  - `Y3`: A 1-bit output signal that represents another specific condition or state output.
+
+State Machine Description:
+- The state machine has six states labeled A, B, C, D, E, and F.
+- The one-hot encoding for these states is as follows:
+  - State A: y[5:0] = 000001
+  - State B: y[5:0] = 000010
+  - State C: y[5:0] = 000100
+  - State D: y[5:0] = 001000
+  - State E: y[5:0] = 010000
+  - State F: y[5:0] = 100000
+
+- State Transitions:
+  - A transitions to B on input w = 0, and remains in A on w = 1.
+  - B transitions to C on w = 0, and to D on w = 1.
+  - C transitions to E on w = 0, and to D on w = 1.
+  - D transitions to F on w = 0, and to A on w = 1.
+  - E remains in E on w = 0, and transitions to D on w = 1.
+  - F transitions to C on w = 0, and to D on w = 1.
+
+- Initial State:
+  - The state machine resets into state A. The reset is asynchronous, meaning the state is set to A regardless of the clock signal when reset is activated.
+
+- State Outputs:
+  - States E and F have an output value of 1; all other states have an output value of 0.
+  - Y1 and Y3 should be driven based on the current state and potentially other conditions as per the design requirements.
+
+Next-State Logic:
+- The module should implement the next-state signals `Y2` and `Y4`, corresponding to the state machine's y[1] and y[3] bits, respectively.
+- The logic equations for `Y2` (next state for y[1]) and `Y4` (next state for y[3]) need to be derived based on the state transitions defined by the one-hot encoding.
+
+- All flip-flops or registers within the module should have clearly defined initial values corresponding to the reset state of the state machine.
+
+Edge Cases and Boundary Conditions:
+- Ensure correct behavior at all input boundaries, particularly during transitions where `w` can change state rapidly.
+- Consider race conditions where state transitions might overlap with input signal changes.
+
+</ENHANCED_SPEC>

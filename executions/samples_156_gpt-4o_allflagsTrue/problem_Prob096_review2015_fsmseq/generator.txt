@@ -1,0 +1,120 @@
+Generated Response:
+
+<REASONING>
+To implement the module `TopModule`, we need to design a finite-state machine (FSM) that detects the sequence `1101` in the input bit stream `data`. The FSM will have several states representing the progress of detecting the sequence. Once the sequence is detected, the output `start_shifting` should be set to `1` and remain `1` until a reset occurs.
+
+1. **State Encoding**: We define states using an enumerated type `state_t` with the following states:
+   - `IDLE`: Initial state, no bits detected.
+   - `S1`: Detected the first `1`.
+   - `S11`: Detected `11`.
+   - `S110`: Detected `110`.
+   - `S1101`: Detected `1101`, sequence complete.
+
+2. **State Transition Logic**: We use a sequential `always_ff` block triggered on the positive edge of `clk` to handle state transitions. If `reset` is asserted, the FSM returns to the `IDLE` state, and `start_shifting` is cleared. Otherwise, the FSM transitions to the next state based on the current state and input `data`.
+
+3. **Next State Logic**: A combinational `always_comb` block determines the next state based on the current state and input `data`.
+
+4. **Output Logic**: The `start_shifting` output is set to `1` when the FSM reaches the `S1101` state. It remains `1` until a reset occurs.
+
+5. **Synchronous Reset**: The reset is synchronous, meaning it is sampled with respect to the clock. It is handled within the sequential `always_ff` block without including `reset` in the sensitivity list.
+
+6. **Coding Conventions**: We adhere to the specified coding conventions, using `logic` for all signals, and not explicitly specifying the sensitivity list for combinational logic.
+
+By following these steps, we ensure the FSM correctly detects the sequence `1101` and sets `start_shifting` as required.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    input  logic data,
+    output logic start_shifting
+);
+
+    // State encoding using typedef enum
+    typedef enum logic [2:0] {
+        IDLE    = 3'b000,
+        S1      = 3'b001,
+        S11     = 3'b010,
+        S110    = 3'b011,
+        S1101   = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // Sequential logic for state transition and output logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            start_shifting <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == S1101) begin
+                start_shifting <= 1'b1;
+            end
+        end
+    end
+
+    // Combinational logic for next state determination
+    always_comb begin
+        case (current_state)
+            IDLE:   next_state = (data) ? S1 : IDLE;
+            S1:     next_state = (data) ? S11 : IDLE;
+            S11:    next_state = (data) ? S11 : S110;
+            S110:   next_state = (data) ? S1101 : IDLE;
+            S1101:  next_state = S1101; // Remain in S1101 once reached
+            default: next_state = IDLE;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    input  logic data,
+    output logic start_shifting
+);
+
+    // State encoding using typedef enum
+    typedef enum logic [2:0] {
+        IDLE    = 3'b000,
+        S1      = 3'b001,
+        S11     = 3'b010,
+        S110    = 3'b011,
+        S1101   = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // Sequential logic for state transition and output logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            start_shifting <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == S1101) begin
+                start_shifting <= 1'b1;
+            end
+        end
+    end
+
+    // Combinational logic for next state determination
+    always_comb begin
+        case (current_state)
+            IDLE:   next_state = (data) ? S1 : IDLE;
+            S1:     next_state = (data) ? S11 : IDLE;
+            S11:    next_state = (data) ? S11 : S110;
+            S110:   next_state = (data) ? S1101 : IDLE;
+            S1101:  next_state = S1101; // Remain in S1101 once reached
+            default: next_state = IDLE;
+        endcase
+    end
+
+endmodule

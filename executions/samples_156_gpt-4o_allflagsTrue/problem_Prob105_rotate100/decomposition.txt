@@ -1,0 +1,38 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, load, ena[1:0], data[99:0] and output port q[99:0].",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input clk,\n    input load,\n    input [1:0] ena,\n    input [99:0] data,\n    output reg [99:0] q\n);\n\nalways @(posedge clk) begin\n    if (load) begin\n        q <= data;\n    end else begin\n        case (ena)\n            2'b01: q <= {q[0], q[99:1]}; // Rotate right\n            2'b10: q <= {q[98:0], q[99]}; // Rotate left\n            default: q <= q; // No rotation\n        endcase\n    end\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the synchronous load functionality to load data[99:0] into the shift register when load is high.",
+        "source": "(1) load: Loads shift register with data[99:0] instead of rotating. Synchronous active high.",
+        "implementation": "always @(posedge clk) begin\n    if (load) begin\n        q <= data;\n    end\nend"
+    },
+    {
+        "id": "3",
+        "content": "Implement the logic to rotate the shift register right by one bit when ena is 2'b01.",
+        "source": "(2) ena[1:0]: Synchronous. Chooses whether and which direction to rotate: (a) 2'b01 rotates right by one bit.",
+        "implementation": "always @(posedge clk) begin\n    if (ena == 2'b01) begin\n        q <= {q[0], q[99:1]};\n    end\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement the logic to rotate the shift register left by one bit when ena is 2'b10.",
+        "source": "(2) ena[1:0]: Synchronous. Chooses whether and which direction to rotate: (b) 2'b10 rotates left by one bit.",
+        "implementation": "always @(posedge clk) begin\n    if (ena == 2'b10) begin\n        q <= {q[98:0], q[99]};\n    end\nend"
+    },
+    {
+        "id": "5",
+        "content": "Ensure that no rotation occurs when ena is 2'b00 or 2'b11, maintaining the current state of the shift register.",
+        "source": "(2) ena[1:0]: Synchronous. Chooses whether and which direction to rotate: (c) 2'b00 and 2'b11 do not rotate.",
+        "implementation": "always @(posedge clk) begin\n    if (load) begin\n        q <= data;\n    end else begin\n        case (ena)\n            2'b01: q <= {q[0], q[99:1]}; // Rotate right\n            2'b10: q <= {q[98:0], q[99]}; // Rotate left\n            2'b00, 2'b11: q <= q; // No rotation\n        endcase\n    end\nend"
+    },
+    {
+        "id": "6",
+        "content": "Assign the current state of the shift register to the output q[99:0].",
+        "source": "(3) q: The contents of the rotator.",
+        "implementation": "assign q = shift_register;"
+    }
+]

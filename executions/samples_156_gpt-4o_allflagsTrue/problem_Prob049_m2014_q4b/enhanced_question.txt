@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module: TopModule
+
+Interface:
+
+- Inputs:
+  - `input clk`: Clock signal. The module is triggered on the positive edge of this clock.
+  - `input ar`: Asynchronous reset signal. Active high, meaning when `ar` is '1', the reset is asserted.
+  - `input d`: Data input for the D flip-flop.
+
+- Output:
+  - `output reg q`: Data output. This is a registered output, representing the stored value in the D flip-flop.
+
+Functionality:
+
+The module implements a D flip-flop with the following characteristics:
+
+1. **Positive Edge-Triggered**: The value of `d` is sampled and stored in `q` on the rising edge of `clk`, provided the asynchronous reset `ar` is not active.
+
+2. **Asynchronous Reset**: 
+   - The reset is active high. When `ar` is asserted ('1'), the output `q` is immediately reset to '0', regardless of the clock state.
+   - If `ar` is not asserted ('0'), the D flip-flop operates normally, capturing the input `d` on the rising edge of `clk`.
+
+3. **Initial Condition**: 
+   - On power-up, or when the module is instantiated, the initial state of `q` is undefined until the first reset or clock edge event occurs.
+
+Additional Notes:
+
+- Bit Indexing: Not applicable as all signals are one bit.
+- There are no additional timing constraints or dependencies beyond those stated.
+- Ensure that the design accounts for any potential glitches on the `ar` line that could cause unintended resets.
+</ENHANCED_SPEC>

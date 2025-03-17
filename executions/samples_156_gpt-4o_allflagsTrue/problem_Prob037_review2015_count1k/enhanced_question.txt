@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit, clock signal. All sequential logic is triggered on the positive edge.
+  - reset: 1-bit, active high synchronous reset.
+
+- Output Ports:
+  - q: 10-bit vector, representing the current counter value. Bit[0] refers to the least significant bit (LSB), and bit[9] is the most significant bit (MSB).
+
+Functionality:
+- The module implements a 10-bit counter that counts from 0 to 999, inclusive. It completes a full cycle every 1000 clock cycles.
+- The counter increments by 1 on each positive edge of the clock.
+
+Reset Behavior:
+- The reset input is a synchronous reset, meaning it is sampled on the positive edge of the clock.
+- When reset is high, the counter is set to 0 on the next positive clock edge.
+- The reset state of the counter is 0.
+
+Boundary Conditions:
+- Upon reaching the count of 999, the counter will wrap around to 0 on the next clock cycle.
+
+Additional Notes:
+- All counter operations occur synchronously with the clock, ensuring predictable behavior in a clocked environment.
+- The module does not require any special handling for underflow or overflow beyond the defined counting range, as it wraps within the specified range of 0 to 999.
+</ENHANCED_SPEC>

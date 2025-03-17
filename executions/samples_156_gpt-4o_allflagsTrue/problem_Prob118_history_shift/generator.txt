@@ -1,0 +1,73 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the given specifications and guidelines. Here's the step-by-step reasoning:
+
+1. **Module Declaration**: The module is named `TopModule` and includes all the specified input and output ports. All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **Asynchronous Reset**: The `areset` signal is used to asynchronously reset the `predict_history` register to zero. This is implemented using the `always_ff` block with `posedge areset` in the sensitivity list.
+
+3. **Misprediction Handling**: If `train_mispredicted` is high, the `predict_history` register is updated with the `train_history` concatenated with `train_taken`. This operation takes precedence over the prediction logic.
+
+4. **Prediction Handling**: If `predict_valid` is high and there is no misprediction, the `predict_history` register is updated by shifting in `predict_taken` from the LSB side.
+
+5. **Sequential Logic**: The logic is implemented using an `always_ff` block triggered on the positive edge of the clock, ensuring all operations are synchronized with the clock.
+
+6. **Signal Indexing**: The indexing of the `predict_history` register is done correctly, with the LSB being the direction of the youngest branch.
+
+7. **Coding Conventions**: The code adheres to the coding conventions by using `logic` for all signals, using `always_ff` for sequential logic, and ensuring all numeric constants are sized.
+
+This implementation ensures that the module behaves as specified, handling both predictions and mispredictions correctly, with the appropriate precedence given to mispredictions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic predict_valid,
+    input logic predict_taken,
+    input logic train_mispredicted,
+    input logic train_taken,
+    input logic [31:0] train_history,
+    output logic [31:0] predict_history
+);
+
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            predict_history <= 32'b0;
+        end else if (train_mispredicted) begin
+            predict_history <= {train_history[30:0], train_taken};
+        end else if (predict_valid) begin
+            predict_history <= {predict_history[30:0], predict_taken};
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic predict_valid,
+    input logic predict_taken,
+    input logic train_mispredicted,
+    input logic train_taken,
+    input logic [31:0] train_history,
+    output logic [31:0] predict_history
+);
+
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            predict_history <= 32'b0;
+        end else if (train_mispredicted) begin
+            predict_history <= {train_history[30:0], train_taken};
+        end else if (predict_valid) begin
+            predict_history <= {predict_history[30:0], predict_taken};
+        end
+    end
+
+endmodule

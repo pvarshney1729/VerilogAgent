@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input a`: 1-bit input signal, referred to as `a`.
+  - `input b`: 1-bit input signal, referred to as `b`.
+  - `input c`: 1-bit input signal, referred to as `c`.
+  - `input d`: 1-bit input signal, referred to as `d`.
+- Output Ports:
+  - `output q`: 1-bit output signal, referred to as `q`.
+
+Design Specifications:
+1. The module implements a combinational logic circuit with no internal state or clock dependency.
+2. All input and output signals are 1-bit wide. These signals use binary representation with `0` as logic low and `1` as logic high.
+3. Bit Indexing Convention: `bit[0]` refers to the least significant bit (LSB).
+4. The logic for output `q` is derived from the following truth table based on the given simulation waveforms:
+
+   | a | b | c | d | q |
+   |---|---|---|---|---|
+   | 0 | 0 | 0 | 0 | 1 |
+   | 0 | 0 | 0 | 1 | 0 |
+   | 0 | 0 | 1 | 0 | 0 |
+   | 0 | 0 | 1 | 1 | 1 |
+   | 0 | 1 | 0 | 0 | 0 |
+   | 0 | 1 | 0 | 1 | 1 |
+   | 0 | 1 | 1 | 0 | 1 |
+   | 0 | 1 | 1 | 1 | 0 |
+   | 1 | 0 | 0 | 0 | 0 |
+   | 1 | 0 | 0 | 1 | 1 |
+   | 1 | 0 | 1 | 0 | 1 |
+   | 1 | 0 | 1 | 1 | 0 |
+   | 1 | 1 | 0 | 0 | 1 |
+   | 1 | 1 | 0 | 1 | 0 |
+   | 1 | 1 | 1 | 0 | 0 |
+   | 1 | 1 | 1 | 1 | 1 |
+
+5. There are no sequential elements, flip-flops, or registers, so initial values and reset conditions are not applicable.
+6. There are no race conditions or clock edge dependencies as this is a purely combinational circuit.
+7. The circuit's behavior is fully defined by the truth table and must be implemented to produce the specified `q` output for each input combination.
+</ENHANCED_SPEC>

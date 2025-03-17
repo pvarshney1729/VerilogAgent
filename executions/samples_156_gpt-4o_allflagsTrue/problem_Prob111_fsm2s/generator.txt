@@ -1,0 +1,141 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the guidelines and specifications provided. Here's the step-by-step reasoning:
+
+1. **Module Declaration**: The module is named `TopModule` with inputs `clk`, `reset`, `j`, `k`, and output `out`. All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **State Encoding**: Two states are defined using local parameters `OFF` and `ON`, each represented by a single bit (`1'b0` and `1'b1`, respectively).
+
+3. **State Registers**: Two logic variables, `state` and `next_state`, are declared to hold the current and next state of the state machine.
+
+4. **Synchronous State Transition Logic**: An `always` block is used to update the `state` on the rising edge of the `clk`. If `reset` is high, the state is set to `OFF`. Otherwise, the state is updated to `next_state`.
+
+5. **Next State Logic**: A combinational `always` block (`always @(*)`) is used to determine the `next_state` based on the current `state` and inputs `j` and `k`. The transitions are implemented as per the state diagram:
+   - From `OFF`, if `j` is 1, transition to `ON`; otherwise, stay in `OFF`.
+   - From `ON`, if `k` is 1, transition to `OFF`; otherwise, stay in `ON`.
+
+6. **Output Logic**: Another combinational `always` block is used to set the output `out` based on the current `state`. The output is 0 in the `OFF` state and 1 in the `ON` state.
+
+7. **Coding Conventions**: The code adheres to the conventions by using `logic` for all signals, using `always @(*)` for combinational logic, and ensuring that all numeric constants have a size greater than zero.
+
+This implementation ensures that the module behaves as a Moore state machine with the specified state transitions and output logic.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    localparam logic OFF = 1'b0;
+    localparam logic ON  = 1'b1;
+
+    // State registers
+    logic state, next_state;
+
+    // Synchronous state transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= OFF;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (state)
+            OFF: begin
+                if (j) begin
+                    next_state = ON;
+                end else begin
+                    next_state = OFF;
+                end
+            end
+            ON: begin
+                if (k) begin
+                    next_state = OFF;
+                end else begin
+                    next_state = ON;
+                end
+            end
+            default: next_state = OFF;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    localparam logic OFF = 1'b0;
+    localparam logic ON  = 1'b1;
+
+    // State registers
+    logic state, next_state;
+
+    // Synchronous state transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= OFF;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (state)
+            OFF: begin
+                if (j) begin
+                    next_state = ON;
+                end else begin
+                    next_state = OFF;
+                end
+            end
+            ON: begin
+                if (k) begin
+                    next_state = OFF;
+                end else begin
+                    next_state = ON;
+                end
+            end
+            default: next_state = OFF;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule

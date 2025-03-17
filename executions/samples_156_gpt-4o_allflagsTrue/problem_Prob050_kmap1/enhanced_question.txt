@@ -1,0 +1,56 @@
+<ENHANCED_SPEC>
+Module Specification for TopModule:
+
+1. Module Name:
+   - TopModule
+
+2. Port Definitions:
+   - Input Ports:
+     - `input wire a` (1-bit, unsigned)
+     - `input wire b` (1-bit, unsigned)
+     - `input wire c` (1-bit, unsigned)
+   - Output Ports:
+     - `output wire out` (1-bit, unsigned)
+
+3. Logic Functionality:
+   - The module implements a combinational logic circuit based on the following Karnaugh map:
+
+     Karnaugh Map:
+     ```
+          a
+      bc   0   1
+      00 | 0 | 1 |
+      01 | 1 | 1 |
+      11 | 1 | 1 |
+      10 | 1 | 1 |
+     ```
+
+   - Binary Representation:
+     - The input vector can be represented as {b, c, a}.
+     - For a = 0:
+       - {bc = 00}: out = 0
+       - {bc = 01}: out = 1
+       - {bc = 10}: out = 1
+       - {bc = 11}: out = 1
+     - For a = 1:
+       - {bc = 00}: out = 1
+       - {bc = 01}: out = 1
+       - {bc = 10}: out = 1
+       - {bc = 11}: out = 1
+
+4. Logic Expression:
+   - The output `out` can be expressed as:
+     - `out = (b & ~c) | a`
+
+5. Implementation Details:
+   - The module is purely combinational, with no clock or reset signals involved.
+   - There are no sequential elements; therefore, initial values and reset behavior are not applicable.
+   - The module should be implemented to ensure minimal logic delay and efficient resource utilization.
+  
+6. Edge Cases:
+   - All possible combinations of inputs {a, b, c} are explicitly covered by the Karnaugh map.
+   - Ensure correct operation for all input transitions.
+
+7. Conventions:
+   - Bit indexing and MSB/LSB conventions are not applicable as all ports are single-bit.
+</ENHANCED_SPEC>

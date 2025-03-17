@@ -1,0 +1,129 @@
+Generated Response:
+
+<REASONING>
+To implement the FSM as specified, we need to define a state machine with the following states:
+- **STATE_A**: The initial state where the FSM waits for the input `s` to become 1. The FSM remains in this state as long as `s` is 0.
+- **STATE_B1, STATE_B2, STATE_B3**: These states are used to count the number of times `w` is 1 over three clock cycles. The FSM transitions through these states sequentially.
+- **STATE_C**: This state is used to evaluate the count of `w` and set the output `z` accordingly. If `w` was 1 exactly twice during the three cycles, `z` is set to 1; otherwise, it is set to 0.
+
+The FSM transitions are as follows:
+- From **STATE_A** to **STATE_B1** when `s` is 1.
+- From **STATE_B1** to **STATE_B2**, **STATE_B2** to **STATE_B3**, and **STATE_B3** to **STATE_C** sequentially.
+- From **STATE_C** back to **STATE_B1** to continue the cycle of checking `w`.
+
+The synchronous reset ensures that the FSM returns to **STATE_A** when the reset signal is high. The `w_count` is used to track the number of times `w` is 1 during the three cycles in states **STATE_B1**, **STATE_B2**, and **STATE_B3**. The output `z` is set based on the value of `w_count` in **STATE_C**.
+
+The code adheres to the coding conventions by using `logic` for all signals, using `always @(*)` for combinational logic, and ensuring the reset is synchronous.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic s,
+    input logic w,
+    output logic z
+);
+
+    typedef enum logic [2:0] {
+        STATE_A  = 3'b000,
+        STATE_B1 = 3'b001,
+        STATE_B2 = 3'b010,
+        STATE_B3 = 3'b011,
+        STATE_C  = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [1:0] w_count;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_A;
+            w_count <= 2'b00;
+            z <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == STATE_B1 || current_state == STATE_B2 || current_state == STATE_B3) begin
+                if (w) w_count <= w_count + 1;
+            end
+            if (current_state == STATE_C) begin
+                if (w_count == 2'b10) z <= 1'b1;
+                else z <= 1'b0;
+                w_count <= 2'b00; // Reset count for next cycle
+            end
+        end
+    end
+
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (s) next_state = STATE_B1;
+                else next_state = STATE_A;
+            end
+            STATE_B1: next_state = STATE_B2;
+            STATE_B2: next_state = STATE_B3;
+            STATE_B3: next_state = STATE_C;
+            STATE_C: next_state = STATE_B1;
+            default: next_state = STATE_A;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic s,
+    input logic w,
+    output logic z
+);
+
+    typedef enum logic [2:0] {
+        STATE_A  = 3'b000,
+        STATE_B1 = 3'b001,
+        STATE_B2 = 3'b010,
+        STATE_B3 = 3'b011,
+        STATE_C  = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [1:0] w_count;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_A;
+            w_count <= 2'b00;
+            z <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == STATE_B1 || current_state == STATE_B2 || current_state == STATE_B3) begin
+                if (w) w_count <= w_count + 1;
+            end
+            if (current_state == STATE_C) begin
+                if (w_count == 2'b10) z <= 1'b1;
+                else z <= 1'b0;
+                w_count <= 2'b00; // Reset count for next cycle
+            end
+        end
+    end
+
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (s) next_state = STATE_B1;
+                else next_state = STATE_A;
+            end
+            STATE_B1: next_state = STATE_B2;
+            STATE_B2: next_state = STATE_B3;
+            STATE_B3: next_state = STATE_C;
+            STATE_C: next_state = STATE_B1;
+            default: next_state = STATE_A;
+        endcase
+    end
+
+endmodule

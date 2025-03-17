@@ -1,0 +1,62 @@
+Generated Response:
+
+```xml
+<REASONING>
+To implement the TopModule, we need to follow the given specifications and guidelines. The module has a simple combinational logic design, so we will use continuous assignments with the `assign` statement. The module will have three main tasks:
+1. Determine the state of the heater based on the mode and too_cold signals.
+2. Determine the state of the air conditioner based on the mode and too_hot signals.
+3. Determine the state of the fan based on the heater, air conditioner, and fan_on signals.
+
+We will use bitwise operations to implement the logic for each output. The heater should be on when the mode is heating (mode = 1) and it is too cold (too_cold = 1). The air conditioner should be on when the mode is cooling (mode = 0) and it is too hot (too_hot = 1). The fan should be on when either the heater or air conditioner is on, or when the user requests it (fan_on = 1).
+
+The guidelines specify using `logic` for all ports and signals, and using `always @(*)` for combinational logic, but since we are using continuous assignments, we will not use `always` blocks. We will ensure all numeric constants are properly sized.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input  logic mode,
+    input  logic too_cold,
+    input  logic too_hot,
+    input  logic fan_on,
+    output logic heater,
+    output logic aircon,
+    output logic fan
+);
+
+    // Heater logic: On in heating mode when too cold
+    assign heater = mode & too_cold;
+
+    // Air conditioner logic: On in cooling mode when too hot
+    assign aircon = ~mode & too_hot;
+
+    // Fan logic: On when heater or aircon is on, or when fan_on is requested
+    assign fan = heater | aircon | fan_on;
+
+endmodule
+[DONE]
+</CODE>
+```
+
+Generated Code:
+
+module TopModule(
+    input  logic mode,
+    input  logic too_cold,
+    input  logic too_hot,
+    input  logic fan_on,
+    output logic heater,
+    output logic aircon,
+    output logic fan
+);
+
+    // Heater logic: On in heating mode when too cold
+    assign heater = mode & too_cold;
+
+    // Air conditioner logic: On in cooling mode when too hot
+    assign aircon = ~mode & too_hot;
+
+    // Fan logic: On when heater or aircon is on, or when fan_on is requested
+    assign fan = heater | aircon | fan_on;
+
+endmodule

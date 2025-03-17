@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `in`: A 3-bit input vector. The bits are indexed from 2 (Most Significant Bit) to 0 (Least Significant Bit), i.e., `in[2:0]`.
+
+- Output Ports:
+  - `out`: A 2-bit output vector. The bits are indexed from 1 (Most Significant Bit) to 0 (Least Significant Bit), i.e., `out[1:0]`.
+
+Functionality:
+- The module implements a "population count" circuit. It counts the number of '1's present in the 3-bit input vector `in`.
+- The output `out` represents this count as a 2-bit binary number.
+
+Operational Details:
+- The module is purely combinational; there are no clock or reset signals associated with this design.
+- The population count operation is performed as follows:
+  - If `in` has 0 '1's, `out` will be `2'b00`.
+  - If `in` has 1 '1', `out` will be `2'b01`.
+  - If `in` has 2 '1's, `out` will be `2'b10`.
+  - If `in` has 3 '1's, `out` will be `2'b11`.
+
+Edge Cases:
+- All possible input combinations (from `3'b000` to `3'b111`) are valid and accounted for, given the 3-bit width of the input vector.
+
+Implementation Notes:
+- The calculation of the population count should ensure there are no race conditions as this is a purely combinational circuit.
+- The design must ensure the output `out` is updated immediately in response to any changes in the input `in`.
+</ENHANCED_SPEC>

@@ -1,0 +1,151 @@
+Generated Response:
+
+```xml
+<REASONING>
+The implementation of the TopModule follows the guidelines and coding conventions provided. The module uses a Moore state machine with two states: WALK_LEFT and WALK_RIGHT. The state transitions are determined by the bump_left and bump_right inputs, and the outputs walk_left and walk_right are determined by the current state.
+
+1. **State Encoding**: Two states are defined using an enumerated type (state_t) for clarity and readability. The states are WALK_LEFT and WALK_RIGHT.
+
+2. **State Transition Logic**: An always_ff block is used for the state transition logic, triggered on the positive edge of the clock or the positive edge of the asynchronous reset (areset). If areset is asserted, the state is reset to WALK_LEFT. Otherwise, the state transitions to the next state based on the current state and inputs.
+
+3. **Next State Logic**: An always_comb block is used to determine the next state based on the current state and the bump inputs. If in WALK_LEFT state and bump_left is asserted, the next state is WALK_RIGHT. If in WALK_RIGHT state and bump_right is asserted, the next state is WALK_LEFT. If both bump_left and bump_right are asserted, the direction switches.
+
+4. **Output Logic**: Another always_comb block is used to set the outputs walk_left and walk_right based on the current state. In WALK_LEFT state, walk_left is set to 1 and walk_right to 0. In WALK_RIGHT state, walk_right is set to 1 and walk_left to 0.
+
+5. **Asynchronous Reset**: The areset signal is handled in the state transition logic to reset the state to WALK_LEFT when asserted.
+
+The module adheres to the coding conventions by using logic for all signals, using always_ff for sequential logic, and always_comb for combinational logic. The sensitivity list is not explicitly specified in the always_comb block, following the convention.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic bump_left,
+    input logic bump_right,
+    output logic walk_left,
+    output logic walk_right
+);
+
+    // State encoding
+    typedef enum logic {WALK_LEFT, WALK_RIGHT} state_t;
+    state_t state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= WALK_LEFT;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            WALK_LEFT: begin
+                if (bump_left || (bump_left && bump_right)) begin
+                    next_state = WALK_RIGHT;
+                end else begin
+                    next_state = WALK_LEFT;
+                end
+            end
+            WALK_RIGHT: begin
+                if (bump_right || (bump_left && bump_right)) begin
+                    next_state = WALK_LEFT;
+                end else begin
+                    next_state = WALK_RIGHT;
+                end
+            end
+            default: next_state = WALK_LEFT;
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (state)
+            WALK_LEFT: begin
+                walk_left = 1;
+                walk_right = 0;
+            end
+            WALK_RIGHT: begin
+                walk_left = 0;
+                walk_right = 1;
+            end
+            default: begin
+                walk_left = 1;
+                walk_right = 0;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+```
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic bump_left,
+    input logic bump_right,
+    output logic walk_left,
+    output logic walk_right
+);
+
+    // State encoding
+    typedef enum logic {WALK_LEFT, WALK_RIGHT} state_t;
+    state_t state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= WALK_LEFT;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            WALK_LEFT: begin
+                if (bump_left || (bump_left && bump_right)) begin
+                    next_state = WALK_RIGHT;
+                end else begin
+                    next_state = WALK_LEFT;
+                end
+            end
+            WALK_RIGHT: begin
+                if (bump_right || (bump_left && bump_right)) begin
+                    next_state = WALK_LEFT;
+                end else begin
+                    next_state = WALK_RIGHT;
+                end
+            end
+            default: next_state = WALK_LEFT;
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (state)
+            WALK_LEFT: begin
+                walk_left = 1;
+                walk_right = 0;
+            end
+            WALK_RIGHT: begin
+                walk_left = 0;
+                walk_right = 1;
+            end
+            default: begin
+                walk_left = 1;
+                walk_right = 0;
+            end
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `a`: 8-bit input vector, representing a 2's complement number. Bit index 7 is the most significant bit (MSB), and bit index 0 is the least significant bit (LSB).
+  - `b`: 8-bit input vector, representing a 2's complement number. Bit index 7 is the MSB, and bit index 0 is the LSB.
+
+- Output Ports:
+  - `s`: 8-bit output vector, representing the 2's complement sum of inputs `a` and `b`. Bit index 7 is the MSB, and bit index 0 is the LSB.
+  - `overflow`: 1-bit output that indicates if a signed overflow has occurred during the addition of `a` and `b`.
+
+Functional Description:
+- The module performs an addition of two 8-bit 2's complement numbers, `a` and `b`.
+- The result of the addition is stored in the output `s`.
+
+Signed Overflow Detection:
+- Signed overflow occurs if:
+  - The sign bit of `a` (a[7]) and the sign bit of `b` (b[7]) are the same, and
+  - The sign bit of the result `s` (s[7]) differs from the sign bits of `a` and `b`.
+- The `overflow` output is set to `1` if a signed overflow is detected; otherwise, it is set to `0`.
+
+Edge Cases and Input Boundaries:
+- Ensure correct handling of edge cases, such as when `a` and/or `b` are at their maximum or minimum 2's complement values.
+- The behavior is well-defined for all possible input combinations of `a` and `b`.
+
+Clock and Reset:
+- This module is purely combinational and does not involve any clock or reset signals.
+
+Dependencies:
+- The output `s` and `overflow` are directly dependent on the inputs `a` and `b` and should reflect changes immediately.
+</ENHANCED_SPEC>

@@ -1,0 +1,85 @@
+Generated Response:
+
+<REASONING>
+To implement the FSM as specified, we need to handle both the state transitions and the output logic. The FSM transitions are based on the current state `y` and input `x`, and the output `z` is determined by the current state.
+
+1. **State Transition Logic**: We use a `case` statement to determine the next state based on the current state `y` and input `x`. This logic is placed inside an `always @(posedge clk)` block to ensure that state transitions occur synchronously with the clock.
+
+2. **Output Logic**: The output `Y0` is derived from the least significant bit of the next state, `next_state[0]`. The output `z` is determined by the current state `y`, using another `case` statement inside an `always @(*)` block for combinational logic.
+
+3. **Default Cases**: We include default cases in both `case` statements to handle unexpected states, ensuring the FSM returns to a known state (`000`) and sets `z` to `0` for safety.
+
+4. **Coding Conventions**: We declare all ports and signals as `logic`, use `always @(*)` for combinational logic, and ensure numeric constants have a size greater than zero.
+
+5. **Synchronous Reset**: Although not explicitly mentioned in the problem, a synchronous reset can be added if needed. However, the current implementation assumes no reset is required.
+
+By following these steps, we ensure that the FSM behaves as specified and adheres to the given coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic x,
+    input logic [2:0] y,
+    output logic Y0,
+    output logic z
+);
+
+    logic [2:0] next_state;
+
+    always @(posedge clk) begin
+        case (y)
+            3'b000: next_state <= (x == 1'b0) ? 3'b000 : 3'b001;
+            3'b001: next_state <= (x == 1'b0) ? 3'b001 : 3'b100;
+            3'b010: next_state <= (x == 1'b0) ? 3'b010 : 3'b001;
+            3'b011: next_state <= (x == 1'b0) ? 3'b001 : 3'b010;
+            3'b100: next_state <= (x == 1'b0) ? 3'b011 : 3'b100;
+            default: next_state <= 3'b000; // Default case for safety
+        endcase
+    end
+
+    always @(*) begin
+        Y0 = next_state[0];
+        case (y)
+            3'b011, 3'b100: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic x,
+    input logic [2:0] y,
+    output logic Y0,
+    output logic z
+);
+
+    logic [2:0] next_state;
+
+    always @(posedge clk) begin
+        case (y)
+            3'b000: next_state <= (x == 1'b0) ? 3'b000 : 3'b001;
+            3'b001: next_state <= (x == 1'b0) ? 3'b001 : 3'b100;
+            3'b010: next_state <= (x == 1'b0) ? 3'b010 : 3'b001;
+            3'b011: next_state <= (x == 1'b0) ? 3'b001 : 3'b010;
+            3'b100: next_state <= (x == 1'b0) ? 3'b011 : 3'b100;
+            default: next_state <= 3'b000; // Default case for safety
+        endcase
+    end
+
+    always @(*) begin
+        Y0 = next_state[0];
+        case (y)
+            3'b011, 3'b100: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    output logic [3:0] q\n);\n\n    logic [3:0] count;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            count <= 4'd1; // Reset counter to 1\n        end else if (count == 4'd10) begin\n            count <= 4'd1; // Wrap around to 1 after reaching 10\n        end else begin\n            count <= count + 4'd1; // Increment counter\n        end\n    end\n\n    assign q = count; // Assign the count value to output q\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

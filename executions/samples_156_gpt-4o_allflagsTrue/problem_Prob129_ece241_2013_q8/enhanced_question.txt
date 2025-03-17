@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Interface:
+- input wire clk: Clock signal, positive edge-triggered.
+- input wire aresetn: Asynchronous reset signal, active-low, triggered on the negative edge.
+- input wire x: Input data bit for sequence detection.
+- output reg z: Output signal, asserted to 1 when sequence "101" is detected.
+
+Finite State Machine (FSM) Description:
+- Type: Mealy-type FSM
+- Number of States: 3
+- State Encoding: Use 2-bit state encoding.
+
+State Definitions:
+1. STATE_0 (00): Initial state, waiting for the first '1' in the sequence.
+2. STATE_1 (01): Second state, '1' detected, awaiting '0'.
+3. STATE_2 (10): Third state, '10' detected, awaiting final '1'.
+
+State Transitions:
+- From STATE_0:
+  - Transition to STATE_1 on input x == 1.
+  - Remain in STATE_0 on input x == 0.
+- From STATE_1:
+  - Transition to STATE_2 on input x == 0.
+  - Remain in STATE_1 on input x == 1.
+- From STATE_2:
+  - Transition to STATE_0 on input x == 1 and assert z = 1.
+  - Transition to STATE_1 on input x == 1 without asserting z.
+  - Remain in STATE_2 on input x == 0.
+
+Output Logic:
+- The output z is asserted to 1 (logic high) immediately when the sequence "101" is detected, during the transition from STATE_2 to STATE_0 on input x == 1.
+- z is otherwise held at 0 (logic low).
+
+Reset Behavior:
+- Asynchronous, active-low reset (aresetn).
+- On the negative edge of aresetn, the FSM resets to STATE_0 and the output z is set to 0.
+
+Clock and Timing:
+- All state transitions are triggered on the rising edge of the clock signal (clk).
+
+This specification ensures the FSM is capable of detecting overlapping sequences of "101" in the input x, and the asynchronous reset initializes the FSM to a known state. Bit[0] is the least significant bit in state encoding.
+</ENHANCED_SPEC>

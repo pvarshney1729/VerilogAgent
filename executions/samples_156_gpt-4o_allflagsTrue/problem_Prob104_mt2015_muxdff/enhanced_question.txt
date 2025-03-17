@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+The goal is to create a submodule named "TopModule" which will be used within a parent module called "full_module". This submodule will incorporate a flip-flop and a 2:1 multiplexer. The submodule should adhere to the following refined specifications:
+
+1. **Module Name**: `TopModule`
+
+2. **Interface Description**:
+   - **Inputs**:
+     - `input clk`: A clock signal for sequential logic. The clock signal should trigger operations on the rising edge.
+     - `input L`: A control signal for the multiplexer. It determines whether to load new data or perform feedback.
+     - `input q_in`: Data input for the flip-flop, representing the feedback path.
+     - `input r_in`: Data input from an external source, representing the parallel load path.
+   - **Output**:
+     - `output Q`: The output of the flip-flop, representing the stored bit value.
+
+3. **Bit Width**:
+   - All input and output ports are single-bit (`1-bit`) wide, as specified.
+
+4. **Combinational and Sequential Logic**:
+   - This module should implement a 2:1 multiplexer and a flip-flop.
+   - The multiplexer selects between `r_in` and `q_in` based on the `L` control signal:
+     - If `L` = 1, the multiplexer outputs `r_in`.
+     - If `L` = 0, the multiplexer outputs `q_in`.
+   - The flip-flop should capture the output of the multiplexer on the rising edge of `clk`.
+
+5. **Reset Behavior**:
+   - The specification does not mention a reset signal; hence, the flip-flop does not include a reset mechanism within this submodule. Ensure the parent module handles any necessary initialization or reset logic externally.
+
+6. **Operation Precedence and Signal Dependency**:
+   - The output `Q` is updated with the value selected by the multiplexer on each rising edge of `clk`.
+
+7. **Edge Cases and Boundary Conditions**:
+   - As all operations involve single-bit signals, ensure that all logical operations handle 0 and 1 values correctly. The design should be robust against any input combination of `L`, `q_in`, and `r_in`.
+
+By following this specification, the `TopModule` can be instantiated three times in the `full_module` to handle the three-bit-wide operations described in the original design context.
+</ENHANCED_SPEC>

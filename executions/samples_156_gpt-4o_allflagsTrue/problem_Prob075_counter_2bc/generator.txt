@@ -1,0 +1,79 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the given specification and guidelines:
+
+1. **Module Declaration**: The module is named `TopModule` with the specified input and output ports. All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **Asynchronous Reset**: The `areset` signal is included in the sensitivity list of the `always` block to ensure it acts as an asynchronous reset. When `areset` is asserted, the counter is reset to `2'b01`, representing a weakly not-taken state.
+
+3. **Counter Logic**: The counter logic is implemented within the `always` block. The counter only updates when `train_valid` is high:
+   - If `train_taken` is high, the counter increments, ensuring it does not exceed `2'b11`.
+   - If `train_taken` is low, the counter decrements, ensuring it does not go below `2'b00`.
+
+4. **State Retention**: When `train_valid` is low, the counter retains its current value, as there are no conditions to change the state.
+
+5. **Sensitivity List**: The `always` block is sensitive to both `clk` and `areset`, ensuring the asynchronous reset functionality.
+
+6. **Output Assignment**: The `state` output directly reflects the current counter value, which is updated based on the conditions described.
+
+This implementation ensures that the module behaves as a two-bit saturating counter with the specified reset and update conditions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic train_valid,
+    input logic train_taken,
+    output logic [1:0] state
+);
+
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= 2'b01; // Reset to weakly not-taken
+        end else if (train_valid) begin
+            if (train_taken) begin
+                if (state < 2'b11) begin
+                    state <= state + 1; // Increment counter
+                end
+            end else begin
+                if (state > 2'b00) begin
+                    state <= state - 1; // Decrement counter
+                end
+            end
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic train_valid,
+    input logic train_taken,
+    output logic [1:0] state
+);
+
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= 2'b01; // Reset to weakly not-taken
+        end else if (train_valid) begin
+            if (train_taken) begin
+                if (state < 2'b11) begin
+                    state <= state + 1; // Increment counter
+                end
+            end else begin
+                if (state > 2'b00) begin
+                    state <= state - 1; // Decrement counter
+                end
+            end
+        end
+    end
+
+endmodule

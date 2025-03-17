@@ -1,0 +1,77 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the specification for a one-dimensional cellular automaton using Rule 90. The module has a clock input `clk`, a load signal `load`, a 512-bit wide input `data`, and a 512-bit wide output `q`. The logic is designed to update the state of the automaton on each positive edge of the clock.
+
+1. **Initialization and Load Logic**: 
+   - When the `load` signal is high, the state of the automaton (`q`) is directly loaded with the input `data`. This allows for initializing or resetting the automaton to a known state.
+
+2. **Rule 90 Logic**:
+   - When `load` is low, the automaton advances by one time step according to Rule 90. The next state of each cell is determined by the XOR of its two neighbors.
+   - For the boundary cells, `q[0]` and `q[511]`, the neighbors outside the array (`q[-1]` and `q[512]`) are assumed to be zero.
+
+3. **Sequential Logic**:
+   - The `always` block is triggered on the positive edge of the clock, ensuring that all updates to the state are synchronized with the clock.
+   - The `q_next` register is used to compute the next state of the automaton before updating `q`, ensuring that all cells are updated simultaneously.
+
+4. **Coding Conventions**:
+   - The module uses `logic` for all signals, adhering to modern SystemVerilog conventions.
+   - The `always` block does not explicitly specify a sensitivity list, as it is triggered by the clock edge.
+   - The implementation avoids using `wire` or `reg`, and all numeric constants are properly sized.
+
+This design ensures that the automaton behaves correctly according to the specified rules and interfaces.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] q_next;
+
+    always @(posedge clk) begin
+        if (load) begin
+            q <= data;
+        end else begin
+            q_next[0] <= q[1]; // q[-1] is 0
+            q_next[511] <= q[510]; // q[512] is 0
+            for (int i = 1; i < 511; i++) begin
+                q_next[i] <= q[i-1] ^ q[i+1];
+            end
+            q <= q_next;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [511:0] data,
+    output logic [511:0] q
+);
+
+    logic [511:0] q_next;
+
+    always @(posedge clk) begin
+        if (load) begin
+            q <= data;
+        end else begin
+            q_next[0] <= q[1]; // q[-1] is 0
+            q_next[511] <= q[510]; // q[512] is 0
+            for (int i = 1; i < 511; i++) begin
+                q_next[i] <= q[i-1] ^ q[i+1];
+            end
+            q <= q_next;
+        end
+    end
+
+endmodule

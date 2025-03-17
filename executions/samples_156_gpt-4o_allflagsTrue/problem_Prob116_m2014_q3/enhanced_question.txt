@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specifications:
+- Input Ports:
+  - `x`: A 4-bit wide input vector representing a binary number. The most significant bit is `x[3]` and the least significant bit is `x[0]`.
+- Output Ports:
+  - `f`: A 1-bit output that results from the evaluation of the Karnaugh map.
+
+Functional Description:
+- The output `f` is determined based on the values of the input vector `x`, utilizing the Karnaugh map provided below. The values in the Karnaugh map are as follows:
+
+                x[1]x[2]
+  x[3]x[4]   00  01  11  10
+        00 | d | 0 | d | d |
+        01 | 0 | d | 1 | 0 |
+        11 | 1 | 1 | d | d |
+        10 | 1 | 1 | 0 | d |
+
+- `d` represents a "don't-care" condition, meaning the output can be either 0 or 1 for these input combinations. Optimal simplification may be applied to minimize logic without altering the specified functional outcomes.
+
+Implementation Details:
+- The module is combinational, implying that the output `f` is purely a function of the inputs without reliance on any clocked elements.
+- Ensure that no latches or unintentional memory elements are formed by explicitly defining the logic for all combinations of `x`.
+
+Edge Cases and Boundaries:
+- All possible input combinations of `x` (from 0000 to 1111 in binary) should be considered and mapped according to the specified Karnaugh map entries.
+- The precedence of operations should comply with standard logical operation rules where necessary.
+- Ensure that the module does not rely on any specific initial state, as it is fully combinational.
+</ENHANCED_SPEC>

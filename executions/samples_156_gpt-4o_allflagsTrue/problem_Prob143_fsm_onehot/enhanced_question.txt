@@ -1,0 +1,58 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire in`: A single-bit input signal.
+  - `input wire [9:0] state`: A 10-bit input vector representing the current state in one-hot encoding. Each bit corresponds to a state from S0 to S9, where `state[0]` represents S0 and `state[9]` represents S9. The module can receive combinations of active states.
+
+- Output Ports:
+  - `output wire [9:0] next_state`: A 10-bit output vector representing the next state in one-hot encoding. Each bit corresponds to the transition to the next state, where `next_state[0]` is set to 1 when transitioning to S0, and so on.
+  - `output wire out1`: A single-bit output signal.
+  - `output wire out2`: A single-bit output signal.
+
+State Machine Description:
+- The state machine operates with one input (`in`) and produces two outputs (`out1`, `out2`).
+- State Transitions and Outputs:
+  - S0: (out1, out2) = (0, 0)
+    - If `in` = 0, remain in S0.
+    - If `in` = 1, transition to S1.
+  - S1: (out1, out2) = (0, 0)
+    - If `in` = 0, transition to S0.
+    - If `in` = 1, transition to S2.
+  - S2: (out1, out2) = (0, 0)
+    - If `in` = 0, transition to S0.
+    - If `in` = 1, transition to S3.
+  - S3: (out1, out2) = (0, 0)
+    - If `in` = 0, transition to S0.
+    - If `in` = 1, transition to S4.
+  - S4: (out1, out2) = (0, 0)
+    - If `in` = 0, transition to S0.
+    - If `in` = 1, transition to S5.
+  - S5: (out1, out2) = (0, 0)
+    - If `in` = 0, transition to S8.
+    - If `in` = 1, transition to S6.
+  - S6: (out1, out2) = (0, 0)
+    - If `in` = 0, transition to S9.
+    - If `in` = 1, transition to S7.
+  - S7: (out1, out2) = (0, 1)
+    - If `in` = 0, transition to S0.
+    - If `in` = 1, remain in S7.
+  - S8: (out1, out2) = (1, 0)
+    - If `in` = 0, transition to S0.
+    - If `in` = 1, transition to S1.
+  - S9: (out1, out2) = (1, 1)
+    - If `in` = 0, transition to S0.
+    - If `in` = 1, transition to S1.
+
+Encoding and Signal Details:
+- One-hot encoding is used for states: `state[0]` through `state[9]` correspond to S0 through S9, respectively.
+- Outputs default to zero unless specified otherwise in state transitions.
+- The `next_state` output must reflect the transitions based on the current `state` input and the `in` signal.
+- The design is combinational and should not include memory elements such as flip-flops or registers for state holding.
+
+Additional Considerations:
+- Ensure race conditions are avoided by properly handling combinations of states.
+- The module should be purely combinational and handle multiple active states in the `state` input as described.
+- Resets, clocks, and initialization are not specified as this module only implements the state transition and output logic.
+</ENHANCED_SPEC>

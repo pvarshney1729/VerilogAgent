@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, should be implemented with the following interface. All input and output ports are one bit unless otherwise specified:
+
+- **input** `clk`: Clock signal for triggering sequential logic. Positive edge-triggered.
+- **input** `a`: First input bit to the XOR gate.
+- **input** `b`: Second input bit to the XOR gate.
+- **output** `out_assign`: Output from the XOR operation implemented using an `assign` statement.
+- **output** `out_always_comb`: Output from the XOR operation implemented using a combinational `always` block.
+- **output** `out_always_ff`: Output from the XOR operation implemented using a clocked `always` block. This output is delayed by one clock cycle due to the flip-flop.
+
+### Implementation Details:
+
+1. **`out_assign`**: 
+   - Implement using a continuous assignment with an `assign` statement.
+   - `out_assign = a ^ b;`
+
+2. **`out_always_comb`**: 
+   - Implement using a combinational logic block.
+   - Use an `always @*` block to describe the XOR operation.
+   - Ensure there are no latches by covering all input conditions in the block.
+   - `out_always_comb = a ^ b;`
+
+3. **`out_always_ff`**: 
+   - Implement using a sequential logic block.
+   - Use an `always @(posedge clk)` block to describe the XOR operation.
+   - This block should use a flip-flop, meaning the output is registered and delayed by one clock cycle.
+   - The initial state of the flip-flop is undefined unless explicitly reset.
+
+4. **Reset Conditions**:
+   - If required, specify whether the module includes a reset input to initialize the sequential logic.
+   - For this specification, assume no explicit reset is used, and the initial state of `out_always_ff` is undefined.
+
+5. **Bit Indexing and Conventions**:
+   - `bit[0]` refers to the least significant bit (LSB) for all single-bit ports.
+   - Ensure consistent naming conventions for inputs and outputs as defined above.
+
+6. **Edge Case Handling**:
+   - Since all inputs are single-bit, only two possible input states exist for `a` and `b`: either `0` or `1`.
+   - XOR operation should correctly handle all possible combinations: `0 ^ 0`, `0 ^ 1`, `1 ^ 0`, `1 ^ 1`.
+
+By adhering to these guidelines, the module should achieve the desired behavior with clear and correct implementation.
+</ENHANCED_SPEC>

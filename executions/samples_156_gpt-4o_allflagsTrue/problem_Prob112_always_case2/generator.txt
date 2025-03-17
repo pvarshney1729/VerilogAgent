@@ -1,0 +1,53 @@
+Generated Response:
+
+<REASONING>
+To implement the 4-bit priority encoder, we need to check each bit of the input vector 'in' from the most significant bit (MSB) to the least significant bit (LSB). The goal is to find the position of the first '1' encountered and output this position as a 2-bit binary number. If no bits are set, the output should be zero.
+
+1. **Module Definition**: Define the module `TopModule` with a 4-bit input `in` and a 2-bit output `pos`.
+2. **Combinational Logic**: Use an `always @(*)` block to implement the combinational logic for the priority encoder. This ensures that the logic is evaluated whenever any input changes.
+3. **Priority Encoding**: Use a `casez` statement to check each bit of the input vector, starting from the MSB. The `casez` statement allows for 'don't care' conditions, which simplifies the priority checking.
+4. **Default Case**: Ensure that if all bits are zero, the output is set to zero.
+5. **Coding Conventions**: Follow the guidelines by using `logic` for port declarations and ensuring all numeric constants are properly sized.
+
+The implementation will be straightforward, as we only need to check four bits and output the position of the first '1' found.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [3:0] in,
+    output logic [1:0] pos
+);
+
+    always @(*) begin
+        casez (in)
+            4'b1???: pos = 2'd3; // Highest priority for bit 3
+            4'b01??: pos = 2'd2; // Next priority for bit 2
+            4'b001?: pos = 2'd1; // Next priority for bit 1
+            4'b0001: pos = 2'd0; // Lowest priority for bit 0
+            default: pos = 2'd0; // Default case when all bits are zero
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [3:0] in,
+    output logic [1:0] pos
+);
+
+    always @(*) begin
+        casez (in)
+            4'b1???: pos = 2'd3; // Highest priority for bit 3
+            4'b01??: pos = 2'd2; // Next priority for bit 2
+            4'b001?: pos = 2'd1; // Next priority for bit 1
+            4'b0001: pos = 2'd0; // Lowest priority for bit 0
+            default: pos = 2'd0; // Default case when all bits are zero
+        endcase
+    end
+
+endmodule

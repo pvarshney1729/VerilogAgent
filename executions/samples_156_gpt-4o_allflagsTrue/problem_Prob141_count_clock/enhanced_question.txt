@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: A fast-running clock signal, positive edge-triggered.
+- input wire reset: An active-high synchronous reset signal. When asserted, the clock resets to "12:00:00 AM."
+- input wire ena: An enable signal that increments the clock by one second when asserted.
+- output reg pm: A signal indicating if the current time is PM (1) or AM (0).
+- output reg [7:0] hh: An 8-bit output representing the hour in BCD format (01-12).
+- output reg [7:0] mm: An 8-bit output representing the minutes in BCD format (00-59).
+- output reg [7:0] ss: An 8-bit output representing the seconds in BCD format (00-59).
+
+Clock Operation:
+- The clock increments by one second on the positive edge of clk if ena is asserted.
+- The reset signal has the highest priority and will reset the clock to "12:00:00 AM" when asserted, regardless of the ena signal state.
+
+Counter Specifications:
+- Hours (hh): Represented in BCD, ranges from 01 to 12.
+- Minutes (mm) and Seconds (ss): Each represented in BCD, ranges from 00 to 59.
+- The PM indicator (pm) is set when the hour is greater than or equal to 12.
+
+BCD Counting Rules:
+- Each BCD digit represents a decimal value using 4 bits, with bit[0] as the least significant bit.
+- Incrementing the seconds from 59 transitions to 00 and increments the minutes.
+- Incrementing the minutes from 59 transitions to 00 and increments the hour.
+- Incrementing the hour from 12 transitions to 01 and toggles the PM indicator.
+
+Reset Behavior:
+- On reset, hh is set to 8'b00010010 (BCD for 12), mm and ss are set to 8'b00000000 (BCD for 00), and pm is set to 0 (AM).
+
+Edge Cases:
+- The transition from 11:59:59 AM to 12:00:00 PM toggles the pm signal.
+- The transition from 11:59:59 PM to 12:00:00 AM also toggles the pm signal.
+
+All sequential elements are initialized to their reset values upon system start.
+</ENHANCED_SPEC>

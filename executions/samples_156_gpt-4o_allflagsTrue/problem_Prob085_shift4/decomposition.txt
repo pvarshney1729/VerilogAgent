@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, areset, load, ena, data[3:0] and output port q[3:0].",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input clk,\n    input areset,\n    input load,\n    input ena,\n    input [3:0] data,\n    output reg [3:0] q\n);\n\nalways @(posedge clk or posedge areset) begin\n    if (areset) begin\n        q <= 4'b0000;\n    end else if (load) begin\n        q <= data;\n    end else if (ena) begin\n        q <= {1'b0, q[3:1]};\n    end\nend\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Implement the asynchronous reset logic to set the shift register q to zero when areset is high.",
+        "source": "areset: Resets shift register to zero.",
+        "implementation": "always @(posedge clk or posedge areset) begin\n    if (areset) begin\n        q <= 4'b0000;\n    end\n    // Other logic will be implemented here in the full module\nend"
+    },
+    {
+        "id": "3",
+        "content": "Implement the synchronous load logic to load data[3:0] into the shift register q when load is high.",
+        "source": "load: Loads shift register with data[3:0] instead of shifting.",
+        "implementation": "always @(posedge clk) begin\n    if (load) begin\n        q <= data;\n    end\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement the synchronous enable logic to shift the shift register q to the right when ena is high, setting q[3] to zero.",
+        "source": "ena: Shift right (q[3] becomes zero, q[0] is shifted out and disappears).",
+        "implementation": "always @(posedge clk) begin\n    if (ena) begin\n        q[3] <= 1'b0;\n        q[2:0] <= q[3:1];\n    end\nend"
+    },
+    {
+        "id": "5",
+        "content": "Implement priority logic to ensure that when both load and ena are high, the load operation takes precedence over the shift operation.",
+        "source": "If both the load and ena inputs are asserted (1), the load input has higher priority.",
+        "implementation": "always @(posedge clk or posedge areset) begin\n    if (areset) begin\n        q <= 4'b0000;\n    end else if (load) begin\n        q <= data;\n    end else if (ena) begin\n        q <= {1'b0, q[3:1]};\n    end\nend"
+    }
+]

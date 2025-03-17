@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, is specified with the following interface. All input and output ports are explicitly defined with widths. Each signal is considered unsigned unless otherwise specified, and bit[0] refers to the least significant bit (LSB).
+
+- Input Ports:
+  - `input [4:0] a`: A 5-bit vector.
+  - `input [4:0] b`: A 5-bit vector.
+  - `input [4:0] c`: A 5-bit vector.
+  - `input [4:0] d`: A 5-bit vector.
+  - `input [4:0] e`: A 5-bit vector.
+  - `input [4:0] f`: A 5-bit vector.
+
+- Output Ports:
+  - `output [7:0] w`: An 8-bit vector.
+  - `output [7:0] x`: An 8-bit vector.
+  - `output [7:0] y`: An 8-bit vector.
+  - `output [7:0] z`: An 8-bit vector.
+
+Functional Description:
+- The module should concatenate all six 5-bit input vectors (`a`, `b`, `c`, `d`, `e`, and `f`) into a single 30-bit vector. The concatenation order should be as follows: `a` is the most significant 5 bits, followed by `b`, `c`, `d`, `e`, and `f` in sequence.
+- Following the concatenation of the input vectors, append two '1' bits to the least significant positions, resulting in a 32-bit vector. This can be mathematically represented as: `{a, b, c, d, e, f, 2'b11}`.
+- Split this resulting 32-bit vector into four 8-bit output vectors (`w`, `x`, `y`, `z`). The assignment should follow the order from most significant to least significant bits:
+  - `w` should be assigned the most significant 8 bits.
+  - `x` should be assigned the next 8 bits.
+  - `y` should be assigned the following 8 bits.
+  - `z` should be assigned the least significant 8 bits.
+
+Edge Cases:
+- All input vectors (`a`, `b`, `c`, `d`, `e`, `f`) must be valid 5-bit vectors within the range [0, 31]. The module does not handle inputs outside this range.
+- The two appended '1' bits ensure that the output vector `z` always has the two least significant bits set to '1'.
+
+All logic within this module is combinational and does not involve any sequential element or edge-triggered behavior. Thus, there are no clock or reset signals required or specified.
+</ENHANCED_SPEC>

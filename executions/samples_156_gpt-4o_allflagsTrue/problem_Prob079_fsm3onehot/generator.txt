@@ -1,0 +1,91 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` for the Moore state machine with one-hot encoding, we need to follow these steps:
+
+1. **Define the Module Interface**: The module will have inputs `in` and `state` (4 bits), and outputs `next_state` (4 bits) and `out`.
+
+2. **State Transition Logic**: Based on the current state and input `in`, determine the next state using a combinational `always @(*)` block. The state transitions are defined by the given state transition table.
+
+3. **Output Logic**: The output `out` is determined solely by the current state, as per Moore FSM characteristics. For states A, B, and C, the output is 0. For state D, the output is 1.
+
+4. **Coding Conventions**: Use `logic` for all signals, and ensure that the numeric constants are properly sized. Use `always @(*)` for combinational logic.
+
+5. **No Sequential Logic**: Since the task specifies only the combinational logic portion, we do not include any clock or reset logic.
+
+By following these steps, we ensure that the module adheres to the given specifications and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic in,
+    input logic [3:0] state,
+    output logic [3:0] next_state,
+    output logic out
+);
+
+always @(*) begin
+    case (state)
+        4'b0001: begin // State A
+            next_state = (in == 1'b0) ? 4'b0001 : 4'b0010; // A or B
+            out = 1'b0;
+        end
+        4'b0010: begin // State B
+            next_state = (in == 1'b0) ? 4'b0100 : 4'b0010; // C or B
+            out = 1'b0;
+        end
+        4'b0100: begin // State C
+            next_state = (in == 1'b0) ? 4'b0001 : 4'b1000; // A or D
+            out = 1'b0;
+        end
+        4'b1000: begin // State D
+            next_state = (in == 1'b0) ? 4'b0100 : 4'b0010; // C or B
+            out = 1'b1;
+        end
+        default: begin
+            next_state = 4'b0000; // Undefined state
+            out = 1'b0;
+        end
+    endcase
+end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic in,
+    input logic [3:0] state,
+    output logic [3:0] next_state,
+    output logic out
+);
+
+always @(*) begin
+    case (state)
+        4'b0001: begin // State A
+            next_state = (in == 1'b0) ? 4'b0001 : 4'b0010; // A or B
+            out = 1'b0;
+        end
+        4'b0010: begin // State B
+            next_state = (in == 1'b0) ? 4'b0100 : 4'b0010; // C or B
+            out = 1'b0;
+        end
+        4'b0100: begin // State C
+            next_state = (in == 1'b0) ? 4'b0001 : 4'b1000; // A or D
+            out = 1'b0;
+        end
+        4'b1000: begin // State D
+            next_state = (in == 1'b0) ? 4'b0100 : 4'b0010; // C or B
+            out = 1'b1;
+        end
+        default: begin
+            next_state = 4'b0000; // Undefined state
+            out = 1'b0;
+        end
+    endcase
+end
+
+endmodule

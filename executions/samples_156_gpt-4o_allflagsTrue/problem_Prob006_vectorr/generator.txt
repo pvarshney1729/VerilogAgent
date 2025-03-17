@@ -1,0 +1,31 @@
+Generated Response:
+
+<REASONING>
+The task is to reverse the bit order of an 8-bit input and assign it to an 8-bit output. This is a purely combinational logic operation, so we can use an `assign` statement to achieve this. The input bits are accessed in reverse order and concatenated to form the output. The guidelines specify using `logic` for port declarations and using `assign` for combinational logic, which is followed here. Since there is no clock or reset involved, the implementation is straightforward.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input  logic [7:0] in,
+    output logic [7:0] out
+);
+
+    // Reverse the bit order of the input and assign to output
+    assign out = {in[0], in[1], in[2], in[3], in[4], in[5], in[6], in[7]};
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input  logic [7:0] in,
+    output logic [7:0] out
+);
+
+    // Reverse the bit order of the input and assign to output
+    assign out = {in[0], in[1], in[2], in[3], in[4], in[5], in[6], in[7]};
+
+endmodule

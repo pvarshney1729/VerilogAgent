@@ -1,0 +1,67 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to follow the given specifications and guidelines. The module is a 4-bit shift register with specific control signals for reset, load, and enable operations. Here's the step-by-step reasoning:
+
+1. **Module Declaration**: We declare the module `TopModule` with the specified input and output ports. All ports are declared as `logic` to follow the coding conventions.
+
+2. **Asynchronous Reset**: The reset (`areset`) is asynchronous and active high. This means that whenever `areset` is high, the shift register `q` should be reset to `4'b0000` immediately, regardless of the clock. This is implemented by including `areset` in the sensitivity list of the `always` block.
+
+3. **Load Operation**: The `load` signal is synchronous and active high. When `load` is high on the positive edge of the clock, the shift register `q` should be loaded with the value of `data[3:0]`. This operation takes precedence over the shift operation, so it is checked before the `ena` signal.
+
+4. **Enable Operation**: The `ena` signal is also synchronous and active high. When `ena` is high and `load` is not asserted, the shift register should perform a right shift operation. During this operation, `q[3]` is set to `0`, and `q[2:0]` are shifted right.
+
+5. **Priority Handling**: The `load` operation has higher priority than the `ena` operation. This is ensured by checking the `load` condition before the `ena` condition within the `always` block.
+
+6. **Sensitivity List**: The `always` block is sensitive to the positive edge of `clk` and `areset` to handle both synchronous and asynchronous operations correctly.
+
+By following these steps, we ensure that the module behaves as specified, with correct handling of reset, load, and shift operations.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic load,
+    input logic ena,
+    input logic [3:0] data,
+    output logic [3:0] q
+);
+
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        q <= 4'b0000;
+    end else if (load) begin
+        q <= data;
+    end else if (ena) begin
+        q <= {1'b0, q[3:1]};
+    end
+end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic load,
+    input logic ena,
+    input logic [3:0] data,
+    output logic [3:0] q
+);
+
+always @(posedge clk or posedge areset) begin
+    if (areset) begin
+        q <= 4'b0000;
+    end else if (load) begin
+        q <= data;
+    end else if (ena) begin
+        q <= {1'b0, q[3:1]};
+    end
+end
+
+endmodule

@@ -1,0 +1,57 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to follow the given specifications and guidelines. The module requires 8 D flip-flops with a synchronous reset that initializes the output to 0x34. The flip-flops must be triggered on the negative edge of the clock signal.
+
+1. **Interface Definition**: The module has a clock (`clk`), a reset (`reset`), an 8-bit input (`d`), and an 8-bit output (`q`). All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **Synchronous Reset**: The reset is synchronous, meaning it is sampled with the clock. The reset logic is placed inside the `always` block triggered by the negative edge of `clk`. When `reset` is high, `q` is set to 0x34.
+
+3. **Negative Edge Triggering**: The `always` block is sensitive to the negative edge of `clk`, ensuring that the flip-flops are triggered correctly.
+
+4. **Data Capture**: If `reset` is not asserted, the flip-flops capture the value of `d` on the negative edge of `clk`.
+
+5. **Coding Conventions**: The code uses `logic` for all signals, and the `always` block does not include `reset` in its sensitivity list, as it is a synchronous reset.
+
+By following these steps, the module is implemented correctly according to the specifications and guidelines.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always @(negedge clk) begin
+        if (reset) begin
+            q <= 8'h34; // Reset to 0x34
+        end else begin
+            q <= d; // Capture input d
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always @(negedge clk) begin
+        if (reset) begin
+            q <= 8'h34; // Reset to 0x34
+        end else begin
+            q <= d; // Capture input d
+        end
+    end
+
+endmodule

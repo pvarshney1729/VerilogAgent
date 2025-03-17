@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk (1-bit): Clock signal, used to trigger sequential logic on its positive edge.
+  - a (1-bit): Data input signal.
+
+- Output Ports:
+  - q (1-bit): Output signal that changes state based on the input signal 'a' and clock edges.
+
+Operational Description:
+- This is a sequential circuit, where the behavior is defined by clock cycles and the input signal 'a'.
+- The output 'q' is initially undefined and transitions to a known state based on the input 'a' at each positive edge of the clock.
+
+Timing and Logic Details:
+- At time 0ns, both clk and signals are undefined ('x'). The initial state of 'q' is undefined due to the unspecified behavior at the start.
+- At time 5ns, on the first positive edge of clk, if 'a' is 0, 'q' remains undefined.
+- At time 15ns, with clk at a positive edge and 'a' still 0, 'q' transitions to 1.
+- When 'a' is 0, any subsequent positive clock edges maintain 'q' in state 1.
+- When 'a' transitions to 1, 'q' remains 1 until the next positive edge of clk.
+- On the subsequent positive edge when 'a' is 1 (time 45ns), 'q' transitions to 0.
+- If 'a' remains 1, 'q' will hold at 0 through subsequent positive clock edges.
+
+Clock and Reset Details:
+- The circuit operates on the positive edge of the clk signal.
+- No explicit reset is provided or assumed; initial behavior depends on the input sequence.
+
+Initial Conditions:
+- The initial state of 'q' is undefined until the first positive clk edge with a valid input 'a'.
+- There is no specified reset state; behavior is determined entirely by the input conditions.
+
+Edge Cases and Input Boundaries:
+- The behavior is undefined if the input 'a' changes values other than at positive clock edges.
+- Ensure stable inputs at each positive clock edge to prevent race conditions.
+
+The provided waveform demonstrates a toggle behavior of 'q' controlled by the input 'a' at each positive clock edge.
+</ENHANCED_SPEC>

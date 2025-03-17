@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Input/Output Ports:
+- `input clk`: A single-bit clock signal. All sequential logic is triggered on the positive edge of this clock.
+- `input [7:0] in`: An 8-bit input vector where bit[0] refers to the least significant bit.
+- `output reg [7:0] anyedge`: An 8-bit output vector. Each bit corresponds to detecting an edge on the respective input bit.
+
+Functional Description:
+The module detects any transition (0 to 1 or 1 to 0) for each bit in the 8-bit input vector `in`. For each bit, if a transition is detected from one clock cycle to the next, the corresponding bit in the output vector `anyedge` is set to 1 in the following clock cycle.
+
+Sequential Logic:
+- The detection is based on comparing the input vector `in` at the current clock cycle to its state in the previous clock cycle.
+- A register must be used to store the state of the input vector `in` from the previous clock cycle to facilitate edge detection.
+
+Clock and Reset Behavior:
+- All sequential operations are synchronous with the positive edge of the clock `clk`.
+- The initial state of the output register `anyedge` should be explicitly initialized to 0 at system start-up.
+- The behavior of the system under asynchronous or synchronous reset conditions is not specified in the original description; thus, the implementation assumes no reset behavior is required.
+
+Edge Detection Logic:
+- For each bit `i` in `in`, the corresponding bit in `anyedge` should be set to 1 if there is a change in the state of `in[i]` from the previous clock cycle to the current one.
+
+Boundary Conditions:
+- The behavior at the first clock cycle (system start-up) should be defined as no edge detected. Hence, `anyedge` should start at 0.
+
+Notes:
+- Ensure that no race conditions exist due to the synchronous operation of the edge detection mechanism.
+</ENHANCED_SPEC>

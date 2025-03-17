@@ -1,0 +1,135 @@
+Generated Response:
+
+```xml
+<REASONING>
+The implementation of the `TopModule` follows a finite state machine (FSM) approach to detect message boundaries in an incoming byte stream. The FSM transitions through states to collect three bytes of data, starting when a byte with `in[3] = 1` is detected. The module uses a synchronous reset to initialize the state machine and clear the message buffer. The `done` signal is asserted after the third byte is collected, and the `out_bytes` output is updated with the complete message. The FSM returns to the IDLE state after signaling `done`.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic [23:0] out_bytes,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [23:0] message_buffer;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            message_buffer <= 24'b0;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (done) begin
+                out_bytes <= message_buffer;
+            end
+        end
+    end
+
+    // Next state logic and output logic
+    always_comb begin
+        next_state = current_state;
+        done = 1'b0;
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;
+                    message_buffer[23:16] = in;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+                message_buffer[15:8] = in;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+                message_buffer[7:0] = in;
+            end
+            BYTE3: begin
+                done = 1'b1;
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+```
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic [23:0] out_bytes,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [23:0] message_buffer;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            message_buffer <= 24'b0;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (done) begin
+                out_bytes <= message_buffer;
+            end
+        end
+    end
+
+    // Next state logic and output logic
+    always_comb begin
+        next_state = current_state;
+        done = 1'b0;
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;
+                    message_buffer[23:16] = in;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+                message_buffer[15:8] = in;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+                message_buffer[7:0] = in;
+            end
+            BYTE3: begin
+                done = 1'b1;
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,38 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with inputs: in (1 bit), state (2 bits) and outputs: next_state (2 bits), out (1 bit).",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input in - input state (2 bits) - output next_state (2 bits) - output out",
+        "implementation": "always @(*) begin\n    case (state)\n        2'b00: begin // State A\n            next_state = (in == 1'b0) ? 2'b00 : 2'b01; // A -> A or A -> B\n            out = 1'b0;\n        end\n        2'b01: begin // State B\n            next_state = (in == 1'b0) ? 2'b10 : 2'b01; // B -> C or B -> B\n            out = 1'b0;\n        end\n        2'b10: begin // State C\n            next_state = (in == 1'b0) ? 2'b00 : 2'b11; // C -> A or C -> D\n            out = 1'b0;\n        end\n        2'b11: begin // State D\n            next_state = (in == 1'b0) ? 2'b10 : 2'b01; // D -> C or D -> B\n            out = 1'b1;\n        end\n        default: begin\n            next_state = 2'b00;\n            out = 1'b0;\n        end\n    endcase\nend"
+    },
+    {
+        "id": "2",
+        "content": "Implement the state transition logic for state A. If in=0, next_state remains A; if in=1, next_state transitions to B.",
+        "source": "State | Next state in=0, Next state in=1 | Output A     | A, B                             | 0",
+        "implementation": "always @(*) begin\n    case (state)\n        2'b00: begin // State A\n            if (in == 1'b0) begin\n                next_state = 2'b00; // Remain in A\n            end else begin\n                next_state = 2'b01; // Transition to B\n            end\n            out = 1'b0;\n        end\n        // Other states would be implemented here\n        default: begin\n            next_state = 2'b00;\n            out = 1'b0;\n        end\n    endcase\nend"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state transition logic for state B. If in=0, next_state transitions to C; if in=1, next_state remains B.",
+        "source": "State | Next state in=0, Next state in=1 | Output B     | C, B                             | 0",
+        "implementation": "always @(*) begin\n    case (state)\n        2'b01: begin // State B\n            if (in == 1'b0)\n                next_state = 2'b10; // Transition to state C\n            else\n                next_state = 2'b01; // Remain in state B\n        end\n        default: begin\n            next_state = 2'b00; // Default case, should not occur for state B logic\n        end\n    endcase\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement the state transition logic for state C. If in=0, next_state transitions to A; if in=1, next_state transitions to D.",
+        "source": "State | Next state in=0, Next state in=1 | Output C     | A, D                             | 0",
+        "implementation": "always @(*) begin\n    case (state)\n        2'b10: begin // State C\n            if (in == 0)\n                next_state = 2'b00; // Transition to A\n            else\n                next_state = 2'b11; // Transition to D\n            out = 0;\n        end\n        // Other states logic would be here\n    endcase\nend"
+    },
+    {
+        "id": "5",
+        "content": "Implement the state transition logic for state D. If in=0, next_state transitions to C; if in=1, next_state transitions to B.",
+        "source": "State | Next state in=0, Next state in=1 | Output D     | C, B                             | 1",
+        "implementation": "always @(*) begin\n    case (state)\n        2'b11: begin // State D\n            if (in == 0)\n                next_state = 2'b10; // Transition to C\n            else\n                next_state = 2'b01; // Transition to B\n            out = 1;\n        end\n        default: begin\n            next_state = 2'b00; // Default case to avoid latches\n            out = 0;\n        end\n    endcase\nend"
+    },
+    {
+        "id": "6",
+        "content": "Implement the output logic. Output is 0 for states A, B, and C, and 1 for state D.",
+        "source": "State | Next state in=0, Next state in=1 | Output A     | A, B                             | 0 B     | C, B                             | 0 C     | A, D                             | 0 D     | C, B                             | 1",
+        "implementation": "always @(*) begin\n    case (state)\n        2'b00: out = 1'b0; // State A\n        2'b01: out = 1'b0; // State B\n        2'b10: out = 1'b0; // State C\n        2'b11: out = 1'b1; // State D\n        default: out = 1'b0;\n    endcase\nend"
+    }
+]

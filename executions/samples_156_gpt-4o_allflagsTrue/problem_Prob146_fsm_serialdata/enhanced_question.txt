@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+The module `TopModule` is specified with the following interface and functionality. All input and output ports are one bit unless otherwise specified:
+
+- `input clk`: The clock signal, positive-edge triggered.
+- `input in`: Serial data input.
+- `input reset`: Active-high synchronous reset signal.
+- `output [7:0] out_byte`: An 8-bit output representing the correctly received data byte.
+- `output done`: A signal indicating the successful reception of a complete byte.
+
+The module implements a finite state machine (FSM) to process a serial stream of bits according to an asynchronous serial communication protocol. The protocol transmits data with the following structure: one start bit (`0`), followed by 8 data bits, and one stop bit (`1`). The line remains at logic `1` when idle.
+
+**FSM Operation:**
+1. **Idle State**: The FSM begins in the idle state, waiting for a start bit (`0`).
+2. **Start Bit Detection**: Upon detecting a start bit, the FSM moves to the data reception state.
+3. **Data Reception**: The FSM sequentially captures 8 data bits, starting with the least significant bit (LSB). The order of reception is bit[0] (LSB) to bit[7] (MSB).
+4. **Stop Bit Verification**: After the 8 data bits, the FSM expects a stop bit (`1`). If the stop bit is correct, the FSM asserts `done` for one clock cycle and `out_byte` contains the valid data byte.
+5. **Error Handling**: If the stop bit is not `1`, the FSM returns to the idle state, discarding the received bits and waiting for a valid start bit.
+
+**Signal Specifications:**
+- The `reset` signal synchronously initializes the FSM to the idle state. Upon reset, `out_byte` is set to a don't-care state, and `done` is deasserted.
+- The `out_byte` is only meaningful when `done` is asserted. Otherwise, its value is considered don't-care.
+- The `done` signal is asserted for one clock cycle upon successful byte reception and remains deasserted otherwise.
+
+**Edge Cases:**
+- If the start bit is not detected, the FSM remains in the idle state.
+- The reception of the start bit, 8 data bits, and stop bit must be continuous; any deviation returns the FSM to the idle state.
+- The FSM ensures no race conditions by relying on the positive edge of the clock for all sequential operations.
+
+The FSM and its associated logic ensure robust byte reception in adherence to the defined protocol, considering the least significant bit-first transmission order.
+</ENHANCED_SPEC>

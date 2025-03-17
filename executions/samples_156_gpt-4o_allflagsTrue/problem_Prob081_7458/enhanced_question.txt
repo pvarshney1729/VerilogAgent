@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Definition:
+- Inputs:
+  - input p1a: 1-bit, unsigned
+  - input p1b: 1-bit, unsigned
+  - input p1c: 1-bit, unsigned
+  - input p1d: 1-bit, unsigned
+  - input p1e: 1-bit, unsigned
+  - input p1f: 1-bit, unsigned
+  - input p2a: 1-bit, unsigned
+  - input p2b: 1-bit, unsigned
+  - input p2c: 1-bit, unsigned
+  - input p2d: 1-bit, unsigned
+- Outputs:
+  - output p1y: 1-bit, unsigned
+  - output p2y: 1-bit, unsigned
+
+Functional Description:
+- The module should replicate the functionality of the 7458 chip, which includes four 3-input AND gates and two OR gates.
+- Output Logic:
+  - p1y: This output is derived from the OR operation between two intermediate signals. Each intermediate signal is the result of a 3-input AND operation.
+    - Intermediate Signal 1: AND(p1a, p1b, p1c)
+    - Intermediate Signal 2: AND(p1d, p1e, p1f)
+    - p1y = OR(Intermediate Signal 1, Intermediate Signal 2)
+  - p2y: This output is produced by the OR operation between two intermediate signals. Each intermediate signal is the result of a 2-input AND operation.
+    - Intermediate Signal 3: AND(p2a, p2b)
+    - Intermediate Signal 4: AND(p2c, p2d)
+    - p2y = OR(Intermediate Signal 3, Intermediate Signal 4)
+
+Additional Details:
+- Bit Indexing: All inputs and outputs are single-bit, hence bit indexing is not applicable.
+- Signal Dependencies: The outputs p1y and p2y are combinationally dependent on the specified inputs and their respective logic operations.
+- Combinational Logic: The module contains only combinational logic; there are no sequential elements, flip-flops, or registers.
+- Edge Cases: All input combinations should be considered valid due to the combinational nature of the circuit.
+- There are no resets or initial values as the design is purely combinational.
+</ENHANCED_SPEC>

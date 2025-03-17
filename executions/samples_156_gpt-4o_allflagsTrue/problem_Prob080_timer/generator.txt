@@ -1,0 +1,67 @@
+Generated Response:
+
+<REASONING>
+To implement the TopModule, we need to create a countdown timer using a 10-bit down-counter. The module has a clock input, a load signal, a 10-bit data input, and a terminal count output (tc). The counter should load the data value when the load signal is high and decrement by 1 on each clock cycle when the load signal is low. The tc output should be asserted when the counter reaches zero.
+
+1. **Port Declaration**: We declare the input and output ports using `logic` as per the coding conventions. The `clk` and `load` are 1-bit inputs, `data` is a 10-bit input, and `tc` is a 1-bit output.
+
+2. **Counter Declaration**: We declare a 10-bit `logic` variable `counter` to hold the countdown value.
+
+3. **Sequential Logic**: We use an `always @(posedge clk)` block to implement the synchronous logic. This block is triggered on the positive edge of the clock.
+
+4. **Load Logic**: Inside the always block, we first check if `load` is high. If it is, we load the `counter` with the value from `data`.
+
+5. **Decrement Logic**: If `load` is low and the `counter` is not zero, we decrement the `counter` by 1.
+
+6. **Terminal Count Logic**: We set the `tc` output to high when the `counter` reaches zero. This is done by comparing the `counter` to zero and assigning the result to `tc`.
+
+7. **Coding Conventions**: We adhere to the coding conventions by using `logic` for all signals, using a synchronous always block, and ensuring all numeric constants are properly sized.
+
+This implementation ensures that the counter loads and decrements correctly, and the terminal count signal is asserted when the counter reaches zero.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [9:0] data,
+    output logic tc
+);
+
+    logic [9:0] counter;
+
+    always @(posedge clk) begin
+        if (load) begin
+            counter <= data;
+        end else if (counter != 10'b0) begin
+            counter <= counter - 1;
+        end
+        tc <= (counter == 10'b0);
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic load,
+    input logic [9:0] data,
+    output logic tc
+);
+
+    logic [9:0] counter;
+
+    always @(posedge clk) begin
+        if (load) begin
+            counter <= data;
+        end else if (counter != 10'b0) begin
+            counter <= counter - 1;
+        end
+        tc <= (counter == 10'b0);
+    end
+
+endmodule

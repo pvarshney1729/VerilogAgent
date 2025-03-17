@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Port:
+  - Name: in
+  - Width: 100 bits
+  - Type: wire
+  - Bit Indexing: bit[0] is the least significant bit (LSB), bit[99] is the most significant bit (MSB)
+
+- Output Port:
+  - Name: out
+  - Width: 100 bits
+  - Type: wire
+  - Bit Indexing: bit[0] is the least significant bit (LSB), bit[99] is the most significant bit (MSB)
+
+Functionality:
+- The module performs a bit reversal operation on the input signal 'in'. 
+- The output 'out' will be the reverse of the input 'in', such that the bit in position [0] of 'in' is mapped to position [99] of 'out', the bit in position [1] of 'in' is mapped to position [98] of 'out', continuing in this manner until the bit in position [99] of 'in' is mapped to position [0] of 'out'.
+
+Timing and Logic:
+- This is a purely combinational logic module with no sequential elements.
+- There is no clock or reset signal involved as the operation is combinational.
+
+Edge Cases:
+- All 100 bits must always be accounted for in the operation; no bits should be left unmapped or undefined in the output.
+</ENHANCED_SPEC>

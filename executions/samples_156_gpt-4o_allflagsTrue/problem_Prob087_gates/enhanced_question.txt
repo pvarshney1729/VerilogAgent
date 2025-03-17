@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Description:
+- This module implements a combinational logic circuit with two single-bit inputs and seven single-bit outputs, each representing a different logic operation.
+
+Port Definitions:
+- Input Ports:
+  - input wire a: Single-bit input, where bit[0] is the least significant bit.
+  - input wire b: Single-bit input, where bit[0] is the least significant bit.
+
+- Output Ports:
+  - output wire out_and: Single-bit output, representing the logical AND of inputs a and b.
+  - output wire out_or: Single-bit output, representing the logical OR of inputs a and b.
+  - output wire out_xor: Single-bit output, representing the logical XOR of inputs a and b.
+  - output wire out_nand: Single-bit output, representing the logical NAND of inputs a and b.
+  - output wire out_nor: Single-bit output, representing the logical NOR of inputs a and b.
+  - output wire out_xnor: Single-bit output, representing the logical XNOR of inputs a and b.
+  - output wire out_anotb: Single-bit output, representing the logical AND of input a and the logical NOT of input b.
+
+Functional Description:
+- The module is purely combinational with no clock or reset signals involved.
+- Each output performs a distinct logic operation on the inputs a and b, as follows:
+
+  1. out_and = a & b
+  2. out_or = a | b
+  3. out_xor = a ^ b
+  4. out_nand = ~(a & b)
+  5. out_nor = ~(a | b)
+  6. out_xnor = ~(a ^ b)
+  7. out_anotb = a & ~b
+
+- The module does not exhibit stateful behavior, hence no initialization or sequential logic is required.
+- The operations are evaluated within a single clock cycle, assuming zero propagation delay for theoretical purposes.
+
+Edge Cases and Input Boundaries:
+- As the inputs are single-bit, the module handles all possible binary combinations (00, 01, 10, 11) of a and b.
+- The outputs will reflect the correct logical operation for each combination without race conditions.
+
+Note:
+- Ensure that the input connections to the module respect the single-bit width constraint.
+</ENHANCED_SPEC>

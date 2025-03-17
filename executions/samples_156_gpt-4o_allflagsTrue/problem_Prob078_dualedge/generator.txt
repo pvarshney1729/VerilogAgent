@@ -1,0 +1,74 @@
+Generated Response:
+
+<REASONING>
+To implement a dual-edge triggered flip-flop using standard FPGA resources, we need to simulate the behavior of capturing data on both the rising and falling edges of the clock. Since FPGAs do not support dual-edge triggered flip-flops natively, we can achieve this by using two separate flip-flops: one triggered on the positive edge and the other on the negative edge of the clock. 
+
+1. **Positive Edge Flip-Flop**: This captures the input `d` on the rising edge of the clock and stores it in `q_pos`.
+2. **Negative Edge Flip-Flop**: This captures the input `d` on the falling edge of the clock and stores it in `q_neg`.
+3. **Multiplexer Logic**: A combinational logic block is used to select between `q_pos` and `q_neg` based on the current state of the clock. If the clock is high, `q` will take the value of `q_pos`; if the clock is low, `q` will take the value of `q_neg`.
+
+This approach effectively emulates a dual-edge triggered flip-flop by ensuring that the output `q` reflects the most recent value of `d` captured on either edge of the clock.
+
+The implementation adheres to the provided guidelines and coding conventions:
+- All ports and signals are declared as `logic`.
+- Combinational logic uses `always @(*)` without an explicit sensitivity list.
+- The design does not include a reset signal, as it was not specified in the original question.
+- The module strictly follows the interface and signal names as specified.
+
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic d,
+    output logic q
+);
+
+    logic q_pos, q_neg;
+
+    // Positive edge triggered flip-flop
+    always @(posedge clk) begin
+        q_pos <= d;
+    end
+
+    // Negative edge triggered flip-flop
+    always @(negedge clk) begin
+        q_neg <= d;
+    end
+
+    // Multiplexer to select between q_pos and q_neg based on clk
+    always @(*) begin
+        q = clk ? q_pos : q_neg;
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic d,
+    output logic q
+);
+
+    logic q_pos, q_neg;
+
+    // Positive edge triggered flip-flop
+    always @(posedge clk) begin
+        q_pos <= d;
+    end
+
+    // Negative edge triggered flip-flop
+    always @(negedge clk) begin
+        q_neg <= d;
+    end
+
+    // Multiplexer to select between q_pos and q_neg based on clk
+    always @(*) begin
+        q = clk ? q_pos : q_neg;
+    end
+
+endmodule

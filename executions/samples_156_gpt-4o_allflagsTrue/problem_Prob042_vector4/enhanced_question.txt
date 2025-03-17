@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Specification for the Verilog Module: TopModule
+
+- Module Name: TopModule
+
+- Input Ports:
+  - `input [7:0] in`: An 8-bit signed input vector. The most significant bit (bit[7]) represents the sign bit, where bit[0] is the least significant bit.
+
+- Output Ports:
+  - `output [31:0] out`: A 32-bit signed output vector resulting from sign-extension of the 8-bit input.
+
+Functional Description:
+- The purpose of the TopModule is to perform sign-extension of the 8-bit input to a 32-bit output. 
+- Sign-extension involves replicating the sign bit (bit[7]) of the 8-bit input to fill the upper 24 bits of the 32-bit output, followed by the original 8-bit input.
+
+Detailed Operation:
+- The sign bit of the input (`in[7]`) is replicated 24 times to form the most significant 24 bits of the output.
+- The least significant 8 bits of the output are directly assigned from the input.
+
+Example Cases:
+- If `input = 8'b01010101` (equivalent to decimal 85), the output will be `32'b00000000000000000000000001010101` (also 85).
+- If `input = 8'b11010101` (equivalent to decimal -43 in two's complement), the output will be `32'b11111111111111111111111111010101` (also -43).
+
+Additional Requirements:
+- Ensure the module is implemented as combinational logic, with no clock or reset signals involved.
+- The implementation should avoid race conditions and ensure the output is stable as soon as the input is stable.
+
+Edge Cases:
+- The module should correctly handle all possible values of the 8-bit input, including the boundary values `8'b00000000` (0) and `8'b11111111` (-1).
+
+Note: This module strictly performs bitwise operations and does not involve any sequential logic elements such as flip-flops or latches.
+</ENHANCED_SPEC>

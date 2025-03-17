@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock input signal. The counter advances on the positive edge of this signal.
+  - `reset`: 1-bit active-high synchronous reset input. When high on the rising edge of `clk`, the counter will reset to 0.
+- Output Ports:
+  - `q`: 4-bit output representing the current count value. Bit[3] is the most significant bit (MSB), and bit[0] is the least significant bit (LSB).
+
+Functional Description:
+- The module implements a 4-bit binary counter that counts from 0 to 15, inclusive, in a sequential manner. The counter operates with a period of 16 clock cycles.
+- All sequential logic within the module is triggered on the positive edge of the `clk` signal.
+
+Reset Behavior:
+- The `reset` input is synchronous. During the positive edge of the `clk`, if the `reset` signal is high, the counter will be reset to 0.
+- The reset state of the counter is 0, which means `q` will output `0000` after a reset.
+
+Operational Details:
+- The counter increments by 1 on each positive edge of `clk`, provided that `reset` is not active.
+- Upon reaching the maximum count of 15 (`1111` in binary), the counter will wrap around to 0 on the next clock cycle.
+
+Edge Cases:
+- If `reset` is high during the positive edge of `clk`, the counter will be set to 0 regardless of its current state.
+- The transition from 15 (`1111`) to 0 (`0000`) occurs seamlessly without requiring additional logic for wrap-around.
+
+Initial State:
+- Upon instantiation, before any clock cycles, the counter should be considered to be in a reset state, i.e., `q` should initially be `0000`.
+
+Ensure that the design handles all possible timing scenarios appropriately, avoiding race conditions and ensuring correct synchronous reset behavior.
+</ENHANCED_SPEC>

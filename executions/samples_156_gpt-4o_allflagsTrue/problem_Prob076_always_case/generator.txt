@@ -1,0 +1,65 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as a 6-to-1 multiplexer, we need to use the `sel` input to determine which of the six 4-bit data inputs (`data0` to `data5`) should be routed to the 4-bit output `out`. If `sel` is outside the range of 0 to 5, the output should be `4'b0000`. 
+
+The implementation will use a combinational `always @(*)` block to handle the selection logic. This block will use a `case` statement to map each `sel` value to the corresponding data input. If `sel` is not in the range of 0 to 5, the `default` case will set the output to zero.
+
+The module will adhere to the coding conventions by declaring all ports and signals as `logic`, using `always @(*)` for combinational logic, and ensuring all numeric constants have a size greater than zero.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [2:0] sel,
+    input logic [3:0] data0,
+    input logic [3:0] data1,
+    input logic [3:0] data2,
+    input logic [3:0] data3,
+    input logic [3:0] data4,
+    input logic [3:0] data5,
+    output logic [3:0] out
+);
+
+always @(*) begin
+    case (sel)
+        3'b000: out = data0;
+        3'b001: out = data1;
+        3'b010: out = data2;
+        3'b011: out = data3;
+        3'b100: out = data4;
+        3'b101: out = data5;
+        default: out = 4'b0000;
+    endcase
+end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [2:0] sel,
+    input logic [3:0] data0,
+    input logic [3:0] data1,
+    input logic [3:0] data2,
+    input logic [3:0] data3,
+    input logic [3:0] data4,
+    input logic [3:0] data5,
+    output logic [3:0] out
+);
+
+always @(*) begin
+    case (sel)
+        3'b000: out = data0;
+        3'b001: out = data1;
+        3'b010: out = data2;
+        3'b011: out = data3;
+        3'b100: out = data4;
+        3'b101: out = data5;
+        default: out = 4'b0000;
+    endcase
+end
+
+endmodule

@@ -1,0 +1,45 @@
+Generated Response:
+
+<REASONING>
+To implement the D latch, we need to follow the given guidelines and coding conventions. The module should have a simple interface with inputs `d` and `ena`, and an output `q`. The D latch will be implemented using an always block that is sensitive to changes in the inputs. Since the latch is level-sensitive, we will use `always @(*)` to ensure that the output `q` is updated whenever there is a change in `d` or `ena`.
+
+The logic inside the always block will check if `ena` is high. If it is, the output `q` will be assigned the value of `d`. If `ena` is low, `q` will retain its previous value. This behavior is typical for a D latch, where the output follows the input when enabled.
+
+We will declare all ports and signals as `logic` to adhere to the coding conventions. Since there is no reset signal specified, we will not implement any reset logic. The initial state of `q` is undefined until the first latch operation occurs.
+
+The implementation will strictly follow the provided interface and signal names, ensuring that the module operates correctly as a D latch.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic d,
+    input logic ena,
+    output logic q
+);
+
+    always @(*) begin
+        if (ena) begin
+            q = d;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic d,
+    input logic ena,
+    output logic q
+);
+
+    always @(*) begin
+        if (ena) begin
+            q = d;
+        end
+    end
+
+endmodule

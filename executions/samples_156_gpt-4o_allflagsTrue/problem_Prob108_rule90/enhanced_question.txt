@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: Clock signal for sequential logic, triggering on the positive edge.
+  - `input wire load`: Control signal indicating when to load new data into the system.
+  - `input wire [511:0] data`: 512-bit wide input representing the initial state of the cellular automaton.
+
+- Output Ports:
+  - `output reg [511:0] q`: 512-bit wide output representing the current state of the cellular automaton.
+
+Behavioral Specification:
+1. The module implements a one-dimensional cellular automaton following Rule 90.
+2. The automaton consists of 512 cells, each represented by a single bit in the `q` array, where `q[0]` is the least significant bit (LSB) and `q[511]` is the most significant bit (MSB).
+
+Operational Details:
+1. On the positive edge of the `clk`:
+   - If `load` is asserted (high), the current state of the system (`q`) is loaded with the value of `data[511:0]`.
+   - If `load` is not asserted (low), the automaton advances by one time step according to Rule 90.
+
+2. Rule 90 Description:
+   - For each cell `q[i]`, the next state is determined by the XOR of its two neighbors: 
+     - Left Neighbor: `q[i-1]` (if `i == 0`, assume `q[-1]` as 0, off)
+     - Right Neighbor: `q[i+1]` (if `i == 511`, assume `q[512]` as 0, off)
+
+   - Next State Table:
+     - `Left | Center | Right | Center's next state`
+     - `1    | 1      | 1     | 0`
+     - `1    | 1      | 0     | 1`
+     - `1    | 0      | 1     | 0`
+     - `1    | 0      | 0     | 1`
+     - `0    | 1      | 1     | 1`
+     - `0    | 1      | 0     | 0`
+     - `0    | 0      | 1     | 1`
+     - `0    | 0      | 0     | 0`
+
+3. Edge Conditions:
+   - For `q[0]`, use `0` for the left boundary.
+   - For `q[511]`, use `0` for the right boundary.
+
+4. Reset Condition:
+   - No explicit reset condition is described; the module will rely on the `load` signal to initialize or update the state as needed.
+
+Ensure all sequential elements are synchronized with the positive edge of the `clk` signal and handle the `load` signal appropriately to update the state.
+</ENHANCED_SPEC>

@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+The Verilog module, named `TopModule`, is specified with the following interface. All input and output ports are one bit wide unless otherwise specified.
+
+- `input logic clk;` // 1-bit clock input, triggering on the positive edge
+- `input logic reset;` // 1-bit active-high synchronous reset
+- `input logic [31:0] in;` // 32-bit input vector
+- `output logic [31:0] out;` // 32-bit output vector
+
+**Functional Description:**
+
+1. **Clock and Reset Behavior:**
+   - The module operates on the positive edge of the clock (`clk`).
+   - The reset (`reset`) is an active-high synchronous signal.
+   - When `reset` is asserted (high) on the rising edge of `clk`, all bits of the output vector `out` are reset to 0.
+
+2. **Signal Capture Logic:**
+   - The module monitors each bit of the 32-bit input vector `in`.
+   - For each bit `n` (where `n` ranges from 0 to 31, with `in[0]` being the least significant bit):
+     - If `in[n]` changes from 1 in the previous clock cycle to 0 in the current clock cycle, the corresponding bit `out[n]` is set to 1.
+     - Once `out[n]` is set to 1, it remains 1 until a reset occurs.
+
+3. **Edge Case and Boundary Behavior:**
+   - Initial state: After a reset, all bits of the output vector `out` are initialized to 0.
+   - The detection of a falling edge (1 to 0 transition) for each bit is independent of other bits.
+
+**Implementation Notes:**
+- Ensure that the module's logic correctly identifies and captures the 1-to-0 transitions for each bit independently.
+- The reset must effectively clear all captured states, setting `out` to a 32-bit vector of zeros.
+</ENHANCED_SPEC>

@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: `clk` (1 bit) - Clock signal for the FSM, rising edge-triggered.
+- Input: `x` (1 bit) - Control input determining the transition path.
+- Input: `y` (3 bits) - Current state input for the FSM, where `y[2]` is the most significant bit and `y[0]` is the least significant bit.
+- Output: `Y0` (1 bit) - Corresponds to the least significant bit of the next state `Y[0]`.
+- Output: `z` (1 bit) - Output determined by the present state.
+
+FSM Description:
+- The FSM transitions and outputs are determined by the present state `y` and input `x` based on the provided state transition table.
+- State transitions occur on the rising edge of `clk`.
+
+State Transition Table:
+- Present State `y[2:0]` | Next State `Y[2:0]` when `x=0` | Next State `Y[2:0]` when `x=1` | Output `z`
+  - `000` | `000` | `001` | `0`
+  - `001` | `001` | `100` | `0`
+  - `010` | `010` | `001` | `0`
+  - `011` | `001` | `010` | `1`
+  - `100` | `011` | `100` | `1`
+
+Reset Behavior:
+- The FSM should initialize to state `000` on reset.
+
+Additional Specifications:
+- The reset signal, if applicable, should be synchronous with respect to the `clk`.
+- Ensure all state transitions are stable to avoid race conditions.
+- The state register should be explicitly initialized to `000` at the start.
+
+Output Behavior:
+- The output `Y0` will be directly derived from the least significant bit of the next state `Y[0]` after the state transition.
+- The output `z` is determined by the current state according to the transition table.
+
+Edge Cases:
+- Ensure proper handling of all defined states and provide default behavior for undefined states, which should be a transition to state `000`.
+</ENHANCED_SPEC>

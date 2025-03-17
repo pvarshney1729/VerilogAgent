@@ -1,0 +1,203 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the guidelines and coding conventions specified. The module is designed to detect a specific pattern (1101) on the `data` input and then perform a series of operations based on the detected pattern. The finite-state machine (FSM) is implemented using an enumerated type `state_t` to represent the different states of the FSM. The states include `IDLE`, `S1`, `S11`, `S110`, `DETECTED`, `SHIFT`, `COUNT`, and `DONE_STATE`.
+
+1. **Pattern Detection**: The FSM transitions through states `S1`, `S11`, and `S110` to detect the pattern `1101`. Once detected, it moves to the `DETECTED` state and then to the `SHIFT` state.
+
+2. **Shifting Operation**: In the `SHIFT` state, the `shift_ena` signal is asserted for exactly 4 clock cycles, controlled by a `shift_counter`. After 4 cycles, the FSM transitions to the `COUNT` state.
+
+3. **Counting Phase**: In the `COUNT` state, the `counting` signal is asserted, indicating that the module is waiting for the counting operation to complete. The FSM remains in this state until the `done_counting` input is high.
+
+4. **Completion Notification**: Once `done_counting` is high, the FSM transitions to the `DONE_STATE`, where the `done` signal is asserted to notify the user. The FSM waits in this state until the `ack` input is high.
+
+5. **Reset and Reinitialization**: The FSM resets to the `IDLE` state when the `ack` input is high, ready to detect the next occurrence of the pattern `1101`.
+
+The synchronous reset is implemented by checking the `reset` signal within the `always_ff` block, ensuring that the FSM initializes to the `IDLE` state when reset is asserted. The module adheres to the coding conventions by using `logic` for all signals and ensuring that all sequential logic is triggered on the positive edge of the clock.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic data,
+    input logic done_counting,
+    input logic ack,
+    output logic shift_ena,
+    output logic counting,
+    output logic done
+);
+
+    typedef enum logic [2:0] {
+        IDLE        = 3'b000,
+        S1          = 3'b001,
+        S11         = 3'b010,
+        S110        = 3'b011,
+        DETECTED    = 3'b100,
+        SHIFT       = 3'b101,
+        COUNT       = 3'b110,
+        DONE_STATE  = 3'b111
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [1:0] shift_counter;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            shift_counter <= 2'b00;
+        end else begin
+            current_state <= next_state;
+            if (current_state == SHIFT) begin
+                shift_counter <= shift_counter + 1;
+            end else begin
+                shift_counter <= 2'b00;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        next_state = current_state; // Default to hold state
+        shift_ena = 1'b0;
+        counting = 1'b0;
+        done = 1'b0;
+
+        case (current_state)
+            IDLE: begin
+                if (data) next_state = S1;
+            end
+            S1: begin
+                if (data) next_state = S11;
+                else next_state = IDLE;
+            end
+            S11: begin
+                if (!data) next_state = S110;
+                else next_state = S1;
+            end
+            S110: begin
+                if (data) next_state = DETECTED;
+                else next_state = IDLE;
+            end
+            DETECTED: begin
+                next_state = SHIFT;
+            end
+            SHIFT: begin
+                shift_ena = 1'b1;
+                if (shift_counter == 2'b11) begin
+                    next_state = COUNT;
+                end
+            end
+            COUNT: begin
+                counting = 1'b1;
+                if (done_counting) begin
+                    next_state = DONE_STATE;
+                end
+            end
+            DONE_STATE: begin
+                done = 1'b1;
+                if (ack) begin
+                    next_state = IDLE;
+                end
+            end
+            default: next_state = IDLE;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic data,
+    input logic done_counting,
+    input logic ack,
+    output logic shift_ena,
+    output logic counting,
+    output logic done
+);
+
+    typedef enum logic [2:0] {
+        IDLE        = 3'b000,
+        S1          = 3'b001,
+        S11         = 3'b010,
+        S110        = 3'b011,
+        DETECTED    = 3'b100,
+        SHIFT       = 3'b101,
+        COUNT       = 3'b110,
+        DONE_STATE  = 3'b111
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [1:0] shift_counter;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            shift_counter <= 2'b00;
+        end else begin
+            current_state <= next_state;
+            if (current_state == SHIFT) begin
+                shift_counter <= shift_counter + 1;
+            end else begin
+                shift_counter <= 2'b00;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        next_state = current_state; // Default to hold state
+        shift_ena = 1'b0;
+        counting = 1'b0;
+        done = 1'b0;
+
+        case (current_state)
+            IDLE: begin
+                if (data) next_state = S1;
+            end
+            S1: begin
+                if (data) next_state = S11;
+                else next_state = IDLE;
+            end
+            S11: begin
+                if (!data) next_state = S110;
+                else next_state = S1;
+            end
+            S110: begin
+                if (data) next_state = DETECTED;
+                else next_state = IDLE;
+            end
+            DETECTED: begin
+                next_state = SHIFT;
+            end
+            SHIFT: begin
+                shift_ena = 1'b1;
+                if (shift_counter == 2'b11) begin
+                    next_state = COUNT;
+                end
+            end
+            COUNT: begin
+                counting = 1'b1;
+                if (done_counting) begin
+                    next_state = DONE_STATE;
+                end
+            end
+            DONE_STATE: begin
+                done = 1'b1;
+                if (ack) begin
+                    next_state = IDLE;
+                end
+            end
+            default: next_state = IDLE;
+        endcase
+    end
+
+endmodule

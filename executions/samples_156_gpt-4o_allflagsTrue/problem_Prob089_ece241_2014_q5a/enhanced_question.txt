@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input wire clk`: Clock signal, triggers on the positive edge.
+  - `input wire areset`: Asynchronous reset signal, active high.
+  - `input wire x`: Serial input bit stream, processed one bit per clock cycle.
+- Outputs:
+  - `output reg z`: Serial output representing the 2's complement of the input.
+
+Functional Description:
+- The module implements a one-input, one-output Moore state machine to compute the 2's complement of a serial bit stream.
+- The input `x` is presented as a series of bits, starting from the least-significant bit (LSB) of the number.
+- The output `z` provides the corresponding 2's complement bit for each input bit, with a one-clock-cycle delay due to the sequential nature of the state machine.
+
+Reset Behavior:
+- The module features an asynchronous reset (`areset`), which, when asserted high, will reset the state machine to its initial state immediately, regardless of the clock signal.
+- When `areset` is deasserted (low), the state machine resumes operation, processing `x` on each positive clock edge.
+
+State Machine Details:
+- The Moore state machine operates based on the current state and input `x`, updating the state and output `z` on the positive edge of `clk`.
+- The initial state, upon reset, should prepare the machine to start processing the input bit stream from an initial known state.
+
+Sequential Logic:
+- All internal registers and flip-flops should be initialized to a defined state upon reset to ensure deterministic operation.
+- The state transitions and output logic should be clearly defined to handle all possible input sequences and edge cases, including very short or very long input sequences.
+
+Edge Cases and Boundary Conditions:
+- The system should correctly handle input sequences of arbitrary length, producing a valid 2's complement output for the entire sequence.
+- Care must be taken to handle transitions correctly at the end of input sequences and during continuous operation without reset interruptions.
+
+Assumptions:
+- The number of bits in the input sequence is not predetermined and can vary with each operation cycle.
+- The input sequence is considered to end when `areset` is asserted or when processing is otherwise interrupted.
+
+Debugging and Verification:
+- Ensure comprehensive test cases cover typical, edge, and boundary conditions, verifying both correct output generation and proper state transitions.
+
+Note: The module should be designed to avoid race conditions, ensuring clear precedence of operations in all scenarios.
+</ENHANCED_SPEC>

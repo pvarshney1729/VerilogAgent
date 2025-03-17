@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: Clock signal for sequential logic.
+  - `input wire reset`: Active-high synchronous reset signal. Resets the module when high.
+  - `input wire [2:0] s`: 3-bit vector representing the state of water level sensors. 
+    - `s[2]`: Most significant bit, sensor at the highest level.
+    - `s[0]`: Least significant bit, sensor at the lowest level.
+
+- Output Ports:
+  - `output reg fr2`: Control signal for flow rate corresponding to the highest nominal flow rate.
+  - `output reg fr1`: Control signal for flow rate corresponding to a medium nominal flow rate.
+  - `output reg fr0`: Control signal for flow rate corresponding to the lowest nominal flow rate.
+  - `output reg dfr`: Control signal for the Supplemental flow valve.
+
+Functional Description:
+- Water Level Sensors:
+  - When `s` represents all sensors asserted (`s = 3'b111`), indicating the water level is above the highest sensor `s[2]`, all flow rate outputs (`fr2`, `fr1`, `fr0`) should be deasserted (set to zero).
+  - When `s` represents only the lowest sensor `s[0]` asserted (`s = 3'b001`), indicating the water level is between `s[1]` and `s[0]`, set `fr0` and `fr1` high.
+  - When no sensors are asserted (`s = 3'b000`), indicating the water level is below `s[0]`, set `fr0`, `fr1`, and `fr2` high to ensure maximum flow rate.
+
+- Supplemental Flow Control:
+  - The `dfr` signal should be asserted (set to one) if the water level change indicates that the previous level was lower than the current level, requiring an increase in the flow rate.
+
+- Reset Behavior:
+  - Upon assertion of the `reset` signal, the module should reset to a state equivalent to the condition where the water level has been low for a long time. This state is characterized by no sensors being asserted (`s = 3'b000`) and all flow rate outputs (`fr2`, `fr1`, `fr0`, `dfr`) being asserted (set to one).
+
+Clocking and Synchronization:
+- All changes in output signals should be synchronized with the rising edge of the `clk` signal, and the reset should also be synchronized with this clock edge.
+
+Edge Cases and Initial Conditions:
+- Ensure all outputs are initialized to a known state upon power-up or reset.
+- Handle boundary conditions where transitions occur between different sensor states to avoid glitches or race conditions.
+
+This specification ensures that all functional requirements are met while providing a clear and precise definition of the module's behavior and interface.
+</ENHANCED_SPEC>

@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire x: Single-bit input, bit[0] refers to the least significant bit (LSB).
+- input wire y: Single-bit input, bit[0] refers to the least significant bit (LSB).
+- output wire z: Single-bit output, bit[0] refers to the least significant bit (LSB).
+
+Behavioral Specification:
+The output z is a combinational logic function of the inputs x and y, defined by the following truth table derived from the simulation waveform:
+
+| x | y | z |
+|---|---|---|
+| 0 | 0 | 1 |
+| 1 | 0 | 0 |
+| 0 | 1 | 0 |
+| 1 | 1 | 1 |
+
+Description:
+- The output z is determined by the logical AND operation between x and y, followed by OR with the inverted x AND inverted y, effectively implementing the expression: z = (x AND y) OR (NOT x AND NOT y).
+- This implies z = 1 when both x and y are 1, or when both are 0. For other combinations, z = 0.
+
+Timing and Edge Cases:
+- This module is purely combinational with no dependence on clock edges or sequential logic elements.
+- Ensure that the input signals x and y have stable values before evaluating the output z to avoid metastability or glitches.
+- The module does not utilize any reset conditions as it is purely combinational.
+
+Implementation Note:
+- There are no flip-flops or state-dependent elements in this module; hence, initial conditions are not applicable.
+</ENHANCED_SPEC>

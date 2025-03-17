@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input in1`: 1-bit; represents the first operand for the XNOR gate.
+  - `input in2`: 1-bit; represents the second operand for the XNOR gate.
+  - `input in3`: 1-bit; serves as the second operand for the XOR gate.
+
+- Output Ports:
+  - `output out`: 1-bit; represents the final output of the XOR gate.
+
+Circuit Description:
+- The module implements a combinational logic circuit with the following structure:
+  1. A two-input XNOR gate receives `in1` and `in2` as inputs.
+     - Logical Operation: XNOR(in1, in2) = ~(in1 ^ in2)
+  2. The output of the XNOR gate is connected to the first input of a two-input XOR gate.
+  3. The second input of the XOR gate is `in3`.
+     - Logical Operation: XOR(XNOR(in1, in2), in3) = (XNOR(in1, in2)) ^ in3
+
+- The output of the XOR gate is assigned to `out`.
+
+Bit Indexing and Conventions:
+- All inputs and outputs are single bits, with the least significant bit (`LSB`) at index 0.
+- The operations are combinational and do not involve any clocking or sequential elements.
+
+Edge Cases and Input Boundaries:
+- As all inputs are single bits and the operations are purely combinational, there are no additional edge cases or input boundary conditions beyond the natural binary behavior of the gates.
+</ENHANCED_SPEC>

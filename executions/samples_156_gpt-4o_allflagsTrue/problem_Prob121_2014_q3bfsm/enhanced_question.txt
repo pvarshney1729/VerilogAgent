@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule`. It interfaces with the following ports, where each port is 1-bit wide unless specified otherwise:
+
+- `input logic clk`: The clock signal, triggering all sequential logic on its positive edge.
+- `input logic reset`: A synchronous, active-high reset signal for the finite state machine (FSM).
+- `input logic x`: A control input signal.
+- `output logic z`: The output signal.
+
+The FSM consists of states represented by a 3-bit vector `y[2:0]`, with `y[0]` as the least significant bit (LSB) and `y[2]` as the most significant bit (MSB). Upon activation of the reset signal, the FSM synchronously transitions to the initial state `000`.
+
+State transition logic is defined as follows:
+
+- **Present State `000`**: 
+  - If `x = 0`, transition to next state `000`.
+  - If `x = 1`, transition to next state `001`.
+  - Output `z = 0`.
+
+- **Present State `001`**: 
+  - If `x = 0`, transition to next state `001`.
+  - If `x = 1`, transition to next state `100`.
+  - Output `z = 0`.
+
+- **Present State `010`**: 
+  - If `x = 0`, transition to next state `010`.
+  - If `x = 1`, transition to next state `001`.
+  - Output `z = 0`.
+
+- **Present State `011`**: 
+  - If `x = 0`, transition to next state `001`.
+  - If `x = 1`, transition to next state `010`.
+  - Output `z = 1`.
+
+- **Present State `100`**: 
+  - If `x = 0`, transition to next state `011`.
+  - If `x = 1`, transition to next state `100`.
+  - Output `z = 1`.
+
+The reset state of all flip-flops or registers is explicitly defined as state `000`. Ensure all sequential elements start with this initial state upon reset activation. Handle all edge cases by strictly adhering to the defined state transitions and output behaviors as described. 
+</ENHANCED_SPEC>

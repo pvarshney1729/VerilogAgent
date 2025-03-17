@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - clk: 1-bit clock input signal. Triggering occurs on the positive edge.
+  - d: 8-bit data input vector. Bit indexing is from [7:0], where bit[0] is the least significant bit (LSB).
+
+- Outputs:
+  - q: 8-bit data output vector. Bit indexing is from [7:0], where bit[0] is the least significant bit (LSB).
+
+Description:
+- The TopModule contains 8 D-type flip-flops (DFFs).
+- Each DFF is triggered by the positive edge of the 'clk' signal.
+- The 8-bit input 'd' is directly connected to the D inputs of the 8 DFFs.
+- On each positive edge of 'clk', the 8-bit input 'd' is sampled and stored in the corresponding DFFs.
+- The stored values in the DFFs are presented at the output 'q' on the same clock edge.
+
+Initial State:
+- All DFFs are initialized to a known state of 0 at system reset (not specified in original but assumed necessary for clarity).
+
+Clocking and Reset:
+- There is no explicit reset signal mentioned; if needed, specify whether a synchronous or asynchronous reset is required and default state upon reset.
+- If a reset is added, assume it initializes all DFFs to a low state (all outputs of 'q' are 0).
+
+Operation:
+- At every rising edge of 'clk', the current value of 'd' is captured and held in the respective DFFs, and the same value is output on 'q'.
+
+Note:
+- Ensure that the clock signal 'clk' adheres to the desired frequency and timing requirements to avoid metastability and ensure reliable operation.
+</ENHANCED_SPEC>

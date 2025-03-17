@@ -1,0 +1,57 @@
+Generated Response:
+
+<REASONING>
+To implement the D flip-flop with an asynchronous reset, we need to follow these steps:
+
+1. **Module Declaration**: We declare a module named `TopModule` with the specified interface. The inputs are `clk`, `ar`, and `d`, and the output is `q`.
+
+2. **Signal Declaration**: According to the coding conventions, all ports are declared as `logic`.
+
+3. **Asynchronous Reset**: The asynchronous reset (`ar`) is active high. This means that when `ar` is high, the output `q` should be reset to '0' immediately, regardless of the clock.
+
+4. **Positive Edge-Triggered**: The flip-flop should capture the value of `d` on the rising edge of `clk` if the reset is not active.
+
+5. **Always Block**: We use an `always` block with `posedge clk or posedge ar` in the sensitivity list to handle both the clock edge and the asynchronous reset.
+
+6. **Behavioral Logic**: Inside the `always` block, we first check if `ar` is high. If so, we set `q` to '0'. Otherwise, on the rising edge of `clk`, we set `q` to the value of `d`.
+
+This approach ensures that the flip-flop behaves correctly with respect to both the clock and the asynchronous reset.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic ar,
+    input logic d,
+    output logic q
+);
+
+    always @(posedge clk or posedge ar) begin
+        if (ar)
+            q <= 1'b0;
+        else
+            q <= d;
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic ar,
+    input logic d,
+    output logic q
+);
+
+    always @(posedge clk or posedge ar) begin
+        if (ar)
+            q <= 1'b0;
+        else
+            q <= d;
+    end
+
+endmodule

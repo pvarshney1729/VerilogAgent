@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+The module `TopModule` is a sequential circuit with the following interface:
+
+- `input wire clk`: The clock signal. This module uses a rising edge-triggered clock.
+- `input wire a`: A single-bit input signal.
+- `output reg [2:0] q`: A 3-bit output register. Bit index [0] refers to the least significant bit (LSB).
+
+Specifications:
+
+1. **Clock and Reset Behavior**:
+   - The module operates on the rising edge of the `clk` signal.
+   - There is no explicit reset signal provided. Assume the initial state of `q` is unspecified and can be treated as 'don't care' (denoted as 'x').
+
+2. **Output `q` Behavior**:
+   - At time 0ns, when `clk` is low and `a` is high, `q` is unspecified (x).
+   - On each rising edge of `clk` when `a` is high, `q` holds the value 4.
+   - On each rising edge of `clk` when `a` is low, `q` increments its value by 1 in a modulo-7 counter manner, cycling through values 0 to 6.
+   - When `q` reaches 6, the next increment results in `q` resetting to 0.
+
+3. **Operation Precedence**:
+   - The module does not change `q` on the falling edge of `clk`.
+   - The output `q` only changes on the rising edge of `clk` based on the value of `a`.
+
+4. **Edge Cases and Input Boundaries**:
+   - If `a` remains high, `q` will continuously output 4 irrespective of previous values.
+   - If `a` remains low, `q` will increment from its current value on each rising edge of `clk`, cycling back to 0 after reaching 6.
+
+5. **Initial Condition**:
+   - Although `q` is initially unspecified, once the first active clock edge (rising) is encountered with `a` high, `q` is set to 4.
+
+The timing diagram provided outlines the expected behavior as described, with transitions occurring on rising edges of the clock and dependent on the state of `a`.
+</ENHANCED_SPEC>

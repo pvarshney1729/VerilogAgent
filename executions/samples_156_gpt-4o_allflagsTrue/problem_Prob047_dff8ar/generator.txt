@@ -1,0 +1,57 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a module with the specified interface: inputs `clk`, `areset`, and `d` (8 bits), and output `q` (8 bits). The module should use 8 D flip-flops with an active high asynchronous reset. The reset should set the output `q` to zero, and the flip-flops should be triggered by the positive edge of `clk`.
+
+1. **Module Declaration**: We declare the module `TopModule` with the specified ports. We use `logic` for all ports to adhere to the coding conventions.
+
+2. **Asynchronous Reset**: The asynchronous reset (`areset`) is included in the sensitivity list of the `always` block to ensure that when `areset` is high, the output `q` is immediately reset to zero, regardless of the clock state.
+
+3. **D Flip-Flops**: The `always` block is triggered on the positive edge of `clk` or `areset`. If `areset` is high, `q` is set to `8'b00000000`. Otherwise, on the rising edge of `clk`, `q` is updated with the value of `d`.
+
+4. **Coding Conventions**: We use `logic` for all signals, and the asynchronous reset is correctly handled by including it in the sensitivity list. The numeric constant for reset is sized (8 bits) as per the conventions.
+
+5. **Simulation Initialization**: Although not explicitly required in the code, it is assumed that in simulation, all signals are initialized to zero unless specified otherwise.
+
+This approach ensures that the module meets the specification requirements and adheres to the given guidelines and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 8'b00000000;
+        end else begin
+            q <= d;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic [7:0] d,
+    output logic [7:0] q
+);
+
+    always @(posedge clk or posedge areset) begin
+        if (areset) begin
+            q <= 8'b00000000;
+        end else begin
+            q <= d;
+        end
+    end
+
+endmodule

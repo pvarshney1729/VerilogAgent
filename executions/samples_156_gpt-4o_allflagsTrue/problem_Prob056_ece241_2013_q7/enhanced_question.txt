@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit input, used as the clock signal. The JK flip-flop operation occurs on the rising edge of this clock signal.
+  - j: 1-bit input, represents the J input for the JK flip-flop.
+  - k: 1-bit input, represents the K input for the JK flip-flop.
+
+- Output Ports:
+  - Q: 1-bit output, represents the current state of the JK flip-flop. Bit[0] refers to the least significant bit.
+
+Functional Description:
+- The module implements a JK flip-flop with the following characteristic table:
+  - When J = 0 and K = 0, Q (the output) retains its previous value (Qold).
+  - When J = 0 and K = 1, Q is reset to 0.
+  - When J = 1 and K = 0, Q is set to 1.
+  - When J = 1 and K = 1, Q toggles its previous value (i.e., Q becomes ~Qold).
+
+- This is a sequential logic element, and all state transitions occur on the positive (rising) edge of the clock signal (clk).
+
+Reset Behavior:
+- There is no explicit reset signal described in the original specification. The initial state of Q after power-up is assumed to be indeterminate unless otherwise specified in the implementation context.
+
+Additional Clarifications:
+- Ensure that the implementation correctly handles potential race conditions by ensuring that all input signals are stable before the rising edge of the clock.
+- The implementation should assume that the inputs J and K are stable during the rising edge of the clock to avoid meta-stability issues.
+- The behavior is undefined for any conditions outside the specified truth table, such as simultaneous changes on J and K at the clock edge.
+
+Edge Cases:
+- The module should handle normal clock signal behavior and ensure that Q is only updated on the positive edge as specified.
+- The flip-flop should correctly handle repeated clock cycles with the same J and K inputs according to the truth table.
+</ENHANCED_SPEC>

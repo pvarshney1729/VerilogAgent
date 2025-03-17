@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input clk`: Clock signal for sequential logic, active on the rising edge.
+  - `input areset`: Asynchronous reset signal, active high. When high, the module should reset to its initial state.
+  - `input in`: 1-bit input signal to determine state transitions in the Moore machine.
+- Output:
+  - `output reg out`: 1-bit output signal representing the current state's output value.
+
+State Machine Description:
+- The module implements a Moore state machine with two states, A and B.
+- State Encoding:
+  - State A: Outputs `out = 0`
+  - State B: Outputs `out = 1`
+- State Transition Diagram:
+  - From State B, with input `in = 0`, transition to State A.
+  - From State B, with input `in = 1`, remain in State B.
+  - From State A, with input `in = 0`, transition to State B.
+  - From State A, with input `in = 1`, remain in State A.
+
+Reset Behavior:
+- The asynchronous reset signal, `areset`, when high, forces the state machine into State B regardless of the clock signal.
+- Upon deactivation of the reset (areset goes low), the state machine resumes operation based on the input and clock signals.
+
+Implementation Notes:
+- The output `out` is only dependent on the current state, consistent with Moore machine operation.
+- Bit Indexing: Each input and output is a single bit, with bit[0] being the least significant bit.
+- Initial State: On power-up and after reset, the state machine initializes to State B.
+
+Edge Cases:
+- Ensure that transitions occur on the rising edge of the clock signal when not in reset.
+- Properly handle all possible input combinations and transitions as per the state diagram.
+
+This specification ensures that the module's behavior is precisely defined for correct Verilog implementation.
+</ENHANCED_SPEC>

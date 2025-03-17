@@ -1,0 +1,165 @@
+Generated Response:
+
+<REASONING>
+To implement the module `TopModule` as specified, we need to design a finite state machine (FSM) that can correctly identify a byte in a serial bit stream. The FSM will have the following states: IDLE, START, DATA, STOP, and DONE. 
+
+1. **IDLE State**: The FSM starts in the IDLE state, waiting for a start bit (logic '0'). If the input `in` is '0', it transitions to the START state.
+
+2. **START State**: This state is a transient state to confirm the start bit has been detected. It immediately transitions to the DATA state.
+
+3. **DATA State**: In this state, the FSM counts 8 data bits. A counter (`bit_counter`) is used to keep track of the number of bits received. Once 8 bits are received, it transitions to the STOP state.
+
+4. **STOP State**: The FSM checks for the stop bit (logic '1'). If the stop bit is detected, it transitions to the DONE state. If the stop bit is not detected, it remains in the STOP state until a '1' is detected.
+
+5. **DONE State**: This state indicates a successful byte reception. The `done` output is set high for one clock cycle, and the FSM transitions back to the IDLE state to wait for the next byte.
+
+The FSM uses a synchronous reset to initialize the state to IDLE and reset the bit counter. The `done` signal is set high only in the DONE state, indicating a successful byte reception.
+
+The implementation adheres to the coding conventions by using `logic` for all signals, using `always_ff` for sequential logic, and `always_comb` for combinational logic. The reset is synchronous, so it is not included in the sensitivity list of the sequential block.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    input  logic in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        IDLE        = 3'b000,
+        START       = 3'b001,
+        DATA        = 3'b010,
+        STOP        = 3'b011,
+        DONE        = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [2:0] bit_counter; // Counter for 8 data bits
+
+    // Sequential logic for state transition
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_counter <= 3'b000;
+        end else begin
+            current_state <= next_state;
+            if (current_state == DATA) begin
+                bit_counter <= bit_counter + 1;
+            end else begin
+                bit_counter <= 3'b000;
+            end
+        end
+    end
+
+    // Combinational logic for next state and output
+    always_comb begin
+        done = 1'b0;
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) // Detect start bit
+                    next_state = START;
+                else
+                    next_state = IDLE;
+            end
+            START: begin
+                next_state = DATA;
+            end
+            DATA: begin
+                if (bit_counter == 3'b111) // 8 data bits received
+                    next_state = STOP;
+                else
+                    next_state = DATA;
+            end
+            STOP: begin
+                if (in == 1'b1) begin // Verify stop bit
+                    next_state = DONE;
+                end else begin
+                    next_state = STOP; // Wait for stop bit
+                end
+            end
+            DONE: begin
+                done = 1'b1;
+                next_state = IDLE;
+            end
+            default: next_state = IDLE;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    input  logic in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        IDLE        = 3'b000,
+        START       = 3'b001,
+        DATA        = 3'b010,
+        STOP        = 3'b011,
+        DONE        = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [2:0] bit_counter; // Counter for 8 data bits
+
+    // Sequential logic for state transition
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_counter <= 3'b000;
+        end else begin
+            current_state <= next_state;
+            if (current_state == DATA) begin
+                bit_counter <= bit_counter + 1;
+            end else begin
+                bit_counter <= 3'b000;
+            end
+        end
+    end
+
+    // Combinational logic for next state and output
+    always_comb begin
+        done = 1'b0;
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) // Detect start bit
+                    next_state = START;
+                else
+                    next_state = IDLE;
+            end
+            START: begin
+                next_state = DATA;
+            end
+            DATA: begin
+                if (bit_counter == 3'b111) // 8 data bits received
+                    next_state = STOP;
+                else
+                    next_state = DATA;
+            end
+            STOP: begin
+                if (in == 1'b1) begin // Verify stop bit
+                    next_state = DONE;
+                end else begin
+                    next_state = STOP; // Wait for stop bit
+                end
+            end
+            DONE: begin
+                done = 1'b1;
+                next_state = IDLE;
+            end
+            default: next_state = IDLE;
+        endcase
+    end
+
+endmodule

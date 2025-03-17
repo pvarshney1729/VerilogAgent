@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input  clk: Clock signal for sequential logic, positive edge-triggered.
+- input  areset: Asynchronous reset signal, active high, resets the Lemming to walk left.
+- input  bump_left: Indicates an obstacle on the left, active high.
+- input  bump_right: Indicates an obstacle on the right, active high.
+- input  ground: Indicates the presence of ground, active high.
+- output walk_left: Indicates the Lemming is walking left, active high.
+- output walk_right: Indicates the Lemming is walking right, active high.
+- output aaah: Indicates the Lemming is falling, active high.
+
+Port Conventions:
+- All ports are 1-bit wide.
+- bit[0] refers to the least significant bit where applicable.
+
+State Machine Description:
+- The module implements a Moore finite state machine (FSM) with three primary states:
+  1. WALK_LEFT: Lemming is walking left (walk_left = 1, walk_right = 0, aaah = 0).
+  2. WALK_RIGHT: Lemming is walking right (walk_left = 0, walk_right = 1, aaah = 0).
+  3. FALLING: Lemming is falling (walk_left = 0, walk_right = 0, aaah = 1).
+
+Transition Logic:
+- From WALK_LEFT:
+  - Transition to WALK_RIGHT on (bump_left = 1).
+  - Transition to FALLING on (ground = 0).
+- From WALK_RIGHT:
+  - Transition to WALK_LEFT on (bump_right = 1).
+  - Transition to FALLING on (ground = 0).
+- From FALLING:
+  - Return to previous walking direction on (ground = 1). If previous state was WALK_LEFT, return to WALK_LEFT; if it was WALK_RIGHT, return to WALK_RIGHT.
+
+Special Conditions:
+- If both bump_left and bump_right are 1 simultaneously, the Lemming will switch directions.
+- Being bumped while in the FALLING state does not affect the Lemming’s direction upon regaining ground.
+- If bump and ground change concurrently, the ground state change takes precedence.
+
+Reset Behavior:
+- On areset, the FSM resets to WALK_LEFT regardless of current state or input conditions.
+
+Clock Domain Considerations:
+- All state transitions and output signal updates are synchronized to the positive edge of clk.
+- Ensure all sequential logic elements are initialized to predefined states on reset.
+
+Edge Cases and Boundary Conditions:
+- Input transitions are handled synchronously except for the asynchronous reset.
+- Conflicting inputs (bump_left and bump_right both active) default to direction reversal.
+- Behavior is deterministic upon recovery from the asynchronous reset, favoring WALK_LEFT.
+
+Initial Values:
+- Upon reset, walk_left = 1, walk_right = 0, aaah = 0.
+</ENHANCED_SPEC>

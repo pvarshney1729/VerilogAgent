@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: Clock signal, triggering sequential logic on the positive edge.
+  - `input wire reset`: Active high synchronous reset.
+
+- Output Ports:
+  - `output reg shift_ena`: Control signal for enabling the shift register.
+
+Functional Description:
+- The module implements a finite state machine (FSM) responsible for controlling a shift register.
+- The primary function of the FSM is to assert `shift_ena` for precisely 4 consecutive clock cycles when a designated bit pattern is detected.
+- Upon being reset, the FSM will immediately assert `shift_ena` for exactly 4 clock cycles, after which `shift_ena` will remain de-asserted (logic 0) indefinitely until the next reset signal is received.
+
+Reset Behavior:
+- The reset operation is synchronous with the clock signal and is triggered on the positive edge.
+- During the synchronous reset, `shift_ena` is asserted for 4 clock cycles starting from the first clock cycle after the reset has been detected.
+
+Signal Conventions:
+- All signals are treated as unsigned and are 1 bit in width unless otherwise specified.
+- Bit indexing follows the convention where `bit[0]` refers to the least significant bit (LSB).
+
+FSM Operation:
+- The FSM operates under the assumption of positive edge-triggered sequential logic.
+- The initial state of `shift_ena` upon module instantiation is de-asserted (logic 0) until a reset is detected.
+
+Edge Cases:
+- Ensure no unintentional assertion of `shift_ena` occurs outside of the defined conditions (during reset or upon detection of the specific pattern).
+- The module should handle continuous reset assertions by maintaining the reset behavior as defined without glitches or race conditions.
+
+This specification ensures a clear understanding of the intended operation and provides a guideline for implementing the module correctly in Verilog.
+</ENHANCED_SPEC>

@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - code: 8-bit input vector [7:0] where bit[0] refers to the least significant bit.
+- Outputs:
+  - out: 4-bit output vector [3:0] representing the detected key, where bit[0] is the least significant bit.
+  - valid: 1-bit output indicating the detection status.
+
+Functional Description:
+- The module processes an 8-bit input `code` representing keyboard scancodes for numeric keys 0 through 9.
+- The module checks whether the `code` matches any of the predefined scancodes:
+  - 8'h45 (scancode for '0')
+  - 8'h16 (scancode for '1')
+  - 8'h1e (scancode for '2')
+  - 8'h26 (scancode for '3')
+  - 8'h25 (scancode for '4')
+  - 8'h2e (scancode for '5')
+  - 8'h36 (scancode for '6')
+  - 8'h3d (scancode for '7')
+  - 8'h3e (scancode for '8')
+  - 8'h46 (scancode for '9')
+
+Output Behavior:
+- If the `code` matches one of the specified scancodes, the `valid` output is set to 1, and the `out` output is set to the corresponding 4-bit binary representation of the detected key (from 0 to 9).
+- If the `code` does not match any of the specified scancodes, the `valid` output is set to 0, and the `out` output is set to 4'b0000.
+
+Additional Considerations:
+- This module is purely combinational logic, with no clock or reset signals required.
+- There are no dependencies on previous inputs, and the outputs are determined solely by the current input `code`.
+- Ensure that all outputs default to the specified values in case of non-matching input.
+</ENHANCED_SPEC>

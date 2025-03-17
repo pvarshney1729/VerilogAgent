@@ -1,0 +1,55 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the provided specifications and guidelines. The module has a 10-bit counter that counts from 0 to 999, inclusive, with a period of 1000 cycles. The counter is implemented using a 10-bit register `count_reg`. The counter increments on each positive edge of the clock, and it wraps around to 0 when it reaches 999. The reset is synchronous, meaning it is sampled on the positive edge of the clock. When the reset is high, the counter is reset to 0. The output `q` is assigned the value of `count_reg`. The code adheres to the coding conventions by using `logic` for all ports and signals, and it does not include `posedge reset` in the sensitivity list of the sequential always block.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [9:0] q
+);
+
+    logic [9:0] count_reg;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            count_reg <= 10'b0;
+        end else if (count_reg == 10'd999) begin
+            count_reg <= 10'b0;
+        end else begin
+            count_reg <= count_reg + 1'b1;
+        end
+    end
+
+    assign q = count_reg;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [9:0] q
+);
+
+    logic [9:0] count_reg;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            count_reg <= 10'b0;
+        end else if (count_reg == 10'd999) begin
+            count_reg <= 10'b0;
+        end else begin
+            count_reg <= count_reg + 1'b1;
+        end
+    end
+
+    assign q = count_reg;
+
+endmodule

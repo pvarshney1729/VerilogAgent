@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Specification for an 8-bit 2-to-1 Multiplexer:
+
+Module Name: TopModule
+
+Ports:
+- Input Ports:
+  - sel: 1-bit, unsigned. Used to select between input 'a' and input 'b'.
+  - a: 8-bit vector [7:0], unsigned. Represents one data input to the multiplexer.
+  - b: 8-bit vector [7:0], unsigned. Represents another data input to the multiplexer.
+
+- Output Ports:
+  - out: 8-bit vector [7:0], unsigned. Outputs the selected input data based on 'sel'.
+
+Operational Description:
+- The multiplexer selects between inputs 'a' and 'b' based on the 'sel' signal.
+- If 'sel' is 0, 'out' should be equal to input 'a'.
+- If 'sel' is 1, 'out' should be equal to input 'b'.
+- The operation is purely combinational with no clock or reset signals involved.
+
+Bit Indexing Convention:
+- All vectors are indexed with bit[0] as the least significant bit (LSB).
+
+Additional Notes:
+- Ensure that the 'out' port is correctly driven with the selected 8-bit input.
+- Verify that no unintended bitwise operations or misassignments occur in the logic.
+- Ensure that the signal 'out' reflects the correct 8-bit data width, avoiding any truncation or incorrect bit assignment.
+- There are no sequential elements in this module, thus no initial values or reset conditions to be defined.
+
+Edge Cases:
+- All possible values of 'sel' (0 or 1) should be handled correctly.
+- The module should handle all possible 8-bit input combinations for 'a' and 'b' without error.
+</ENHANCED_SPEC>

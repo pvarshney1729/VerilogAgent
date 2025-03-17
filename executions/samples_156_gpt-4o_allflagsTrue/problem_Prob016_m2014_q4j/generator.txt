@@ -1,0 +1,90 @@
+Generated Response:
+
+<REASONING>
+To implement the 4-bit adder using full adders, we decompose the addition process into a series of bit-wise operations. Each bit position uses a full adder, which takes two input bits and a carry-in bit, and produces a sum bit and a carry-out bit. The carry-out from each bit position becomes the carry-in for the next higher bit position. The most significant carry-out becomes the overflow bit.
+
+1. **Bit 0 Addition**: 
+   - Sum bit is calculated using XOR: `sum[0] = x[0] ^ y[0]`.
+   - Carry-out is calculated using AND: `c1 = x[0] & y[0]`.
+
+2. **Bit 1 Addition**:
+   - Sum bit is calculated using XOR with carry-in: `sum[1] = x[1] ^ y[1] ^ c1`.
+   - Carry-out is calculated using OR of ANDs: `c2 = (x[1] & y[1]) | (x[1] & c1) | (y[1] & c1)`.
+
+3. **Bit 2 Addition**:
+   - Sum bit is calculated using XOR with carry-in: `sum[2] = x[2] ^ y[2] ^ c2`.
+   - Carry-out is calculated using OR of ANDs: `c3 = (x[2] & y[2]) | (x[2] & c2) | (y[2] & c2)`.
+
+4. **Bit 3 Addition**:
+   - Sum bit is calculated using XOR with carry-in: `sum[3] = x[3] ^ y[3] ^ c3`.
+   - Carry-out is calculated using OR of ANDs: `c4 = (x[3] & y[3]) | (x[3] & c3) | (y[3] & c3)`.
+
+5. **Overflow Bit**:
+   - The overflow bit is the carry-out from the most significant bit: `sum[4] = c4`.
+
+This approach ensures that the addition is performed correctly and the overflow is captured in the 5th bit of the output.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic [3:0] x,
+    input logic [3:0] y,
+    output logic [4:0] sum
+);
+
+    logic c1, c2, c3, c4; // Intermediate carry signals
+
+    // Full adder for bit 0
+    assign sum[0] = x[0] ^ y[0];
+    assign c1 = x[0] & y[0];
+
+    // Full adder for bit 1
+    assign sum[1] = x[1] ^ y[1] ^ c1;
+    assign c2 = (x[1] & y[1]) | (x[1] & c1) | (y[1] & c1);
+
+    // Full adder for bit 2
+    assign sum[2] = x[2] ^ y[2] ^ c2;
+    assign c3 = (x[2] & y[2]) | (x[2] & c2) | (y[2] & c2);
+
+    // Full adder for bit 3
+    assign sum[3] = x[3] ^ y[3] ^ c3;
+    assign c4 = (x[3] & y[3]) | (x[3] & c3) | (y[3] & c3);
+
+    // Overflow bit
+    assign sum[4] = c4;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic [3:0] x,
+    input logic [3:0] y,
+    output logic [4:0] sum
+);
+
+    logic c1, c2, c3, c4; // Intermediate carry signals
+
+    // Full adder for bit 0
+    assign sum[0] = x[0] ^ y[0];
+    assign c1 = x[0] & y[0];
+
+    // Full adder for bit 1
+    assign sum[1] = x[1] ^ y[1] ^ c1;
+    assign c2 = (x[1] & y[1]) | (x[1] & c1) | (y[1] & c1);
+
+    // Full adder for bit 2
+    assign sum[2] = x[2] ^ y[2] ^ c2;
+    assign c3 = (x[2] & y[2]) | (x[2] & c2) | (y[2] & c2);
+
+    // Full adder for bit 3
+    assign sum[3] = x[3] ^ y[3] ^ c3;
+    assign c4 = (x[3] & y[3]) | (x[3] & c3) | (y[3] & c3);
+
+    // Overflow bit
+    assign sum[4] = c4;
+
+endmodule

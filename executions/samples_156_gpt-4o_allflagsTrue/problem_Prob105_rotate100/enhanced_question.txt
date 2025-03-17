@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and has the following interface specifications:
+
+- Inputs:
+  - `clk`: 1-bit clock input, used for synchronizing operations.
+  - `load`: 1-bit synchronous active-high input, used to load data into the register.
+  - `ena`: 2-bit synchronous input, used to control the direction and enablement of rotation.
+  - `data`: 100-bit input vector, used to load data into the shift register.
+
+- Outputs:
+  - `q`: 100-bit output vector, representing the current state of the shift register.
+
+Behavior and Functional Description:
+
+1. **Clock and Synchronization**: 
+   - All operations are synchronized with the rising edge of the `clk` signal.
+
+2. **Load Operation**:
+   - When `load` is asserted high ('1') during a clock cycle, the shift register is loaded with the `data` input (`data[99:0]`). This operation has priority over rotation and occurs synchronously with the clock.
+
+3. **Enable and Rotate Operations**:
+   - The `ena` signal determines the rotation behavior if `load` is not asserted.
+   - `ena[1:0]` values:
+     - `2'b01`: Rotate right by one bit position. Bit `q[0]` receives `q[99]`.
+     - `2'b10`: Rotate left by one bit position. Bit `q[99]` receives `q[0]`.
+     - `2'b00` or `2'b11`: No rotation occurs; the output `q` remains unchanged.
+
+4. **Initial State**:
+   - The initial state of `q` after reset is undefined unless specified by an external reset logic.
+
+5. **Bit Indexing**:
+   - The vector `q[99:0]` follows a most significant bit (MSB) to least significant bit (LSB) indexing, where `q[99]` is the MSB and `q[0]` is the LSB.
+
+6. **Reset**:
+   - Ensure that the implementation includes a clear reset mechanism, either synchronous or asynchronous, to establish a known starting state if required by the system.
+
+This specification defines a 100-bit rotator with controlled rotation and loading capabilities, ensuring a clear understanding of input handling and data flow.
+</ENHANCED_SPEC>

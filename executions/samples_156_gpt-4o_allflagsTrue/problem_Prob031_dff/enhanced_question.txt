@@ -1,0 +1,23 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Ports:
+- Input: 
+  - clk: 1-bit clock signal. Positive edge-triggered for sequential logic.
+  - d: 1-bit data input for the D flip-flop.
+- Output:
+  - q: 1-bit data output representing the current state of the D flip-flop.
+
+Specifications:
+1. The module implements a single D flip-flop.
+2. The flip-flop is triggered on the rising edge (positive edge) of the 'clk' input.
+3. On each rising edge of 'clk', the value of 'd' is sampled and stored into the flip-flop.
+4. The output 'q' reflects the stored value after the clock edge.
+5. There are no reset conditions specified; the initial state of the flip-flop is assumed undefined at power-up.
+6. The module contains only combinational logic outside the sequential flip-flop operation.
+
+Notes:
+- Ensure there are no logic hazards or race conditions by maintaining proper clocking.
+- Bit[0] refers to the least significant bit, which is applicable for all ports as they are single-bit signals.
+- The design assumes continuous operation once powered and clocked, with no explicit initialization or reset signals provided.
+</ENHANCED_SPEC>

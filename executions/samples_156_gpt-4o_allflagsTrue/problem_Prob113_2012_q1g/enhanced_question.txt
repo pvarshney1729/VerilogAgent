@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and has a specific interface. The details of the interface and functional behavior are outlined as follows:
+
+Interface:
+- Input ports:
+  - `x`: A 4-bit input vector, designated as `input [3:0] x`. Here, `x[3]` is the most significant bit (MSB) and `x[0]` is the least significant bit (LSB).
+- Output ports:
+  - `f`: A 1-bit output signal, designated as `output f`.
+
+Functional Specification:
+- The module computes the output `f` based on the provided Karnaugh map. The input vector `x` is used to determine the output `f` according to the following truth table derived from the Karnaugh map:
+
+  ```
+  x[2]x[3] \ x[0]x[1] | 00 | 01 | 11 | 10 |
+  -----------------------------------------
+        00            |  1 |  0 |  0 |  1 |
+        01            |  0 |  0 |  0 |  0 |
+        11            |  1 |  1 |  1 |  0 |
+        10            |  1 |  1 |  0 |  1 |
+  ```
+
+- For each combination of `x[3:2]` and `x[1:0]`, the value of `f` should be set according to the entries in the table. For example, if `x[3:2]` is `00` and `x[1:0]` is `00`, then `f` is `1`.
+
+- The logic is purely combinational, with no requirement for sequential logic or clock signal dependencies.
+
+- There are no initialization or reset conditions applicable to the output `f`, as it is directly determined by the current state of the input vector `x`.
+
+- Ensure that all possible 4-bit combinations of `x` are covered by the truth table entries. No undefined states or transitions exist outside the specified Karnaugh map.
+
+- The precedence of operations in determining the output `f` follows a direct mapping from the Karnaugh map to the truth table without ambiguity.
+</ENHANCED_SPEC>

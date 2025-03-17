@@ -1,0 +1,197 @@
+Generated Response:
+
+<REASONING>
+To implement the module `TopModule`, we need to design a Moore-type finite state machine (FSM) that recognizes specific bit patterns in a serial data stream. The FSM should detect the following sequences:
+1. "0111110" to assert the `disc` signal.
+2. "01111110" to assert the `flag` signal.
+3. "01111111..." to assert the `err` signal.
+
+The FSM is designed with the following states:
+- `S0`: Initial state, representing the start or after a '0'.
+- `S1` to `S6`: Intermediate states representing the detection of consecutive '1's.
+- `S7`: Error state, indicating seven or more consecutive '1's.
+
+The FSM transitions between these states based on the input bit `in`. The outputs `disc`, `flag`, and `err` are asserted based on the current state and the input bit. The FSM uses a synchronous reset to return to the initial state `S0`.
+
+The implementation uses:
+- `always_ff` for sequential logic to update the current state on the positive edge of the clock.
+- `always_comb` for combinational logic to determine the next state and output signals based on the current state and input.
+
+The FSM is initialized to `S0` on reset, and transitions occur on the positive edge of the clock. The outputs are asserted for one clock cycle after the respective conditions are met.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic disc,
+    output logic flag,
+    output logic err
+);
+
+    typedef enum logic [2:0] {
+        S0,  // Initial state
+        S1,  // After one '1'
+        S2,  // After two '1's
+        S3,  // After three '1's
+        S4,  // After four '1's
+        S5,  // After five '1's
+        S6,  // After six '1's
+        S7   // Error state (seven or more '1's)
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= S0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always_comb begin
+        // Default outputs
+        disc = 1'b0;
+        flag = 1'b0;
+        err = 1'b0;
+        next_state = current_state;
+
+        case (current_state)
+            S0: begin
+                if (in) next_state = S1;
+            end
+            S1: begin
+                if (in) next_state = S2;
+                else next_state = S0;
+            end
+            S2: begin
+                if (in) next_state = S3;
+                else next_state = S0;
+            end
+            S3: begin
+                if (in) next_state = S4;
+                else next_state = S0;
+            end
+            S4: begin
+                if (in) next_state = S5;
+                else next_state = S0;
+            end
+            S5: begin
+                if (in) next_state = S6;
+                else next_state = S0;
+            end
+            S6: begin
+                if (in) next_state = S7;
+                else begin
+                    next_state = S0;
+                    disc = 1'b1; // 0111110 detected
+                end
+            end
+            S7: begin
+                if (in) begin
+                    next_state = S7; // Remain in error state
+                    err = 1'b1; // 01111111... detected
+                end else begin
+                    next_state = S0;
+                    flag = 1'b1; // 01111110 detected
+                end
+            end
+            default: next_state = S0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic disc,
+    output logic flag,
+    output logic err
+);
+
+    typedef enum logic [2:0] {
+        S0,  // Initial state
+        S1,  // After one '1'
+        S2,  // After two '1's
+        S3,  // After three '1's
+        S4,  // After four '1's
+        S5,  // After five '1's
+        S6,  // After six '1's
+        S7   // Error state (seven or more '1's)
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= S0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always_comb begin
+        // Default outputs
+        disc = 1'b0;
+        flag = 1'b0;
+        err = 1'b0;
+        next_state = current_state;
+
+        case (current_state)
+            S0: begin
+                if (in) next_state = S1;
+            end
+            S1: begin
+                if (in) next_state = S2;
+                else next_state = S0;
+            end
+            S2: begin
+                if (in) next_state = S3;
+                else next_state = S0;
+            end
+            S3: begin
+                if (in) next_state = S4;
+                else next_state = S0;
+            end
+            S4: begin
+                if (in) next_state = S5;
+                else next_state = S0;
+            end
+            S5: begin
+                if (in) next_state = S6;
+                else next_state = S0;
+            end
+            S6: begin
+                if (in) next_state = S7;
+                else begin
+                    next_state = S0;
+                    disc = 1'b1; // 0111110 detected
+                end
+            end
+            S7: begin
+                if (in) begin
+                    next_state = S7; // Remain in error state
+                    err = 1'b1; // 01111111... detected
+                end else begin
+                    next_state = S0;
+                    flag = 1'b1; // 01111110 detected
+                end
+            end
+            default: next_state = S0;
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: 
+  - `clk`: Clock signal (1-bit). All sequential logic is triggered on the positive edge.
+  - `reset`: Active-high synchronous reset (1-bit).
+  - `in`: Serial data input (1-bit).
+
+- Output:
+  - `done`: Indicates successful byte reception (1-bit).
+
+Functional Description:
+- This module implements a finite state machine (FSM) to identify correctly received bytes in a serial bit stream conforming to a specific serial communication protocol.
+
+- The protocol format consists of:
+  - 1 start bit (logic '0').
+  - 8 data bits, transmitted least significant bit (LSB) first.
+  - 1 stop bit (logic '1').
+
+- The line is idle at logic '1' when no data is being transmitted.
+
+- FSM Behavior:
+  - Detect the start bit ('0') to begin byte reception.
+  - Sequentially receive the 8 data bits following the start bit.
+  - Verify the presence of a stop bit ('1') after the data bits.
+  - If the stop bit is not detected as expected, the FSM must continue monitoring the input until a valid stop bit is detected before attempting to process the next byte.
+  
+- The `done` output signals high for one clock cycle when a byte is successfully received and validated (i.e., correct start, data, and stop bits).
+
+- Reset Behavior:
+  - On the assertion of `reset`, the FSM returns to its initial state, waiting for a start bit.
+  - All internal state registers should be initialized to their default states upon reset.
+
+- Indexing Convention:
+  - Data bits are indexed from 0 to 7, with bit[0] being the least significant bit.
+
+Edge Cases:
+- The FSM should handle continuous '1's on the line by remaining in an idle state until a start bit is detected.
+- Ensure no race conditions occur between detecting the stop bit and transitioning states.
+
+Timing and Clock Cycle Relationships:
+- All state transitions and outputs are updated on the rising edge of `clk`.
+- The FSM logic should be designed to ensure stable and glitch-free transitions between states.
+
+</ENHANCED_SPEC>

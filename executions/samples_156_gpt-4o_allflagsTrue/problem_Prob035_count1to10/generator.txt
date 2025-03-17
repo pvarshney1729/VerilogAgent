@@ -1,0 +1,67 @@
+Generated Response:
+
+<REASONING>
+To implement the decade counter as specified, we need to ensure that the counter counts from 1 to 10 and wraps back to 1 after reaching 10. The counter should be reset to 1 when the reset signal is high, and this reset should occur synchronously with the clock. The output `q` is a 4-bit signal representing the current count value.
+
+1. **Module Declaration**: We declare the module `TopModule` with the specified input and output ports. The ports are declared as `logic` to adhere to the coding conventions.
+
+2. **Internal Register**: We use a 4-bit register `count` to hold the current count value. This register is updated on the positive edge of the clock.
+
+3. **Synchronous Reset**: The reset logic is implemented inside the `always` block. When `reset` is high, the counter is set to 1. This ensures that the reset is synchronous with the clock.
+
+4. **Counting Logic**: If the reset is not active, the counter increments by 1 on each positive clock edge. If the counter reaches 10, it wraps around to 1.
+
+5. **Output Assignment**: The current value of the counter is assigned to the output `q`.
+
+This implementation follows the guidelines and coding conventions provided, ensuring correct behavior of the decade counter.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    logic [3:0] count;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            count <= 4'd1; // Reset counter to 1
+        end else if (count == 4'd10) begin
+            count <= 4'd1; // Wrap around to 1 after reaching 10
+        end else begin
+            count <= count + 4'd1; // Increment counter
+        end
+    end
+
+    assign q = count; // Assign the count value to output q
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [3:0] q
+);
+
+    logic [3:0] count;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            count <= 4'd1; // Reset counter to 1
+        end else if (count == 4'd10) begin
+            count <= 4'd1; // Wrap around to 1 after reaching 10
+        end else begin
+            count <= count + 4'd1; // Increment counter
+        end
+    end
+
+    assign q = count; // Assign the count value to output q
+
+endmodule

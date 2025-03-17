@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, resetn, in, and output port out.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  clk,\n    input  resetn,\n    input  in,\n    output out\n);\n\n    reg [3:0] shift_reg;\n\n    always @(posedge clk) begin\n        if (!resetn) begin\n            shift_reg <= 4'b0000;\n        end else begin\n            shift_reg <= {shift_reg[2:0], in};\n        end\n    end\n\n    assign out = shift_reg[3];\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare four D flip-flops as part of the shift register to store intermediate values.",
+        "source": "The module should implement a shift register with four D flops.",
+        "implementation": "reg q0, q1, q2, q3;\n\n  always @(posedge clk) begin\n    if (!resetn) begin\n      q0 <= 1'b0;\n      q1 <= 1'b0;\n      q2 <= 1'b0;\n      q3 <= 1'b0;\n    end else begin\n      q0 <= in;\n      q1 <= q0;\n      q2 <= q1;\n      q3 <= q2;\n    end\n  end"
+    },
+    {
+        "id": "3",
+        "content": "Implement the synchronous active-low reset logic for the shift register.",
+        "source": "Reset is active-low synchronous resettable.",
+        "implementation": "reg [3:0] shift_reg;\n\nalways @(posedge clk) begin\n    if (!resetn) begin\n        shift_reg <= 4'b0000;\n    end else begin\n        shift_reg <= {shift_reg[2:0], in};\n    end\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement the shift register logic to shift the input 'in' through the four D flip-flops on the positive edge of the clock.",
+        "source": "Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "reg [3:0] shift_reg;\n\n  always @(posedge clk) begin\n    if (!resetn)\n      shift_reg <= 4'b0;\n    else\n      shift_reg <= {shift_reg[2:0], in};\n  end\n\n  assign out = shift_reg[3];"
+    },
+    {
+        "id": "5",
+        "content": "Assign the output 'out' to the value of the last D flip-flop in the shift register chain.",
+        "source": "The module should implement a shift register with four D flops.",
+        "implementation": "assign out = q3;"
+    }
+]

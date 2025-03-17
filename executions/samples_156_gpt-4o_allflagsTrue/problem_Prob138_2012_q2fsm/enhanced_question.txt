@@ -1,0 +1,66 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input  logic clk           // Clock input, positive edge-triggered
+- input  logic reset         // Synchronous active-high reset
+- input  logic w             // Input signal
+- output logic z             // Output signal
+
+State Machine Description:
+- The FSM has six states: A, B, C, D, E, and F.
+- State transition and output are defined as follows:
+  - State A: 
+    - Transition to B on input w = 1
+    - Remain in A on input w = 0
+    - Output z = 0
+  - State B: 
+    - Transition to C on input w = 1
+    - Transition to D on input w = 0
+    - Output z = 0
+  - State C: 
+    - Transition to E on input w = 1
+    - Transition to D on input w = 0
+    - Output z = 0
+  - State D: 
+    - Transition to F on input w = 1
+    - Transition to A on input w = 0
+    - Output z = 0
+  - State E: 
+    - Remain in E on input w = 1
+    - Transition to D on input w = 0
+    - Output z = 1
+  - State F: 
+    - Transition to C on input w = 1
+    - Transition to D on input w = 0
+    - Output z = 1
+
+State Encoding:
+- Assign state codes using a 3-bit representation:
+  - A: 3'b000
+  - B: 3'b001
+  - C: 3'b010
+  - D: 3'b011
+  - E: 3'b100
+  - F: 3'b101
+
+Reset and Initialization:
+- On reset (active-high), the FSM transitions to state A.
+- The reset is synchronous, meaning it occurs on the next positive clock edge when reset is high.
+- All registers and flip-flops are initialized to their reset state upon reset.
+
+Logic Description:
+- Use separate always blocks for:
+  - State transition logic: Define next state based on current state and input w.
+  - State register logic: Update current state at each positive clock edge.
+- Output logic for z can be implemented using either a continuous assignment or an always block depending on design preference.
+
+Clock and Signal Timing:
+- All sequential elements are triggered on the positive edge of clk.
+- Ensure that all state transitions and output logic are free from race conditions by adhering to the specified clocking and reset strategy.
+
+Edge Cases:
+- Ensure proper handling of all state transitions, especially on the boundaries of state changes and reset activation.
+- Validate behavior when input w changes synchronously with the clock edge.
+
+</ENHANCED_SPEC>

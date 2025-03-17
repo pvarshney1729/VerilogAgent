@@ -1,0 +1,26 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Input/Output Port Specifications:
+- Input: `in` - a 1024-bit wide vector input. This input is used to represent 256 separate 4-bit wide input values. The indexing convention for this vector is such that bit[0] refers to the least significant bit.
+- Input: `sel` - an 8-bit wide input vector. This is used to select one of the 256 input groups of 4 bits from the `in` vector. Note that `sel` is an unsigned integer.
+- Output: `out` - a 4-bit wide vector output. The output provides the selected 4-bit value from the `in` input vector based on the `sel` input.
+
+Functional Description:
+- The module implements a 256-to-1 multiplexer, where each selected input group consists of 4 bits. 
+- The relationship between the `sel` value and the `in` input vector is defined as follows:
+  - When `sel` = 0, `out` should be assigned the value of `in[3:0]`.
+  - When `sel` = 1, `out` should be assigned the value of `in[7:4]`.
+  - When `sel` = 2, `out` should be assigned the value of `in[11:8]`.
+  - This pattern continues such that when `sel` = N, `out` is assigned the value of `in[(4*N+3):(4*N)]`.
+
+Operational Considerations:
+- The module operates purely combinationally. There are no clocked elements, flip-flops, or registers within this module.
+- There are no reset conditions as all operations are combinational.
+- Ensure that the indexing and selection logic correctly maps each `sel` value to its corresponding 4-bit segment in the `in` vector.
+- All signal dependencies are combinational, and thus there are no concerns of race conditions within this module.
+
+Edge Cases:
+- The `sel` input should always be within the range 0 to 255 inclusive. Values outside this range are not defined within this specification.
+- The implementation assumes that all bits in the `in` vector are correctly defined and valid at the time of selection.
+</ENHANCED_SPEC>

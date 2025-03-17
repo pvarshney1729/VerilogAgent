@@ -1,0 +1,24 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `x`: A 4-bit input vector representing the first operand. This input is unsigned and uses a 0-indexed bit order, where bit[0] is the least significant bit (LSB).
+  - `y`: A 4-bit input vector representing the second operand. This input is unsigned and uses a 0-indexed bit order, where bit[0] is the least significant bit (LSB).
+
+- Output:
+  - `sum`: A 5-bit output vector representing the result of the addition operation. This includes a carry-out or overflow bit. The output is unsigned and uses a 0-indexed bit order, where bit[0] is the least significant bit (LSB).
+
+Functional Description:
+- The module implements a 4-bit binary adder using a series of full adders. Each full adder takes two bits from the same position in `x` and `y` along with a carry-in from the previous less significant position, and it generates a sum bit and a carry-out.
+- The carry-out from the most significant full adder (bit[3]) is used as the overflow bit and is assigned to `sum[4]`.
+
+Edge Cases:
+- If both `x` and `y` are at their maximum value (4'b1111), the resulting `sum` will be 5'b11110, indicating an overflow as expected.
+- The outputs are combinationally dependent on the inputs and change immediately as inputs `x` and `y` change.
+
+Additional Considerations:
+- This module does not include any clock or reset signals, as it is purely combinational and does not involve any storage elements.
+- Ensure that the adder handles all possible input combinations correctly, including the handling of carry propagation across all bits.
+
+<ENHANCED_SPEC>

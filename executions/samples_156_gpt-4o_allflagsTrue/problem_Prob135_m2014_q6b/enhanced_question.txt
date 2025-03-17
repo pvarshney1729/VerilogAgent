@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input:
+  - `y`: A 3-bit vector, representing the current state of the finite state machine (FSM). Bit indexing is y[2:0], where y[0] is the least significant bit (LSB).
+  - `w`: A 1-bit input used to determine state transitions.
+- Output:
+  - `Y1`: A 1-bit output, directly representing the value of y[1].
+
+Finite State Machine (FSM) Description:
+- States are encoded as follows:
+  - State A: y = 3'b000
+  - State B: y = 3'b001
+  - State C: y = 3'b010
+  - State D: y = 3'b011
+  - State E: y = 3'b100
+  - State F: y = 3'b101
+
+- State Transitions:
+  - From State A:
+    - If w == 0, transition to State B.
+    - If w == 1, remain in State A.
+  - From State B:
+    - If w == 0, transition to State C.
+    - If w == 1, transition to State D.
+  - From State C:
+    - If w == 0, transition to State E.
+    - If w == 1, transition to State D.
+  - From State D:
+    - If w == 0, transition to State F.
+    - If w == 1, transition to State A.
+  - From State E:
+    - If w == 0, remain in State E.
+    - If w == 1, transition to State D.
+  - From State F:
+    - If w == 0, transition to State C.
+    - If w == 1, transition to State D.
+
+Implementation Details:
+- The FSM uses three D-type flip-flops to store the current state, encoded in `y[2:0]`.
+- Flip-flops are clocked on the rising edge of a system clock (not explicitly defined here).
+- Reset behavior:
+  - The specification does not define a reset input; hence, assume the module starts from an undefined state unless specified in the actual implementation.
+- Output `Y1` is directly assigned to `y[1]`, reflecting the FSM's second state bit.
+
+Note:
+- This specification focuses on defining the next-state logic and the output logic related to `y[1]` as requested.
+- Ensure that the state transitions and output logic are implemented correctly and verified against the specified FSM behavior.
+</ENHANCED_SPEC>

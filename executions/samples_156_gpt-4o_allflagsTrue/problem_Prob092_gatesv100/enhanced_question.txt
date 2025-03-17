@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input:
+  - `input [99:0] in`: A 100-bit wide input vector. Bits are indexed from 0 (least significant bit) to 99 (most significant bit).
+
+- Outputs:
+  - `output [99:0] out_both`: A 100-bit wide output vector.
+  - `output [99:0] out_any`: A 100-bit wide output vector.
+  - `output [99:0] out_different`: A 100-bit wide output vector.
+
+Output Descriptions:
+1. `out_both`: Each bit `out_both[i]` (where `0 <= i <= 99`) indicates whether both `in[i]` and its neighbour to the left `in[i+1]` (for `i < 99`) are '1'. Specifically:
+   - For `0 <= i < 99`: `out_both[i] = in[i] AND in[i+1]`.
+   - For `i = 99`: `out_both[99] = 0` (since `in[99]` has no left neighbour).
+
+2. `out_any`: Each bit `out_any[i]` (where `0 <= i <= 99`) indicates whether either `in[i]` or its neighbour to the right `in[i-1]` (for `i > 0`) is '1'. Specifically:
+   - For `1 <= i <= 99`: `out_any[i] = in[i] OR in[i-1]`.
+   - For `i = 0`: `out_any[0] = 0` (since `in[0]` has no right neighbour).
+
+3. `out_different`: Each bit `out_different[i]` (where `0 <= i <= 99`) indicates whether `in[i]` is different from its neighbour to the left `in[i+1]`, treating the vector as circular (wrapping around). Specifically:
+   - For `0 <= i < 99`: `out_different[i] = in[i] XOR in[i+1]`.
+   - For `i = 99`: `out_different[99] = in[99] XOR in[0]` (wrapping around).
+
+Additional Notes:
+- All operations are combinational logic, meaning they are computed without any sequential dependencies or clock cycles.
+- Bit indexing follows the MSB to LSB convention, with `bit[0]` referring to the least significant bit.
+- There are no reset conditions or initial values needed, as this module does not contain any sequential elements or state retention.
+</ENHANCED_SPEC>

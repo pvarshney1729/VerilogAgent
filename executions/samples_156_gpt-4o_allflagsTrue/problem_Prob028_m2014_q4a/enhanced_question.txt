@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire d`: Data input (1 bit, refers to the data to be latched).
+  - `input wire ena`: Enable signal (1 bit, controls whether the data input is latched).
+
+- Output Ports:
+  - `output reg q`: Latched output (1 bit, holds the latched data).
+
+Functional Description:
+- The module implements a D latch using an always block.
+- The latch operation is controlled by the `ena` signal:
+  - When `ena` is high (`1`), the output `q` will latch the value of the input `d`.
+  - When `ena` is low (`0`), the output `q` retains its previous state.
+
+Operational Details:
+- The latch is level-sensitive and operates asynchronously with respect to any clock signal.
+- The latch does not have a reset signal; hence, the initial state of `q` is undefined until the first latch operation occurs.
+
+Bit Conventions:
+- All bit positions are indexed from 0, with `bit[0]` referring to the least significant bit.
+
+Timing Considerations:
+- Ensure that `d` is stable when `ena` is asserted to avoid indeterminate states at the output `q`.
+
+Edge Cases:
+- Ensure that `ena` is not fluctuating rapidly during the operation to prevent race conditions or glitches in the output `q`.
+
+Note: This specification assumes that the latch operates solely based on the `ena` signal and does not incorporate any additional clock-related logic.
+</ENHANCED_SPEC>

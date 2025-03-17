@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, triggers sequential logic on the positive edge.
+  - `input shift_ena`: Control signal to enable shifting of data into the register.
+  - `input count_ena`: Control signal to enable decrementing of the register value.
+  - `input data`: Serial data input for shifting, interpreted as 1-bit.
+
+- Output Ports:
+  - `output [3:0] q`: Four-bit output representing the current state of the shift register.
+
+Functional Description:
+- The module functions as a four-bit shift register and down counter.
+- The register shifts data in from the `data` input when `shift_ena` is high (1).
+  - Data is shifted in with the most significant bit (MSB) first.
+  - The shifting operation occurs on the rising edge of the clock (`clk`).
+
+- When `count_ena` is high (1), the current value in the register is decremented by 1.
+  - The decrement operation occurs on the rising edge of the clock (`clk`).
+
+- The module is not required to handle the scenario when both `shift_ena` and `count_ena` are high simultaneously. The behavior in this condition is undefined, and no priority is assigned to either operation in this case.
+
+- Initial State:
+  - On reset, the shift register should be initialized to a value of 4'b0000.
+
+Additional Specifications:
+- Bit Indexing: `q[3]` is the most significant bit (MSB), and `q[0]` is the least significant bit (LSB).
+- Reset Condition: The module does not specify an explicit reset input; thus, initial conditions are assumed to be managed externally or through other means in a larger system context.
+
+Edge Case Handling:
+- The behavior of the module should be robust against overflow when counting down from 4'b0000. In such cases, the register should wrap around to 4'b1111.
+- The shift operation will treat the most significant input bit as `data` when shifting.
+</ENHANCED_SPEC>

@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic [7:0] a,\n    input logic [7:0] b,\n    output logic [7:0] s,\n    output logic overflow\n);\n\n    // Perform the addition\n    assign s = a + b;\n\n    // Detect signed overflow\n    assign overflow = (a[7] & b[7] & ~s[7]) | (~a[7] & ~b[7] & s[7]);\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}
