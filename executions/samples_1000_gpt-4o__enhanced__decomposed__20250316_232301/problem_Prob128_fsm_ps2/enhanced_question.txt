@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- `input wire clk`: This is the clock signal. The module operates on the rising edge of this clock.
+- `input wire reset`: An active-high, synchronous reset signal. When high, the FSM will reset to its initial state.
+- `input wire [7:0] in`: An 8-bit input bus representing the incoming byte stream. Bit 0 is the least significant bit (LSB) and bit 7 is the most significant bit (MSB).
+- `output reg done`: A 1-bit output signal that goes high for one clock cycle immediately after the third byte of a message is successfully received.
+
+Functional Description:
+The module implements a finite state machine (FSM) to identify and process message boundaries in a continuous byte stream following the PS/2 mouse protocol. The FSM has the following operational details:
+
+1. **Initial State**: The FSM starts in an idle state (STATE_IDLE), waiting for the first byte of a message.
+
+2. **Byte Detection**:
+   - The FSM discards incoming bytes until it detects a byte with `in[3] == 1`.
+   - Upon detection, it transitions to the next state, indicating the receipt of the first byte of a message (STATE_BYTE1).
+
+3. **Message Tracking**:
+   - The FSM tracks the receipt of three consecutive bytes.
+   - Transition states are as follows:
+     - From STATE_BYTE1 to STATE_BYTE2 upon receiving the next byte.
+     - From STATE_BYTE2 to STATE_DONE after the third byte is received.
+
+4. **Done Signal**:
+   - The `done` signal is asserted (set high) for one clock cycle immediately following the complete receipt of the third byte (in STATE_DONE), indicating the end of the message.
+
+5. **Reset Behavior**:
+   - On the rising edge of the `clk`, if `reset` is high, the FSM returns to STATE_IDLE, and all internal counters and signals are reset to their initial values.
+
+Edge Cases:
+- If the stream is interrupted or reset is asserted during the message, the FSM will reset and begin re-evaluating the byte stream from the idle state.
+
+State Definitions:
+- STATE_IDLE: Waiting for a byte with `in[3] == 1`.
+- STATE_BYTE1: First byte of a message has been detected.
+- STATE_BYTE2: Second byte of a message has been received.
+- STATE_DONE: Third byte received; `done` is asserted next clock cycle.
+
+Ensure that all state transitions and signal assertions are executed on the rising edge of the clock to prevent race conditions.
+
+All sequential elements should have explicitly defined initial values upon reset to ensure deterministic behavior.
+</ENHANCED_SPEC>

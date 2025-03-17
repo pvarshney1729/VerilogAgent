@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module interface for TopModule with input ports clk, reset, in, and output port out.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input clk - input reset - input in - output out",
+        "implementation": "module TopModule (\n    input  clk,\n    input  reset,\n    input  in,\n    output out\n);"
+    },
+    {
+        "id": "2",
+        "content": "Define state encoding using localparam for states A and B.",
+        "source": "Implement the following Moore state machine with two states, one input, and one output. The reset state is B and reset is active-high synchronous.",
+        "implementation": "localparam STATE_A = 1'b0;\nlocalparam STATE_B = 1'b1;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic. The reset state should be B.",
+        "source": "The reset state is B and reset is active-high synchronous.",
+        "implementation": "// State encoding\n  localparam STATE_A = 1'b0;\n  localparam STATE_B = 1'b1;\n\n  // State register\n  reg state;\n\n  // Synchronous reset logic\n  always @(posedge clk) begin\n    if (reset) begin\n      state <= STATE_B; // Reset state\n    end else begin\n      // State transition logic will be implemented here\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic based on the current state and input in.",
+        "source": "B (out=1) --in=0--> A B (out=1) --in=1--> B A (out=0) --in=0--> B A (out=0) --in=1--> A",
+        "implementation": "// State encoding\n  localparam STATE_A = 1'b0;\n  localparam STATE_B = 1'b1;\n\n  // Next state logic\n  always @(*) begin\n    case (current_state)\n      STATE_B: begin\n        if (in == 1'b0)\n          next_state = STATE_A;\n        else\n          next_state = STATE_B;\n      end\n      STATE_A: begin\n        if (in == 1'b0)\n          next_state = STATE_B;\n        else\n          next_state = STATE_A;\n      end\n      default: next_state = STATE_B; // Default to reset state\n    endcase\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic based on the current state.",
+        "source": "B (out=1) --in=0--> A B (out=1) --in=1--> B A (out=0) --in=0--> B A (out=0) --in=1--> A",
+        "implementation": "// Output combinational logic based on the current state\n  always @(*) begin\n    case (current_state)\n      1'b0: out = 0; // State A\n      1'b1: out = 1; // State B\n      default: out = 1'bx; // Undefined state\n    endcase\n  end"
+    }
+]

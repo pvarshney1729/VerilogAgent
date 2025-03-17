@@ -1,0 +1,191 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we will create a finite state machine (FSM) to handle the serial data reception according to the specified protocol. The FSM will have the following states: IDLE, START, DATA, and STOP. The module will use a synchronous reset to initialize the state and other registers.
+
+1. **State Encoding**: We'll define states using an enumerated type for clarity. The states will be IDLE (waiting for start bit), START (start bit detected), DATA (receiving 8 data bits), and STOP (waiting for stop bit).
+
+2. **State Transition Logic**: We'll use an always block to determine the next state based on the current state and input. The transitions will be:
+   - IDLE to START when a start bit (0) is detected.
+   - START to DATA to begin capturing data bits.
+   - DATA to STOP after 8 data bits are received.
+   - STOP to IDLE if the stop bit (1) is correct, or to ERROR if incorrect.
+
+3. **Data Capture**: We'll use a shift register to capture the 8 data bits. A counter will track the number of bits received.
+
+4. **Output Logic**: The `done` signal will be asserted when a complete byte is correctly received, including the correct stop bit.
+
+5. **Synchronous Reset**: The reset will initialize the state to IDLE and clear the bit counter and shift register.
+
+This approach ensures the module adheres to the specified protocol and handles errors gracefully by returning to the IDLE state when an incorrect stop bit is detected.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        IDLE  = 3'b000,
+        START = 3'b001,
+        DATA  = 3'b010,
+        STOP  = 3'b011,
+        ERROR = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [3:0] bit_count; // To count the 8 data bits
+    logic [7:0] data_reg;  // Shift register for data bits
+
+    // State register with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 4'd0;
+            data_reg <= 8'd0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        next_state = current_state; // Default to hold state
+        done = 1'b0; // Default done signal
+
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) // Detect start bit
+                    next_state = START;
+            end
+
+            START: begin
+                next_state = DATA;
+                bit_count = 4'd0; // Reset bit counter
+            end
+
+            DATA: begin
+                if (bit_count == 4'd8) // All 8 data bits received
+                    next_state = STOP;
+                else
+                    next_state = DATA;
+            end
+
+            STOP: begin
+                if (in == 1'b1) begin // Correct stop bit
+                    done = 1'b1;
+                    next_state = IDLE;
+                end else begin
+                    next_state = ERROR;
+                end
+            end
+
+            ERROR: begin
+                if (in == 1'b1) // Wait for stop bit to return to IDLE
+                    next_state = IDLE;
+            end
+
+            default: next_state = IDLE;
+        endcase
+    end
+
+    // Data capture logic
+    always_ff @(posedge clk) begin
+        if (current_state == DATA) begin
+            data_reg <= {in, data_reg[7:1]}; // Shift in data bits
+            bit_count <= bit_count + 1;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        IDLE  = 3'b000,
+        START = 3'b001,
+        DATA  = 3'b010,
+        STOP  = 3'b011,
+        ERROR = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [3:0] bit_count; // To count the 8 data bits
+    logic [7:0] data_reg;  // Shift register for data bits
+
+    // State register with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 4'd0;
+            data_reg <= 8'd0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        next_state = current_state; // Default to hold state
+        done = 1'b0; // Default done signal
+
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) // Detect start bit
+                    next_state = START;
+            end
+
+            START: begin
+                next_state = DATA;
+                bit_count = 4'd0; // Reset bit counter
+            end
+
+            DATA: begin
+                if (bit_count == 4'd8) // All 8 data bits received
+                    next_state = STOP;
+                else
+                    next_state = DATA;
+            end
+
+            STOP: begin
+                if (in == 1'b1) begin // Correct stop bit
+                    done = 1'b1;
+                    next_state = IDLE;
+                end else begin
+                    next_state = ERROR;
+                end
+            end
+
+            ERROR: begin
+                if (in == 1'b1) // Wait for stop bit to return to IDLE
+                    next_state = IDLE;
+            end
+
+            default: next_state = IDLE;
+        endcase
+    end
+
+    // Data capture logic
+    always_ff @(posedge clk) begin
+        if (current_state == DATA) begin
+            data_reg <= {in, data_reg[7:1]}; // Shift in data bits
+            bit_count <= bit_count + 1;
+        end
+    end
+
+endmodule

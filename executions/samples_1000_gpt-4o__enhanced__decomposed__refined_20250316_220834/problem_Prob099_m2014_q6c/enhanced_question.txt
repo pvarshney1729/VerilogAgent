@@ -1,0 +1,58 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `y` : 6-bit vector (bit[5] is the most significant bit, bit[0] is the least significant bit), representing the current state in one-hot encoding.
+  - `w` : 1-bit input signal, used as the state transition trigger.
+- Outputs:
+  - `Y1` : 1-bit output signal, derived from state logic.
+  - `Y3` : 1-bit output signal, derived from state logic.
+
+State Machine Description:
+- States: A, B, C, D, E, F
+- Encoding:
+  - State A: y = 6'b000001
+  - State B: y = 6'b000010
+  - State C: y = 6'b000100
+  - State D: y = 6'b001000
+  - State E: y = 6'b010000
+  - State F: y = 6'b100000
+
+- State Transitions:
+  - From State A:
+    - `w` = 0: Transition to State B
+    - `w` = 1: Remain in State A
+  - From State B:
+    - `w` = 0: Transition to State C
+    - `w` = 1: Transition to State D
+  - From State C:
+    - `w` = 0: Transition to State E
+    - `w` = 1: Transition to State D
+  - From State D:
+    - `w` = 0: Transition to State F
+    - `w` = 1: Transition to State A
+  - From State E:
+    - `w` = 0: Remain in State E
+    - `w` = 1: Transition to State D
+  - From State F:
+    - `w` = 0: Transition to State C
+    - `w` = 1: Transition to State D
+
+Reset Behavior:
+- The module uses an asynchronous reset signal, which initializes the state machine to State A (y = 6'b000001).
+
+Output Logic:
+- `Y1` and `Y3` are output signals derived from the state machine logic as follows:
+  - `Y1` relates to the state associated with y[1] (State B).
+  - `Y3` relates to the state associated with y[3] (State D).
+
+Next-State Logic:
+- Implement the next-state logic for y[1] and y[3] based on the current state `y` and input `w`, using the one-hot encoding and the state transition diagram provided.
+
+Edge Cases:
+- Ensure correct handling of transitions at the boundaries of the state machine.
+- All state transitions should be evaluated on the positive edge of the clock cycle unless otherwise specified.
+
+The module is designed to be synthesized for digital hardware, ensuring that all logical operations and state transitions adhere to the defined specifications.
+</ENHANCED_SPEC>

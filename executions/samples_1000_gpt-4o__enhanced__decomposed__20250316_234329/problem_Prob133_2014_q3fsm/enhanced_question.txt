@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input clk: Clock signal, used to drive sequential logic. Triggered on the positive edge.
+- input reset: Active high, synchronous reset signal. Resets the FSM to the initial state A.
+- input s: Control signal used to transition from state A to state B.
+- input w: Input signal examined in state B across multiple clock cycles.
+- output z: Output signal set based on the FSM logic.
+
+Port Widths and Conventions:
+- All input and output ports are single-bit signals (1-bit wide).
+- Bit[0] refers to the least significant bit if applicable in expanded designs.
+
+Finite State Machine (FSM) Specification:
+- Initial State: The FSM begins in State A upon reset.
+- State A: 
+  - The FSM remains in State A as long as input s = 0.
+  - Transition to State B occurs when the input s = 1 on a positive clock edge.
+- State B:
+  - Once in State B, the FSM examines the input w over the next three consecutive clock cycles.
+  - If input w = 1 in exactly two of these three clock cycles, the output z is set to 1 in the following clock cycle.
+  - If the condition is not met (w = 1 in fewer than or more than two cycles), the output z is set to 0.
+  - The FSM continues to evaluate the input w in batches of three clock cycles while in State B.
+
+Reset Behavior:
+- The reset is active high and synchronous, meaning it is recognized on the rising edge of the clock.
+- Upon reset, the FSM transitions to State A, and any internal counters or registers used to track the state of input w should also be reset to their initial values.
+
+Sequential Logic:
+- All sequential elements, such as flip-flops or registers used in the FSM, are triggered on the positive edge of the clock.
+- Initial states for all registers should be explicitly defined to avoid undefined behavior.
+
+Operational Precedence and Edge Cases:
+- The input signal s is only relevant in State A and has no effect in State B.
+- The input w is irrelevant in State A and only influences transitions and output generation in State B.
+- Ensure that operations are performed in a way that prevents race conditions and ambiguity in signal evaluation.
+
+This specification ensures a clear understanding and implementation of the FSM within the TopModule, with explicit definitions of state transitions, signal dependencies, and reset conditions.
+</ENHANCED_SPEC>

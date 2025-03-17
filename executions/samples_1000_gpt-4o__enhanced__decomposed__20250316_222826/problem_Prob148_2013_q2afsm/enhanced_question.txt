@@ -1,0 +1,57 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+**Interface:**
+
+- `input  logic clk`: Clock signal for the FSM.
+- `input  logic resetn`: Active-low, synchronous reset. Resets the FSM to the initial state A.
+- `input  logic [2:0] r`: 3-bit input vector where `r[0]` represents device 0's request, `r[1]` for device 1, and `r[2]` for device 2.
+- `output logic [2:0] g`: 3-bit output vector where `g[0]` represents the grant for device 0, `g[1]` for device 1, and `g[2]` for device 2.
+
+**State Encoding:**
+
+- State `A`: Initial state and default state when no requests are made. Encoded as 2'b00.
+- State `B`: Device 0 is granted access. Encoded as 2'b01. `g[0]` is set to 1.
+- State `C`: Device 1 is granted access. Encoded as 2'b10. `g[1]` is set to 1.
+- State `D`: Device 2 is granted access. Encoded as 2'b11. `g[2]` is set to 1.
+
+**FSM Description:**
+
+- **Initial State:** The FSM resets to state `A` on a synchronous reset (`resetn` = 0).
+
+- **State Transitions:**
+  - **State `A`:**
+    - Remains in state `A` if `r[0]=0`, `r[1]=0`, and `r[2]=0`.
+    - Transitions to state `B` if `r[0]=1`.
+    - Transitions to state `C` if `r[0]=0` and `r[1]=1`.
+    - Transitions to state `D` if `r[0]=0`, `r[1]=0`, and `r[2]=1`.
+  - **State `B`:**
+    - Remains in state `B` if `r[0]=1`.
+    - Transitions to state `A` if `r[0]=0`.
+  - **State `C`:**
+    - Remains in state `C` if `r[1]=1`.
+    - Transitions to state `A` if `r[1]=0`.
+  - **State `D`:**
+    - Remains in state `D` as long as `r[2]=1`.
+    - Transitions to state `A` if `r[2]=0`.
+
+**Output Logic:**
+
+- The output vector `g` is determined by the current state:
+  - `State A`: `g = 3'b000`
+  - `State B`: `g = 3'b001`
+  - `State C`: `g = 3'b010`
+  - `State D`: `g = 3'b100`
+
+**Design Constraints:**
+
+- Use separate always blocks for the state transition logic (state table) and state register updates (state flip-flops).
+- All sequential logic is triggered on the positive edge of the clock (`clk`).
+- Ensure no race conditions occur by proper ordering in state transitions and output assignments.
+
+**Edge Cases:**
+
+- If multiple requests are made, the FSM will prioritize higher-priority devices (e.g., `r[0]` over `r[1]`, `r[1]` over `r[2]`).
+
+This specification ensures a clear understanding of the FSM's functionality and its design constraints for implementation in Verilog.
+</ENHANCED_SPEC>

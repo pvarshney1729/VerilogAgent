@@ -1,0 +1,84 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - input wire d: 1-bit, active high
+  - input wire done_counting: 1-bit, active high
+  - input wire ack: 1-bit, active high
+  - input wire [9:0] state: 10-bit one-hot encoded, where bit[0] refers to the least significant bit (LSB)
+
+- Outputs:
+  - output wire B3_next: 1-bit, active high
+  - output wire S_next: 1-bit, active high
+  - output wire S1_next: 1-bit, active high
+  - output wire Count_next: 1-bit, active high
+  - output wire Wait_next: 1-bit, active high
+  - output wire done: 1-bit, active high
+  - output wire counting: 1-bit, active high
+  - output wire shift_ena: 1-bit, active high
+
+State Encoding:
+- One-hot encoding is used for state representation:
+  - S = 10'b0000000001
+  - S1 = 10'b0000000010
+  - S11 = 10'b0000000100
+  - S110 = 10'b0000001000
+  - B0 = 10'b0000010000
+  - B1 = 10'b0000100000
+  - B2 = 10'b0001000000
+  - B3 = 10'b0010000000
+  - Count = 10'b0100000000
+  - Wait = 10'b1000000000
+
+State Machine Description:
+- The state machine is a Moore type with three inputs: d, done_counting, ack.
+- The state machine outputs are: shift_ena, counting, done.
+- By default, all outputs and state transitions assume a '0' value unless specified.
+
+State Transitions (using one-hot encoding):
+- From state S:
+  - If d=0, remain in state S.
+  - If d=1, transition to state S1.
+- From state S1:
+  - If d=0, transition to state S.
+  - If d=1, transition to state S11.
+- From state S11:
+  - If d=0, transition to state S110.
+  - If d=1, remain in state S11.
+- From state S110:
+  - If d=0, transition to state S.
+  - If d=1, transition to state B0.
+- From state B0:
+  - Always transition to state B1.
+- From state B1:
+  - Always transition to state B2.
+- From state B2:
+  - Always transition to state B3.
+- From state B3:
+  - Always transition to state Count.
+- From state Count:
+  - If done_counting=0, remain in Count.
+  - If done_counting=1, transition to Wait.
+- From state Wait:
+  - If ack=0, remain in Wait.
+  - If ack=1, transition to S.
+
+Reset Behavior:
+- Upon reset, the state machine initializes to state S.
+
+Output Logic:
+- shift_ena is asserted (1) in states B0, B1, B2, and B3.
+- counting is asserted (1) when in state Count.
+- done is asserted (1) when in state Wait.
+
+Next State Signal Assertions:
+- B3_next is asserted when the next state is B3.
+- S_next is asserted when the next state is S.
+- S1_next is asserted when the next state is S1.
+- Count_next is asserted when the next state is Count.
+- Wait_next is asserted when the next state is Wait.
+
+Combinational Logic:
+- The module only includes state transition logic and output logic based on the combinational logic derived from the state transitions and outputs described above.
+</ENHANCED_SPEC>

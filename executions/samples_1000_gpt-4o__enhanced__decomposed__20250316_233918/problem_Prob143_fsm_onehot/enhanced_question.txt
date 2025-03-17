@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and has the following interface. All input and output ports are one bit wide unless otherwise specified. The module does not include the state flip-flops but focuses on the state transition and output logic.
+
+- `input logic in;`  
+  A single-bit input signal representing the state machine input.
+
+- `input logic [9:0] state;`  
+  A 10-bit input vector representing the current state of the state machine using one-hot encoding. Each bit corresponds to a specific state (`state[0]` is S0, ..., `state[9]` is S9).
+
+- `output logic [9:0] next_state;`  
+  A 10-bit output vector indicating the next state in one-hot encoding. Each bit corresponds to a specific next state (`next_state[0]` is S0, ..., `next_state[9]` is S9). The bit is set to 1 if the next state is active, otherwise 0.
+
+- `output logic out1;`  
+  A single-bit output derived from the current state as per the state machine's output specification.
+
+- `output logic out2;`  
+  A single-bit output derived from the current state as per the state machine's output specification.
+
+State Machine Description:
+- The state machine uses one-hot encoding for states S0 to S9, where `state[i] == 1` indicates the machine is in state Si.
+- The transitions between states depend on the value of the input `in`.
+- The outputs are defined as pairs `(out1, out2)` and are generally `(0, 0)` unless specified otherwise for specific states.
+
+State Transitions:
+- S0 (0, 0) transitions to S0 if `in == 0`, S1 if `in == 1`.
+- S1 (0, 0) transitions to S0 if `in == 0`, S2 if `in == 1`.
+- S2 (0, 0) transitions to S0 if `in == 0`, S3 if `in == 1`.
+- S3 (0, 0) transitions to S0 if `in == 0`, S4 if `in == 1`.
+- S4 (0, 0) transitions to S0 if `in == 0`, S5 if `in == 1`.
+- S5 (0, 0) transitions to S8 if `in == 0`, S6 if `in == 1`.
+- S6 (0, 0) transitions to S9 if `in == 0`, S7 if `in == 1`.
+- S7 (0, 1) transitions to S0 if `in == 0`, stays in S7 if `in == 1`.
+- S8 (1, 0) transitions to S0 if `in == 0`, S1 if `in == 1`.
+- S9 (1, 1) transitions to S0 if `in == 0`, S1 if `in == 1`.
+
+Output Logic:
+- The outputs `out1` and `out2` are generally `(0, 0)` except:
+  - For state S7, the outputs are `(0, 1)`.
+  - For state S8, the outputs are `(1, 0)`.
+  - For state S9, the outputs are `(1, 1)`.
+
+Edge Case Handling:
+- It is possible for `state[9:0]` to represent multiple active states simultaneously. In such cases, priority should be given to the lowest numbered active state for determining the next state and outputs.
+
+The `TopModule` must implement this state transition logic and output logic based on the provided state machine specification, without implementing the state flip-flops themselves.
+</ENHANCED_SPEC>

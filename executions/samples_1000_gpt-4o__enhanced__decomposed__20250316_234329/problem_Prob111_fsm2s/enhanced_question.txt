@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+The module `TopModule` is a digital circuit that implements a Moore state machine. The interface and behavior are specified as follows:
+
+**Interface:**
+- `input clk`: Clock signal, used to synchronize state transitions, rising-edge triggered.
+- `input reset`: Active-high synchronous reset signal; when asserted, the state machine transitions to the initial state, OFF.
+- `input j`: Input signal that influences state transitions from the OFF state.
+- `input k`: Input signal that influences state transitions from the ON state.
+- `output reg out`: Output signal representing the current state of the machine, where `1` indicates the ON state and `0` indicates the OFF state.
+
+**State Machine Details:**
+- The state machine includes two states:
+  - OFF: `out = 0`
+  - ON: `out = 1`
+- State Transition Diagram:
+  - From OFF (out = 0):
+    - If `j = 0`, remain in the OFF state.
+    - If `j = 1`, transition to the ON state.
+  - From ON (out = 1):
+    - If `k = 0`, remain in the ON state.
+    - If `k = 1`, transition to the OFF state.
+
+**Reset Behavior:**
+- The reset is synchronous and active-high. When `reset` is asserted (high) during a clock edge, the state machine transitions to the OFF state, setting `out = 0`.
+
+**Initial Conditions:**
+- At power-up or when reset is asserted, the state machine should be initialized to the OFF state with `out` set to 0.
+
+**Signal Conventions:**
+- All signals are 1-bit wide.
+- The state transitions occur on the rising edge of the `clk` signal.
+- The output `out` reflects the current state and is updated with each valid state transition based on inputs `j` and `k`.
+
+The state machine is designed to avoid race conditions by ensuring that state transitions are synchronized with the clock signal and subject to the current state and input signals.
+</ENHANCED_SPEC>

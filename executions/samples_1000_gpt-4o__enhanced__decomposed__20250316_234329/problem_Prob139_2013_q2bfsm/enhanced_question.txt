@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- `input wire clk`: Clock signal, positive edge-triggered.
+- `input wire resetn`: Synchronous active-low reset signal. The system is in reset when `resetn` is 0.
+- `input wire x`: Input signal from the motor.
+- `input wire y`: Input signal from the motor.
+- `output reg f`: Control output signal for the motor.
+- `output reg g`: Control output signal for the motor.
+
+Signal and State Definitions:
+- Finite State Machine (FSM) operates with states: A, B, C, D, E, and F.
+- `state A`: Initial state upon reset. System remains here as long as `resetn` is asserted low.
+- `state B`: Transition occurs on the first clock edge after reset is de-asserted. `f` is set to 1 for one clock cycle.
+- `state C`: Monitors input `x` for the sequence 1, 0, 1 over three successive clock cycles.
+- `state D`: Sets `g` to 1 upon detecting the sequence in `state C`.
+- `state E`: Monitors input `y` for two clock cycles after entering this state. If `y` is 1 within this period, `g` remains 1.
+- `state F`: If `y` is not 1 within two clock cycles in `state E`, transition to this state where `g` is set to 0.
+
+FSM Transition Logic:
+- Transition from `state A` to `state B` occurs on the first positive clock edge after `resetn` is de-asserted.
+- Transition from `state B` to `state C` occurs immediately after setting `f` to 1 for one clock cycle.
+- Transition from `state C` to `state D` occurs after detecting the input sequence 1, 0, 1 on successive clock cycles.
+- Transition from `state D` to `state E` occurs immediately after setting `g` to 1.
+- In `state E`, if `y` becomes 1 within two clock cycles, remain in `state D`. Otherwise, transition to `state F`.
+- In `state F`, `g` remains 0 until the next reset.
+
+Reset Behavior:
+- FSM resets to `state A` when `resetn` is low.
+- On reset, `f` and `g` are initialized to 0.
+
+Edge Cases:
+- Ensure proper state transition even if `x` or `y` changes outside expected sequence.
+- Monitor input boundaries and handle unexpected changes robustly.
+
+Operation Precedence:
+- All sequential logic is triggered on the positive edge of the clock.
+- State transitions depend on clock edges and input conditions as specified.
+
+General Notes:
+- Bit[0] refers to the least significant bit in any multi-bit signal representation.
+- Ensure no race conditions occur by designing state transitions to be mutually exclusive based on specified conditions.
+</ENHANCED_SPEC>

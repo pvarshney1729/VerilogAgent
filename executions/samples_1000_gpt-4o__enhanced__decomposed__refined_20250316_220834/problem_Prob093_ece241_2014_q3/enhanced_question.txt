@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Specification: TopModule
+
+Overview:
+Implement a module named "TopModule" with a specified interface. The module will generate a 4-bit output vector, "mux_in", which interfaces with a 4-to-1 multiplexer to realize a given Karnaugh map. The multiplexer uses "a" and "b" as selector inputs.
+
+Interface:
+- Inputs:
+  - `c`: 1-bit input, unsigned.
+  - `d`: 1-bit input, unsigned.
+- Outputs:
+  - `mux_in`: 4-bit output vector, unsigned, indexed from bit[3] (MSB) to bit[0] (LSB).
+
+Functional Requirements:
+- Use a combination of one 4-to-1 multiplexer and the minimum number of 2-to-1 multiplexers to implement the Karnaugh map.
+- Only the inputs "a" and "b" are used as selector inputs for the 4-to-1 multiplexer.
+- No additional logic gates are permitted.
+
+Karnaugh Map Representation:
+
+      ab
+  cd  00  01  11  10
+  00 | 0 | 0 | 0 | 1 |
+  01 | 1 | 0 | 0 | 0 |
+  11 | 1 | 0 | 1 | 1 |
+  10 | 1 | 0 | 0 | 1 |
+
+Mapping:
+- For selector inputs {a, b}:
+  - When ab = 00, connect mux_in[0].
+  - When ab = 01, connect mux_in[1].
+  - When ab = 11, connect mux_in[2].
+  - When ab = 10, connect mux_in[3].
+
+Implementation Notes:
+- Ensure each bit of "mux_in" corresponds to the truth values derived from the Karnaugh map for the respective conditions of inputs "c" and "d".
+- The design should ensure correct logical mapping without introducing race conditions or glitches.
+
+Edge Cases:
+- Handle all possible combinations of inputs "c" and "d" to ensure correct output on "mux_in" for each selector state of the 4-to-1 multiplexer.
+
+Clock and Reset:
+- This specification does not involve sequential logic, hence no clock or reset signals are required.
+
+Objective:
+The objective is to create a reliable and efficient combinational logic design that adheres to the given constraints and accurately implements the specified Karnaugh map using multiplexers.
+</ENHANCED_SPEC>

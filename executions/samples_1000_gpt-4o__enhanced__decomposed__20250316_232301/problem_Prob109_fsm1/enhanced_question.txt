@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock signal for synchronizing the sequential logic.
+- input wire areset: Asynchronous reset signal; active high.
+- input wire in: Input signal for state transitions.
+- output reg out: Output signal representing the current state's output value.
+
+State Definitions:
+- State A: Output value = 0
+- State B: Output value = 1
+
+State Transition Diagram:
+- From State B: 
+  - On input '0', transition to State A.
+  - On input '1', remain in State B.
+- From State A: 
+  - On input '0', transition to State B.
+  - On input '1', remain in State A.
+
+Reset Behavior:
+- Asynchronous reset to State B when areset is high, overriding any other inputs or clock edges.
+
+Clock and Reset:
+- The state transition occurs on the rising edge of the clk signal.
+- The module should asynchronously reset to State B if areset is high, regardless of the clock state.
+
+Output Specification:
+- The output 'out' is determined solely by the current state:
+  - It reflects the output value associated with the current state as defined above.
+
+Edge Cases and Input Boundaries:
+- Ensure the module properly handles all possible input combinations and initial conditions.
+- On power-up, if areset is not asserted, the initial state is undefined until the next reset or clock edge.
+
+Note:
+- All state transitions are synchronous with respect to the clk signal except for the asynchronous reset.
+- The design must ensure glitch-free output transitions when moving between states.
+</ENHANCED_SPEC>

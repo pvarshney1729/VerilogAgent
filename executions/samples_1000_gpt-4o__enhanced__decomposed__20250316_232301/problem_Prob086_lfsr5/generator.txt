@@ -1,0 +1,65 @@
+Generated Response:
+
+<REASONING>
+To implement the 5-bit maximal-length Galois LFSR with taps at positions 5 and 3, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. The output `q` is a 5-bit vector.
+
+2. **Signal Declaration**: Use `logic` to declare the internal signals and the output `q` as per the coding conventions.
+
+3. **Synchronous Reset**: Implement a synchronous reset that sets the LFSR to the state `00001` when the `reset` signal is high on the rising edge of the clock.
+
+4. **LFSR Logic**: Implement the Galois LFSR logic. The LFSR shifts right, and the new value for the MSB (`q[4]`) is determined by XORing the current LSB (`q[0]`) with the bit at position 3 (`q[2]`). The rest of the bits shift right as usual.
+
+5. **Sequential Logic**: Use an `always_ff` block to handle the sequential logic triggered by the positive edge of the clock.
+
+6. **Output Assignment**: Assign the internal LFSR state to the output `q`.
+
+By following these steps, we ensure that the module adheres to the specified behavior and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    logic [4:0] lfsr;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            lfsr <= 5'b00001; // Synchronous reset to 1
+        end else begin
+            lfsr <= {lfsr[3:0], lfsr[4] ^ lfsr[2]}; // Galois LFSR logic with taps at positions 5 and 3
+        end
+    end
+
+    assign q = lfsr;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    logic [4:0] lfsr;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            lfsr <= 5'b00001; // Synchronous reset to 1
+        end else begin
+            lfsr <= {lfsr[3:0], lfsr[4] ^ lfsr[2]}; // Galois LFSR logic with taps at positions 5 and 3
+        end
+    end
+
+    assign q = lfsr;
+
+endmodule

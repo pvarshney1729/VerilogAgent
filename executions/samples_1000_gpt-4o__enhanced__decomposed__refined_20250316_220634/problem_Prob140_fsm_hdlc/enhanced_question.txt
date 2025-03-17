@@ -1,0 +1,22 @@
+<ENHANCED_SPEC>
+I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.
+
+- `input clk`: Clock signal for synchronizing sequential operations. Triggered on the positive edge.
+- `input reset`: Active-high synchronous reset signal. When asserted, all state elements should reset to initial values.
+- `input in`: Serial input data stream.
+- `output disc`: Asserted high for one clock cycle when a bit needs to be discarded after detecting the sequence `0111110`.
+- `output flag`: Asserted high for one clock cycle to indicate the detection of the frame boundary sequence `01111110`.
+- `output err`: Asserted high for one clock cycle upon detection of error condition with 7 or more consecutive `1`s.
+
+The module implements a synchronous HDLC framing decoder using a Moore-type finite state machine (FSM) to process a continuous bit stream and identify specific bit patterns:
+
+1. **Discard Sequence (0111110)**: The FSM detects this sequence to signal that the next incoming bit should be discarded. `disc` is asserted high for one clock cycle starting in the cycle after the sequence is completed.
+
+2. **Frame Boundary Sequence (01111110)**: Detection of this sequence indicates the start or end of a data frame. `flag` is asserted high for one clock cycle starting in the cycle after the sequence is completed.
+
+3. **Error Condition (7 or more consecutive 1s)**: If 7 or more consecutive `1`s are detected, it signals an error condition. `err` is asserted high for one clock cycle starting in the cycle after the sequence is completed.
+
+The FSM should initialize to a state that behaves as though the last input bit was `0` when reset is asserted. This ensures that no partial sequence detection is carried over after reset. All sequential elements, such as state registers, must initialize to their defined starting state upon reset. Bit indexing starts from 0, with `bit[0]` representing the least significant bit.
+
+Edge cases such as alternating sequences or input boundaries should be handled such that the FSM transitions back to the appropriate state without missing any potential valid sequences. All outputs are to be asserted only after the complete sequence has been detected, ensuring no premature or erroneous signal assertion.
+</ENHANCED_SPEC>

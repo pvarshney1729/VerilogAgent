@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input clk: Clock signal for synchronizing state transitions. 
+- input areset: Asynchronous reset signal, active high. 
+- input in: Input signal to determine state transitions.
+- output reg out: Output signal representing the current state's output.
+
+Port Widths and Significance:
+- All ports (clk, areset, in) are 1-bit wide.
+- The output 'out' is driven by the current state.
+
+State Machine Description:
+- This module implements a Moore state machine with two states: A and B.
+- State Encoding: 
+  - State A: Encoded as 1'b0
+  - State B: Encoded as 1'b1
+
+State Transition and Output Logic:
+- The state transitions and outputs are defined as follows:
+  - From State B (out = 1):
+    - On input '0', transition to State A.
+    - On input '1', remain in State B.
+  - From State A (out = 0):
+    - On input '0', transition to State B.
+    - On input '1', remain in State A.
+
+Asynchronous Reset:
+- The state machine should transition to State B when 'areset' is high, irrespective of the clock.
+- The reset state of the state machine is State B.
+
+Clock and Sequential Logic:
+- State transitions occur on the rising edge of 'clk'.
+- The output 'out' is updated synchronously with the state transitions.
+
+Initial Conditions:
+- On initialization, or when 'areset' is asserted, the module should default to State B, with 'out' set to 1.
+
+Note:
+- Ensure the design accounts for any potential race conditions by prioritizing the asynchronous reset over synchronous state transitions.
+</ENHANCED_SPEC>

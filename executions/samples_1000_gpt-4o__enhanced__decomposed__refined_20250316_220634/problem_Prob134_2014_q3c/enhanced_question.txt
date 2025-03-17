@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, 1-bit width.
+  - `input x`: Control signal, 1-bit width.
+  - `input [2:0] y`: Current state input, 3-bit width, with `y[2]` as the most significant bit (MSB) and `y[0]` as the least significant bit (LSB).
+
+- Output Ports:
+  - `output Y0`: The least significant bit of the next state, 1-bit width (corresponds to `Y[0]`).
+  - `output z`: Output signal, 1-bit width.
+
+Functional Specification:
+- This module implements a finite state machine (FSM) with the following characteristics:
+  - The FSM operates on the rising edge of the `clk` signal.
+  - The state transitions occur synchronously with the clock.
+  - The FSM does not explicitly define a reset mechanism; initial state conditions are not specified.
+
+- State Transition and Output Logic:
+  - The FSM transitions between states based on the current state `y[2:0]` and the input `x`. 
+  - The state transition table is as follows:
+
+    | Present State `y[2:0]` | Next State `Y[2:0]` when x=0 | Next State `Y[2:0]` when x=1 | Output `z` |
+    |------------------------|-------------------------------|-------------------------------|------------|
+    | 000                    | 000                           | 001                           | 0          |
+    | 001                    | 001                           | 100                           | 0          |
+    | 010                    | 010                           | 001                           | 0          |
+    | 011                    | 001                           | 010                           | 1          |
+    | 100                    | 011                           | 100                           | 1          |
+
+- Output `Y0` is derived directly from the next state `Y[0]` and is updated synchronously with the clock.
+
+- Edge Cases and Assumptions:
+  - Undefined present states are not handled within this specification.
+  - Behavior for states other than those listed in the table is undefined and should be treated as don't-care conditions.
+  - The output `z` is determined directly by the current state as per the table, independent of the input `x`.
+
+Design Considerations:
+- This specification assumes no asynchronous reset exists, implying that the initial state must be defined by the system utilizing this module or handled by additional logic if necessary.
+- Designers should ensure no race conditions occur by maintaining synchronous clock edges for state transitions.
+</ENHANCED_SPEC>

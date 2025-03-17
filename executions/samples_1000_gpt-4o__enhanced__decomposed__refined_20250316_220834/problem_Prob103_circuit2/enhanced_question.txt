@@ -1,0 +1,59 @@
+<ENHANCED_SPEC>
+Module Specification: TopModule
+
+1. Module Interface:
+
+   - `input wire a`  : Single-bit input.
+   - `input wire b`  : Single-bit input.
+   - `input wire c`  : Single-bit input.
+   - `input wire d`  : Single-bit input.
+   - `output wire q` : Single-bit output.
+
+2. General Description:
+
+   - The module `TopModule` implements a combinational logic circuit.
+   - The output `q` is determined solely by the current values of inputs `a`, `b`, `c`, and `d`.
+
+3. Signal Details and Conventions:
+
+   - All inputs (`a`, `b`, `c`, `d`) and the output (`q`) are of type `wire`, indicating they are used in a combinational logic context.
+   - Bit indexing is not applicable as all signals are single-bit.
+
+4. Functionality:
+
+   - The truth table below defines the logic behavior of the output `q` for all possible input combinations:
+
+     | a | b | c | d | q |
+     |---|---|---|---|---|
+     | 0 | 0 | 0 | 0 | 1 |
+     | 0 | 0 | 0 | 1 | 0 |
+     | 0 | 0 | 1 | 0 | 0 |
+     | 0 | 0 | 1 | 1 | 1 |
+     | 0 | 1 | 0 | 0 | 0 |
+     | 0 | 1 | 0 | 1 | 1 |
+     | 0 | 1 | 1 | 0 | 1 |
+     | 0 | 1 | 1 | 1 | 0 |
+     | 1 | 0 | 0 | 0 | 0 |
+     | 1 | 0 | 0 | 1 | 1 |
+     | 1 | 0 | 1 | 0 | 1 |
+     | 1 | 0 | 1 | 1 | 0 |
+     | 1 | 1 | 0 | 0 | 1 |
+     | 1 | 1 | 0 | 1 | 0 |
+     | 1 | 1 | 1 | 0 | 0 |
+     | 1 | 1 | 1 | 1 | 1 |
+
+5. Implementation Notes:
+
+   - The logic designer is expected to derive the Boolean expression or use alternative logic minimization techniques (e.g., Karnaugh maps) based on the provided truth table to implement the correct logic for `q`.
+   - No sequential elements (flip-flops, registers) or clock/reset signals are involved in this design, ensuring it is purely combinational.
+
+6. Edge Case Handling:
+
+   - All possible input combinations are explicitly defined in the truth table, ensuring comprehensive coverage.
+   - There are no undefined or "don't care" conditions; each input combination has a specific output `q`.
+
+7. Reset and Initialization:
+
+   - Not applicable as the module is purely combinational and does not contain any state-holding elements.
+   
+</ENHANCED_SPEC>

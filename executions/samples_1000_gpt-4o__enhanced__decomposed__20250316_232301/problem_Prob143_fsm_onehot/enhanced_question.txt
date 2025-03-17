@@ -1,0 +1,57 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+**Interface:**
+- **Inputs:**
+  - `in`: 1-bit input representing the state machine trigger.
+  - `state`: 10-bit input vector (`state[9:0]`), each bit corresponds to a specific state in one-hot encoding:
+    - `state[0]` corresponds to S0
+    - `state[1]` corresponds to S1
+    - ...
+    - `state[9]` corresponds to S9
+
+- **Outputs:**
+  - `next_state`: 10-bit output vector (`next_state[9:0]`), representing the next state in one-hot encoding.
+  - `out1`: 1-bit output.
+  - `out2`: 1-bit output.
+
+**State Machine Description:**
+- **Encoding:** One-hot encoding is used. Each state is represented by a single high bit in the `state[9:0]` vector.
+- **State Transitions and Outputs:**
+  - **S0**: 
+    - `in == 0`: Transition to S0, `(out1, out2) = (0, 0)`
+    - `in == 1`: Transition to S1, `(out1, out2) = (0, 0)`
+  - **S1**:
+    - `in == 0`: Transition to S0, `(out1, out2) = (0, 0)`
+    - `in == 1`: Transition to S2, `(out1, out2) = (0, 0)`
+  - **S2**:
+    - `in == 0`: Transition to S0, `(out1, out2) = (0, 0)`
+    - `in == 1`: Transition to S3, `(out1, out2) = (0, 0)`
+  - **S3**:
+    - `in == 0`: Transition to S0, `(out1, out2) = (0, 0)`
+    - `in == 1`: Transition to S4, `(out1, out2) = (0, 0)`
+  - **S4**:
+    - `in == 0`: Transition to S0, `(out1, out2) = (0, 0)`
+    - `in == 1`: Transition to S5, `(out1, out2) = (0, 0)`
+  - **S5**:
+    - `in == 0`: Transition to S8, `(out1, out2) = (0, 0)`
+    - `in == 1`: Transition to S6, `(out1, out2) = (0, 0)`
+  - **S6**:
+    - `in == 0`: Transition to S9, `(out1, out2) = (0, 0)`
+    - `in == 1`: Transition to S7, `(out1, out2) = (0, 0)`
+  - **S7**:
+    - `in == 0`: Transition to S0, `(out1, out2) = (0, 1)`
+    - `in == 1`: Remain in S7, `(out1, out2) = (0, 1)`
+  - **S8**:
+    - `in == 0`: Transition to S0, `(out1, out2) = (1, 0)`
+    - `in == 1`: Transition to S1, `(out1, out2) = (1, 0)`
+  - **S9**:
+    - `in == 0`: Transition to S0, `(out1, out2) = (1, 1)`
+    - `in == 1`: Transition to S1, `(out1, out2) = (1, 1)`
+
+**Additional Notes:**
+- The state machine can be in multiple states simultaneously due to combinational inputs. The module should resolve transitions accordingly.
+- Edge cases where multiple states are active should be handled with priority given to the highest index state bit that is set.
+- This specification covers only the state transition and output logic. State registers are assumed to be maintained externally and are not part of this module.
+- Ensure that the initial values and reset conditions for any internal registers or variables are explicitly defined when implementing the module.
+</ENHANCED_SPEC>

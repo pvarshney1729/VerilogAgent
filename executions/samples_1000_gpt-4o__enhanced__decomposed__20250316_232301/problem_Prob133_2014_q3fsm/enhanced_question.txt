@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+Interface:
+- `input clk`: Clock signal, positive-edge triggered.
+- `input reset`: Active-high synchronous reset signal.
+- `input s`: One-bit input signal for state transition control.
+- `input w`: One-bit input signal for FSM operation in state B.
+- `output reg z`: One-bit output signal, indicating condition met.
+
+State Machine Description:
+- The FSM begins in the reset state, State A.
+- State A Behavior:
+  - Remain in State A as long as `s = 0`.
+  - Transition to State B on the next positive clock edge if `s = 1`.
+
+- State B Behavior:
+  - Continuously examine the input `w` for three consecutive clock cycles.
+  - Count the occurrences of `w = 1` during these three cycles.
+  - If `w = 1` exactly twice during these cycles, set `z = 1` on the fourth cycle.
+  - Otherwise, set `z = 0` on the fourth cycle.
+  - Repeat the sequence, continuously checking `w` in sets of three cycles.
+
+Reset and Initialization:
+- On assertion of the active-high synchronous reset, the FSM returns to State A.
+- All registers and outputs, including `z`, should be initialized to 0 upon reset.
+
+Clocking and Timing:
+- The design is based on a positive edge-triggered clock.
+- Ensure no race conditions by synchronizing all sequential elements to the clock edge.
+
+Signal Details:
+- `z` is updated based on the count of `w` after every three clock cycles in State B.
+- `s` is only relevant when the FSM is in State A for determining the transition to State B.
+
+Edge Cases:
+- If `s` remains 0 indefinitely, the FSM will not transition out of State A.
+- Ensure no assumptions of `w` values outside specified conditions when in State A.
+
+General Constraints:
+- Use minimal states to fulfill the specified FSM behavior.
+- Ensure all operations are well-defined for each state transition and output calculation.
+
+Note: Bit indexing is not applicable as all signals are single-bit.
+</ENHANCED_SPEC>

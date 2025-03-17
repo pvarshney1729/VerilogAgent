@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: 
+  - `in`: 1-bit, representing the input signal.
+  - `state`: 2-bit, representing the current state of the state machine. Bit[1] is the Most Significant Bit (MSB), and bit[0] is the Least Significant Bit (LSB).
+- Output: 
+  - `next_state`: 2-bit, representing the next state of the state machine. Bit[1] is the MSB, and bit[0] is the LSB.
+  - `out`: 1-bit, representing the output of the state machine.
+
+State Encoding:
+- State A: 2'b00
+- State B: 2'b01
+- State C: 2'b10
+- State D: 2'b11
+
+State Transition Logic (Combinational Logic):
+- Current State A:
+  - If `in` is 0, `next_state` = A (2'b00)
+  - If `in` is 1, `next_state` = B (2'b01)
+- Current State B:
+  - If `in` is 0, `next_state` = C (2'b10)
+  - If `in` is 1, `next_state` = B (2'b01)
+- Current State C:
+  - If `in` is 0, `next_state` = A (2'b00)
+  - If `in` is 1, `next_state` = D (2'b11)
+- Current State D:
+  - If `in` is 0, `next_state` = C (2'b10)
+  - If `in` is 1, `next_state` = B (2'b01)
+
+Output Logic (Combinational Logic):
+- For states A, B, and C, `out` = 0
+- For state D, `out` = 1
+
+Additional Considerations:
+- The implementation is purely combinational; hence, no clocked or sequential elements are included.
+- Ensure all logic expressions are minimized for optimal synthesis.
+- Handle all possible input combinations explicitly to avoid undefined behavior.
+</ENHANCED_SPEC>

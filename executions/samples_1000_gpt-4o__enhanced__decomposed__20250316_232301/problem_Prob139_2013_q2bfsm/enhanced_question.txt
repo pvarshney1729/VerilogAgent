@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk` : Clock signal (positive edge-triggered).
+  - `input resetn` : Active-low synchronous reset signal. Maintains the FSM in the initial state when asserted.
+  - `input x` : One-bit input signal from the motor.
+  - `input y` : One-bit input signal from the motor.
+
+- Output Ports:
+  - `output reg f` : One-bit control output for the motor.
+  - `output reg g` : One-bit control output for the motor.
+
+Finite State Machine (FSM) Description:
+- Initial State: The FSM begins in State A.
+- Reset Behavior: 
+  - While `resetn` is asserted (low), the FSM remains in State A.
+  - Upon de-assertion of `resetn` (high), at the next positive clock edge, the FSM transitions from State A.
+  
+- State Transitions and Output Logic:
+  1. Upon exiting State A (following the de-assertion of `resetn`), set `f` to 1 for one clock cycle.
+  2. Monitor `x` in subsequent clock cycles:
+     - If `x` follows a pattern of 1, 0, 1 over three successive positive clock edges, set `g` to 1 on the next clock cycle.
+  3. Once `g` is set to 1, monitor `y`:
+     - If `y` becomes 1 within two clock cycles, maintain `g` as 1 indefinitely (until reset).
+     - If `y` does not become 1 within two clock cycles, set `g` back to 0 indefinitely (until reset).
+
+- Output `f` and `g` are updated on the positive edge of `clk`.
+
+- Initial Values:
+  - `f` and `g` are initialized to 0 upon reset.
+
+- Clock and Reset:
+  - All state transitions and output updates are synchronized with the positive edge of the `clk`.
+  - Reset (`resetn`) is synchronous and active-low, meaning it acts on the next positive clock edge when asserted.
+
+- Bit Indexing Convention:
+  - All inputs and outputs are treated as single-bit signals.
+
+- Edge Cases:
+  - Ensure that the pattern detection for `x` and monitoring of `y` start only after the initial setup of `f` is complete.
+  - Handle transitions smoothly to prevent glitches in output signals `f` and `g`.
+
+No race conditions are expected due to positive edge-triggered logic and well-defined state transitions.
+</ENHANCED_SPEC>

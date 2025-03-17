@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock input. All sequential logic is triggered on the rising edge of this clock.
+  - `reset`: 1-bit active-high synchronous reset input. When high, reset all state elements to their initial state on the next rising clock edge.
+  - `data`: 1-bit serial input data stream.
+
+- Output Ports:
+  - `start_shifting`: 1-bit output signal. This signal is set to 1 when the sequence 1101 is detected in the input stream and remains 1 until the next reset.
+
+Functional Description:
+- The module implements a finite-state machine (FSM) to detect the sequence 1101 in the incoming `data` stream.
+- The FSM transitions through states representing the progress of detecting the sequence:
+  - Initial state (reset state): Wait for the first '1' of the sequence.
+  - Detect the first '1'.
+  - Detect the second consecutive '1'.
+  - Detect '0' following the two '1's.
+  - Detect the final '1' to complete the sequence 1101.
+- Upon successful detection of the sequence 1101, the `start_shifting` output is set to 1 and remains high, irrespective of further input, until a reset occurs.
+
+State Machine Details:
+- The FSM is synchronous, advancing states on the rising edge of `clk`.
+- State transitions depend on the current state and the value of `data` at each clock cycle.
+- The reset condition sets the FSM to the initial state, and `start_shifting` is reset to 0.
+
+Bit Conventions:
+- `data` is treated as a stream of bits where the most recent bit is always the least significant in the context of sequence detection.
+- State encoding and transitions are designed to avoid race conditions and ensure reliable sequence detection.
+
+Reset Behavior:
+- Reset is synchronous. When `reset` is asserted (high) on a rising clock edge, all state registers are initialized to their default state, and `start_shifting` is reset to 0.
+
+Edge Cases:
+- If the sequence 1101 is detected, subsequent detection of the sequence in the absence of a reset is ignored, as `start_shifting` remains high.
+- The FSM correctly handles overlapping sequences, resetting to the appropriate state upon detecting the first '1' after detecting the sequence.
+
+This specification ensures precise implementation of the desired functionality while maintaining clarity in the design intent and operational conditions.
+</ENHANCED_SPEC>

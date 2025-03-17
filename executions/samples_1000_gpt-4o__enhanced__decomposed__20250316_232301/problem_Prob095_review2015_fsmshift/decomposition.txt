@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, and output port shift_ena.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  wire clk,\n    input  wire reset,\n    output reg  shift_ena\n);\n\n    reg [2:0] shift_counter;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            shift_counter <= 3'b100;\n            shift_ena <= 1'b1;\n        end else if (shift_counter != 3'b000) begin\n            shift_counter <= shift_counter - 1;\n            shift_ena <= 1'b1;\n        end else begin\n            shift_ena <= 1'b0;\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare the state register and state encoding using localparam for binary encoding. Use a 2-bit register for state representation.",
+        "source": "Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding using localparam for binary encoding\n  localparam [1:0] STATE_IDLE  = 2'b00,\n                   STATE_SHIFT = 2'b01,\n                   STATE_DONE  = 2'b10;\n\n  // State register declaration\n  reg [1:0] current_state, next_state;\n[END]\n```"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic. On reset, transition to the initial state and assert shift_ena for 4 cycles.",
+        "source": "Reset should be active high synchronous. Whenever the FSM is reset, assert shift_ena for 4 cycles, then 0 forever (until reset).",
+        "implementation": "reg [2:0] shift_counter;\nreg shift_ena_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        shift_counter <= 3'b100; // Initialize counter to 4\n        shift_ena_reg <= 1'b1;   // Assert shift_ena\n    end else if (shift_counter != 3'b000) begin\n        shift_counter <= shift_counter - 1;\n        if (shift_counter == 3'b001) begin\n            shift_ena_reg <= 1'b0; // Deassert shift_ena after 4 cycles\n        end\n    end\nend\n\nassign shift_ena = shift_ena_reg;"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic to handle state transitions based on the current state and input conditions.",
+        "source": "we want the ability to enable the shift register for exactly 4 clock cycles whenever the proper bit pattern is detected.",
+        "implementation": "// State encoding\n  localparam IDLE = 2'b00;\n  localparam ENABLE_SHIFT = 2'b01;\n  localparam DONE = 2'b10;\n\n  // State registers\n  reg [1:0] current_state, next_state;\n  reg [2:0] cycle_count;\n\n  // Next state logic\n  always @(*) begin\n    case (current_state)\n      IDLE: begin\n        if (reset) begin\n          next_state = ENABLE_SHIFT;\n        end else begin\n          next_state = IDLE;\n        end\n      end\n      ENABLE_SHIFT: begin\n        if (cycle_count == 3'b011) begin\n          next_state = DONE;\n        end else begin\n          next_state = ENABLE_SHIFT;\n        end\n      end\n      DONE: begin\n        next_state = DONE;\n      end\n      default: begin\n        next_state = IDLE;\n      end\n    endcase\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic to assert shift_ena based on the current state. Use direct assignment for shift_ena based on state equality.",
+        "source": "assert shift_ena for 4 cycles, then 0 forever (until reset).",
+        "implementation": "reg [2:0] state;\nwire shift_ena;\n\n// Combinational logic for shift_ena based on state\nassign shift_ena = (state < 3'd4) ? 1'b1 : 1'b0;"
+    }
+]

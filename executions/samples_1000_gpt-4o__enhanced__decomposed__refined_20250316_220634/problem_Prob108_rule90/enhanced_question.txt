@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+The module, named TopModule, should have the following interface, with all input and output ports defined as below:
+
+- Input Ports:
+  - `input wire clk` : Clock signal for synchronization, active on the rising edge.
+  - `input wire load` : Control signal for loading initial data into the system.
+  - `input wire [511:0] data` : 512-bit wide input data used to initialize the cellular automaton state when load is asserted.
+
+- Output Ports:
+  - `output reg [511:0] q` : 512-bit wide output representing the current state of the cellular automaton.
+
+Functional Description:
+
+1. The module implements Rule 90, a one-dimensional cellular automaton. The main operation is the computation of the next state of each cell, based on the XOR of its two current neighbors.
+
+2. The transition rules for each cell (Center) based on its neighbors (Left and Right) are as follows:
+   - If Left = 1, Center = 1, Right = 1, then the next state of Center = 0
+   - If Left = 1, Center = 1, Right = 0, then the next state of Center = 1
+   - If Left = 1, Center = 0, Right = 1, then the next state of Center = 0
+   - If Left = 1, Center = 0, Right = 0, then the next state of Center = 1
+   - If Left = 0, Center = 1, Right = 1, then the next state of Center = 1
+   - If Left = 0, Center = 1, Right = 0, then the next state of Center = 0
+   - If Left = 0, Center = 0, Right = 1, then the next state of Center = 1
+   - If Left = 0, Center = 0, Right = 0, then the next state of Center = 0
+
+3. Boundary conditions are defined as follows:
+   - Assume q[-1] (Left neighbor of q[0]) and q[512] (Right neighbor of q[511]) are both logically zero (off).
+
+4. The system operates as follows:
+   - On the rising edge of the clock (`clk`), if `load` is asserted (high), the state of the cellular automaton is initialized with the input data (`data[511:0]`).
+   - Otherwise, the state advances by one time step according to Rule 90.
+
+5. Initialization and Reset:
+   - The initial state of `q` is undefined until the first load or clock edge operation.
+
+6. The design should ensure that all sequential logic elements are triggered on the positive edge of `clk`.
+
+7. No explicit reset signal is provided; ensure the module supports initialization through the `load` signal.
+
+8. The bit indexing convention is such that `q[0]` refers to the least significant bit and `q[511]` refers to the most significant bit.
+
+This specification ensures correct implementation by defining input/output widths, operation rules, and clock cycle dependencies.
+</ENHANCED_SPEC>

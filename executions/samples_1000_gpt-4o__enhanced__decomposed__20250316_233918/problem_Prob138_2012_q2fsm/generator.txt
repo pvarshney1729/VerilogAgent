@@ -1,0 +1,127 @@
+Generated Response:
+
+<REASONING>
+To implement the FSM as specified, we need to follow these steps:
+
+1. **Define the Module Interface**: We will declare the module `TopModule` with inputs `clk`, `reset`, `w`, and output `z`.
+
+2. **State Encoding**: We will use a 3-bit encoding for the states A, B, C, D, E, and F. This will allow us to represent each state uniquely.
+
+3. **State Register**: We will implement a state register using an always block that updates the current state on the positive edge of the clock. The reset logic will ensure that the FSM resets to state A when the reset signal is high.
+
+4. **Next State Logic**: We will use a combinational always block to determine the next state based on the current state and input `w`.
+
+5. **Output Logic**: We will implement the output logic for `z` using a combinational always block. The output will be '1' in states E and F, and '0' in all other states.
+
+6. **Coding Conventions**: We will adhere to the specified coding conventions, such as using `logic` for all signals, using `always @(*)` for combinational logic, and ensuring all numeric constants are properly sized.
+
+By following these steps, we will ensure that the FSM is implemented correctly according to the specification.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic w,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        A = 3'b000,
+        B = 3'b001,
+        C = 3'b010,
+        D = 3'b011,
+        E = 3'b100,
+        F = 3'b101
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= A; // Reset to state A
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            A: next_state = (w) ? B : A;
+            B: next_state = (w) ? C : D;
+            C: next_state = (w) ? E : D;
+            D: next_state = (w) ? F : A;
+            E: next_state = (w) ? E : D;
+            F: next_state = (w) ? C : D;
+            default: next_state = A;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            E, F: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic w,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        A = 3'b000,
+        B = 3'b001,
+        C = 3'b010,
+        D = 3'b011,
+        E = 3'b100,
+        F = 3'b101
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= A; // Reset to state A
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            A: next_state = (w) ? B : A;
+            B: next_state = (w) ? C : D;
+            C: next_state = (w) ? E : D;
+            D: next_state = (w) ? F : A;
+            E: next_state = (w) ? E : D;
+            F: next_state = (w) ? C : D;
+            default: next_state = A;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            E, F: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule

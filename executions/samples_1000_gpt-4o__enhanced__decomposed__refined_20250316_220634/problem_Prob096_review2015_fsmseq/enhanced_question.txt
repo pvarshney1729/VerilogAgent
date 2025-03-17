@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input logic clk` : Clock signal, positive edge-triggered.
+  - `input logic reset` : Active-high synchronous reset signal.
+  - `input logic data` : Input data stream, 1-bit.
+  
+- Output Ports:
+  - `output logic start_shifting` : Output signal, set to 1 when the sequence is detected.
+
+Behavioral Specification:
+1. The module implements a finite-state machine (FSM) that detects the sequence "1101" in the incoming `data` bit stream.
+2. The FSM operates as follows:
+   - It consists of multiple states, each representing a part of the sequence detection process.
+   - The FSM transitions on the positive edge of the `clk` signal.
+   - The sequence "1101" is detected when those bits appear consecutively in the data stream.
+
+3. Upon detection of the sequence "1101", the `start_shifting` output is set to 1 and remains 1 until a reset occurs.
+
+4. The `reset` signal is synchronous and active-high:
+   - When `reset` is asserted, the FSM returns to its initial state.
+   - The `start_shifting` output is cleared to 0 during reset.
+
+5. Initial Conditions:
+   - All states of the FSM and the `start_shifting` output are initialized to 0 at startup and after reset.
+
+6. Edge Cases:
+   - The FSM must correctly handle overlapping sequences. For example, in the stream "1101101", it should detect the sequence twice.
+   - The design must ensure there are no race conditions in sequence detection or output signal generation.
+
+7. Bit Indexing:
+   - `bit[0]` refers to the least significant bit if any multi-bit signals are introduced in future enhancements.
+
+The implementation must adhere strictly to these specifications to ensure correct operation and edge case handling.
+</ENHANCED_SPEC>

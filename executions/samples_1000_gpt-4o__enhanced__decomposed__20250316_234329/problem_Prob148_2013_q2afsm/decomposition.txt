@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module interface for TopModule with input ports clk, resetn, r (3 bits), and output port g (3 bits).",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  clk - input  resetn - input  r (3 bits) - output g (3 bits)",
+        "implementation": "```verilog\n[BEGIN]\nmodule TopModule (\n    input clk,\n    input resetn,\n    input [2:0] r,\n    output reg [2:0] g\n);\n[END]\n```"
+    },
+    {
+        "id": "2",
+        "content": "Define state encoding using localparam for states A, B, C, and D.",
+        "source": "Assign any state codes that you wish to use.",
+        "implementation": "// State encoding using localparam\n  localparam STATE_A = 2'b00;\n  localparam STATE_B = 2'b01;\n  localparam STATE_C = 2'b10;\n  localparam STATE_D = 2'b11;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state flip-flops with synchronous reset logic to reset into state A.",
+        "source": "Resetn is an active-low synchronous reset that resets into state A. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "// State encoding\n  localparam STATE_A = 2'b00;\n  localparam STATE_B = 2'b01;\n  localparam STATE_C = 2'b10;\n  localparam STATE_D = 2'b11;\n\n  // State register\n  reg [1:0] current_state, next_state;\n\n  // State flip-flops with synchronous reset logic\n  always @(posedge clk) begin\n    if (!resetn) begin\n      current_state <= STATE_A; // Reset to state A\n    end else begin\n      current_state <= next_state;\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Create a combinational block to determine the next state based on the current state and input r, following the state transition diagram.",
+        "source": "The module should implement the FSM described by the state diagram shown below: A --r0=0,r1=0,r2=0--> A A -------r0=1-------> B A -----r0=0,r1=1----> C A --r0=0,r1=0,r2=0--> D B (g0=1) -------r0=1-------> B B (g0=1) -------r0=0-------> A C (g1=1) -------r1=1-------> C C (g1=1) -------r1=0-------> A",
+        "implementation": "// State encoding\n  localparam STATE_A = 2'b00;\n  localparam STATE_B = 2'b01;\n  localparam STATE_C = 2'b10;\n  localparam STATE_D = 2'b11;\n\n  // Combinational block for next state logic\n  always @(*) begin\n    case (current_state)\n      STATE_A: begin\n        if (r[0] == 1'b1)\n          next_state = STATE_B;\n        else if (r[0] == 1'b0 && r[1] == 1'b1)\n          next_state = STATE_C;\n        else if (r[0] == 1'b0 && r[1] == 1'b0 && r[2] == 1'b0)\n          next_state = STATE_D;\n        else\n          next_state = STATE_A;\n      end\n      STATE_B: begin\n        if (r[0] == 1'b1)\n          next_state = STATE_B;\n        else\n          next_state = STATE_A;\n      end\n      STATE_C: begin\n        if (r[1] == 1'b1)\n          next_state = STATE_C;\n        else\n          next_state = STATE_A;\n      end\n      default: next_state = STATE_A; // Default to STATE_A for safety\n    endcase\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output logic to set g based on the current state, where g0=1 in state B and g1=1 in state C.",
+        "source": "The FSM stays in state _A_ as long as there are no requests. When one or more request occurs, then the FSM decides which device receives a grant to use the resource and changes to a state that sets that device's _g[i]_ signal to 1. Each _g[i]_ is an output from the FSM.",
+        "implementation": "// Output logic to set g based on the current state\n  always @(*) begin\n    // Default values for g\n    g = 3'b000;\n    \n    case (current_state)\n      STATE_B: g[0] = 1'b1; // Set g0=1 in state B\n      STATE_C: g[1] = 1'b1; // Set g1=1 in state C\n      default: g = 3'b000;  // Default case for other states\n    endcase\n  end"
+    }
+]

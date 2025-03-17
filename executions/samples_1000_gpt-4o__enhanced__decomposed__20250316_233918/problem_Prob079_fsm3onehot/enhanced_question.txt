@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, is to implement a Moore state machine with the following interface specifications. It involves combinational logic for state transitions and output logic based on one-hot state encoding.
+
+Interface:
+- Input Ports:
+  - `in`: 1-bit input signal.
+  - `state`: 4-bit input vector representing the current state using one-hot encoding.
+
+- Output Ports:
+  - `next_state`: 4-bit output vector representing the next state using one-hot encoding.
+  - `out`: 1-bit output signal.
+
+State Encoding:
+- The state machine uses one-hot state encoding as follows:
+  - State A: 4'b0001
+  - State B: 4'b0010
+  - State C: 4'b0100
+  - State D: 4'b1000
+
+State Transition Table:
+- The state transitions and outputs are defined as follows:
+
+  | Current State | Next State (in=0) | Next State (in=1) | Output |
+  |---------------|-------------------|-------------------|--------|
+  | A             | A                 | B                 | 0      |
+  | B             | C                 | B                 | 0      |
+  | C             | A                 | D                 | 0      |
+  | D             | C                 | B                 | 1      |
+
+- `next_state` and `out` are purely combinational logic derived from the current `state` and input `in`.
+
+Signal Considerations:
+- `next_state` and `out` are updated based on the current `state` and `in` without clock dependencies as this specification covers only combinational logic.
+- Ensure that `next_state` and `out` are determined correctly for all possible one-hot encoded states.
+
+Notes:
+- The initial state is not defined within this specification as it only addresses combinational logic.
+- This specification does not cover sequential logic elements, such as flip-flops or registers, which would require additional clock and reset logic.
+- The handling of invalid or multiple active bits in the one-hot encoded `state` is not specified and should be considered outside this scope.
+</ENHANCED_SPEC>

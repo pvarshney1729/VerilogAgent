@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- `input wire clk`: System clock signal. The module assumes positive edge-triggered operation.
+- `input wire reset`: Active-high synchronous reset signal. When high, the module resets to its initial state at the next positive clock edge.
+- `input wire [7:0] in`: 8-bit input representing a byte stream from the PS/2 protocol.
+- `output reg done`: 1-bit output, indicating the successful reception of a complete 3-byte message. This signal is asserted high for one clock cycle immediately following the reception of the third byte.
+
+Functionality:
+- The module operates as a finite state machine (FSM) to detect the start and end of PS/2 protocol messages within a continuous byte stream.
+- Message Identification: The first byte of each message is characterized by in[3] = 1. The FSM searches for this condition to identify the start of a new message.
+- Byte Counting: Upon detection of in[3] = 1, the FSM assumes this is byte 1 of a new message and begins counting bytes.
+- Completion Signal: Upon receiving the third byte of a message, the FSM sets the `done` signal high for one clock cycle in the subsequent clock cycle.
+
+State Machine Description:
+- Initial State: The FSM starts in an idle state, continuously checking each incoming byte.
+- Transition Condition: The FSM transitions from idle to message-receiving state when in[3] = 1 is detected.
+- Byte Tracking: The FSM tracks the number of bytes received, using internal counters or state variables.
+- Transition Back to Idle: Once all 3 bytes are received, the FSM returns to the idle state, ready to detect the start of the next message.
+
+Reset Behavior:
+- On a synchronous reset (reset = 1), the FSM returns to its initial idle state, and `done` is reset to 0. This occurs on the next positive clock edge when reset is active.
+
+Edge Cases and Boundaries:
+- The FSM assumes that in[3] = 1 correctly identifies the start of a message. Any erroneous bytes before this signal do not affect the FSM's operation.
+- The FSM operates continuously, processing the byte stream without interruption unless reset is asserted.
+
+Note: All registers, counters, and internal signals should be initialized to zero or their respective default states upon reset.
+</ENHANCED_SPEC>

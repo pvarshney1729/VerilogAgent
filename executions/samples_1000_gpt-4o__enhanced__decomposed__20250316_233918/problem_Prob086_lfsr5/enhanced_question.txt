@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule` and has the following interface. All input and output ports are one bit unless otherwise specified.
+
+### Port Definitions
+- **input** `clk`: Clock signal for synchronizing sequential operations.
+- **input** `reset`: Active-high, synchronous reset signal.
+- **output** `q`: A 5-bit output representing the current state of the LFSR. Bit indexing is such that `q[0]` refers to the least significant bit (LSB) and `q[4]` is the most significant bit (MSB).
+
+### Module Functionality
+The module implements a 5-bit maximal-length Galois Linear Feedback Shift Register (LFSR). The LFSR is designed to cycle through `2^5 - 1 = 31` states, avoiding the all-zero state.
+
+#### LFSR Characteristics:
+- **Taps**: The LFSR has taps at bit positions 5 (`q[4]`) and 3 (`q[2]`).
+- **Shift Direction**: The LFSR shifts right.
+- **Tap XOR Operation**: The bit at position `q[2]` is XORed with the LSB (`q[0]`) to determine the next value of `q[4]`.
+- **Non-Tap Shift**: Bit positions without a tap shift right unchanged, except for `q[0]`, which is determined by the XOR operation.
+
+### Clocking and Reset Behavior
+- **Clock Edge**: All sequential logic is triggered on the positive edge of the `clk`.
+- **Reset Behavior**: The `reset` signal is synchronous and active-high. When asserted, the LFSR output `q` is set to a binary value of `00001` (decimal 1).
+- **Initial State**: Upon reset, the LFSR starts from the state representing the binary value `00001`.
+
+### Signal Dependencies
+- The next state of each bit in the LFSR depends on its current state and the result of the XOR operation for the tapped positions.
+- Ensure the precedence of the XOR operation is maintained to avoid race conditions and ensure deterministic behavior.
+
+### Edge Cases and Input Boundaries
+- The all-zero state should never be reached. If encountered, the LFSR should not remain in this state and must be appropriately designed to cycle back to a valid non-zero state on each positive clock edge after reset.
+
+This specification should be adhered to strictly to ensure the correct and intended functionality of the `TopModule`.
+</ENHANCED_SPEC>

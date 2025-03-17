@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input wire clk`: Clock signal, positive-edge triggered.
+  - `input wire reset`: Synchronous active-high reset.
+  - `input wire x`: Control input signal.
+- Outputs:
+  - `output reg z`: Output signal.
+
+Signal Conventions:
+- Bit Indexing: bit[0] refers to the least significant bit (LSB).
+
+Finite State Machine (FSM):
+- State Encoding:
+  - Present state `y[2:0]` is a 3-bit register representing the current state of the FSM.
+  - Next state `y[2:0]` is determined based on the current state and input `x`.
+
+- State Transition Table:
+  - Present State (y[2:0]) | Next State (y[2:0]) when x=0 | Next State (y[2:0]) when x=1 | Output z
+  - `000` | `000` | `001` | `0`
+  - `001` | `001` | `100` | `0`
+  - `010` | `010` | `001` | `0`
+  - `011` | `001` | `010` | `1`
+  - `100` | `011` | `100` | `1`
+
+Reset Behavior:
+- On receiving a synchronous active-high reset, the FSM transitions to state `000`.
+
+Operational Details:
+- The FSM transitions occur on the positive edge of the clock.
+- The output `z` is determined by the current state as defined in the state transition table.
+- Ensure all registers, including the state register `y[2:0]`, are initialized to a known state upon reset.
+
+Edge Cases and Input Boundaries:
+- The module behavior is defined for all possible states of `y[2:0]` and input `x`.
+- Ensure stable operation under all specified input conditions and transitions.
+</ENHANCED_SPEC>

@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock input. All sequential logic is triggered on the positive edge.
+  - `reset`: 1-bit active-high synchronous reset input. When asserted, it resets the FSM and related logic.
+
+- Output Ports:
+  - `shift_ena`: 1-bit output. Used to enable the shift register.
+
+Operational Overview:
+- The module is a part of a Finite State Machine (FSM) responsible for controlling a shift register.
+- The `shift_ena` output should be asserted (set to 1) for exactly 4 consecutive clock cycles when a specific bit pattern is detected within the FSM (details of the pattern detection are assumed to be implemented within the FSM logic and are not specified here).
+
+Reset Behavior:
+- Upon the assertion of `reset`, the FSM and all internal registers are reset to their initial state.
+- After reset is deasserted, `shift_ena` should be asserted for exactly 4 clock cycles and then remain deasserted (0) until the next reset or detection of the specific bit pattern.
+
+Bit and Signal Conventions:
+- All signals are 1-bit wide unless explicitly stated.
+- Bit indexing is not applicable as all ports and signals are single bits.
+
+Sequential Logic:
+- The FSM and any internal registers should be implemented using positive-edge triggered flip-flops.
+- All flip-flops and registers should have an explicitly defined initial value upon reset.
+
+Edge Cases and Additional Notes:
+- Ensure that any pattern detection logic within the FSM does not interfere with the reset sequence behavior.
+- The `shift_ena` output should return to 0 after the initial 4-cycle assertion post-reset, and remain 0 until another valid condition for enabling is met.
+
+</ENHANCED_SPEC>

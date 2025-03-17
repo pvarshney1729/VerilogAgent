@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Ports:
+- `input clk`: Clock signal, used to trigger sequential logic on its rising edge.
+- `input reset`: Active-high synchronous reset signal.
+- `output [4:0] q`: 5-bit output representing the state of the Galois LFSR. Bit 0 (`q[0]`) is the least significant bit.
+
+Design Description:
+- The module implements a 5-bit maximal-length Galois Linear Feedback Shift Register (LFSR).
+- The LFSR utilizes XOR feedback from specific tap positions to generate the next state.
+- The tap positions for this LFSR are at bit positions 4 and 2 (considering 0-based indexing, where bit 0 is the LSB of `q`).
+- The feedback mechanism works as follows: 
+  - XOR the current least significant bit (`q[0]`) with the bits at the tap positions.
+  - Shift the bits of the LFSR (`q`) to the right by one position.
+  - The new value of `q[4]` (the most significant bit) is set to the result of the XOR operation.
+  - Bits without a tap (positions other than 4 and 2) shift unchanged.
+- The LFSR is designed to never enter the all-zero state and will cycle through `2^5 - 1 = 31` unique states before repeating.
+
+Reset Behavior:
+- On the assertion of the synchronous reset signal (`reset` high), the LFSR output (`q`) is reset to the initial state `00001` (decimal 1).
+- The reset logic is active on the rising edge of the `clk`.
+
+Sequential Logic:
+- All updates to the LFSR occur on the rising edge of the `clk`.
+- Ensure all logic is free from race conditions by using non-blocking assignments for sequential updates.
+
+Edge Cases:
+- The only forbidden state is the all-zero state, which should not be reached given correct initial state and logic.
+- The module should handle any input conditions gracefully, maintaining the maximal-length sequence operation.
+</ENHANCED_SPEC>

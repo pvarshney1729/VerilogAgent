@@ -1,0 +1,38 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, and output port shift_ena.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  wire clk,\n    input  wire reset,\n    output reg  shift_ena\n);\n\n    reg [2:0] shift_counter;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            shift_counter <= 3'b100;\n            shift_ena <= 1'b1;\n        end else if (shift_counter != 3'b000) begin\n            shift_counter <= shift_counter - 1'b1;\n            shift_ena <= 1'b1;\n        end else begin\n            shift_ena <= 1'b0;\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare the state register and state encoding using localparam for binary encoding. Define states: IDLE (2'b00), ASSERT (2'b01), and DONE (2'b10).",
+        "source": "Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "// State encoding using localparam for binary encoding\n  localparam IDLE   = 2'b00;\n  localparam ASSERT = 2'b01;\n  localparam DONE   = 2'b10;\n\n  // State register declaration\n  reg [1:0] state;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic. On reset, transition to ASSERT state.",
+        "source": "Reset should be active high synchronous.",
+        "implementation": "// State encoding\n  localparam ASSERT = 1'b0;\n  localparam IDLE   = 1'b1;\n\n  // State register\n  reg state;\n\n  // Synchronous reset logic\n  always @(posedge clk) begin\n    if (reset) begin\n      state <= ASSERT;\n    end else begin\n      // State transition logic here\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic. Transition from IDLE to ASSERT when the proper bit pattern is detected. Stay in ASSERT for 4 cycles, then transition to DONE.",
+        "source": "we want the ability to enable the shift register for exactly 4 clock cycles whenever the proper bit pattern is detected.",
+        "implementation": "```verilog\n[BEGIN]\nreg [1:0] state, next_state;\nreg [2:0] cycle_count;\nlocalparam IDLE = 2'b00, ASSERT = 2'b01, DONE = 2'b10;\n\n// Next state logic\nalways @(*) begin\n    case (state)\n        IDLE: begin\n            if (/* condition for proper bit pattern */) \n                next_state = ASSERT;\n            else \n                next_state = IDLE;\n        end\n        ASSERT: begin\n            if (cycle_count == 3'b100)\n                next_state = DONE;\n            else\n                next_state = ASSERT;\n        end\n        DONE: begin\n            next_state = DONE;\n        end\n        default: next_state = IDLE;\n    endcase\nend\n[END]\n```"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic. Assert shift_ena when in ASSERT state, otherwise deassert it.",
+        "source": "assert shift_ena for 4 cycles, then 0 forever (until reset).",
+        "implementation": "reg [2:0] cycle_count;\nreg shift_ena_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        cycle_count <= 3'b000;\n        shift_ena_reg <= 1'b1;\n    end else if (shift_ena_reg) begin\n        if (cycle_count < 3'b011) begin\n            cycle_count <= cycle_count + 1'b1;\n        end else begin\n            shift_ena_reg <= 1'b0;\n        end\n    end\nend\n\nassign shift_ena = shift_ena_reg;"
+    },
+    {
+        "id": "6",
+        "content": "Implement a counter to count 4 clock cycles while in ASSERT state to ensure shift_ena is asserted for exactly 4 cycles.",
+        "source": "assert shift_ena for 4 cycles, then 0 forever (until reset).",
+        "implementation": "reg [2:0] count;\nreg shift_ena_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        count <= 3'b000;\n        shift_ena_reg <= 1'b1;\n    end else if (shift_ena_reg) begin\n        if (count == 3'b011) begin\n            shift_ena_reg <= 1'b0;\n        end else begin\n            count <= count + 1;\n        end\n    end\nend\n\nassign shift_ena = shift_ena_reg;"
+    }
+]

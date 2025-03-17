@@ -1,0 +1,129 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as a Moore state machine, we will follow these steps:
+
+1. **Define the State Encoding**: We will use a single-bit encoding for the two states, `STATE_A` and `STATE_B`. This is efficient since we only have two states.
+
+2. **Declare Ports and Signals**: We will declare the input and output ports as `logic` types, as per the coding conventions. We will also declare the state registers and next state logic.
+
+3. **Implement the State Register**: We will use an `always_ff` block to implement the state register with a synchronous reset. The reset will set the state to `STATE_B`.
+
+4. **Implement the Next State Logic**: Using an `always_comb` block, we will define the next state transitions based on the current state and input `in`.
+
+5. **Implement the Output Logic**: The output `out` is determined solely by the current state, adhering to the Moore machine principle.
+
+6. **Adhere to Coding Conventions**: We will ensure that all numeric constants are properly sized, and we will use `always @(*)` for combinational logic.
+
+By following these steps, we ensure that the module adheres to the given specification and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        STATE_A = 1'b0,
+        STATE_B = 1'b1
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always_comb begin
+        case (current_state)
+            STATE_B: begin
+                out = 1'b1;
+                if (in == 1'b0) begin
+                    next_state = STATE_A;
+                end else begin
+                    next_state = STATE_B;
+                end
+            end
+            STATE_A: begin
+                out = 1'b0;
+                if (in == 1'b0) begin
+                    next_state = STATE_B;
+                end else begin
+                    next_state = STATE_A;
+                end
+            end
+            default: begin
+                next_state = STATE_B;
+                out = 1'b1;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        STATE_A = 1'b0,
+        STATE_B = 1'b1
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always_comb begin
+        case (current_state)
+            STATE_B: begin
+                out = 1'b1;
+                if (in == 1'b0) begin
+                    next_state = STATE_A;
+                end else begin
+                    next_state = STATE_B;
+                end
+            end
+            STATE_A: begin
+                out = 1'b0;
+                if (in == 1'b0) begin
+                    next_state = STATE_B;
+                end else begin
+                    next_state = STATE_A;
+                end
+            end
+            default: begin
+                next_state = STATE_B;
+                out = 1'b1;
+            end
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,113 @@
+Generated Response:
+
+<REASONING>
+To implement the Moore state machine as specified, we will follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. All ports will be declared as `logic` to adhere to the coding conventions.
+
+2. **State Encoding**: Use `localparam` to define the states A, B, C, and D with 2-bit binary values.
+
+3. **State Register**: Implement the state register with an asynchronous reset. The reset will set the state to A when `areset` is high. This will be done using an `always` block triggered on the positive edge of `clk` or `areset`.
+
+4. **Next State Logic**: Use an `always @(*)` block to define the combinational logic for determining the next state based on the current state and input `in`.
+
+5. **Output Logic**: Implement the output logic based on the current state. Since this is a Moore machine, the output depends only on the current state.
+
+6. **Adherence to Guidelines**: Ensure all numeric constants are properly sized, and use `always @(*)` for combinational logic without explicitly specifying the sensitivity list.
+
+By following these steps, we ensure the implementation meets the specifications and adheres to the provided guidelines and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    localparam logic [1:0] A = 2'b00,
+                           B = 2'b01,
+                           C = 2'b10,
+                           D = 2'b11;
+
+    logic [1:0] state, next_state;
+
+    // State register with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            state <= A;
+        else
+            state <= next_state;
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (state)
+            A: next_state = (in == 1'b0) ? A : B;
+            B: next_state = (in == 1'b0) ? C : B;
+            C: next_state = (in == 1'b0) ? A : D;
+            D: next_state = (in == 1'b0) ? C : B;
+            default: next_state = A; // Default state
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (state)
+            D: out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    localparam logic [1:0] A = 2'b00,
+                           B = 2'b01,
+                           C = 2'b10,
+                           D = 2'b11;
+
+    logic [1:0] state, next_state;
+
+    // State register with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            state <= A;
+        else
+            state <= next_state;
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (state)
+            A: next_state = (in == 1'b0) ? A : B;
+            B: next_state = (in == 1'b0) ? C : B;
+            C: next_state = (in == 1'b0) ? A : D;
+            D: next_state = (in == 1'b0) ? C : B;
+            default: next_state = A; // Default state
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (state)
+            D: out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule

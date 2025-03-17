@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Ports:
+- input wire clk: Clock signal for synchronous operations.
+- input wire areset: Active-high asynchronous reset signal. When high, the state machine immediately transitions to the OFF state.
+- input wire j: Input signal used to determine state transitions from the OFF state.
+- input wire k: Input signal used to determine state transitions from the ON state.
+- output reg out: Output signal indicating the current state output. It reflects the state, being '0' in the OFF state and '1' in the ON state.
+
+State Machine Description:
+- The state machine is a Moore type with two states: OFF and ON.
+- State Encoding:
+  - OFF: State where `out` is '0'.
+  - ON: State where `out` is '1'.
+
+State Transitions:
+- From OFF (out=0):
+  - Remains in OFF if j=0.
+  - Transitions to ON if j=1.
+- From ON (out=1):
+  - Remains in ON if k=0.
+  - Transitions to OFF if k=1.
+
+Reset Behavior:
+- areset is an active-high asynchronous reset. 
+- When areset is high, the state machine immediately transitions to the OFF state regardless of clk, j, or k.
+- Upon reset, the output `out` is set to '0'.
+
+Implementation Notes:
+- The module is designed as a sequential circuit using a clock signal for state transitions.
+- The state transitions are evaluated on the rising edge of the clock.
+- Ensure that the output `out` reflects the current state immediately after the state transition.
+- The reset signal, being asynchronous, takes precedence over other inputs and state transitions.
+
+Initial Conditions:
+- Upon power-up or reset, the state machine starts in the OFF state with `out` initialized to '0'.
+
+Additional Constraints:
+- All state transitions and output updates should be completed within a single clock cycle following the conditions specified.
+- The bit index is not applicable as all ports are single-bit signals.
+</ENHANCED_SPEC>

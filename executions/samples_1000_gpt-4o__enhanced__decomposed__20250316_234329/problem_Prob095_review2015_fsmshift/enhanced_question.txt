@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input logic clk`: Clock signal. The module operates on the positive edge of this signal.
+  - `input logic reset`: Active high synchronous reset signal. Resets the FSM and its outputs.
+  
+- Output Ports:
+  - `output logic shift_ena`: Control signal to enable the shift register. Initially asserted for 4 clock cycles after reset.
+
+Behavior and Operation:
+- The module is part of a finite state machine (FSM) designed to control a shift register.
+- Upon detecting a specific bit pattern (details of pattern detection are assumed to be handled externally or are not specified here), the FSM should enable the shift register for exactly 4 consecutive clock cycles.
+- Upon activation of the synchronous reset (reset asserted), the FSM should immediately assert `shift_ena` for 4 clock cycles, regardless of the input pattern detection state.
+- After the initial 4 clock cycles of asserting `shift_ena` post-reset, the output should remain deasserted (0) indefinitely until the next reset event.
+
+Reset Behavior:
+- Reset is active high and synchronous with the clock signal. 
+- Upon the assertion of reset, all internal states should default to a known initial state, ensuring that `shift_ena` is asserted for 4 clock cycles.
+
+Operational Details:
+- The module is driven entirely by the positive edge of the `clk` signal.
+- Ensure that all state transitions and outputs are correctly aligned with clock edges to avoid race conditions.
+- There are no specific details given for the detection of the bit pattern; thus, this specification assumes it is managed outside this module or that it is not required for this implementation.
+
+Edge Cases:
+- If reset is asserted during the 4-cycle enabling period due to a bit pattern detection, the module should prioritize the reset behavior, restarting the 4-cycle sequence.
+- Behavior outside the specified operations is undefined and should not affect the primary functionality of outputting `shift_ena` for 4 cycles post-reset.
+</ENHANCED_SPEC>

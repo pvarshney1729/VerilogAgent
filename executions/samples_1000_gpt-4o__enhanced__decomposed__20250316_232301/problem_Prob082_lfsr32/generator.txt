@@ -1,0 +1,73 @@
+Generated Response:
+
+<REASONING>
+To implement the 32-bit Galois LFSR with the specified taps and synchronous reset, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. The input ports are `clk` and `reset`, and the output port is a 32-bit vector `q`.
+
+2. **Register Declaration**: Use a 32-bit register `q` to hold the state of the LFSR. This register will be updated on each positive edge of the clock.
+
+3. **Synchronous Reset**: Implement the synchronous reset logic. When `reset` is high, the register `q` should be set to `32'h1`. This ensures that the LFSR starts from a known state.
+
+4. **LFSR Logic**: Implement the LFSR logic using the specified taps at bit positions 32, 22, 2, and 1. The LFSR shifts right, and the new value of the LSB is determined by XORing the current LSB with the tapped bits.
+
+5. **Sequential Logic**: Use an `always` block triggered on the positive edge of `clk` to implement the sequential logic. The reset logic is included within this block to ensure it is synchronous.
+
+6. **Coding Conventions**: Follow the provided coding conventions, such as using `logic` for signal declarations and not explicitly specifying the sensitivity list for combinational logic.
+
+By following these steps, we can ensure that the module meets the specified requirements and behaves correctly.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    // Internal register to hold the LFSR state
+    logic [31:0] lfsr_reg;
+
+    // Sequential logic for LFSR with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            lfsr_reg <= 32'h1; // Reset state
+        end else begin
+            // LFSR shift and feedback logic
+            lfsr_reg <= {lfsr_reg[30:0], lfsr_reg[31] ^ lfsr_reg[21] ^ lfsr_reg[1] ^ lfsr_reg[0]};
+        end
+    end
+
+    // Assign the internal register to the output
+    assign q = lfsr_reg;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    // Internal register to hold the LFSR state
+    logic [31:0] lfsr_reg;
+
+    // Sequential logic for LFSR with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            lfsr_reg <= 32'h1; // Reset state
+        end else begin
+            // LFSR shift and feedback logic
+            lfsr_reg <= {lfsr_reg[30:0], lfsr_reg[31] ^ lfsr_reg[21] ^ lfsr_reg[1] ^ lfsr_reg[0]};
+        end
+    end
+
+    // Assign the internal register to the output
+    assign q = lfsr_reg;
+
+endmodule

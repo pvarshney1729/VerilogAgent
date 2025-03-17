@@ -1,0 +1,107 @@
+Generated Response:
+
+<REASONING>
+To implement the requested Moore machine, we need to define a state machine with two states, A and B. The state transitions are determined by the input 'in', and the output 'out' is determined solely by the current state. The module should also support an asynchronous reset that forces the machine into state B.
+
+1. **State Encoding**: We will use a 1-bit logic type to represent the states, where STATE_A is encoded as 1'b0 and STATE_B as 1'b1.
+
+2. **State Register**: We'll use an always block sensitive to the positive edge of the clock and the asynchronous reset. If the reset is high, the state will be set to STATE_B; otherwise, it will transition to the next state based on the current state and input.
+
+3. **Next State Logic**: We'll use a combinational always block to determine the next state based on the current state and input 'in'. This block will not have an explicit sensitivity list, as per the guidelines.
+
+4. **Output Logic**: The output 'out' is determined by the current state. It will be 1'b1 when in STATE_B and 1'b0 when in STATE_A.
+
+5. **Coding Conventions**: We'll declare all signals as logic and adhere to the specified coding conventions, ensuring that all numeric constants are properly sized.
+
+By following these steps, we can implement the module that meets the specifications.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    typedef enum logic {STATE_A = 1'b0, STATE_B = 1'b1} state_t;
+    state_t current_state, next_state;
+
+    // State register with asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset)
+            current_state <= STATE_B;
+        else
+            current_state <= next_state;
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            STATE_A: begin
+                if (in)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_B: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_B; // Default to STATE_B for safety
+        endcase
+    end
+
+    // Output logic
+    assign out = (current_state == STATE_B) ? 1'b1 : 1'b0;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    typedef enum logic {STATE_A = 1'b0, STATE_B = 1'b1} state_t;
+    state_t current_state, next_state;
+
+    // State register with asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset)
+            current_state <= STATE_B;
+        else
+            current_state <= next_state;
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            STATE_A: begin
+                if (in)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_B: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_B; // Default to STATE_B for safety
+        endcase
+    end
+
+    // Output logic
+    assign out = (current_state == STATE_B) ? 1'b1 : 1'b0;
+
+endmodule

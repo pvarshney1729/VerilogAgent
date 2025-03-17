@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, s, w, and output port z.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  clk,\n    input  reset,\n    input  s,\n    input  w,\n    output reg z\n);\n\n    // State encoding\n    typedef enum reg [1:0] {\n        STATE_A = 2'b00,\n        STATE_B = 2'b01,\n        STATE_C = 2'b10,\n        STATE_D = 2'b11\n    } state_t;\n\n    state_t current_state, next_state;\n    reg [1:0] w_count;\n\n    // State transition logic\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= STATE_A;\n            w_count <= 2'b00;\n            z <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            if (current_state == STATE_B) begin\n                if (w_count == 2'b10) begin\n                    z <= 1'b1;\n                end else begin\n                    z <= 1'b0;\n                end\n            end else begin\n                z <= 1'b0;\n            end\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            STATE_A: begin\n                if (s) begin\n                    next_state = STATE_B;\n                end else begin\n                    next_state = STATE_A;\n                end\n            end\n            STATE_B: begin\n                if (w_count == 2'b10) begin\n                    next_state = STATE_A;\n                end else begin\n                    next_state = STATE_B;\n                end\n            end\n            default: begin\n                next_state = STATE_A;\n            end\n        endcase\n    end\n\n    // Count logic for w\n    always @(posedge clk) begin\n        if (reset || current_state == STATE_A) begin\n            w_count <= 2'b00;\n        end else if (current_state == STATE_B) begin\n            if (w) begin\n                w_count <= w_count + 1;\n            end\n        end\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare the state register and state encoding using binary encoding (A=2'b00, B=2'b01).",
+        "source": "Assume that the FSM begins in a reset state called A, as depicted below. The FSM remains in state A as long as s = 0, and it moves to state B when s = 1.",
+        "implementation": "// State encoding using binary encoding\n  localparam A = 2'b00;\n  localparam B = 2'b01;\n\n  // State register declaration\n  reg [1:0] state, next_state;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic. Use always @(posedge clk) for the state transition logic.",
+        "source": "Assume reset is active high synchronous. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "```verilog\n[BEGIN]\n  reg [1:0] state, next_state;\n\n  // State encoding\n  localparam A = 2'b00, B = 2'b01, C = 2'b10, D = 2'b11;\n\n  // State register with synchronous reset\n  always @(posedge clk) begin\n    if (reset) begin\n      state <= A;\n    end else begin\n      state <= next_state;\n    end\n  end\n[END]\n```"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic to handle transitions from state A to B based on input s, and manage state B transitions based on input w.",
+        "source": "The FSM remains in state A as long as s = 0, and it moves to state B when s = 1. Once in state B the FSM examines the value of the input w in the next three clock cycles.",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  localparam STATE_A = 1'b0;\n  localparam STATE_B = 1'b1;\n\n  // State registers\n  reg current_state, next_state;\n  reg [1:0] w_count; // Counter for 'w' being 1\n\n  // Next state logic\n  always @(*) begin\n    case (current_state)\n      STATE_A: begin\n        if (s == 1'b1)\n          next_state = STATE_B;\n        else\n          next_state = STATE_A;\n      end\n      STATE_B: begin\n        // Remain in STATE_B, as the task is to handle transitions based on 'w'\n        next_state = STATE_B;\n      end\n      default: next_state = STATE_A;\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic to set output z to 1 if w = 1 in exactly two of the three clock cycles while in state B, otherwise set z to 0.",
+        "source": "If w = 1 in exactly two of these clock cycles, then the FSM has to set an output z to 1 in the following clock cycle. Otherwise z has to be 0.",
+        "implementation": "reg [1:0] w_count;\nreg z_reg;\n\nalways @(*) begin\n    if (w_count == 2) \n        z_reg = 1;\n    else \n        z_reg = 0;\nend\n\nassign z = z_reg;"
+    }
+]

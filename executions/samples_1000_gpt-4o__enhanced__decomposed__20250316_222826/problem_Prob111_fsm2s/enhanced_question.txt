@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Ports:
+- input clk: Clock signal for synchronous operations.
+- input reset: Active-high synchronous reset signal. Initiates transition to the OFF state.
+- input j: Input signal for state transition when in the OFF state.
+- input k: Input signal for state transition when in the ON state.
+- output reg out: Output signal reflecting the current state. Defaults to 0 in the OFF state and 1 in the ON state.
+
+State Machine Description:
+- The module implements a Moore state machine with two states: OFF and ON.
+- State transitions occur on the rising edge of the clock signal when the reset is not active.
+- The reset is active-high and synchronous, meaning it takes effect on the next rising edge of the clock.
+
+State Definitions:
+1. OFF State:
+   - out = 0
+   - Transition to the ON state if j = 1 on the next rising edge of clk.
+   - Remain in the OFF state if j = 0 on the next rising edge of clk.
+
+2. ON State:
+   - out = 1
+   - Transition to the OFF state if k = 1 on the next rising edge of clk.
+   - Remain in the ON state if k = 0 on the next rising edge of clk.
+
+Reset Behavior:
+- When reset = 1, the state machine transitions to the OFF state and outputs 0 on the next rising edge of the clock.
+
+Initial Conditions:
+- On power-up, the output reg out and state will default to the OFF state.
+
+Bit Indexing:
+- All ports are single-bit signals.
+
+Edge Cases:
+- Ensure j and k signals are stable around the rising edge of the clock to avoid metastability issues.
+- The reset signal must be stable for at least one clock cycle to ensure a valid state transition.
+
+Note: The state machine assumes a stable clock signal and stable input conditions as specified above to function correctly.
+</ENHANCED_SPEC>

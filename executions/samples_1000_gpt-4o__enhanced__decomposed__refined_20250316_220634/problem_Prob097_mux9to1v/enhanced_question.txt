@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `a`: 16-bit input vector, unsigned
+  - `b`: 16-bit input vector, unsigned
+  - `c`: 16-bit input vector, unsigned
+  - `d`: 16-bit input vector, unsigned
+  - `e`: 16-bit input vector, unsigned
+  - `f`: 16-bit input vector, unsigned
+  - `g`: 16-bit input vector, unsigned
+  - `h`: 16-bit input vector, unsigned
+  - `i`: 16-bit input vector, unsigned
+  - `sel`: 4-bit input vector, unsigned
+
+- Outputs:
+  - `out`: 16-bit output vector, unsigned
+
+Functional Specification:
+- The module implements a 16-bit wide, 9-to-1 multiplexer.
+- Selection Logic:
+  - `sel = 4'b0000` selects input `a` and assigns it to `out`.
+  - `sel = 4'b0001` selects input `b` and assigns it to `out`.
+  - `sel = 4'b0010` selects input `c` and assigns it to `out`.
+  - `sel = 4'b0011` selects input `d` and assigns it to `out`.
+  - `sel = 4'b0100` selects input `e` and assigns it to `out`.
+  - `sel = 4'b0101` selects input `f` and assigns it to `out`.
+  - `sel = 4'b0110` selects input `g` and assigns it to `out`.
+  - `sel = 4'b0111` selects input `h` and assigns it to `out`.
+  - `sel = 4'b1000` selects input `i` and assigns it to `out`.
+  - For unused cases where `sel` ranges from `4'b1001` to `4'b1111`, the output `out` should be set to `16'b1111_1111_1111_1111` (all bits set to '1').
+
+- Bit Indexing:
+  - Bit [0] is the least significant bit (LSB), and bit [15] is the most significant bit (MSB) for all 16-bit inputs and the output.
+
+Edge Cases:
+- Ensure correct behavior for all possible values of `sel` ranging from 0 to 15.
+- The module is purely combinational and does not involve any clock or reset signals.
+
+Precedence and Dependencies:
+- The output `out` directly depends on the value of the `sel` input, with a clear mapping from `sel` value to input selection or default high state for unused cases.
+</ENHANCED_SPEC>

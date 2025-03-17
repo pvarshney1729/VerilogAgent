@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module interface for TopModule with input ports clk, reset, in, and output ports disc, flag, err.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  wire clk,\n    input  wire reset,\n    input  wire in,\n    output reg  disc,\n    output reg  flag,\n    output reg  err\n);\n    // Internal state and logic will be implemented here\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define state encoding using localparam for the FSM states to recognize the sequences 0111110, 01111110, and 01111111.",
+        "source": "Create a Moore-type finite state machine to recognize these three sequences: (1) 0111110: Signal a bit needs to be discarded (disc). (2) 01111110: Flag the beginning/end of a frame (flag). (3) 01111111...: Error (7 or more 1s) (err).",
+        "implementation": "localparam IDLE       = 3'b000;\nlocalparam ONE        = 3'b001;\nlocalparam TWO_ONES   = 3'b010;\nlocalparam THREE_ONES = 3'b011;\nlocalparam FOUR_ONES  = 3'b100;\nlocalparam FIVE_ONES  = 3'b101;\nlocalparam SIX_ONES   = 3'b110;\nlocalparam SEVEN_ONES = 3'b111;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic to hold the current state of the FSM.",
+        "source": "The reset signal is active high synchronous. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "reg [2:0] current_state, next_state;\n\n  // State register with synchronous reset\n  always @(posedge clk) begin\n    if (reset) begin\n      current_state <= 3'b000; // Initial state on reset\n    end else begin\n      current_state <= next_state;\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Develop the next state combinational logic to determine the next state based on the current state and input bit 'in'.",
+        "source": "Create a Moore-type finite state machine to recognize these three sequences: (1) 0111110: Signal a bit needs to be discarded (disc). (2) 01111110: Flag the beginning/end of a frame (flag). (3) 01111111...: Error (7 or more 1s) (err).",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  typedef enum logic [2:0] {\n    S_IDLE      = 3'b000,\n    S_0         = 3'b001,\n    S_01        = 3'b010,\n    S_011       = 3'b011,\n    S_0111      = 3'b100,\n    S_01111     = 3'b101,\n    S_011111    = 3'b110,\n    S_0111111   = 3'b111\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // Next state logic\n  always_comb begin\n    case (current_state)\n      S_IDLE: begin\n        if (in == 1'b0)\n          next_state = S_0;\n        else\n          next_state = S_IDLE;\n      end\n      S_0: begin\n        if (in == 1'b1)\n          next_state = S_01;\n        else\n          next_state = S_0;\n      end\n      S_01: begin\n        if (in == 1'b1)\n          next_state = S_011;\n        else\n          next_state = S_0;\n      end\n      S_011: begin\n        if (in == 1'b1)\n          next_state = S_0111;\n        else\n          next_state = S_0;\n      end\n      S_0111: begin\n        if (in == 1'b1)\n          next_state = S_01111;\n        else\n          next_state = S_0;\n      end\n      S_01111: begin\n        if (in == 1'b1)\n          next_state = S_011111;\n        else\n          next_state = S_0;\n      end\n      S_011111: begin\n        if (in == 1'b0)\n          next_state = S_IDLE; // Transition to idle for disc\n        else\n          next_state = S_0111111;\n      end\n      S_0111111: begin\n        if (in == 1'b0)\n          next_state = S_IDLE; // Transition to idle for flag\n        else\n          next_state = S_0111111; // Stay in error state\n      end\n      default: next_state = S_IDLE;\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic to assert disc, flag, and err based on the current state of the FSM.",
+        "source": "The output signals should be asserted for a complete cycle beginning on the clock cycle after the condition occurs.",
+        "implementation": "always @(*) begin\n    // Default assignments\n    disc = 1'b0;\n    flag = 1'b0;\n    err  = 1'b0;\n    \n    case (current_state)\n        STATE_0111110: begin\n            disc = 1'b1; // Assert disc for 0111110\n        end\n        STATE_01111110: begin\n            flag = 1'b1; // Assert flag for 01111110\n        end\n        STATE_01111111_or_more: begin\n            err = 1'b1; // Assert err for 01111111...\n        end\n        default: begin\n            // No output asserted\n        end\n    endcase\nend"
+    }
+]

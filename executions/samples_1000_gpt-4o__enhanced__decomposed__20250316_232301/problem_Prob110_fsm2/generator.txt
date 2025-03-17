@@ -1,0 +1,127 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as specified, we need to create a Moore state machine with two states: OFF and ON. The state machine transitions between these states based on the inputs `j` and `k`. The reset is asynchronous and active-high, meaning that when `areset` is high, the state machine should immediately transition to the OFF state, regardless of the clock or other inputs.
+
+The implementation involves:
+1. Defining the states using a localparam for clarity and readability.
+2. Implementing the state transition logic using a combinational always block.
+3. Implementing the state register with an asynchronous reset using a sequential always block.
+4. Defining the output logic based on the current state, which is typical for a Moore machine.
+
+The guidelines and coding conventions provided will be adhered to, ensuring correct syntax and behavior. The ports and signals will be declared as `logic`, and the sensitivity list for combinational logic will be inferred using `always @(*)`.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        OFF = 1'b0,
+        ON  = 1'b1
+    } state_t;
+
+    state_t state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (state)
+            OFF: begin
+                if (j)
+                    next_state = ON;
+                else
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k)
+                    next_state = OFF;
+                else
+                    next_state = ON;
+            end
+            default: next_state = OFF;
+        endcase
+    end
+
+    // State register with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            state <= OFF;
+        else
+            state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        case (state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        OFF = 1'b0,
+        ON  = 1'b1
+    } state_t;
+
+    state_t state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (state)
+            OFF: begin
+                if (j)
+                    next_state = ON;
+                else
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k)
+                    next_state = OFF;
+                else
+                    next_state = ON;
+            end
+            default: next_state = OFF;
+        endcase
+    end
+
+    // State register with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            state <= OFF;
+        else
+            state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        case (state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule

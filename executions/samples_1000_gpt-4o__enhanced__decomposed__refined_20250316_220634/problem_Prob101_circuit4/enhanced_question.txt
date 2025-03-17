@@ -1,0 +1,61 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Input Ports:
+  - input wire a: 1-bit input signal.
+  - input wire b: 1-bit input signal.
+  - input wire c: 1-bit input signal.
+  - input wire d: 1-bit input signal.
+
+- Output Ports:
+  - output wire q: 1-bit output signal representing the result of the combinational logic.
+
+General Description:
+- The module implements a combinational logic circuit with the inputs a, b, c, and d, producing an output q.
+- This is a purely combinational module, meaning that there are no clock signals, flip-flops, or state elements involved.
+
+Combinational Logic Specification:
+- The output q is determined by the following observed truth table:
+
+```
+  a  b  c  d  |  q
+  ------------|----
+  0  0  0  0  |  0
+  0  0  0  1  |  0
+  0  0  1  0  |  1
+  0  0  1  1  |  1
+  0  1  0  0  |  1
+  0  1  0  1  |  1
+  0  1  1  0  |  1
+  0  1  1  1  |  1
+  1  0  0  0  |  0
+  1  0  0  1  |  0
+  1  0  1  0  |  1
+  1  0  1  1  |  1
+  1  1  0  0  |  1
+  1  1  0  1  |  1
+  1  1  1  0  |  1
+  1  1  1  1  |  1
+```
+
+- The output q is '1' for the following conditions:
+  - When c = 1.
+  - When b = 1.
+  - When a = 0, b = 0, c = 0, and d = 1.
+
+- The output q is '0' for the following conditions:
+  - When a = 1, b = 0, c = 0, and d = 0 or d = 1.
+
+- The logic function can be simplified as:
+  `q = (c) OR (b) OR (a AND NOT(b) AND NOT(c) AND d)`
+
+Index and Signal Conventions:
+- All signals are 1-bit wide.
+- All input and output signals are unsigned.
+- Bit indices are not applicable as all signals are single-bit.
+
+Edge Cases and Boundary Conditions:
+- The table presents all possible combinations of the 4 input bits, ensuring complete specification coverage.
+- Since the module is combinational, there are no timing or sequential dependencies to consider.
+</ENHANCED_SPEC>

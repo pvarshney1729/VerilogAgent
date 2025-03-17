@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk` (1-bit): Clock signal, positive edge-triggered.
+  - `input reset` (1-bit): Active-high synchronous reset signal.
+
+- Output Ports:
+  - `output shift_ena` (1-bit): Control signal to enable the shift register.
+
+Module Description:
+- This module functions as part of a Finite State Machine (FSM) responsible for controlling a shift register.
+- The primary function is to enable the shift register for exactly 4 consecutive clock cycles upon detecting a specific bit pattern.
+
+Reset Behavior:
+- Upon detection of a reset (`reset = 1`), the `shift_ena` output must be asserted (set to 1) for 4 consecutive clock cycles.
+- After these 4 cycles, `shift_ena` will be deasserted (set to 0) indefinitely until the next reset condition occurs.
+
+Clock and Reset Specifications:
+- All sequential logic within the module is triggered on the positive edge of the `clk` signal.
+- The reset is synchronous, meaning it affects the state of the FSM on the rising edge of `clk` if `reset` is high.
+- Upon reset, all state-holding elements should be initialized to their respective starting states to ensure consistent operation.
+
+Output Behavior:
+- The `shift_ena` signal should have a defined logic level at every clock edge, ensuring no undefined or metastable states are present.
+
+Operational Details:
+- Ensure that the FSM logic is robust to handle correct operation upon reaching the edge cases, such as immediate repeated resets.
+- Proper precedence of operations and state transitions should be defined to avoid race conditions within the FSM.
+
+Indexing and Bit Conventions:
+- All signals are assumed to be 1-bit wide unless specified otherwise.
+- Ensure all bit operations and signal assignments are clearly defined following the LSB/MSB conventions.
+
+Edge Cases:
+- The system should handle consecutive resets correctly, ensuring `shift_ena` is asserted for 4 cycles each time.
+- Ensure graceful handling and operation when the bit pattern for enabling the shift register is detected concurrently with a reset.
+
+By adhering to these specifications, the module will ensure predictable and reliable operation within the larger system.
+</ENHANCED_SPEC>

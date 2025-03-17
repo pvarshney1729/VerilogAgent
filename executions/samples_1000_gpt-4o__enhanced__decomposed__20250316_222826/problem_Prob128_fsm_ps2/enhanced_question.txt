@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit clock signal. All sequential logic is triggered on the positive edge of this clock.
+  - reset: 1-bit active-high synchronous reset signal. When asserted, all internal state registers are reset to their initial values.
+  - in: 8-bit input data bus, where bit[0] is the least significant bit and bit[7] is the most significant bit.
+
+- Output Ports:
+  - done: 1-bit signal indicating the successful receipt of a complete 3-byte message. This signal is asserted high for one clock cycle immediately after the third byte of a message is received.
+
+Functional Specification:
+- The module implements a finite state machine (FSM) to detect message boundaries in a continuous byte stream according to the PS/2 mouse protocol.
+- The FSM operates as follows:
+  1. The FSM starts in an idle state and discards incoming bytes until a byte is received with in[3] = 1, indicating the start of a new message.
+  2. Upon detection of in[3] = 1, the FSM transitions to a state that expects the subsequent two bytes of the message.
+  3. Upon receiving the third byte of the message, the FSM asserts the done signal high for one clock cycle in the next state.
+  4. The FSM then returns to the idle state to await the start of the next message.
+
+Behavior under Reset:
+- Upon assertion of the reset signal, the FSM returns to the idle state.
+- All internal state registers and counters are reset to their initial values, ensuring the module is ready to detect a new message sequence.
+
+Edge Cases and Input Boundaries:
+- If the byte with in[3] = 1 is followed by fewer than two additional bytes before another byte with in[3] = 1 is detected, the FSM restarts the message detection process from the first byte of the new sequence.
+- The FSM is designed to handle continuous streams of bytes without losing message synchronization, provided that the reset signal is not asserted.
+
+Signal Precedence and Dependencies:
+- The done signal is solely dependent on the successful detection of a complete 3-byte message sequence and is asserted only after the third byte.
+- The FSM's state transitions are based on the value of in[3] and the internal state of the FSM, which is updated on the positive edge of the clock.
+
+Initial Values:
+- All state registers within the FSM are to be initialized to ensure the FSM starts in the idle state immediately after reset.
+</ENHANCED_SPEC>

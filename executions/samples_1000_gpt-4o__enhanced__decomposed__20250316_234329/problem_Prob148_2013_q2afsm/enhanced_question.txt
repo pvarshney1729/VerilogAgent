@@ -1,0 +1,45 @@
+```verilog
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input  logic clk;       // Clock signal, positive edge triggered
+- input  logic resetn;    // Active-low synchronous reset
+- input  logic [2:0] r;   // Request signals from 3 devices, r[0] is the highest priority
+- output logic [2:0] g;   // Grant signals for 3 devices, corresponding to r
+
+FSM Description:
+- The FSM transitions between states A, B, C, and D.
+- State A (Initial/Reset State):
+  - Remains in state A if all request signals are low (r[0] = 0, r[1] = 0, r[2] = 0).
+  - Transitions to state B if r[0] = 1 (highest priority request).
+  - Transitions to state C if r[0] = 0 and r[1] = 1.
+  - Transitions to state D if r[0] = 0, r[1] = 0, and r[2] = 1.
+
+- State B:
+  - Outputs: g[0] = 1, g[1] = 0, g[2] = 0 (grants device 0).
+  - Remains in state B if r[0] = 1.
+  - Transitions back to state A if r[0] = 0.
+
+- State C:
+  - Outputs: g[0] = 0, g[1] = 1, g[2] = 0 (grants device 1).
+  - Remains in state C if r[1] = 1.
+  - Transitions back to state A if r[1] = 0.
+
+- State D:
+  - Outputs: g[0] = 0, g[1] = 0, g[2] = 1 (grants device 2).
+  - Remains in state D if r[2] = 1.
+  - Transitions back to state A if r[2] = 0.
+
+Reset Behavior:
+- The reset is synchronous and active-low. If resetn is asserted (0), the FSM transitions to state A at the next positive clock edge.
+
+State Encoding:
+- Implement state encoding using binary codes or one-hot encoding as preferred. Ensure state codes are clearly defined in the implementation.
+
+Additional Notes:
+- All sequential logic elements (e.g., flip-flops) within the FSM should initialize to state A upon reset.
+- Ensure the state transition logic is free of race conditions by correctly prioritizing requests.
+- Outputs g[i] should be driven by the current state and not depend directly on inputs r[i].
+</ENHANCED_SPEC>
+```

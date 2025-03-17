@@ -1,0 +1,143 @@
+Generated Response:
+
+<REASONING>
+To implement the 32-bit Galois LFSR with the specified taps, we need to follow these steps:
+
+1. **Module Interface**: Define the module with the specified input and output ports. The `clk` and `reset` are inputs, and `q` is a 32-bit output.
+
+2. **Internal State**: Use a 32-bit register to hold the current state of the LFSR. This will be updated on each clock cycle.
+
+3. **Synchronous Reset**: Implement a synchronous reset that sets the LFSR state to `32'h1` when the reset signal is high.
+
+4. **LFSR Logic**: On each positive edge of the clock, if the reset is not active, update the LFSR state by shifting right and applying the XOR feedback from the specified tap positions (32, 22, 2, and 1).
+
+5. **Combinational Logic**: Use an `always @(*)` block to define the next state logic, ensuring that the XOR operations are applied correctly to the tapped positions.
+
+6. **Sequential Logic**: Use an `always @(posedge clk)` block to update the LFSR state based on the calculated next state, considering the reset condition.
+
+By following these steps, we ensure that the LFSR operates correctly according to the given specifications and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    logic [31:0] lfsr_state;
+    logic [31:0] next_q;
+
+    // Combinational logic to calculate the next state
+    always @(*) begin
+        next_q[31] = lfsr_state[0]; // Shift right and feedback from q[0]
+        next_q[30] = lfsr_state[31];
+        next_q[29] = lfsr_state[30];
+        next_q[28] = lfsr_state[29];
+        next_q[27] = lfsr_state[28];
+        next_q[26] = lfsr_state[27];
+        next_q[25] = lfsr_state[26];
+        next_q[24] = lfsr_state[25];
+        next_q[23] = lfsr_state[24];
+        next_q[22] = lfsr_state[23] ^ lfsr_state[0]; // Tap at position 22
+        next_q[21] = lfsr_state[22];
+        next_q[20] = lfsr_state[21];
+        next_q[19] = lfsr_state[20];
+        next_q[18] = lfsr_state[19];
+        next_q[17] = lfsr_state[18];
+        next_q[16] = lfsr_state[17];
+        next_q[15] = lfsr_state[16];
+        next_q[14] = lfsr_state[15];
+        next_q[13] = lfsr_state[14];
+        next_q[12] = lfsr_state[13];
+        next_q[11] = lfsr_state[12];
+        next_q[10] = lfsr_state[11];
+        next_q[9]  = lfsr_state[10];
+        next_q[8]  = lfsr_state[9];
+        next_q[7]  = lfsr_state[8];
+        next_q[6]  = lfsr_state[7];
+        next_q[5]  = lfsr_state[6];
+        next_q[4]  = lfsr_state[5];
+        next_q[3]  = lfsr_state[4];
+        next_q[2]  = lfsr_state[3] ^ lfsr_state[0]; // Tap at position 2
+        next_q[1]  = lfsr_state[2] ^ lfsr_state[0]; // Tap at position 1
+        next_q[0]  = lfsr_state[1] ^ lfsr_state[0]; // Tap at position 0 (feedback)
+    end
+
+    // Sequential logic with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            lfsr_state <= 32'h1;
+        end else begin
+            lfsr_state <= next_q;
+        end
+    end
+
+    // Assign the output
+    assign q = lfsr_state;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    logic [31:0] lfsr_state;
+    logic [31:0] next_q;
+
+    // Combinational logic to calculate the next state
+    always @(*) begin
+        next_q[31] = lfsr_state[0]; // Shift right and feedback from q[0]
+        next_q[30] = lfsr_state[31];
+        next_q[29] = lfsr_state[30];
+        next_q[28] = lfsr_state[29];
+        next_q[27] = lfsr_state[28];
+        next_q[26] = lfsr_state[27];
+        next_q[25] = lfsr_state[26];
+        next_q[24] = lfsr_state[25];
+        next_q[23] = lfsr_state[24];
+        next_q[22] = lfsr_state[23] ^ lfsr_state[0]; // Tap at position 22
+        next_q[21] = lfsr_state[22];
+        next_q[20] = lfsr_state[21];
+        next_q[19] = lfsr_state[20];
+        next_q[18] = lfsr_state[19];
+        next_q[17] = lfsr_state[18];
+        next_q[16] = lfsr_state[17];
+        next_q[15] = lfsr_state[16];
+        next_q[14] = lfsr_state[15];
+        next_q[13] = lfsr_state[14];
+        next_q[12] = lfsr_state[13];
+        next_q[11] = lfsr_state[12];
+        next_q[10] = lfsr_state[11];
+        next_q[9]  = lfsr_state[10];
+        next_q[8]  = lfsr_state[9];
+        next_q[7]  = lfsr_state[8];
+        next_q[6]  = lfsr_state[7];
+        next_q[5]  = lfsr_state[6];
+        next_q[4]  = lfsr_state[5];
+        next_q[3]  = lfsr_state[4];
+        next_q[2]  = lfsr_state[3] ^ lfsr_state[0]; // Tap at position 2
+        next_q[1]  = lfsr_state[2] ^ lfsr_state[0]; // Tap at position 1
+        next_q[0]  = lfsr_state[1] ^ lfsr_state[0]; // Tap at position 0 (feedback)
+    end
+
+    // Sequential logic with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            lfsr_state <= 32'h1;
+        end else begin
+            lfsr_state <= next_q;
+        end
+    end
+
+    // Assign the output
+    assign q = lfsr_state;
+
+endmodule

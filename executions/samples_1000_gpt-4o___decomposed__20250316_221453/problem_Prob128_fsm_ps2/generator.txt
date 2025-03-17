@@ -1,0 +1,130 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to design a finite state machine (FSM) that identifies the start of a PS/2 mouse message and signals when a complete message has been received. The FSM will have the following states:
+
+1. `WAIT`: The FSM waits for the first byte of a message, identified by `in[3] = 1`.
+2. `BYTE1`: The FSM has detected the first byte of a message.
+3. `BYTE2`: The FSM has detected the second byte of a message.
+4. `BYTE3`: The FSM has detected the third byte of a message.
+
+The FSM transitions between these states based on the input `in[3]` and the current state. The `done` signal is asserted for one clock cycle after the third byte is received, indicating a complete message.
+
+The reset is synchronous, meaning it will only affect the FSM on the rising edge of the clock. The `done` signal is generated combinationally based on the current state and the transition conditions.
+
+We will use a case statement to define the state transitions and the output logic, as specified in the question. The FSM will be implemented using an always block triggered on the positive edge of the clock for state transitions and another always block for combinational logic to determine the `done` signal.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+
+    typedef enum logic [1:0] {
+        WAIT = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= WAIT;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always_comb begin
+        done = 1'b0; // Default value
+        case (current_state)
+            WAIT: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;
+                end else begin
+                    next_state = WAIT;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+            end
+            BYTE3: begin
+                done = 1'b1;
+                next_state = WAIT;
+            end
+            default: begin
+                next_state = WAIT;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+
+    typedef enum logic [1:0] {
+        WAIT = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= WAIT;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always_comb begin
+        done = 1'b0; // Default value
+        case (current_state)
+            WAIT: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;
+                end else begin
+                    next_state = WAIT;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+            end
+            BYTE3: begin
+                done = 1'b1;
+                next_state = WAIT;
+            end
+            default: begin
+                next_state = WAIT;
+            end
+        endcase
+    end
+
+endmodule

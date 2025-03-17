@@ -1,0 +1,63 @@
+Generated Response:
+
+<REASONING>
+To implement the 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified interface, including inputs `clk` and `reset`, and output `q` which is 5 bits wide.
+
+2. **Signal Declaration**: Use `logic` to declare the internal register that will hold the current state of the LFSR. This register will be updated on the positive edge of the clock.
+
+3. **Synchronous Reset**: Implement a synchronous reset within the sequential logic block. When `reset` is high, the LFSR should be set to the initial state `5'b00001`.
+
+4. **LFSR Logic**: Implement the LFSR logic using a Galois configuration. The next state is determined by shifting the current state right and XORing the LSB with the taps at positions 5 and 3. This is done by XORing `q[4]` and `q[2]` with `q[0]`.
+
+5. **Output Assignment**: Assign the internal register to the output `q`.
+
+By following these steps, we ensure that the LFSR cycles through all possible non-zero states, providing a maximal-length sequence.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    logic [4:0] lfsr;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            lfsr <= 5'b00001;
+        end else begin
+            lfsr <= {lfsr[3:0], lfsr[4] ^ lfsr[2]};
+        end
+    end
+
+    assign q = lfsr;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    logic [4:0] lfsr;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            lfsr <= 5'b00001;
+        end else begin
+            lfsr <= {lfsr[3:0], lfsr[4] ^ lfsr[2]};
+        end
+    end
+
+    assign q = lfsr;
+
+endmodule

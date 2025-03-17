@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input logic a;`  // 1-bit input
+  - `input logic b;`  // 1-bit input
+  - `input logic c;`  // 1-bit input
+  - `input logic d;`  // 1-bit input
+
+- Output Ports:
+  - `output logic out;`  // 1-bit output
+
+Module Description:
+- The module implements a combinational logic circuit based on the provided Karnaugh map. It produces the output `out` as a function of the four input variables `a`, `b`, `c`, and `d`.
+
+Karnaugh Map:
+- The Karnaugh map specifies the relationship between inputs (`a`, `b`, `c`, `d`) and the output `out` as follows:
+
+```
+    ab
+cd   00  01  11  10
+00 | 0 | 1 | 0 | 1 |
+01 | 1 | 0 | 1 | 0 |
+11 | 0 | 1 | 0 | 1 |
+10 | 1 | 0 | 1 | 0 |
+```
+
+- Inputs `a` and `b` are treated as a two-bit binary number representing columns.
+- Inputs `c` and `d` are treated as a two-bit binary number representing rows.
+- Each cell in the Karnaugh map corresponds to a unique combination of (`c`, `d`, `a`, `b`) and the value within the cell is the output `out`.
+
+Bit Indexing Convention:
+- All input and output ports are single bits, with `bit[0]` being the least significant bit.
+
+Design Constraints:
+- The implementation should be purely combinational with no sequential elements such as flip-flops or latches.
+- The output `out` must stabilize within a single clock cycle of the inputs `a`, `b`, `c`, and `d` being stable.
+- No reset logic is required as the module is purely combinational.
+
+Edge Cases:
+- As all inputs are binary, consider all possible combinations of `a`, `b`, `c`, and `d` (i.e., 16 combinations) as covered by the Karnaugh map.
+
+Note: Ensure that the implementation adheres strictly to the specified mapping and logic derived from the Karnaugh map.
+</ENHANCED_SPEC>

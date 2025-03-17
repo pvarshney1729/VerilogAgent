@@ -1,0 +1,149 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to design a finite state machine (FSM) that processes a serial bit stream according to a protocol with a start bit, 8 data bits, and a stop bit. The FSM will have the following states: IDLE, START, DATA, and STOP. 
+
+1. **IDLE State**: The FSM remains in this state while waiting for a start bit (`0`). The line is idle when `in` is `1`.
+
+2. **START State**: Once a start bit is detected, the FSM transitions to this state to confirm the start of a byte.
+
+3. **DATA State**: In this state, the FSM captures 8 data bits, shifting them into a register. The least significant bit is received first.
+
+4. **STOP State**: After receiving 8 data bits, the FSM checks for a stop bit (`1`). If the stop bit is correct, the `done` signal is asserted, and the `out_byte` is valid. If the stop bit is incorrect, the FSM waits for a correct stop bit before returning to IDLE.
+
+The FSM uses a synchronous reset to initialize the state and registers. The `done` signal is asserted for one clock cycle when a valid byte is received. The `out_byte` is only valid when `done` is high.
+
+The implementation uses a shift register to capture the data bits and a counter to track the number of bits received. The FSM transitions are determined by the current state and input conditions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic in,
+    input logic reset,
+    output logic [7:0] out_byte,
+    output logic done
+);
+
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        START = 2'b01,
+        DATA  = 2'b10,
+        STOP  = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [7:0] shift_reg;
+    logic [3:0] bit_count;
+
+    // State register with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            shift_reg <= 8'b0;
+            bit_count <= 4'b0;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always_comb begin
+        next_state = current_state; // Default to hold state
+        done = 1'b0; // Default done signal
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) // Detect start bit
+                    next_state = START;
+            end
+            START: begin
+                next_state = DATA;
+                bit_count = 4'b0;
+            end
+            DATA: begin
+                shift_reg = {in, shift_reg[7:1]}; // Shift in LSB first
+                bit_count = bit_count + 1;
+                if (bit_count == 4'd7) // After 8 data bits
+                    next_state = STOP;
+            end
+            STOP: begin
+                if (in == 1'b1) begin // Check stop bit
+                    done = 1'b1;
+                    out_byte = shift_reg;
+                end
+                next_state = IDLE;
+            end
+            default: next_state = IDLE; // Default case
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic in,
+    input logic reset,
+    output logic [7:0] out_byte,
+    output logic done
+);
+
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        START = 2'b01,
+        DATA  = 2'b10,
+        STOP  = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [7:0] shift_reg;
+    logic [3:0] bit_count;
+
+    // State register with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            shift_reg <= 8'b0;
+            bit_count <= 4'b0;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always_comb begin
+        next_state = current_state; // Default to hold state
+        done = 1'b0; // Default done signal
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) // Detect start bit
+                    next_state = START;
+            end
+            START: begin
+                next_state = DATA;
+                bit_count = 4'b0;
+            end
+            DATA: begin
+                shift_reg = {in, shift_reg[7:1]}; // Shift in LSB first
+                bit_count = bit_count + 1;
+                if (bit_count == 4'd7) // After 8 data bits
+                    next_state = STOP;
+            end
+            STOP: begin
+                if (in == 1'b1) begin // Check stop bit
+                    done = 1'b1;
+                    out_byte = shift_reg;
+                end
+                next_state = IDLE;
+            end
+            default: next_state = IDLE; // Default case
+        endcase
+    end
+
+endmodule

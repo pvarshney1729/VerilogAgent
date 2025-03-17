@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Implement a Verilog module named `TopModule` with the following interface. All input and output ports are one bit unless otherwise specified:
+
+- `input clk`: Clock signal, positive edge-triggered.
+- `input reset`: Synchronous active-high reset signal.
+- `output reg [31:0] q`: 32-bit output vector representing the state of the Galois LFSR.
+
+Design Specifications:
+
+1. **Galois LFSR Description**:
+   - The module should implement a 32-bit Galois Linear Feedback Shift Register (LFSR).
+   - The LFSR shifts to the right. Taps are present at bit positions 31 (MSB), 21, 1, and 0 (LSB).
+   - For each clock cycle, the new LSB (q[0]) is determined by XORing the current LSB with the tap positions. Specifically, the update logic is:
+     - q_next[31] = q[0] (shift from q[30])
+     - q_next[30] = q[31]
+     - ...
+     - q_next[22] = q[23]
+     - q_next[21] = q[22] XOR q[0]
+     - ...
+     - q_next[2] = q[3]
+     - q_next[1] = q[2] XOR q[0]
+     - q_next[0] = q[1] XOR q[0]
+
+2. **Reset Behavior**:
+   - The reset signal is synchronous and active high.
+   - Upon reset, the output `q` should be set to the initial value of `32'h1`.
+
+3. **Sequential Logic**:
+   - The LFSR state (represented by `q`) is updated on the positive edge of the `clk` signal.
+   - Ensure that the reset condition takes precedence over the regular LFSR update logic.
+
+4. **Bit Indexing**:
+   - Bit indices in the output `q` follow the convention where `q[0]` is the least significant bit (LSB) and `q[31]` is the most significant bit (MSB).
+
+5. **Edge Cases**:
+   - Ensure that the logic correctly handles the case where `reset` is asserted at any time, setting `q` to `32'h1` regardless of the current state.
+   - The design should avoid any race conditions by ensuring that the synchronous reset logic is correctly implemented.
+
+This specification ensures a clear and precise understanding of the module's design requirements and behavior.
+</ENHANCED_SPEC>

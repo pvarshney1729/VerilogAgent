@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock signal for synchronizing sequential logic (1-bit).
+- input wire reset: Active-high synchronous reset signal (1-bit). Resets the FSM to the initial state A.
+- input wire s: Control signal used to transition from state A to state B (1-bit).
+- input wire w: Data signal evaluated in state B for determining output (1-bit).
+- output reg z: Output signal set based on the evaluation of input w (1-bit).
+
+Finite State Machine (FSM) Description:
+- Initial State: The FSM begins in reset state A.
+- State Transitions:
+  - State A: The FSM remains in state A as long as s = 0. Upon s = 1, the FSM transitions to state B in the next clock cycle.
+  - State B: In state B, the FSM evaluates the input w over the next three consecutive clock cycles.
+    - Counting Logic: If w = 1 in exactly two of these three cycles, the FSM sets output z to 1 in the following clock cycle. Otherwise, z is set to 0.
+    - The FSM continues to evaluate w in groups of three cycles as long as it remains in state B.
+  - Note: The input s is only relevant in state A.
+
+Clock and Reset Behavior:
+- All sequential logic is triggered on the positive edge of the clk signal.
+- The reset signal is synchronous; it must be asserted high to reset the FSM to state A.
+
+Output Definition:
+- The output z is a registered output, updated based on the conditions defined for state B.
+- In state A, z is not explicitly defined by the FSM behavior and should be considered as maintaining its previous state or reset condition.
+
+Considerations:
+- The FSM should use a minimal number of states to achieve the described behavior.
+- Ensure that the sequential logic correctly handles all edge cases, such as transitions and reset conditions.
+- Proper initialization of all sequential elements should be considered, particularly following a reset.
+</ENHANCED_SPEC>

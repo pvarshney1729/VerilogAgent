@@ -1,0 +1,26 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module interface with input ports clk, reset, and output port q (32 bits).",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  clk - input  reset - output q (32 bits)",
+        "implementation": "```verilog\n[BEGIN]\nmodule TopModule (\n    input clk,\n    input reset,\n    output reg [31:0] q\n);\n[END]\n```"
+    },
+    {
+        "id": "2",
+        "content": "Declare a 32-bit register to hold the current state of the LFSR.",
+        "source": "The module should implement a 32-bit Galois LFSR.",
+        "implementation": "reg [31:0] lfsr_state;"
+    },
+    {
+        "id": "3",
+        "content": "Create a combinational block to calculate the next state by first shifting right and then applying XOR feedback to tap positions 32, 22, 2, and 1.",
+        "source": "A Galois LFSR is one particular arrangement that shifts right, where a bit position with a \"tap\" is XORed with the LSB output bit (q[0]) to produce its next value, while bit positions without a tap shift right unchanged. The module should implement a 32-bit Galois LFSR with taps at bit positions 32, 22, 2, and 1.",
+        "implementation": "always @(*) begin\n    // Calculate the next state of the LFSR\n    next_q[31] = q[0]; // Shift right and feedback from q[0]\n    next_q[30] = q[31];\n    next_q[29] = q[30];\n    next_q[28] = q[29];\n    next_q[27] = q[28];\n    next_q[26] = q[27];\n    next_q[25] = q[26];\n    next_q[24] = q[25];\n    next_q[23] = q[24];\n    next_q[22] = q[23] ^ q[0]; // Tap at position 22\n    next_q[21] = q[22];\n    next_q[20] = q[21];\n    next_q[19] = q[20];\n    next_q[18] = q[19];\n    next_q[17] = q[18];\n    next_q[16] = q[17];\n    next_q[15] = q[16];\n    next_q[14] = q[15];\n    next_q[13] = q[14];\n    next_q[12] = q[13];\n    next_q[11] = q[12];\n    next_q[10] = q[11];\n    next_q[9]  = q[10];\n    next_q[8]  = q[9];\n    next_q[7]  = q[8];\n    next_q[6]  = q[7];\n    next_q[5]  = q[6];\n    next_q[4]  = q[5];\n    next_q[3]  = q[4];\n    next_q[2]  = q[3] ^ q[0]; // Tap at position 2\n    next_q[1]  = q[2] ^ q[0]; // Tap at position 1\n    next_q[0]  = q[1] ^ q[0]; // Tap at position 0 (feedback)\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement the sequential logic with synchronous reset to update the LFSR state. On reset, set the output q to 32'h1.",
+        "source": "Reset should be active high synchronous, and should reset the output q to 32'h1. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "reg [31:0] q;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        q <= 32'h1;\n    end else begin\n        q <= {q[30:0], q[31] ^ q[21] ^ q[1] ^ q[0]};\n    end\nend"
+    }
+]

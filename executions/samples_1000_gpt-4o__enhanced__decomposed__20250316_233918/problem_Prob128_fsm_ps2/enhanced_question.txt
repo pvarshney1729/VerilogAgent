@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: clk (1 bit) - Clock signal, positive edge triggered
+- Input: reset (1 bit) - Active high, synchronous reset
+- Input: in (8 bits) - Data input bus, where bit[0] refers to the least significant bit
+- Output: done (1 bit) - Indicates completion of message reception
+
+Functional Description:
+The TopModule implements a finite state machine (FSM) to detect message boundaries within a continuous PS/2 mouse protocol byte stream. Each message consists of three consecutive bytes, where the first byte is identified by in[3] being set to 1. The FSM will:
+1. Continuously monitor the input stream in[7:0].
+2. Discard bytes until a byte with in[3]=1 is detected, marking the start of a message.
+3. Continue to process the next two bytes sequentially as part of the message.
+4. Assert the 'done' output high for exactly one clock cycle immediately after receiving the third byte of a message.
+
+FSM State Transitions:
+- Initial State: Wait for a byte with in[3]=1.
+- Message Start State: Upon detecting in[3]=1, transition to the next state expecting the second byte.
+- Second Byte State: Transition to the final state upon receiving the second byte.
+- Third Byte State: Once the third byte is received, assert 'done' for one cycle and return to the initial state.
+
+Reset Behavior:
+- On reset (active high), all internal states and outputs are reset to their initial state, with 'done' set to 0.
+
+Clock Relationship:
+- All state transitions and outputs are synchronized to the positive edge of the clk signal.
+
+Edge Cases and Boundary Conditions:
+- If reset is asserted during any state, the FSM will return to the initial state.
+- The 'done' signal will not be asserted if a reset occurs before the third byte is processed even if the first two bytes have been detected.
+
+Initial Conditions:
+- Upon power-up or reset, the FSM starts in the initial state, and the 'done' output is 0.
+</ENHANCED_SPEC>

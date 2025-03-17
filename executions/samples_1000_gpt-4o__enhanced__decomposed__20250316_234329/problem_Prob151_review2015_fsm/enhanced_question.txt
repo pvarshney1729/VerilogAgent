@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- `input wire clk`: Clock signal, positive-edge triggered.
+- `input wire reset`: Active-high synchronous reset signal.
+- `input wire data`: Serial input data stream.
+- `input wire done_counting`: Signal indicating completion of counting from external counter.
+- `input wire ack`: Acknowledge signal from the user.
+- `output reg shift_ena`: Control signal to enable shifting, active for 4 clock cycles after pattern detection.
+- `output reg counting`: Control signal indicating the module is waiting for counting to complete.
+- `output reg done`: Signal to notify the user that the timer has completed.
+
+Operation Details:
+1. **Pattern Detection**: The state machine starts by searching for the bit pattern "1101" on the `data` input. This pattern detection is performed on the rising edge of the clock.
+
+2. **Shifting**: Upon detecting the pattern "1101", the state machine asserts `shift_ena` for exactly 4 consecutive clock cycles to allow the subsequent 4 bits on `data` to be shifted in and determine the delay duration.
+
+3. **Counting**: After the 4-bit shift operation, the state machine asserts the `counting` signal, indicating it is waiting for the external counter to finish. It remains in this state until `done_counting` is high.
+
+4. **Notification and Acknowledgment**: Once `done_counting` is high, the state machine asserts `done` to notify the user that the timer has completed. The state machine waits in this state until the `ack` signal from the user is high.
+
+5. **Reset Behavior**: The state machine includes a synchronous reset mechanism. When `reset` is asserted high, the state machine immediately transitions to the initial state, ready to begin searching for the "1101" pattern again.
+
+State Machine Characteristics:
+- The state machine is fully synchronous, operating on the positive edge of the `clk`.
+- The initial state upon reset is configured to search for the pattern "1101".
+- All registers and output signals are initialized to their default states on reset.
+- Bit indexing for state machine operations should consider `bit[0]` as the least significant bit (LSB).
+
+Edge Cases and Boundary Conditions:
+- Ensure input signals `data`, `done_counting`, and `ack` are stable and synchronized to the `clk` to prevent metastability.
+- The pattern detection should be robust against bit shifts and should reset if an incorrect sequence is detected before completion.
+- The module's behavior in scenarios of simultaneous assertion of `reset` and valid state transitions is well-defined, prioritizing the reset action.
+
+Note: The data path components, such as counters and comparators, are assumed to be managed externally and are not part of this specification.
+</ENHANCED_SPEC>

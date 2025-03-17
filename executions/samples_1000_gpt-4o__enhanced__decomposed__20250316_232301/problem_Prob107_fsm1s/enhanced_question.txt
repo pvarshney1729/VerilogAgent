@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input wire clk: Clock signal for synchronizing the sequential logic.
+- input wire reset: Active-high synchronous reset signal.
+- input wire in: Single-bit input to the state machine.
+- output reg out: Single-bit output of the state machine.
+
+State Machine Description:
+- This is a Moore state machine with two states: State A and State B.
+- The output 'out' is determined solely by the current state.
+
+States:
+- State B: Represents the reset state.
+  - Output (out): 1
+  - Transitions:
+    - If 'in' = 0, transition to State A.
+    - If 'in' = 1, remain in State B.
+- State A:
+  - Output (out): 0
+  - Transitions:
+    - If 'in' = 0, transition to State B.
+    - If 'in' = 1, remain in State A.
+
+Reset Behavior:
+- Reset is active-high and synchronous with the clock.
+- On reset, the state machine transitions to State B and the output 'out' is set to 1.
+
+Clocking:
+- All state transitions occur on the rising edge of the clock signal.
+
+Bit Indexing and Conventions:
+- All inputs and outputs are single-bit signals.
+- No specific bit indexing is required as all signals are one bit wide.
+
+Initial Conditions:
+- Upon reset, the state is initialized to State B and the output 'out' is set to its corresponding value.
+
+Additional Notes:
+- Ensure no race conditions by properly synchronizing the reset and state transitions with the clock signal.
+- The module should strictly adhere to the specified state transitions and output conditions.
+</ENHANCED_SPEC>

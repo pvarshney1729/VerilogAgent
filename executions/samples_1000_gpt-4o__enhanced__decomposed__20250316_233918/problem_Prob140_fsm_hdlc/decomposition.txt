@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module interface for TopModule with input ports clk, reset, in, and output ports disc, flag, err.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  clk,\n    input  reset,\n    input  in,\n    output reg disc,\n    output reg flag,\n    output reg err\n);\n    // Additional logic will be implemented here\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define state encoding using localparam for the FSM states to recognize the sequences 0111110, 01111110, and 01111111.",
+        "source": "Create a Moore-type finite state machine to recognize these three sequences: (1) 0111110: Signal a bit needs to be discarded (disc). (2) 01111110: Flag the beginning/end of a frame (flag). (3) 01111111...: Error (7 or more 1s) (err).",
+        "implementation": "localparam [2:0]\n    IDLE       = 3'b000,\n    ONE        = 3'b001,\n    TWO_ONES   = 3'b010,\n    THREE_ONES = 3'b011,\n    FOUR_ONES  = 3'b100,\n    FIVE_ONES  = 3'b101,\n    SIX_ONES   = 3'b110,\n    SEVEN_ONES = 3'b111;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic to hold the current state of the FSM.",
+        "source": "The reset signal is active high synchronous. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "reg [2:0] current_state, next_state;\n\n  // State register with synchronous reset\n  always @(posedge clk) begin\n    if (reset) begin\n      current_state <= 3'b000; // Assuming 3'b000 is the initial state\n    end else begin\n      current_state <= next_state;\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Develop the next state combinational logic to determine the next state based on the current state and input bit 'in'.",
+        "source": "Create a Moore-type finite state machine to recognize these three sequences: (1) 0111110: Signal a bit needs to be discarded (disc). (2) 01111110: Flag the beginning/end of a frame (flag). (3) 01111111...: Error (7 or more 1s) (err).",
+        "implementation": "// State encoding\n  typedef enum logic [2:0] {\n    IDLE       = 3'b000,\n    ONE        = 3'b001,\n    TWO_ONES   = 3'b010,\n    THREE_ONES = 3'b011,\n    FOUR_ONES  = 3'b100,\n    FIVE_ONES  = 3'b101,\n    SIX_ONES   = 3'b110,\n    SEVEN_ONES = 3'b111\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // Next state logic\n  always_comb begin\n    case (current_state)\n      IDLE: begin\n        if (in) \n          next_state = ONE;\n        else \n          next_state = IDLE;\n      end\n      ONE: begin\n        if (in) \n          next_state = TWO_ONES;\n        else \n          next_state = IDLE;\n      end\n      TWO_ONES: begin\n        if (in) \n          next_state = THREE_ONES;\n        else \n          next_state = IDLE;\n      end\n      THREE_ONES: begin\n        if (in) \n          next_state = FOUR_ONES;\n        else \n          next_state = IDLE;\n      end\n      FOUR_ONES: begin\n        if (in) \n          next_state = FIVE_ONES;\n        else \n          next_state = IDLE;\n      end\n      FIVE_ONES: begin\n        if (in) \n          next_state = SIX_ONES;\n        else \n          next_state = IDLE;\n      end\n      SIX_ONES: begin\n        if (in) \n          next_state = SEVEN_ONES;\n        else \n          next_state = IDLE;\n      end\n      SEVEN_ONES: begin\n        if (in) \n          next_state = SEVEN_ONES; // Remain in error state\n        else \n          next_state = IDLE;\n      end\n      default: next_state = IDLE;\n    endcase\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic to assert disc, flag, and err based on the current state of the FSM.",
+        "source": "The output signals should be asserted for a complete cycle beginning on the clock cycle after the condition occurs.",
+        "implementation": "// Output combinational logic based on the current state\n  always @(*) begin\n    // Default assignments\n    disc = 1'b0;\n    flag = 1'b0;\n    err  = 1'b0;\n\n    case (current_state)\n      STATE_DISC: begin\n        disc = 1'b1;\n      end\n      STATE_FLAG: begin\n        flag = 1'b1;\n      end\n      STATE_ERR: begin\n        err = 1'b1;\n      end\n      default: begin\n        // No output asserted\n      end\n    endcase\n  end"
+    }
+]

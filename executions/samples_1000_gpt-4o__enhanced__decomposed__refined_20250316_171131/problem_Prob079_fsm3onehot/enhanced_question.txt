@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+The module "TopModule" is designed to implement the combinational logic portion of a Moore state machine with one input, one output, and four states, using one-hot encoding. The interface and functionality are defined as follows:
+
+- **Inputs:**
+  - `input wire in;`  
+    - A single-bit input signal that influences the state transitions.
+  - `input wire [3:0] state;`
+    - A 4-bit input representing the current state of the state machine using one-hot encoding.
+    - The state encoding is as follows:
+      - State A: `4'b0001`
+      - State B: `4'b0010`
+      - State C: `4'b0100`
+      - State D: `4'b1000`
+    - Note: Each bit in this vector corresponds to a unique state, with only one bit set to '1' at any time.
+
+- **Outputs:**
+  - `output reg [3:0] next_state;`
+    - A 4-bit output representing the next state of the state machine, also using one-hot encoding.
+  - `output reg out;`
+    - A single-bit output that provides the Moore state machine's output based on the current state.
+
+- **Combinational Logic:**
+  - The state transition and output logic are defined by the following state transition table:
+    - **State A**:
+      - If `in = 0`, `next_state = A (4'b0001)`;
+      - If `in = 1`, `next_state = B (4'b0010)`;
+      - `out = 0`.
+    - **State B**:
+      - If `in = 0`, `next_state = C (4'b0100)`;
+      - If `in = 1`, `next_state = B (4'b0010)`;
+      - `out = 0`.
+    - **State C**:
+      - If `in = 0`, `next_state = A (4'b0001)`;
+      - If `in = 1`, `next_state = D (4'b1000)`;
+      - `out = 0`.
+    - **State D**:
+      - If `in = 0`, `next_state = C (4'b0100)`;
+      - If `in = 1`, `next_state = B (4'b0010)`;
+      - `out = 1`.
+
+- **Additional Notes:**
+  - Ensure that the bit indexing is consistent with the one-hot encoding scheme provided, where `state[0]` is the least significant bit (LSB) corresponding to State A.
+  - The module does not include sequential logic, resets, or clock definitions, focusing solely on the combinational logic for state transitions and output generation.
+</ENHANCED_SPEC>

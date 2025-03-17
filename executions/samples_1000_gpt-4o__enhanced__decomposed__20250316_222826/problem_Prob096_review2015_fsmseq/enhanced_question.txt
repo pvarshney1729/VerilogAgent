@@ -1,0 +1,34 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal for sequential logic. The module operates on the positive edge of this clock.
+  - `reset`: Active-high, synchronous reset signal. Resets the state machine and all sequential elements to their initial states upon assertion.
+  - `data`: One-bit input, representing the incoming bit stream to be monitored for the sequence 1101.
+
+- Output Ports:
+  - `start_shifting`: One-bit output. Set to 1 when the sequence 1101 is detected in the input data stream. Remains 1 until the module is reset.
+
+Behavioral Description:
+- The module implements a finite-state machine (FSM) designed to detect the specific sequence of bits: 1101.
+- The FSM transitions through states based on the bits received from the `data` input, updating on the positive edge of the `clk`, and can be reset synchronously using the `reset` input.
+
+State Machine Details:
+- The state machine consists of multiple states tracking the progress of detecting the sequence 1101.
+- Upon detecting the sequence, `start_shifting` is set to 1 and remains in this state until a reset occurs.
+
+Reset Behavior:
+- `reset` is an active-high signal. When asserted, it synchronously resets the FSM to its initial state, and `start_shifting` is reset to 0.
+
+Bit Indexing:
+- Bit[0] is the least significant bit for any required bit indexing operations.
+
+Edge Cases:
+- If the sequence 1101 is found, and `reset` is not asserted, `start_shifting` remains 1 indefinitely.
+- Upon reset, the FSM returns to its initial state, and `start_shifting` is reset to 0, regardless of the current state or input data.
+
+All sequential logic elements, including state registers, are initialized to their respective reset states when the reset signal is asserted.
+
+Ensure that all dependencies and signal precedence are handled correctly to avoid race conditions.
+</ENHANCED_SPEC>

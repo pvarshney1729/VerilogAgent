@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal for sequential logic.
+  - `input areset`: Asynchronous reset signal, active high.
+  - `input in`: 1-bit input signal.
+
+- Output Ports:
+  - `output out`: 1-bit output signal.
+
+Behavioral Specification:
+- The module implements a Moore finite state machine (FSM) with two states, A and B, where:
+  - State A outputs a logic '0'.
+  - State B outputs a logic '1'.
+
+State Transition Diagram:
+- State B transitions:
+  - Remains in state B when `in` is 1.
+  - Transitions to state A when `in` is 0.
+- State A transitions:
+  - Remains in state A when `in` is 1.
+  - Transitions to state B when `in` is 0.
+
+Reset Behavior:
+- The reset (`areset`) is asynchronous and active high.
+- On activation of `areset`, the FSM transitions immediately to state B, regardless of the current state or input.
+
+Implementation Details:
+- States are encoded as binary values with the following assignments:
+  - State A: 1'b0
+  - State B: 1'b1
+- The initial state after reset is state B.
+- The output `out` strictly depends on the current state, not the input:
+  - `out = 1'b1` when in state B.
+  - `out = 1'b0` when in state A.
+
+- All state transitions occur on the rising edge of `clk` unless overridden by `areset`.
+- Bit indexing convention: bit[0] refers to the least significant bit (LSB).
+
+Edge Cases:
+- Ensure that the transition logic handles the asynchronous reset correctly, such that any rising or falling edge of `areset` immediately resets the state to B, regardless of the clock signal.
+</ENHANCED_SPEC>

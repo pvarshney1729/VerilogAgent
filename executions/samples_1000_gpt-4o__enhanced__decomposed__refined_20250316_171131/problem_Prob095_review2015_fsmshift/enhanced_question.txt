@@ -1,0 +1,31 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: 
+  - `clk`: 1-bit clock signal. All sequential logic is triggered on the positive edge.
+  - `reset`: 1-bit active-high synchronous reset signal.
+- Output:
+  - `shift_ena`: 1-bit control signal for enabling the shift register.
+
+Functional Description:
+- The TopModule is designed to interface with a shift register. It controls the enable signal (`shift_ena`) for the shift register based on the state of an internal Finite State Machine (FSM).
+- Upon detecting a predetermined bit pattern (details of the pattern detection are beyond the scope of this specification), the FSM will enable `shift_ena` for exactly 4 consecutive clock cycles.
+- Following a reset event (active high), the FSM will immediately assert `shift_ena` for 4 clock cycles, after which `shift_ena` will remain de-asserted (0) indefinitely until another reset occurs.
+- The reset is synchronous, meaning it only affects the FSM state and `shift_ena` on the rising edge of `clk`.
+
+Signal and Logic Details:
+- `shift_ena` must be initialized to 0 upon reset completion.
+- The module's behavior is fully defined by synchronous logic; no asynchronous logic is employed.
+- Edge cases include:
+  - If reset is applied during the assertion of `shift_ena`, the output immediately transitions to the reset behavior, asserting for 4 cycles post-reset.
+  - Ensure that no glitches occur on the `shift_ena` output during state transitions.
+
+Initial Conditions:
+- On power-up, assume an implicit reset condition, ensuring `shift_ena` is 0 until a reset is explicitly applied and released, allowing the FSM to start in a known state.
+
+Bit Indexing:
+- All specified signals are single bit; no multi-bit indexing is required. Any future extensions involving multi-bit signals should follow the convention where `bit[0]` is the least significant bit.
+
+Note: The specific bit pattern detection mechanism is not detailed in this specification and should be defined based on system-level requirements.
+</ENHANCED_SPEC>

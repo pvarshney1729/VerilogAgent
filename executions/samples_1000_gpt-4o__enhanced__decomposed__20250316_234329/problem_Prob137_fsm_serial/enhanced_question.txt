@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: The clock signal for the sequential logic, positive edge-triggered.
+  - `input wire reset`: An active-high synchronous reset signal that initializes the FSM and all registers to their default state.
+  - `input wire in`: Serial input stream containing the data bits.
+
+- Output Ports:
+  - `output reg done`: Indicates successful receipt of a byte with correct start and stop bits.
+
+Port Width and Conventions:
+- All ports are single-bit signals.
+
+FSM Description:
+- The finite state machine (FSM) will operate based on the following states:
+  - IDLE: The line is at logic 1, waiting for a start bit (logic 0).
+  - START: Detects the start bit (logic 0) and transitions to receiving data bits.
+  - DATA[7:0]: Sequentially captures 8 data bits, starting from the least significant bit (LSB). `bit[0]` refers to the LSB, and `bit[7]` refers to the most significant bit (MSB).
+  - STOP: Verifies the presence of the stop bit (logic 1) after 8 data bits.
+  - ERROR: If the stop bit is not detected, the FSM enters this state and waits for a valid stop bit to reset the reception process.
+
+Behavior:
+- Reset: Upon receiving an active-high reset signal, the FSM returns to the IDLE state, and any stored data is cleared.
+- Start Bit Detection: Transition from IDLE to START occurs when a start bit (logic 0) is detected.
+- Data Bit Reception: From the START state, the FSM collects 8 data bits (DATA[7:0]) on each positive clock edge.
+- Stop Bit Verification: After receiving the 8th data bit, the FSM transitions to the STOP state to verify the presence of a stop bit (logic 1).
+- Successful Reception: If the stop bit is detected correctly, the `done` signal is asserted high for one clock cycle.
+- Error Handling: If the stop bit is not detected, the FSM enters the ERROR state. It remains there until a logic 1 (idle or stop bit) is detected, upon which it returns to the IDLE state.
+
+Clock and Reset:
+- All sequential elements are triggered on the positive edge of `clk`.
+- The reset is synchronous, and all registers initialize to a known state upon reset.
+
+Edge Cases:
+- The FSM handles unexpected sequences by returning to the IDLE state if the expected start or stop bits are not found.
+- The `done` signal is only asserted if a complete byte, including correct start and stop bits, is received successfully.
+
+Note:
+- The serial protocol assumes LSB-first transmission for the 8 data bits.
+</ENHANCED_SPEC>

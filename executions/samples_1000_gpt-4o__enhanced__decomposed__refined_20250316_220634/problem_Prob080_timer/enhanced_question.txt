@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Inputs:
+  - clk: 1-bit, clock signal. All sequential logic is triggered on the positive edge of this clock.
+  - load: 1-bit, control signal to load the counter.
+  - data: 10-bit, unsigned, input specifying the initial count value for the timer. Indexing: bit[0] is the least significant bit (LSB).
+
+- Output:
+  - tc: 1-bit, output signal indicating the terminal count condition (i.e., the internal counter has reached zero).
+
+Behavioral Specification:
+- The module operates as a countdown timer using a down-counter mechanism.
+- Internal Counter:
+  - Width: 10 bits, unsigned.
+  - Initial State: Undefined, but will be explicitly set when loaded.
+  
+Operational Details:
+1. Clock Cycle Behavior:
+   a. On the positive edge of clk:
+      i. If load = 1:
+         - Load the 10-bit internal counter with the value from the data input.
+         - The counter will be set to the data value regardless of its current state, allowing reloading while counting.
+      ii. If load = 0:
+         - Check the current value of the internal counter.
+         - If the counter is greater than 0, decrement the counter by 1.
+         - If the counter is 0, maintain its value at 0. The counter does not go negative.
+
+2. Output Signal (tc):
+   - Assert tc = 1 when the internal counter reaches 0.
+   - Once tc is asserted, it remains 1 until the counter is loaded again with load = 1.
+
+3. Reset Behavior:
+   - No specific asynchronous or synchronous reset is defined for this module.
+   - The counter is reset implicitly by loading a new value via the load signal.
+
+Considerations:
+- Ensure that the input data is correctly interpreted as unsigned for proper counting behavior.
+- The behavior of the counter and tc signal must be explicitly maintained across clock cycles to prevent race conditions.
+- There is no specified handling for edge cases such as when data is loaded with a value of 0, so it is assumed the counter will immediately assert tc in such cases.
+</ENHANCED_SPEC>

@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input  wire clk;              // Clock signal, triggering on the positive edge
+- input  wire reset;            // Active high synchronous reset
+- input  wire data;             // Serial data input
+- input  wire done_counting;    // Indicates completion of counting
+- input  wire ack;              // Acknowledgment signal from the user
+- output reg  shift_ena;        // Enable signal for shifting operation
+- output reg  counting;         // Indicates counting operation is in progress
+- output reg  done;             // Indicates timer completion to user
+
+Functional Description:
+1. State Machine Initialization:
+   - On an active high synchronous reset, the state machine initializes to the state where it begins monitoring for the input pattern (1101).
+   - All registers and outputs (shift_ena, counting, done) are set to 0 during reset.
+
+2. Pattern Detection:
+   - The state machine continuously monitors the 'data' input for the 4-bit sequence '1101'.
+   - The pattern detection operates on the most recent 4 bits received, where bit[0] is the least significant bit (LSB).
+
+3. Shifting Operation:
+   - Upon detection of the pattern '1101', the state machine asserts 'shift_ena' for exactly 4 consecutive clock cycles.
+   - During these cycles, additional bits are shifted in to determine the delay duration (handled by the data path, not included here).
+
+4. Counting Operation:
+   - After the 4-cycle shift operation, the state machine asserts 'counting' to indicate that it is waiting for the counters to finish.
+   - The state machine remains in this state until 'done_counting' input is asserted high.
+
+5. Timer Completion and User Notification:
+   - Once 'done_counting' is high, the state machine asserts 'done' to notify the user about the timer expiration.
+   - The state machine waits for 'ack' input to become high, indicating that the user has acknowledged the timer expiration.
+
+6. Reset and Restart:
+   - After receiving acknowledgment ('ack' is high), the state machine resets to begin monitoring for the '1101' start sequence again.
+
+Edge Cases and Input Boundaries:
+- The state machine is robust against incomplete or incorrect input sequences by resetting to pattern detection upon any deviation from the expected sequence.
+- The system handles continuous input streams and ensures no race conditions, as transitions are strictly controlled by clock edges and defined inputs.
+
+Note: This specification focuses solely on the finite state machine logic. The data path for counters and comparators is assumed to be implemented separately.
+</ENHANCED_SPEC>

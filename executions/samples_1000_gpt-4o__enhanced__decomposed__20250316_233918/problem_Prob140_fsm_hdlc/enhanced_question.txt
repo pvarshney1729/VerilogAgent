@@ -1,0 +1,49 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock signal (positive edge-triggered).
+  - `reset`: 1-bit active-high synchronous reset signal.
+  - `in`: 1-bit input data stream.
+
+- Output Ports:
+  - `disc`: 1-bit signal, asserted high for one clock cycle to indicate a bit needs to be discarded.
+  - `flag`: 1-bit signal, asserted high for one clock cycle to indicate the detection of a frame boundary.
+  - `err`: 1-bit signal, asserted high for one clock cycle to indicate an error condition due to 7 or more consecutive 1s.
+
+Operational Details:
+- The module implements a Moore-type finite state machine (FSM) to decode a continuous bit stream and recognize specific bit patterns.
+  
+Pattern Recognition:
+1. **Discard Pattern (0111110):** 
+   - This pattern signals that the next bit should be discarded.
+   - The `disc` output is asserted high for one clock cycle following the detection of this pattern.
+
+2. **Flag Pattern (01111110):**
+   - This pattern indicates the start or end of a data frame.
+   - The `flag` output is asserted high for one clock cycle following the detection of this pattern.
+
+3. **Error Pattern (01111111...):**
+   - This pattern indicates an error condition due to 7 or more consecutive 1s.
+   - The `err` output is asserted high for one clock cycle immediately following the detection of this condition.
+
+Reset Behavior:
+- Upon activation of the `reset` signal, the FSM transitions to an initial state, treating the previous input as if it were 0.
+- Reset is synchronous with the clock and takes effect on the rising edge.
+
+Bit Indexing and Conventions:
+- The least significant bit is referred to as bit[0].
+- The FSM should account for edge cases where input patterns cross boundaries between consecutive clock cycles.
+
+Sequential Logic:
+- All state transitions and output signal assertions are synchronized with the positive edge of the clock.
+
+Output Timing:
+- Output signals (`disc`, `flag`, `err`) are asserted on the clock cycle following the cycle in which the pattern is detected, ensuring one full cycle of assertion.
+
+Edge Cases:
+- The FSM must handle cases where the input patterns overlap or span across clock cycles, maintaining robustness against race conditions.
+
+The implementation should ensure that all outputs are properly de-asserted in states not matching these conditions and that the FSM remains responsive to new input patterns.
+</ENHANCED_SPEC>

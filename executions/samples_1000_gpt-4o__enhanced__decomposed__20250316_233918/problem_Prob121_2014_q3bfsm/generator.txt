@@ -1,0 +1,129 @@
+Generated Response:
+
+<REASONING>
+To implement the FSM as specified, we will follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. Use `logic` for all signals as per the coding conventions.
+
+2. **State Encoding**: Use `localparam` to define the state encodings for clarity and maintainability. This helps in easily understanding and modifying the state transitions.
+
+3. **State Register**: Implement a state register using an `always` block that updates on the positive edge of the clock. Include synchronous reset logic to initialize the FSM to state 000 when `reset` is high.
+
+4. **Next State Logic**: Use a combinational `always @(*)` block to determine the next state based on the current state and input `x`. This block will implement the state transition table provided.
+
+5. **Output Logic**: Implement another combinational `always @(*)` block to determine the output `z` based on the current state. This block will follow the output specification given in the table.
+
+6. **Coding Conventions**: Ensure all numeric constants are sized, use `always @(*)` for combinational logic, and avoid using `wire` or `reg`.
+
+By following these steps, we ensure that the FSM is implemented correctly and adheres to the given specifications and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    localparam logic [2:0] STATE_000 = 3'b000;
+    localparam logic [2:0] STATE_001 = 3'b001;
+    localparam logic [2:0] STATE_010 = 3'b010;
+    localparam logic [2:0] STATE_011 = 3'b011;
+    localparam logic [2:0] STATE_100 = 3'b100;
+
+    // State register
+    logic [2:0] state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= STATE_000;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (state)
+            STATE_000: next_state = (x == 1'b0) ? STATE_000 : STATE_001;
+            STATE_001: next_state = (x == 1'b0) ? STATE_001 : STATE_100;
+            STATE_010: next_state = (x == 1'b0) ? STATE_010 : STATE_001;
+            STATE_011: next_state = (x == 1'b0) ? STATE_001 : STATE_010;
+            STATE_100: next_state = (x == 1'b0) ? STATE_011 : STATE_100;
+            default: next_state = STATE_000; // Default case for safety
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (state)
+            STATE_000: z = 1'b0;
+            STATE_001: z = 1'b0;
+            STATE_010: z = 1'b0;
+            STATE_011: z = 1'b1;
+            STATE_100: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    localparam logic [2:0] STATE_000 = 3'b000;
+    localparam logic [2:0] STATE_001 = 3'b001;
+    localparam logic [2:0] STATE_010 = 3'b010;
+    localparam logic [2:0] STATE_011 = 3'b011;
+    localparam logic [2:0] STATE_100 = 3'b100;
+
+    // State register
+    logic [2:0] state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= STATE_000;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (state)
+            STATE_000: next_state = (x == 1'b0) ? STATE_000 : STATE_001;
+            STATE_001: next_state = (x == 1'b0) ? STATE_001 : STATE_100;
+            STATE_010: next_state = (x == 1'b0) ? STATE_010 : STATE_001;
+            STATE_011: next_state = (x == 1'b0) ? STATE_001 : STATE_010;
+            STATE_100: next_state = (x == 1'b0) ? STATE_011 : STATE_100;
+            default: next_state = STATE_000; // Default case for safety
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (state)
+            STATE_000: z = 1'b0;
+            STATE_001: z = 1'b0;
+            STATE_010: z = 1'b0;
+            STATE_011: z = 1'b1;
+            STATE_100: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule

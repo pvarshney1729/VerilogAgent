@@ -1,0 +1,131 @@
+Generated Response:
+
+<REASONING>
+To implement the 32-bit Galois LFSR with the specified taps and synchronous reset, we will follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. The output `q` is a 32-bit vector.
+
+2. **Signal Declaration**: Use `logic` to declare the internal signals and the output port, adhering to the coding conventions.
+
+3. **Synchronous Reset**: Implement the synchronous reset logic within an `always_ff` block triggered by the positive edge of the clock. When `reset` is high, set `q` to `32'h1`.
+
+4. **LFSR Logic**: Implement the Galois LFSR logic using bitwise XOR operations. The taps are at positions 31, 21, 1, and 0. The LFSR shifts right, and the new LSB is determined by XORing the current LSB with the tapped positions.
+
+5. **Combinational Logic**: Use an `always_comb` block to define the next state of the LFSR based on the current state and the tap positions.
+
+6. **Sequential Logic**: Use an `always_ff` block to update the state of the LFSR on the positive edge of the clock, considering the synchronous reset.
+
+By following these steps, we ensure that the module adheres to the specified behavior and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    logic [31:0] q_next;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            q <= 32'h1;
+        end else begin
+            q <= q_next;
+        end
+    end
+
+    always_comb begin
+        q_next[31] = q[0] ^ q[31];
+        q_next[30] = q[31];
+        q_next[29] = q[30];
+        q_next[28] = q[29];
+        q_next[27] = q[28];
+        q_next[26] = q[27];
+        q_next[25] = q[26];
+        q_next[24] = q[25];
+        q_next[23] = q[24];
+        q_next[22] = q[0] ^ q[23];
+        q_next[21] = q[22];
+        q_next[20] = q[21];
+        q_next[19] = q[20];
+        q_next[18] = q[19];
+        q_next[17] = q[18];
+        q_next[16] = q[17];
+        q_next[15] = q[16];
+        q_next[14] = q[15];
+        q_next[13] = q[14];
+        q_next[12] = q[13];
+        q_next[11] = q[12];
+        q_next[10] = q[11];
+        q_next[9]  = q[10];
+        q_next[8]  = q[9];
+        q_next[7]  = q[8];
+        q_next[6]  = q[7];
+        q_next[5]  = q[6];
+        q_next[4]  = q[5];
+        q_next[3]  = q[4];
+        q_next[2]  = q[0] ^ q[3];
+        q_next[1]  = q[0] ^ q[2];
+        q_next[0]  = q[1];
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [31:0] q
+);
+
+    logic [31:0] q_next;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            q <= 32'h1;
+        end else begin
+            q <= q_next;
+        end
+    end
+
+    always_comb begin
+        q_next[31] = q[0] ^ q[31];
+        q_next[30] = q[31];
+        q_next[29] = q[30];
+        q_next[28] = q[29];
+        q_next[27] = q[28];
+        q_next[26] = q[27];
+        q_next[25] = q[26];
+        q_next[24] = q[25];
+        q_next[23] = q[24];
+        q_next[22] = q[0] ^ q[23];
+        q_next[21] = q[22];
+        q_next[20] = q[21];
+        q_next[19] = q[20];
+        q_next[18] = q[19];
+        q_next[17] = q[18];
+        q_next[16] = q[17];
+        q_next[15] = q[16];
+        q_next[14] = q[15];
+        q_next[13] = q[14];
+        q_next[12] = q[13];
+        q_next[11] = q[12];
+        q_next[10] = q[11];
+        q_next[9]  = q[10];
+        q_next[8]  = q[9];
+        q_next[7]  = q[8];
+        q_next[6]  = q[7];
+        q_next[5]  = q[6];
+        q_next[4]  = q[5];
+        q_next[3]  = q[4];
+        q_next[2]  = q[0] ^ q[3];
+        q_next[1]  = q[0] ^ q[2];
+        q_next[0]  = q[1];
+    end
+
+endmodule

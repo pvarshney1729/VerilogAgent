@@ -1,0 +1,38 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module interface with input ports clk, in, reset, and output ports out_byte (8 bits) and done.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  clk - input  in - input  reset - output out_byte (8 bits) - output done",
+        "implementation": "module TopModule (\n    input clk,\n    input in,\n    input reset,\n    output reg [7:0] out_byte,\n    output reg done\n);\n    // Additional logic and state machine implementation will be added here\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define state encoding using localparam for the FSM states: IDLE, START, DATA, and STOP.",
+        "source": "Design a finite state machine that will identify when bytes have been correctly received when given a stream of bits. It needs to identify the start bit, wait for all 8 data bits, then verify that the stop bit was correct.",
+        "implementation": "localparam IDLE  = 2'b00;\nlocalparam START = 2'b01;\nlocalparam DATA  = 2'b10;\nlocalparam STOP  = 2'b11;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic to hold the current state of the FSM.",
+        "source": "Include a active-high synchronous reset. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "reg [3:0] state_reg, state_next;\n\n  // State register with synchronous reset\n  always @(posedge clk) begin\n    if (reset) begin\n      state_reg <= 4'b0000; // Assuming 4-bit state register, reset to initial state\n    end else begin\n      state_reg <= state_next;\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state logic to transition between states based on the input bit stream. Transition from IDLE to START on detecting a start bit, from START to DATA after one cycle, from DATA to STOP after 8 data bits, and from STOP back to IDLE after verifying the stop bit.",
+        "source": "Design a finite state machine that will identify when bytes have been correctly received when given a stream of bits. It needs to identify the start bit, wait for all 8 data bits, then verify that the stop bit was correct.",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  typedef enum logic [1:0] {\n    IDLE  = 2'b00,\n    START = 2'b01,\n    DATA  = 2'b10,\n    STOP  = 2'b11\n  } state_t;\n\n  state_t current_state, next_state;\n  logic [2:0] bit_count; // Counter for data bits\n\n  // Next state logic\n  always_comb begin\n    case (current_state)\n      IDLE: begin\n        if (in == 1'b0) // Detect start bit\n          next_state = START;\n        else\n          next_state = IDLE;\n      end\n      START: begin\n        next_state = DATA; // Move to DATA state after one cycle\n      end\n      DATA: begin\n        if (bit_count == 3'd7) // After 8 data bits\n          next_state = STOP;\n        else\n          next_state = DATA;\n      end\n      STOP: begin\n        if (in == 1'b1) // Verify stop bit\n          next_state = IDLE;\n        else\n          next_state = STOP; // Wait for correct stop bit\n      end\n      default: next_state = IDLE;\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "5",
+        "content": "Implement a shift register to capture the 8 data bits during the DATA state. Shift in the input bit on each clock cycle while in the DATA state.",
+        "source": "Note that the serial protocol sends the least significant bit first.",
+        "implementation": "reg [7:0] shift_reg;\n  reg [3:0] bit_count;\n  \n  always @(posedge clk) begin\n    if (reset) begin\n      shift_reg <= 8'b0;\n      bit_count <= 4'b0;\n    end else if (state == DATA) begin\n      shift_reg <= {in, shift_reg[7:1]}; // Shift in the input bit\n      bit_count <= bit_count + 1;\n    end\n  end"
+    },
+    {
+        "id": "6",
+        "content": "Implement the output logic to assign the captured data bits to out_byte and assert done when a valid byte is received and the stop bit is correct.",
+        "source": "The module will also output the correctly-received data byte. `out_byte` needs to be valid when `done` is 1, and is don't-care otherwise. If the stop bit does not appear when expected, the FSM must wait until it finds a stop bit before attempting to receive the next byte. It should assert done each time it finds a stop bit.",
+        "implementation": "```verilog\n[BEGIN]\nreg [7:0] data_reg;\nreg done_reg;\nreg [3:0] bit_count;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        out_byte <= 8'b0;\n        done <= 1'b0;\n    end else begin\n        if (bit_count == 4'd9) begin // Assuming bit_count reaches 9 at the stop bit\n            if (in == 1'b1) begin // Check for correct stop bit\n                out_byte <= data_reg;\n                done <= 1'b1;\n            end else begin\n                done <= 1'b0;\n            end\n        end else begin\n            done <= 1'b0;\n        end\n    end\nend\n[END]\n```"
+    }
+]

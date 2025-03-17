@@ -1,0 +1,30 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit input, serves as the clock signal. All sequential logic operations are triggered on the rising edge of this clock.
+  - `reset`: 1-bit input, active-high, synchronous reset. When asserted, it resets the LFSR output `q` to a predefined state.
+
+- Output Ports:
+  - `q`: 32-bit output representing the state of the LFSR. Bit indexing follows the convention where `q[0]` is the least significant bit (LSB) and `q[31]` is the most significant bit (MSB).
+
+Functional Description:
+- The module implements a 32-bit Galois Linear Feedback Shift Register (LFSR).
+- On each clock cycle triggered by the rising edge of `clk`, the LFSR shifts its contents to the right.
+- The taps are located at bit positions 31 (MSB), 21, 1, and 0 (LSB), where bit position 31 is considered the MSB based on zero-based indexing.
+- Each bit position with a tap computes its next value by XORing its current value with the LSB output bit `q[0]`.
+- Bit positions without a tap simply shift right and retain the value of the bit to their left.
+- On assertion of the synchronous reset (`reset` = 1), the LFSR output `q` is reset to the hexadecimal value 32'h1, which implies that only `q[0]` is set to 1 and all other bits are set to 0.
+
+Timing and Initialization:
+- All sequential elements are initialized to their reset state on module instantiation or when reset is asserted.
+- Ensure correct timing by adhering to the positive edge trigger of the `clk` signal for all state transitions.
+- Sequential logic is designed to be free from race conditions.
+
+Edge Cases and Boundary Conditions:
+- Ensure that the LFSR does not enter a state of all zeros since this is a non-functional state for a standard LFSR and could lead to a locked state with no further state transitions.
+- The module is expected to cycle through a pseudo-random sequence of states, maximizing the length of the sequence before repetition as determined by the tap positions.
+
+The implementation should thoroughly ensure correct functionality and edge case handling based on the provided specifications.
+</ENHANCED_SPEC>

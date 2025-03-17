@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic a,\n    output logic [2:0] q\n);\n    logic [2:0] q_reg;\n\n    always_ff @(posedge clk) begin\n        if (a) begin\n            q_reg <= 3'd4;\n        end else begin\n            if (q_reg == 3'd6) begin\n                q_reg <= 3'd0;\n            end else begin\n                q_reg <= q_reg + 3'd1;\n            end\n        end\n    end\n\n    assign q = q_reg;\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: Clock signal, positive edge-sensitive.
+  - `input wire reset`: Synchronous active-high reset signal.
+  - `input wire in`: Input data stream (1-bit).
+
+- Output Ports:
+  - `output reg disc`: Indicates a bit needs to be discarded.
+  - `output reg flag`: Indicates the beginning/end of a frame.
+  - `output reg err`: Indicates an error condition (7 or more consecutive 1s).
+
+Design Specifications:
+1. **Finite State Machine (FSM):**
+   - The design should implement a Moore-type FSM to decode a continuous bit stream.
+   - Define states to recognize specific sequences: `0111110`, `01111110`, and `01111111...`.
+   - The FSM should transition states based on the input bit `in`, sampled on the positive edge of `clk`.
+
+2. **Sequences and Outputs:**
+   - Sequence `0111110`: Assert `disc` high for one clock cycle immediately following detection.
+   - Sequence `01111110`: Assert `flag` high for one clock cycle immediately following detection.
+   - Sequence `01111111` or more: Assert `err` high for one clock cycle immediately following detection.
+
+3. **Reset Behavior:**
+   - The FSM should return to an initial state as if the previous input were `0` upon a synchronous active-high reset.
+   - All output signals (`disc`, `flag`, `err`) should be deasserted (set low) upon reset.
+
+4. **Output Definitions:**
+   - All outputs (`disc`, `flag`, `err`) must remain asserted for exactly one clock cycle after the respective condition is detected.
+
+5. **Bit Indexing Convention:**
+   - Assume LSB-first bit ordering in sequences, i.e., bit[0] is the least significant bit.
+
+6. **Edge Cases:**
+   - Ensure the FSM correctly handles transitions and outputs at the boundaries between sequences.
+   - Handle potential race conditions by ensuring proper state transitions on the clock edge.
+
+7. **Operational Notes:**
+   - The FSM should be designed to handle continuous input and should not miss any potential sequence due to state transition delays.
+   - Ensure the design accounts for potential input jitter and noise by robust state transitioning.
+</ENHANCED_SPEC>

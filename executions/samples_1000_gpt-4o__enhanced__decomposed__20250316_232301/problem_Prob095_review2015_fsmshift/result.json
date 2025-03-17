@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    output logic shift_ena\n);\n\n    logic [2:0] shift_counter;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            shift_counter <= 3'd4; // Initialize counter to 4 on reset\n        end else if (shift_counter != 3'd0) begin\n            shift_counter <= shift_counter - 1; // Decrement counter\n        end\n    end\n\n    always @(*) begin\n        shift_ena = (shift_counter != 3'd0); // Assert shift_ena when counter is non-zero\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

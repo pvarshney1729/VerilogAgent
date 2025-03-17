@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input clk: A clock signal, positive edge-triggered, width = 1 bit.
+- input areset: An asynchronous active-high reset signal, width = 1 bit.
+- input j: Input signal used to control state transitions, width = 1 bit.
+- input k: Input signal used to control state transitions, width = 1 bit.
+- output out: Output signal representing the state output, width = 1 bit.
+
+State Machine Description:
+- This module implements a Moore state machine with two states: OFF and ON.
+- The machine transitions between states based on the values of inputs j and k.
+- State transitions occur on the rising edge of the clock signal.
+- The initial state after reset is OFF.
+
+State Definitions:
+1. State OFF:
+   - Output: out = 0
+   - Transitions:
+     - If j = 0, remain in OFF.
+     - If j = 1, transition to ON.
+
+2. State ON:
+   - Output: out = 1
+   - Transitions:
+     - If k = 0, remain in ON.
+     - If k = 1, transition to OFF.
+
+Reset Behavior:
+- The reset signal (areset) is active-high and asynchronous.
+- When areset is asserted (high), the state machine immediately transitions to the OFF state, regardless of the clock.
+- Upon release of areset (returning low), normal state transitions based on inputs j and k resume on the next rising edge of clk.
+
+Bit Indexing and Conventions:
+- All inputs and outputs are treated as single-bit signals.
+- Bit indexing is not applicable due to single-bit nature of the ports.
+
+Edge Cases and Input Boundaries:
+- The behavior is fully defined for all possible combinations of inputs j and k in both states.
+- The transition logic ensures no race conditions, as changes occur synchronously with the clock except during asynchronous reset.
+</ENHANCED_SPEC>

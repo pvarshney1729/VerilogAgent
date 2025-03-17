@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire a` : Bit index 0, represents the least significant bit for 'ab' pair
+  - `input wire b` : Bit index 1, represents the most significant bit for 'ab' pair
+  - `input wire c` : Bit index 0, represents the least significant bit for 'cd' pair
+  - `input wire d` : Bit index 1, represents the most significant bit for 'cd' pair
+
+- Output Ports:
+  - `output wire out` : Single bit output
+
+Functional Description:
+- The module implements combinational logic based on the provided Karnaugh map. The output `out` is determined by the combinations of the input variables `a`, `b`, `c`, and `d`.
+  
+Karnaugh Map Representation:
+- The Karnaugh map has been defined for the truth table as follows, where:
+  - The horizontal axis represents the `ab` combination.
+  - The vertical axis represents the `cd` combination.
+
+  |   ab \ cd  |  00  |  01  |  11  |  10  |
+  |------------|------|------|------|------|
+  | **00**     |  1   |  1   |  0   |  1   |
+  | **01**     |  1   |  0   |  0   |  1   |
+  | **11**     |  0   |  1   |  1   |  1   |
+  | **10**     |  1   |  1   |  0   |  0   |
+
+Implementation Notes:
+- The module is purely combinational and does not depend on clock cycles or sequential logic.
+- All inputs and outputs are treated as single-bit signals.
+- The circuit's logic should be minimized using appropriate techniques such as boolean algebra or automated tools if necessary, based on the given Karnaugh map.
+- Ensure that there is no assumption about initial values as the circuit is combinational.
+
+Edge Cases:
+- Since all inputs are 1-bit, consider all 16 possible combinations of input values when verifying correctness.
+- No additional reset or initialization considerations are required in this combinational circuit.
+</ENHANCED_SPEC>

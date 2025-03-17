@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Descriptions:
+- `input clk`: Clock signal for synchronizing sequential logic. There are no specific requirements for the clock frequency, but it must be stable and free from glitches.
+- `input areset`: Asynchronous reset signal. Active high. When high, the state machine should immediately transition to the reset state (state B).
+- `input in`: Input signal that influences state transitions within the state machine.
+- `output out`: Output signal, determined solely by the current state of the state machine.
+
+Port Widths and Signaling:
+- All ports (`clk`, `areset`, `in`, `out`) are 1-bit wide.
+- Input and output signals are treated as unsigned.
+
+State Machine Specification:
+- The module implements a Moore state machine with two states: A and B.
+- State Encoding:
+  - State A: Encoded as 0
+  - State B: Encoded as 1
+
+- State Transition Diagram:
+  - State B (output 1) transitions to:
+    - State A on input `in = 0`
+    - State B on input `in = 1`
+  - State A (output 0) transitions to:
+    - State B on input `in = 0`
+    - State A on input `in = 1`
+
+- Initial State and Reset Behavior:
+  - The state machine should asynchronously reset to State B when `areset` is high. This transition is independent of the clock signal.
+  - Upon release of `areset`, the state machine should continue operation based on the current input and clock edge.
+
+Output Behavior:
+- The output `out` is determined by the state of the machine:
+  - It outputs `1` when in state B.
+  - It outputs `0` when in state A.
+
+Clocking and Sequential Logic:
+- The state transitions occur on the rising edge of the `clk` signal.
+- The `areset` signal is asynchronous. It should be used to override the clock-based state transitions when asserted.
+
+Race Conditions and Edge Cases:
+- Ensure that the `areset` signal is properly synchronized to avoid metastability when transitioning from asynchronous reset to normal operation.
+
+This specification provides all necessary details for a correct Verilog implementation of the TopModule with defined behavior under all specified conditions.
+</ENHANCED_SPEC>

@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal, 1-bit, positive edge-triggered.
+  - `in`: Serial data input, 1-bit.
+  - `reset`: Active-high synchronous reset, 1-bit.
+
+- Output Ports:
+  - `out_byte`: 8-bit data output. Valid when `done` is high.
+  - `done`: 1-bit flag, indicates a complete and correct byte has been received when high.
+
+General Description:
+The module implements a finite state machine (FSM) to decode a serial communication protocol consisting of a start bit, 8 data bits, and a stop bit. The protocol sends data with the least significant bit (LSB) first.
+
+FSM Operation:
+1. Idle State: The FSM remains in this state while the line is high (logic 1) and transitions to the Start state upon detecting a low (logic 0) start bit.
+
+2. Start State: Upon detecting the start bit, the FSM transitions to the Data state to begin receiving the 8 data bits.
+
+3. Data State: The FSM sequentially shifts in each of the 8 data bits from the LSB to the most significant bit (MSB). This process occurs over 8 clock cycles.
+
+4. Stop State: After the 8 data bits have been received, the FSM checks for a high (logic 1) stop bit:
+   - If the stop bit is detected, `done` is asserted high for one clock cycle, and the byte is output on `out_byte`.
+   - If the stop bit is not detected, the FSM will continue checking for a correct stop bit before transitioning back to the Idle state.
+
+Reset Behavior:
+- On a synchronous reset (when `reset` is high), the FSM will return to the Idle state, `out_byte` is set to a don't-care value, and `done` is set to 0.
+
+Signal Conventions:
+- The `out_byte` is valid only when `done` is high.
+- The data bits are received least significant bit first.
+- Bit indexing follows the convention where bit[0] is the least significant bit.
+
+Edge Cases:
+- If the start bit is not detected, the FSM remains in the Idle state.
+- The FSM ensures correct byte reception by verifying the presence of a valid start bit, 8 data bits, and a valid stop bit sequentially.
+
+Assumptions:
+- The module operates with sequential logic triggered on the positive edge of the clock.
+- Line is at logic 1 when idle, and transitions to logic 0 to indicate the start bit.
+- The FSM is designed to handle continuous streams of serial data with no gaps between bytes.
+</ENHANCED_SPEC>

@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk` : Clock signal, driving all sequential logic.
+  - `input wire areset` : Active-high asynchronous reset signal. When high, forces the state machine to the OFF state.
+  - `input wire j` : Control input, used to transition from OFF to ON state.
+  - `input wire k` : Control input, used to transition from ON to OFF state.
+  
+- Output Ports:
+  - `output reg out` : Represents the current output of the state machine. Initialized to 0.
+
+Design Specification:
+- State Machine Type: Moore State Machine
+- Number of States: 2
+  - OFF State: Output `out` is 0.
+  - ON State: Output `out` is 1.
+
+- Reset Behavior:
+  - The reset (`areset`) is asynchronous and active-high.
+  - On assertion of `areset`, the state machine transitions to the OFF state, and `out` is set to 0.
+
+- State Transitions:
+  - When in the OFF state (`out=0`):
+    - If `j` is 0, remain in the OFF state.
+    - If `j` is 1, transition to the ON state.
+  - When in the ON state (`out=1`):
+    - If `k` is 0, remain in the ON state.
+    - If `k` is 1, transition to the OFF state.
+
+- Bit Indexing: 
+  - All signals are single-bit, no additional indexing is required.
+
+- Initialization:
+  - The state machine should initialize in the OFF state with `out` set to 0 on reset assertion.
+
+- Edge Cases:
+  - Ensure that on the rising edge of `clk`, the state transitions occur as per the state logic described given the current values of `j` and `k`.
+  - Handle asynchronous reset (`areset`) such that it takes precedence over clock-driven state transitions.
+  
+- Precedence:
+  - Asynchronous reset has the highest precedence and can override any state transition dictated by `j` or `k`.
+
+Note: Ensure that all transitions and outputs are updated synchronously with the clock edge except for the asynchronous reset.
+</ENHANCED_SPEC>

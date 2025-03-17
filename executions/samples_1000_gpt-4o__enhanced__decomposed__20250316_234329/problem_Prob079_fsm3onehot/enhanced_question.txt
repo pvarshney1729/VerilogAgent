@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input in`: Single-bit input signal.
+  - `input [3:0] state`: 4-bit input signal representing the current state using one-hot encoding. 
+    - State encoding:
+      - A = 4'b0001
+      - B = 4'b0010
+      - C = 4'b0100
+      - D = 4'b1000
+
+- Outputs:
+  - `output [3:0] next_state`: 4-bit output signal for the next state, encoded in one-hot format.
+  - `output out`: Single-bit output signal.
+
+Specifications:
+1. The module implements a Moore state machine with four states (A, B, C, D), a single input, and a single output.
+2. State transitions are determined by the current state and the input signal `in`.
+3. The state transition table is as follows:
+   - State A: 
+     - Next state: A if `in` = 0, B if `in` = 1
+     - Output: 0
+   - State B:
+     - Next state: C if `in` = 0, B if `in` = 1
+     - Output: 0
+   - State C:
+     - Next state: A if `in` = 0, D if `in` = 1
+     - Output: 0
+   - State D:
+     - Next state: C if `in` = 0, B if `in` = 1
+     - Output: 1
+
+4. The state machine is purely combinational, involving only the state transition logic and output logic. It does not include sequential logic elements such as flip-flops or registers within this module.
+
+5. The one-hot encoding ensures that only one bit of the state vector is high at any time, representing the current active state.
+
+6. The logic for the next state and the output should be derived directly from the state transition table, as specified above.
+
+7. All inputs and outputs are assumed to be active-high unless otherwise noted.
+</ENHANCED_SPEC>

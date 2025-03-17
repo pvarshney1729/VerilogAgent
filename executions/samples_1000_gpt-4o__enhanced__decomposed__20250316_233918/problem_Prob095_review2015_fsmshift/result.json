@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    output logic shift_ena\n);\n\n    // State encoding\n    typedef enum logic [1:0] {\n        IDLE   = 2'b00,\n        ENABLE = 2'b01\n    } state_t;\n\n    state_t current_state, next_state;\n    logic [2:0] shift_counter;\n\n    // State register with synchronous reset\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= ENABLE;\n            shift_counter <= 3'b100; // Initialize counter to 4\n        end else begin\n            current_state <= next_state;\n            if (current_state == ENABLE) begin\n                if (shift_counter != 3'b000) begin\n                    shift_counter <= shift_counter - 1;\n                end\n            end\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            IDLE: begin\n                if (reset)\n                    next_state = ENABLE;\n                else\n                    next_state = IDLE;\n            end\n            ENABLE: begin\n                if (shift_counter == 3'b000)\n                    next_state = IDLE;\n                else\n                    next_state = ENABLE;\n            end\n            default: next_state = IDLE;\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        shift_ena = (current_state == ENABLE);\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 2,
+        "passfail": "R"
+    }
+}

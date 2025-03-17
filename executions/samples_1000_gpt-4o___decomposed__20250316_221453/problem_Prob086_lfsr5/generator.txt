@@ -1,0 +1,135 @@
+Generated Response:
+
+<REASONING>
+To implement the 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3, we need to follow these steps:
+
+1. **Interface Definition**: Define the module `TopModule` with the specified inputs and outputs. The inputs are `clk` and `reset`, and the output is a 5-bit vector `q`.
+
+2. **Synchronous Reset**: Implement a synchronous reset that sets the LFSR to the initial state `00001` when `reset` is high on the rising edge of the clock.
+
+3. **LFSR Logic**: Implement the LFSR logic using a case statement as provided. The LFSR shifts right, and the taps at positions 5 and 3 are XORed with the LSB to determine the next state.
+
+4. **Sequential Logic**: Use an always block triggered on the positive edge of the clock to update the state of the LFSR. The reset logic is included within this block to ensure it is synchronous.
+
+5. **Combinational Logic**: Use an always block with `always @(*)` to determine the next state based on the current state and the LFSR logic.
+
+6. **Coding Conventions**: Follow the coding conventions such as using `logic` for declarations and ensuring all numeric constants have a size.
+
+By following these steps, we ensure that the LFSR operates correctly and cycles through all states except the all-zero state.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    logic [4:0] current_state, next_state;
+
+    // Combinational logic to determine the next state
+    always @(*) begin
+        case (current_state)
+            5'b00001: next_state = 5'b00010;
+            5'b00010: next_state = 5'b00100;
+            5'b00100: next_state = 5'b01000;
+            5'b01000: next_state = 5'b10000;
+            5'b10000: next_state = 5'b10011;
+            5'b10011: next_state = 5'b11001;
+            5'b11001: next_state = 5'b11111;
+            5'b11111: next_state = 5'b01110;
+            5'b01110: next_state = 5'b00111;
+            5'b00111: next_state = 5'b01101;
+            5'b01101: next_state = 5'b00011;
+            5'b00011: next_state = 5'b11110;
+            5'b11110: next_state = 5'b01111;
+            5'b01111: next_state = 5'b11010;
+            5'b11010: next_state = 5'b10110;
+            5'b10110: next_state = 5'b01011;
+            5'b01011: next_state = 5'b01001;
+            5'b01001: next_state = 5'b10111;
+            5'b10111: next_state = 5'b11011;
+            5'b11011: next_state = 5'b11101;
+            5'b11101: next_state = 5'b00110;
+            5'b00110: next_state = 5'b10001;
+            5'b10001: next_state = 5'b11100;
+            5'b11100: next_state = 5'b10101;
+            5'b10101: next_state = 5'b10010;
+            5'b10010: next_state = 5'b00001;
+            default: next_state = 5'b00000;
+        endcase
+    end
+
+    // Sequential logic for state update
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= 5'b00001;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output assignment
+    assign q = current_state;
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    logic [4:0] current_state, next_state;
+
+    // Combinational logic to determine the next state
+    always @(*) begin
+        case (current_state)
+            5'b00001: next_state = 5'b00010;
+            5'b00010: next_state = 5'b00100;
+            5'b00100: next_state = 5'b01000;
+            5'b01000: next_state = 5'b10000;
+            5'b10000: next_state = 5'b10011;
+            5'b10011: next_state = 5'b11001;
+            5'b11001: next_state = 5'b11111;
+            5'b11111: next_state = 5'b01110;
+            5'b01110: next_state = 5'b00111;
+            5'b00111: next_state = 5'b01101;
+            5'b01101: next_state = 5'b00011;
+            5'b00011: next_state = 5'b11110;
+            5'b11110: next_state = 5'b01111;
+            5'b01111: next_state = 5'b11010;
+            5'b11010: next_state = 5'b10110;
+            5'b10110: next_state = 5'b01011;
+            5'b01011: next_state = 5'b01001;
+            5'b01001: next_state = 5'b10111;
+            5'b10111: next_state = 5'b11011;
+            5'b11011: next_state = 5'b11101;
+            5'b11101: next_state = 5'b00110;
+            5'b00110: next_state = 5'b10001;
+            5'b10001: next_state = 5'b11100;
+            5'b11100: next_state = 5'b10101;
+            5'b10101: next_state = 5'b10010;
+            5'b10010: next_state = 5'b00001;
+            default: next_state = 5'b00000;
+        endcase
+    end
+
+    // Sequential logic for state update
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= 5'b00001;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output assignment
+    assign q = current_state;
+
+endmodule

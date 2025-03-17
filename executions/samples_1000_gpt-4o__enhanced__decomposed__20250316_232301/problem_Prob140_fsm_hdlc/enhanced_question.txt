@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit, clock signal, triggering on the positive edge.
+  - reset: 1-bit, active high synchronous reset signal.
+  - in: 1-bit, input bit stream.
+
+- Output Ports:
+  - disc: 1-bit, output signal indicating a bit should be discarded.
+  - flag: 1-bit, output signal indicating the beginning or end of a frame.
+  - err: 1-bit, output signal indicating an error due to 7 or more consecutive 1s.
+
+Functional Description:
+The module implements a Moore-type Finite State Machine (FSM) to process a continuous bit stream according to the Synchronous HDLC framing rules, adhering to these conditions:
+
+1. Detect the sequence "0111110":
+   - Output `disc` is asserted for one complete clock cycle starting from the cycle after detection.
+   - This sequence indicates a bit needs to be discarded to maintain frame integrity.
+
+2. Detect the sequence "01111110":
+   - Output `flag` is asserted for one complete clock cycle starting from the cycle after detection.
+   - This sequence indicates a flag, marking the beginning or end of a frame.
+
+3. Detect "01111111" or more consecutive 1s:
+   - Output `err` is asserted for one complete clock cycle starting from the cycle after detection.
+   - This condition signals an error due to 7 or more consecutive 1s, which is not allowed in the valid data stream.
+
+FSM Behavior:
+- The FSM should reset to an initial state that behaves as if the previous input was 0.
+- State transitions occur on the positive edge of the `clk`.
+- The FSM should have clearly defined states for detecting and handling each specified bit pattern.
+- All output signals (`disc`, `flag`, `err`) are asserted synchronously with the clock.
+
+Reset Behavior:
+- The `reset` signal is an active high synchronous reset.
+- Upon reset, the FSM transitions to the initial state, ensuring it behaves as if the previous input was 0.
+- All outputs (`disc`, `flag`, `err`) should be deasserted immediately upon reset.
+
+Bit Indexing:
+- Bit[0] refers to the least significant bit (LSB).
+
+Edge Case Handling:
+- Ensure correct state transitions and output assertions even at the boundaries of input sequences.
+- Properly handle transitions from one sequence to another, avoiding false detections.
+
+Initial Values:
+- Define initial states and values for all registers and flip-flops to ensure predictable behavior on startup and reset.
+</ENHANCED_SPEC>

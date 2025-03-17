@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock input. This signal is used for synchronous operations.
+  - `reset`: 1-bit synchronous active-high reset input. When asserted, the state machine transitions to the initial state, OFF.
+  - `j`: 1-bit input determining state transitions from OFF state.
+  - `k`: 1-bit input determining state transitions from ON state.
+
+- Output Ports:
+  - `out`: 1-bit output reflecting the current state of the state machine. This signal is 0 in the OFF state and 1 in the ON state.
+
+State Machine Description:
+- This is a Moore state machine with two states: OFF and ON.
+- State Encoding:
+  - `OFF`: The state where `out` is 0.
+  - `ON`: The state where `out` is 1.
+
+State Transition Logic:
+- From state `OFF`:
+  - If `j` is 0, remain in state OFF.
+  - If `j` is 1, transition to state ON.
+
+- From state `ON`:
+  - If `k` is 0, remain in state ON.
+  - If `k` is 1, transition to state OFF.
+
+Reset Behavior:
+- The reset signal is a synchronous active-high reset.
+- When `reset` is asserted (i.e., `reset` is 1), the state machine transitions to the OFF state, regardless of the inputs `j` or `k`.
+
+Bit Indexing and Conventions:
+- All inputs and outputs are 1-bit wide, with the least significant bit (bit[0]) representing the value of the signal.
+
+Initial Conditions:
+- Upon reset, the state machine must be in the OFF state, which means `out` will output 0.
+
+Clock Cycle Relationships:
+- State transitions occur on the rising edge of the `clk` signal.
+- The output `out` is updated synchronously with the state transitions.
+
+Edge Cases:
+- Ensure that transitions are correctly handled on the rising edge of `clk` and that `reset` takes precedence over inputs `j` and `k` during a reset condition.
+</ENHANCED_SPEC>

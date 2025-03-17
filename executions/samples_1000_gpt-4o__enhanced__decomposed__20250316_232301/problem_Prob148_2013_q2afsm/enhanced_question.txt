@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule`. The following describes the interface and internal behavior specifications to ensure correct implementation.
+
+### Interface Definition
+- **input clk**: Clock signal, triggers on the positive edge.
+- **input resetn**: Active-low synchronous reset signal. When asserted (`resetn = 0`), the FSM resets to state A.
+- **input [2:0] r**: Request signals from three devices, where `r[0]` refers to device 0, `r[1]` to device 1, and `r[2]` to device 2. Each bit is independent and indicates a request when set to 1.
+- **output reg [2:0] g**: Grant signals corresponding to the request signals. `g[0]` for device 0, `g[1]` for device 1, and `g[2]` for device 2. Each bit is set to 1 when the respective device is granted access.
+
+### State Encoding and FSM Description
+- State encoding can be implemented using binary or one-hot encoding as preferred. For clarity, we suggest the following states:
+  - **State A**: 2'b00
+  - **State B**: 2'b01 (indicates `g[0]=1`)
+  - **State C**: 2'b10 (indicates `g[1]=1`)
+  - **State D**: 2'b11 (indicates `g[2]=1`)
+
+### FSM State Transitions
+- **State A**:
+  - Transition to **State B** if `r[0] = 1`.
+  - Transition to **State C** if `r[0] = 0` and `r[1] = 1`.
+  - Transition to **State D** if `r[0] = 0`, `r[1] = 0`, and `r[2] = 1`.
+  - Remain in **State A** if `r[0] = 0`, `r[1] = 0`, and `r[2] = 0`.
+
+- **State B**: (Output `g[0] = 1`)
+  - Remain in **State B** if `r[0] = 1`.
+  - Transition to **State A** if `r[0] = 0`.
+
+- **State C**: (Output `g[1] = 1`)
+  - Remain in **State C** if `r[1] = 1`.
+  - Transition to **State A** if `r[1] = 0`.
+
+- **State D**: (Output `g[2] = 1`)
+  - Remain in **State D** if `r[2] = 1`.
+  - Transition to **State A** if `r[2] = 0`.
+
+### Logic Implementation Details
+- Use separate `always` blocks for state transition logic and state register updates.
+- The state register should update on the positive edge of `clk` and respect the synchronous reset condition (`resetn`).
+- Output logic (`g`) can be implemented using a continuous assignment or an `always` block. It should reflect the current state as follows:
+  - In **State B**, set `g[0] = 1`, all others to 0.
+  - In **State C**, set `g[1] = 1`, all others to 0.
+  - In **State D**, set `g[2] = 1`, all others to 0.
+  - In **State A**, set all `g[i] = 0`.
+
+### Initial Conditions
+- Upon reset, or when `resetn` is asserted, transition the FSM to **State A**.
+- Ensure all flip-flops and registers are initialized to a known state, consistent with the reset behavior.
+
+This FSM prioritizes requests based on device index, with device 0 having the highest priority and device 2 having the lowest priority.
+</ENHANCED_SPEC>

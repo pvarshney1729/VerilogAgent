@@ -1,0 +1,127 @@
+Generated Response:
+
+<REASONING>
+To implement the FSM as specified, we need to follow these steps:
+
+1. **Module Declaration**: Define the module with the specified interface, including input ports `clk`, `reset`, `x`, and output port `z`.
+
+2. **State Encoding**: Use local parameters to define the states `000`, `001`, `010`, `011`, and `100`. This helps in making the code more readable and maintainable.
+
+3. **State Register**: Implement a state register to hold the current state of the FSM. This register will be updated on the positive edge of the clock and will reset synchronously to state `000` when `reset` is asserted.
+
+4. **Next State Logic**: Create combinational logic to determine the next state based on the current state and input `x`. This logic will be implemented using a case statement.
+
+5. **Output Logic**: Implement combinational logic to determine the output `z` based on the current state. This is also done using a case statement.
+
+6. **Coding Conventions**: Follow the specified coding conventions, such as using `logic` for signal declarations, using `always @(*)` for combinational logic, and ensuring all numeric constants are properly sized.
+
+By following these steps, we ensure that the FSM behaves as specified and adheres to the given guidelines and conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    localparam logic [2:0] STATE_000 = 3'b000;
+    localparam logic [2:0] STATE_001 = 3'b001;
+    localparam logic [2:0] STATE_010 = 3'b010;
+    localparam logic [2:0] STATE_011 = 3'b011;
+    localparam logic [2:0] STATE_100 = 3'b100;
+
+    // State registers
+    logic [2:0] state, next_state;
+
+    // State register with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset)
+            state <= STATE_000; // Reset state to 000
+        else
+            state <= next_state; // Update state
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            STATE_000: next_state = (x == 1'b0) ? STATE_000 : STATE_001;
+            STATE_001: next_state = (x == 1'b0) ? STATE_001 : STATE_100;
+            STATE_010: next_state = (x == 1'b0) ? STATE_010 : STATE_001;
+            STATE_011: next_state = (x == 1'b0) ? STATE_001 : STATE_010;
+            STATE_100: next_state = (x == 1'b0) ? STATE_011 : STATE_100;
+            default: next_state = STATE_000; // Default case for safety
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (state)
+            STATE_000: z = 1'b0;
+            STATE_001: z = 1'b0;
+            STATE_010: z = 1'b0;
+            STATE_011: z = 1'b1;
+            STATE_100: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic x,
+    output logic z
+);
+
+    // State encoding
+    localparam logic [2:0] STATE_000 = 3'b000;
+    localparam logic [2:0] STATE_001 = 3'b001;
+    localparam logic [2:0] STATE_010 = 3'b010;
+    localparam logic [2:0] STATE_011 = 3'b011;
+    localparam logic [2:0] STATE_100 = 3'b100;
+
+    // State registers
+    logic [2:0] state, next_state;
+
+    // State register with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset)
+            state <= STATE_000; // Reset state to 000
+        else
+            state <= next_state; // Update state
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            STATE_000: next_state = (x == 1'b0) ? STATE_000 : STATE_001;
+            STATE_001: next_state = (x == 1'b0) ? STATE_001 : STATE_100;
+            STATE_010: next_state = (x == 1'b0) ? STATE_010 : STATE_001;
+            STATE_011: next_state = (x == 1'b0) ? STATE_001 : STATE_010;
+            STATE_100: next_state = (x == 1'b0) ? STATE_011 : STATE_100;
+            default: next_state = STATE_000; // Default case for safety
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (state)
+            STATE_000: z = 1'b0;
+            STATE_001: z = 1'b0;
+            STATE_010: z = 1'b0;
+            STATE_011: z = 1'b1;
+            STATE_100: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule

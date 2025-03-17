@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+The module "TopModule" is a combinational logic circuit designed as a priority encoder with the following specifications:
+
+- **Module Name**: TopModule
+- **Inputs**:
+  - `in`: A 4-bit vector input, denoted as `in[3:0]`. Here, `in[3]` is the most significant bit (MSB) and `in[0]` is the least significant bit (LSB).
+  
+- **Outputs**:
+  - `pos`: A 2-bit vector output, denoted as `pos[1:0]`, representing the binary position of the first high ('1') bit found in the input vector `in`.
+
+**Functionality**:
+- The priority encoder scans the input `in` from the MSB (`in[3]`) to the LSB (`in[0]`).
+- The output `pos` provides the binary index of the first high ('1') bit encountered during this scan. The index is based on a 0-based counting system (`in[0]` corresponds to position 0).
+- If the input `in` is `4'b0000` (i.e., all bits are low), the output `pos` should be `2'b00`.
+
+**Behavioral Examples**:
+- Example 1: If `in` is `4'b1000`, then `pos` should be `2'b11` since the first high bit is at position 3.
+- Example 2: If `in` is `4'b0100`, then `pos` should be `2'b10` since the first high bit is at position 2.
+- Example 3: If `in` is `4'b0010`, then `pos` should be `2'b01` since the first high bit is at position 1.
+- Example 4: If `in` is `4'b0001`, then `pos` should be `2'b00` since the first high bit is at position 0.
+- Example 5: If `in` is `4'b0000`, then `pos` should be `2'b00` as no high bit is present.
+
+**Notes**:
+- This module should be implemented as a purely combinational circuit, meaning there are no clock inputs or sequential elements involved.
+- The operation of the module should be completed in a single evaluation cycle of the simulation or synthesis tool.
+- No reset signal is necessary as there are no state-holding elements in this design.
+</ENHANCED_SPEC>

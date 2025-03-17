@@ -1,0 +1,125 @@
+Generated Response:
+
+<REASONING>
+To implement the FSM as specified, we will follow these steps:
+
+1. **Module Declaration**: Define the module with the specified interface, including inputs `clk`, `reset`, `w`, and output `z`.
+
+2. **State Encoding**: Use `localparam` to define the states A, B, C, D, E, and F with unique binary codes.
+
+3. **State Register**: Implement a state register to hold the current state. This register will be updated on the positive edge of the clock and will reset to state A when the reset signal is high.
+
+4. **Next State Logic**: Use a combinational always block to determine the next state based on the current state and input `w`.
+
+5. **Output Logic**: Implement the output logic for `z` using either a continuous assignment or an always block. The output `z` is determined by the current state, where states E and F produce a `1`, and all other states produce a `0`.
+
+6. **Coding Conventions**: Follow the specified coding conventions, such as using `logic` for signal declarations and using `always @(*)` for combinational logic.
+
+By following these steps, we ensure that the FSM behaves as specified and adheres to the coding guidelines.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic w,
+    output logic z
+);
+
+    // State encoding using localparam
+    localparam logic [2:0] A = 3'b000,
+                           B = 3'b001,
+                           C = 3'b010,
+                           D = 3'b011,
+                           E = 3'b100,
+                           F = 3'b101;
+
+    // State register
+    logic [2:0] current_state, next_state;
+
+    // State transition logic (combinational)
+    always @(*) begin
+        case (current_state)
+            A: next_state = (w) ? B : A;
+            B: next_state = (w) ? C : D;
+            C: next_state = (w) ? E : D;
+            D: next_state = (w) ? F : A;
+            E: next_state = (w) ? E : D;
+            F: next_state = (w) ? C : D;
+            default: next_state = A; // Default to state A
+        endcase
+    end
+
+    // State register update (sequential)
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= A; // Reset to state A
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic for z (combinational)
+    always @(*) begin
+        case (current_state)
+            E, F: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic w,
+    output logic z
+);
+
+    // State encoding using localparam
+    localparam logic [2:0] A = 3'b000,
+                           B = 3'b001,
+                           C = 3'b010,
+                           D = 3'b011,
+                           E = 3'b100,
+                           F = 3'b101;
+
+    // State register
+    logic [2:0] current_state, next_state;
+
+    // State transition logic (combinational)
+    always @(*) begin
+        case (current_state)
+            A: next_state = (w) ? B : A;
+            B: next_state = (w) ? C : D;
+            C: next_state = (w) ? E : D;
+            D: next_state = (w) ? F : A;
+            E: next_state = (w) ? E : D;
+            F: next_state = (w) ? C : D;
+            default: next_state = A; // Default to state A
+        endcase
+    end
+
+    // State register update (sequential)
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= A; // Reset to state A
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic for z (combinational)
+    always @(*) begin
+        case (current_state)
+            E, F: z = 1'b1;
+            default: z = 1'b0;
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,107 @@
+Generated Response:
+
+<REASONING>
+To implement the Moore state machine as specified, we need to define two states, A and B, with specific transitions based on the input signal 'in'. The module should asynchronously reset to state B when 'areset' is high. The output 'out' is determined solely by the current state, making it a Moore machine.
+
+1. **State Encoding**: Use local parameters to define the states A and B. This helps in making the code more readable and maintainable.
+
+2. **State Register**: Use a register to hold the current state. This register will be updated on the rising edge of the clock or asynchronously reset to state B when 'areset' is high.
+
+3. **Next State Logic**: Implement combinational logic to determine the next state based on the current state and input 'in'. This logic will be used to update the state register.
+
+4. **Output Logic**: The output 'out' is determined by the current state. In state A, 'out' is 0, and in state B, 'out' is 1.
+
+5. **Asynchronous Reset**: Ensure that the state register is reset to state B when 'areset' is high, irrespective of the clock.
+
+By following these steps, we can ensure that the module adheres to the specified behavior and interface.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    localparam logic STATE_A = 1'b0;
+    localparam logic STATE_B = 1'b1;
+
+    // State register
+    logic current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: next_state = (in) ? STATE_A : STATE_B;
+            STATE_B: next_state = (in) ? STATE_B : STATE_A;
+            default: next_state = STATE_B; // Default to STATE_B for safety
+        endcase
+    end
+
+    // State register update with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            current_state <= STATE_B; // Asynchronous reset to state B
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b0; // Default case to handle unexpected states
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    localparam logic STATE_A = 1'b0;
+    localparam logic STATE_B = 1'b1;
+
+    // State register
+    logic current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: next_state = (in) ? STATE_A : STATE_B;
+            STATE_B: next_state = (in) ? STATE_B : STATE_A;
+            default: next_state = STATE_B; // Default to STATE_B for safety
+        endcase
+    end
+
+    // State register update with asynchronous reset
+    always @(posedge clk or posedge areset) begin
+        if (areset)
+            current_state <= STATE_B; // Asynchronous reset to state B
+        else
+            current_state <= next_state;
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b0; // Default case to handle unexpected states
+        endcase
+    end
+
+endmodule

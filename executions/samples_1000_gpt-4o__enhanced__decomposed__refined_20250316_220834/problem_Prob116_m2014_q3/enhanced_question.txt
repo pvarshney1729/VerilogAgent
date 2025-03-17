@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input: 
+  - x: 4-bit vector, unsigned (`input wire [3:0] x`)
+    - Bit indexing: `x[3]` is the most significant bit (MSB), `x[0]` is the least significant bit (LSB).
+- Output: 
+  - f: 1-bit (`output wire f`)
+
+Functional Description:
+- The module computes the output `f` based on the values of the 4-bit input `x` using the specified Karnaugh map. The Karnaugh map is interpreted as follows, using `x[3]x[4]` for row selection and `x[1]x[2]` for column selection:
+
+  ```
+                x[1]x[2]
+    x[3]x[4]   00  01  11  10
+          00 | d | 0 | d | d |
+          01 | 0 | d | 1 | 0 |
+          11 | 1 | 1 | d | d |
+          10 | 1 | 1 | 0 | d |
+  ```
+
+- The symbol `d` represents a don't-care condition, meaning the output `f` can be either 0 or 1 for those combinations of `x`.
+
+Operational Clarifications:
+- The function `f` is purely combinational, with no sequential elements or state dependencies.
+- Ensure that all possible input combinations are covered, and the output for don't-care conditions (`d`) should be chosen to optimize the logic implementation.
+
+Boundary Conditions:
+- All 16 combinations of the 4-bit input `x` are accounted for in the Karnaugh map. The output for these combinations has been defined directly or as don't-care, allowing flexibility in implementation.
+- The output `f` must be stable and immediately reflect changes in the input `x`, adhering to the combinational nature of the logic.
+
+Additional Notes:
+- No clock or reset signals are involved as this is a purely combinational module.
+- Ensure that the logic implementation adheres to the specified Karnaugh map, with emphasis on optimizing the logic gate usage where possible.
+</ENHANCED_SPEC>

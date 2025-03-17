@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Specification: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal (1 bit), triggers all sequential logic on the positive edge.
+  - `in`: Serial data input (1 bit).
+  - `reset`: Active-high synchronous reset (1 bit), initializes all registers to their default states on the next clock edge when asserted.
+
+- Output Ports:
+  - `out_byte`: 8-bit output port representing the received data byte. Valid only when `done` is asserted.
+  - `done`: 1-bit output indicating the completion of a byte reception and the validity of `out_byte`.
+
+Functional Behavior:
+- The module implements a finite state machine (FSM) to decode a serial communication protocol characterized by:
+  - One start bit (logic 0).
+  - Eight data bits transmitted least significant bit (LSB) first.
+  - One stop bit (logic 1).
+  - Idle line state at logic 1 when no data is being transmitted.
+
+- FSM Operation:
+  - Start State: Waits for a transition from idle (logic 1) to the start bit (logic 0).
+  - Data Reception: After detecting the start bit, the FSM captures the following 8 data bits, one per clock cycle.
+  - Stop Bit Verification: After the 8 data bits, the FSM checks for a stop bit (logic 1).
+    - If the stop bit is correctly detected, `out_byte` is updated with the received data, and `done` is asserted (set to 1) for one clock cycle to indicate the completion of byte reception.
+    - If the stop bit is not detected, the FSM waits for an idle state (logic 1) before attempting to find the next start bit.
+
+- Edge Case Behavior:
+  - If an incorrect stop bit is detected, the FSM does not update `out_byte` and does not assert `done`.
+  - The FSM restarts the search for a start bit only after detecting a stop bit or idle state.
+
+- Reset Behavior:
+  - On `reset` assertion, all internal registers (including those holding partial data and state information) are initialized to their default states on the next positive clock edge.
+  - The FSM transitions to an initial state, ready to detect the next valid start bit.
+
+Note:
+- Bit Indexing: The least significant bit (bit[0]) of `out_byte` corresponds to the first data bit received after the start bit.
+</ENHANCED_SPEC>

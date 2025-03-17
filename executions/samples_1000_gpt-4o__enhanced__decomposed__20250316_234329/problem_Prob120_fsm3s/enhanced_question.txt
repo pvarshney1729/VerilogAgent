@@ -1,0 +1,52 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock signal. Positive edge-triggered.
+- input wire reset: Synchronous active high reset signal.
+- input wire in: One-bit input signal.
+- output reg out: One-bit output signal.
+
+State Machine Description:
+- This module implements a Moore finite state machine (FSM) with four states: A, B, C, and D.
+- State Encoding: 
+  * State A: 2'b00
+  * State B: 2'b01
+  * State C: 2'b10
+  * State D: 2'b11
+- Initial State: On reset, the FSM transitions to State A.
+
+Clock and Reset:
+- All sequential logic is triggered on the rising edge of the clock (clk).
+- The reset is a synchronous signal, meaning it is sampled on the rising edge of the clock.
+- When reset is high, the FSM transitions to State A, and the output is set according to State A.
+
+State Transition Table:
+- Current State: A
+  * Next State if in=0: A
+  * Next State if in=1: B
+  * Output: 0
+- Current State: B
+  * Next State if in=0: C
+  * Next State if in=1: B
+  * Output: 0
+- Current State: C
+  * Next State if in=0: A
+  * Next State if in=1: D
+  * Output: 0
+- Current State: D
+  * Next State if in=0: C
+  * Next State if in=1: B
+  * Output: 1
+
+Output Behavior:
+- The output 'out' is determined solely by the current state (Moore machine characteristic) and is updated on the rising edge of the clock.
+- State A, B, and C produce an output of 0.
+- State D produces an output of 1.
+
+Edge Cases and Boundaries:
+- Ensure the reset signal is properly synchronized with the clock to avoid metastability.
+- The FSM should correctly handle rapid changes in the input signal 'in' by evaluating it only at the clock's positive edge.
+
+Note: All state transitions and outputs are stable between clock edges, ensuring that there are no race conditions or glitches.
+</ENHANCED_SPEC>

@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, positive edge-triggered.
+  - `input areset`: Asynchronous reset signal, active high. Resets the state machine to state A on the positive edge.
+  - `input in`: Single-bit input signal.
+
+- Output Ports:
+  - `output out`: Single-bit output signal.
+
+Design Specifications:
+1. State Machine Description:
+   - Type: Moore state machine
+   - Number of States: 4 (A, B, C, D)
+   - Initial State: State A
+
+2. State Encoding:
+   - State A: 2'b00
+   - State B: 2'b01
+   - State C: 2'b10
+   - State D: 2'b11
+
+3. State Transition Table:
+   - Current State | Next State (in=0) | Next State (in=1) | Output
+   - A (00)        | A (00)            | B (01)            | 0
+   - B (01)        | C (10)            | B (01)            | 0
+   - C (10)        | A (00)            | D (11)            | 0
+   - D (11)        | C (10)            | B (01)            | 1
+
+4. Logic Details:
+   - All state transitions occur on the positive edge of the `clk` signal.
+   - The `areset` signal resets the FSM to state A asynchronously on its positive edge.
+   - The output `out` is determined solely by the current state, as per Moore machine characteristics.
+
+5. Edge Case Handling:
+   - Ensure that any input condition not explicitly covered by the state transition table defaults to remaining in the current state with the corresponding output.
+
+6. Clarifications:
+   - The `areset` signal has precedence over clock-driven state transitions.
+   - All sequential elements should initialize to a defined state upon reset.
+
+Notes:
+- Bit Indexing: Not applicable as all signals and states are single-bit or 2-bit.
+- Ensure that race conditions are avoided by proper synchronization with the clock and reset signals.
+</ENHANCED_SPEC>

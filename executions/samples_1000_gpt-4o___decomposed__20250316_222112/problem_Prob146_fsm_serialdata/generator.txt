@@ -1,0 +1,168 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to design a finite state machine (FSM) that can detect a start bit, read 8 data bits, and verify a stop bit. The FSM will have the following states:
+1. **IDLE**: Wait for the start bit (0).
+2. **START**: Transition to this state when a start bit is detected.
+3. **DATA**: Shift in 8 data bits, one per clock cycle.
+4. **STOP**: Verify the stop bit (1).
+5. **DONE**: Indicate that a byte has been successfully received.
+
+The FSM will transition between these states based on the input `in` and the current state. The `out_byte` will be updated with the received data when the FSM reaches the `DONE` state, and `done` will be asserted. If the stop bit is not detected correctly, the FSM will return to the `IDLE` state and wait for the next start bit.
+
+The module will use synchronous reset logic to initialize the FSM to the `IDLE` state. The `out_byte` is a don't-care value unless `done` is asserted, which is handled by setting `out_byte` only in the `DONE` state.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic in,
+    input logic reset,
+    output logic [7:0] out_byte,
+    output logic done
+);
+
+    typedef enum logic [2:0] {
+        IDLE = 3'b000,
+        START = 3'b001,
+        DATA = 3'b010,
+        STOP = 3'b011,
+        DONE = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [2:0] bit_count;
+    logic [7:0] data_reg;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 3'b000;
+            data_reg <= 8'b00000000;
+            out_byte <= 8'b00000000;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == DATA) begin
+                data_reg[bit_count] <= in;
+                bit_count <= bit_count + 1;
+            end else if (current_state == DONE) begin
+                out_byte <= data_reg;
+                done <= 1'b1;
+            end else begin
+                done <= 1'b0;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        next_state = current_state; // Default to hold state
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) // Detect start bit
+                    next_state = START;
+            end
+            START: begin
+                next_state = DATA;
+            end
+            DATA: begin
+                if (bit_count == 3'b111) // After 8 data bits
+                    next_state = STOP;
+            end
+            STOP: begin
+                if (in == 1'b1) // Detect stop bit
+                    next_state = DONE;
+                else
+                    next_state = IDLE; // Error recovery
+            end
+            DONE: begin
+                next_state = IDLE; // Return to IDLE after done
+            end
+            default: begin
+                next_state = IDLE; // Default to IDLE on invalid state
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic in,
+    input logic reset,
+    output logic [7:0] out_byte,
+    output logic done
+);
+
+    typedef enum logic [2:0] {
+        IDLE = 3'b000,
+        START = 3'b001,
+        DATA = 3'b010,
+        STOP = 3'b011,
+        DONE = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [2:0] bit_count;
+    logic [7:0] data_reg;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+            bit_count <= 3'b000;
+            data_reg <= 8'b00000000;
+            out_byte <= 8'b00000000;
+            done <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == DATA) begin
+                data_reg[bit_count] <= in;
+                bit_count <= bit_count + 1;
+            end else if (current_state == DONE) begin
+                out_byte <= data_reg;
+                done <= 1'b1;
+            end else begin
+                done <= 1'b0;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        next_state = current_state; // Default to hold state
+        case (current_state)
+            IDLE: begin
+                if (in == 1'b0) // Detect start bit
+                    next_state = START;
+            end
+            START: begin
+                next_state = DATA;
+            end
+            DATA: begin
+                if (bit_count == 3'b111) // After 8 data bits
+                    next_state = STOP;
+            end
+            STOP: begin
+                if (in == 1'b1) // Detect stop bit
+                    next_state = DONE;
+                else
+                    next_state = IDLE; // Error recovery
+            end
+            DONE: begin
+                next_state = IDLE; // Return to IDLE after done
+            end
+            default: begin
+                next_state = IDLE; // Default to IDLE on invalid state
+            end
+        endcase
+    end
+
+endmodule

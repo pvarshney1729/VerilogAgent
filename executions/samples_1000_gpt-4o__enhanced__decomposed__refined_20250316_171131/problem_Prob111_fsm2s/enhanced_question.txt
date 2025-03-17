@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal for clocking sequential logic elements. Active on the rising edge.
+  - `input reset`: Active-high synchronous reset signal. Resets the state machine to the initial state, OFF.
+  - `input j`: Input signal for state transition from OFF to ON.
+  - `input k`: Input signal for state transition from ON to OFF.
+- Output Port:
+  - `output out`: Output signal representing the current state's output value.
+
+Port Characteristics:
+- All input and output ports are 1-bit wide.
+- The reset signal is synchronous and active-high, meaning it is asserted with the clock edge.
+
+State Machine Description:
+- This module implements a Moore state machine with two states: OFF and ON.
+- State Definitions:
+  - State OFF: Output `out` is '0'.
+  - State ON: Output `out` is '1'.
+
+State Transition Diagram:
+- From State OFF (out=0):
+  - If `j=0`, remain in state OFF.
+  - If `j=1`, transition to state ON.
+- From State ON (out=1):
+  - If `k=0`, remain in state ON.
+  - If `k=1`, transition to state OFF.
+
+Initial Conditions and Reset Behavior:
+- Upon the assertion of the reset signal, the state machine transitions to the OFF state regardless of the values of `j` and `k`. The output `out` will be '0' during and after the reset is applied.
+- The reset is synchronous; transitions caused by the reset occur at the clock edge.
+
+Bit Indexing and Conventions:
+- All signals are single-bit and thus do not require specific bit indexing.
+
+Edge Cases and Input Boundaries:
+- The behavior for synchronous reset has been specified: it resets to state OFF.
+- Transitions only occur on the rising clock edge, ensuring no race conditions between `j` and `k` inputs.
+</ENHANCED_SPEC>

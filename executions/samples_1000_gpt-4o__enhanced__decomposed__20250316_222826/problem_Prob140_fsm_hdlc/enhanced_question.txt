@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, positive edge-triggered.
+  - `input reset`: Synchronous active-high reset.
+  - `input in`: Input data stream bit.
+
+- Output Ports:
+  - `output disc`: Asserted when a bit needs to be discarded due to a sequence of "0111110".
+  - `output flag`: Asserted to indicate the detection of the "01111110" flag sequence.
+  - `output err`: Asserted when 7 or more consecutive '1's are detected.
+
+Input/Output Details:
+- All input and output ports are 1 bit in width.
+- Bit[0] refers to the least significant bit.
+
+Functional Description:
+- The module implements a Moore-type finite state machine (FSM) to decode a continuous bit stream for specific bit patterns that indicate frame boundaries, discard requirements, and error conditions in synchronous HDLC framing.
+
+FSM Behavior:
+1. **Discard Bit Sequence Detection (`0111110`)**:
+   - When this sequence is detected, the `disc` output is asserted for one clock cycle starting from the next positive edge of the clock.
+  
+2. **Flag Sequence Detection (`01111110`)**:
+   - Detection of this sequence asserts the `flag` output for one clock cycle beginning on the clock cycle following the sequence detection.
+
+3. **Error Condition (`01111111...`)**:
+   - The detection of 7 or more consecutive '1's results in the `err` output being asserted for one clock cycle starting on the next clock cycle after detection.
+
+Reset Behavior:
+- The FSM should reset to an initial state that behaves as if the previous input bit was '0'. 
+- On reset, all outputs (`disc`, `flag`, `err`) should be deasserted.
+
+Clock and Reset:
+- The FSM transitions on the positive edge of the `clk`.
+- The `reset` signal is synchronous and active-high, ensuring the FSM transitions to the reset state on the next clock edge when `reset` is high.
+
+Special Conditions:
+- Ensure that the outputs are only asserted for a full clock cycle immediately after the condition that triggers them is detected.
+- The system assumes that all sequential logic elements, such as flip-flops, are initialized to known values on reset to ensure correct operation.
+</ENHANCED_SPEC>

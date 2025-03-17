@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- Inputs:
+  - clk: 1-bit clock input. All sequential logic is triggered on the positive edge of this clock.
+  - areset: 1-bit asynchronous reset input. It resets the FSM to state A when asserted, independent of the clock.
+  - in: 1-bit input signal used for state transitions.
+
+- Outputs:
+  - out: 1-bit output signal determined by the current state of the FSM.
+
+State Machine Description:
+- Type: Moore state machine
+- Number of States: 4 (States are named A, B, C, and D)
+- State Encoding: Use a 2-bit state encoding, with bit[1] as the most significant bit (MSB) and bit[0] as the least significant bit (LSB).
+  - State A: 2'b00
+  - State B: 2'b01
+  - State C: 2'b10
+  - State D: 2'b11
+
+State Transition Table:
+- Current State: A
+  - Next State: A if in=0, B if in=1
+  - Output: 0
+- Current State: B
+  - Next State: C if in=0, B if in=1
+  - Output: 0
+- Current State: C
+  - Next State: A if in=0, D if in=1
+  - Output: 0
+- Current State: D
+  - Next State: C if in=0, B if in=1
+  - Output: 1
+
+Reset Behavior:
+- The asynchronous reset (areset) is active-high. When asserted, it immediately sets the FSM to state A, regardless of the clock.
+
+Initial Conditions:
+- On power-up or reset, the FSM should start in state A.
+
+Output Logic:
+- The output 'out' is determined solely by the current state, not by the input signal 'in'.
+
+Edge Cases and Input Boundaries:
+- Ensure proper handling of transitions when the input signal 'in' changes near the clock edge to avoid race conditions.
+- The behavior of the FSM is fully defined for all possible combinations of states and input values.
+</ENHANCED_SPEC>

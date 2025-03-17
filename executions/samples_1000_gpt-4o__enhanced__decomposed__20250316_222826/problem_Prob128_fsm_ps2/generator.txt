@@ -1,0 +1,142 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we will use a finite state machine (FSM) to detect the boundaries of 3-byte messages in a continuous byte stream. The FSM will have four states: `IDLE`, `BYTE1`, `BYTE2`, and `BYTE3`. The module will transition through these states based on the input `in[3]` and will assert the `done` signal after receiving the third byte of a message.
+
+1. **State Encoding**: We will use a 2-bit encoding for the states:
+   - `IDLE`: 2'b00
+   - `BYTE1`: 2'b01
+   - `BYTE2`: 2'b10
+   - `BYTE3`: 2'b11
+
+2. **State Transition Logic**: 
+   - Start in the `IDLE` state and wait for a byte with `in[3] = 1`.
+   - Transition to `BYTE1` when `in[3] = 1` is detected.
+   - Move to `BYTE2` after receiving any byte in `BYTE1`.
+   - Move to `BYTE3` after receiving any byte in `BYTE2`.
+   - After `BYTE3`, assert `done` and return to `IDLE`.
+
+3. **Synchronous Reset**: The FSM will reset to the `IDLE` state when the `reset` signal is high.
+
+4. **Output Logic**: The `done` signal will be asserted for one clock cycle immediately after the `BYTE3` state.
+
+5. **Coding Conventions**: We will use `logic` for all signals and follow the provided coding conventions for clarity and correctness.
+
+The implementation will follow these steps to ensure the FSM correctly identifies message boundaries and signals completion as specified.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always @(*) begin
+        done = 1'b0; // Default value for done
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+            end
+            BYTE3: begin
+                done = 1'b1; // Signal done after third byte
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always @(*) begin
+        done = 1'b0; // Default value for done
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+            end
+            BYTE3: begin
+                done = 1'b1; // Signal done after third byte
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule

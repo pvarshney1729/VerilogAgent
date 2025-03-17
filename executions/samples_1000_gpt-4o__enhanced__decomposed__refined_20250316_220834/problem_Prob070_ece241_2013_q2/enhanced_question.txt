@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input logic a  // Bit 0 of the input word
+  - input logic b  // Bit 1 of the input word
+  - input logic c  // Bit 2 of the input word
+  - input logic d  // Bit 3 of the input word
+- Output Ports:
+  - output logic out_sop  // Output in minimum sum-of-products form
+  - output logic out_pos  // Output in minimum product-of-sums form
+
+Specification:
+1. Inputs 'a', 'b', 'c', and 'd' are considered as a 4-bit binary number, with 'a' as the least significant bit (LSB) and 'd' as the most significant bit (MSB). Thus, the 4-bit input is represented as {d, c, b, a}.
+
+2. The module generates a logic-1 when the input pattern corresponds to the decimal numbers 2, 7, or 15:
+   - 2: {d, c, b, a} = 0010
+   - 7: {d, c, b, a} = 0111
+   - 15: {d, c, b, a} = 1111
+
+3. The module generates a logic-0 when the input pattern corresponds to the decimal numbers 0, 1, 4, 5, 6, 9, 10, 13, or 14:
+   - 0: {d, c, b, a} = 0000
+   - 1: {d, c, b, a} = 0001
+   - 4: {d, c, b, a} = 0100
+   - 5: {d, c, b, a} = 0101
+   - 6: {d, c, b, a} = 0110
+   - 9: {d, c, b, a} = 1001
+   - 10: {d, c, b, a} = 1010
+   - 13: {d, c, b, a} = 1101
+   - 14: {d, c, b, a} = 1110
+
+4. The input conditions for the numbers 3, 8, 11, and 12 ({d, c, b, a} = 0011, 1000, 1011, 1100, respectively) are considered don't-care conditions and will not occur in this system.
+
+5. Output 'out_sop' should be derived using the minimum sum-of-products form based on the specified logic-1 conditions.
+
+6. Output 'out_pos' should be derived using the minimum product-of-sums form based on the specified logic-0 conditions.
+
+Operation Details:
+- Both outputs 'out_sop' and 'out_pos' must be combinational logic outputs, directly dependent on the current values of inputs 'a', 'b', 'c', and 'd'.
+- No clock or reset signals are necessary as the module is purely combinational.
+</ENHANCED_SPEC>

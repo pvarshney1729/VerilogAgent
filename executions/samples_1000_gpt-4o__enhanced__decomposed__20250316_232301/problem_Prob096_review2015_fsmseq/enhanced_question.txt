@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+The module named `TopModule` is required to have the following interface, with explicit definitions for each port:
+
+- `input wire clk`: This is the clock input, and all sequential logic within the module will be triggered on the positive edge of this clock.
+- `input wire reset`: This is an active-high synchronous reset input. When asserted, it will reset the module's state machine to its initial state on the next positive clock edge.
+- `input wire data`: This input represents the incoming bit stream that will be processed by the state machine.
+- `output reg start_shifting`: This output will be set to 1 when the sequence 1101 is detected in the input bit stream and remains 1 until a reset occurs.
+
+The module implements a finite-state machine (FSM) to detect the sequence "1101" in the input bit stream. The FSM should be designed as follows:
+
+1. **State Encoding**: Use a minimum of 3 bits to represent each state for clarity, allowing for states like `IDLE`, `S1`, `S11`, `S110`, and `FOUND`. Each state represents the progress in detecting the sequence:
+   - `IDLE`: Initial state, no bits matched yet.
+   - `S1`: '1' detected.
+   - `S11`: '11' detected.
+   - `S110`: '110' detected.
+   - `FOUND`: The sequence "1101" is detected.
+
+2. **State Transition**:
+   - From `IDLE`, transition to `S1` on receiving '1'.
+   - From `S1`, transition to `S11` on receiving '1'.
+   - From `S11`, transition to `S110` on receiving '0'.
+   - From `S110`, transition to `FOUND` on receiving '1'.
+   - From any state other than `FOUND`, return to `IDLE` if the sequence is broken or a reset occurs.
+
+3. **Output Behavior**:
+   - `start_shifting` should be set to 1 when the FSM reaches the `FOUND` state.
+   - Once set, `start_shifting` remains 1 until a reset occurs.
+
+4. **Reset Behavior**:
+   - On the assertion of `reset`, the FSM should return to the `IDLE` state on the next positive edge of `clk`, and `start_shifting` should be reset to 0.
+
+5. **Miscellaneous**:
+   - Ensure all outputs are initialized appropriately upon reset.
+   - Handle edge cases where the input stream may not fully match the sequence but could partially match; ensure proper state transitions.
+
+This specification ensures clarity in the design and implementation of the FSM, providing clear guidance on the state transitions, output conditions, and reset behavior.
+</ENHANCED_SPEC>

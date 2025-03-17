@@ -1,0 +1,29 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule`, with the following interface specifications. All input and output ports are one bit unless otherwise specified:
+
+- `input logic in` : This is the input signal for the state machine.
+- `input logic [1:0] state` : This is the 2-bit input representing the current state of the state machine.
+- `output logic [1:0] next_state` : This is the 2-bit output indicating the next state of the state machine.
+- `output logic out` : This is the 1-bit output signal based on the current state.
+
+Description:
+- The module implements a Moore state machine with a single input, a single output, and four distinct states. The states are encoded as follows:
+  - State A: 2'b00
+  - State B: 2'b01
+  - State C: 2'b10
+  - State D: 2'b11
+
+- The state transition and output logic are purely combinational. The state machine operates based on the following state transition table:
+
+  | Current State | Next State when in=0 | Next State when in=1 | Output |
+  |---------------|----------------------|----------------------|--------|
+  | A             | A                    | B                    | 0      |
+  | B             | C                    | B                    | 0      |
+  | C             | A                    | D                    | 0      |
+  | D             | C                    | B                    | 1      |
+
+- The `next_state` and `out` are determined based on the current `state` and the input `in`, following the table above. 
+- The logic to determine `next_state` and `out` must be implemented using combinational logic without any sequential elements, as this part of the specification excludes clocked elements.
+- Bit indexing convention: `state[1]` is the most significant bit (MSB), and `state[0]` is the least significant bit (LSB).
+- The initial state or reset behavior of the state machine is not specified within this module, as it focuses solely on the combinational logic for state transitions and output determination.
+</ENHANCED_SPEC>

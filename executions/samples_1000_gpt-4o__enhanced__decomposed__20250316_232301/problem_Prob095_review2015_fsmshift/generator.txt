@@ -1,0 +1,67 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as specified, we need to create a finite state machine (FSM) that controls the `shift_ena` signal. The FSM should assert `shift_ena` for exactly 4 clock cycles upon reset and then keep it deasserted until the next reset. The reset is synchronous, meaning it is sampled on the rising edge of the clock.
+
+1. **State Representation**: We will use a simple counter to track the number of cycles for which `shift_ena` should be asserted. A 3-bit counter is sufficient to count up to 4 cycles.
+
+2. **State Initialization**: On reset, the counter is initialized to 4, and `shift_ena` is asserted. The counter will decrement on each clock cycle until it reaches zero, at which point `shift_ena` will be deasserted.
+
+3. **Synchronous Reset**: The reset logic is included in the sequential always block, which is triggered on the positive edge of the clock. This ensures that the reset is synchronous.
+
+4. **Output Logic**: The `shift_ena` signal is directly controlled by the counter value. It is asserted when the counter is non-zero.
+
+5. **Coding Conventions**: We will use `logic` for all signals, and the sensitivity list for combinational logic will be `always @(*)`. Numeric constants will be sized appropriately.
+
+By following these steps, we ensure that the module meets the specification and adheres to the coding conventions provided.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    logic [2:0] shift_counter;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            shift_counter <= 3'd4; // Initialize counter to 4 on reset
+        end else if (shift_counter != 3'd0) begin
+            shift_counter <= shift_counter - 1; // Decrement counter
+        end
+    end
+
+    always @(*) begin
+        shift_ena = (shift_counter != 3'd0); // Assert shift_ena when counter is non-zero
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    logic [2:0] shift_counter;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            shift_counter <= 3'd4; // Initialize counter to 4 on reset
+        end else if (shift_counter != 3'd0) begin
+            shift_counter <= shift_counter - 1; // Decrement counter
+        end
+    end
+
+    always @(*) begin
+        shift_ena = (shift_counter != 3'd0); // Assert shift_ena when counter is non-zero
+    end
+
+endmodule

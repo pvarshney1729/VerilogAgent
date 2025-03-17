@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- **Inputs:**
+  - `input wire clk` : Clock signal for sequencing.
+  - `input wire areset` : Asynchronous reset signal, active high.
+  - `input wire in` : Input signal to the state machine.
+  
+- **Outputs:**
+  - `output reg out` : Output signal based on the current state.
+
+Specifications:
+- **State Machine Type:** Moore machine.
+- **States and Transitions:**
+  - **State B**: Output `out` is 1.
+    - Transition to State A on `in == 0`.
+    - Remain in State B on `in == 1`.
+  - **State A**: Output `out` is 0.
+    - Transition to State B on `in == 0`.
+    - Remain in State A on `in == 1`.
+  
+- **Reset Behavior:**
+  - Asynchronous reset (`areset`) will immediately set the state to State B regardless of the clock.
+  - The reset is active high, meaning the state transitions to B when `areset` is 1.
+  
+- **Initial Conditions:**
+  - On power-up or reset event, the initial state is State B.
+  
+- **Clock and Timing:**
+  - State transitions occur on the rising edge of the clock signal (`clk`).
+  
+- **Signal Conventions:**
+  - All signals are 1-bit wide.
+  - Bit[0] refers to the least significant bit if applicable.
+  
+- **Race Conditions:**
+  - Ensure that the `areset` signal is appropriately synchronized to avoid indeterminate states on reset.
+  
+- **Edge Cases and Boundaries:**
+  - All transitions must be clearly defined for both `in = 0` and `in = 1` scenarios.
+  - The module must handle any spurious spikes on the `clk` and `areset` inputs to prevent unintended state transitions.
+</ENHANCED_SPEC>

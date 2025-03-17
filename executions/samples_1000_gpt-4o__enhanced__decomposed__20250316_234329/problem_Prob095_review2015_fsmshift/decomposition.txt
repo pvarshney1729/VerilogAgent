@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module interface with input ports clk, reset, and output port shift_ena.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  clk - input  reset - output shift_ena",
+        "implementation": "module TopModule (\n    input clk,\n    input reset,\n    output reg shift_ena\n);\n\n    // Additional logic and registers would be defined here to implement the FSM\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define state encoding using localparam for the FSM states: IDLE, ENABLE, and DONE.",
+        "source": "This module is a part of the FSM for controlling a shift register, we want the ability to enable the shift register for exactly 4 clock cycles whenever the proper bit pattern is detected.",
+        "implementation": "localparam IDLE   = 2'b00;\nlocalparam ENABLE = 2'b01;\nlocalparam DONE   = 2'b10;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic to initialize the FSM to the IDLE state.",
+        "source": "Reset should be active high synchronous. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "// State encoding\n  localparam IDLE = 1'b0;\n  localparam ACTIVE = 1'b1;\n\n  // State register\n  reg state;\n\n  // Synchronous reset logic\n  always @(posedge clk) begin\n    if (reset) begin\n      state <= IDLE;\n    end else begin\n      // State transition logic would go here\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Create combinational logic to determine the next state based on the current state and input conditions.",
+        "source": "we want the ability to enable the shift register for exactly 4 clock cycles whenever the proper bit pattern is detected. Whenever the FSM is reset, assert shift_ena for 4 cycles, then 0 forever (until reset).",
+        "implementation": "// State encoding\n  localparam IDLE = 2'b00, ENABLE_1 = 2'b01, ENABLE_2 = 2'b10, ENABLE_3 = 2'b11, ENABLE_4 = 2'b00;\n\n  // State register\n  reg [1:0] current_state, next_state;\n\n  // Combinational logic for next state\n  always @(*) begin\n    case (current_state)\n      IDLE: begin\n        if (reset)\n          next_state = ENABLE_1;\n        else\n          next_state = IDLE;\n      end\n      ENABLE_1: next_state = ENABLE_2;\n      ENABLE_2: next_state = ENABLE_3;\n      ENABLE_3: next_state = ENABLE_4;\n      ENABLE_4: next_state = IDLE;\n      default: next_state = IDLE;\n    endcase\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output logic to assert shift_ena for 4 cycles when in the ENABLE state and deassert otherwise.",
+        "source": "Whenever the FSM is reset, assert shift_ena for 4 cycles, then 0 forever (until reset).",
+        "implementation": "reg [2:0] shift_counter;\nreg shift_ena_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        shift_counter <= 3'b100; // Initialize counter to 4\n        shift_ena_reg <= 1'b1;   // Assert shift_ena\n    end else if (shift_counter != 3'b000) begin\n        shift_counter <= shift_counter - 1;\n        if (shift_counter == 3'b001) begin\n            shift_ena_reg <= 1'b0; // Deassert shift_ena after 4 cycles\n        end\n    end\nend\n\nassign shift_ena = shift_ena_reg;"
+    }
+]

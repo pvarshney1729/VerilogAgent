@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module interface for TopModule with inputs clk, reset, in (8 bits), and output done.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  clk - input  reset - input  in (8 bits) - output done",
+        "implementation": "```verilog\n[BEGIN]\nmodule TopModule (\n    input clk,\n    input reset,\n    input [7:0] in,\n    output done\n);\n[END]\n```"
+    },
+    {
+        "id": "2",
+        "content": "Define state encoding for the FSM using localparam for states: IDLE, BYTE1, BYTE2, BYTE3.",
+        "source": "The module should implement a finite state machine that will search for message boundaries when given an input byte stream.",
+        "implementation": "localparam IDLE  = 2'b00;\nlocalparam BYTE1 = 2'b01;\nlocalparam BYTE2 = 2'b10;\nlocalparam BYTE3 = 2'b11;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic to hold the current state of the FSM.",
+        "source": "Reset should be active high synchronous. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "reg [1:0] state_reg, state_next;\n\n// State register with synchronous reset\nalways @(posedge clk) begin\n    if (reset) begin\n        state_reg <= 2'b00; // Assuming 2'b00 is the initial state\n    end else begin\n        state_reg <= state_next;\n    end\nend"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state logic to transition between states based on the input 'in'. Transition from IDLE to BYTE1 when in[3] is 1, and sequentially to BYTE2 and BYTE3.",
+        "source": "The algorithm we'll use is to discard bytes until we see one with in[3]=1. We then assume that this is byte 1 of a message, and signal the receipt of a message once all 3 bytes have been received.",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  typedef enum logic [1:0] {\n    IDLE  = 2'b00,\n    BYTE1 = 2'b01,\n    BYTE2 = 2'b10,\n    BYTE3 = 2'b11\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // Next state logic\n  always_comb begin\n    case (current_state)\n      IDLE: begin\n        if (in[3] == 1'b1)\n          next_state = BYTE1;\n        else\n          next_state = IDLE;\n      end\n      BYTE1: begin\n        next_state = BYTE2;\n      end\n      BYTE2: begin\n        next_state = BYTE3;\n      end\n      BYTE3: begin\n        next_state = IDLE; // Transition back to IDLE after BYTE3\n      end\n      default: begin\n        next_state = IDLE;\n      end\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output logic to assert 'done' in the cycle immediately after the third byte of each message was successfully received.",
+        "source": "The FSM should signal done in the cycle immediately after the third byte of each message was successfully received.",
+        "implementation": "reg [1:0] byte_count;\nreg done_reg;\n\nalways @(posedge clk) begin\n    if (reset) begin\n        byte_count <= 2'b00;\n        done_reg <= 1'b0;\n    end else begin\n        done_reg <= 1'b0; // Default to not done\n        if (in[3] == 1'b1 && byte_count == 2'b00) begin\n            // Detected the first byte of a message\n            byte_count <= 2'b01;\n        end else if (byte_count != 2'b00) begin\n            // Increment byte count if we are in the middle of a message\n            byte_count <= byte_count + 1'b1;\n            if (byte_count == 2'b10) begin\n                // Third byte received, assert done\n                done_reg <= 1'b1;\n                byte_count <= 2'b00; // Reset byte count after done\n            end\n        end\n    end\nend\n\nassign done = done_reg;"
+    }
+]

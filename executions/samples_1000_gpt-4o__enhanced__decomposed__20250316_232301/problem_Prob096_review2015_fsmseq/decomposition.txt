@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, data, and output port start_shifting.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  wire clk,\n    input  wire reset,\n    input  wire data,\n    output reg  start_shifting\n);\n\n    // State encoding\n    typedef enum reg [2:0] {\n        IDLE  = 3'b000,\n        S1    = 3'b001,\n        S11   = 3'b010,\n        S110  = 3'b011,\n        S1101 = 3'b100\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            current_state <= IDLE;\n            start_shifting <= 1'b0;\n        end else begin\n            current_state <= next_state;\n            if (current_state == S1101) begin\n                start_shifting <= 1'b1;\n            end\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            IDLE:   next_state = (data) ? S1 : IDLE;\n            S1:     next_state = (data) ? S11 : IDLE;\n            S11:    next_state = (data) ? S11 : S110;\n            S110:   next_state = (data) ? S1101 : IDLE;\n            S1101:  next_state = S1101; // Remain in S1101 once sequence is detected\n            default: next_state = IDLE;\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare the state register and state encoding using reg [1:0] for the FSM states. Use binary encoding for states: IDLE=2'b00, S1=2'b01, S2=2'b10, S3=2'b11.",
+        "source": "The module should implement a finite-state machine that searches for the sequence 1101 in an input bit stream.",
+        "implementation": "// State encoding\n  localparam IDLE = 2'b00;\n  localparam S1   = 2'b01;\n  localparam S2   = 2'b10;\n  localparam S3   = 2'b11;\n\n  // State register\n  reg [1:0] state, next_state;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic. Use always @(posedge clk) and reset the state to IDLE when reset is high.",
+        "source": "Reset is active high synchronous. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "// State encoding\n  localparam IDLE = 2'b00;\n  \n  // State register\n  reg [1:0] state;\n  \n  // Synchronous reset logic\n  always @(posedge clk) begin\n    if (reset) begin\n      state <= IDLE;\n    end else begin\n      // State transition logic would go here\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic using always @(*). Define state transitions based on the input data to detect the sequence 1101.",
+        "source": "The module should implement a finite-state machine that searches for the sequence 1101 in an input bit stream.",
+        "implementation": "// State encoding\n  typedef enum logic [2:0] {\n    IDLE    = 3'b000,\n    S1      = 3'b001,\n    S11     = 3'b010,\n    S110    = 3'b011,\n    S1101   = 3'b100\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // Next state logic\n  always @(*) begin\n    case (current_state)\n      IDLE: begin\n        if (data)\n          next_state = S1;\n        else\n          next_state = IDLE;\n      end\n      S1: begin\n        if (data)\n          next_state = S11;\n        else\n          next_state = IDLE;\n      end\n      S11: begin\n        if (data)\n          next_state = S11;\n        else\n          next_state = S110;\n      end\n      S110: begin\n        if (data)\n          next_state = S1101;\n        else\n          next_state = IDLE;\n      end\n      S1101: begin\n        next_state = S1101; // Stay in S1101 once sequence is detected\n      end\n      default: begin\n        next_state = IDLE;\n      end\n    endcase\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic using always @(*). Set start_shifting to 1 when the FSM reaches the final state S3, indicating the sequence 1101 is detected.",
+        "source": "When the sequence is found, it should set start_shifting to 1, forever, until reset.",
+        "implementation": "reg [1:0] state, next_state;\nlocalparam S0 = 2'b00, S1 = 2'b01, S2 = 2'b10, S3 = 2'b11;\nreg start_shifting_reg;\n\nalways @(*) begin\n    case (state)\n        S0: if (data) next_state = S1; else next_state = S0;\n        S1: if (data) next_state = S2; else next_state = S0;\n        S2: if (!data) next_state = S3; else next_state = S2;\n        S3: next_state = S3;\n        default: next_state = S0;\n    endcase\nend\n\nalways @(*) begin\n    start_shifting_reg = (state == S3);\nend\n\nassign start_shifting = start_shifting_reg;"
+    }
+]

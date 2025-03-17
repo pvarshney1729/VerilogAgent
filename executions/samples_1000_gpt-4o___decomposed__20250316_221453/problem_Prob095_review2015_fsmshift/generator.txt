@@ -1,0 +1,117 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we need to create a finite state machine (FSM) that controls the `shift_ena` signal. The FSM should enable the shift register for exactly 4 clock cycles when reset is asserted. The reset is synchronous and active high, meaning the reset signal is sampled on the rising edge of the clock.
+
+The FSM will have the following states:
+- `IDLE`: The initial state where `shift_ena` is 0.
+- `SHIFT1` to `SHIFT4`: States where `shift_ena` is 1 for 4 consecutive clock cycles.
+
+Upon reset, the FSM should transition from `IDLE` to `SHIFT1` and continue to `SHIFT4`, asserting `shift_ena` in each of these states. After `SHIFT4`, it should return to `IDLE` and remain there until the next reset.
+
+The case statement provided in the question suggests a simple combinational logic based on the `clk` and `reset` signals, but for a proper FSM implementation, we need to consider the state transitions and outputs based on the current state and inputs.
+
+We'll use a synchronous reset, so the reset logic will be inside the clocked always block. We'll use a state register to hold the current state and a counter to track the number of cycles `shift_ena` has been asserted.
+
+The coding conventions require us to use `logic` for all signals and to use `always @(*)` for combinational logic. We'll follow these conventions in our implementation.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    typedef enum logic [2:0] {
+        IDLE   = 3'b000,
+        SHIFT1 = 3'b001,
+        SHIFT2 = 3'b010,
+        SHIFT3 = 3'b011,
+        SHIFT4 = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= SHIFT1;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            IDLE:   next_state = IDLE;
+            SHIFT1: next_state = SHIFT2;
+            SHIFT2: next_state = SHIFT3;
+            SHIFT3: next_state = SHIFT4;
+            SHIFT4: next_state = IDLE;
+            default: next_state = IDLE;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            SHIFT1, SHIFT2, SHIFT3, SHIFT4: shift_ena = 1;
+            default: shift_ena = 0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    typedef enum logic [2:0] {
+        IDLE   = 3'b000,
+        SHIFT1 = 3'b001,
+        SHIFT2 = 3'b010,
+        SHIFT3 = 3'b011,
+        SHIFT4 = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= SHIFT1;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            IDLE:   next_state = IDLE;
+            SHIFT1: next_state = SHIFT2;
+            SHIFT2: next_state = SHIFT3;
+            SHIFT3: next_state = SHIFT4;
+            SHIFT4: next_state = IDLE;
+            default: next_state = IDLE;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            SHIFT1, SHIFT2, SHIFT3, SHIFT4: shift_ena = 1;
+            default: shift_ena = 0;
+        endcase
+    end
+
+endmodule

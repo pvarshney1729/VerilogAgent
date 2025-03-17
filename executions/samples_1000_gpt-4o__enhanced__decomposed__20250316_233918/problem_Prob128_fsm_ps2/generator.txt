@@ -1,0 +1,149 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we will create a finite state machine (FSM) with four states: `IDLE`, `BYTE1`, `BYTE2`, and `BYTE3`. The FSM will transition through these states based on the input `in[3]` and the number of bytes received. The `done` signal will be asserted for one clock cycle immediately after the third byte is received.
+
+1. **State Encoding**: We will use a 2-bit encoding for the states.
+2. **State Register**: A register will hold the current state, updated on the positive edge of the clock.
+3. **Next State Logic**: This logic will determine the next state based on the current state and input `in[3]`.
+4. **Output Logic**: The `done` signal will be asserted in the `BYTE3` state, indicating the completion of a message.
+5. **Synchronous Reset**: The reset logic will initialize the state to `IDLE` and clear the `done` signal.
+
+The FSM will start in the `IDLE` state, waiting for a byte with `in[3] = 1`. Upon detecting such a byte, it transitions to `BYTE1`, then `BYTE2`, and finally `BYTE3`, where it asserts `done` and returns to `IDLE`.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State register with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1)
+                    next_state = BYTE1;
+                else
+                    next_state = IDLE;
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+            end
+            BYTE3: begin
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+    // Output logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            done <= 1'b0;
+        end else begin
+            if (current_state == BYTE3) begin
+                done <= 1'b1;
+            end else begin
+                done <= 1'b0;
+            end
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State register with synchronous reset
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1)
+                    next_state = BYTE1;
+                else
+                    next_state = IDLE;
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+            end
+            BYTE3: begin
+                next_state = IDLE;
+            end
+            default: begin
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+    // Output logic
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            done <= 1'b0;
+        end else begin
+            if (current_state == BYTE3) begin
+                done <= 1'b1;
+            end else begin
+                done <= 1'b0;
+            end
+        end
+    end
+
+endmodule

@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input wire a` (1-bit, unsigned)
+  - `input wire b` (1-bit, unsigned)
+  - `input wire c` (1-bit, unsigned)
+  - `input wire d` (1-bit, unsigned)
+- Output:
+  - `output wire out` (1-bit, unsigned)
+
+Design Specification:
+1. The module implements a combinational logic circuit based on the given Karnaugh map, which simplifies to a truth table.
+
+2. Bit Indexing and Mapping:
+   - Inputs `a`, `b`, `c`, and `d` are single-bit signals.
+   - The inputs `a` and `b` determine the column index.
+   - The inputs `c` and `d` determine the row index, where `d` is a don't-care condition.
+
+3. Karnaugh Map Representation:
+   ```
+              ab
+     cd   | 01 | 00 | 10 | 11 |
+     00   |  x |  0 |  1 |  1 |
+     01   |  0 |  0 |  x |  x |
+     11   |  0 |  1 |  1 |  1 |
+     10   |  0 |  1 |  1 |  1 |
+   ```
+   - Here, 'x' indicates a don't-care condition where the output can be either 0 or 1.
+
+4. Output Logic:
+   - The output `out` is derived from the simplified boolean expression of the Karnaugh map.
+   - The output logic should be optimized to minimize logic gates while maintaining the functionality defined by the map.
+
+5. Constraints and Conditions:
+   - The module operates purely combinationally, without any clock or sequential elements.
+   - There are no reset conditions since no memory or state elements are used.
+   - Ensure that all possible input combinations are accounted for, with don't-care conditions leveraged to simplify logic.
+
+6. Edge Cases:
+   - The circuit should handle all possible combinations of inputs `a`, `b`, `c`, and `d` and produce consistent output according to the specified logic.
+
+Note: The don't-care conditions ('x') can be used to optimize the circuit but should not affect correct operation for specified input conditions.
+</ENHANCED_SPEC>

@@ -1,0 +1,26 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- `input clk`: Clock signal, triggers all sequential logic on the positive edge.
+- `input reset`: Active-high synchronous reset signal.
+- `output reg [4:0] q`: 5-bit output representing the state of the LFSR. Bit indexing within `q` is such that `q[0]` is the least significant bit (LSB) and `q[4]` is the most significant bit (MSB).
+
+Description:
+The module implements a 5-bit maximal-length Galois Linear Feedback Shift Register (LFSR) with taps at bit positions 5 (`q[4]`) and 3 (`q[2]`). The LFSR utilizes XOR gates positioned at the specified tap positions to generate feedback for the shift register. The feedback bit is XORed with the current LSB (`q[0]`) to determine the next value of the tapped bit positions.
+
+- Initial State: Upon reset, the LFSR is initialized to the state `00001`. This ensures that the LFSR begins its cycle from a non-zero state.
+- Reset Behavior: An active-high synchronous reset sets the output `q` to `00001` on the next positive clock edge when `reset` is high.
+- Normal Operation: On the rising edge of `clk`, if `reset` is low, the LFSR shifts right by one position. The new value for `q[4]` is determined by XORing the old `q[0]` with `q[2]`. All other bits shift right without modification except the LSB, which becomes the previous value of `q[4]`.
+
+Functional Intent:
+- The LFSR is designed to cycle through all possible non-zero states of a 5-bit register, totaling 31 states (2^5 - 1). The all-zero state is avoided, ensuring continuous operation without halting.
+
+Edge Cases & Boundaries:
+- The LFSR starts in a known good state after every reset, ensuring predictable operation.
+- The design inherently avoids the all-zero state, maintaining maximum-length operation as specified.
+
+Special Considerations:
+- Ensure that the XOR operation is correctly implemented to prevent erroneous state transitions.
+- Verify the tap positions in the implementation to maintain the maximum-length property of the LFSR.
+</ENHANCED_SPEC>

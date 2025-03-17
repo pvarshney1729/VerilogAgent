@@ -1,0 +1,131 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as a Moore state machine, we need to define two states: OFF and ON. The state transitions are determined by the inputs `j` and `k`. The module should have an asynchronous reset (`areset`) that sets the state to OFF. The output `out` is determined solely by the current state, making it a Moore machine.
+
+1. **State Encoding**: Use local parameters to define the states OFF and ON. OFF is encoded as `0` and ON as `1`.
+
+2. **State Register**: Use a register to hold the current state. Implement an always block with asynchronous reset logic to update the state on the rising edge of the clock or reset it when `areset` is high.
+
+3. **Next State Logic**: Use combinational logic to determine the next state based on the current state and inputs `j` and `k`.
+
+4. **Output Logic**: The output `out` is determined by the current state. If the state is OFF, `out` is `0`. If the state is ON, `out` is `1`.
+
+5. **Coding Conventions**: Use `logic` for all signals, and use `always @(*)` for combinational logic. Ensure all numeric constants are properly sized.
+
+By following these steps, we can ensure the module adheres to the specification and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    localparam logic OFF = 1'b0;
+    localparam logic ON  = 1'b1;
+
+    // State register
+    logic state, next_state;
+
+    // State transition logic with asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= OFF;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (state)
+            OFF: begin
+                if (j)
+                    next_state = ON;
+                else
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k)
+                    next_state = OFF;
+                else
+                    next_state = ON;
+            end
+            default: next_state = OFF;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    localparam logic OFF = 1'b0;
+    localparam logic ON  = 1'b1;
+
+    // State register
+    logic state, next_state;
+
+    // State transition logic with asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= OFF;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (state)
+            OFF: begin
+                if (j)
+                    next_state = ON;
+                else
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k)
+                    next_state = OFF;
+                else
+                    next_state = ON;
+            end
+            default: next_state = OFF;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        case (state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule

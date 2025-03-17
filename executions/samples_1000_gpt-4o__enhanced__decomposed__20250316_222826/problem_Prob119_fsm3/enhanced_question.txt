@@ -1,0 +1,49 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `clk`: 1-bit clock input, positive edge-triggered.
+  - `areset`: 1-bit asynchronous reset input, active high. Resets the FSM to initial state A.
+  - `in`: 1-bit data input.
+- Outputs:
+  - `out`: 1-bit data output.
+
+State Machine Description:
+- The module implements a Moore state machine with four states: A, B, C, and D.
+- State Transition Table:
+  - State A: 
+    - Next state if `in` = 0: A
+    - Next state if `in` = 1: B
+    - Output: 0
+  - State B: 
+    - Next state if `in` = 0: C
+    - Next state if `in` = 1: B
+    - Output: 0
+  - State C: 
+    - Next state if `in` = 0: A
+    - Next state if `in` = 1: D
+    - Output: 0
+  - State D: 
+    - Next state if `in` = 0: C
+    - Next state if `in` = 1: B
+    - Output: 1
+
+Clock and Reset Behavior:
+- All state transitions are triggered on the positive edge of the `clk`.
+- The `areset` input is an active high asynchronous reset. When `areset` is asserted, the state machine immediately transitions to state A, regardless of the clock.
+- Ensure `areset` is debounced in environments with potential noise to avoid unintended transitions.
+
+Initial Conditions:
+- On initialization or reset, the state machine is set to state A.
+
+Operational Details:
+- Outputs are determined solely by the current state, as per Moore state machine design.
+- Ensure that all state transitions are properly synchronized with the clock, and avoid race conditions by adhering to the positive edge-triggered design.
+
+Bit Indexing:
+- All signals are 1-bit and do not require indexing beyond their defined purpose in this specification.
+
+Edge Cases:
+- Correct operation is ensured for all combinations of input and reset signals, with specific attention to the correct handling of asynchronous reset conditions.
+</ENHANCED_SPEC>

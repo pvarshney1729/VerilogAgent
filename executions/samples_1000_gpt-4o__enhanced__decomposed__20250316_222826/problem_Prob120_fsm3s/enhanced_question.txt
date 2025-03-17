@@ -1,0 +1,52 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input  logic clk              // Clock signal for synchronizing sequential logic.
+- input  logic reset            // Synchronous active high reset signal.
+- input  logic in               // Input signal for state transitions.
+- output logic out              // Output signal representing the current state's output.
+
+State Machine Specification:
+- Type: Moore State Machine
+- Number of States: 4 (State A, State B, State C, State D)
+- State Encoding: Utilize a 2-bit encoding for the four states.
+  - State A: 2'b00
+  - State B: 2'b01
+  - State C: 2'b10
+  - State D: 2'b11
+
+State Transition Table:
+- State A:
+  - Next State when in = 0: State A
+  - Next State when in = 1: State B
+  - Output: 0
+
+- State B:
+  - Next State when in = 0: State C
+  - Next State when in = 1: State B
+  - Output: 0
+
+- State C:
+  - Next State when in = 0: State A
+  - Next State when in = 1: State D
+  - Output: 0
+
+- State D:
+  - Next State when in = 0: State C
+  - Next State when in = 1: State B
+  - Output: 1
+
+Operational Details:
+- The FSM is reset to State A upon a synchronous active high reset.
+- State transitions occur on the positive edge of the clock signal.
+- The output 'out' is determined solely by the current state, as per Moore machine characteristics.
+- Reset Behavior: All registers and state variables are initialized to State A upon reset.
+
+Bit Indexing Convention:
+- Bit[0] refers to the least significant bit (LSB) in any state or signal encoding.
+
+Edge Cases and Input Boundaries:
+- Ensure the reset signal is cleanly de-asserted to avoid unintended state transitions.
+- The module should handle any glitches on the input 'in' by ensuring transitions only occur on clock edges.
+</ENHANCED_SPEC>

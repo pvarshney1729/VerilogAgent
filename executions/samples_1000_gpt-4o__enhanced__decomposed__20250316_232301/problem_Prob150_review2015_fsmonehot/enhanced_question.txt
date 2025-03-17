@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - input wire d: 1-bit input signal.
+  - input wire done_counting: 1-bit input signal.
+  - input wire ack: 1-bit input signal.
+  - input wire [9:0] state: 10-bit one-hot encoded state input. Each bit represents a unique state in the state machine.
+
+- Outputs:
+  - output wire B3_next: Asserted when the next state is B3.
+  - output wire S_next: Asserted when the next state is S.
+  - output wire S1_next: Asserted when the next state is S1.
+  - output wire Count_next: Asserted when the next state is Count.
+  - output wire Wait_next: Asserted when the next state is Wait.
+  - output wire done: Asserted when the machine is in the Wait state.
+  - output wire counting: Asserted when the machine is in the Count state.
+  - output wire shift_ena: Asserted when the machine is in states B0, B1, B2, or B3.
+
+State Machine Description:
+- This module implements a Moore state machine with the following states and transitions:
+  - S (0000000001): Transition to S1 on d=1, otherwise stay in S.
+  - S1 (0000000010): Transition to S11 on d=1, otherwise revert to S.
+  - S11 (0000000100): Transition to S110 on d=0, otherwise stay in S11.
+  - S110 (0000001000): Transition to B0 on d=1, otherwise revert to S.
+  - B0 (0000010000): Always transition to B1, shift_ena=1.
+  - B1 (0000100000): Always transition to B2, shift_ena=1.
+  - B2 (0001000000): Always transition to B3, shift_ena=1.
+  - B3 (0010000000): Always transition to Count, shift_ena=1.
+  - Count (0100000000): Remain in Count if done_counting=0, otherwise transition to Wait, counting=1.
+  - Wait (1000000000): Remain in Wait if ack=0, otherwise transition to S, done=1.
+
+Reset and Initial State:
+- The state machine initializes to the S state upon reset. Reset is asynchronous, and all state flip-flops should reset to '0' except for the bit representing the S state, which should reset to '1'.
+
+Signal Descriptions:
+- B3_next: Asserted when transitioning to B3 state.
+- S_next: Asserted when transitioning to S state.
+- S1_next: Asserted when transitioning to S1 state.
+- Count_next: Asserted when transitioning to Count state.
+- Wait_next: Asserted when transitioning to Wait state.
+- done: Asserted during Wait state.
+- counting: Asserted during Count state.
+- shift_ena: Asserted during states B0, B1, B2, and B3.
+
+Note: Each state transition and output logic is based on the one-hot encoded state representation. Ensure all output signals are derived from the current state and input conditions as specified in the state machine description.
+</ENHANCED_SPEC>

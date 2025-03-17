@@ -1,0 +1,51 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal (1-bit). The module operates on the positive edge of this clock.
+  - `input reset`: Active-high synchronous reset signal (1-bit). When asserted, all state registers are initialized to their idle state.
+  - `input in`: Serial data input (1-bit).
+
+- Output Ports:
+  - `output done`: Signal (1-bit) indicating a complete and correct byte has been received.
+
+Operational Details:
+- The module implements a finite state machine (FSM) to decode serial data transmitted using a protocol consisting of:
+  - 1 start bit (logic 0)
+  - 8 data bits transmitted least significant bit (LSB) first
+  - 1 stop bit (logic 1)
+
+- States:
+  1. **Idle**: Line is idle at logic 1.
+  2. **Start**: Detect the start bit (logic 0).
+  3. **Data**: Read 8 data bits sequentially.
+  4. **Stop**: Verify the stop bit (logic 1).
+  5. **Error**: Entered if the expected stop bit is not observed.
+
+- State Transitions:
+  - Transition from Idle to Start upon detecting a start bit (0).
+  - Transition from Start to Data after detecting a start bit.
+  - In the Data state, sequentially shift in 8 data bits.
+  - Transition from Data to Stop upon receiving 8 data bits.
+  - Transition from Stop to Idle if a correct stop bit is detected.
+  - Transition from Stop to Error if the stop bit is incorrect.
+  - Transition from Error to Idle upon detecting the next stop bit (logic 1).
+
+- Reset Behavior:
+  - On the assertion of the `reset` signal, return the FSM to the Idle state and clear any intermediate data storage.
+
+- Signal Behavior:
+  - `done` is asserted high for one clock cycle when a byte is successfully received and verified (correct start, data, and stop bits).
+
+- Edge Cases:
+  - If an incorrect stop bit is detected, the FSM waits in the Error state until a new stop bit is identified to resynchronize.
+  - The module does not handle framing errors or noise; it assumes ideal conditions apart from incorrect stop bits.
+
+- Bit Indexing:
+  - Bits are indexed from 0 to 7, with bit[0] being the least significant bit (LSB).
+
+- All sequential logic elements must have explicitly defined initial values upon reset, typically set to a known state such as zero.
+
+- The FSM and its associated logic operate exclusively on the rising edge of the clock signal.
+</ENHANCED_SPEC>

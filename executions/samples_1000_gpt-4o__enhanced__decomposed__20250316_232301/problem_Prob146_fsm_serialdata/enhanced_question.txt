@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- `input  logic clk`: Clock signal, triggers all sequential logic on the positive edge.
+- `input  logic in`: Serial data input stream, represents a sequence of bits.
+- `input  logic reset`: Active-high synchronous reset, initializes the FSM and all internal states.
+- `output logic [7:0] out_byte`: 8-bit output representing the received data byte, valid when `done` is high.
+- `output logic done`: Output signal indicating the completion of a byte reception and that `out_byte` holds valid data.
+
+Specifications:
+1. The module implements a finite state machine (FSM) to parse incoming serial data according to the following protocol:
+   - One start bit (logic 0)
+   - Eight data bits (LSB first)
+   - One stop bit (logic 1)
+   - The line remains at logic 1 during idle periods.
+
+2. FSM Operation:
+   - **Idle State**: The FSM remains in this state when `in` is logic 1, indicating the line is idle.
+   - **Start Bit Detection**: Transition to the "Receiving" state upon detecting a start bit (logic 0).
+   - **Data Bit Reception**: Sequentially capture 8 data bits starting from the least significant bit. Each bit is captured on the positive edge of `clk`.
+   - **Stop Bit Verification**: After receiving all data bits, verify the presence of a stop bit (logic 1).
+   - **Output Validity**: If the stop bit is correctly detected, assert `done` high and load `out_byte` with the received byte. If the stop bit is incorrect, discard the byte and await the next start bit.
+
+3. Edge Case Handling:
+   - If a stop bit is not detected when expected, the FSM resets to the "Idle" state and waits for a new start bit.
+   - During reset (`reset` high), the FSM returns to the initial state, `out_byte` is undefined, and `done` is low.
+
+4. Bit Indexing and Conventions:
+   - The least significant bit (LSB) of the data byte is received first and corresponds to `out_byte[0]`.
+   - `out_byte[7]` represents the most significant bit (MSB).
+
+5. Initialization:
+   - On reset, all internal registers and states are initialized to their default values to ensure correct FSM operation.
+
+6. Timing and Constraints:
+   - All sequential operations are synchronized to the positive edge of the clock.
+   - Ensure that `done` is asserted only when a complete, valid byte has been received and verified.
+
+This specification ensures a robust and clear implementation of the serial data reception process, adhering to the described protocol and handling invalid conditions appropriately.
+</ENHANCED_SPEC>

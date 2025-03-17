@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, w, and output port z.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input clk,\n    input reset,\n    input w,\n    output reg z\n);\n\n    // State encoding\n    typedef enum reg [2:0] {\n        STATE_A = 3'b000,\n        STATE_B = 3'b001,\n        STATE_C = 3'b010,\n        STATE_D = 3'b011,\n        STATE_E = 3'b100,\n        STATE_F = 3'b101\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State flip-flops\n    always @(posedge clk) begin\n        if (reset) begin\n            current_state <= STATE_A;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // State table\n    always @(*) begin\n        case (current_state)\n            STATE_A: next_state = (w) ? STATE_B : STATE_A;\n            STATE_B: next_state = (w) ? STATE_C : STATE_D;\n            STATE_C: next_state = (w) ? STATE_E : STATE_D;\n            STATE_D: next_state = (w) ? STATE_F : STATE_A;\n            STATE_E: next_state = (w) ? STATE_E : STATE_D;\n            STATE_F: next_state = (w) ? STATE_C : STATE_D;\n            default: next_state = STATE_A;\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        case (current_state)\n            STATE_E, STATE_F: z = 1'b1;\n            default: z = 1'b0;\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Define state encoding using localparam for states A, B, C, D, E, F with binary encoding (A=2'b00, B=2'b01, C=2'b10, D=2'b11, E=2'b100, F=2'b101).",
+        "source": "Assign any state codes that you wish to use.",
+        "implementation": "localparam A = 3'b000,\n           B = 3'b001,\n           C = 3'b010,\n           D = 3'b011,\n           E = 3'b100,\n           F = 3'b101;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic. Use always @(posedge clk) block to update the current state based on the next state. Reset to state A when reset is high.",
+        "source": "Reset resets into state A and is synchronous active-high. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "// State encoding\n  localparam A = 3'b000,\n             B = 3'b001,\n             C = 3'b010,\n             D = 3'b011,\n             E = 3'b100,\n             F = 3'b101;\n\n  reg [2:0] current_state, next_state;\n\n  // State register with synchronous reset\n  always @(posedge clk) begin\n    if (reset) begin\n      current_state <= A; // Reset to state A\n    end else begin\n      current_state <= next_state; // Update current state\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic using an always @(*) block. Define state transitions based on the input w and current state according to the state diagram.",
+        "source": "The module should implement the state machine shown below: A (0) --1--> B, A (0) --0--> A, B (0) --1--> C, B (0) --0--> D, C (0) --1--> E, C (0) --0--> D, D (0) --1--> F, D (0) --0--> A, E (1) --1--> E, E (1) --0--> D, F (1) --1--> C, F (1) --0--> D.",
+        "implementation": "// State encoding\n  localparam A = 3'b000,\n             B = 3'b001,\n             C = 3'b010,\n             D = 3'b011,\n             E = 3'b100,\n             F = 3'b101;\n\n  reg [2:0] state, next_state;\n\n  // Next state logic\n  always @(*) begin\n    case (state)\n      A: begin\n        if (w)\n          next_state = B;\n        else\n          next_state = A;\n      end\n      B: begin\n        if (w)\n          next_state = C;\n        else\n          next_state = D;\n      end\n      C: begin\n        if (w)\n          next_state = E;\n        else\n          next_state = D;\n      end\n      D: begin\n        if (w)\n          next_state = F;\n        else\n          next_state = A;\n      end\n      E: begin\n        if (w)\n          next_state = E;\n        else\n          next_state = D;\n      end\n      F: begin\n        if (w)\n          next_state = C;\n        else\n          next_state = D;\n      end\n      default: next_state = A; // Default state\n    endcase\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic for z using an assign statement. Set z to 1 when in states E or F, otherwise set z to 0.",
+        "source": "Describe the FSM output, which is called _z_, using either continuous assignment statement(s) or an always block (at your discretion).",
+        "implementation": "assign z = (state == E || state == F) ? 1'b1 : 1'b0;"
+    }
+]

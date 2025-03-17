@@ -1,0 +1,129 @@
+Generated Response:
+
+<REASONING>
+To implement the Moore state machine as specified, we need to define two states, A and B, with specific transitions based on the input `in`. The reset is active-high and synchronous, meaning it is sampled on the rising edge of the clock. The output `out` is determined solely by the current state, not the input.
+
+1. **State Encoding**: Use localparam to define the states A and B. This helps in making the code more readable and maintainable.
+
+2. **State Register**: Use a register to hold the current state. This register will be updated on the rising edge of the clock. If the reset is high, the state should be set to B.
+
+3. **Next State Logic**: Implement combinational logic to determine the next state based on the current state and input `in`.
+
+4. **Output Logic**: Implement combinational logic to determine the output `out` based on the current state.
+
+5. **Synchronous Reset**: Ensure that the reset logic is synchronous with the clock, meaning it should be inside the clocked always block.
+
+Following these steps ensures that the module adheres to the specified behavior and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    localparam logic STATE_A = 1'b0;
+    localparam logic STATE_B = 1'b1;
+
+    // State register
+    logic current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_B: begin
+                if (in == 1'b0)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_A: begin
+                if (in == 1'b0)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_B; // Default to reset state
+        endcase
+    end
+
+    // State register update with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b0; // Default case for safety
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    localparam logic STATE_A = 1'b0;
+    localparam logic STATE_B = 1'b1;
+
+    // State register
+    logic current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            STATE_B: begin
+                if (in == 1'b0)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_A: begin
+                if (in == 1'b0)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_B; // Default to reset state
+        endcase
+    end
+
+    // State register update with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_B;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b0; // Default case for safety
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,83 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire d`: 1-bit input, represents a binary condition.
+  - `input wire done_counting`: 1-bit input, indicates completion of a counting operation.
+  - `input wire ack`: 1-bit input, acknowledges the completion of a process.
+  - `input wire [9:0] state`: 10-bit input, represents the current state using a one-hot encoding.
+
+- Output Ports:
+  - `output wire B3_next`: 1-bit output, asserted when the next state is B3.
+  - `output wire S_next`: 1-bit output, asserted when the next state is S.
+  - `output wire S1_next`: 1-bit output, asserted when the next state is S1.
+  - `output wire Count_next`: 1-bit output, asserted when the next state is Count.
+  - `output wire Wait_next`: 1-bit output, asserted when the next state is Wait.
+  - `output wire done`: 1-bit output, indicates the done condition.
+  - `output wire counting`: 1-bit output, indicates the counting condition.
+  - `output wire shift_ena`: 1-bit output, indicates when shifting is enabled.
+
+State Encoding:
+- One-hot encoding for states is assumed as follows:
+  - S = 10'b0000000001
+  - S1 = 10'b0000000010
+  - S11 = 10'b0000000100
+  - S110 = 10'b0000001000
+  - B0 = 10'b0000010000
+  - B1 = 10'b0000100000
+  - B2 = 10'b0001000000
+  - B3 = 10'b0010000000
+  - Count = 10'b0100000000
+  - Wait = 10'b1000000000
+
+State Machine:
+- Initial State on Reset: The state machine starts in state "S" (10'b0000000001). Reset is synchronous.
+- The state transitions are based on inputs `d`, `done_counting`, and `ack` with outputs `shift_ena`, `counting`, and `done` as described below:
+
+1. S (current state):
+   - `d=0`: Remain in S
+   - `d=1`: Transition to S1
+
+2. S1 (current state):
+   - `d=0`: Transition to S
+   - `d=1`: Transition to S11
+
+3. S11 (current state):
+   - `d=0`: Transition to S110
+   - `d=1`: Remain in S11
+
+4. S110 (current state):
+   - `d=0`: Transition to S
+   - `d=1`: Transition to B0
+
+5. B0 (current state):
+   - Always transition to B1, `shift_ena=1`
+
+6. B1 (current state):
+   - Always transition to B2, `shift_ena=1`
+
+7. B2 (current state):
+   - Always transition to B3, `shift_ena=1`
+
+8. B3 (current state):
+   - Always transition to Count, `shift_ena=1`
+
+9. Count (current state):
+   - `done_counting=0`: Remain in Count, `counting=1`
+   - `done_counting=1`: Transition to Wait, `counting=1`
+
+10. Wait (current state):
+    - `ack=0`: Remain in Wait, `done=1`
+    - `ack=1`: Transition to S, `done=1`
+
+Output Logic:
+- `shift_ena` is asserted in states B0, B1, B2, and B3.
+- `counting` is asserted in state Count.
+- `done` is asserted in state Wait.
+
+Next-State Logic:
+- Generate the next-state signals (`B3_next`, `S_next`, `S1_next`, `Count_next`, `Wait_next`) based on the current state and inputs as per the transitions described above.
+
+Note: Ensure that the implementation handles edge cases and input boundaries as per the state machine design.
+</ENHANCED_SPEC>

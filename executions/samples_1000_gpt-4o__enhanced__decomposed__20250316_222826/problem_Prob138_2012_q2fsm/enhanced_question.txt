@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+
+- Input Ports:
+  - `input wire clk`: Clock signal, positive edge-triggered.
+  - `input wire reset`: Synchronous active-high reset signal.
+  - `input wire w`: Input signal for state transitions.
+
+- Output Ports:
+  - `output reg z`: Output signal, 1-bit.
+
+State Machine Description:
+
+- State Encoding:
+  - `parameter A = 3'b000;`
+  - `parameter B = 3'b001;`
+  - `parameter C = 3'b010;`
+  - `parameter D = 3'b011;`
+  - `parameter E = 3'b100;`
+  - `parameter F = 3'b101;`
+
+- Initial State:
+  - Upon reset, the FSM transitions to state `A`.
+
+- State Transitions:
+  - From state `A`, on `w = 1`, transition to state `B`; on `w = 0`, remain in state `A`.
+  - From state `B`, on `w = 1`, transition to state `C`; on `w = 0`, transition to state `D`.
+  - From state `C`, on `w = 1`, transition to state `E`; on `w = 0`, transition to state `D`.
+  - From state `D`, on `w = 1`, transition to state `F`; on `w = 0`, transition to state `A`.
+  - From state `E`, on `w = 1`, remain in state `E`; on `w = 0`, transition to state `D`.
+  - From state `F`, on `w = 1`, transition to state `C`; on `w = 0`, transition to state `D`.
+
+- Output Logic:
+  - In states `A`, `B`, `C`, and `D`, `z = 0`.
+  - In states `E` and `F`, `z = 1`.
+
+Design Constraints:
+
+- Clocking: All sequential logic is triggered on the positive edge of `clk`.
+- Reset: `reset` is a synchronous active-high signal affecting all state flip-flops.
+- Signal Dependence: The output `z` depends solely on the current state.
+- Initial Values: All state registers are initialized to state `A` upon reset.
+
+Implementation Notes:
+- Use separate always blocks for combinational logic (state transitions) and sequential logic (state flip-flops).
+- Ensure no race conditions by properly synchronizing all state transitions and outputs with the clock edge.
+- Assign state codes using a 3-bit encoding scheme to facilitate state management and transitions.
+
+Edge Cases:
+- Ensure behavior is defined for all input scenarios, particularly during state transitions and reset conditions.
+</ENHANCED_SPEC>

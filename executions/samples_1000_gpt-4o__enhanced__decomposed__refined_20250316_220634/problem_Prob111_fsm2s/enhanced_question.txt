@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input: `clk` (1-bit, clock signal)
+- Input: `reset` (1-bit, active-high synchronous reset)
+- Input: `j` (1-bit, control input for state transition)
+- Input: `k` (1-bit, control input for state transition)
+- Output: `out` (1-bit, Moore state machine output)
+
+State Machine Description:
+- The Moore state machine has two states: `OFF` and `ON`.
+- State `OFF` is defined with an output `out = 0`.
+- State `ON` is defined with an output `out = 1`.
+
+Reset Behavior:
+- The `reset` signal is an active-high synchronous signal.
+- Upon activation of `reset`, the state machine transitions to state `OFF`.
+- The output `out` is set to `0` during the reset state.
+
+State Transitions:
+- From `OFF` state:
+  - If `j == 0`, remain in `OFF` state.
+  - If `j == 1`, transition to `ON` state.
+- From `ON` state:
+  - If `k == 0`, remain in `ON` state.
+  - If `k == 1`, transition to `OFF` state.
+
+Clock and Timing:
+- State transitions occur on the rising edge of the `clk` signal.
+- The output `out` reflects the state of the system and changes in the next clock cycle after a state transition, as per the Moore state machine definition.
+
+Initial State:
+- On power-up, the system should be initialized to the `OFF` state with `out = 0`.
+
+Bit Indexing and Conventions:
+- All signals are single-bit and do not require bit indexing.
+- The least significant bit is bit[0] by default as all ports are single-bit.
+
+Edge Cases and Input Boundaries:
+- Ensure that state transitions are well-defined for all possible combinations of `j` and `k` inputs.
+- No undefined states or transitions are present in the state machine.
+
+This specification ensures that the Moore state machine is accurately implemented with clear definitions of state transitions, reset behavior, and output logic.
+</ENHANCED_SPEC>

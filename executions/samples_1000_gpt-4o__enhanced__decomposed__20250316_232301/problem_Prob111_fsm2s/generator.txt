@@ -1,0 +1,117 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as a Moore state machine, we need to define two states: OFF and ON. The state transitions are determined by the inputs `j` and `k`, and the output `out` is determined solely by the current state. The reset is a synchronous active-high reset that sets the state to OFF. We'll use a `logic` type for all signals, as per the coding conventions. The state transitions and output logic will be implemented using two always blocks: one for sequential logic (state transitions) and one for combinational logic (next state and output logic). The state encoding will be binary, with OFF as 0 and ON as 1.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    input  logic j,
+    input  logic k,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        OFF = 1'b0,
+        ON  = 1'b1
+    } state_t;
+
+    state_t state, next_state;
+
+    // State transition logic with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= OFF;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always @(*) begin
+        case (state)
+            OFF: begin
+                if (j) begin
+                    next_state = ON;
+                end else begin
+                    next_state = OFF;
+                end
+                out = 1'b0;
+            end
+            ON: begin
+                if (k) begin
+                    next_state = OFF;
+                end else begin
+                    next_state = ON;
+                end
+                out = 1'b1;
+            end
+            default: begin
+                next_state = OFF;
+                out = 1'b0;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input  logic clk,
+    input  logic reset,
+    input  logic j,
+    input  logic k,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        OFF = 1'b0,
+        ON  = 1'b1
+    } state_t;
+
+    state_t state, next_state;
+
+    // State transition logic with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            state <= OFF;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always @(*) begin
+        case (state)
+            OFF: begin
+                if (j) begin
+                    next_state = ON;
+                end else begin
+                    next_state = OFF;
+                end
+                out = 1'b0;
+            end
+            ON: begin
+                if (k) begin
+                    next_state = OFF;
+                end else begin
+                    next_state = ON;
+                end
+                out = 1'b1;
+            end
+            default: begin
+                next_state = OFF;
+                out = 1'b0;
+            end
+        endcase
+    end
+
+endmodule

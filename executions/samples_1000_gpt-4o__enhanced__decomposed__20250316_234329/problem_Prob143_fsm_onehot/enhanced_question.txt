@@ -1,0 +1,64 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input: 
+  - `input wire in;` // Single-bit input signal
+  - `input wire [9:0] state;` // 10-bit one-hot encoded current state vector
+- Output:
+  - `output reg [9:0] next_state;` // 10-bit one-hot encoded next state vector
+  - `output reg out1;` // Single-bit output for specific state conditions
+  - `output reg out2;` // Single-bit output for specific state conditions
+
+State Encoding:
+- States are one-hot encoded:
+  - `state[0]` corresponds to S0
+  - `state[1]` corresponds to S1
+  - ...
+  - `state[9]` corresponds to S9
+
+State Transition Logic:
+- The module implements combinational logic to determine `next_state` based on `state` and `in`.
+- State transitions are defined as:
+  - From S0: 
+    - `in == 0` -> Stay in S0
+    - `in == 1` -> Transition to S1
+  - From S1:
+    - `in == 0` -> Transition to S0
+    - `in == 1` -> Transition to S2
+  - From S2:
+    - `in == 0` -> Transition to S0
+    - `in == 1` -> Transition to S3
+  - From S3:
+    - `in == 0` -> Transition to S0
+    - `in == 1` -> Transition to S4
+  - From S4:
+    - `in == 0` -> Transition to S0
+    - `in == 1` -> Transition to S5
+  - From S5:
+    - `in == 0` -> Transition to S8
+    - `in == 1` -> Transition to S6
+  - From S6:
+    - `in == 0` -> Transition to S9
+    - `in == 1` -> Transition to S7
+  - From S7:
+    - `in == 0` -> Transition to S0
+    - `in == 1` -> Stay in S7
+  - From S8:
+    - `in == 0` -> Transition to S0
+    - `in == 1` -> Transition to S1
+  - From S9:
+    - `in == 0` -> Transition to S0
+    - `in == 1` -> Transition to S1
+
+Output Logic:
+- Outputs are zero unless explicitly specified by the state:
+  - `out1` is set to 1 when in states S8 or S9.
+  - `out2` is set to 1 when in states S7 or S9.
+
+Additional Notes:
+- The module does not include flip-flops for state storage; it receives the current state externally.
+- The `next_state` output is determined combinationally, without additional clock or reset signals.
+- Each bit in `next_state[9:0]` is set high if the corresponding state is the next state, otherwise set low.
+- Ensure that only one bit in `next_state` is high at any given time, reflecting one-hot encoding.
+</ENHANCED_SPEC>

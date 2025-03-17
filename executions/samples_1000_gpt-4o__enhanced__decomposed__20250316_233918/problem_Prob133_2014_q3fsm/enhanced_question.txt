@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal (1 bit). All sequential logic is triggered on the positive edge.
+  - `reset`: Active high synchronous reset signal (1 bit). On reset, the FSM enters state A.
+  - `s`: Control input (1 bit) used in state A to determine state transitions.
+  - `w`: Data input (1 bit) used in state B for evaluating conditions over three clock cycles.
+
+- Output Ports:
+  - `z`: Output signal (1 bit) indicating the result of the FSM evaluation.
+
+FSM Description:
+- The FSM consists of two primary states: A (initial/reset state) and B.
+
+- State A:
+  - Initial state after reset.
+  - The FSM remains in state A as long as `s` is 0.
+  - Transition to state B occurs when `s` is 1.
+
+- State B:
+  - In state B, the FSM monitors the input `w` over the next three clock cycles.
+  - The FSM counts the occurrences where `w` is 1 within these three cycles.
+  - If `w` is 1 in exactly two out of the three cycles, the output `z` is set to 1 in the following clock cycle.
+  - If the condition is not met, output `z` is set to 0.
+  - This evaluation is repeated every three clock cycles in state B.
+
+- Reset Behavior:
+  - The reset is synchronous, meaning the FSM transitions to state A on the next positive clock edge when `reset` is high.
+  - All sequential elements (e.g., state registers, counters) are initialized to their default states upon reset.
+
+State and Signal Conventions:
+- All states and transitions are controlled by the positive edge of the `clk`.
+- Output `z` is updated in the clock cycle following the evaluation of the three-cycle condition.
+
+Additional Considerations:
+- Ensure any state transitions or signal evaluations are free from race conditions by properly synchronizing all signals to the clock.
+- In cases where `s` transitions from 0 to 1 in the middle of a three-cycle evaluation in state B, the FSM should complete the current evaluation cycle before transitioning back to state A.
+- Use minimal states to efficiently implement the specified behavior while maintaining clarity in state transitions and conditions.
+</ENHANCED_SPEC>

@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule`. It is a Moore state machine with two distinct states. Below is the refined specification with enhanced clarity and precision:
+
+**Module Interface:**
+- `input  wire clk`: This is the clock signal. All sequential logic operations are synchronized with the rising edge of this clock.
+- `input  wire reset`: This is an active-high synchronous reset signal. When asserted, the state machine transitions to the reset state on the next rising clock edge.
+- `input  wire in`: This is the one-bit input signal to the state machine.
+- `output reg  out`: This is a one-bit output signal, which is determined by the current state of the state machine.
+
+**State Definitions:**
+- **State B**: Output `out` is `1`. This is the reset state.
+- **State A**: Output `out` is `0`.
+
+**State Transition Descriptions:**
+- From **State B**:
+  - If `in` is `0`, transition to **State A** on the next rising clock edge.
+  - If `in` is `1`, remain in **State B**.
+
+- From **State A**:
+  - If `in` is `0`, transition to **State B** on the next rising clock edge.
+  - If `in` is `1`, remain in **State A**.
+
+**Reset Behavior:**
+- The reset is synchronous. When `reset` is asserted high, the state machine will transition to **State B** on the next clock edge. The output `out` will be set to `1` in **State B**.
+
+**Initial Conditions:**
+- Upon power-up or initialization, the module should be designed to start in **State B**, with the output `out` initialized to `1`, assuming the reset condition is met.
+
+**Additional Notes:**
+- The state transition and output determination are fully dependent on the rising edge of the `clk` signal and the current state.
+- This design ensures that the state transitions occur without any race conditions or glitches.
+- The outputs are strictly governed by the current state, adhering to the Moore machine's principle of state-dependent output.
+
+**Bit Indexing and Conventions:**
+- Since all inputs and outputs are one bit, bit indexing is not applicable in this specification.
+
+**Edge Cases:**
+- The behavior of the module is well-defined for all input combinations in both states, ensuring robust operation across all possible scenarios.
+</ENHANCED_SPEC>

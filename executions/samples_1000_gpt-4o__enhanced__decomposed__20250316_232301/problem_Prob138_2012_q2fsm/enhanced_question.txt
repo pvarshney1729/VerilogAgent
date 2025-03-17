@@ -1,0 +1,50 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input  logic clk            // Clock signal for synchronous logic, positive edge-triggered
+- input  logic reset          // Synchronous active-high reset signal, resets to state A
+- input  logic w              // One-bit input signal driving state transitions
+- output logic z              // One-bit output signal, determined by the current state
+
+State Encoding (using binary encoding):
+- State A: 3'b000
+- State B: 3'b001
+- State C: 3'b010
+- State D: 3'b011
+- State E: 3'b100
+- State F: 3'b101
+
+State Machine Specification:
+- Initial State: State A upon reset
+- Transition Table:
+  - A (z = 0): 
+    - w = 1: Transition to State B
+    - w = 0: Remain in State A
+  - B (z = 0): 
+    - w = 1: Transition to State C
+    - w = 0: Transition to State D
+  - C (z = 0): 
+    - w = 1: Transition to State E
+    - w = 0: Transition to State D
+  - D (z = 0): 
+    - w = 1: Transition to State F
+    - w = 0: Transition to State A
+  - E (z = 1): 
+    - w = 1: Remain in State E
+    - w = 0: Transition to State D
+  - F (z = 1): 
+    - w = 1: Transition to State C
+    - w = 0: Transition to State D
+
+FSM Output Logic:
+- Output z is determined by the current state:
+  - States A, B, C, D: z = 0
+  - States E, F: z = 1
+
+Implementation Notes:
+- Use separate always blocks for the state transition logic (next state logic) and the state register (current state storage).
+- Ensure that reset is handled in the state register always block to initialize the state to A.
+- Ensure that all combinational logic has explicitly defined dependencies to avoid race conditions.
+- All state transitions and output logic should be evaluated on the positive edge of the clock.
+</ENHANCED_SPEC>

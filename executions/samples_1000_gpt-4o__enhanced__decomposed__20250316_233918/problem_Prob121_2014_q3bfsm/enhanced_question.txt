@@ -1,0 +1,42 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input clk: Clock signal, positive edge-triggered.
+- input reset: Synchronous active-high reset signal. Resets the FSM to the initial state.
+- input x: Control input signal.
+- output reg z: Output signal.
+
+Port Specifications:
+- All ports are 1-bit wide.
+- Signal 'clk' is used to trigger all sequential logic at its rising edge.
+- 'reset' initializes the FSM to state 000 when high.
+- Signal 'z' is a registered output.
+
+State Machine Description:
+- The FSM has five states, encoded as 3-bit vectors (y[2:0]), where y[2] is the most significant bit (MSB) and y[0] is the least significant bit (LSB).
+- The states and transitions are defined by the present state and the input 'x'.
+- The FSM transitions according to the following state transition table:
+
+  | Present State (y[2:0]) | Next State (y[2:0]) when x=0 | Next State (y[2:0]) when x=1 | Output z |
+  |------------------------|------------------------------|------------------------------|----------|
+  | 000                    | 000                          | 001                          | 0        |
+  | 001                    | 001                          | 100                          | 0        |
+  | 010                    | 010                          | 001                          | 0        |
+  | 011                    | 001                          | 010                          | 1        |
+  | 100                    | 011                          | 100                          | 1        |
+
+- The output 'z' is determined solely by the current state, not the input 'x'.
+
+Operation and Edge Cases:
+- On the assertion of 'reset', the FSM is initialized to the state 000 regardless of the value of 'x'.
+- The FSM operates on the rising edge of 'clk'.
+- Ensure all transitions are executed without race conditions by adhering to rising edge triggered logic.
+- The output 'z' is updated based on the current state in the same clock cycle as the state transition.
+
+Initial Conditions:
+- Upon power-up or reset, the FSM initializes to state 000, and the output 'z' is 0.
+- All sequential logic elements must have defined initial states upon reset activation.
+
+Ensure all listed conventions and operational details are strictly followed for accurate implementation.
+</ENHANCED_SPEC>

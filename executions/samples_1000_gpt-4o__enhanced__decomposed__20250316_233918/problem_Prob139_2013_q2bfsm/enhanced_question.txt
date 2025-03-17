@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input wire clk: Clock signal for the FSM. All sequential logic is triggered on the positive edge of this clock.
+- input wire resetn: Active-low, synchronous reset signal. When asserted low, the FSM enters the reset state.
+- input wire x: Input signal from the motor.
+- input wire y: Input signal from the motor.
+- output reg f: Output control signal for the motor. This is a registered output.
+- output reg g: Output control signal for the motor. This is a registered output.
+
+Port Widths and Conventions:
+- All input and output ports are 1-bit wide.
+- Bit[0] refers to the least significant bit when discussing multi-bit values.
+
+Reset Behavior:
+- The resetn signal is synchronous and active-low. When resetn is asserted (low), the FSM enters the initial state, State A.
+
+State Machine Description:
+- The FSM begins in State A when reset is asserted.
+- When resetn is de-asserted (goes high), the FSM transitions from State A to a state where output f is set to 1 for one clock cycle after the next positive clock edge.
+- The FSM then monitors the input x. If the sequence 1, 0, 1 is detected on successive clock cycles, the output g is set to 1 on the clock cycle immediately following this sequence.
+
+Output g Behavior:
+- Once g is set to 1, the FSM monitors input y.
+- If y becomes 1 within the next two clock cycles after g is set to 1, then g remains 1 permanently until reset.
+- If y does not become 1 within two clock cycles, g is set to 0 permanently until reset.
+
+Sequential Logic:
+- All state transitions and output updates are based on the positive edge of the clock signal.
+- Ensure that all flip-flops and registers have defined initial values upon reset. State A is the default state after reset.
+
+Edge Cases and Input Boundaries:
+- Ensure that the FSM handles all possible sequences of x and y correctly.
+- Verify behavior when inputs are held constant or change rapidly, especially during boundary conditions of state transitions.
+</ENHANCED_SPEC>

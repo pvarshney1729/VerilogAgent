@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule (\n    input logic clk,\n    input logic reset,\n    output logic [4:0] q\n);\n\n    logic [4:0] lfsr;\n\n    always @(posedge clk) begin\n        if (reset) begin\n            lfsr <= 5'b00001;\n        end else begin\n            lfsr[4] <= lfsr[0];\n            lfsr[3] <= lfsr[4];\n            lfsr[2] <= lfsr[3] ^ lfsr[0]; // Tap at position 3\n            lfsr[1] <= lfsr[2];\n            lfsr[0] <= lfsr[1];\n        end\n    end\n\n    assign q = lfsr;\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

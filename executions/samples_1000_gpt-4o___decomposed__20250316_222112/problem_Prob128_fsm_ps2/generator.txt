@@ -1,0 +1,135 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we will design a finite state machine (FSM) with four states: `IDLE`, `BYTE1`, `BYTE2`, and `BYTE3`. The FSM will transition between these states based on the input `in[3]` and the clock signal. The `done` signal will be asserted when the FSM transitions from `BYTE3` back to `IDLE`, indicating the completion of a message.
+
+1. **State Definitions**: 
+   - `IDLE`: The FSM waits for the first byte of a message, identified by `in[3] = 1`.
+   - `BYTE1`: The FSM has detected the first byte of a message.
+   - `BYTE2`: The FSM has detected the second byte of a message.
+   - `BYTE3`: The FSM has detected the third byte of a message.
+
+2. **State Transitions**:
+   - From `IDLE` to `BYTE1` when `in[3] = 1`.
+   - From `BYTE1` to `BYTE2` on the next clock cycle.
+   - From `BYTE2` to `BYTE3` on the next clock cycle.
+   - From `BYTE3` to `IDLE` and assert `done` for one cycle.
+
+3. **Synchronous Reset**: The FSM will reset to `IDLE` when the `reset` signal is high.
+
+4. **Output Logic**: The `done` signal will be asserted when the FSM transitions from `BYTE3` to `IDLE`.
+
+The implementation will use `logic` for all signals, and the FSM will be implemented using a combination of sequential and combinational logic.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always @(*) begin
+        // Default assignments
+        next_state = current_state;
+        done = 1'b0;
+
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+            end
+            BYTE3: begin
+                done = 1'b1;
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic [7:0] in,
+    output logic done
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE  = 2'b00,
+        BYTE1 = 2'b01,
+        BYTE2 = 2'b10,
+        BYTE3 = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= IDLE;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state logic and output logic
+    always @(*) begin
+        // Default assignments
+        next_state = current_state;
+        done = 1'b0;
+
+        case (current_state)
+            IDLE: begin
+                if (in[3] == 1'b1) begin
+                    next_state = BYTE1;
+                end
+            end
+            BYTE1: begin
+                next_state = BYTE2;
+            end
+            BYTE2: begin
+                next_state = BYTE3;
+            end
+            BYTE3: begin
+                done = 1'b1;
+                next_state = IDLE;
+            end
+        endcase
+    end
+
+endmodule

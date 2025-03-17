@@ -1,0 +1,54 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port List:
+- input clk       : Clock input, triggers on the positive edge.
+- input reset     : Synchronous active-high reset input, resets the FSM to state A.
+- input w         : 1-bit input signal driving state transitions.
+- output reg z    : 1-bit output, driven by the current state.
+
+State Encoding:
+- State A (2'b00)
+- State B (2'b01)
+- State C (2'b10)
+- State D (2'b11)
+- State E (2'b100)
+- State F (2'b101)
+
+FSM Description:
+- Reset behavior: On a synchronous active-high reset, the FSM transitions to state A.
+- State Transition Logic:
+  - From State A: 
+    - If w == 1: Transition to State B.
+    - If w == 0: Remain in State A.
+  - From State B:
+    - If w == 1: Transition to State C.
+    - If w == 0: Transition to State D.
+  - From State C:
+    - If w == 1: Transition to State E.
+    - If w == 0: Transition to State D.
+  - From State D:
+    - If w == 1: Transition to State F.
+    - If w == 0: Transition to State A.
+  - From State E:
+    - If w == 1: Remain in State E.
+    - If w == 0: Transition to State D.
+  - From State F:
+    - If w == 1: Transition to State C.
+    - If w == 0: Transition to State D.
+
+Output Logic:
+- The output z is determined by the current state:
+  - z = 0 for states A, B, C, and D.
+  - z = 1 for states E and F.
+
+Implementation Requirements:
+- Use separate always blocks for state transition logic and state register update.
+- Ensure state register update is triggered on the positive edge of the clock.
+- Define initial state as A after a reset.
+- Avoid race conditions by ensuring all state transitions and output assignments are based on the same clock edge.
+
+Edge Cases:
+- Ensure that all undefined input conditions and transitions are properly handled according to the state transition logic.
+- Verify behavior at input boundaries, especially during reset and state transitions.
+</ENHANCED_SPEC>

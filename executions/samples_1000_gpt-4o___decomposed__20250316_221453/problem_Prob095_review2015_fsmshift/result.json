@@ -1,0 +1,7 @@
+{
+    "code": "module TopModule(\n    input logic clk,\n    input logic reset,\n    output logic shift_ena\n);\n\n    typedef enum logic [2:0] {\n        IDLE   = 3'b000,\n        SHIFT1 = 3'b001,\n        SHIFT2 = 3'b010,\n        SHIFT3 = 3'b011,\n        SHIFT4 = 3'b100\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // State transition logic\n    always_ff @(posedge clk) begin\n        if (reset) begin\n            current_state <= SHIFT1;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Next state logic\n    always @(*) begin\n        case (current_state)\n            IDLE:   next_state = IDLE;\n            SHIFT1: next_state = SHIFT2;\n            SHIFT2: next_state = SHIFT3;\n            SHIFT3: next_state = SHIFT4;\n            SHIFT4: next_state = IDLE;\n            default: next_state = IDLE;\n        endcase\n    end\n\n    // Output logic\n    always @(*) begin\n        case (current_state)\n            SHIFT1, SHIFT2, SHIFT3, SHIFT4: shift_ena = 1;\n            default: shift_ena = 0;\n        endcase\n    end\n\nendmodule",
+    "test_results": {
+        "num_mismatch": 0,
+        "passfail": "."
+    }
+}

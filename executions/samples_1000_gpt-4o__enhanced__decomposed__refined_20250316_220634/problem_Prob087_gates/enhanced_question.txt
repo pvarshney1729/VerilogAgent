@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule`. This module has a combinational circuit with the following input and output interface specifications:
+
+**Inputs:**
+- `input wire a;`  // Single-bit input signal, representing the logic input A.
+- `input wire b;`  // Single-bit input signal, representing the logic input B.
+
+**Outputs:**
+- `output wire out_and;`  // Single-bit output, result of logical AND operation on inputs A and B.
+- `output wire out_or;`   // Single-bit output, result of logical OR operation on inputs A and B.
+- `output wire out_xor;`  // Single-bit output, result of logical XOR operation on inputs A and B.
+- `output wire out_nand;` // Single-bit output, result of logical NAND operation on inputs A and B.
+- `output wire out_nor;`  // Single-bit output, result of logical NOR operation on inputs A and B.
+- `output wire out_xnor;` // Single-bit output, result of logical XNOR operation on inputs A and B.
+- `output wire out_anotb;`// Single-bit output, result of logical AND between input A and the logical NOT of input B.
+
+**Details:**
+- All inputs and outputs are single-bit signals.
+- The module is purely combinational, meaning that it does not involve any clock signal or sequential logic. Outputs will change immediately in response to changes in the inputs.
+- The operations are defined as follows:
+  - `out_and` performs the logical AND operation: `out_and = a & b`.
+  - `out_or` performs the logical OR operation: `out_or = a | b`.
+  - `out_xor` performs the logical XOR operation: `out_xor = a ^ b`.
+  - `out_nand` performs the logical NAND operation: `out_nand = ~(a & b)`.
+  - `out_nor` performs the logical NOR operation: `out_nor = ~(a | b)`.
+  - `out_xnor` performs the logical XNOR operation: `out_xnor = ~(a ^ b)`.
+  - `out_anotb` performs the logical AND of A and NOT B: `out_anotb = a & ~b`.
+
+- No initial values are required for the combinational logic module as it does not involve any sequential elements or state retention.
+- The logic levels for inputs and outputs are assumed to be standard binary (0 for low, 1 for high).
+- Ensure that any changes in input signals `a` or `b` immediately reflect in the respective output signals, adhering to the behavior of combinational logic.
+</ENHANCED_SPEC>

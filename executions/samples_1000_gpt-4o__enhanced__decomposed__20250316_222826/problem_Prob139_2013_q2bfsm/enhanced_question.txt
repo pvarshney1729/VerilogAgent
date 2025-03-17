@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- Input Ports:
+  - clk: Clock signal. All sequential logic is triggered on the positive edge.
+  - resetn: Active-low, synchronous reset signal. When asserted low, the FSM returns to its initial state, state A.
+  - x: Input signal from the motor.
+  - y: Input signal from the motor.
+
+- Output Ports:
+  - f: Output signal controlling the motor.
+  - g: Output signal controlling the motor.
+
+Port Widths:
+- All input and output ports are 1-bit wide.
+
+Bit Indexing Convention:
+- Single-bit ports do not use bit indexing.
+
+Finite State Machine (FSM) Description:
+- Initial State: State A
+- Reset Behavior: 
+  - When resetn is asserted (low), the FSM remains in state A.
+  - Upon deassertion of resetn (high), the FSM transitions from state A on the next positive clock edge.
+  
+- Output f Behavior:
+  - Upon deassertion of resetn, the FSM sets output f=1 for exactly one clock cycle after the next positive clock edge.
+
+- Output g Behavior:
+  - The FSM monitors input x. When x follows the pattern 1, 0, 1 over three successive positive clock edges, g is set to 1 on the following clock cycle.
+  - Once g is set to 1, the FSM monitors input y for a maximum of two subsequent clock cycles:
+    - If y=1 within two clock cycles, g remains 1 permanently until resetn is asserted.
+    - If y does not become 1 within two cycles, g is set to 0 permanently until resetn is asserted.
+
+Edge Cases and Input Boundaries:
+- All transitions and output changes occur on positive clock edges.
+- The FSM responds to the reset signal synchronously; thus, the reset state is only entered on the clock edge following the resetn assertion.
+- The FSM's functionality is defined for a continuous operation; unexpected input sequences outside the described patterns will not alter the behavior unless resetn is asserted.
+
+Initial Values:
+- The FSM starts in state A with both outputs f and g initialized to 0.
+</ENHANCED_SPEC>

@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Definition:
+- Input Ports:
+  - `clk`: 1-bit clock signal. Positive edge-triggered.
+  - `in`: 1-bit serial data input.
+  - `reset`: 1-bit active-high synchronous reset signal.
+
+- Output Ports:
+  - `out_byte`: 8-bit data output, representing the received byte.
+  - `done`: 1-bit signal that indicates a correctly received byte. High when `out_byte` is valid.
+
+Operational Specification:
+- The module implements a finite state machine (FSM) to process a stream of serial bits according to a specific protocol.
+- The protocol includes:
+  - 1 start bit (`0`).
+  - 8 data bits, transmitted with the least significant bit first.
+  - 1 stop bit (`1`).
+
+- FSM Operation:
+  - Upon detecting a start bit (`0`), the FSM transitions to capturing the 8 data bits. These bits form the `out_byte` with `bit[0]` as the least significant bit.
+  - After capturing 8 data bits, the FSM checks for a stop bit (`1`). If the stop bit is found, the `done` signal is asserted high for one clock cycle, indicating `out_byte` is valid.
+  - If a stop bit is not detected, the FSM waits until a stop bit is detected before resetting to search for the next start bit.
+
+- Clock Cycle Relationship:
+  - All sequential elements are triggered on the positive edge of `clk`.
+  - The `done` signal is high for one clock cycle after a valid byte is received.
+
+- Reset Behavior:
+  - A synchronous active-high reset (`reset=1`) initializes the FSM to its idle state. All internal registers and outputs (`out_byte` and `done`) are reset to zero.
+
+- Edge Cases:
+  - In case of continuous `1`s on `in` (idle state), the FSM remains in an idle state until a start bit (`0`) is detected.
+  - If the input stream is interrupted or malformed, the FSM will wait for a valid start bit to resume operation.
+
+- Input Assumptions:
+  - Data is correctly framed with start and stop bits.
+  - The serial protocol sends the least significant bit first.
+
+- Output Conditions:
+  - `out_byte` is valid and holds the received byte only when `done` is asserted high.
+  - `done` is a don't-care outside the valid byte reception context.
+
+This specification ensures a robust and clear implementation of the intended functionality.
+</ENHANCED_SPEC>

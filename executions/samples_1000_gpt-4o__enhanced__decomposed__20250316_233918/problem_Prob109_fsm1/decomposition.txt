@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module interface with input ports clk, areset, in, and output port out.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "```verilog\n[BEGIN]\nmodule TopModule (\n    input  clk,\n    input  areset,\n    input  in,\n    output out\n);\n[END]\n```"
+    },
+    {
+        "id": "2",
+        "content": "Define state encoding using localparam for states A and B.",
+        "source": "The module should implement a Moore machine with the diagram described below: B (1) --0--> A, B (1) --1--> B, A (0) --0--> B, A (0) --1--> A.",
+        "implementation": "// State encoding using localparam\n  localparam STATE_A = 1'b0;\n  localparam STATE_B = 1'b1;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with asynchronous reset logic to reset to state B when areset is high.",
+        "source": "It should asynchronously reset into state B if reset is high.",
+        "implementation": "reg state;\n  parameter A = 1'b0, B = 1'b1;\n\n  always @(posedge clk or posedge areset) begin\n    if (areset)\n      state <= B; // Asynchronous reset to state B\n    else begin\n      case (state)\n        B: state <= (in) ? B : A;\n        A: state <= (in) ? A : B;\n      endcase\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Create combinational logic to determine the next state based on the current state and input in.",
+        "source": "The module should implement a Moore machine with the diagram described below: B (1) --0--> A, B (1) --1--> B, A (0) --0--> B, A (0) --1--> A.",
+        "implementation": "// State encoding\n  localparam STATE_A = 1'b0;\n  localparam STATE_B = 1'b1;\n\n  // State register\n  reg state, next_state;\n\n  // Combinational logic for next state\n  always @(*) begin\n    case (state)\n      STATE_A: begin\n        if (in)\n          next_state = STATE_A;\n        else\n          next_state = STATE_B;\n      end\n      STATE_B: begin\n        if (in)\n          next_state = STATE_B;\n        else\n          next_state = STATE_A;\n      end\n      default: next_state = STATE_B; // Default to state B\n    endcase\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output logic to assign the output based on the current state.",
+        "source": "The module should implement a Moore machine with the diagram described below: B (1) --0--> A, B (1) --1--> B, A (0) --0--> B, A (0) --1--> A.",
+        "implementation": "// State encoding\n  parameter A = 1'b0, B = 1'b1;\n  \n  // Output logic based on current state\n  always @(*) begin\n    case (state)\n      A: out = 1'b0;\n      B: out = 1'b1;\n      default: out = 1'b0; // Default case for safety\n    endcase\n  end"
+    }
+]

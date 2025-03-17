@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, x, and output port z.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  wire clk,\n    input  wire reset,\n    input  wire x,\n    output reg  z\n);\n\n    reg [2:0] state, next_state;\n\n    // State transition logic\n    always @(posedge clk) begin\n        if (reset) begin\n            state <= 3'b000;\n        end else begin\n            state <= next_state;\n        end\n    end\n\n    // Next state and output logic\n    always @(*) begin\n        case (state)\n            3'b000: begin\n                next_state = (x == 1'b0) ? 3'b000 : 3'b001;\n                z = 1'b0;\n            end\n            3'b001: begin\n                next_state = (x == 1'b0) ? 3'b001 : 3'b100;\n                z = 1'b0;\n            end\n            3'b010: begin\n                next_state = (x == 1'b0) ? 3'b010 : 3'b001;\n                z = 1'b0;\n            end\n            3'b011: begin\n                next_state = (x == 1'b0) ? 3'b001 : 3'b010;\n                z = 1'b1;\n            end\n            3'b100: begin\n                next_state = (x == 1'b0) ? 3'b011 : 3'b100;\n                z = 1'b1;\n            end\n            default: begin\n                next_state = 3'b000;\n                z = 1'b0;\n            end\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare the state register y[2:0] and the next state logic as reg type.",
+        "source": "Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "reg [2:0] y;       // State register\nreg [2:0] y_next;  // Next state logic"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic to reset the FSM to state 000 on reset.",
+        "source": "Reset should synchronous active high reset the FSM to state 000.",
+        "implementation": "reg [2:0] state;\n  \n  always @(posedge clk) begin\n    if (reset) begin\n      state <= 3'b000;\n    end else begin\n      // Next state logic will be implemented here\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic based on the present state and input x according to the state transition table.",
+        "source": "Present state y[2:0] | Next state y[2:0] x=0, Next state y[2:0] x=1",
+        "implementation": "always @(*) begin\n    case (present_state)\n        3'b000: next_state = (x == 1'b0) ? 3'b000 : 3'b001;\n        3'b001: next_state = (x == 1'b0) ? 3'b001 : 3'b100;\n        3'b010: next_state = (x == 1'b0) ? 3'b010 : 3'b001;\n        3'b011: next_state = (x == 1'b0) ? 3'b001 : 3'b010;\n        3'b100: next_state = (x == 1'b0) ? 3'b011 : 3'b100;\n        default: next_state = 3'b000; // Default case for safety\n    endcase\nend"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic for z based on the current state according to the output table.",
+        "source": "Output z: 000 | 0, 001 | 0, 010 | 0, 011 | 1, 100 | 1",
+        "implementation": "always @(*) begin\n    case (y)\n        3'b000: z = 1'b0;\n        3'b001: z = 1'b0;\n        3'b010: z = 1'b0;\n        3'b011: z = 1'b1;\n        3'b100: z = 1'b1;\n        default: z = 1'b0;\n    endcase\nend"
+    }
+]

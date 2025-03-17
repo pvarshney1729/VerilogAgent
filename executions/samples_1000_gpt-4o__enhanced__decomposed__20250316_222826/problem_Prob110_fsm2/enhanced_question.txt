@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module: TopModule
+
+Description:
+The module implements a Moore state machine with two states (OFF, ON), two inputs (j, k), and one output (out). The reset is an active-high asynchronous reset to the OFF state. The state machine transitions based on the input conditions as described below.
+
+Inputs:
+- input clk: Clock signal for synchronizing state transitions. It is a 1-bit signal.
+- input areset: Asynchronous reset signal. It is a 1-bit active-high signal that forces the state machine into the OFF state.
+- input j: Transition input signal for the state machine. It is a 1-bit signal.
+- input k: Transition input signal for the state machine. It is a 1-bit signal.
+
+Output:
+- output reg out: Output signal representing the current state. It is a 1-bit signal, where 0 represents the OFF state and 1 represents the ON state.
+
+State Definitions:
+- OFF: Represents the state where out = 0. This is the initial state upon reset.
+- ON: Represents the state where out = 1.
+
+State Transition Table:
+1. From OFF (out=0):
+   - If j=0, remain in OFF.
+   - If j=1, transition to ON.
+
+2. From ON (out=1):
+   - If k=0, remain in ON.
+   - If k=1, transition to OFF.
+
+Reset Behavior:
+- The areset signal is asynchronous and active-high. When areset is asserted (1), the state machine immediately transitions to the OFF state regardless of the clock.
+
+Clock and Signal Behavior:
+- All state transitions occur on the rising edge of the clk signal, except when areset is asserted, which takes immediate precedence.
+
+Initial Conditions:
+- Upon the assertion of areset, the state machine is reset to the OFF state, and out is set to 0.
+
+Note:
+- Ensure that the design accounts for potential glitches or race conditions by correctly synchronizing the inputs with the clock where necessary.
+- Make sure to initialize all sequential elements to their defined states to avoid undefined behavior at startup.
+</ENHANCED_SPEC>

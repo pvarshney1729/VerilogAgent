@@ -1,0 +1,58 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input clk: 1-bit clock signal, positive edge-triggered.
+- input reset: 1-bit synchronous active high reset signal.
+- input in: 1-bit input signal.
+- output out: 1-bit output signal.
+
+Module Description:
+The module implements a Moore state machine with the following characteristics:
+
+1. States:
+   - Four states named A, B, C, and D.
+   - The state machine starts in state A upon reset.
+
+2. Synchronous Reset:
+   - The reset signal is synchronous with the clock.
+   - Active high reset that resets the FSM to state A.
+
+3. State Transitions:
+   - Transitions occur on the positive edge of the clock.
+   - The state transition table is defined as follows:
+
+     - State A:
+       - Next state if 'in' = 0: Remains in A
+       - Next state if 'in' = 1: Transitions to B
+       - Output: 0
+
+     - State B:
+       - Next state if 'in' = 0: Transitions to C
+       - Next state if 'in' = 1: Remains in B
+       - Output: 0
+
+     - State C:
+       - Next state if 'in' = 0: Transitions to A
+       - Next state if 'in' = 1: Transitions to D
+       - Output: 0
+
+     - State D:
+       - Next state if 'in' = 0: Transitions to C
+       - Next state if 'in' = 1: Transitions to B
+       - Output: 1
+
+4. Output Behavior:
+   - The output is determined by the current state only (Moore machine).
+   - Outputs are stable from the start of the clock cycle.
+
+5. Initial Conditions and Edge Cases:
+   - On reset, the FSM is initialized to state A with output 0.
+   - Ensure all sequential elements are initialized correctly to avoid undefined states.
+
+6. Signal Relationships:
+   - All state transitions and outputs are dependent solely on the current state and the input 'in'.
+   - No race conditions are present as transitions are driven by the clock edge.
+
+The module ensures a clear and deterministic behavior across all defined states and transitions, with explicit handling of the reset condition.
+</ENHANCED_SPEC>

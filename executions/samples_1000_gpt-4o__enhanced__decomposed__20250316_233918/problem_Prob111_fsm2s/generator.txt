@@ -1,0 +1,135 @@
+Generated Response:
+
+<REASONING>
+To implement the Moore state machine as specified, we will follow these steps:
+
+1. **Define the Module Interface**: We will declare the module `TopModule` with the specified input and output ports using `logic` data type.
+
+2. **State Encoding**: We will define two states, OFF and ON, using `localparam` for clarity and readability.
+
+3. **State Register**: We will implement a state register to hold the current state of the machine. This will be updated on the rising edge of the clock.
+
+4. **Synchronous Reset**: The reset logic will be synchronous, meaning the state will be reset to OFF when the reset signal is high at the rising edge of the clock.
+
+5. **Next State Logic**: We will use combinational logic to determine the next state based on the current state and inputs `j` and `k`.
+
+6. **Output Logic**: Since this is a Moore machine, the output depends only on the current state. We will set the output `out` based on the current state.
+
+7. **Coding Conventions**: We will adhere to the coding conventions by using `logic` for all signals, using `always @(*)` for combinational logic, and ensuring all numeric constants have a size greater than zero.
+
+By following these steps, we will ensure that the module behaves as specified and adheres to the provided guidelines and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    localparam logic OFF = 1'b0;
+    localparam logic ON  = 1'b1;
+
+    // State register
+    logic current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            OFF: begin
+                if (j == 1'b1)
+                    next_state = ON;
+                else
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k == 1'b1)
+                    next_state = OFF;
+                else
+                    next_state = ON;
+            end
+            default: next_state = OFF;
+        endcase
+    end
+
+    // State register update with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= OFF;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    localparam logic OFF = 1'b0;
+    localparam logic ON  = 1'b1;
+
+    // State register
+    logic current_state, next_state;
+
+    // State transition logic
+    always @(*) begin
+        case (current_state)
+            OFF: begin
+                if (j == 1'b1)
+                    next_state = ON;
+                else
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k == 1'b1)
+                    next_state = OFF;
+                else
+                    next_state = ON;
+            end
+            default: next_state = OFF;
+        endcase
+    end
+
+    // State register update with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= OFF;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Output logic
+    always @(*) begin
+        case (current_state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule

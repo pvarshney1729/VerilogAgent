@@ -1,0 +1,49 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock input. This signal is used to synchronize the sequential logic and is active on the positive edge.
+- input wire reset: Synchronous active-high reset input. When high, the state machine resets to the initial state (State A).
+- input wire w: Input signal that influences state transitions.
+- output reg z: Output signal representing the FSM output logic.
+
+FSM State Definitions:
+- The FSM consists of six states: A, B, C, D, E, F.
+- State Encoding: Assign binary codes to each state. Example:
+  - A = 3'b000
+  - B = 3'b001
+  - C = 3'b010
+  - D = 3'b011
+  - E = 3'b100
+  - F = 3'b101
+
+State Transition Description:
+- Initial State: Upon reset (synchronous active-high), the FSM enters State A.
+- Transition Conditions: States transition based on input 'w' as follows:
+  - A (0) --1--> B
+  - A (0) --0--> A
+  - B (0) --1--> C
+  - B (0) --0--> D
+  - C (0) --1--> E
+  - C (0) --0--> D
+  - D (0) --1--> F
+  - D (0) --0--> A
+  - E (1) --1--> E
+  - E (1) --0--> D
+  - F (1) --1--> C
+  - F (1) --0--> D
+
+Output Logic:
+- The output z is a combinational logic based on the current state.
+- Output z is '1' in states E and F, and '0' in states A, B, C, D.
+
+Implementation Notes:
+- Use separate always blocks for the state transition logic (state table) and the state register logic (flip-flops).
+- State transitions occur on the positive edge of the clock.
+- Ensure that all flip-flops have explicitly defined initial values to prevent undefined behavior.
+- Handle all potential input combinations, ensuring robust behavior at input boundaries.
+
+Edge Cases:
+- Ensure correct behavior during reset: The FSM should transition to State A immediately upon a reset condition.
+- If 'w' changes simultaneously with the clock edge, state transitions should respect the precedence of operations as defined above.
+</ENHANCED_SPEC>

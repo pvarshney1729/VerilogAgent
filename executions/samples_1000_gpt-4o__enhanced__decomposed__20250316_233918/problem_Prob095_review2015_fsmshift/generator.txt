@@ -1,0 +1,132 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as specified, we will create a finite state machine (FSM) that controls the `shift_ena` signal. The FSM will have the following states:
+
+1. **IDLE**: The initial state where `shift_ena` is deasserted. Upon reset, the FSM transitions to the ENABLE state.
+2. **ENABLE**: A state where `shift_ena` is asserted for exactly 4 clock cycles. After 4 cycles, the FSM transitions back to the IDLE state.
+
+The FSM will use a counter to keep track of the number of cycles `shift_ena` has been asserted. The counter will be reset to 4 upon a reset and decremented each cycle while in the ENABLE state. Once the counter reaches zero, the FSM will transition back to the IDLE state.
+
+The reset is synchronous, so it will be checked within the clock edge-triggered always block. The `shift_ena` signal will be controlled based on the current state of the FSM.
+
+We will adhere to the coding conventions by using `logic` for all signals, using `always @(*)` for combinational logic, and ensuring all constants are properly sized.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE   = 2'b00,
+        ENABLE = 2'b01
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [2:0] shift_counter;
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= ENABLE;
+            shift_counter <= 3'b100; // Initialize counter to 4
+        end else begin
+            current_state <= next_state;
+            if (current_state == ENABLE) begin
+                if (shift_counter != 3'b000) begin
+                    shift_counter <= shift_counter - 1;
+                end
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            IDLE: begin
+                if (reset)
+                    next_state = ENABLE;
+                else
+                    next_state = IDLE;
+            end
+            ENABLE: begin
+                if (shift_counter == 3'b000)
+                    next_state = IDLE;
+                else
+                    next_state = ENABLE;
+            end
+            default: next_state = IDLE;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        shift_ena = (current_state == ENABLE);
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic shift_ena
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        IDLE   = 2'b00,
+        ENABLE = 2'b01
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [2:0] shift_counter;
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= ENABLE;
+            shift_counter <= 3'b100; // Initialize counter to 4
+        end else begin
+            current_state <= next_state;
+            if (current_state == ENABLE) begin
+                if (shift_counter != 3'b000) begin
+                    shift_counter <= shift_counter - 1;
+                end
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            IDLE: begin
+                if (reset)
+                    next_state = ENABLE;
+                else
+                    next_state = IDLE;
+            end
+            ENABLE: begin
+                if (shift_counter == 3'b000)
+                    next_state = IDLE;
+                else
+                    next_state = ENABLE;
+            end
+            default: next_state = IDLE;
+        endcase
+    end
+
+    // Output logic
+    always @(*) begin
+        shift_ena = (current_state == ENABLE);
+    end
+
+endmodule

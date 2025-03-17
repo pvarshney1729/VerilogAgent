@@ -1,0 +1,113 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule` as a Moore machine, we need to follow the state transition diagram provided. The module has two states, A and B, with specific transitions based on the input `in`. The output `out` is determined solely by the current state, not the input.
+
+1. **State Encoding**: We will use a single bit to represent the states. Let's assign `0` to state A and `1` to state B.
+
+2. **Asynchronous Reset**: The reset (`areset`) is asynchronous and should reset the state to B when high.
+
+3. **State Transition Logic**: 
+   - From state B, if `in` is 0, transition to state A; if `in` is 1, remain in state B.
+   - From state A, if `in` is 0, transition to state B; if `in` is 1, remain in state A.
+
+4. **Output Logic**: 
+   - Output `out` is `1` when in state B.
+   - Output `out` is `0` when in state A.
+
+5. **Implementation Details**: 
+   - Use an always block for sequential logic to handle state transitions and asynchronous reset.
+   - Use another always block for combinational logic to determine the output based on the current state.
+
+By following these steps, we ensure that the module adheres to the given specifications and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    localparam logic STATE_A = 1'b0;
+    localparam logic STATE_B = 1'b1;
+
+    // State register
+    logic state, next_state;
+
+    // State transition logic with asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset)
+            state <= STATE_B; // Asynchronous reset to state B
+        else
+            state <= next_state;
+    end
+
+    // Combinational logic for next state
+    always_comb begin
+        case (state)
+            STATE_A: next_state = in ? STATE_A : STATE_B;
+            STATE_B: next_state = in ? STATE_B : STATE_A;
+            default: next_state = STATE_B; // Default to state B
+        endcase
+    end
+
+    // Output logic based on current state
+    always_comb begin
+        case (state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b0; // Default case for safety
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    localparam logic STATE_A = 1'b0;
+    localparam logic STATE_B = 1'b1;
+
+    // State register
+    logic state, next_state;
+
+    // State transition logic with asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset)
+            state <= STATE_B; // Asynchronous reset to state B
+        else
+            state <= next_state;
+    end
+
+    // Combinational logic for next state
+    always_comb begin
+        case (state)
+            STATE_A: next_state = in ? STATE_A : STATE_B;
+            STATE_B: next_state = in ? STATE_B : STATE_A;
+            default: next_state = STATE_B; // Default to state B
+        endcase
+    end
+
+    // Output logic based on current state
+    always_comb begin
+        case (state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b0; // Default case for safety
+        endcase
+    end
+
+endmodule

@@ -1,0 +1,39 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit clock input, positive edge-triggered.
+  - `reset`: 1-bit active-high synchronous reset input.
+
+- Output Ports:
+  - `q`: 5-bit output representing the current state of the LFSR. Bit indexing is from `q[4]` (most significant bit) to `q[0]` (least significant bit).
+
+Functional Description:
+1. The module implements a 5-bit maximal-length Galois Linear Feedback Shift Register (LFSR). 
+2. The LFSR operates by shifting its bits to the right on every positive edge of the clock.
+3. Taps are applied at bit positions 4 and 2 (using zero-based indexing).
+4. The new value of `q[4]` is determined by XORing `q[0]` (least significant bit) with `q[2]` and `q[4]` (tap positions).
+5. The rest of the bits (`q[3:0]`) shift right by one position.
+
+Reset Behavior:
+- Upon an active-high synchronous reset, the LFSR output (`q`) will be initialized to the binary value `00001`.
+
+Sequential Logic:
+- All changes to the LFSR occur on the positive edge of the `clk`.
+- The reset is synchronous, meaning the initialization of `q` to `00001` occurs on the next rising edge of `clk` when `reset` is high.
+
+Edge Cases:
+- The LFSR is designed to cycle through all possible non-zero states (31 states for a 5-bit LFSR) before repeating.
+- The all-zero state is not considered within the operational sequence of the LFSR.
+
+Note on Bit Indexing and Conventions:
+- Bit `q[0]` is the least significant bit of the output.
+- Bit `q[4]` is the most significant bit and determines the next state based on the LFSR feedback logic.
+
+Operational Constraints:
+- Ensure that no race conditions occur by maintaining the specified clock and reset conditions.
+- The initial state after reset ensures that the LFSR never enters the all-zero state, hence maintaining maximum-length cycling.
+
+This specification ensures a clear understanding of the LFSR's functional intent, reset behavior, and operational constraints for correct implementation in Verilog.
+</ENHANCED_SPEC>

@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, triggers on the positive edge.
+  - `input resetn`: Synchronous active-low reset signal. When `resetn` is low, the FSM is in initial state A.
+  - `input x`: Input signal from the motor.
+  - `input y`: Input signal from the motor.
+
+- Output Ports:
+  - `output f`: Control signal for the motor. Set to 1 for one clock cycle after reset is de-asserted.
+  - `output g`: Control signal for the motor. Set according to the FSM logic described below.
+
+Implementation Details:
+
+1. **Clock and Reset:**
+   - All sequential logic is triggered on the positive edge of `clk`.
+   - Reset (`resetn`) is synchronous and active low. When `resetn` is low, the FSM transitions to state A regardless of the clock edge.
+
+2. **FSM Behavior:**
+   - **State A (Initial State):**
+     - Remain in State A as long as `resetn` is asserted (low).
+     - Upon de-assertion of `resetn` (high) and on the next positive clock edge, set `f` to 1 for exactly one clock cycle.
+
+   - **State Transition Monitoring:**
+     - After `f` is set to 1, the FSM monitors the `x` input for the sequence `1, 0, 1` across three successive clock cycles.
+     - Upon detecting the sequence, transition to a state where `g` is set to 1 on the following clock cycle.
+
+   - **Monitoring `y` Input:**
+     - Once `g` is set to 1, monitor the `y` input for a value of 1 within the next two clock cycles.
+     - If `y` becomes 1 within this two-cycle window, maintain `g` at 1 permanently until reset.
+     - If `y` does not become 1 within the two-cycle window, set `g` to 0 permanently until reset.
+
+3. **Output Initialization:**
+   - Outputs `f` and `g` should be initialized to 0 during the reset condition (when `resetn` is low).
+
+4. **Bit Indexing:**
+   - All input and output ports are single-bit signals, with bit[0] being the least significant bit.
+
+5. **Edge Cases and Input Boundaries:**
+   - Ensure that state transitions are correctly handled on positive clock edges.
+   - Any noise or glitches on the `x` and `y` inputs outside the specified sequences should not affect the FSM behavior.
+
+This specification ensures the correct implementation of the FSM controlling the motor based on the input signals `x` and `y`, synchronized with the clock signal, and governed by the reset logic.
+</ENHANCED_SPEC>

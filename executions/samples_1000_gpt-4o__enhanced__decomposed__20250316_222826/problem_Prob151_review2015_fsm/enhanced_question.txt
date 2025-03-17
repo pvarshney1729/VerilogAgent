@@ -1,0 +1,32 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+Port Definitions:
+- `input  clk`: Clock signal for the module. All sequential elements trigger on the positive edge.
+- `input  reset`: Active high synchronous reset. Resets the state machine to its initial state, ready to detect the input pattern "1101".
+- `input  data`: Serial data input. Bit[0] is the least significant bit.
+- `input  done_counting`: Signal indicating the completion of the counting process.
+- `input  ack`: Acknowledgment signal from the user, used to reset the state machine after the timer operation is completed.
+- `output shift_ena`: Signal asserted high for 4 clock cycles to enable shifting of additional bits after detecting the pattern "1101".
+- `output counting`: Signal asserted high when the state machine is waiting for the counters to finish counting.
+- `output done`: Signal asserted high to notify the user that the timer has completed.
+
+State Machine Behavior:
+1. **Initial State**: The state machine begins in an idle state, continuously checking for the input pattern "1101" on the `data` input.
+2. **Pattern Detection**: On detection of the pattern "1101", the state machine transitions to the shift enable state.
+3. **Shift Enable**: `shift_ena` is asserted high for exactly 4 consecutive clock cycles to allow shifting of additional bits.
+4. **Counting State**: After the shift enable period, the state machine asserts `counting` high and waits for the `done_counting` input to go high, indicating the completion of the count.
+5. **Completion Notification**: Once `done_counting` is high, the state machine asserts `done` high to notify the user of timer completion.
+6. **Acknowledgment and Reset**: The state machine remains in the done state until the user acknowledges by asserting `ack` high. Upon acknowledgment, the state machine resets to search for the next occurrence of the start pattern "1101".
+
+Edge Cases and Input Boundaries:
+- The state machine handles the detection of the "1101" pattern in a bit-by-bit manner, ensuring robustness against noise and partial patterns.
+- All state transitions and output assertions are synchronized with the positive edge of the `clk`.
+
+Initial Conditions:
+- On reset, all outputs (`shift_ena`, `counting`, `done`) are set to low, and the state machine is positioned to search for the input pattern "1101".
+
+Notes:
+- All registers and flip-flops should have explicitly defined initial values as part of the reset sequence.
+- Ensure no race conditions by proper synchronization and sequencing of state transitions and output assertions.
+</ENHANCED_SPEC>

@@ -1,0 +1,124 @@
+Generated Response:
+
+<REASONING>
+To implement the Moore machine as specified, we need to define two states, A and B. The state transitions and outputs are defined as follows:
+
+- State B outputs 1 and transitions to state A on input 0, stays in state B on input 1.
+- State A outputs 0 and transitions to state B on input 0, stays in state A on input 1.
+
+The asynchronous reset will set the state to B. The state transitions occur on the rising edge of the clock. We will use an enumerated type for the states to improve readability. The output is determined solely by the current state, which is characteristic of a Moore machine.
+
+The provided truth table and case statement are not directly applicable to Verilog syntax, so we will implement the logic using a state machine structure with an always block for state transitions and another for output logic.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01
+    } state_t;
+
+    state_t state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= STATE_B;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            STATE_A: begin
+                if (in)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_B: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_B;
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01
+    } state_t;
+
+    state_t state, next_state;
+
+    // State transition logic
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= STATE_B;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            STATE_A: begin
+                if (in)
+                    next_state = STATE_A;
+                else
+                    next_state = STATE_B;
+            end
+            STATE_B: begin
+                if (in)
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            default: next_state = STATE_B;
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (state)
+            STATE_A: out = 1'b0;
+            STATE_B: out = 1'b1;
+            default: out = 1'b0;
+        endcase
+    end
+
+endmodule

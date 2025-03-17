@@ -1,0 +1,35 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input: `in` (1 bit) - This is the primary input signal for the state machine.
+- Input: `state` (4 bits) - This represents the current state of the state machine using one-hot encoding.
+- Output: `next_state` (4 bits) - This represents the next state of the state machine using one-hot encoding.
+- Output: `out` (1 bit) - This is the output of the state machine based on the current state.
+
+State Encoding:
+- The state machine uses one-hot encoding for state representation, with the following mappings:
+  - State A: 4'b0001
+  - State B: 4'b0010
+  - State C: 4'b0100
+  - State D: 4'b1000
+
+State Transition Table:
+- Current State | `in` = 0 | `in` = 1 | Output
+  - A | Next State: A | Next State: B | Output: 0
+  - B | Next State: C | Next State: B | Output: 0
+  - C | Next State: A | Next State: D | Output: 0
+  - D | Next State: C | Next State: B | Output: 1
+
+Logic Implementation:
+- The module should implement only the combinational logic for state transitions and output logic based on the given state transition table.
+- Derive the logic equations for `next_state` and `out` directly from the state transition table and state encoding.
+- No sequential elements (e.g., flip-flops) or clock signals are required for this specification.
+
+Additional Considerations:
+- Assume that the initial state is externally managed or assumed as valid for the operation of this combinational logic.
+- Inputs and outputs adhere to active-high logic.
+- Ensure that any invalid state encodings (e.g., states other than the defined one-hot states) are handled appropriately, potentially defaulting to a known safe state like A.
+
+Note: This specification focuses on the combinational logic aspect and assumes that state storage and clocking are managed externally in a complete system design.
+</ENHANCED_SPEC>

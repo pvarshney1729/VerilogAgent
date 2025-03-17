@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, areset, in, and output port out.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  clk,\n    input  areset,\n    input  in,\n    output reg out\n);\n\n    typedef enum logic [1:0] {STATE_A = 1'b0, STATE_B = 1'b1} state_t;\n    state_t state, next_state;\n\n    always_ff @(posedge clk or posedge areset) begin\n        if (areset)\n            state <= STATE_B;\n        else\n            state <= next_state;\n    end\n\n    always_comb begin\n        case (state)\n            STATE_A: begin\n                out = 1'b0;\n                if (in)\n                    next_state = STATE_A;\n                else\n                    next_state = STATE_B;\n            end\n            STATE_B: begin\n                out = 1'b1;\n                if (in)\n                    next_state = STATE_B;\n                else\n                    next_state = STATE_A;\n            end\n            default: begin\n                next_state = STATE_B;\n                out = 1'b1;\n            end\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare state registers and parameters for state encoding. Use reg [1:0] for state and next_state. Define parameters for states A and B using binary encoding (A=2'b00, B=2'b01).",
+        "source": "Always separate FSM into exactly three distinct components. Use binary encoding for states (A=2'b00, B=2'b01, etc.) unless one-hot is specified.",
+        "implementation": "// State encoding\n  parameter A = 2'b00;\n  parameter B = 2'b01;\n\n  // State registers\n  reg [1:0] state, next_state;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with asynchronous reset logic. Use always @(posedge clk or posedge areset) to update the current state to next_state or reset to state B when areset is high.",
+        "source": "It should asynchronously reset into state B if reset is high. For asynchronous reset, use: always @(posedge clk or posedge reset).",
+        "implementation": "reg [1:0] current_state, next_state;\n  \n  // State encoding\n  localparam STATE_A = 2'b00;\n  localparam STATE_B = 2'b01;\n\n  // State register with asynchronous reset\n  always @(posedge clk or posedge areset) begin\n    if (areset)\n      current_state <= STATE_B;\n    else\n      current_state <= next_state;\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic using an always @(*) block. Define state transitions based on the current state and input 'in'.",
+        "source": "The module should implement a Moore machine with the diagram described below: B (1) --0--> A, B (1) --1--> B, A (0) --0--> B, A (0) --1--> A.",
+        "implementation": "// State encoding\n  typedef enum logic [1:0] {\n    STATE_A = 2'b00,\n    STATE_B = 2'b01\n  } state_t;\n\n  state_t current_state, next_state;\n\n  // Next state logic\n  always @(*) begin\n    case (current_state)\n      STATE_A: begin\n        if (in)\n          next_state = STATE_A;\n        else\n          next_state = STATE_B;\n      end\n      STATE_B: begin\n        if (in)\n          next_state = STATE_B;\n        else\n          next_state = STATE_A;\n      end\n      default: next_state = STATE_B; // Default to STATE_B for safety\n    endcase\n  end"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic using an assign statement. Set output 'out' based on the current state: out = 1'b1 for state B and out = 1'b0 for state A.",
+        "source": "For Moore machines, implement output logic ONLY based on current state. The module should implement a Moore machine with the diagram described below: B (1) --0--> A, B (1) --1--> B, A (0) --0--> B, A (0) --1--> A.",
+        "implementation": "assign out = (state == B) ? 1'b1 : 1'b0;"
+    }
+]

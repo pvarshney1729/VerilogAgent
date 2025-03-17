@@ -1,0 +1,36 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock signal, positive edge-triggered.
+- input wire reset: Synchronous, active-high reset signal. Resets the FSM to state 3'b000.
+- input wire x: Input signal for state transition, 1-bit.
+- output reg z: Output signal, 1-bit.
+
+FSM Details:
+- The finite-state machine (FSM) is a synchronous sequential logic design.
+- State Encoding: The FSM has 5 states, encoded as 3-bit values (y[2:0]).
+  - State 000: Initial state upon reset.
+  - State 001
+  - State 010
+  - State 011
+  - State 100
+
+State Transition Table:
+- Present State (y[2:0]) | Next State (y[2:0]) if x=0, Next State (y[2:0]) if x=1 | Output z
+  - 000 | 000, 001 | z = 0
+  - 001 | 001, 100 | z = 0
+  - 010 | 010, 001 | z = 0
+  - 011 | 001, 010 | z = 1
+  - 100 | 011, 100 | z = 1
+
+Operational Details:
+- The FSM transitions between states based on the input 'x', at each rising edge of the clock.
+- The reset ('reset') is a synchronous signal and will cause the FSM to return to state 000 when asserted high at the clock's rising edge.
+- Output 'z' is defined by the current state and reflects the values described in the state transition table.
+
+Edge Cases and Initial Conditions:
+- On reset, the FSM initializes to state 000.
+- All transitions and outputs are evaluated on the positive edge of the clock.
+- The system behavior for undefined states is not specified and should be considered as don't care for FSM synthesis purposes.
+</ENHANCED_SPEC>

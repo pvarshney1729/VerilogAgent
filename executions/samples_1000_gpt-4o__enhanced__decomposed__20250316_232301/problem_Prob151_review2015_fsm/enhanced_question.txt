@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Specification:
+- Inputs:
+  - `input wire clk`: Clock signal for triggering sequential logic (positive edge-triggered).
+  - `input wire reset`: Synchronous active-high reset signal.
+  - `input wire data`: Serial data input for pattern detection and duration determination.
+  - `input wire done_counting`: Signal indicating the external counter has completed its count.
+  - `input wire ack`: Acknowledgment signal from the user.
+
+- Outputs:
+  - `output reg shift_ena`: Indicates that the module should shift in bits for delay duration. Active for 4 clock cycles.
+  - `output reg counting`: Indicates the state machine is in the counting phase, waiting for `done_counting` to be high.
+  - `output reg done`: Indicates the timer has completed and is waiting for user acknowledgment.
+
+Sequential Logic and State Machine Specification:
+1. Initial State and Reset Behavior:
+   - Upon an active-high synchronous reset, the state machine initializes to the state where it searches for the input pattern `1101`.
+   - All output signals (`shift_ena`, `counting`, `done`) should be reset to `0`.
+
+2. Pattern Detection:
+   - The state machine continuously monitors the `data` input for the occurrence of the bit pattern `1101`.
+   - Bit indexing follows the convention where `bit[0]` refers to the least significant bit.
+
+3. Shifting Duration Bits:
+   - Once the pattern `1101` is detected, the state machine asserts `shift_ena` for exactly 4 consecutive clock cycles.
+   - During these cycles, the module shifts in additional bits from the `data` input to determine the delay duration.
+
+4. Counting Phase:
+   - After shifting in the duration bits, the state machine transitions to the counting phase, asserting `counting`.
+   - It remains in this state until `done_counting` is asserted high, indicating the count completion.
+
+5. Notification and Acknowledgment:
+   - Upon `done_counting` being high, the state machine asserts `done`, signaling the user that the timer has expired.
+   - The state remains in this phase until `ack` is asserted high, indicating user acknowledgment.
+   - Once acknowledged, the state machine resets to search for the next occurrence of the `1101` pattern.
+
+Edge Cases and Clarifications:
+- The state machine assumes all inputs are stable throughout a single clock cycle.
+- The transition between states occurs on the positive edge of the `clk`.
+- Ensure no race conditions exist by defining explicit transitions between states based on input signals.
+</ENHANCED_SPEC>

@@ -1,0 +1,110 @@
+Generated Response:
+
+<REASONING>
+To implement the Moore state machine as specified, we need to define two states: OFF and ON. The state transitions depend on inputs `j` and `k`, and the output `out` is determined solely by the current state. The reset is asynchronous and active-high, which means the state should be set to OFF when `areset` is high, regardless of the clock. The state transitions are as follows:
+- From OFF, if `j` is 1, transition to ON; otherwise, stay in OFF.
+- From ON, if `k` is 1, transition to OFF; otherwise, stay in ON.
+The output `out` is 0 in the OFF state and 1 in the ON state. We will use an enumerated type for the states and logic for all signals. The state register will be updated on the rising edge of the clock or when `areset` is high.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    typedef enum logic [0:0] {
+        OFF = 1'b0,
+        ON  = 1'b1
+    } state_t;
+
+    state_t state, next_state;
+
+    // State register with asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= OFF;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            OFF: begin
+                if (j)
+                    next_state = ON;
+                else
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k)
+                    next_state = OFF;
+                else
+                    next_state = ON;
+            end
+            default: next_state = OFF;
+        endcase
+    end
+
+    // Output logic
+    assign out = (state == ON);
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    typedef enum logic [0:0] {
+        OFF = 1'b0,
+        ON  = 1'b1
+    } state_t;
+
+    state_t state, next_state;
+
+    // State register with asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= OFF;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            OFF: begin
+                if (j)
+                    next_state = ON;
+                else
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k)
+                    next_state = OFF;
+                else
+                    next_state = ON;
+            end
+            default: next_state = OFF;
+        endcase
+    end
+
+    // Output logic
+    assign out = (state == ON);
+
+endmodule

@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit, clock signal, positive edge-triggered.
+  - reset: 1-bit, active-high synchronous reset.
+  - in: 1-bit input signal.
+- Output Ports:
+  - out: 1-bit output signal.
+
+State Machine Description:
+- The module implements a Moore state machine with the following characteristics:
+  - States: 
+    - State B: Output 'out' is 1.
+    - State A: Output 'out' is 0.
+  - Reset: 
+    - Active-high synchronous reset.
+    - Upon activation of the reset signal, the state machine transitions to State B.
+  - State Transitions:
+    - From State B: 
+      - If 'in' = 0, transition to State A.
+      - If 'in' = 1, remain in State B.
+    - From State A: 
+      - If 'in' = 0, transition to State B.
+      - If 'in' = 1, remain in State A.
+
+Clock and Reset Behavior:
+- The state transition occurs on the rising edge of the 'clk' signal.
+- The reset is synchronous; hence, the state transition to State B occurs on the next rising edge of 'clk' when the 'reset' signal is asserted.
+
+Initial Conditions:
+- Upon reset, the state machine initializes to State B, where the output 'out' is set to 1.
+
+Bit Indexing:
+- Since all ports are single-bit, no specific indexing is applicable.
+
+Edge Cases:
+- Ensure that at power-up, the system is properly reset to State B to establish a known starting condition.
+- If the 'reset' signal is asserted and deasserted within the same clock cycle, the state machine will remain in State B as per synchronous reset behavior.
+</ENHANCED_SPEC>

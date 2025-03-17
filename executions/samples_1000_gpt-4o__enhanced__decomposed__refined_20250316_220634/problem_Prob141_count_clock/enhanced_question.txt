@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- Input: 
+  - clk: 1-bit clock signal, used for triggering all sequential logic on the positive edge.
+  - reset: 1-bit active high synchronous reset signal, initializes the clock to "12:00 AM" when asserted.
+  - ena: 1-bit enable signal, increments the clock by one second when asserted.
+
+- Output:
+  - pm: 1-bit signal indicating PM when asserted, and AM otherwise.
+  - hh: 8-bit output representing hours in Binary-Coded Decimal (BCD) format, ranging from 01 to 12.
+  - mm: 8-bit output representing minutes in BCD format, ranging from 00 to 59.
+  - ss: 8-bit output representing seconds in BCD format, ranging from 00 to 59.
+
+Functional Description:
+- The module implements a 12-hour clock with an AM/PM indication.
+- The clock is incremented based on the ena signal, which pulses at a rate corresponding to one second.
+- The clk signal is a fast-running clock, and all sequential logic is edge-triggered on its positive edge.
+- The reset signal, when asserted, synchronously resets the time to "12:00 AM" and has a higher priority over the ena signal.
+- The reset state for hh, mm, and ss is "12:00:00 AM" in BCD format, which is hh = 8'b0001_0010, mm = 8'b0000_0000, ss = 8'b0000_0000.
+- The pm signal is set to 0 for AM and 1 for PM, transitioning at 12:00 PM and 12:00 AM, respectively.
+
+Operational Notes:
+- BCD representation means each digit of hh, mm, and ss is stored separately within the 8-bit width.
+- Bit indexing convention: bit[0] refers to the least significant bit (LSB).
+- Synchronous reset ensures that the clock initializes correctly on the next positive edge of clk after reset is asserted.
+- The clock transitions from 11:59:59 AM to 12:00:00 PM and from 11:59:59 PM to 12:00:00 AM correctly, toggling the pm signal accordingly.
+- Race conditions are avoided by prioritizing the reset signal over the enable signal.
+
+Edge Case Handling:
+- When hh reaches 12 and if incremented, it should reset to 1.
+- When mm or ss reaches 59 and if incremented, it should reset to 00 and cause the next higher unit to increment.
+- The clock should correctly roll over from 11:59:59 AM to 12:00:00 PM and from 11:59:59 PM to 12:00:00 AM.
+
+Example Initial State:
+- At reset, the time should be set to "12:00:00 AM" with pm = 0.
+</ENHANCED_SPEC>

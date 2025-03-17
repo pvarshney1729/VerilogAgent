@@ -1,0 +1,27 @@
+<ENHANCED_SPEC>
+The module, named `TopModule`, should be implemented with the following interface. Define the input and output ports as follows:
+
+- `input wire clk`: Clock signal for synchronous operations.
+- `input wire reset`: Active-high, synchronous reset signal.
+- `input wire in`: Single-bit input signal.
+- `output reg out`: Single-bit output signal.
+
+Design a Moore state machine with two states, `STATE_A` and `STATE_B`. The initial state after reset must be `STATE_B`. The state transitions and output behavior are described below:
+
+- In `STATE_B` (output `out=1`):
+  - If `in=0`, transition to `STATE_A`.
+  - If `in=1`, stay in `STATE_B`.
+
+- In `STATE_A` (output `out=0`):
+  - If `in=0`, transition to `STATE_B`.
+  - If `in=1`, stay in `STATE_A`.
+
+Additional specifications:
+- The reset signal is synchronous with the clock, meaning it affects the state on the rising edge of `clk`.
+- The Most Significant Bit (MSB) convention is not required as all signals are single-bit.
+- Ensure that `out` is updated based on the current state on every rising edge of `clk`.
+- No race conditions are present as the state is solely determined by the current state and input `in`.
+- Edge cases are inherently handled due to the binary nature of `in` and the defined state transitions.
+
+The intention is to maintain a clear, unambiguous design for the state machine with defined behavior for all possible input conditions.
+</ENHANCED_SPEC>

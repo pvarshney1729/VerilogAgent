@@ -1,0 +1,37 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire clk`: Clock signal for synchronizing sequential logic.
+  - `input wire a`: Single-bit input signal.
+
+- Output Ports:
+  - `output reg [2:0] q`: 3-bit output register. Initial value is undefined.
+
+Signal Conventions:
+- Bit Indexing: `q[2]` is the most significant bit (MSB) and `q[0]` is the least significant bit (LSB).
+- The signal `clk` is a clock input driving sequential logic, and `a` is a control signal affecting the behavior of `q`.
+
+Clocking and Reset:
+- The circuit is synchronous and operates on the rising edge of the `clk` signal.
+- There is no explicit reset signal provided; hence, the initial state of `q` is 'unknown' or 'x'.
+
+Sequential Logic Description:
+- The output `q` is updated at each rising edge of the clock (`clk`).
+- The behavior of the module is observed from the provided simulation waveform.
+
+Simulation Waveform Behavior:
+- When `a` is high (1), `q` remains at the value 4 (binary 100).
+- When `a` transitions to low (0), `q` increments by 1 with each rising edge of `clk`.
+- The value of `q` rolls over after reaching 6 (binary 110), resetting to 0.
+
+Edge Case Handling:
+- The transition from `q = 6` to `q = 0` indicates a rollover behavior in a 3-bit counter when `a` is low.
+
+Additional Notes:
+- Ensure that input signal `a` is stable and transitions are synchronized with `clk` to avoid metastability.
+- The implementation must ensure that the circuit follows the specified waveform behavior precisely.
+
+The module is fully described by the given waveform, and no additional states or behaviors are implied beyond what is provided.
+</ENHANCED_SPEC>

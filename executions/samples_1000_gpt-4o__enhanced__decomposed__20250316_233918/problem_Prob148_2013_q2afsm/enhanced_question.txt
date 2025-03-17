@@ -1,0 +1,57 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: 1-bit, clock signal (positive edge-triggered)
+  - `resetn`: 1-bit, active-low synchronous reset
+  - `r`: 3-bit vector, request signals from devices (bit[0] = device 0, bit[1] = device 1, bit[2] = device 2)
+
+- Output Ports:
+  - `g`: 3-bit vector, grant signals to devices (bit[0] = device 0, bit[1] = device 1, bit[2] = device 2)
+
+FSM Description:
+1. States:
+   - State A: Initial state, no grants are active.
+   - State B: Grant for device 0 active (`g[0] = 1`).
+   - State C: Grant for device 1 active (`g[1] = 1`).
+   - State D: Grant for device 2 active (`g[2] = 1`).
+
+2. Reset Behavior:
+   - On the rising edge of `clk`, if `resetn` is low (active), the FSM transitions to state A.
+
+3. State Transitions:
+   - From State A:
+     - If `r[0] = 1`, transition to State B.
+     - Else if `r[0] = 0` and `r[1] = 1`, transition to State C.
+     - Else if `r[0] = 0`, `r[1] = 0`, and `r[2] = 1`, transition to State D.
+     - Otherwise, remain in State A.
+   - From State B:
+     - If `r[0] = 1`, remain in State B.
+     - Otherwise, transition to State A.
+   - From State C:
+     - If `r[1] = 1`, remain in State C.
+     - Otherwise, transition to State A.
+   - From State D:
+     - Transition directly to State A (since D is not explicitly mentioned, assuming immediate return to A).
+
+4. Signal Precedence:
+   - Priority is given to device 0 over device 1, and device 1 over device 2.
+
+5. Output Logic:
+   - The output grants `g[i]` are determined by the current state:
+     - In State B, `g[0] = 1`, all other `g[i] = 0`.
+     - In State C, `g[1] = 1`, all other `g[i] = 0`.
+     - In State D, `g[2] = 1`, all other `g[i] = 0`.
+
+6. Implementation Notes:
+   - Use separate always blocks for the state transitions (state table) and the state register (flip-flops).
+   - The outputs `g[i]` can be described using continuous assignment or an always block.
+
+7. Edge Cases:
+   - If multiple request signals are high simultaneously while in State A, follow the priority order: `r[0]`, `r[1]`, `r[2]`.
+
+Assumptions:
+- All sequential logic is triggered on the positive edge of the clock (`clk`).
+- The initial state after reset is State A.
+</ENHANCED_SPEC>

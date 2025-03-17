@@ -1,0 +1,124 @@
+Generated Response:
+
+<Question>
+I would like you to implement a module named TopModule with the following
+interface. All input and output ports are one bit unless otherwise
+specified.
+
+ - input  clk
+ - input  a
+ - output q (3 bits)
+
+The module implements a sequential circuit. Read the simulation waveforms
+to determine what the circuit does, then implement it.
+
+  time  clk a   q
+  0ns   0   1   x
+  5ns   1   1   4
+  10ns  0   1   4
+  15ns  1   1   4
+  20ns  0   1   4
+  25ns  1   1   4
+  30ns  0   1   4
+  35ns  1   1   4
+  40ns  0   1   4
+  45ns  1   0   4
+  50ns  0   0   4
+  55ns  1   0   5
+  60ns  0   0   5
+  65ns  1   0   6
+  70ns  0   0   6
+  75ns  1   0   0
+  80ns  0   0   0
+  85ns  1   0   1
+  90ns  0   0   1
+
+Here is the truth table generated from the specification:
+                    and here is the corresponding case statement, you should be using a similar structure:
+                    case ({clk, a})
+    2'b00: q = x;
+    2'b10: q = x;
+    2'b01: q = x;
+    2'b11: q = 4;
+    default: q = 0;
+endcase to make sure you are implementing the correct logic.
+                    Don't try to minimise the logic, 
+                    you may correct the signal names if needed, and use the case statement as is in the final code.
+</Question>
+
+<Guidelines>
+- Ensure synchronous reset is implemented as specified.
+- Initialize all flip-flops and inputs to zero in simulation, unless provided the specified initial values in the question.s
+- Adhere strictly to the provided interface and signal names.
+- Generate results in the specified cycle timing.
+- Handle bitwise operations and signal broadcasting correctly.
+</Guidelines>
+
+<Coding Conventions>
+ - Declare all ports and signals as logic; do not to use wire or reg.
+ - For combinational logic with an always block do not explicitly specify
+   the sensitivity list; instead use always @(*).
+ - All sized numeric constants must have a size greater than zero
+   (e.g, 0'b0 is not a valid expression).
+ - An always block must read at least one signal otherwise it will never
+   be executed; use an assign statement instead of an always block in
+   situations where there is no need to read any signals.
+ - if the module uses a synchronous reset signal, this means the reset
+   signal is sampled with respect to the clock. When implementing a
+   synchronous reset signal, do not include posedge reset in the
+   sensitivity list of any sequential always block.
+</Coding Conventions>
+
+<REASONING>
+The waveform indicates that the output `q` is initialized to an unknown state and then set to 4 when `a` is high. When `a` is low, `q` increments on each clock cycle. This suggests a counter behavior that starts at 4 when `a` is high and counts up when `a` is low. The counter resets to 0 after reaching 6. The module should use a synchronous process to update `q` on the rising edge of `clk`. The initial state of `q` is set to 4 when `a` is high, and it increments when `a` is low.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic a,
+    output logic [2:0] q
+);
+    logic [2:0] q_reg;
+
+    always_ff @(posedge clk) begin
+        if (a) begin
+            q_reg <= 3'd4;
+        end else begin
+            if (q_reg == 3'd6) begin
+                q_reg <= 3'd0;
+            end else begin
+                q_reg <= q_reg + 3'd1;
+            end
+        end
+    end
+
+    assign q = q_reg;
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic a,
+    output logic [2:0] q
+);
+    logic [2:0] q_reg;
+
+    always_ff @(posedge clk) begin
+        if (a) begin
+            q_reg <= 3'd4;
+        end else begin
+            if (q_reg == 3'd6) begin
+                q_reg <= 3'd0;
+            end else begin
+                q_reg <= q_reg + 3'd1;
+            end
+        end
+    end
+
+    assign q = q_reg;
+endmodule

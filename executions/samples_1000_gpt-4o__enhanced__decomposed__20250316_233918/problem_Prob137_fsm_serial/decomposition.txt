@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module interface for TopModule with input ports clk, reset, in, and output port done.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified. - input  clk - input  reset - input  in - output done",
+        "implementation": "```verilog\n[BEGIN]\nmodule TopModule (\n    input  wire clk,\n    input  wire reset,\n    input  wire in,\n    output wire done\n);\n[END]\n```"
+    },
+    {
+        "id": "2",
+        "content": "Define state encoding using localparam for the FSM states: IDLE, START, DATA, and STOP.",
+        "source": "Implement a finite state machine that will identify when bytes have been correctly received when given a stream of bits. It needs to identify the start bit, wait for all 8 data bits, then verify that the stop bit was correct.",
+        "implementation": "localparam IDLE  = 2'b00;\nlocalparam START = 2'b01;\nlocalparam DATA  = 2'b10;\nlocalparam STOP  = 2'b11;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic to hold the current state of the FSM.",
+        "source": "Include a active-high synchronous reset. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "reg [3:0] current_state;\n  \n  always @(posedge clk) begin\n    if (reset) begin\n      current_state <= 4'b0000; // Assuming initial state is 0\n    end else begin\n      // State transition logic will be implemented here\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state logic for the FSM to transition between states based on the input bit stream.",
+        "source": "It needs to identify the start bit, wait for all 8 data bits, then verify that the stop bit was correct. If the stop bit does not appear when expected, the FSM must wait until it finds a stop bit before attempting to receive the next byte.",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  typedef enum logic [2:0] {\n    IDLE      = 3'b000,\n    START     = 3'b001,\n    DATA      = 3'b010,\n    STOP      = 3'b011,\n    ERROR     = 3'b100\n  } state_t;\n\n  state_t current_state, next_state;\n  logic [3:0] bit_count; // To count the 8 data bits\n\n  // Next state logic\n  always_comb begin\n    case (current_state)\n      IDLE: begin\n        if (in == 1'b0) // Detect start bit\n          next_state = START;\n        else\n          next_state = IDLE;\n      end\n\n      START: begin\n        next_state = DATA;\n      end\n\n      DATA: begin\n        if (bit_count == 4'd8) // All 8 data bits received\n          next_state = STOP;\n        else\n          next_state = DATA;\n      end\n\n      STOP: begin\n        if (in == 1'b1) // Correct stop bit\n          next_state = IDLE;\n        else\n          next_state = ERROR;\n      end\n\n      ERROR: begin\n        if (in == 1'b1) // Wait for stop bit to return to IDLE\n          next_state = IDLE;\n        else\n          next_state = ERROR;\n      end\n\n      default: next_state = IDLE;\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output logic to assert the done signal when a byte is correctly received.",
+        "source": "Implement a finite state machine that will identify when bytes have been correctly received when given a stream of bits.",
+        "implementation": "```verilog\n[BEGIN]\nreg [3:0] bit_count;\nreg [9:0] shift_reg;\nreg byte_received;\n\nalways @(posedge clk or posedge reset) begin\n    if (reset) begin\n        bit_count <= 4'd0;\n        shift_reg <= 10'b0;\n        byte_received <= 1'b0;\n    end else begin\n        if (bit_count == 4'd10) begin\n            if (shift_reg[0] == 1'b0 && shift_reg[9] == 1'b1) begin\n                byte_received <= 1'b1;\n            end else begin\n                byte_received <= 1'b0;\n            end\n            bit_count <= 4'd0;\n        end else begin\n            shift_reg <= {in, shift_reg[9:1]};\n            bit_count <= bit_count + 1;\n            byte_received <= 1'b0;\n        end\n    end\nend\n\nassign done = byte_received;\n[END]\n```"
+    }
+]

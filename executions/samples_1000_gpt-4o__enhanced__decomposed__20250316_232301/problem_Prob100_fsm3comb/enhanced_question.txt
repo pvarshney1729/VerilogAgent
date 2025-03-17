@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface Description:
+- Input Ports:
+  - `input wire in` : 1-bit input signal.
+  - `input wire [1:0] state` : 2-bit input representing the current state of the state machine. The state is encoded as follows:
+    - A = 2'b00
+    - B = 2'b01
+    - C = 2'b10
+    - D = 2'b11
+
+- Output Ports:
+  - `output reg [1:0] next_state` : 2-bit output representing the next state of the state machine.
+  - `output reg out` : 1-bit output signal.
+
+State Transition and Output Logic:
+- The module implements the combinational logic for a Moore state machine with the specified state transition table. The output depends only on the current state.
+
+State Transition Table:
+- For state A (2'b00):
+  - Next state if `in` = 0: A (2'b00)
+  - Next state if `in` = 1: B (2'b01)
+  - Output: 0
+
+- For state B (2'b01):
+  - Next state if `in` = 0: C (2'b10)
+  - Next state if `in` = 1: B (2'b01)
+  - Output: 0
+
+- For state C (2'b10):
+  - Next state if `in` = 0: A (2'b00)
+  - Next state if `in` = 1: D (2'b11)
+  - Output: 0
+
+- For state D (2'b11):
+  - Next state if `in` = 0: C (2'b10)
+  - Next state if `in` = 1: B (2'b01)
+  - Output: 1
+
+Additional Specifications:
+- The module is purely combinational and should not include any sequential logic such as flip-flops or registers.
+- The next state and output are determined entirely by the current state and the input signal `in`.
+- Bit indexing follows the convention where bit[0] is the least significant bit (LSB).
+- Ensure that the logic implementation avoids race conditions by properly evaluating the state transitions based on the current input and state.
+
+</ENHANCED_SPEC>

@@ -1,0 +1,171 @@
+Generated Response:
+
+<REASONING>
+To implement the FSM as described, we will follow these steps:
+
+1. **Module Interface**: Define the module `TopModule` with the specified input and output ports. The inputs are `clk`, `resetn`, and a 3-bit vector `r`. The output is a 3-bit vector `g`.
+
+2. **State Encoding**: Define the states using `localparam` for clarity and maintainability. We will use a 2-bit encoding for the four states: A, B, C, and D.
+
+3. **State Flip-Flops**: Implement the state register using an always block triggered on the positive edge of the clock. This block will also handle the synchronous reset, setting the state to A when `resetn` is low.
+
+4. **Next State Logic**: Use a combinational always block to determine the next state based on the current state and the input vector `r`. This block will implement the state transition diagram provided.
+
+5. **Output Logic**: Implement the output logic to set the grant signals `g` based on the current state. This can be done using a combinational always block.
+
+6. **Coding Conventions**: Follow the specified coding conventions, such as using `logic` for signal declarations and using `always @(*)` for combinational logic.
+
+7. **Guidelines**: Ensure the synchronous reset is correctly implemented and that the FSM adheres to the priority system for granting access to the devices.
+
+By following these steps, we ensure that the FSM behaves as specified and adheres to the provided guidelines and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic resetn,
+    input logic [2:0] r,
+    output logic [2:0] g
+);
+
+    // State encoding
+    localparam logic [1:0] STATE_A = 2'b00;
+    localparam logic [1:0] STATE_B = 2'b01;
+    localparam logic [1:0] STATE_C = 2'b10;
+    localparam logic [1:0] STATE_D = 2'b11;
+
+    // State register
+    logic [1:0] current_state, next_state;
+
+    // State flip-flops with synchronous reset logic
+    always @(posedge clk) begin
+        if (!resetn) begin
+            current_state <= STATE_A; // Reset to state A
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Combinational block for next state logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else if (r[1])
+                    next_state = STATE_C;
+                else if (r[2])
+                    next_state = STATE_D;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_B: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_C: begin
+                if (r[1])
+                    next_state = STATE_C;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_D: begin
+                next_state = STATE_A;
+            end
+            default: next_state = STATE_A; // Default case
+        endcase
+    end
+
+    // Output logic based on current state
+    always @(*) begin
+        // Default all grants to 0
+        g = 3'b000;
+
+        case (current_state)
+            STATE_B: g[0] = 1'b1; // g0=1 in state B
+            STATE_C: g[1] = 1'b1; // g1=1 in state C
+            STATE_D: g[2] = 1'b1; // g2=1 in state D
+            default: g = 3'b000;  // Default case
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic resetn,
+    input logic [2:0] r,
+    output logic [2:0] g
+);
+
+    // State encoding
+    localparam logic [1:0] STATE_A = 2'b00;
+    localparam logic [1:0] STATE_B = 2'b01;
+    localparam logic [1:0] STATE_C = 2'b10;
+    localparam logic [1:0] STATE_D = 2'b11;
+
+    // State register
+    logic [1:0] current_state, next_state;
+
+    // State flip-flops with synchronous reset logic
+    always @(posedge clk) begin
+        if (!resetn) begin
+            current_state <= STATE_A; // Reset to state A
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Combinational block for next state logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else if (r[1])
+                    next_state = STATE_C;
+                else if (r[2])
+                    next_state = STATE_D;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_B: begin
+                if (r[0])
+                    next_state = STATE_B;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_C: begin
+                if (r[1])
+                    next_state = STATE_C;
+                else
+                    next_state = STATE_A;
+            end
+            STATE_D: begin
+                next_state = STATE_A;
+            end
+            default: next_state = STATE_A; // Default case
+        endcase
+    end
+
+    // Output logic based on current state
+    always @(*) begin
+        // Default all grants to 0
+        g = 3'b000;
+
+        case (current_state)
+            STATE_B: g[0] = 1'b1; // g0=1 in state B
+            STATE_C: g[1] = 1'b1; // g1=1 in state C
+            STATE_D: g[2] = 1'b1; // g2=1 in state D
+            default: g = 3'b000;  // Default case
+        endcase
+    end
+
+endmodule

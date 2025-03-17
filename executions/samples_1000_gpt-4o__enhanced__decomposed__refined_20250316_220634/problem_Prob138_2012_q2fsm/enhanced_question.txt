@@ -1,0 +1,53 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Specifications:
+- `input wire clk`: Clock signal, positive-edge triggered.
+- `input wire reset`: Synchronous active-high reset signal.
+- `input wire w`: State transition input, 1-bit.
+- `output reg z`: FSM output, 1-bit.
+
+State Machine Description:
+- The FSM has six states: A, B, C, D, E, F.
+- States are encoded as follows:
+  - A: 3'b000
+  - B: 3'b001
+  - C: 3'b010
+  - D: 3'b011
+  - E: 3'b100
+  - F: 3'b101
+
+State Transition Table:
+- From State A:
+  - If `w == 1`, transition to State B.
+  - If `w == 0`, remain in State A.
+- From State B:
+  - If `w == 1`, transition to State C.
+  - If `w == 0`, transition to State D.
+- From State C:
+  - If `w == 1`, transition to State E.
+  - If `w == 0`, transition to State D.
+- From State D:
+  - If `w == 1`, transition to State F.
+  - If `w == 0`, transition to State A.
+- From State E:
+  - If `w == 1`, remain in State E.
+  - If `w == 0`, transition to State D.
+- From State F:
+  - If `w == 1`, transition to State C.
+  - If `w == 0`, transition to State D.
+
+Output Logic:
+- `z = 1` for States E and F.
+- `z = 0` for States A, B, C, D.
+
+Reset Behavior:
+- On a synchronous active-high reset, the state transitions to State A.
+- Output `z` is determined by the current state and is updated on the positive edge of `clk`.
+
+Implementation Notes:
+- Use separate `always` blocks for state transition logic and state register updates.
+- State transitions should be evaluated on the positive edge of `clk`.
+- Ensure no race conditions by properly defining state transitions and outputs.
+- Handle all possible state and input combinations.
+</ENHANCED_SPEC>

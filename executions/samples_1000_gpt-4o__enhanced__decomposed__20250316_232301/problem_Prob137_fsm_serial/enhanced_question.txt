@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal, used to trigger all sequential logic on its positive edge.
+  - `input reset`: Active-high synchronous reset signal, used to initialize the module's state.
+  - `input in`: Serial input stream, one bit per clock cycle.
+
+- Output Ports:
+  - `output done`: Indicates a complete and correctly received byte (including start and stop bits).
+
+Protocol Specification:
+- The serial communication protocol uses:
+  - One start bit (`0`)
+  - Eight data bits (sent least significant bit first)
+  - One stop bit (`1`)
+  - Idle line is at logic `1`
+
+Finite State Machine (FSM) Requirements:
+- The FSM should transition through the following states:
+  1. Idle: Waits for a start bit (`0`).
+  2. Receiving: Captures 8 data bits sequentially.
+  3. Stop Check: Verifies the presence of a stop bit (`1`).
+  4. Done: Signals a successfully received byte and returns to Idle.
+
+- If the correct stop bit is not detected, the FSM should ignore incoming bits until another stop bit (`1`) is found, indicating the line is idle again. Only then should the FSM reset to the Idle state to begin receiving the next byte.
+
+Reset Behavior:
+- On activation of the synchronous reset, the FSM returns to the Idle state immediately, regardless of the current state. All internal registers should be initialized to a known state upon reset.
+
+Signal Timing and Edge Cases:
+- Ensure all state transitions and logic operations are triggered on the positive edge of the clock.
+- Properly handle edge cases where:
+  - The start bit is missed due to noise.
+  - The stop bit is incorrect or missing.
+  - Data bits are corrupted.
+
+Bit Indexing and Conventions:
+- Data bits are captured in a shift register starting from the least significant bit (bit[0]) to the most significant bit (bit[7]).
+
+This specification aims for clarity and accuracy in implementing the described serial communication protocol decoder.
+</ENHANCED_SPEC>

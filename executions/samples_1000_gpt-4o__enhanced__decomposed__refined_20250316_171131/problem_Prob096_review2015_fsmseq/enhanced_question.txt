@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input wire clk: Clock signal, triggering on the positive edge.
+- input wire reset: Synchronous active-high reset signal.
+- input wire data: Serial input bit stream.
+- output reg start_shifting: Output signal, set to high when the sequence is detected.
+
+Details:
+1. Finite State Machine (FSM):
+   - The FSM searches for the bit sequence '1101' in the input bit stream 'data'.
+   - States are defined as follows:
+     - IDLE: Awaiting the first '1' of the sequence.
+     - S1: First '1' detected.
+     - S11: Second '1' detected.
+     - S110: Sequence '110' detected.
+     - FOUND: Complete sequence '1101' detected.
+
+2. FSM Operation:
+   - Transition from IDLE to S1 upon receiving a '1'.
+   - Transition from S1 to S11 upon receiving another '1'.
+   - Transition from S11 to S110 upon receiving a '0'.
+   - Transition from S110 to FOUND upon receiving a '1'.
+   - Remain in FOUND state indefinitely once the complete sequence is detected.
+
+3. Output Behavior:
+   - When the FSM enters the FOUND state, set 'start_shifting' to 1.
+   - 'start_shifting' remains 1 until the reset is activated.
+
+4. Reset Behavior:
+   - The reset is synchronous and active-high.
+   - Upon reset, the FSM returns to the IDLE state, and 'start_shifting' is set to 0.
+
+5. Initial State:
+   - On system power-up, assume reset has been applied, so the FSM starts in the IDLE state, and 'start_shifting' is initially 0.
+
+6. Signal Conventions:
+   - Bit indexing is not applicable as all inputs and outputs are single bits.
+   - No additional edge-case handling is necessary beyond the defined resetting behavior.
+
+Ensure that all state transitions and output assignments are handled within the positive edge-triggered always block, respecting the synchronous reset condition.
+</ENHANCED_SPEC>

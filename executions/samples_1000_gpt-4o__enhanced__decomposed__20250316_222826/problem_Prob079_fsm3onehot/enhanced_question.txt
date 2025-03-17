@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Specification: TopModule
+
+1. **Interface Description:**
+   - `input wire in`: Single-bit input signal.
+   - `input wire [3:0] state`: 4-bit wide input representing the current state using one-hot encoding.
+   - `output wire [3:0] next_state`: 4-bit wide output representing the next state using one-hot encoding.
+   - `output wire out`: Single-bit output signal.
+
+2. **State Encoding:**
+   - State A: `4'b0001`
+   - State B: `4'b0010`
+   - State C: `4'b0100`
+   - State D: `4'b1000`
+
+3. **Operational Details:**
+   - The system implements a Moore state machine where outputs depend only on the current state.
+   - The state transitions and output are determined by the current state and the input signal `in`.
+
+4. **State Transition Table:**
+   - Current State (state) | Next State if `in=0` | Next State if `in=1` | Output
+   - A (`4'b0001`)         | A (`4'b0001`)        | B (`4'b0010`)        | 0
+   - B (`4'b0010`)         | C (`4'b0100`)        | B (`4'b0010`)        | 0
+   - C (`4'b0100`)         | A (`4'b0001`)        | D (`4'b1000`)        | 0
+   - D (`4'b1000`)         | C (`4'b0100`)        | B (`4'b0010`)        | 1
+
+5. **Logic Design Considerations:**
+   - The design focuses on combinational logic for determining `next_state` and `out`.
+   - There is no need to implement any sequential logic or storage elements (e.g., flip-flops) within this module.
+   - The `out` signal is directly derived from the current state, ensuring it changes only with state transitions.
+
+6. **Assumptions and Constraints:**
+   - The input `state` is assumed to be valid one-hot encoded at all times.
+   - The module does not handle invalid or multiple active states; such conditions should be managed externally.
+   - No reset logic is included since the specification focuses solely on combinational logic.
+   - The module assumes synchronous operation without clock or reset dependencies.
+
+7. **Edge Cases:**
+   - It is assumed that invalid state encodings will not occur, as they are outside the module's responsibility.
+</ENHANCED_SPEC>

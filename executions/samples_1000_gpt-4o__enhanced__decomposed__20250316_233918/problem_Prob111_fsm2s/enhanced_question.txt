@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - `input logic clk` : Clock signal. This is the positive edge-triggered clock for the sequential elements.
+  - `input logic reset` : Active-high, synchronous reset signal. Resets the state machine to the initial state (OFF).
+  - `input logic j` : Input signal that determines state transition from OFF to ON.
+  - `input logic k` : Input signal that determines state transition from ON to OFF.
+
+- Outputs:
+  - `output logic out` : Single bit output representing the current state output. This is a Moore machine, so the output is associated with the current state only.
+
+State Machine Description:
+- Type: Moore State Machine with two states: OFF and ON.
+- Initial State: OFF
+- State Definitions:
+  - OFF: Output `out = 0`
+  - ON: Output `out = 1`
+
+State Transitions:
+- From State OFF:
+  - If `j == 0`, remain in state OFF.
+  - If `j == 1`, transition to state ON.
+- From State ON:
+  - If `k == 0`, remain in state ON.
+  - If `k == 1`, transition to state OFF.
+
+Reset Behavior:
+- The reset is synchronous with respect to the clock (`reset` must be active high).
+- When `reset` is asserted, regardless of inputs `j` or `k`, the state machine transitions to the state OFF, and output `out` is set to `0`.
+
+Bit Indexing and Conventions:
+- All signals are treated as single-bit logic values where `logic` represents the bit type used in the module.
+- There are no multi-bit signals, so MSB/LSB conventions do not apply.
+
+Edge Cases:
+- Ensure correct operation during reset deassertion and input changes by using proper clock edge synchronization.
+
+Operation Precedence:
+- State transitions and output determinations are based on the current state and input conditions evaluated at the rising edge of the clock.
+
+There are no race conditions as state transitions are determined by the synchronous clock edge and reset operations are explicitly defined.
+</ENHANCED_SPEC>

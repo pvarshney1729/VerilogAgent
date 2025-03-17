@@ -1,0 +1,69 @@
+Generated Response:
+
+<REASONING>
+To implement the 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. The output `q` is a 5-bit vector.
+
+2. **Signal Declaration**: Use `logic` to declare the internal signals and registers. This aligns with the coding conventions provided.
+
+3. **Synchronous Reset**: Implement a synchronous reset that sets the LFSR state to `00001` when `reset` is high. This ensures that the LFSR starts in a known state.
+
+4. **LFSR Logic**: Implement the Galois LFSR logic. The LFSR shifts right, and the new value of the most significant bit is determined by XORing the least significant bit with the bits at the specified tap positions (5 and 3). Since we are using 0-based indexing, these correspond to `q[4]` and `q[2]`.
+
+5. **Sequential Logic**: Use an `always_ff` block triggered on the positive edge of `clk` to update the LFSR state. The reset logic is included within this block to ensure synchronous behavior.
+
+6. **Output Assignment**: Directly assign the internal LFSR state to the output `q`.
+
+7. **Adherence to Conventions**: Ensure all numeric constants are properly sized, and use `always_ff` for sequential logic to adhere to SystemVerilog conventions.
+
+By following these steps, we ensure that the module meets the specified requirements and adheres to the provided guidelines and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    logic [4:0] lfsr;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            lfsr <= 5'b00001; // Synchronous reset to initial state
+        end else begin
+            // Galois LFSR logic with taps at positions 5 and 3
+            lfsr <= {lfsr[3:0], lfsr[4] ^ lfsr[2]};
+        end
+    end
+
+    assign q = lfsr; // Assign internal LFSR state to output
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    logic [4:0] lfsr;
+
+    always_ff @(posedge clk) begin
+        if (reset) begin
+            lfsr <= 5'b00001; // Synchronous reset to initial state
+        end else begin
+            // Galois LFSR logic with taps at positions 5 and 3
+            lfsr <= {lfsr[3:0], lfsr[4] ^ lfsr[2]};
+        end
+    end
+
+    assign q = lfsr; // Assign internal LFSR state to output
+
+endmodule

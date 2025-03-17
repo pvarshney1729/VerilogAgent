@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule`. This module is a Moore finite state machine (FSM) with a defined interface and behavior. Below are the specifications for the module:
+
+**Module Interface:**
+- **input clk**: 1-bit clock signal. All sequential logic is triggered on the positive edge of this clock.
+- **input reset**: 1-bit synchronous active-high reset signal. When asserted, the FSM resets to State A on the next rising edge of the clock.
+- **input in**: 1-bit input signal determining state transitions.
+- **output out**: 1-bit output signal based on the current state of the FSM.
+
+**FSM Specifications:**
+- **States**: The FSM consists of four states named A, B, C, and D.
+- **State Encoding**: Use binary encoding for states. Assume:
+  - State A is encoded as `2'b00`
+  - State B is encoded as `2'b01`
+  - State C is encoded as `2'b10`
+  - State D is encoded as `2'b11`
+- **State Transition Table**: 
+  - **Current State A**: 
+    - If `in` = 0, transition to State A
+    - If `in` = 1, transition to State B
+    - Output = 0
+  - **Current State B**:
+    - If `in` = 0, transition to State C
+    - If `in` = 1, remain in State B
+    - Output = 0
+  - **Current State C**:
+    - If `in` = 0, transition to State A
+    - If `in` = 1, transition to State D
+    - Output = 0
+  - **Current State D**:
+    - If `in` = 0, transition to State C
+    - If `in` = 1, transition to State B
+    - Output = 1
+
+**Reset Behavior:**
+- On the assertion of the `reset` signal, the FSM transitions to State A on the next positive edge of the `clk`.
+
+**Initial Conditions:**
+- Assume the FSM starts in State A upon initialization.
+
+**Additional Specifications:**
+- The least significant bit (bit[0]) in state encoding represents the lowest binary digit.
+- Ensure that there are no race conditions by adhering to the positive edge clocking and synchronous reset behavior.
+- The `out` signal is determined solely by the current state and does not depend directly on the `in` signal.
+</ENHANCED_SPEC>

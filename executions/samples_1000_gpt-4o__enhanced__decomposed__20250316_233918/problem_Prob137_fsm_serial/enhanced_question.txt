@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: 
+  - `clk`: 1-bit clock input. All sequential logic is triggered on the positive edge.
+  - `reset`: 1-bit active-high synchronous reset input. When asserted, all state-holding elements reset to their initial states.
+  - `in`: 1-bit serial data input.
+
+- Output:
+  - `done`: 1-bit output that indicates a byte has been correctly received.
+
+Specifications:
+1. The module implements a finite state machine (FSM) for byte detection in a serial communication protocol.
+2. The protocol format includes:
+   - 1 start bit (logic 0)
+   - 8 data bits, sent least significant bit (LSB) first
+   - 1 stop bit (logic 1)
+   - The line is idle at logic 1 when not transmitting data.
+
+3. FSM Operation:
+   - Initially, the FSM waits for a start bit (logic 0).
+   - Upon detecting a start bit, the FSM transitions to capturing the 8 data bits.
+   - Once 8 data bits are captured, the FSM expects a stop bit (logic 1).
+   - If the stop bit is correctly received, the `done` output is asserted high for one clock cycle.
+   - If the stop bit is not as expected, the FSM continues to search for a stop bit before restarting the byte reception process.
+   - The `done` signal is asserted only if a complete byte is correctly received, including the correct stop bit.
+
+4. Reset Behavior:
+   - The `reset` input, when asserted high, synchronously resets the FSM to its initial state.
+   - All internal state registers and outputs are reset to their defined initial conditions on the next positive clock edge when `reset` is high.
+
+5. Edge Cases:
+   - Any deviation from the start or stop bit conventions will cause the FSM to return to an idle state and wait for the next valid start bit.
+   - Proper handling ensures no race conditions, as all state transitions and outputs are synchronized to the clock.
+
+This specification ensures a clear implementation of the FSM for receiving serial data bytes with the defined protocol format.
+</ENHANCED_SPEC>

@@ -1,0 +1,125 @@
+Generated Response:
+
+<REASONING>
+To implement the FSM as specified, we need to define a module named `TopModule` with the given interface. The FSM will have two states: A and B. In state A, the FSM waits for the input `s` to become 1 to transition to state B. In state B, the FSM will count the number of times `w` is 1 over three clock cycles. If `w` is 1 exactly twice, the output `z` will be set to 1; otherwise, it will be set to 0. The FSM will then continue to evaluate `w` in groups of three cycles as long as it remains in state B. The reset is synchronous, meaning it will only affect the state on the rising edge of the clock. We will use a 2-bit counter to track the number of cycles and another 2-bit counter to count the occurrences of `w` being 1. The output `z` will be registered and updated based on the evaluation of `w`.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic s,
+    input logic w,
+    output logic z
+);
+
+    typedef enum logic [1:0] {
+        A = 2'b00,
+        B = 2'b01
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [1:0] cycle_count;
+    logic [1:0] w_count;
+
+    // State transition and output logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= A;
+            cycle_count <= 2'b00;
+            w_count <= 2'b00;
+            z <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == B) begin
+                if (cycle_count < 2'b10) begin
+                    cycle_count <= cycle_count + 1;
+                    if (w) begin
+                        w_count <= w_count + 1;
+                    end
+                end else begin
+                    z <= (w_count == 2'b10) ? 1'b1 : 1'b0;
+                    cycle_count <= 2'b00;
+                    w_count <= 2'b00;
+                end
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            A: begin
+                if (s) next_state = B;
+                else next_state = A;
+            end
+            B: begin
+                next_state = B; // Remain in B, as the task is to handle transitions based on 'w'
+            end
+            default: next_state = A;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic s,
+    input logic w,
+    output logic z
+);
+
+    typedef enum logic [1:0] {
+        A = 2'b00,
+        B = 2'b01
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [1:0] cycle_count;
+    logic [1:0] w_count;
+
+    // State transition and output logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= A;
+            cycle_count <= 2'b00;
+            w_count <= 2'b00;
+            z <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == B) begin
+                if (cycle_count < 2'b10) begin
+                    cycle_count <= cycle_count + 1;
+                    if (w) begin
+                        w_count <= w_count + 1;
+                    end
+                end else begin
+                    z <= (w_count == 2'b10) ? 1'b1 : 1'b0;
+                    cycle_count <= 2'b00;
+                    w_count <= 2'b00;
+                end
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            A: begin
+                if (s) next_state = B;
+                else next_state = A;
+            end
+            B: begin
+                next_state = B; // Remain in B, as the task is to handle transitions based on 'w'
+            end
+            default: next_state = A;
+        endcase
+    end
+
+endmodule
