@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Ports:
+- Input: 
+  - clk: 1 bit, clock signal, positive edge-triggered.
+  - reset: 1 bit, active high synchronous reset.
+  - in: 8 bits, input data stream, with bit[0] as the least significant bit (LSB) and bit[7] as the most significant bit (MSB).
+
+- Output:
+  - done: 1 bit, indicates the successful receipt of a complete 3-byte message.
+
+Functional Description:
+- The module implements a finite state machine (FSM) to detect message boundaries within a continuous byte stream using the PS/2 mouse protocol.
+- Message Structure: Each message consists of three bytes.
+- The start of a message is identified by a byte where in[3] = 1.
+- Bytes following the first byte in a message may have any value of in[3].
+
+FSM Operation:
+1. Initial State: The FSM discards bytes until it detects a byte with in[3] = 1.
+2. Once the FSM identifies such a byte, it considers it to be the first byte of a message.
+3. The FSM counts and processes the next two bytes as part of the message.
+4. After the third byte of the message is processed, the 'done' signal is asserted high for one clock cycle on the following clock edge.
+
+Reset Behavior:
+- The reset signal is active high and synchronous, meaning it affects the FSM state on the next rising edge of the clock when asserted.
+- On reset, the FSM returns to its initial state, ready to begin discarding bytes until it finds a new start-of-message byte.
+
+Edge Cases:
+- If reset is asserted during message processing, the FSM immediately returns to the initial state, discarding all current progress.
+- The FSM assumes a continuous stream of bytes, and any byte with in[3] = 1 is treated as the potential start of a new message.
+
+Clock and Triggering:
+- All sequential logic elements within the module are triggered on the positive edge of the clock signal.
+- Ensure all registers used in the FSM have clearly defined initial values upon reset.
+
+The design assumes no race conditions due to the synchronous nature of the FSM, as all state transitions occur on the same clock edge.
+</ENHANCED_SPEC>

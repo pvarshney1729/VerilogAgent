@@ -1,0 +1,55 @@
+Generated Response:
+
+<REASONING>
+To implement the 5-bit maximal-length Galois LFSR with taps at bit positions 5 and 3, we need to follow these steps:
+
+1. **Module Declaration**: Define the module `TopModule` with the specified input and output ports. The input ports are `clk` and `reset`, and the output port is a 5-bit vector `q`.
+
+2. **Synchronous Reset**: Implement a synchronous reset that sets the LFSR to the initial state `00001` when `reset` is high. This ensures that the LFSR starts from a known state and avoids the all-zero state.
+
+3. **LFSR Logic**: Implement the Galois LFSR logic. On each positive edge of the clock, if `reset` is not asserted, the LFSR shifts right. The new value of `q[4]` is determined by XORing the current LSB (`q[0]`) with the bit at the tap position `q[2]`. The rest of the bits shift right unchanged.
+
+4. **Bitwise Operations**: Use bitwise operations to implement the feedback mechanism. The XOR operation is used to determine the new value for the tapped position.
+
+5. **Coding Conventions**: Follow the provided coding conventions, such as using `logic` for signal declarations and ensuring all numeric constants have a size greater than zero.
+
+By following these steps, we ensure that the LFSR is correctly implemented and adheres to the specifications provided.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 5'b00001; // Reset state
+        end else begin
+            q <= {q[0] ^ q[2], q[4:1]}; // Shift right with feedback from taps at positions 5 and 3
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    output logic [4:0] q
+);
+
+    always @(posedge clk) begin
+        if (reset) begin
+            q <= 5'b00001; // Reset state
+        end else begin
+            q <= {q[0] ^ q[2], q[4:1]}; // Shift right with feedback from taps at positions 5 and 3
+        end
+    end
+
+endmodule

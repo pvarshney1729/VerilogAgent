@@ -1,0 +1,32 @@
+Decomposition Result:[
+    {
+        "id": "1",
+        "content": "Define the module TopModule with input ports clk, reset, in, and output port done.",
+        "source": "I would like you to implement a module named TopModule with the following interface. All input and output ports are one bit unless otherwise specified.",
+        "implementation": "module TopModule (\n    input  wire clk,\n    input  wire reset,\n    input  wire in,\n    output reg  done\n);\n\n    // State encoding\n    typedef enum reg [3:0] {\n        IDLE        = 4'b0000,\n        START_BIT   = 4'b0001,\n        DATA_BIT_0  = 4'b0010,\n        DATA_BIT_1  = 4'b0011,\n        DATA_BIT_2  = 4'b0100,\n        DATA_BIT_3  = 4'b0101,\n        DATA_BIT_4  = 4'b0110,\n        DATA_BIT_5  = 4'b0111,\n        DATA_BIT_6  = 4'b1000,\n        DATA_BIT_7  = 4'b1001,\n        STOP_BIT    = 4'b1010\n    } state_t;\n\n    state_t current_state, next_state;\n\n    // Sequential logic for state transition\n    always @(posedge clk or posedge reset) begin\n        if (reset) begin\n            current_state <= IDLE;\n        end else begin\n            current_state <= next_state;\n        end\n    end\n\n    // Combinational logic for next state and output\n    always @(*) begin\n        next_state = current_state;\n        done = 1'b0;\n        case (current_state)\n            IDLE: begin\n                if (in == 1'b0) begin\n                    next_state = START_BIT;\n                end\n            end\n            START_BIT: begin\n                next_state = DATA_BIT_0;\n            end\n            DATA_BIT_0: begin\n                next_state = DATA_BIT_1;\n            end\n            DATA_BIT_1: begin\n                next_state = DATA_BIT_2;\n            end\n            DATA_BIT_2: begin\n                next_state = DATA_BIT_3;\n            end\n            DATA_BIT_3: begin\n                next_state = DATA_BIT_4;\n            end\n            DATA_BIT_4: begin\n                next_state = DATA_BIT_5;\n            end\n            DATA_BIT_5: begin\n                next_state = DATA_BIT_6;\n            end\n            DATA_BIT_6: begin\n                next_state = DATA_BIT_7;\n            end\n            DATA_BIT_7: begin\n                next_state = STOP_BIT;\n            end\n            STOP_BIT: begin\n                if (in == 1'b1) begin\n                    done = 1'b1;\n                    next_state = IDLE;\n                end else begin\n                    next_state = IDLE; // Wait for stop bit\n                end\n            end\n            default: begin\n                next_state = IDLE;\n            end\n        endcase\n    end\n\nendmodule"
+    },
+    {
+        "id": "2",
+        "content": "Declare the state register and state encoding using localparam for the FSM states: IDLE (2'b00), START (2'b01), DATA (2'b10), STOP (2'b11).",
+        "source": "Implement a finite state machine that will identify when bytes have been correctly received when given a stream of bits.",
+        "implementation": "// State register declaration\n  reg [1:0] state;\n\n  // State encoding using localparam\n  localparam IDLE  = 2'b00,\n             START = 2'b01,\n             DATA  = 2'b10,\n             STOP  = 2'b11;"
+    },
+    {
+        "id": "3",
+        "content": "Implement the state register with synchronous reset logic. Use always @(posedge clk) to update the current state based on the next state.",
+        "source": "Include a active-high synchronous reset. Assume all sequential logic is triggered on the positive edge of the clock.",
+        "implementation": "reg [3:0] current_state, next_state;\n\n  // State register with synchronous reset\n  always @(posedge clk) begin\n    if (reset) begin\n      current_state <= 4'b0000; // Assuming 4'b0000 is the initial state\n    end else begin\n      current_state <= next_state;\n    end\n  end"
+    },
+    {
+        "id": "4",
+        "content": "Implement the next state combinational logic using always @(*) block. Define state transitions based on the input 'in' and current state.",
+        "source": "It needs to identify the start bit, wait for all 8 data bits, then verify that the stop bit was correct. If the stop bit does not appear when expected, the FSM must wait until it finds a stop bit before attempting to receive the next byte.",
+        "implementation": "```verilog\n[BEGIN]\n  // State encoding\n  typedef enum logic [2:0] {\n    IDLE      = 3'b000,\n    START     = 3'b001,\n    DATA      = 3'b010,\n    STOP      = 3'b011,\n    WAIT_STOP = 3'b100\n  } state_t;\n\n  state_t current_state, next_state;\n  logic [2:0] bit_count;\n\n  // Next state logic\n  always @(*) begin\n    case (current_state)\n      IDLE: begin\n        if (in == 1'b0) // Detect start bit\n          next_state = START;\n        else\n          next_state = IDLE;\n      end\n\n      START: begin\n        next_state = DATA;\n      end\n\n      DATA: begin\n        if (bit_count == 3'd7) // After 8 data bits\n          next_state = STOP;\n        else\n          next_state = DATA;\n      end\n\n      STOP: begin\n        if (in == 1'b1) // Correct stop bit\n          next_state = IDLE;\n        else\n          next_state = WAIT_STOP;\n      end\n\n      WAIT_STOP: begin\n        if (in == 1'b1) // Wait for stop bit\n          next_state = IDLE;\n        else\n          next_state = WAIT_STOP;\n      end\n\n      default: next_state = IDLE;\n    endcase\n  end\n[END]\n```"
+    },
+    {
+        "id": "5",
+        "content": "Implement the output combinational logic using always @(*) block. Set the output 'done' high when a byte is correctly received, i.e., when the FSM is in the STOP state and the stop bit is verified.",
+        "source": "Implement a finite state machine that will identify when bytes have been correctly received when given a stream of bits.",
+        "implementation": "always @(*) begin\n    done = 1'b0; // Default value\n    if (current_state == STOP && in == 1'b1) begin\n        done = 1'b1; // Set done high when in STOP state and stop bit is verified\n    end\nend"
+    }
+]

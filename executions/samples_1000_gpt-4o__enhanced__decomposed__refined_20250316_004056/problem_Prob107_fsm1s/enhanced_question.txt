@@ -1,0 +1,47 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit clock signal used for synchronous operations.
+  - reset: 1-bit active-high synchronous reset signal.
+  - in: 1-bit input signal that drives state transitions.
+
+- Output Ports:
+  - out: 1-bit output signal representing the state output.
+
+Design Specifications:
+1. State Machine Type: Moore State Machine with two states:
+   - State B: Output `out` is 1.
+   - State A: Output `out` is 0.
+
+2. State Encoding:
+   - State B encoded as 1'b0
+   - State A encoded as 1'b1
+
+3. State Transition Logic:
+   - From State B:
+     - Transition to State A when `in` = 0.
+     - Remain in State B when `in` = 1.
+   - From State A:
+     - Transition to State B when `in` = 0.
+     - Remain in State A when `in` = 1.
+
+4. Reset Behavior:
+   - The reset signal is active-high and synchronous, meaning it will only be evaluated on the rising edge of the clock.
+   - Upon activation of the reset, the state machine transitions to State B, irrespective of the current state or input.
+
+5. Signal Conventions:
+   - Bit[0] refers to the least significant bit (LSB).
+
+6. Initial Conditions:
+   - On power-up, the initial state is not defined by this specification; ensure reset is asserted to initialize the state machine.
+
+7. State Transition Table:
+   - Current State: B, Input: 0, Next State: A, Output: 1
+   - Current State: B, Input: 1, Next State: B, Output: 1
+   - Current State: A, Input: 0, Next State: B, Output: 0
+   - Current State: A, Input: 1, Next State: A, Output: 0
+
+Note: The design assumes the presence of a stable clock signal to ensure reliable state transitions.
+</ENHANCED_SPEC>

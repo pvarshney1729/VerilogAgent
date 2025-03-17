@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `clk`: Clock signal, 1 bit. All sequential logic is triggered on the positive edge.
+  - `resetn`: Active-low synchronous reset, 1 bit. Resets the FSM to state A when asserted low.
+  - `r`: Request signals, 3 bits, representing `r[2:0]` where `r[0]` is the highest priority and `r[2]` the lowest. Bit[0] refers to the least significant bit (LSB).
+
+- Output Ports:
+  - `g`: Grant signals, 3 bits, representing `g[2:0]` where `g[0]` corresponds to the grant for device 0 and `g[2]` for device 2. Bit[0] refers to the least significant bit (LSB).
+
+FSM Description:
+- Initial State: State A, where no grants are issued (`g = 3'b000`).
+
+- State Transitions:
+  - State A:
+    - Remain in A if `r = 3'b000`.
+    - Transition to B if `r[0] = 1`.
+    - Transition to C if `r[0] = 0` and `r[1] = 1`.
+    - Transition to D if `r[0] = 0`, `r[1] = 0`, and `r[2] = 1`.
+  - State B:
+    - Remain in B if `r[0] = 1`.
+    - Transition to A if `r[0] = 0`.
+  - State C:
+    - Remain in C if `r[1] = 1`.
+    - Transition to A if `r[1] = 0`.
+  - State D:
+    - Remain in D if `r[2] = 1`.
+    - Transition to A if `r[2] = 0`.
+
+- State Outputs:
+  - State B: `g[0] = 1`, `g[1] = 0`, `g[2] = 0`.
+  - State C: `g[0] = 0`, `g[1] = 1`, `g[2] = 0`.
+  - State D: `g[0] = 0`, `g[1] = 0`, `g[2] = 1`.
+  - State A: `g = 3'b000`.
+
+- Priority Scheme: Device 0 has the highest priority, followed by device 1, then device 2. A device is granted resource access only if no higher-priority requests are pending.
+
+Implementation Notes:
+- Use separate always blocks for the state transition logic (state table) and state register (flip-flops).
+- Describe the FSM outputs using continuous assignment statements or an always block.
+- Assign state encoding as desired, ensuring clarity and simplicity in implementation.
+- Edge Cases: Ensure correct operation when multiple requests are asserted simultaneously, adhering to the priority scheme.
+</ENHANCED_SPEC>

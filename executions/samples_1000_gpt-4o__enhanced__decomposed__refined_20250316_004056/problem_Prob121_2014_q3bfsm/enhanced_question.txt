@@ -1,0 +1,49 @@
+<ENHANCED_SPEC>
+Module Specification:
+
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - clk: 1-bit clock signal. The module operates on the positive edge of this clock.
+  - reset: 1-bit synchronous active-high reset signal. When high, the FSM resets to state 000 on the next clock edge.
+  - x: 1-bit control input signal.
+
+- Output Ports:
+  - z: 1-bit output signal.
+
+Finite State Machine (FSM) Description:
+- State Encoding: The FSM uses a 3-bit state register y[2:0] to represent states, with bit[2] as the most significant bit and bit[0] as the least significant bit.
+- Initial State: On reset, the FSM transitions to state 000.
+- State Transitions: The state transitions are determined by the current state y[2:0] and input x as follows:
+  - Present State 000:
+    - If x = 0, next state = 000
+    - If x = 1, next state = 001
+  - Present State 001:
+    - If x = 0, next state = 001
+    - If x = 1, next state = 100
+  - Present State 010:
+    - If x = 0, next state = 010
+    - If x = 1, next state = 001
+  - Present State 011:
+    - If x = 0, next state = 001
+    - If x = 1, next state = 010
+  - Present State 100:
+    - If x = 0, next state = 011
+    - If x = 1, next state = 100
+
+- Output Logic: The output z is determined by the present state as follows:
+  - z = 0 for states 000, 001, 010
+  - z = 1 for states 011, 100
+
+Operational Details:
+- The FSM is triggered on the positive edge of the clk signal.
+- The reset signal is synchronous and active-high, meaning the FSM will transition to the initial state 000 on the next clock cycle when reset is asserted.
+- All state transitions and output determinations occur on the positive edge of the clk signal.
+
+Edge Cases:
+- Ensure that the reset signal is deasserted before observing normal state transitions.
+- If the reset is asserted, the state immediately transitions to 000 on the next positive clock edge, regardless of the input x.
+
+This specification ensures clarity in implementation and defines all necessary conditions for correct behavior of the FSM in the TopModule.
+</ENHANCED_SPEC>

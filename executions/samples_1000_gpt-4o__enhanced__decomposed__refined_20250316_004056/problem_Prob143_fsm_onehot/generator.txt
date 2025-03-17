@@ -1,0 +1,149 @@
+Generated Response:
+
+<REASONING>
+To implement the `TopModule`, we will follow the guidelines and coding conventions provided. The module will have a 10-bit input `state` representing the current state in one-hot encoding, a single-bit input `in`, and outputs `next_state` (10 bits), `out1`, and `out2`. The state transitions and outputs are defined by the state machine description.
+
+1. **State Transition Logic**: We'll use an `always @(*)` block to determine the `next_state` based on the current `state` and `in`. Each state will be checked, and the corresponding next state will be set based on the input `in`.
+
+2. **Output Logic**: The outputs `out1` and `out2` will be set based on the current state. States S7, S8, and S9 have specific output values, while other states default to zero.
+
+3. **One-Hot Encoding**: We'll ensure that only one bit in the `next_state` vector is set at any time, corresponding to the next state.
+
+4. **Combinational Logic**: We'll use `always @(*)` for combinational logic, ensuring that all outputs are driven correctly based on the current state and input.
+
+5. **Coding Conventions**: We'll declare all ports and signals as `logic`, and ensure numeric constants are properly sized.
+
+By following these steps, we ensure the module adheres to the specification and coding conventions.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic in,
+    input logic [9:0] state,
+    output logic [9:0] next_state,
+    output logic out1,
+    output logic out2
+);
+
+always @(*) begin
+    // Initialize next_state and outputs
+    next_state = 10'b0;
+    out1 = 1'b0;
+    out2 = 1'b0;
+
+    // State transition logic
+    if (state[0]) begin
+        if (in) next_state[1] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[1]) begin
+        if (in) next_state[2] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[2]) begin
+        if (in) next_state[3] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[3]) begin
+        if (in) next_state[4] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[4]) begin
+        if (in) next_state[5] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[5]) begin
+        if (in) next_state[6] = 1'b1;
+        else next_state[8] = 1'b1;
+    end
+    if (state[6]) begin
+        if (in) next_state[7] = 1'b1;
+        else next_state[9] = 1'b1;
+    end
+    if (state[7]) begin
+        out2 = 1'b1;
+        if (in) next_state[7] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[8]) begin
+        out1 = 1'b1;
+        if (in) next_state[1] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[9]) begin
+        out1 = 1'b1;
+        out2 = 1'b1;
+        if (in) next_state[1] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic in,
+    input logic [9:0] state,
+    output logic [9:0] next_state,
+    output logic out1,
+    output logic out2
+);
+
+always @(*) begin
+    // Initialize next_state and outputs
+    next_state = 10'b0;
+    out1 = 1'b0;
+    out2 = 1'b0;
+
+    // State transition logic
+    if (state[0]) begin
+        if (in) next_state[1] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[1]) begin
+        if (in) next_state[2] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[2]) begin
+        if (in) next_state[3] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[3]) begin
+        if (in) next_state[4] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[4]) begin
+        if (in) next_state[5] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[5]) begin
+        if (in) next_state[6] = 1'b1;
+        else next_state[8] = 1'b1;
+    end
+    if (state[6]) begin
+        if (in) next_state[7] = 1'b1;
+        else next_state[9] = 1'b1;
+    end
+    if (state[7]) begin
+        out2 = 1'b1;
+        if (in) next_state[7] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[8]) begin
+        out1 = 1'b1;
+        if (in) next_state[1] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+    if (state[9]) begin
+        out1 = 1'b1;
+        out2 = 1'b1;
+        if (in) next_state[1] = 1'b1;
+        else next_state[0] = 1'b1;
+    end
+end
+
+endmodule

@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input  wire clk: Clock signal, active on the positive edge.
+- input  wire reset: Active high synchronous reset.
+- input  wire in: Input data stream, 1-bit.
+- output reg disc: Output signal, indicates a bit needs to be discarded, 1-bit.
+- output reg flag: Output signal, indicates detection of a frame boundary flag, 1-bit.
+- output reg err: Output signal, indicates an error condition, 1-bit.
+
+Port Widths and Conventions:
+- All ports are 1-bit wide.
+- Input 'in' is a 1-bit continuous bit stream.
+- Outputs 'disc', 'flag', and 'err' will be asserted for one clock cycle when their respective conditions are met.
+
+Finite State Machine Specification:
+- Type: Moore-type FSM.
+- Initial State: Upon reset, the FSM should act as if the previous input was '0'.
+- State Transition: Triggered on the positive edge of the clock.
+
+Flag Detection:
+1. Sequence "0111110": 
+   - FSM should transition to a state where 'disc' is asserted for one clock cycle to discard the zero following five consecutive '1's.
+2. Sequence "01111110":
+   - FSM should transition to a state where 'flag' is asserted for one clock cycle, indicating a frame boundary.
+3. Sequence "01111111...":
+   - FSM should transition to a state where 'err' is asserted for one clock cycle if seven or more consecutive '1's are detected.
+
+Reset Behavior:
+- The reset is synchronous (active high) and returns the FSM to the initial state.
+- Upon reset, outputs 'disc', 'flag', and 'err' should be de-asserted (set to 0).
+
+Input Boundaries and Edge Cases:
+- The FSM should handle continuous stream inputs and reset correctly to process subsequent bit patterns.
+- No race conditions should occur as the design is based on a Moore FSM, where outputs depend solely on the current state.
+
+Output Assertion:
+- Outputs 'disc', 'flag', and 'err' are asserted for the entire clock cycle following the detection of their respective conditions.
+- Outputs are cleared on the next clock cycle unless conditions for assertion are met again.
+
+Clock and Timing:
+- All sequential logic is triggered on the positive edge of the clock.
+- Ensure that the FSM transitions and output assertions adhere to the specified clock cycle behavior.
+</ENHANCED_SPEC>

@@ -1,0 +1,45 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input wire in`: A single-bit input signal that influences state transitions.
+  - `input wire [1:0] state`: A 2-bit input representing the current state of the state machine. Bit[1] is the most significant bit, and bit[0] is the least significant bit.
+
+- Output Ports:
+  - `output wire [1:0] next_state`: A 2-bit output representing the next state of the state machine. Bit[1] is the most significant bit, and bit[0] is the least significant bit.
+  - `output wire out`: A single-bit output signal produced by the state machine.
+
+Behavioral Specification:
+- The module implements a Moore state machine with four states (A, B, C, D) and a single input (`in`).
+- State Encoding:
+  - State A: 2'b00
+  - State B: 2'b01
+  - State C: 2'b10
+  - State D: 2'b11
+
+- State Transition and Output Logic:
+  - Current State: A
+    - Next State if `in` = 0: A
+    - Next State if `in` = 1: B
+    - Output: 0
+  - Current State: B
+    - Next State if `in` = 0: C
+    - Next State if `in` = 1: B
+    - Output: 0
+  - Current State: C
+    - Next State if `in` = 0: A
+    - Next State if `in` = 1: D
+    - Output: 0
+  - Current State: D
+    - Next State if `in` = 0: C
+    - Next State if `in` = 1: B
+    - Output: 1
+
+Operational Details:
+- The module strictly implements combinational logic for both state transition and output logic.
+- The state transitions and output are determined solely by the current state and input `in`.
+- Ensure that the module correctly implements the transitions and outputs as specified in the state transition table without any latches or memory elements.
+
+Note: This specification assumes no reset condition or initial state is required as it exclusively focuses on combinational logic implementation.
+</ENHANCED_SPEC>

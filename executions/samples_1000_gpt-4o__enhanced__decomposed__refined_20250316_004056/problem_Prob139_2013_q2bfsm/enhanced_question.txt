@@ -1,0 +1,46 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- input wire clk: Clock signal, positive edge-triggered.
+- input wire resetn: Synchronous, active-low reset signal.
+- input wire x: Motor input signal.
+- input wire y: Motor input signal.
+- output reg f: Motor control signal.
+- output reg g: Motor control signal.
+
+Design Specification:
+1. The TopModule implements a finite state machine (FSM) to control a motor using inputs x and y.
+2. The FSM is driven by the clk signal and is reset by a synchronous, active-low resetn signal.
+3. The initial state of the FSM is State A. In this state:
+   - The FSM remains in State A as long as resetn is deasserted (logic high).
+   - When resetn is asserted (logic low) and on the next rising edge of clk, the FSM transitions out of State A.
+4. Upon transitioning out of State A, the output f is set to logic high (1) for exactly one clock cycle.
+5. Following the f logic high condition, the FSM monitors input x:
+   - If input x follows the sequence of 1, 0, 1 across three successive clock cycles, the FSM sets output g to logic high (1) on the clock cycle immediately following the sequence.
+6. Once g is set to logic high (1), the FSM monitors input y:
+   - If input y becomes logic high (1) within the next two clock cycles, the FSM maintains g at logic high (1) indefinitely until the next reset.
+   - If input y does not become logic high (1) within two clock cycles, the FSM sets g to logic low (0) permanently until the next reset.
+7. All FSM transitions are triggered by the positive edge of the clk signal.
+8. It is assumed that all sequential elements are initialized to logic low (0) upon reset.
+
+Bit Conventions:
+- All inputs and outputs are single-bit signals.
+- Bit indexing is not applicable as all signals are single-bit.
+
+Edge Cases:
+- Ensure that transitions between states do not occur inadvertently due to signal glitches or race conditions.
+- The FSM should handle boundary conditions where x or y signals change state precisely at the clock edge.
+
+Initial Values:
+- Registers and outputs are initialized to logic low (0) upon the assertion of the resetn signal (active low).
+
+State Descriptions:
+- State A: Initial state, awaiting reset deassertion.
+- State B: Transition state post-reset where f is asserted.
+- State C: Monitoring x for sequence detection.
+- State D: Maintaining g high and monitoring y for confirmation.
+- State E: Permanent states for g based on y observation.
+
+Note: All unspecified behavior is assumed to maintain the last known state until the next specified condition is met.
+</ENHANCED_SPEC>

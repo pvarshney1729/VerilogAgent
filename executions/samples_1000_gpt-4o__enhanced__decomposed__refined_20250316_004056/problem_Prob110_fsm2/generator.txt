@@ -1,0 +1,127 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the guidelines and conventions provided. The module is designed as a Moore state machine with two states: OFF and ON. The state transitions are determined by the inputs `j` and `k`, and the output `out` is determined solely by the current state.
+
+1. **State Encoding**: The states are encoded using a single-bit logic type, with OFF represented as `1'b0` and ON as `1'b1`.
+
+2. **State Register**: The state register is implemented using an `always_ff` block with an asynchronous reset. The reset is active-high and immediately sets the state to OFF when asserted.
+
+3. **Next State Logic**: The next state logic is implemented using an `always_comb` block. A `case` statement is used to determine the next state based on the current state and inputs `j` and `k`.
+
+4. **Output Logic**: The output logic is also implemented using an `always_comb` block. The output `out` is set based on the current state, with OFF producing an output of `0` and ON producing an output of `1`.
+
+5. **Coding Conventions**: The code adheres to the specified coding conventions, using `logic` for all ports and signals, and `always_comb` for combinational logic without explicitly specifying the sensitivity list.
+
+6. **Safety Defaults**: Default cases are included in both the next state and output logic to handle unexpected states, ensuring robust operation.
+
+The implementation ensures that the state transitions and outputs occur as specified in the state diagram, with the asynchronous reset correctly initializing the state to OFF.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {OFF = 1'b0, ON = 1'b1} state_t;
+    state_t state, next_state;
+
+    // State register with asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= OFF;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            OFF: begin
+                if (j)
+                    next_state = ON;
+                else
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k)
+                    next_state = OFF;
+                else
+                    next_state = ON;
+            end
+            default: next_state = OFF; // Default case for safety
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0; // Default case for safety
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic j,
+    input logic k,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {OFF = 1'b0, ON = 1'b1} state_t;
+    state_t state, next_state;
+
+    // State register with asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= OFF;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            OFF: begin
+                if (j)
+                    next_state = ON;
+                else
+                    next_state = OFF;
+            end
+            ON: begin
+                if (k)
+                    next_state = OFF;
+                else
+                    next_state = ON;
+            end
+            default: next_state = OFF; // Default case for safety
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (state)
+            OFF: out = 1'b0;
+            ON:  out = 1'b1;
+            default: out = 1'b0; // Default case for safety
+        endcase
+    end
+
+endmodule

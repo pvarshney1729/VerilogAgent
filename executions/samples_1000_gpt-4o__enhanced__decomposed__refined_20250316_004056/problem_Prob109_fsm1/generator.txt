@@ -1,0 +1,127 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows the guidelines and specifications provided. Here's a step-by-step reasoning:
+
+1. **Module Declaration**: The module is named `TopModule` with inputs `clk`, `areset`, `in`, and output `out`. All ports are declared as `logic` to adhere to the coding conventions.
+
+2. **State Encoding**: The states are encoded using an enumerated type `state_t` with two states: `A` and `B`. This makes the code more readable and maintainable.
+
+3. **State Register with Asynchronous Reset**: An `always_ff` block is used to implement the state register. The block is sensitive to the positive edge of `clk` and `areset`. If `areset` is high, the state is set to `B` asynchronously. Otherwise, the state transitions to `next_state` on the rising edge of `clk`.
+
+4. **Next State Logic**: An `always_comb` block is used to determine the `next_state` based on the current `state` and input `in`. The transitions follow the specified state diagram:
+   - From state `B`, if `in` is 0, transition to `A`; if `in` is 1, remain in `B`.
+   - From state `A`, if `in` is 0, transition to `B`; if `in` is 1, remain in `A`.
+
+5. **Output Logic**: Another `always_comb` block is used to set the output `out` based on the current `state`. The output is 0 in state `A` and 1 in state `B`.
+
+6. **Default Cases**: Default cases are included in both the next state and output logic to handle any unforeseen states, ensuring robustness.
+
+This implementation strictly follows the provided interface, coding conventions, and state machine specifications.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {A = 1'b0, B = 1'b1} state_t;
+    state_t state, next_state;
+
+    // State register with asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= B;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            A: begin
+                if (in)
+                    next_state = A;
+                else
+                    next_state = B;
+            end
+            B: begin
+                if (in)
+                    next_state = B;
+                else
+                    next_state = A;
+            end
+            default: next_state = B; // Default to state B
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (state)
+            A: out = 1'b0;
+            B: out = 1'b1;
+            default: out = 1'b0; // Default case to handle any unforeseen states
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic areset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [0:0] {A = 1'b0, B = 1'b1} state_t;
+    state_t state, next_state;
+
+    // State register with asynchronous reset
+    always_ff @(posedge clk or posedge areset) begin
+        if (areset) begin
+            state <= B;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        case (state)
+            A: begin
+                if (in)
+                    next_state = A;
+                else
+                    next_state = B;
+            end
+            B: begin
+                if (in)
+                    next_state = B;
+                else
+                    next_state = A;
+            end
+            default: next_state = B; // Default to state B
+        endcase
+    end
+
+    // Output logic
+    always_comb begin
+        case (state)
+            A: out = 1'b0;
+            B: out = 1'b1;
+            default: out = 1'b0; // Default case to handle any unforeseen states
+        endcase
+    end
+
+endmodule

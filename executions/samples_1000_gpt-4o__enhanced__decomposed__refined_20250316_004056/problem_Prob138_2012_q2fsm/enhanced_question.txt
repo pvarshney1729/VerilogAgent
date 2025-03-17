@@ -1,0 +1,49 @@
+<ENHANCED_SPEC>
+The module named `TopModule` will implement a finite state machine (FSM) with the following interface. All input and output ports are single-bit signals unless otherwise specified.
+
+- Input Ports:
+  - `input clk`: Clock signal, positive edge-triggered.
+  - `input reset`: Synchronous active-high reset signal.
+  - `input w`: Input signal for state transitions.
+
+- Output Ports:
+  - `output z`: Output signal based on the current state.
+
+The FSM consists of six states: A, B, C, D, E, and F, with state transitions controlled by the input `w`. The output `z` is determined by the current state as follows:
+
+- State A (output `z = 0`):
+  - `w = 1`: Transition to State B.
+  - `w = 0`: Remain in State A.
+
+- State B (output `z = 0`):
+  - `w = 1`: Transition to State C.
+  - `w = 0`: Transition to State D.
+
+- State C (output `z = 0`):
+  - `w = 1`: Transition to State E.
+  - `w = 0`: Transition to State D.
+
+- State D (output `z = 0`):
+  - `w = 1`: Transition to State F.
+  - `w = 0`: Transition to State A.
+
+- State E (output `z = 1`):
+  - `w = 1`: Remain in State E.
+  - `w = 0`: Transition to State D.
+
+- State F (output `z = 1`):
+  - `w = 1`: Transition to State C.
+  - `w = 0`: Transition to State D.
+
+Initial State and Reset Behavior:
+- The initial state after reset is State A.
+- The reset is synchronous and active-high, meaning it takes effect on the next positive edge of the clock when the reset signal is high.
+- State transitions are triggered on the positive edge of the clock.
+
+Implementation Guidelines:
+- Use separate `always` blocks for the state table (combinational logic for state transitions) and state flip-flops (sequential logic for current state storage).
+- The FSM output `z` can be described using either continuous assignment statements or an `always` block.
+- Assign state codes as desired, ensuring they are consistent throughout the implementation.
+
+Ensure all flip-flops or registers have defined initial values upon reset. Handle edge cases and input boundaries explicitly to maintain predictable behavior.
+</ENHANCED_SPEC>

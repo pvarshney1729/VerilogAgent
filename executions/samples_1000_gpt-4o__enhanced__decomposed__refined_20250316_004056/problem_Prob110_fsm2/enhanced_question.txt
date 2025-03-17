@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module: TopModule
+
+Interface:
+- Input:  clk (Clock signal, 1 bit)
+- Input:  areset (Asynchronous reset, active-high, 1 bit)
+- Input:  j (State transition input, 1 bit)
+- Input:  k (State transition input, 1 bit)
+- Output: out (State output, 1 bit)
+
+Specification:
+1. The module implements a Moore state machine with two states: OFF and ON.
+2. The state transition is determined by the inputs j and k.
+3. The reset (areset) is an active-high asynchronous reset that sets the state to OFF.
+4. The state machine outputs 0 in the OFF state and 1 in the ON state.
+
+State Definitions:
+- OFF State: 
+  - Output (out): 0
+  - Transition: 
+    - If j == 0, stay in OFF.
+    - If j == 1, transition to ON.
+- ON State:
+  - Output (out): 1
+  - Transition:
+    - If k == 0, stay in ON.
+    - If k == 1, transition to OFF.
+
+Reset Behavior:
+- When areset is high, the state machine transitions to the OFF state immediately, regardless of the clock.
+
+Clocking:
+- State transitions occur on the rising edge of the clock signal (clk).
+
+Initial Conditions:
+- On power-up, the module initializes to the OFF state.
+
+MSB/LSB Conventions:
+- bit[0] refers to the least significant bit for single-bit inputs and outputs.
+</ENHANCED_SPEC>

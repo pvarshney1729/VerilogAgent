@@ -1,0 +1,28 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input: `clk` (1 bit) - Clock signal. All sequential logic is triggered on the positive edge.
+- Input: `reset` (1 bit) - Active-high synchronous reset. When asserted, the FSM will reset and follow the reset behavior described below.
+- Output: `shift_ena` (1 bit) - Signal to enable the shift register.
+
+Functional Description:
+1. The module is part of a finite state machine (FSM) that controls a shift register.
+2. The FSM should enable the `shift_ena` signal for exactly 4 consecutive clock cycles upon detecting a specific bit pattern (pattern detection logic is assumed to be external and not part of this specification).
+3. Upon a synchronous reset (`reset` asserted high), `shift_ena` should be asserted (set to 1) for 4 consecutive clock cycles, regardless of other conditions. After these 4 cycles, `shift_ena` should be deasserted (set to 0) indefinitely until another reset occurs.
+4. Ensure that after a reset, the FSM starts counting the 4 cycles from the next positive edge of the clock.
+
+Reset Behavior:
+- The reset is synchronous and active high.
+- Upon reset, the FSM should initialize such that it starts counting the 4 clock cycles from the next positive edge of the clock.
+- After 4 cycles of `shift_ena` being high, it should transition to low (0) and remain low until the next reset.
+
+Implementation Notes:
+- Bit [0] refers to the least significant bit in any multi-bit signals.
+- All registers and flip-flops used in this module should be initialized to a known state upon reset.
+- Sequential elements should have explicitly defined initial values to ensure predictable behavior.
+  
+Edge Cases:
+- Ensure that the FSM handles transitions cleanly and there are no race conditions, particularly around the reset and pattern detection transitions.
+- Consider edge cases where the reset is asserted and deasserted in quick succession; the module should still perform as specified.
+</ENHANCED_SPEC>

@@ -1,0 +1,33 @@
+<ENHANCED_SPEC>
+Module Name: `TopModule`
+
+Interface:
+- `input clk`: Clock signal, used to synchronize all sequential elements, triggered on the positive edge.
+- `input reset`: Active high synchronous reset signal. When asserted, the state machine resets to its initial state.
+- `input data`: Serial data input, 1-bit width, used for pattern detection and duration specification.
+- `input done_counting`: 1-bit input signal indicating when external counters have finished counting.
+- `input ack`: 1-bit input signal indicating user acknowledgment of timer completion.
+- `output shift_ena`: 1-bit output signal, enables shifting of additional bits for duration determination.
+- `output counting`: 1-bit output signal, indicates the state machine is in the counting phase.
+- `output done`: 1-bit output signal, indicates the timer has completed and is awaiting user acknowledgment.
+
+Functional Description:
+1. **Pattern Detection**: The state machine continuously monitors the `data` input for the specific 4-bit pattern `1101`. This is done bit sequentially, starting from the most significant bit (MSB).
+2. **Timer Initialization**: Upon detecting the `1101` pattern, the state machine asserts `shift_ena` for exactly 4 consecutive clock cycles to enable shifting in 4 additional bits from the `data` input to determine the delay duration.
+3. **Counting Phase**: After the duration bits are latched, the state machine asserts the `counting` output, indicating it is waiting for the counting operation to complete, as signaled by `done_counting` being high.
+4. **Completion Notification**: Once `done_counting` is high, the state machine asserts the `done` output to notify the user that the timer has expired.
+5. **Acknowledgment Wait**: The state machine remains in the `done` state until the `ack` signal is asserted, upon which it resets and returns to monitoring for the next `1101` pattern occurrence.
+
+Reset Behavior:
+- On the assertion of the `reset` signal, the state machine is synchronously reset to the initial pattern detection state, ready to search for the `1101` pattern.
+
+Sequential Logic:
+- All state transitions and sequential logic operations are triggered on the positive edge of the `clk`.
+
+Initial Conditions:
+- Upon power-up or reset, the state machine is in its initial state, waiting to detect the `1101` pattern.
+
+Edge Cases and Input Boundaries:
+- Correct handling of consecutive `1101` patterns and partial patterns should be ensured without false triggering.
+- Ensure that `shift_ena`, `counting`, and `done` are correctly deasserted when not in their respective states.
+</ENHANCED_SPEC>

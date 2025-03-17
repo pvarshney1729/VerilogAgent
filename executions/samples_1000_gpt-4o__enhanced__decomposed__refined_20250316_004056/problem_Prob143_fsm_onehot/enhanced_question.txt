@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+The module, referred to as TopModule, is required to implement a finite state machine (FSM) with a specific interface. The following details clarify the requirements for the module's interface and functionality:
+
+### Interface:
+- **Inputs:**
+  - `input in`: A single-bit input signal.
+  - `input [9:0] state`: A 10-bit input vector representing the current state using one-hot encoding. Each bit from `state[0]` to `state[9]` represents states S0 to S9 respectively.
+
+- **Outputs:**
+  - `output [9:0] next_state`: A 10-bit output vector representing the next state using one-hot encoding. Each bit from `next_state[0]` to `next_state[9]` corresponds to states S0 to S9 respectively.
+  - `output out1`: A single-bit output.
+  - `output out2`: A single-bit output.
+
+### State Machine Description:
+- The FSM is defined with 10 states (S0 to S9) and transitions based on the single input `in`.
+- The output pair `(out1, out2)` is specified per state, as defined below:
+  - **S0**: `(out1, out2) = (0, 0)`
+  - **S1**: `(out1, out2) = (0, 0)`
+  - **S2**: `(out1, out2) = (0, 0)`
+  - **S3**: `(out1, out2) = (0, 0)`
+  - **S4**: `(out1, out2) = (0, 0)`
+  - **S5**: `(out1, out2) = (0, 0)`
+  - **S6**: `(out1, out2) = (0, 0)`
+  - **S7**: `(out1, out2) = (0, 1)`
+  - **S8**: `(out1, out2) = (1, 0)`
+  - **S9**: `(out1, out2) = (1, 1)`
+
+### Transition Logic:
+- The state transitions are as follows:
+  - From **S0**: `0` to S0, `1` to S1
+  - From **S1**: `0` to S0, `1` to S2
+  - From **S2**: `0` to S0, `1` to S3
+  - From **S3**: `0` to S0, `1` to S4
+  - From **S4**: `0` to S0, `1` to S5
+  - From **S5**: `0` to S8, `1` to S6
+  - From **S6**: `0` to S9, `1` to S7
+  - From **S7**: `0` to S0, `1` to S7
+  - From **S8**: `0` to S0, `1` to S1
+  - From **S9**: `0` to S0, `1` to S1
+
+### Additional Notes:
+- The FSM uses one-hot encoding, meaning only one bit of the `state` and `next_state` vectors is set to `1` at any given time.
+- The system must not implement the state flip-flops; it should only calculate the `next_state` and outputs `out1` and `out2` based on the current `state` and `in`.
+- The outputs `out1` and `out2` are zero by default unless specified differently for states S7, S8, and S9 as described above.
+- The module must handle cases where multiple bits in `state[9:0]` might be set due to an unexpected condition, ensuring the module responds with valid `next_state` and output logic.
+
+The above specifications ensure the module's design is unambiguous and ready for implementation.
+</ENHANCED_SPEC>

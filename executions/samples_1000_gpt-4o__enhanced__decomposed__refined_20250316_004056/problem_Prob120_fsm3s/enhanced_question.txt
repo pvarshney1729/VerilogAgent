@@ -1,0 +1,44 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- `input clk`: Clock signal, used to trigger all sequential logic on its positive edge.
+- `input reset`: Synchronous active-high reset signal, used to reset the state machine to the initial state (State A).
+- `input in`: Single-bit input used for state transitions.
+- `output reg out`: Single-bit output, determined by the current state of the state machine.
+
+State Machine Description:
+- Type: Moore State Machine
+- Number of States: Four (A, B, C, D)
+- Initial State: State A
+
+State Transition Table:
+- State A: 
+  - Next State: A if `in` = 0, B if `in` = 1
+  - Output: 0
+- State B:
+  - Next State: C if `in` = 0, B if `in` = 1
+  - Output: 0
+- State C:
+  - Next State: A if `in` = 0, D if `in` = 1
+  - Output: 0
+- State D:
+  - Next State: C if `in` = 0, B if `in` = 1
+  - Output: 1
+
+Sequential Logic:
+- All state transitions and output updates are triggered on the positive edge of the `clk` signal.
+- The `reset` signal, when asserted high, synchronously resets the state machine to State A at the next positive clock edge.
+
+Output Behavior:
+- The `out` signal is determined solely by the current state, irrespective of the `in` signal.
+
+Initial Conditions and Conventions:
+- On reset, the state machine is set to State A, and the output `out` is set to 0.
+- Bit Indexing: All inputs and outputs are single-bit and do not require specific bit indexing.
+- Ensure no race conditions by adhering to the specified clock and reset behavior.
+
+Edge Cases and Input Boundaries:
+- The state machine must handle all possible input conditions based on the defined state transition table.
+- Ensure that the synchronous reset properly initializes the state machine regardless of the current state or input values.
+</ENHANCED_SPEC>

@@ -1,0 +1,41 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input wire clk: Clock signal, positive edge triggered.
+- input wire reset: Active-high synchronous reset signal.
+- input wire in: Serial data input.
+- output reg done: Output signal indicating successful byte reception.
+
+Functional Specification:
+The TopModule implements a finite state machine (FSM) to decode a serial data stream based on a communication protocol that includes:
+- 1 start bit (logic 0),
+- 8 data bits,
+- 1 stop bit (logic 1).
+
+Idle State:
+- The serial line remains at logic 1 when idle.
+
+FSM Operation:
+1. The FSM initiates when a start bit (logic 0) is detected.
+2. After detecting the start bit, the FSM reads the next 8 bits as data bits, with the least significant bit (bit[0]) received first.
+3. After reading the 8 data bits, the FSM verifies the presence of a stop bit (logic 1).
+4. If the stop bit is detected correctly, the output signal 'done' is asserted high for one clock cycle, indicating successful reception of a byte.
+5. If the stop bit is not detected, the FSM disregards the current transmission and waits until a proper stop bit is found before attempting to decode the next byte.
+
+Reset Behavior:
+- On the assertion of the reset signal, the FSM returns to its initial state, and the 'done' signal is deasserted to low.
+
+Timing and Triggering:
+- All state transitions and signal changes are synchronized to the positive edge of the clock.
+- The module assumes that input transitions occur sufficiently away from the clock edges to avoid metastability.
+
+Edge Case Handling:
+- The FSM will continuously monitor the input stream and reset its state if a valid stop bit is not detected after 8 data bits.
+- The FSM is designed to handle any erroneous data transmissions by waiting for the next valid start bit sequence.
+
+Bit Indexing:
+- Indexing follows the convention where bit[0] is the least significant bit received first in the data stream.
+
+The implementation must ensure that no race conditions occur and that the FSM transitions are clearly defined to avoid ambiguous states.
+</ENHANCED_SPEC>

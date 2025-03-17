@@ -1,0 +1,241 @@
+Generated Response:
+
+<REASONING>
+The module `TopModule` is designed to implement a finite state machine (FSM) that controls a motor based on inputs `x` and `y`. The FSM has a synchronous, active-low reset (`resetn`) and is driven by a clock (`clk`). The FSM has five states: `STATE_A`, `STATE_B`, `STATE_C`, `STATE_D`, and `STATE_E`. 
+
+1. **State A**: The FSM remains in this state as long as `resetn` is asserted (low). When `resetn` is deasserted (high), it transitions to `STATE_B` on the next clock edge, and `f` is set to 1 for one clock cycle.
+
+2. **State B**: This state is a transition state where `f` is set back to 0, and the FSM moves to `STATE_C`.
+
+3. **State C**: The FSM monitors the input `x` for the sequence `1, 0, 1`. A shift register (`x_sequence`) is used to track the last two values of `x`. If the sequence is detected, the FSM transitions to `STATE_D`, and `g` is set to 1.
+
+4. **State D**: In this state, `g` is maintained at 1, and the FSM transitions to `STATE_E`.
+
+5. **State E**: The FSM monitors the input `y` for up to two clock cycles. If `y` becomes 1, `g` remains 1 permanently. If `y` does not become 1 within two cycles, `g` is set to 0, and the FSM transitions back to `STATE_A`.
+
+The FSM uses a counter (`y_counter`) to track the number of clock cycles in `STATE_E` without `y` being 1.
+
+The implementation follows the guidelines and coding conventions provided, using `logic` for all signals, and ensuring synchronous reset behavior.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic x,
+    input logic y,
+    output logic f,
+    output logic g
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        STATE_A = 3'b000,
+        STATE_B = 3'b001,
+        STATE_C = 3'b010,
+        STATE_D = 3'b011,
+        STATE_E = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [1:0] x_sequence;
+    logic [1:0] y_counter;
+
+    // State transition and output logic
+    always_ff @(posedge clk) begin
+        if (!resetn) begin
+            current_state <= STATE_A;
+            f <= 0;
+            g <= 0;
+            x_sequence <= 2'b00;
+            y_counter <= 0;
+        end else begin
+            current_state <= next_state;
+            case (current_state)
+                STATE_A: begin
+                    f <= 1;
+                end
+                STATE_B: begin
+                    f <= 0;
+                end
+                STATE_C: begin
+                    if (x_sequence == 2'b10 && x == 1) begin
+                        g <= 1;
+                    end
+                end
+                STATE_D: begin
+                    g <= 1;
+                end
+                STATE_E: begin
+                    if (y) begin
+                        g <= 1;
+                    end else if (y_counter == 2) begin
+                        g <= 0;
+                    end
+                end
+            endcase
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        next_state = current_state;
+        case (current_state)
+            STATE_A: begin
+                if (!resetn) begin
+                    next_state = STATE_A;
+                end else begin
+                    next_state = STATE_B;
+                end
+            end
+            STATE_B: begin
+                next_state = STATE_C;
+            end
+            STATE_C: begin
+                x_sequence = {x_sequence[0], x};
+                if (x_sequence == 2'b10 && x == 1) begin
+                    next_state = STATE_D;
+                end
+            end
+            STATE_D: begin
+                next_state = STATE_E;
+            end
+            STATE_E: begin
+                if (y) begin
+                    next_state = STATE_E;
+                end else if (y_counter == 2) begin
+                    next_state = STATE_A;
+                end
+            end
+        endcase
+    end
+
+    // Y counter logic
+    always_ff @(posedge clk) begin
+        if (!resetn) begin
+            y_counter <= 0;
+        end else if (current_state == STATE_E) begin
+            if (!y) begin
+                y_counter <= y_counter + 1;
+            end else begin
+                y_counter <= 0;
+            end
+        end else begin
+            y_counter <= 0;
+        end
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic resetn,
+    input logic x,
+    input logic y,
+    output logic f,
+    output logic g
+);
+
+    // State encoding
+    typedef enum logic [2:0] {
+        STATE_A = 3'b000,
+        STATE_B = 3'b001,
+        STATE_C = 3'b010,
+        STATE_D = 3'b011,
+        STATE_E = 3'b100
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [1:0] x_sequence;
+    logic [1:0] y_counter;
+
+    // State transition and output logic
+    always_ff @(posedge clk) begin
+        if (!resetn) begin
+            current_state <= STATE_A;
+            f <= 0;
+            g <= 0;
+            x_sequence <= 2'b00;
+            y_counter <= 0;
+        end else begin
+            current_state <= next_state;
+            case (current_state)
+                STATE_A: begin
+                    f <= 1;
+                end
+                STATE_B: begin
+                    f <= 0;
+                end
+                STATE_C: begin
+                    if (x_sequence == 2'b10 && x == 1) begin
+                        g <= 1;
+                    end
+                end
+                STATE_D: begin
+                    g <= 1;
+                end
+                STATE_E: begin
+                    if (y) begin
+                        g <= 1;
+                    end else if (y_counter == 2) begin
+                        g <= 0;
+                    end
+                end
+            endcase
+        end
+    end
+
+    // Next state logic
+    always_comb begin
+        next_state = current_state;
+        case (current_state)
+            STATE_A: begin
+                if (!resetn) begin
+                    next_state = STATE_A;
+                end else begin
+                    next_state = STATE_B;
+                end
+            end
+            STATE_B: begin
+                next_state = STATE_C;
+            end
+            STATE_C: begin
+                x_sequence = {x_sequence[0], x};
+                if (x_sequence == 2'b10 && x == 1) begin
+                    next_state = STATE_D;
+                end
+            end
+            STATE_D: begin
+                next_state = STATE_E;
+            end
+            STATE_E: begin
+                if (y) begin
+                    next_state = STATE_E;
+                end else if (y_counter == 2) begin
+                    next_state = STATE_A;
+                end
+            end
+        endcase
+    end
+
+    // Y counter logic
+    always_ff @(posedge clk) begin
+        if (!resetn) begin
+            y_counter <= 0;
+        end else if (current_state == STATE_E) begin
+            if (!y) begin
+                y_counter <= y_counter + 1;
+            end else begin
+                y_counter <= 0;
+            end
+        end else begin
+            y_counter <= 0;
+        end
+    end
+
+endmodule

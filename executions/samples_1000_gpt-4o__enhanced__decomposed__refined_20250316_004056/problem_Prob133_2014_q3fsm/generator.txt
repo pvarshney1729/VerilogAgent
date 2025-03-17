@@ -1,0 +1,139 @@
+Generated Response:
+
+<REASONING>
+The implementation of the `TopModule` follows a structured approach to meet the specifications provided. The module uses a finite state machine (FSM) with two states: `STATE_A` and `STATE_B`. The FSM starts in `STATE_A` and transitions to `STATE_B` when the input `s` is high. In `STATE_B`, the module examines the input `w` over three clock cycles. A counter (`w_count`) tracks how many times `w` is high during these cycles. If `w` is high exactly twice, the output `z` is set to 1; otherwise, it is set to 0. The FSM remains in `STATE_B` continuously checking `w` every three cycles. The design ensures synchronous reset and adheres to the coding conventions provided.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic s,
+    input logic w,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        STATE_A = 1'b0,
+        STATE_B = 1'b1
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [1:0] cycle_count; // Counter for the number of cycles in state B
+    logic [1:0] w_count;     // Counter for the number of times w is 1
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_A;
+            cycle_count <= 2'b00;
+            w_count <= 2'b00;
+            z <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == STATE_B) begin
+                if (cycle_count < 2'b11) begin
+                    cycle_count <= cycle_count + 1;
+                    if (w) begin
+                        w_count <= w_count + 1;
+                    end
+                end else begin
+                    cycle_count <= 2'b00;
+                    if (w_count == 2'b10) begin
+                        z <= 1'b1;
+                    end else begin
+                        z <= 1'b0;
+                    end
+                    w_count <= 2'b00;
+                end
+            end else begin
+                z <= 1'b0;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (s) next_state = STATE_B;
+                else next_state = STATE_A;
+            end
+            STATE_B: begin
+                next_state = STATE_B; // Remain in STATE_B
+            end
+            default: next_state = STATE_A;
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule(
+    input logic clk,
+    input logic reset,
+    input logic s,
+    input logic w,
+    output logic z
+);
+
+    // State encoding
+    typedef enum logic [0:0] {
+        STATE_A = 1'b0,
+        STATE_B = 1'b1
+    } state_t;
+
+    state_t current_state, next_state;
+    logic [1:0] cycle_count; // Counter for the number of cycles in state B
+    logic [1:0] w_count;     // Counter for the number of times w is 1
+
+    // State register with synchronous reset
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_A;
+            cycle_count <= 2'b00;
+            w_count <= 2'b00;
+            z <= 1'b0;
+        end else begin
+            current_state <= next_state;
+            if (current_state == STATE_B) begin
+                if (cycle_count < 2'b11) begin
+                    cycle_count <= cycle_count + 1;
+                    if (w) begin
+                        w_count <= w_count + 1;
+                    end
+                end else begin
+                    cycle_count <= 2'b00;
+                    if (w_count == 2'b10) begin
+                        z <= 1'b1;
+                    end else begin
+                        z <= 1'b0;
+                    end
+                    w_count <= 2'b00;
+                end
+            end else begin
+                z <= 1'b0;
+            end
+        end
+    end
+
+    // Next state logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                if (s) next_state = STATE_B;
+                else next_state = STATE_A;
+            end
+            STATE_B: begin
+                next_state = STATE_B; // Remain in STATE_B
+            end
+            default: next_state = STATE_A;
+        endcase
+    end
+
+endmodule

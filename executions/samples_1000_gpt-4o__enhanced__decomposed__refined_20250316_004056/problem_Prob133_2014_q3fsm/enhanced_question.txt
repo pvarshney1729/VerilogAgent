@@ -1,0 +1,40 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Port Definitions:
+- input  logic clk, // Clock signal, positive edge-triggered.
+- input  logic reset, // Synchronous reset, active high.
+- input  logic s, // Input signal used only in state A.
+- input  logic w, // Input signal used for determining state transitions in state B.
+- output logic z // Output signal that is set based on FSM conditions.
+
+Finite State Machine (FSM) Overview:
+- The FSM comprises two states, A and B.
+- State A is the initial state upon reset.
+
+State Descriptions:
+1. State A:
+   - If s = 0, remain in State A.
+   - If s = 1, transition to State B on the next positive clock edge.
+   - The output z is irrelevant in this state and should be set to 0.
+
+2. State B:
+   - In this state, the FSM monitors the input w over the next three consecutive clock cycles.
+   - A counter (3-bit wide) tracks the number of cycles where w = 1.
+   - If w = 1 in exactly two of these three cycles, set z = 1 in the subsequent clock cycle.
+   - If not, set z = 0 in the subsequent clock cycle.
+   - After evaluating w for three cycles, continue monitoring for the next three cycles without transitioning back to State A.
+
+Clock and Reset Behavior:
+- All state transitions and operations occur on the positive edge of the clock.
+- The reset is synchronous and active high, meaning the FSM will return to State A when reset = 1 on the positive edge of the clock.
+- Upon reset, all FSM state indicators and counters are initialized to 0.
+
+Bit Indexing:
+- All inputs and outputs are single-bit values.
+- Bit[0] refers to the least significant bit if any multi-bit signals or counters are introduced.
+
+Edge Cases and Input Boundaries:
+- Ensure the counter resets correctly after each three-cycle evaluation in state B.
+- Handle transitions and outputs correctly at every clock edge following the specified conditions.
+</ENHANCED_SPEC>

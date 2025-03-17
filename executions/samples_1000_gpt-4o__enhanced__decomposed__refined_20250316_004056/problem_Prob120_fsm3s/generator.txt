@@ -1,0 +1,135 @@
+Generated Response:
+
+<REASONING>
+To implement the Moore state machine as specified, I followed these steps:
+
+1. **Module Declaration**: I declared the module `TopModule` with the specified input and output ports using `logic` data type, as per the coding conventions.
+
+2. **State Encoding**: I defined an enumerated type `state_t` to represent the four states (A, B, C, D) using a 2-bit encoding. This makes the state machine easier to read and maintain.
+
+3. **State Register**: I declared `current_state` and `next_state` of type `state_t` to hold the current and next states of the FSM.
+
+4. **State Transition Logic**: I implemented the state transition logic in an `always` block triggered on the positive edge of the clock. The synchronous reset logic is included to reset the FSM to `STATE_A` when `reset` is high.
+
+5. **Next State and Output Logic**: I used a combinational `always @(*)` block to determine the `next_state` and `out` based on the `current_state` and input `in`. This block implements the state transition table and output logic as specified.
+
+6. **Output Logic**: The output `out` is determined solely by the current state, which is characteristic of a Moore machine.
+
+7. **Default Case**: I included a default case in the `case` statement to handle any unexpected states, ensuring the FSM defaults to `STATE_A` with an output of `0`.
+
+By following these steps and adhering to the guidelines and coding conventions, I ensured that the implementation is correct, efficient, and easy to understand.
+</REASONING>
+
+<CODE>
+[BEGIN]
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_A;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                next_state = (in) ? STATE_B : STATE_A;
+                out = 1'b0;
+            end
+            STATE_B: begin
+                next_state = (in) ? STATE_B : STATE_C;
+                out = 1'b0;
+            end
+            STATE_C: begin
+                next_state = (in) ? STATE_D : STATE_A;
+                out = 1'b0;
+            end
+            STATE_D: begin
+                next_state = (in) ? STATE_B : STATE_C;
+                out = 1'b1;
+            end
+            default: begin
+                next_state = STATE_A;
+                out = 1'b0;
+            end
+        endcase
+    end
+
+endmodule
+[DONE]
+</CODE>
+
+Generated Code:
+
+module TopModule (
+    input logic clk,
+    input logic reset,
+    input logic in,
+    output logic out
+);
+
+    // State encoding
+    typedef enum logic [1:0] {
+        STATE_A = 2'b00,
+        STATE_B = 2'b01,
+        STATE_C = 2'b10,
+        STATE_D = 2'b11
+    } state_t;
+
+    state_t current_state, next_state;
+
+    // State transition logic
+    always @(posedge clk) begin
+        if (reset) begin
+            current_state <= STATE_A;
+        end else begin
+            current_state <= next_state;
+        end
+    end
+
+    // Next state and output logic
+    always @(*) begin
+        case (current_state)
+            STATE_A: begin
+                next_state = (in) ? STATE_B : STATE_A;
+                out = 1'b0;
+            end
+            STATE_B: begin
+                next_state = (in) ? STATE_B : STATE_C;
+                out = 1'b0;
+            end
+            STATE_C: begin
+                next_state = (in) ? STATE_D : STATE_A;
+                out = 1'b0;
+            end
+            STATE_D: begin
+                next_state = (in) ? STATE_B : STATE_C;
+                out = 1'b1;
+            end
+            default: begin
+                next_state = STATE_A;
+                out = 1'b0;
+            end
+        endcase
+    end
+
+endmodule

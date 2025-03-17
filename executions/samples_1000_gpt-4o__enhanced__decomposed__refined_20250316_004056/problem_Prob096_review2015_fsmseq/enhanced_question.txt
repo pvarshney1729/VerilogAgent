@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - input wire clk: Clock signal for the module. All sequential logic is triggered on the positive edge.
+  - input wire reset: Active-high synchronous reset signal. When high, all state registers are reset to their initial state on the next positive clock edge.
+  - input wire data: Input bit stream for the finite-state machine (FSM) to process.
+- Output Ports:
+  - output reg start_shifting: Output signal that is set to 1 when the sequence 1101 is detected in the input stream and remains 1 until a reset occurs.
+
+FSM Description:
+- The FSM is designed to detect the sequence "1101" within a continuous input bit stream provided by 'data'.
+- The FSM consists of multiple states, each representing a partial or complete detection of the target sequence:
+  1. STATE_0: Initial state, no bits of the sequence detected.
+  2. STATE_1: First '1' of the sequence detected.
+  3. STATE_11: Two sequential '1's detected.
+  4. STATE_110: Sequence "110" detected.
+  5. STATE_1101: Sequence "1101" fully detected.
+
+Operation:
+- Transition between states occurs on the positive edge of 'clk'.
+- The state transitions are as follows:
+  - From STATE_0 to STATE_1 on receiving '1'.
+  - From STATE_1 to STATE_11 on receiving another '1'.
+  - From STATE_11 to STATE_110 on receiving '0'.
+  - From STATE_110 to STATE_1101 on receiving '1'.
+  - Remain in STATE_1101 once the sequence is detected until reset.
+
+Output Behavior:
+- The output 'start_shifting' is set to 1 when the FSM enters STATE_1101.
+- 'start_shifting' remains 1 until the 'reset' signal is activated.
+
+Reset Behavior:
+- Upon activation of 'reset', the FSM returns to STATE_0, and 'start_shifting' is reset to 0 on the next positive clock edge.
+
+Edge Cases:
+- The FSM correctly handles overlapping sequences and resets appropriately upon detecting the sequence or receiving a reset signal.
+- All transitions and state assignments are synchronous with the clock signal and respect the active-high reset.
+
+Note:
+- All bit indices refer to the least significant bit (LSB) position as bit[0].
+</ENHANCED_SPEC>

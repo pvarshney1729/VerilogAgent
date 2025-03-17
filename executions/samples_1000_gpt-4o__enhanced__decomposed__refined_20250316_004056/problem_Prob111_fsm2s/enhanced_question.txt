@@ -1,0 +1,43 @@
+<ENHANCED_SPEC>
+The module `TopModule` is a digital logic circuit that implements a Moore state machine with two states and one output. The interface is defined as follows:
+
+- `input clk`: The clock signal, used for synchronizing the state transitions within the state machine.
+- `input reset`: An active-high synchronous reset signal. When asserted (logic high) on the rising edge of the clock, the state machine resets to the initial state `OFF`.
+- `input j`: An input signal that influences state transitions when the current state is `OFF`.
+- `input k`: An input signal that influences state transitions when the current state is `ON`.
+- `output out`: The output signal, which reflects the current state of the state machine.
+
+Port Naming and Widths:
+- All ports are 1-bit wide.
+- The naming convention is lowercase for input and output signals.
+
+State Machine Description:
+- The state machine consists of two states: `OFF` and `ON`.
+- The initial state after reset is `OFF`.
+
+State Transition Conditions:
+1. State `OFF` (Output `out=0`):
+   - If `j=0`, remain in state `OFF`.
+   - If `j=1`, transition to state `ON`.
+
+2. State `ON` (Output `out=1`):
+   - If `k=0`, remain in state `ON`.
+   - If `k=1`, transition to state `OFF`.
+
+Reset Behavior:
+- The reset is synchronous and active-high.
+- When `reset` is high at the rising edge of `clk`, the state machine will transition to state `OFF`.
+
+Initial Conditions:
+- On reset, the state is initialized to `OFF` and the output `out` is set to `0`.
+
+Signal and Operation Precedence:
+- State transitions occur on the rising edge of the `clk`.
+- The reset signal has priority over input signals `j` and `k` during a clock cycle.
+
+Edge Cases:
+- Ensure that `j` and `k` signals are stable before the rising edge of the `clk` to avoid unintended state transitions.
+- The state transition conditions are designed to avoid race conditions by ensuring only stable state transitions occur per the Moore state machine design.
+
+The above specification ensures the correct and unambiguous implementation of the `TopModule` as a Moore state machine.
+</ENHANCED_SPEC>

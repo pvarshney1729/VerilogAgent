@@ -1,0 +1,38 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Input Ports:
+  - `input clk`: Clock signal for the module. This signal is used to synchronize state transitions. Active on the rising edge.
+  - `input areset`: Asynchronous reset signal. When high, the module resets the state to the initial state, B.
+  - `input in`: Input signal to determine state transitions.
+
+- Output Ports:
+  - `output out`: Output signal that reflects the current state. 1 when the module is in state B, 0 when in state A.
+
+State Machine Description:
+- The module implements a Moore state machine with two states, A and B.
+  - State A: The output `out` is 0.
+  - State B: The output `out` is 1.
+
+State Transition Diagram:
+- State B (output = 1)
+  - Transition to State A on input `in` = 0
+  - Remain in State B on input `in` = 1
+
+- State A (output = 0)
+  - Transition to State B on input `in` = 0
+  - Remain in State A on input `in` = 1
+
+Reset Behavior:
+- The `areset` signal is an asynchronous reset.
+- When `areset` is high, the module immediately transitions to state B, regardless of the clock signal.
+- Upon release of `areset`, the module resumes normal operation governed by the clock signal.
+
+Initial Conditions:
+- On power-up or reset (`areset` high), the module is in state B and the output `out` is 1.
+
+Additional Notes:
+- Ensure that the state transitions occur on the rising edge of the `clk` signal when the `areset` signal is not asserted.
+- The module should handle all input combinations and edge cases, ensuring deterministic behavior as specified.
+</ENHANCED_SPEC>

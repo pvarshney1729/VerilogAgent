@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+Module Name: TopModule
+
+Interface:
+- Inputs:
+  - clk: 1-bit clock signal; triggers sequential logic on the positive edge.
+  - areset: 1-bit asynchronous reset signal; active high, resets state machine to initial state on the positive edge.
+  - in: 1-bit input signal for state transition.
+
+- Outputs:
+  - out: 1-bit output signal.
+
+State Machine Description:
+- Type: Moore state machine.
+- Number of States: Four (A, B, C, D).
+
+State Encoding:
+- State A: 2'b00
+- State B: 2'b01
+- State C: 2'b10
+- State D: 2'b11
+
+State Transition Table:
+| Current State | next state (in=0) | next state (in=1) | Output |
+|---------------|-------------------|-------------------|--------|
+| A             | A                 | B                 | 0      |
+| B             | C                 | B                 | 0      |
+| C             | A                 | D                 | 0      |
+| D             | C                 | B                 | 1      |
+
+Operational Details:
+- Upon an active high asynchronous reset (areset = 1), the state machine resets to State A, irrespective of the clock signal.
+- Transition between states occurs on the rising edge of the clk signal.
+- The output is determined solely by the current state and does not depend on the input.
+
+Reset State:
+- All state registers are reset to 2'b00 (State A) upon activation of the asynchronous reset.
+
+Bit Indexing:
+- For multi-bit signals, bit[0] refers to the least significant bit (LSB).
+
+Edge Cases:
+- Ensure that all inputs are properly synchronized with the clk signal to prevent metastability issues.
+- The state transitions should be robust against any glitches on the input signal by ensuring proper debouncing if necessary.
+
+Initial Values:
+- On power-up or reset, the system initializes to State A with the output set to 0.
+</ENHANCED_SPEC>

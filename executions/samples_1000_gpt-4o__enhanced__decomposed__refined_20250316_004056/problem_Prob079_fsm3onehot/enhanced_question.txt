@@ -1,0 +1,48 @@
+<ENHANCED_SPEC>
+The module to be implemented is named `TopModule`. The interface is defined as follows:
+
+- **Input Ports:**
+  - `input wire in`: A 1-bit input signal.
+  - `input wire [3:0] state`: A 4-bit input signal representing the current state using one-hot encoding.
+
+- **Output Ports:**
+  - `output wire [3:0] next_state`: A 4-bit output signal to represent the next state using one-hot encoding.
+  - `output wire out`: A 1-bit output signal.
+
+### State Machine Specifications
+
+The state machine is a Moore type with one input (`in`), one output (`out`), and four distinct states. The state encoding uses a one-hot scheme as follows:
+- State A is encoded as `4'b0001`
+- State B is encoded as `4'b0010`
+- State C is encoded as `4'b0100`
+- State D is encoded as `4'b1000`
+
+#### State Transition Table
+The state transitions and outputs are defined by the following table:
+
+| Current State | `in` = 0 | `in` = 1 | Output |
+|---------------|----------|----------|--------|
+| A (0001)      | A (0001) | B (0010) | 0      |
+| B (0010)      | C (0100) | B (0010) | 0      |
+| C (0100)      | A (0001) | D (1000) | 0      |
+| D (1000)      | C (0100) | B (0010) | 1      |
+
+### Combinational Logic
+
+- **State Transition Logic:** 
+  The next state is determined based on the current state and the input `in`. The logic should be implemented using combinational logic to derive the `next_state` from the `state` and `in` signals.
+
+- **Output Logic:** 
+  The output `out` is determined solely by the current state. The output logic must also be implemented as combinational logic.
+
+### Additional Implementation Details
+
+- **Bit Indexing:** 
+  - The encoding uses bit[0] as the least significant bit (LSB) and bit[3] as the most significant bit (MSB).
+  
+- **Operational Constraints:** 
+  - The design should ensure that only one bit in the `state` and `next_state` signals is set at any time (one-hot encoding).
+  - All logic must be purely combinational without any sequential elements, as the specification focuses exclusively on the state transition and output logic.
+
+Edge cases, such as invalid state encodings, are not to be handled within the module, as the design assumes valid one-hot encoded states are always provided.
+</ENHANCED_SPEC>
