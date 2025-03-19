@@ -197,7 +197,7 @@ def parse_args():
                        help='Top-p value (default: 0.1)')
     parser.add_argument('--enhance_spec', type=bool, default=False,
                        help='Enhance the Spec (default: False)')
-    parser.add_argument('--iterative_refinement', type=bool, default=True,
+    parser.add_argument('--iterative_refinement', type=bool, default=False,
                        help='Iterative Refinement (default: False)')
     parser.add_argument('--decompose', type=bool, default=False,
                        help='Decompose the problem into subtasks (default: False)')
@@ -252,6 +252,12 @@ def main():
         # Limit number of samples if specified
         if args.num_samples:
             problem_files = problem_files[:args.num_samples]
+            if args.num_samples == 1000:
+                # Initialisation problem list:
+                init_list = [88, 95, 98, 107, 118, 119, 120, 123, 127, 132, 133, 134, 135, 136, 137, 138, 139, 140, 144, 145, 146, 147, 148, 150]
+                problem_files = [problem_files[i] for i in init_list]
+
+
             print(f"Processing {len(problem_files)} samples...")
         else:
             print(f"Processing all {len(problem_files)} samples...")

@@ -851,7 +851,12 @@ class VerilogModel:
         # print("initial stimulus:")
         # print(json.dumps(initial_stimulus, indent=4))
 
+
+
         initial_stimulus = initial_stimulus.get("stimuli", [])
+
+        print("Initial Stimulus:")
+        print(initial_stimulus)
 
         import copy
         refinement_messages = copy.deepcopy(messages)
@@ -984,9 +989,13 @@ class VerilogModel:
                 enhance_model = 'gpt-4o'
                 if DEBUG_PRINTS: 
                     print("Enhancing the spec, using model:", enhance_model)
+                
+                fsm_codebook = prompts['fsm_codebook']
 
+                fsm_augment = "Additionally these are similar implementations that you can refer to and use as a codebook for your implementation: {}".format(fsm_codebook)
+                
                 enhanced_query = self.generator.generate_with_system_prompt(
-                    prompt=prompts['enhance_spec_rules'].format(user_spec=base_query),
+                    prompt=prompts['enhance_spec_rules'].format(user_spec=base_query) + fsm_augment,
                     system_prompt=prompts['enhance_spec_system'],
                     model=enhance_model,
                 )
@@ -1027,7 +1036,7 @@ class VerilogModel:
                     """},
                     {"role": "user", "content": f"Now using ALL the research you have done so far, please implement the Verilog module for the original specification:\n{full_prompt}"},
                 ])
-
+                
                 with open(self.problem_dir / "messages.txt", 'w') as f:
                     f.write(json.dumps(messages, indent=4))
 
