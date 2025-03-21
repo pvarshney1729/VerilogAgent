@@ -283,7 +283,7 @@ class SimpleVerifier:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
-                timeout=5
+        	timeout=100
             )
             compile_output = result.stdout + result.stderr
         except Exception as e:
@@ -572,7 +572,8 @@ class SimpleVerifier:
                     tb += f"            $display(\"Time %0t: Output %s = %h\", $time, \"{port}\", {port});\n"
                     tb += f"            errors++;\n"
                     tb += f"        end\n"
-            
+        
+	tb += f"    $finish;\n\n"    
         tb += f"    end\n\n"
 
         
@@ -663,7 +664,7 @@ class SimpleVerifier:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
-                timeout=5
+                timeout=100
             )
             
             if compile_result.returncode != 0:
@@ -679,7 +680,7 @@ class SimpleVerifier:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
-                timeout=5
+                timeout=100
             )
             
             # Process results
