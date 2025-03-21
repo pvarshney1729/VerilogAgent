@@ -573,7 +573,7 @@ class SimpleVerifier:
                     tb += f"            errors++;\n"
                     tb += f"        end\n"
         
-	tb += f"    $finish;\n\n"    
+        tb += f"    $finish;\n\n"    
         tb += f"    end\n\n"
 
         
@@ -872,14 +872,17 @@ class VerilogModel:
             
             # Include testbench results if available
             testbench_info = ""
-            if verification_results.get("testbench_results") and verification_results["testbench_results"].get("success"):
+            if verification_results["testbench_results"].get("has_issues"):
                 tb_results = verification_results["testbench_results"]
-                testbench_info = f"""
-                TESTBENCH OUTPUT:
-                {tb_results.get('output', 'No output')}
+                if tb_results is not None:
+                    testbench_info = f"""
+                    TESTBENCH OUTPUT:
+                    {tb_results.get('output', 'No output')}
 
-                The testbench {'PASSED' if tb_results.get('passed', False) else 'FAILED'}.
-                """
+                    The testbench {'PASSED' if tb_results.get('passed', False) else 'FAILED'}.
+                    """
+                else: 
+                    testbench_info = "No testbench results available."
             
             verification_feedback = f"""
             The Verilog/SystemVerilog code you generated has the following issues:
