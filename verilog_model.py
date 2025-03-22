@@ -18,6 +18,39 @@ from openai import OpenAI
 
 DEBUG_PRINTS = True
 
+def extract_error_lines(error_log):
+    pattern = r"(\/.*?):(\d+):"
+
+    # Find all (file_path, line_number) tuples
+    matches = re.findall(pattern, error_log)
+
+    # Group line numbers by file
+    lines_by_file = {}
+    for file_path, line_str in matches:
+        line_num = int(line_str)
+        lines_by_file.setdefault(file_path, set()).add(line_num)
+
+    content = ""
+
+    # Print extracted lines
+    for file_path, line_nums in lines_by_file.items():
+        try:
+            with open(file_path, 'r') as f:
+                file_lines = f.readlines()
+
+                content += f"\nHere are the lines with errors, you should fix:\n"
+
+                for ln in sorted(line_nums):
+                    if 1 <= ln <= len(file_lines):
+                        content += f"Error in line number {ln}: {file_lines[ln - 1].rstrip()}\n"
+                    else:
+                        content += f"{ln}: [Line number out of range]\n"
+        except FileNotFoundError:
+            print(f"File not found: {file_path}")
+    
+    return content
+
+
 def extract_between_tags(text: str, tag: str) -> str:
     """Extract content between XML-style tags"""
     start_tag = f"<{tag}>"
@@ -270,7 +303,6 @@ class SimpleVerifier:
     def compile_verilog(self, code: str) -> str:
         """Compile Verilog code using iverilog and capture output."""        
 
-        # Create temporary files
         with tempfile.NamedTemporaryFile(suffix='.sv', delete=False, mode='w') as f:
             f.write(code)
             code_path = f.name
@@ -286,6 +318,12 @@ class SimpleVerifier:
         	timeout=100
             )
             compile_output = result.stdout + result.stderr
+
+            # Fetch error lines
+            if extract_error_lines(compile_output) is not None:
+                error_lines = extract_error_lines(compile_output)
+                compile_output += error_lines
+
         except Exception as e:
             compile_output = f"Compilation error: {str(e)}"
         finally:
@@ -830,13 +868,15 @@ class VerilogModel:
         base_code = self.generator._extract_code(base_response, base_query)
 
 
-        messages.extend([
-            {"role": "assistant", "content": f"{base_code}"}
-        ])
+        # messages.extend([
+        #     {"role": "assistant", "content": f"{base_code}"}
+        #])
+
+ 
 
 
-        with open(self.problem_dir / "messages.txt", 'w') as f:
-            f.write(json.dumps(messages, indent=4))
+        # with open(self.problem_dir / "messages.txt", 'w') as f:
+        #     f.write(json.dumps(messages, indent=4))
 
         
         # Initialize the simple verifier
@@ -854,8 +894,8 @@ class VerilogModel:
 
         initial_stimulus = initial_stimulus.get("stimuli", [])
 
-        import copy
-        refinement_messages = copy.deepcopy(messages)
+        # import copy
+        # refinement_messages = copy.deepcopy(messages)
 
         # Iterative refinement loop
         while iterations < max_iterations:
@@ -869,21 +909,13 @@ class VerilogModel:
             
             # Record issues for this iteration
             print(f"Iteration {iterations}: Found {len(verification_results['issues'])} issues")
-            
-            # Include testbench results if available
-            testbench_info = ""
-            if verification_results["testbench_results"].get("has_issues"):
-                tb_results = verification_results["testbench_results"]
-                if tb_results is not None:
-                    testbench_info = f"""
-                    TESTBENCH OUTPUT:
-                    {tb_results.get('output', 'No output')}
 
-                    The testbench {'PASSED' if tb_results.get('passed', False) else 'FAILED'}.
-                    """
-                else: 
-                    testbench_info = "No testbench results available."
-            
+
+            if verification_results["testbench_results"] is not None:
+                testbench_info = verification_results["testbench_results"]
+            else:
+                testbench_info = "No testbench results available."
+
             verification_feedback = f"""
             The Verilog/SystemVerilog code you generated has the following issues:
 
@@ -899,19 +931,21 @@ class VerilogModel:
                 <COMPILER_OUTPUT>
                 {verification_results["compile_output"]}
                 </COMPILER_OUTPUT>
-            """  
+                """  
             else :
                 verification_feedback += f"""
-            <COMPILER_OUTPUT>
-            Compilation ran successfully.
-            </COMPILER_OUTPUT>
-            """
+                <COMPILER_OUTPUT>
+                Compilation ran successfully.
+                </COMPILER_OUTPUT>
+                """
 
-            verification_feedback += f"""This is the synthetic testbench output using your latest code:
-            <TESTBENCH_OUTPUT>
-            {testbench_info}
-            </TESTBENCH_OUTPUT>
+                verification_feedback += f"""This is the synthetic testbench output using your latest code:
+                <TESTBENCH_OUTPUT>
+                {testbench_info}
+                </TESTBENCH_OUTPUT>
+                """
 
+            verification_feedback += f"""
             Recall that the original specification was:
             <ORIGINAL_SPEC>
             {base_query}
@@ -924,25 +958,30 @@ class VerilogModel:
             if DEBUG_PRINTS: 
                 print("Iterative refinement using model:", self.iter_ref_model)
 
-            messages.extend([
-                {"role": "user", "content": verification_feedback}
-            ])
+            messages = [{"role": "user", "content": f"""Here is the initial specification for the Verilog module you need to implement:{base_query}"
+                                                     Here is the code you generated:{best_code}
+                                                     Here is the feebdack from verifcation:{verification_feedback}"""}]
+
+
+            # messages.extend([
+            #    {"role": "user", "content": verification_feedback}
+            # ])
 
             refined_text = self.generator.generate_with_messages(
-                refinement_messages, model=model, 
+                messages, model=model, 
                 temperature=0.2, 
                 top_p=0.1)
-            
+
             refined_code = self.generator._extract_code(refined_text, base_query)
+            
+            # messages.extend([
+            #    {"role": "assistant", "content": f"{refined_text}"}
+            # ])
 
-            messages.extend([
-                {"role": "assistant", "content": f"{refined_text}"}
-            ])
+            # refinement_messages[-1] = {"role": "assistant", "content": f"{refined_code}"}
 
-            refinement_messages[-1] = {"role": "assistant", "content": f"{refined_code}"}
-
-            with open(self.problem_dir / "messages.txt", 'w') as f:
-                f.write(json.dumps(messages, indent=4))
+            # with open(self.problem_dir / "messages.txt", 'w') as f:
+            #     f.write(json.dumps(messages, indent=4))
             
             # Update best code
             best_code = refined_code
